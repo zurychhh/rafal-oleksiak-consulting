@@ -1,0 +1,184 @@
+/* Company Logos Carousel - Fixed to Match Reference Design */
+
+.carouselSection {
+  width: 100%;
+  background: #2A2D3A;
+  padding: 24px 0;
+  overflow: hidden;
+}
+
+.carouselContainer {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Carousel Track - Overflow Hidden */
+.carouselTrack {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 16px 0;
+}
+
+/* Fade effect at edges */
+.carouselTrack::before,
+.carouselTrack::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.carouselTrack::before {
+  left: 0;
+  background: linear-gradient(to right, #2A2D3A, transparent);
+}
+
+.carouselTrack::after {
+  right: 0;
+  background: linear-gradient(to left, #2A2D3A, transparent);
+}
+
+/* Logo Strip - Animated */
+.logoStrip {
+  display: flex;
+  align-items: center;
+  animation: scrollLeftToRight 60s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scrollLeftToRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+/* Logo Wrapper - Contains logo + divider */
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Add divider after each wrapper using ::after */
+.logoWrapper::after {
+  content: '';
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 24px;
+  flex-shrink: 0;
+}
+
+/* Logo Item */
+.logoItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Company Name */
+.companyName {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.3px;
+}
+
+/* Lecturer Badge */
+.badge {
+  display: inline-block;
+  background: #7B2CBF;
+  color: #FFFFFF;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 8px;
+}
+
+/* Label Text - BELOW carousel */
+.carouselLabel {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  margin-top: 16px;
+  padding: 0 24px;
+  margin-bottom: 0;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .carouselSection {
+    padding: 20px 0;
+  }
+
+  .carouselTrack {
+    padding: 12px 0;
+  }
+
+  .logoWrapper::after {
+    margin: 0 20px;
+  }
+
+  .companyName {
+    font-size: 16px;
+  }
+
+  .carouselTrack::before,
+  .carouselTrack::after {
+    width: 80px;
+  }
+
+  .carouselLabel {
+    margin-top: 12px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .carouselSection {
+    padding: 16px 0;
+  }
+
+  .carouselTrack {
+    padding: 10px 0;
+  }
+
+  .logoWrapper::after {
+    margin: 0 16px;
+    height: 16px;
+  }
+
+  .companyName {
+    font-size: 14px;
+  }
+
+  .badge {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+
+  .carouselTrack::before,
+  .carouselTrack::after {
+    width: 60px;
+  }
+
+  .carouselLabel {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+}

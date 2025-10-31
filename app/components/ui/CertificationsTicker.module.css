@@ -1,0 +1,102 @@
+/* Certifications Ticker - Animated Horizontal Scroll */
+
+.tickerContainer {
+  width: 100vw;
+  height: 72px;
+  background: #1A1D2E;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Edge fade effect */
+.tickerContainer::before,
+.tickerContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tickerContainer::before {
+  left: 0;
+  background: linear-gradient(to right, #1A1D2E 0%, transparent 100%);
+}
+
+.tickerContainer::after {
+  right: 0;
+  background: linear-gradient(to left, #1A1D2E 0%, transparent 100%);
+}
+
+/* Ticker content - animates */
+.tickerContent {
+  display: inline-flex;
+  gap: 40px;
+  white-space: nowrap;
+  animation: scrollLeft 30s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Cert group (cert + separator) */
+.certGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 40px;
+}
+
+/* Individual certification */
+.certification {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.03em;
+}
+
+/* Separator */
+.separator {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tickerContainer {
+    height: 60px;
+  }
+
+  .certification {
+    font-size: 12px;
+  }
+
+  .tickerContent {
+    gap: 32px;
+  }
+
+  .certGroup {
+    gap: 32px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .tickerContent {
+    animation: none;
+  }
+}

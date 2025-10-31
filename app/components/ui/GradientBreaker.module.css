@@ -1,0 +1,76 @@
+/* Gradient Line Section Breaker */
+
+.sectionBreaker {
+  width: 100%;
+  padding: 25px 0;
+  background: #2D3142;
+}
+
+.breakerContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+.gradientLine {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(90deg, #7B2CBF 0%, #0066FF 100%);
+  border-radius: 2px;
+}
+
+/* Line Caps */
+.lineCap,
+.lineCapRight {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #7B2CBF, #0066FF);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(123, 44, 191, 0.4);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lineCap {
+  left: -16px;
+}
+
+.lineCapRight {
+  right: -16px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sectionBreaker {
+    padding: 60px 0;
+  }
+
+  .breakerContainer {
+    padding: 0 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionBreaker {
+    padding: 40px 0;
+  }
+
+  .breakerContainer {
+    padding: 0 24px;
+  }
+
+  .lineCap,
+  .lineCapRight {
+    width: 10px;
+    height: 10px;
+  }
+
+  .lineCap {
+    left: -12px;
+  }
+
+  .lineCapRight {
+    right: -12px;
+  }
+}

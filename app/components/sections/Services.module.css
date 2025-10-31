@@ -1,0 +1,248 @@
+/* Services Section - Revenue-Driving Services */
+
+.servicesSection {
+  width: 100%;
+  background: #2D3142;
+  padding: 120px 0;
+}
+
+.servicesContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.headline {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.subheadline {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Services Grid */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+/* Service Card */
+.serviceCard {
+  position: relative;
+  background: rgba(45, 49, 66, 0.6);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 40px;
+  transition: all 0.3s ease;
+}
+
+/* Gradient Border Effect */
+.serviceCard::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #7B2CBF, #0066FF);
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.serviceCard:hover::before {
+  opacity: 1;
+}
+
+.serviceCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(123, 44, 191, 0.3);
+}
+
+/* Icon */
+.icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  transition: transform 0.3s ease;
+}
+
+.icon i {
+  font-size: 28px;
+  color: #FFFFFF;
+}
+
+.serviceCard:hover .icon {
+  transform: scale(1.05);
+}
+
+/* Card Title */
+.cardTitle {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+/* Description */
+.description {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Deliverables List */
+.deliverables {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.deliverableItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.deliverableItem::before {
+  content: '✓';
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #7B2CBF, #0066FF);
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .servicesSection {
+    padding: 80px 0;
+  }
+
+  .servicesContainer {
+    padding: 0 48px;
+  }
+
+  .headline {
+    font-size: 40px;
+  }
+
+  .subheadline {
+    font-size: 16px;
+  }
+
+  .servicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .serviceCard {
+    padding: 32px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .servicesSection {
+    padding: 60px 0;
+  }
+
+  .servicesContainer {
+    padding: 0 24px;
+  }
+
+  .header {
+    margin-bottom: 48px;
+  }
+
+  .headline {
+    font-size: 32px;
+  }
+
+  .subheadline {
+    font-size: 15px;
+  }
+
+  .servicesGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .serviceCard {
+    padding: 28px;
+  }
+
+  .icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .icon i {
+    font-size: 24px;
+  }
+
+  .cardTitle {
+    font-size: 20px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .deliverableItem {
+    font-size: 13px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .serviceCard {
+    transition: none;
+  }
+
+  .serviceCard:hover {
+    transform: none;
+  }
+
+  .icon {
+    transition: none;
+  }
+}

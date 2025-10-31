@@ -1,0 +1,106 @@
+/* Section Breaker - Animated Line with Badges */
+
+.sectionBreaker {
+  width: 100%;
+  height: 120px;
+  background: #2D3142;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breakerContainer {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breakerLine {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #7B2CBF 0%, #0066FF 100%);
+  opacity: 0.5;
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.breakerBadgeLeft,
+.breakerBadgeRight {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7B2CBF, #0066FF);
+  box-shadow: 0 0 16px rgba(123, 44, 191, 0.4);
+  animation: pulseBadge 2s ease-in-out infinite;
+}
+
+.breakerBadgeLeft {
+  left: 80px;
+}
+
+.breakerBadgeRight {
+  right: 80px;
+}
+
+@keyframes pulseBadge {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .breakerContainer {
+    padding: 0 60px;
+  }
+
+  .breakerBadgeLeft {
+    left: 60px;
+  }
+
+  .breakerBadgeRight {
+    right: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionBreaker {
+    height: 80px;
+  }
+
+  .breakerContainer {
+    padding: 0 24px;
+  }
+
+  .breakerBadgeLeft {
+    left: 24px;
+  }
+
+  .breakerBadgeRight {
+    right: 24px;
+  }
+
+  .breakerBadgeLeft,
+  .breakerBadgeRight {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+  }
+}

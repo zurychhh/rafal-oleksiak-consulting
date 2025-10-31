@@ -1,0 +1,393 @@
+/* Bio Section Module CSS - Matches Screenshot Design */
+
+.bioSection {
+  width: 100%;
+  background: #2D3142 !important;
+  padding: 96px 0;
+}
+
+.bioContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+/* TOP ROW - Name/Tagline LEFT + Photo RIGHT */
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 64px;
+  margin-bottom: 64px;
+}
+
+/* Header Content - LEFT SIDE */
+.headerContent {
+  flex: 1;
+  max-width: 600px;
+}
+
+.bioName {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 56px;
+  background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.bioTagline {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Photo Column - RIGHT SIDE */
+.photoColumn {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.photoContainer {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.bioPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+
+/* 3 EXPERTISE BLOCKS - HORIZONTAL */
+.expertiseBlocks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-bottom: 64px;
+  align-items: stretch;
+}
+
+.expertiseBlock {
+  position: relative;
+  background: #35394D;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Gradient Border Effect */
+.expertiseBlock::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7B2CBF, #0066FF);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.expertiseBlock:hover {
+  transform: translateY(-4px);
+}
+
+.blockTitle {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.3;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Different gradient for each card title */
+.expertiseBlock:nth-child(1) .blockTitle {
+  background: linear-gradient(135deg, #A855F7, #C084FC) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.expertiseBlock:nth-child(2) .blockTitle {
+  background: linear-gradient(135deg, #0EA5E9, #38BDF8) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.expertiseBlock:nth-child(3) .blockTitle {
+  background: linear-gradient(135deg, #A855F7, #C084FC) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.blockContent {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* BOTTOM SECTION - CENTERED */
+.bottomSection {
+  text-align: center;
+}
+
+/* Key Metrics Row */
+.trackRecord {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-bottom: 48px;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.metricNumber {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  background: linear-gradient(135deg, #7B2CBF, #0066FF) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  line-height: 1.2;
+}
+
+.metricLabel {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Metrics - Purple (for inline metrics) */
+.metric {
+  color: inherit !important;
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+/* Mission Statement */
+.mission {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin: 32px auto;
+  max-width: 700px;
+}
+
+/* Certifications */
+.certifications {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+/* CTA Button */
+.bioCta {
+  display: inline-block;
+  background: linear-gradient(135deg, #7B2CBF, #9D4EDD) !important;
+  color: #FFFFFF !important;
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 16px 40px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(123, 44, 191, 0.3);
+  transition: all 0.3s ease;
+}
+
+.bioCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(123, 44, 191, 0.5);
+  background: linear-gradient(135deg, #9D4EDD, #7B2CBF) !important;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .bioSection {
+    padding: 80px 0;
+  }
+
+  .bioContainer {
+    padding: 0 48px;
+  }
+
+  .topRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 56px;
+    text-align: center;
+  }
+
+  .headerContent {
+    width: 100%;
+  }
+
+  .photoColumn {
+    width: 260px;
+  }
+
+  .photoContainer {
+    width: 260px;
+    height: 260px;
+  }
+
+  .bioName {
+    font-size: 48px;
+  }
+
+  .bioTagline {
+    font-size: 18px;
+  }
+
+  .expertiseBlocks {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+
+  .expertiseBlock {
+    padding: 28px;
+    min-height: auto;
+  }
+
+  .blockTitle {
+    font-size: 18px;
+  }
+
+  .blockContent {
+    font-size: 14px;
+  }
+
+  .trackRecord {
+    gap: 48px;
+  }
+
+  .metricNumber {
+    font-size: 36px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .bioSection {
+    padding: 60px 0;
+  }
+
+  .bioContainer {
+    padding: 0 24px;
+  }
+
+  .topRow {
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .photoColumn {
+    width: 220px;
+  }
+
+  .photoContainer {
+    width: 220px;
+    height: 220px;
+  }
+
+  .bioName {
+    font-size: 36px;
+  }
+
+  .bioTagline {
+    font-size: 16px;
+  }
+
+  .expertiseBlocks {
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+
+  .expertiseBlock {
+    padding: 24px;
+  }
+
+  .blockTitle {
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+
+  .blockContent {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .trackRecord {
+    flex-direction: column;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+
+  .metricNumber {
+    font-size: 32px;
+  }
+
+  .metricLabel {
+    font-size: 13px;
+  }
+
+  .mission {
+    font-size: 16px;
+    margin: 24px auto;
+  }
+
+  .certifications {
+    font-size: 13px;
+    margin-bottom: 32px;
+  }
+
+  .bioCta {
+    width: 100%;
+    padding: 14px 32px;
+  }
+}

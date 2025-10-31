@@ -1,0 +1,115 @@
+/* Stats Ticker - Animated Horizontal Scroll */
+
+.tickerContainer {
+  width: 100vw;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Edge fade effect */
+.tickerContainer::before,
+.tickerContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tickerContainer::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+}
+
+.tickerContainer::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+}
+
+/* Ticker content - animates */
+.tickerContent {
+  display: inline-flex;
+  gap: 24px;
+  white-space: nowrap;
+  animation: scrollLeft 60s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+/* Metric group (metric + separator) */
+.metricGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Individual metric */
+.metric {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+}
+
+/* Ticker number (white, full opacity) */
+.tickerNumber {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+/* Ticker text (white, 0.85 opacity) */
+.tickerText {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+}
+
+/* Separator */
+.separator {
+  font-size: 16px;
+  background: linear-gradient(135deg, #7B2CBF, #0066FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tickerContainer {
+    height: 50px;
+  }
+
+  .metric {
+    font-size: 14px;
+  }
+
+  .tickerContent {
+    gap: 20px;
+  }
+
+  .metricGroup {
+    gap: 20px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .tickerContent {
+    animation: none;
+  }
+}
