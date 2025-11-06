@@ -3,7 +3,6 @@ import CertificationsTicker from "../ui/CertificationsTicker";
 
 interface CaseStudy {
   badge: string;
-  badgeColor: string;
   title: string;
   challenge: string;
   result: string;
@@ -16,7 +15,6 @@ export default function CaseStudiesSection() {
   const caseStudies: CaseStudy[] = [
     {
       badge: "ALLEGRO",
-      badgeColor: "#C44EDA",
       title: "Building Enterprise-Scale Automation",
       challenge: "Untapped revenue opportunity in owned channels - automation delivering less than 1% of total company revenue",
       result: "Transformed automation into primary revenue driver, scaling from 0.5% to 12% of company revenue (+11.5pp growth). Built 15-person team and managed $2M budget while integrating AI/ML capabilities for predictive personalization.",
@@ -26,7 +24,6 @@ export default function CaseStudiesSection() {
     },
     {
       badge: "ALLEGRO",
-      badgeColor: "#C44EDA",
       title: "Traffic & Conversion Excellence",
       challenge: "Fragmented customer communication across channels with suboptimal traffic and conversion performance",
       result: "Orchestrated omnichannel communication strategy delivering 34% year-over-year revenue growth and 1.2pp CTR improvement through cross-departmental alignment and data-driven optimization.",
@@ -36,7 +33,6 @@ export default function CaseStudiesSection() {
     },
     {
       badge: "BOOKSY",
-      badgeColor: "#C44EDA",
       title: "B2B SaaS Conversion Excellence",
       challenge: "Suboptimal conversion path limiting growth of SaaS subscription base",
       result: "Optimized full B2B funnel from prospect to paying customer, achieving 0.3pp conversion rate improvement while establishing CRM procedures that improved go-to-market efficiency by 30% and reduced costs by 14%.",
@@ -69,10 +65,7 @@ export default function CaseStudiesSection() {
             <div key={index} className={styles.card}>
 
               {/* Company Badge */}
-              <span
-                className={styles.companyBadge}
-                style={{ backgroundColor: study.badgeColor }}
-              >
+              <span className={styles.companyBadge}>
                 {study.badge}
               </span>
 
@@ -93,7 +86,7 @@ export default function CaseStudiesSection() {
 
               {/* Hero Metric */}
               <div className={styles.metricBackdrop}>
-                <div className={styles.heroMetric}>{study.heroMetric}</div>
+                <span className="gradient-number">{study.heroMetric}</span>
               </div>
               <div className={styles.metricLabel}>{study.metricLabel}</div>
 

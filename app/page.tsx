@@ -5,6 +5,11 @@ import GradientBreaker from "./components/ui/GradientBreaker";
 import Services from "./components/sections/Services";
 import Collaboration from "./components/sections/Collaboration";
 import CaseStudiesSection from "./components/sections/CaseStudiesSection";
+import ExpertiseBreaker from "./components/sections/ExpertiseBreaker";
+import ProcessTimeline from "./components/sections/ProcessTimeline";
+import AchievementsTicker from "./components/sections/AchievementsTicker";
+import FinalCTA from "./components/sections/FinalCTA";
+import Footer from "./components/sections/Footer";
 
 export default function Home() {
   return (
@@ -16,11 +21,10 @@ export default function Home() {
       <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#2D3142]">
 
         {/* Floating Gradient Shapes */}
-        <div className="floating-shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-          <div className="shape shape-4"></div>
+        <div className="floating-shapes-container">
+          <div className="floating-shape floating-shape-1"></div>
+          <div className="floating-shape floating-shape-2"></div>
+          <div className="floating-shape floating-shape-3"></div>
         </div>
 
         {/* Content Container */}
@@ -40,10 +44,15 @@ export default function Home() {
           </p>
 
           {/* CTA Button */}
-          <button className="hero-cta-button">
+          <a
+            href="https://calendly.com/rafaloleksiakconsulting/30min"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-cta-button"
+          >
             Book Free Consultation
             <span>→</span>
-          </button>
+          </a>
 
           {/* Credibility Line */}
           <p className="hero-credibility">
@@ -71,6 +80,21 @@ export default function Home() {
 
       {/* Case Studies Section */}
       <CaseStudiesSection />
+
+      {/* Expertise Breaker - Auto-scrolling Tags */}
+      <ExpertiseBreaker />
+
+      {/* Process Timeline - How We'll Work Together */}
+      <ProcessTimeline />
+
+      {/* Breaker 4 - Achievements Ticker */}
+      <AchievementsTicker />
+
+      {/* Final CTA + Contact Form */}
+      <FinalCTA />
+
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }

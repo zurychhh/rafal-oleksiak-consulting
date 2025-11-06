@@ -6,6 +6,9 @@ export default function Bio() {
     <section className={styles.bioSection} id="bio">
       <div className={styles.bioContainer}>
 
+        {/* Bio Card with Animated Border */}
+        <div className={styles.bioCard}>
+
         {/* TOP ROW: Name/Tagline LEFT + Photo RIGHT */}
         <div className={styles.topRow}>
 
@@ -66,15 +69,15 @@ export default function Bio() {
           {/* Track Record Metrics */}
           <div className={styles.trackRecord}>
             <div className={styles.badge}>
-              <div className={styles.metricNumber}>0.5% → 12%</div>
+              <span className="gradient-number" style={{ fontSize: '40px' }}>0.5% → 12%</span>
               <div className={styles.metricLabel}>revenue growth</div>
             </div>
             <div className={styles.badge}>
-              <div className={styles.metricNumber}>$2M</div>
+              <span className="gradient-number" style={{ fontSize: '40px' }}>$2M</span>
               <div className={styles.metricLabel}>managed</div>
             </div>
             <div className={styles.badge}>
-              <div className={styles.metricNumber}>15-person</div>
+              <span className="gradient-number" style={{ fontSize: '40px' }}>15-person</span>
               <div className={styles.metricLabel}>teams built</div>
             </div>
           </div>
@@ -84,15 +87,20 @@ export default function Bio() {
             Mission: Turn your owned channels into your #1 revenue driver.
           </p>
 
-          {/* Certifications */}
-          <p className={styles.certifications}>
-            Certifications: Salesforce Marketing Cloud • Six Sigma & Lean • AMA 5-Day MBA • GAQM Team Leader
-          </p>
+          {/* Certifications - Badge Pills */}
+          <div className={styles.certificationBadges}>
+            <span className={styles.badgePill}>Salesforce Marketing Cloud</span>
+            <span className={styles.badgePill}>Six Sigma & Lean</span>
+            <span className={styles.badgePill}>AMA 5-Day MBA</span>
+            <span className={styles.badgePill}>GAQM Team Leader</span>
+          </div>
 
           {/* CTA Button */}
           <a href="#contact" className={styles.bioCta}>See Full Experience</a>
 
         </div>
+
+        </div> {/* End bioCard */}
 
       </div>
     </section>

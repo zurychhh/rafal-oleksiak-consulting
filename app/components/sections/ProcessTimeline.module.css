@@ -1,0 +1,422 @@
+/* Process Timeline - How We'll Work Together */
+
+.processTimeline {
+  width: 100%;
+  max-width: 100vw;
+  background: #2D3142;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 100px clamp(20px, 5vw, 80px) 120px clamp(20px, 5vw, 80px);
+  box-sizing: border-box;
+}
+
+/* Header */
+.headline {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 52px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  max-width: 850px;
+  margin: 0 auto 120px auto;
+}
+
+/* Timeline Wrapper */
+.timelineWrapper {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 180px 60px;
+}
+
+/* Base Timeline Line */
+.timelineLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2px;
+  background: linear-gradient(90deg, #7B2CBF, #0066FF);
+  box-shadow: 0 0 8px rgba(123, 44, 191, 0.2);
+  z-index: 1 !important;
+}
+
+/* Timeline Stages */
+.timelineStage {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+
+  /* Initial hidden state */
+  opacity: 0;
+  transform: translate(-50%, -50%) translateY(30px);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timelineStage.revealed {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+}
+
+/* Stage Positioning */
+.stage01 {
+  left: 0%;
+}
+
+.stage02 {
+  left: 25%;
+}
+
+.stage03 {
+  left: 50%;
+}
+
+.stage04 {
+  left: 75%;
+}
+
+.stage05 {
+  left: 100%;
+}
+
+/* Node */
+.node {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7B2CBF, #0066FF);
+  border: 3px solid #2D3142;
+  box-shadow: 0 0 24px rgba(123, 44, 191, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10 !important;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timelineStage.revealed .node {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+@keyframes subtlePulse {
+  0%, 100% {
+    box-shadow: 0 0 24px rgba(123, 44, 191, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 32px rgba(123, 44, 191, 0.6);
+  }
+}
+
+.nodeNumber {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+/* Connector Lines */
+.connector {
+  width: 2px;
+  height: 50px;
+  background: linear-gradient(180deg, rgba(123, 44, 191, 0.4), rgba(0, 102, 255, 0.4));
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.connectorTop {
+  bottom: 100%;
+  margin-bottom: 0;
+}
+
+.connectorBottom {
+  top: 100%;
+  margin-top: 0;
+}
+
+/* Stage Content */
+.stageContent {
+  position: absolute;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+
+.contentTop {
+  bottom: calc(100% + 50px);
+  padding-bottom: 10px;
+}
+
+.contentBottom {
+  top: calc(100% + 50px);
+  padding-top: 10px;
+}
+
+/* Icon */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+}
+
+.timelineStage:hover .icon {
+  transform: scale(1.1);
+}
+
+/* Stage Title */
+.stageTitle {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: 10px;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+/* Stage Description */
+.stageDescription {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  max-width: 200px;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* Responsive - Large Desktop */
+@media (max-width: 1400px) {
+  .timelineWrapper {
+    padding: 160px 40px;
+  }
+
+  .stageContent {
+    width: 180px;
+  }
+
+  .stageTitle {
+    font-size: 15px;
+  }
+
+  .stageDescription {
+    font-size: 12px;
+    max-width: 180px;
+  }
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1200px) {
+  .container {
+    padding: 80px 48px;
+  }
+
+  .headline {
+    font-size: 44px;
+  }
+
+  .description {
+    font-size: 17px;
+    margin-bottom: 60px;
+  }
+
+  .timelineWrapper {
+    padding: 140px 30px;
+  }
+
+  .node {
+    width: 56px;
+    height: 56px;
+  }
+
+  .nodeNumber {
+    font-size: 20px;
+  }
+
+  .stageContent {
+    width: 160px;
+  }
+
+  .stageTitle {
+    font-size: 14px;
+  }
+
+  .stageDescription {
+    font-size: 11px;
+    max-width: 160px;
+  }
+
+  .connector {
+    height: 40px;
+  }
+
+  .contentTop {
+    bottom: calc(100% + 40px);
+  }
+
+  .contentBottom {
+    top: calc(100% + 40px);
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .container {
+    padding: 60px 24px;
+  }
+
+  .headline {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .description {
+    font-size: 16px;
+    margin-bottom: 48px;
+  }
+
+  /* Vertical Timeline for Mobile */
+  .timelineWrapper {
+    padding: 40px 20px;
+    max-width: 400px;
+  }
+
+  .timelineLine {
+    left: 32px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+    transform: none;
+    background: linear-gradient(180deg, #7B2CBF, #0066FF);
+  }
+
+  .timelineStage {
+    position: relative;
+    left: 0 !important;
+    top: auto;
+    transform: none !important;
+    margin-bottom: 60px;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .timelineStage:last-child {
+    margin-bottom: 0;
+  }
+
+  .timelineStage.revealed {
+    opacity: 1;
+    transform: none !important;
+  }
+
+  .node {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    margin-right: 20px;
+  }
+
+  .nodeNumber {
+    font-size: 18px;
+  }
+
+  .connector {
+    display: none;
+  }
+
+  .stageContent {
+    position: relative;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    transform: none;
+    width: auto;
+    flex: 1;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .contentTop,
+  .contentBottom {
+    position: relative;
+    top: auto;
+    bottom: auto;
+  }
+
+  .icon {
+    margin-bottom: 12px;
+  }
+
+  .icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .stageTitle {
+    text-align: left;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .stageDescription {
+    text-align: left;
+    font-size: 13px;
+    max-width: none;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .timelineStage {
+    transition: opacity 0.5s ease;
+  }
+
+  .timelineStage.revealed {
+    opacity: 1;
+  }
+
+  .node {
+    animation: none !important;
+  }
+
+  .timelineStage:hover .icon {
+    transform: none;
+  }
+}

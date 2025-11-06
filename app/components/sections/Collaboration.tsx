@@ -5,7 +5,7 @@ import styles from "./Collaboration.module.css";
 import StatsTicker from "../ui/StatsTicker";
 
 export default function Collaboration() {
-  const [activeTab, setActiveTab] = useState<'partnership' | 'project'>('partnership');
+  const [activeTab, setActiveTab] = useState<'partnership' | 'project' | 'quickwins'>('partnership');
 
   const partnershipBenefits = [
     {
@@ -45,6 +45,25 @@ export default function Collaboration() {
     }
   ];
 
+  const quickWinsBenefits = [
+    {
+      title: "Immediate Value",
+      description: "Actionable insights in single session"
+    },
+    {
+      title: "No Long-term Commitment",
+      description: "Pay per hour, scale as needed"
+    },
+    {
+      title: "Tactical Solutions",
+      description: "Focused problem-solving approach"
+    },
+    {
+      title: "Expert Consultation",
+      description: "8+ years experience on demand"
+    }
+  ];
+
   return (
     <section className={styles.collaborationSection} id="collaboration">
 
@@ -70,9 +89,7 @@ export default function Collaboration() {
             role="tab"
             aria-selected={activeTab === 'partnership'}
           >
-            {activeTab === 'partnership' && (
-              <span className={styles.durationBadge}>6-12+ MONTHS</span>
-            )}
+            <span className={styles.durationBadge}>6-12+ MONTHS</span>
             Strategic Partnership
           </button>
           <button
@@ -81,10 +98,17 @@ export default function Collaboration() {
             role="tab"
             aria-selected={activeTab === 'project'}
           >
-            {activeTab === 'project' && (
-              <span className={styles.durationBadge}>2-6 MONTHS</span>
-            )}
+            <span className={styles.durationBadge}>2-6 MONTHS</span>
             Project-Based Engagement
+          </button>
+          <button
+            className={`${styles.tabButton} ${activeTab === 'quickwins' ? styles.active : ''}`}
+            onClick={() => setActiveTab('quickwins')}
+            role="tab"
+            aria-selected={activeTab === 'quickwins'}
+          >
+            <span className={styles.durationBadge}>1-3 HOURS</span>
+            Quick Wins Consulting
           </button>
         </div>
 
@@ -126,9 +150,14 @@ export default function Collaboration() {
               </div>
 
               {/* CTA Button */}
-              <button className={`${styles.ctaButton} ${styles.partnershipCta}`}>
+              <a
+                href="https://calendly.com/rafaloleksiakconsulting/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.ctaButton} ${styles.partnershipCta}`}
+              >
                 Explore Partnership
-              </button>
+              </a>
 
             </div>
           )}
@@ -165,23 +194,188 @@ export default function Collaboration() {
               </div>
 
               {/* CTA Button */}
-              <button className={`${styles.ctaButton} ${styles.projectCta}`}>
+              <a
+                href="https://calendly.com/rafaloleksiakconsulting/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.ctaButton} ${styles.projectCta}`}
+              >
                 Discuss Your Project
-              </button>
+              </a>
+
+            </div>
+          )}
+
+          {activeTab === 'quickwins' && (
+            <div className={styles.cardContent}>
+
+              {/* Title with Badge */}
+              <div className={styles.titleRow}>
+                <h3 className={styles.cardTitle}>Quick Wins Consulting</h3>
+                <span className={`${styles.recommendedBadge} ${styles.flexibleBadge}`}>FLEXIBLE</span>
+              </div>
+
+              {/* Best For */}
+              <p className={styles.bestFor}>
+                Perfect for businesses seeking immediate, actionable insights without long-term commitment
+              </p>
+
+              {/* Description */}
+              <p className={styles.description}>
+                Focused 1-3 hour consulting sessions delivering quick wins and tactical improvements. Get expert guidance on specific challenges, immediate optimization opportunities, and actionable recommendations you can implement right away.
+              </p>
+
+              {/* Benefits */}
+              <h4 className={styles.benefitsHeadline}>Quick Wins Advantages</h4>
+
+              <div className={styles.benefitsGrid}>
+                {quickWinsBenefits.map((benefit, index) => (
+                  <div key={index} className={styles.benefitItem}>
+                    <div className={styles.benefitMarker}>✓</div>
+                    <div className={styles.benefitContent}>
+                      <h5 className={styles.benefitTitle}>{benefit.title}</h5>
+                      <p className={styles.benefitDescription}>{benefit.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA Button */}
+              <a
+                href="https://calendly.com/rafaloleksiakconsulting/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.ctaButton} ${styles.quickwinsCta}`}
+              >
+                Book Quick Win Session
+              </a>
 
             </div>
           )}
 
         </div>
 
-        {/* Pricing Statement */}
-        <div className={styles.pricingContainer}>
-          <p className={styles.pricingText}>
-            Investment tailored to your needs and expected ROI. Book free consultation to discuss scope and pricing customized to your business goals.
-          </p>
-          <button className={styles.scheduleButton}>
-            Schedule a Call
-          </button>
+        {/* Custom Proposal Form */}
+        <div className={styles.customProposalSection}>
+          <div className={styles.proposalContainer}>
+            <h3 className={styles.proposalTitle}>Not Sure What Support Is Best for You?</h3>
+            <p className={styles.proposalSubtitle}>
+              Describe your needs and I will contact you with the most efficient proposal suited to your goals.
+            </p>
+
+            <form className={styles.proposalForm} onSubmit={async (e) => {
+              e.preventDefault();
+
+              const form = e.currentTarget;
+              const formData = new FormData(form);
+
+              const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+              if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+              }
+
+              try {
+                const response = await fetch('/api/send-email', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    formType: 'proposal',
+                    needs: formData.get('needs'),
+                    website: formData.get('website'),
+                    email: formData.get('email'),
+                    marketing: formData.get('marketing') === 'on',
+                  }),
+                });
+
+                if (response.ok) {
+                  alert('Thank you! Your proposal request has been received. I will contact you within 24 hours.');
+                  form.reset();
+                } else {
+                  alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');
+                }
+              } catch (error) {
+                alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');
+                console.error('Network error:', error);
+              } finally {
+                if (submitButton) {
+                  submitButton.disabled = false;
+                  submitButton.textContent = 'Send Proposal Request';
+                }
+              }
+            }}>
+
+              {/* 2-Column Grid */}
+              <div className={styles.formGrid}>
+
+                {/* Left Column - Textarea */}
+                <div className={`${styles.formColumn} ${styles.formColumnLeft}`}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="needs">Describe Your Needs *</label>
+                    <textarea
+                      id="needs"
+                      name="needs"
+                      rows={7}
+                      placeholder="Tell me about your challenges, goals, and what you're looking to achieve..."
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Right Column - Stacked Inputs */}
+                <div className={`${styles.formColumn} ${styles.formColumnRight}`}>
+                  {/* Website URL */}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="website">Your Website URL *</label>
+                    <input
+                      type="text"
+                      id="website"
+                      name="website"
+                      placeholder="https://yourwebsite.com"
+                      required
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="email">Your Email *</label>
+                    <input
+                      type="text"
+                      id="email"
+                      name="email"
+                      placeholder="your.email@company.com"
+                      required
+                    />
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Marketing Consent */}
+              <div className={`${styles.formGroup} ${styles.checkboxGroup}`}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    id="marketing"
+                    name="marketing"
+                  />
+                  <span className={styles.checkboxCustom}></span>
+                  <span className={styles.checkboxText}>
+                    I agree to receive marketing communications and updates about services
+                  </span>
+                </label>
+              </div>
+
+              {/* Submit Button */}
+              <button type="submit" className={`${styles.ctaButton} ${styles.formSubmitButton}`}>
+                Send Proposal Request
+                <svg className={styles.arrowIcon} width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M7 3l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+            </form>
+          </div>
         </div>
 
       </div>

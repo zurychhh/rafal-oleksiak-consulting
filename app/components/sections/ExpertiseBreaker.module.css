@@ -1,0 +1,90 @@
+/* Expertise Breaker - Auto-scrolling Tags */
+
+.expertiseBreaker {
+  width: 100%;
+  max-width: 100vw;
+  background: linear-gradient(
+    180deg,
+    rgba(35, 38, 50, 0.8) 0%,
+    #2D3142 100%
+  );
+  padding: 60px 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.scrollingContainer {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.tagsWrapper {
+  display: flex;
+  gap: 16px;
+  width: fit-content;
+  animation: scrollTags 30s linear infinite;
+  will-change: transform;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  background: rgba(123, 44, 191, 0.15);
+  border: 2px solid rgba(123, 44, 191, 0.3);
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+}
+
+.tag:hover {
+  background: rgba(123, 44, 191, 0.25);
+  border-color: rgba(123, 44, 191, 0.5);
+}
+
+@keyframes scrollTags {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .expertiseBreaker {
+    padding: 40px 0;
+  }
+
+  .tag {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 20px;
+  }
+
+  .tagsWrapper {
+    gap: 12px;
+  }
+
+  @keyframes scrollTags {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-33.333%);
+    }
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .tagsWrapper {
+    animation: scrollTags 60s linear infinite;
+  }
+}

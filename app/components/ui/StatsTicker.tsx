@@ -25,7 +25,7 @@ export default function StatsTicker() {
         {allMetrics.map((metric, index) => (
           <span key={index} className={styles.metricGroup}>
             <span className={styles.metric}>
-              <span className={styles.tickerNumber}>{metric.number}</span>
+              <span className={`gradient-number ${styles.tickerNumber}`} style={{ fontSize: '16px' }}>{metric.number}</span>
               <span className={styles.tickerText}> {metric.text}</span>
             </span>
             <span className={styles.separator}>•</span>

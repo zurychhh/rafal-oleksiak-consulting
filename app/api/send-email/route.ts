@@ -1,0 +1,75 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { formType, ...formData } = body;
+
+    let subject = '';
+    let htmlContent = '';
+
+    if (formType === 'consultation') {
+      subject = 'New Consultation Request - oleksiakconsulting.com';
+      htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #7B2CBF;">New Consultation Request</h2>
+          <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p><strong>Full Name:</strong> ${formData.fullName}</p>
+            <p><strong>Email:</strong> <a href="mailto:${formData.email}">${formData.email}</a></p>
+            <p><strong>Website:</strong> <a href="${formData.website}" target="_blank">${formData.website}</a></p>
+            <p><strong>Challenge:</strong></p>
+            <p style="background: white; padding: 15px; border-left: 4px solid #7B2CBF;">${formData.challenge}</p>
+            <p><strong>Marketing Consent:</strong> ${formData.consent ? 'Yes' : 'No'}</p>
+          </div>
+          <p style="color: #666; font-size: 12px;">Sent from oleksiakconsulting.com</p>
+        </div>
+      `;
+    } else if (formType === 'proposal') {
+      subject = 'New Custom Proposal Request - oleksiakconsulting.com';
+      htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #7B2CBF;">New Custom Proposal Request</h2>
+          <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p><strong>Email:</strong> <a href="mailto:${formData.email}">${formData.email}</a></p>
+            <p><strong>Website:</strong> <a href="${formData.website}" target="_blank">${formData.website}</a></p>
+            <p><strong>Business Needs:</strong></p>
+            <p style="background: white; padding: 15px; border-left: 4px solid #7B2CBF;">${formData.needs}</p>
+            <p><strong>Marketing Consent:</strong> ${formData.marketing ? 'Yes' : 'No'}</p>
+          </div>
+          <p style="color: #666; font-size: 12px;">Sent from oleksiakconsulting.com</p>
+        </div>
+      `;
+    }
+
+    const { data, error } = await resend.emails.send({
+      from: `Rafał Oleksiak <${process.env.FROM_EMAIL}>`,
+      to: [process.env.TO_EMAIL!],
+      subject: subject,
+      html: htmlContent,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return NextResponse.json(
+        { error: 'Failed to send email', details: error },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Email sent successfully',
+      id: data?.id
+    });
+
+  } catch (error) {
+    console.error('Server error:', error);
+    return NextResponse.json(
+      { error: 'Failed to send email', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}

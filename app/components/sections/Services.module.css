@@ -2,14 +2,19 @@
 
 .servicesSection {
   width: 100%;
+  max-width: 100vw;
   background: #2D3142;
   padding: 120px 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .servicesContainer {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 64px;
+  padding: 0 clamp(20px, 5vw, 64px);
+  box-sizing: border-box;
 }
 
 /* Header */
@@ -20,11 +25,12 @@
 
 .headline {
   font-family: var(--font-poppins), 'Poppins', sans-serif;
-  font-weight: 700;
+  font-weight: 900;  /* Black weight for section headline */
   font-size: 48px;
+  line-height: 1.1;  /* Tighter line height */
+  letter-spacing: -0.02em;  /* Tighter for black weight */
   color: #FFFFFF;
   margin-bottom: 16px;
-  line-height: 1.2;
 }
 
 .subheadline {
@@ -99,8 +105,9 @@
 /* Card Title */
 .cardTitle {
   font-family: var(--font-poppins), 'Poppins', sans-serif;
-  font-weight: 700;
+  font-weight: 900;  /* Black weight for service card titles */
   font-size: 22px;
+  letter-spacing: -0.01em;
   color: #FFFFFF;
   margin-bottom: 16px;
   line-height: 1.3;
@@ -162,6 +169,7 @@
   }
 
   .headline {
+    font-weight: 900;  /* Keep black weight on tablet */
     font-size: 40px;
   }
 
@@ -194,6 +202,7 @@
   }
 
   .headline {
+    font-weight: 900;  /* Keep black weight on mobile */
     font-size: 32px;
   }
 
@@ -220,6 +229,7 @@
   }
 
   .cardTitle {
+    font-weight: 900;  /* Keep black weight on mobile */
     font-size: 20px;
   }
 
