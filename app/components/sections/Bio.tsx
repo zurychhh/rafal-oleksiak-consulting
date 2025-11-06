@@ -87,17 +87,6 @@ export default function Bio() {
             Mission: Turn your owned channels into your #1 revenue driver.
           </p>
 
-          {/* Certifications - Badge Pills */}
-          <div className={styles.certificationBadges}>
-            <span className={styles.badgePill}>Salesforce Marketing Cloud</span>
-            <span className={styles.badgePill}>Six Sigma & Lean</span>
-            <span className={styles.badgePill}>AMA 5-Day MBA</span>
-            <span className={styles.badgePill}>GAQM Team Leader</span>
-          </div>
-
-          {/* CTA Button */}
-          <a href="#contact" className={styles.bioCta}>See Full Experience</a>
-
         </div>
 
         </div> {/* End bioCard */}

@@ -133,7 +133,7 @@ export default function ProcessTimeline() {
   };
 
   return (
-    <section className={styles.processTimeline}>
+    <section className={styles.processTimeline} id="process">
       <div className={styles.container}>
 
         {/* Header */}

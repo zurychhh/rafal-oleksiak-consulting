@@ -94,7 +94,7 @@ export default function FinalCTA() {
   };
 
   return (
-    <section className={styles.finalCTA}>
+    <section className={styles.finalCTA} id="contact">
       {/* Floating shapes */}
       <div className={`${styles.floatingShape} ${styles.shape1}`}></div>
       <div className={`${styles.floatingShape} ${styles.shape2}`}></div>
