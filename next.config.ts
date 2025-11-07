@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
+
+  // Performance: Use Turbopack (Next.js 16 default) with optimized code splitting
+  // Turbopack provides automatic code splitting and tree-shaking
+  // Combined with dynamic imports in page.tsx for optimal bundle sizes
+  turbopack: {},
 };
 
 // Enable bundle analyzer when ANALYZE=true

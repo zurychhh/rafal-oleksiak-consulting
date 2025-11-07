@@ -4,20 +4,24 @@ import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold
 import "./globals.css"; // Remaining below-the-fold styles
 import FontAwesomeLoader from "./components/FontAwesomeLoader";
 
-// Configure Poppins for headlines
+// Configure Poppins for headlines - Optimized for mobile performance
 const poppins = Poppins({
-  subsets: ["latin"],
+  subsets: ["latin"], // Latin subset includes Polish special characters
   weight: ["400", "600", "700", "900"],
   variable: "--font-poppins",
   display: "swap",
+  adjustFontFallback: false, // Reduces CLS and prevents extra system font loading
+  preload: true, // Prioritizes font in network waterfall
 });
 
-// Configure DM Sans for body text
+// Configure DM Sans for body text - Optimized for mobile performance
 const dmSans = DM_Sans({
-  subsets: ["latin"],
+  subsets: ["latin"], // Latin subset includes Polish special characters
   weight: ["400", "500", "700"],
   variable: "--font-dm-sans",
   display: "swap",
+  adjustFontFallback: false, // Reduces CLS and prevents extra system font loading
+  preload: true, // Prioritizes font in network waterfall
 });
 
 export const metadata: Metadata = {
