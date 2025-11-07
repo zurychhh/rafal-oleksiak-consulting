@@ -21,6 +21,11 @@ section {
   padding: clamp(48px, 8vw + 1rem, 120px) 0;
 }
 
+/* Smooth scroll offset for fixed navbar */
+section[id] {
+  scroll-margin-top: 80px; /* Adjust based on navbar height */
+}
+
 /* Gradient Number - Universal class used across multiple sections */
 .gradient-number {
   background: linear-gradient(135deg, #9D4EDD 0%, #00BFFF 100%);
