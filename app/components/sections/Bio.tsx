@@ -26,6 +26,7 @@ export default function Bio() {
                 alt="Rafał Oleksiak - CRM and Marketing Automation Consultant"
                 width={280}
                 height={280}
+                sizes="(max-width: 480px) 180px, (max-width: 768px) 220px, (max-width: 1024px) 260px, 280px"
                 className={styles.bioPhoto}
                 priority
               />
