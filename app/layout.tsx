@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins, DM_Sans } from "next/font/google";
-import "./globals.css";
+import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold only)
+import "./globals.css"; // Remaining below-the-fold styles
+import FontAwesomeLoader from "./components/FontAwesomeLoader";
 
 // Configure Poppins for headlines
 const poppins = Poppins({
@@ -37,17 +39,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-          crossOrigin="anonymous"
-          referrerPolicy="no-referrer"
-        />
+        {/* Performance: Preconnect to external domains for faster DNS resolution */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+
+        {/* Performance: DNS prefetch for third-party services */}
+        <link rel="dns-prefetch" href="https://calendly.com" />
       </head>
       <body
         className={`${poppins.variable} ${dmSans.variable} antialiased`}
       >
+        {/* Performance: Async load Font Awesome to prevent render blocking */}
+        <FontAwesomeLoader />
         {children}
       </body>
     </html>

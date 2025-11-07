@@ -10,6 +10,7 @@ import ProcessTimeline from "./components/sections/ProcessTimeline";
 import AchievementsTicker from "./components/sections/AchievementsTicker";
 import FinalCTA from "./components/sections/FinalCTA";
 import Footer from "./components/sections/Footer";
+import LazySection from "./components/LazySection";
 
 export default function Home() {
   return (
@@ -76,25 +77,39 @@ export default function Home() {
       <Services />
 
       {/* Collaboration Section */}
-      <Collaboration />
+      <LazySection>
+        <Collaboration />
+      </LazySection>
 
       {/* Case Studies Section */}
-      <CaseStudiesSection />
+      <LazySection>
+        <CaseStudiesSection />
+      </LazySection>
 
       {/* Expertise Breaker - Auto-scrolling Tags */}
-      <ExpertiseBreaker />
+      <LazySection>
+        <ExpertiseBreaker />
+      </LazySection>
 
       {/* Process Timeline - How We'll Work Together */}
-      <ProcessTimeline />
+      <LazySection>
+        <ProcessTimeline />
+      </LazySection>
 
       {/* Breaker 4 - Achievements Ticker */}
-      <AchievementsTicker />
+      <LazySection>
+        <AchievementsTicker />
+      </LazySection>
 
       {/* Final CTA + Contact Form */}
-      <FinalCTA />
+      <LazySection>
+        <FinalCTA />
+      </LazySection>
 
       {/* Footer */}
-      <Footer />
+      <LazySection>
+        <Footer />
+      </LazySection>
     </main>
   );
 }
