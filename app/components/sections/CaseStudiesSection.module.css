@@ -360,29 +360,29 @@
 
   .cardsGrid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 32px; /* Increased from 24px for better separation */
   }
 
   .card {
-    padding: 28px;
+    padding: 32px; /* Increased from 28px for better breathing room */
   }
 
   .companyBadge {
     font-size: 10px;
     padding: 6px 14px;
-    margin-bottom: 20px;
+    margin-bottom: 24px; /* Increased from 20px */
   }
 
   .cardTitle {
     font-size: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 24px; /* Increased from 20px */
   }
 
   .challengeBox,
   .resultBox {
     padding: 20px;
     padding-left: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 24px; /* Increased from 20px for consistent rhythm */
     border-radius: 12px;
   }
 
@@ -399,6 +399,7 @@
   .metricBackdrop {
     padding: 16px 28px;
     border-radius: 12px;
+    margin-bottom: 20px; /* Better spacing below metric */
   }
 
   .heroMetric {
@@ -407,12 +408,16 @@
 
   .metricLabel {
     font-size: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 24px; /* Increased from 20px for rhythm */
   }
 
   .metricBadge {
     font-size: 12px;
     padding: 8px 16px;
+  }
+
+  .metricsBadges {
+    gap: 10px; /* Slightly tighter on mobile for better wrapping */
   }
 }
 
