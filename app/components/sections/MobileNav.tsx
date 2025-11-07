@@ -18,7 +18,10 @@ export default function MobileNav() {
   }, [isOpen]);
 
   const handleLinkClick = () => {
-    setIsOpen(false);
+    // Small delay to allow anchor navigation to complete before closing menu
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 100);
   };
 
   return (
