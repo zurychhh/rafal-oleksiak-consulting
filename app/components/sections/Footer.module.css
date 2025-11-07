@@ -75,6 +75,11 @@
   background: #7B2CBF;
   border-radius: 50%;
   animation: pulse 1.5s ease-in-out infinite;
+
+  /* GPU acceleration for smooth pulse animation */
+  will-change: opacity, transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .dot:nth-child(2) {
