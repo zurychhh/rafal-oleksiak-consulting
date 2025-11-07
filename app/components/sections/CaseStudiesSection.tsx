@@ -43,7 +43,7 @@ export default function CaseStudiesSection() {
   ];
 
   return (
-    <section className={styles.caseStudiesSection} id="work">
+    <section className={styles.caseStudiesSection} id="transformation-results">
 
       {/* Certifications Ticker */}
       <CertificationsTicker />
