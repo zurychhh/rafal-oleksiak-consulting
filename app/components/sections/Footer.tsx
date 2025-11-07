@@ -47,32 +47,32 @@ export default function Footer() {
             <h4 className={styles.columnTitle}>Services</h4>
             <ul className={styles.linkList}>
               <li>
-                <a href="#services" className={styles.footerLink}>
+                <a href="#revenue-driving-services" className={styles.footerLink}>
                   CRM Strategy
                 </a>
               </li>
               <li>
-                <a href="#services" className={styles.footerLink}>
+                <a href="#revenue-driving-services" className={styles.footerLink}>
                   Marketing Automation
                 </a>
               </li>
               <li>
-                <a href="#services" className={styles.footerLink}>
+                <a href="#revenue-driving-services" className={styles.footerLink}>
                   Email Automation
                 </a>
               </li>
               <li>
-                <a href="#services" className={styles.footerLink}>
+                <a href="#revenue-driving-services" className={styles.footerLink}>
                   Customer Retention
                 </a>
               </li>
               <li>
-                <a href="#services" className={styles.footerLink}>
+                <a href="#revenue-driving-services" className={styles.footerLink}>
                   Analytics & Optimization
                 </a>
               </li>
               <li>
-                <a href="#services" className={styles.footerLink}>
+                <a href="#revenue-driving-services" className={styles.footerLink}>
                   Team Training
                 </a>
               </li>
@@ -84,23 +84,13 @@ export default function Footer() {
             <h4 className={styles.columnTitle}>Work</h4>
             <ul className={styles.linkList}>
               <li>
-                <a href="#case-studies" className={styles.footerLink}>
+                <a href="#transformation-results" className={styles.footerLink}>
                   Case Studies
                 </a>
               </li>
               <li>
-                <a href="#process" className={styles.footerLink}>
+                <a href="#how-we-work" className={styles.footerLink}>
                   Methodologies
-                </a>
-              </li>
-              <li>
-                <a href="#case-studies" className={styles.footerLink}>
-                  Client Results
-                </a>
-              </li>
-              <li>
-                <a href="#case-studies" className={styles.footerLink}>
-                  Testimonials
                 </a>
               </li>
             </ul>
@@ -116,17 +106,17 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#bio" className={styles.footerLink}>
-                  Teaching & Speaking
-                </a>
-              </li>
-              <li>
-                <a href="#final-cta-form" className={styles.footerLink}>
+                <a href="#free-consultation" className={styles.footerLink}>
                   Contact
                 </a>
               </li>
               <li>
-                <a href="#final-cta-form" className={styles.footerLink}>
+                <a
+                  href="https://calendly.com/rafaloleksiakconsulting/30min"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.footerLink}
+                >
                   Book Consultation
                 </a>
               </li>
@@ -139,18 +129,6 @@ export default function Footer() {
           <p className={styles.copyright}>
             © 2025 Rafał Oleksiak. All rights reserved.
           </p>
-
-          <div className={styles.legalLinks}>
-            <a href="#" className={styles.legalLink}>
-              Privacy Policy
-            </a>
-            <a href="#" className={styles.legalLink}>
-              Terms of Service
-            </a>
-            <a href="#" className={styles.legalLink}>
-              Cookie Policy
-            </a>
-          </div>
         </div>
       </div>
     </footer>
