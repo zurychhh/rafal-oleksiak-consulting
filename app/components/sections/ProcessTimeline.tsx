@@ -65,8 +65,8 @@ export default function ProcessTimeline() {
         });
       },
       {
-        threshold: 0.3,
-        rootMargin: "-100px"
+        threshold: 0.1,
+        rootMargin: "50px"
       }
     );
 
@@ -74,10 +74,19 @@ export default function ProcessTimeline() {
       observer.observe(timelineRef.current);
     }
 
+    // Fallback timer for mobile - always show after 1 second if not triggered
+    const fallbackTimer = setTimeout(() => {
+      if (!revealed) {
+        revealStagesSequentially();
+        setRevealed(true);
+      }
+    }, 1000);
+
     return () => {
       if (timelineRef.current) {
         observer.unobserve(timelineRef.current);
       }
+      clearTimeout(fallbackTimer);
     };
   }, [revealed]);
 
