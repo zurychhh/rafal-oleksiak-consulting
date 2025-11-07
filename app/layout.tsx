@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, DM_Sans } from "next/font/google";
-import "./globals.css";
+import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold only)
+import "./globals.css"; // Remaining below-the-fold styles
 import FontAwesomeLoader from "./components/FontAwesomeLoader";
 
 // Configure Poppins for headlines
