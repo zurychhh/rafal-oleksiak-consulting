@@ -37,16 +37,16 @@ export default function MobileNav() {
       {isOpen && (
         <div className={styles.overlay} onClick={() => setIsOpen(false)}>
           <nav className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
-            <a href="#services" onClick={handleLinkClick} className={styles.mobileLink}>
+            <a href="#revenue-driving-services" onClick={handleLinkClick} className={styles.mobileLink}>
               SERVICES
             </a>
-            <a href="#work" onClick={handleLinkClick} className={styles.mobileLink}>
+            <a href="#transformation-results" onClick={handleLinkClick} className={styles.mobileLink}>
               WORK
             </a>
-            <a href="#process" onClick={handleLinkClick} className={styles.mobileLink}>
+            <a href="#how-we-work" onClick={handleLinkClick} className={styles.mobileLink}>
               PROCESS
             </a>
-            <a href="#contact" onClick={handleLinkClick} className={styles.mobileLink}>
+            <a href="#free-consultation" onClick={handleLinkClick} className={styles.mobileLink}>
               CONTACT
             </a>
             <a
