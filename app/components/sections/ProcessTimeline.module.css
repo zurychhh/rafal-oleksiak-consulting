@@ -402,6 +402,58 @@
   }
 }
 
+/* Responsive - Small Mobile (Galaxy Fold, iPhone SE) */
+@media (max-width: 375px) {
+  .container {
+    padding: 48px 16px;
+  }
+
+  .headline {
+    font-size: 28px;
+  }
+
+  .description {
+    font-size: 15px;
+    margin-bottom: 40px;
+  }
+
+  .timelineWrapper {
+    padding: 32px 12px;
+  }
+
+  .timelineLine {
+    left: 24px;
+  }
+
+  .node {
+    width: 40px;
+    height: 40px;
+    margin-right: 16px;
+  }
+
+  .nodeNumber {
+    font-size: 16px;
+  }
+
+  .icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .stageTitle {
+    font-size: 14px;
+  }
+
+  .stageDescription {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .timelineStage {
+    margin-bottom: 48px;
+  }
+}
+
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .timelineStage {
