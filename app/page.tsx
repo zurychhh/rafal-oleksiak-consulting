@@ -1,16 +1,52 @@
+import dynamic from 'next/dynamic';
 import Navbar from "./components/sections/Navbar";
-import Bio from "./components/sections/Bio";
-import CompanyCarousel from "./components/ui/CompanyCarousel";
-import GradientBreaker from "./components/ui/GradientBreaker";
-import Services from "./components/sections/Services";
-import Collaboration from "./components/sections/Collaboration";
-import CaseStudiesSection from "./components/sections/CaseStudiesSection";
-import ExpertiseBreaker from "./components/sections/ExpertiseBreaker";
-import ProcessTimeline from "./components/sections/ProcessTimeline";
-import AchievementsTicker from "./components/sections/AchievementsTicker";
-import FinalCTA from "./components/sections/FinalCTA";
-import Footer from "./components/sections/Footer";
 import LazySection from "./components/LazySection";
+
+// Dynamic imports for below-fold sections to reduce initial bundle size
+// Each component gets code-split into separate chunk for on-demand loading
+const Bio = dynamic(() => import('./components/sections/Bio'), {
+  loading: () => <div style={{ minHeight: '500px' }} />,
+});
+
+const CompanyCarousel = dynamic(() => import('./components/ui/CompanyCarousel'), {
+  loading: () => <div style={{ minHeight: '200px' }} />,
+});
+
+const GradientBreaker = dynamic(() => import('./components/ui/GradientBreaker'), {
+  loading: () => <div style={{ minHeight: '100px' }} />,
+});
+
+const Services = dynamic(() => import('./components/sections/Services'), {
+  loading: () => <div style={{ minHeight: '600px' }} />,
+});
+
+const Collaboration = dynamic(() => import('./components/sections/Collaboration'), {
+  loading: () => <div style={{ minHeight: '800px' }} />,
+});
+
+const CaseStudiesSection = dynamic(() => import('./components/sections/CaseStudiesSection'), {
+  loading: () => <div style={{ minHeight: '900px' }} />,
+});
+
+const ExpertiseBreaker = dynamic(() => import('./components/sections/ExpertiseBreaker'), {
+  loading: () => <div style={{ minHeight: '200px' }} />,
+});
+
+const ProcessTimeline = dynamic(() => import('./components/sections/ProcessTimeline'), {
+  loading: () => <div style={{ minHeight: '700px' }} />,
+});
+
+const AchievementsTicker = dynamic(() => import('./components/sections/AchievementsTicker'), {
+  loading: () => <div style={{ minHeight: '150px' }} />,
+});
+
+const FinalCTA = dynamic(() => import('./components/sections/FinalCTA'), {
+  loading: () => <div style={{ minHeight: '700px' }} />,
+});
+
+const Footer = dynamic(() => import('./components/sections/Footer'), {
+  loading: () => <div style={{ minHeight: '400px' }} />,
+});
 
 export default function Home() {
   return (
