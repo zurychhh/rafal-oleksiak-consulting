@@ -328,11 +328,13 @@ export default function Collaboration() {
                   <div className={styles.formGroup}>
                     <label htmlFor="website">Your Website URL *</label>
                     <input
-                      type="text"
+                      type="url"
                       id="website"
                       name="website"
                       placeholder="https://yourwebsite.com"
                       required
+                      autoComplete="url"
+                      inputMode="url"
                     />
                   </div>
 
@@ -340,11 +342,13 @@ export default function Collaboration() {
                   <div className={styles.formGroup}>
                     <label htmlFor="email">Your Email *</label>
                     <input
-                      type="text"
+                      type="email"
                       id="email"
                       name="email"
                       placeholder="your.email@company.com"
                       required
+                      autoComplete="email"
+                      inputMode="email"
                     />
                   </div>
                 </div>

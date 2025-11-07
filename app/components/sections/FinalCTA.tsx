@@ -171,6 +171,7 @@ export default function FinalCTA() {
                     name="fullName"
                     required
                     className={styles.formInput}
+                    autoComplete="name"
                   />
                 </div>
 
@@ -180,11 +181,13 @@ export default function FinalCTA() {
                     Email Address
                   </label>
                   <input
-                    type="text"
+                    type="email"
                     id="email"
                     name="email"
                     required
                     className={styles.formInput}
+                    autoComplete="email"
+                    inputMode="email"
                   />
                 </div>
 
@@ -194,11 +197,13 @@ export default function FinalCTA() {
                     Company Website
                   </label>
                   <input
-                    type="text"
+                    type="url"
                     id="website"
                     name="website"
                     required
                     className={styles.formInput}
+                    autoComplete="url"
+                    inputMode="url"
                   />
                 </div>
 

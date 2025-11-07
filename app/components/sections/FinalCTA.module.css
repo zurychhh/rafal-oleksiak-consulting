@@ -27,6 +27,11 @@
   animation: float 6s ease-in-out infinite;
   background: linear-gradient(45deg, #7B2CBF, #0066FF);
   pointer-events: none;
+
+  /* GPU acceleration for smooth 60fps animation */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .shape1 {
@@ -273,6 +278,19 @@
   box-shadow: 0 0 16px rgba(0, 102, 255, 0.5);
 }
 
+/* Error states for form validation */
+.formInput:invalid:not(:placeholder-shown),
+.formTextarea:invalid:not(:placeholder-shown) {
+  border-color: #FF4757;
+  box-shadow: 0 0 12px rgba(255, 71, 87, 0.3);
+}
+
+.formInput:invalid:focus:not(:placeholder-shown),
+.formTextarea:invalid:focus:not(:placeholder-shown) {
+  border-color: #FF4757;
+  box-shadow: 0 0 16px rgba(255, 71, 87, 0.5);
+}
+
 .formInput::placeholder,
 .formTextarea::placeholder {
   color: rgba(255, 255, 255, 0.4);
@@ -328,6 +346,7 @@
 .ctaButton {
   width: 100%;
   height: 64px;
+  min-height: 48px;
   background: linear-gradient(135deg, #7B2CBF, #0066FF);
   border-radius: 8px;
   font-family: var(--font-poppins), 'Poppins', sans-serif;
@@ -402,6 +421,17 @@
 
   .floatingShape {
     display: none;
+  }
+
+  /* Ensure touch targets meet minimum size */
+  .formInput {
+    min-height: 48px;
+    font-size: 16px; /* Prevent iOS zoom */
+  }
+
+  .formTextarea {
+    min-height: 120px;
+    font-size: 16px; /* Prevent iOS zoom */
   }
 }
 

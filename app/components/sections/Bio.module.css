@@ -611,6 +611,26 @@
   }
 }
 
+/* Responsive - Small Mobile (iPhone SE, Galaxy Fold) */
+@media (max-width: 480px) {
+  .photoColumn {
+    width: 180px;
+  }
+
+  .photoContainer {
+    width: 180px;
+    height: 180px;
+  }
+
+  .bioName {
+    font-size: 32px;
+  }
+
+  .bioTagline {
+    font-size: 15px;
+  }
+}
+
 /* Reduced motion support for bio card */
 @media (prefers-reduced-motion: reduce) {
   .bioCard {

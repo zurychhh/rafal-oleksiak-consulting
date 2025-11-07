@@ -1,6 +1,7 @@
 "use client";
 
 import Logo from "../ui/Logo";
+import MobileNav from "./MobileNav";
 
 export default function Navbar() {
   return (
@@ -33,6 +34,9 @@ export default function Navbar() {
             BOOK CONSULTATION
           </a>
         </div>
+
+        {/* Mobile Navigation - Hidden on desktop */}
+        <MobileNav />
       </div>
     </nav>
   );

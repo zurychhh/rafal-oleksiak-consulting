@@ -30,6 +30,9 @@
   opacity: 0.5;
   background-size: 200% 100%;
   animation: gradientShift 3s ease-in-out infinite;
+
+  /* Performance optimization */
+  will-change: background-position;
 }
 
 @keyframes gradientShift {
@@ -50,6 +53,11 @@
   background: linear-gradient(135deg, #7B2CBF, #0066FF);
   box-shadow: 0 0 16px rgba(123, 44, 191, 0.4);
   animation: pulseBadge 2s ease-in-out infinite;
+
+  /* GPU acceleration for smooth scaling animation */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .breakerBadgeLeft {

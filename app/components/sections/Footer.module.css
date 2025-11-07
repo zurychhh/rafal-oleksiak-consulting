@@ -75,6 +75,11 @@
   background: #7B2CBF;
   border-radius: 50%;
   animation: pulse 1.5s ease-in-out infinite;
+
+  /* GPU acceleration for smooth pulse animation */
+  will-change: opacity, transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .dot:nth-child(2) {
@@ -111,8 +116,8 @@
 }
 
 .socialLink {
-  width: 40px;
-  height: 40px;
+  width: 44px; /* Increased from 40px for WCAG 2.1 AA compliance */
+  height: 44px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
@@ -167,6 +172,10 @@
   text-decoration: none;
   transition: color 0.3s ease;
   display: inline-block;
+  min-height: 44px; /* WCAG 2.1 AA touch target */
+  display: flex;
+  align-items: center;
+  padding: 8px 0; /* Ensure full touch area */
 }
 
 .footerLink:hover {
@@ -210,6 +219,10 @@
   color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
   transition: color 0.3s ease;
+  min-height: 44px; /* WCAG 2.1 AA touch target */
+  display: flex;
+  align-items: center;
+  padding: 8px 0; /* Ensure full touch area */
 }
 
 .legalLink:hover {
