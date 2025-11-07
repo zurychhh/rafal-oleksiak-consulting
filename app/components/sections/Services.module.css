@@ -39,7 +39,7 @@
   font-size: 18px;
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.6;
-  max-width: 800px;
+  max-width: 700px; /* Optimized from 800px for ~65-75 characters per line */
   margin: 0 auto;
 }
 
