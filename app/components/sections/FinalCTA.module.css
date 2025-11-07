@@ -278,6 +278,19 @@
   box-shadow: 0 0 16px rgba(0, 102, 255, 0.5);
 }
 
+/* Error states for form validation */
+.formInput:invalid:not(:placeholder-shown),
+.formTextarea:invalid:not(:placeholder-shown) {
+  border-color: #FF4757;
+  box-shadow: 0 0 12px rgba(255, 71, 87, 0.3);
+}
+
+.formInput:invalid:focus:not(:placeholder-shown),
+.formTextarea:invalid:focus:not(:placeholder-shown) {
+  border-color: #FF4757;
+  box-shadow: 0 0 16px rgba(255, 71, 87, 0.5);
+}
+
 .formInput::placeholder,
 .formTextarea::placeholder {
   color: rgba(255, 255, 255, 0.4);
