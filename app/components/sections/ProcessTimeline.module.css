@@ -312,12 +312,12 @@
 
   /* Vertical Timeline for Mobile */
   .timelineWrapper {
-    padding: 40px 20px 40px 0;
+    padding: 40px 20px;
     max-width: 400px;
   }
 
   .timelineLine {
-    left: 40px;
+    left: 24px;
     right: auto;
     top: 0;
     bottom: 0;
@@ -335,6 +335,7 @@
     margin-bottom: 60px;
     flex-direction: row;
     align-items: flex-start;
+    padding-left: 80px;
   }
 
   .timelineStage:last-child {
@@ -350,7 +351,7 @@
     width: 48px;
     height: 48px;
     flex-shrink: 0;
-    margin-right: 32px;
+    margin-right: 20px;
   }
 
   .nodeNumber {
@@ -418,17 +419,17 @@
   }
 
   .timelineWrapper {
-    padding: 32px 12px 32px 0;
+    padding: 32px 12px;
   }
 
   .timelineLine {
-    left: 32px;
+    left: 20px;
   }
 
   .node {
     width: 40px;
     height: 40px;
-    margin-right: 24px;
+    margin-right: 16px;
   }
 
   .nodeNumber {
@@ -451,6 +452,7 @@
 
   .timelineStage {
     margin-bottom: 48px;
+    padding-left: 70px;
   }
 }
 
