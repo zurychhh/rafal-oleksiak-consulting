@@ -67,9 +67,6 @@ export default function Home() {
         {/* Content Container */}
         <div className="relative z-10 max-w-5xl mx-auto px-8 text-center">
 
-          {/* Badge */}
-          <div className="hero-badge">CRM & MARKETING AUTOMATION EXPERT</div>
-
           {/* Headline */}
           <h1 className="hero-headline">
             I double revenue from owned marketing channels
@@ -77,7 +74,7 @@ export default function Home() {
 
           {/* Subheadline */}
           <p className="hero-subheadline">
-            ROI-driven approach proven with <strong>Allegro</strong>, <strong>Booksy</strong>, and <strong>Accenture</strong>. I combine technical expertise with business strategy to turn automation into your #1 <strong>revenue driver</strong>.
+            ROI-driven approach proven with Allegro, Booksy, and Accenture
           </p>
 
           {/* CTA Button */}
@@ -91,13 +88,15 @@ export default function Home() {
             <span>→</span>
           </a>
 
-          {/* Credibility Line */}
-          <p className="hero-credibility">
-            <span className="hero-checkmark">✓</span>
-            <strong>Join</strong> 15+ companies that <strong>transformed</strong> their CRM & automation with Rafal Oleksiak Consulting
-          </p>
-
         </div>
+      </section>
+
+      {/* Statistics / Credibility Section */}
+      <section className="bg-[#2D3142] py-12 text-center">
+        <p className="hero-credibility">
+          <span className="hero-checkmark">✓</span>
+          <strong>Join</strong> 15+ companies that <strong>transformed</strong> their CRM & automation with Rafal Oleksiak Consulting
+        </p>
       </section>
 
       {/* Company Logos Carousel */}
