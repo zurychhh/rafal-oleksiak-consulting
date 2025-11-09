@@ -117,30 +117,24 @@ export default function Home() {
         <Collaboration />
       </LazySection>
 
-      {/* Case Studies Section */}
-      <LazySection>
-        <CaseStudiesSection />
-      </LazySection>
+      {/* Case Studies Section - Not lazy (has nav link) */}
+      <CaseStudiesSection />
 
       {/* Expertise Breaker - Auto-scrolling Tags */}
       <LazySection>
         <ExpertiseBreaker />
       </LazySection>
 
-      {/* Process Timeline - How We'll Work Together */}
-      <LazySection>
-        <ProcessTimeline />
-      </LazySection>
+      {/* Process Timeline - How We'll Work Together - Not lazy (has nav link) */}
+      <ProcessTimeline />
 
       {/* Breaker 4 - Achievements Ticker */}
       <LazySection>
         <AchievementsTicker />
       </LazySection>
 
-      {/* Final CTA + Contact Form */}
-      <LazySection>
-        <FinalCTA />
-      </LazySection>
+      {/* Final CTA + Contact Form - Not lazy (has nav link) */}
+      <FinalCTA />
 
       {/* Footer */}
       <LazySection>

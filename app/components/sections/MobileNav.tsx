@@ -5,54 +5,9 @@ import styles from './MobileNav.module.css';
 export default function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const href = e.currentTarget.getAttribute('href');
-
-    // If it's an external link (Calendly), just close menu and let it open
-    if (href?.startsWith('http')) {
-      setIsOpen(false);
-      return;
-    }
-
-    // For anchor links, handle lazy-loaded sections
-    if (href?.startsWith('#')) {
-      e.preventDefault();
-      const targetId = href.substring(1);
-
-      // Function to wait for element and scroll
-      const scrollToElement = () => {
-        const element = document.getElementById(targetId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Close menu after scroll starts
-          setTimeout(() => setIsOpen(false), 100);
-        } else {
-          // If element doesn't exist yet, wait for it to be lazy-loaded
-          const observer = new MutationObserver(() => {
-            const element = document.getElementById(targetId);
-            if (element) {
-              observer.disconnect();
-              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              setTimeout(() => setIsOpen(false), 100);
-            }
-          });
-
-          // Observe the entire document for changes
-          observer.observe(document.body, {
-            childList: true,
-            subtree: true
-          });
-
-          // Fallback: stop observing after 3 seconds
-          setTimeout(() => {
-            observer.disconnect();
-            setIsOpen(false);
-          }, 3000);
-        }
-      };
-
-      scrollToElement();
-    }
+  const handleLinkClick = () => {
+    // Close menu and let browser handle anchor navigation
+    setIsOpen(false);
   };
 
   return (
