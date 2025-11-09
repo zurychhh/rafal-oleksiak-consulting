@@ -141,31 +141,27 @@ select:focus-visible {
   margin-bottom: 32px;
 }
 
-/* Hero Section - Headline with Gradient */
+/* Hero Section - Headline (Simplified - No Gradient) */
 .hero-headline {
   font-family: var(--font-poppins), sans-serif;
-  font-weight: 900;
-  font-size: clamp(28px, 5vw + 1rem, 72px);
-  line-height: clamp(1.1, 1vw + 1, 1.25);
-  letter-spacing: clamp(-0.03em, -0.002vw, -0.01em);
-  background: linear-gradient(135deg, #7B2CBF 0%, #0066FF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 40px rgba(123, 44, 191, 0.5)) drop-shadow(0 0 20px rgba(0, 102, 255, 0.3));
+  font-weight: 700;
+  font-size: clamp(32px, 5vw + 1rem, 60px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: white;
   max-width: 900px;
-  margin: 0 auto 32px;
+  margin: 0 auto 24px;
 }
 
-/* Hero Section - Subheadline */
+/* Hero Section - Subheadline (Simplified) */
 .hero-subheadline {
   font-family: var(--font-dm-sans), sans-serif;
   font-weight: 400;
   font-size: clamp(16px, 1.5vw + 0.5rem, 20px);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 750px;
-  margin: 0 auto 44px;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto 48px;
 }
 
 /* Hero Section - CTA Button */
@@ -175,9 +171,9 @@ select:focus-visible {
   font-family: var(--font-poppins), sans-serif;
   font-weight: 700;
   font-size: clamp(16px, 1vw + 0.5rem, 18px);
-  padding: 18px 36px;
+  padding: 18px 48px;
   min-height: 44px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   text-decoration: none;
@@ -188,7 +184,7 @@ select:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 0;
   position: relative;
   overflow: hidden;
 }
