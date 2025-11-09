@@ -20,19 +20,22 @@ export default function MobileNav() {
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
 
-    // First, restore scroll ability
+    // Get target element first
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    // Restore scroll immediately
     document.body.style.overflow = 'unset';
 
-    // Close menu
-    setIsOpen(false);
+    // Scroll to target using requestAnimationFrame for better reliability
+    requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // Then scroll to target after a brief delay to ensure menu is closing
-    setTimeout(() => {
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
+      // Close menu after scroll starts
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 300);
+    });
   };
 
   return (
