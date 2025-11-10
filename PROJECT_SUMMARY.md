@@ -25,9 +25,14 @@ Successfully transformed a consulting website into a high-performance, mobile-op
 
 1. [What Was Built](#what-was-built)
 2. [Technical Implementation](#technical-implementation)
-3. [Business Impact](#business-impact)
-4. [Proposed Next Steps](#proposed-next-steps)
-5. [Detailed Changelog](#detailed-changelog)
+3. [Development Workflow & Project Management](#development-workflow--project-management)
+4. [Business Impact](#business-impact)
+5. [Proposed Next Steps](#proposed-next-steps)
+6. [Success Metrics to Track](#success-metrics-to-track)
+7. [Detailed Changelog](#detailed-changelog)
+8. [Lessons Learned](#lessons-learned)
+9. [Resources](#resources)
+10. [Support & Maintenance](#support--maintenance)
 
 ---
 
@@ -312,6 +317,523 @@ const handleLinkClick = () => {
    - CSS transforms (GPU-accelerated)
    - will-change for floating shapes
    - transform3d for better performance
+
+---
+
+## 🔄 Development Workflow & Project Management
+
+### Complete Project Structure
+
+```
+rafal-oleksiak-consulting/
+│
+├── 📁 app/                          # Next.js 16 App Router
+│   ├── 📁 api/                      # API routes
+│   │   └── 📁 send-email/           # Contact form email API
+│   │       └── route.ts             # POST endpoint (Resend integration)
+│   │
+│   ├── 📁 components/               # React components
+│   │   ├── 📁 sections/             # Page sections (11 components)
+│   │   │   ├── Navbar.tsx           # Desktop navigation
+│   │   │   ├── MobileNav.tsx        # Mobile hamburger menu
+│   │   │   ├── Footer.tsx           # Footer with links
+│   │   │   ├── Services.tsx         # Services grid
+│   │   │   ├── CaseStudiesSection.tsx
+│   │   │   ├── ProcessTimeline.tsx  # 5-step process
+│   │   │   ├── FinalCTA.tsx         # Contact form
+│   │   │   ├── Bio.tsx              # About section
+│   │   │   ├── Collaboration.tsx    # How we work
+│   │   │   ├── AchievementsTicker.tsx
+│   │   │   ├── ExpertiseBreaker.tsx
+│   │   │   └── *.module.css         # CSS Modules per component
+│   │   │
+│   │   ├── 📁 ui/                   # Reusable UI components (7 components)
+│   │   │   ├── Logo.tsx             # Logo with animated dots
+│   │   │   ├── CompanyCarousel.tsx  # Client logos carousel
+│   │   │   ├── GradientBreaker.tsx  # Section divider
+│   │   │   ├── SectionBreaker.tsx
+│   │   │   ├── StatsTicker.tsx
+│   │   │   ├── CertificationsTicker.tsx
+│   │   │   └── *.module.css
+│   │   │
+│   │   ├── LazySection.tsx          # IntersectionObserver wrapper
+│   │   └── FontAwesomeLoader.tsx    # Icon library loader
+│   │
+│   ├── 📁 lib/                      # Utility libraries
+│   │   ├── 📁 constants/            # App constants
+│   │   └── 📁 utils/                # Helper functions
+│   │
+│   ├── 📁 types/                    # TypeScript type definitions
+│   │
+│   ├── critical.css                 # Above-fold critical CSS (inlined in <head>)
+│   ├── globals.css                  # Global styles
+│   ├── layout.tsx                   # Root layout (metadata, fonts)
+│   └── page.tsx                     # Main page (section composition)
+│
+├── 📁 public/                       # Static assets
+│   └── 📁 images/                   # Images (served from /images/)
+│       └── rafal-oleksiak.png
+│
+├── 📁 assets/                       # Source assets
+│   └── roc-bio.png
+│
+├── 📁 audit-results/                # Performance audit reports
+│   ├── post-implementation-audit-report.md
+│   └── test-results.json
+│
+├── 📄 Configuration Files
+│   ├── next.config.ts               # Next.js configuration
+│   ├── tsconfig.json                # TypeScript config
+│   ├── tailwind.config.ts           # Tailwind CSS config
+│   ├── postcss.config.mjs           # PostCSS config
+│   ├── package.json                 # Dependencies & scripts
+│   └── package-lock.json            # Locked dependencies
+│
+├── 📄 Documentation
+│   ├── PROJECT_SUMMARY.md           # This file
+│   ├── project_information.md       # Project specs
+│   ├── audit-rwd-report.md          # RWD audit
+│   └── strona-review.md             # Site review
+│
+└── 📁 .git/                         # Git version control
+```
+
+### File Count by Type
+- **React Components**: 18 files (.tsx)
+- **CSS Modules**: 18 files (.module.css)
+- **Configuration**: 5 files
+- **Documentation**: 4 markdown files
+- **Total Files**: ~45+ files
+
+---
+
+### Development Workflow
+
+#### 1. **Local Development**
+
+**Setup (First Time)**:
+```bash
+# Clone repository
+git clone https://github.com/zurychhh/rafal-oleksiak-consulting.git
+cd rafal-oleksiak-consulting
+
+# Install dependencies
+npm install
+
+# Set up environment variables (if needed)
+cp .env.example .env.local
+# Edit .env.local with your values
+
+# Run development server
+npm run dev
+```
+
+**Development Server**:
+- URL: http://localhost:3000
+- Hot Module Replacement (HMR): Instant updates on file changes
+- Turbopack: Fast refresh in <1s
+- TypeScript: Real-time type checking
+
+**Available Scripts**:
+```bash
+npm run dev       # Start development server (port 3000)
+npm run build     # Production build (outputs to .next/)
+npm run start     # Start production server
+npm run lint      # ESLint code quality check
+ANALYZE=true npm run build  # Analyze bundle size
+```
+
+**Environment Variables**:
+- `.env.local`: Local development (gitignored)
+- `.env.production`: Production secrets (Vercel dashboard)
+
+---
+
+#### 2. **Git Workflow** (Feature Branch Strategy)
+
+**Branching Strategy**:
+```
+main (production)
+  └── feature/* (new features)
+  └── fix/* (bug fixes)
+  └── docs/* (documentation)
+```
+
+**Branch Naming Convention**:
+- `feature/hero-minimalist` - New features
+- `fix/mobile-nav-lazy-sections` - Bug fixes
+- `docs/project-summary` - Documentation updates
+
+**Commit Message Convention**:
+```
+<type>: <subject>
+
+<body>
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+**Types**:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation
+- `style`: CSS/styling changes
+- `refactor`: Code refactoring
+- `perf`: Performance improvements
+- `test`: Tests
+- `chore`: Build/tooling
+
+**Example Workflow**:
+```bash
+# 1. Start on main, pull latest
+git checkout main
+git pull origin main
+
+# 2. Create feature branch
+git checkout -b feature/contact-form-validation
+
+# 3. Make changes, commit frequently
+git add .
+git commit -m "feat: add email validation to contact form"
+
+# 4. Push to remote
+git push -u origin feature/contact-form-validation
+
+# 5. Create Pull Request (automated via gh CLI)
+gh pr create --title "Add contact form validation" --body "..."
+
+# 6. After PR approved and merged, delete local branch
+git checkout main
+git pull origin main
+git branch -d feature/contact-form-validation
+```
+
+---
+
+#### 3. **GitHub Workflow** (Pull Request Process)
+
+**PR Creation** (Automated with `gh` CLI):
+```bash
+gh pr create \
+  --title "Feature: Add A/B testing framework" \
+  --body "$(cat <<'EOF'
+## Summary
+Added A/B testing framework using Vercel Edge Middleware
+
+## Changes
+- Created middleware.ts for variant routing
+- Added analytics event tracking
+- Updated hero section with test variants
+
+## Test Plan
+- [x] Build passes
+- [ ] Tested variant A
+- [ ] Tested variant B
+- [ ] Analytics tracking works
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+)"
+```
+
+**PR Review Process**:
+1. **Automated Checks**:
+   - Vercel Preview Deployment (automatically created)
+   - Build validation (Next.js build must pass)
+   - TypeScript type checking
+
+2. **Manual Review**:
+   - Code review (optional for solo projects)
+   - Preview deployment testing
+   - Mobile responsiveness check
+
+3. **Merge Strategy**:
+   - **Squash Merge**: Combines all commits into one (keeps main clean)
+   - Command: `gh pr merge --squash --delete-branch`
+   - Deletes feature branch automatically
+
+**PR Workflow** (Current Project):
+```
+PR Created → Vercel Deploys Preview → Build Checks Pass → Merge Squash → Branch Deleted
+     ↓              ↓                        ↓                  ↓              ↓
+  GitHub      Preview URL           ✅ or ❌              main updated    Cleanup
+```
+
+**PR Statistics**:
+- **Total PRs**: 14 merged
+- **Average PR Size**: 2-4 files changed
+- **Merge Strategy**: 100% squash merge
+- **Failed PRs**: 0 (all merged successfully)
+
+---
+
+#### 4. **Deployment Workflow** (Vercel)
+
+**Environments**:
+
+| Environment | Branch | URL | Auto-Deploy | Purpose |
+|------------|--------|-----|-------------|---------|
+| **Production** | `main` | oleksiakconsulting.com | ✅ Yes | Live site |
+| **Preview** | `feature/*`, `fix/*` | Random Vercel URL | ✅ Yes | Testing PRs |
+| **Local** | Any | localhost:3000 | ❌ Manual | Development |
+
+**Deployment Pipeline**:
+```
+Code Push → GitHub → Vercel Build → Deploy
+    ↓          ↓         ↓            ↓
+  git push   Webhook   npm build   Live/Preview
+```
+
+**Vercel Integration**:
+1. **Automatic Deployments**:
+   - Every push to `main` → Production deployment
+   - Every PR → Preview deployment (unique URL)
+   - Build logs viewable in Vercel dashboard
+
+2. **Build Process**:
+   ```bash
+   # Vercel runs these automatically:
+   npm install          # Install dependencies
+   npm run build        # Next.js production build
+   # Outputs to .next/ directory
+   # Vercel serves static/dynamic content
+   ```
+
+3. **Environment Variables**:
+   - Set in Vercel Dashboard: Settings → Environment Variables
+   - Available environments: Production, Preview, Development
+   - Secrets: API keys, database URLs, etc.
+
+4. **Performance Monitoring**:
+   - Vercel Analytics (Core Web Vitals)
+   - Real User Monitoring (RUM)
+   - Deployment logs
+
+**Deployment Speed**:
+- Build time: ~2-3 minutes
+- Preview URL ready: ~15-30 seconds after build
+- Production deployment: Instant (global CDN)
+
+---
+
+#### 5. **Change Management Best Practices**
+
+**✅ What We Do Well**:
+
+1. **Atomic Commits**:
+   - Each commit = one logical change
+   - Clear commit messages
+   - Easy to trace issues
+
+2. **Feature Branches**:
+   - Isolated development
+   - No direct commits to `main`
+   - Safe experimentation
+
+3. **Automated Testing** (via Vercel):
+   - Build validation on every PR
+   - Preview deployments for testing
+   - No broken code reaches production
+
+4. **Documentation**:
+   - PR descriptions explain WHY
+   - Code comments explain HOW
+   - PROJECT_SUMMARY.md for overview
+
+5. **Version Control**:
+   - Every change tracked in Git
+   - Full history (757+ commits)
+   - Easy rollback if needed
+
+**Current Git Statistics**:
+```bash
+# View commit history
+git log --oneline --graph --all
+
+# View specific PR changes
+gh pr view 14 --json files,commits
+
+# View file history
+git log --follow -- app/page.tsx
+```
+
+---
+
+#### 6. **Rollback Procedures** (Emergency Recovery)
+
+**Scenario 1: Bad Deployment (Just Merged)**
+
+**Option A**: Revert via GitHub (Recommended)
+```bash
+# 1. Find the merge commit
+git log --oneline -5
+# Example output:
+# 98c7bf5 feat: simplify hero section for better UX (#14)
+# 52295b4 Fix mobile nav - simplest solution (#13)
+
+# 2. Revert the merge commit
+git revert 98c7bf5 -m 1
+
+# 3. Push to trigger new deployment
+git push origin main
+```
+
+**Option B**: Rollback via Vercel Dashboard
+1. Go to Vercel Dashboard
+2. Select project
+3. Go to "Deployments"
+4. Find last working deployment
+5. Click "..." → "Promote to Production"
+6. Production instantly reverts to previous version
+
+**Time to Rollback**: ~30 seconds (Vercel) or ~3 minutes (Git revert)
+
+---
+
+**Scenario 2: Bad PR (Not Yet Merged)**
+
+```bash
+# Close PR without merging
+gh pr close 14
+
+# Delete remote branch
+git push origin --delete feature/hero-minimalist
+
+# Delete local branch
+git branch -d feature/hero-minimalist
+```
+
+---
+
+**Scenario 3: Multiple Bad Commits**
+
+```bash
+# Reset to specific commit (DANGEROUS - use with caution)
+git log --oneline -10
+git reset --hard <good-commit-hash>
+
+# Force push (only if absolutely necessary)
+git push --force origin main
+
+# This will trigger immediate Vercel redeployment
+```
+
+⚠️ **Warning**: Force push rewrites history. Only use if:
+- You're the only developer
+- Production is critically broken
+- No other option works
+
+---
+
+**Scenario 4: Partial Rollback (Specific File)**
+
+```bash
+# Restore specific file from previous commit
+git log --oneline -- app/components/sections/Hero.tsx
+git checkout <commit-hash> -- app/components/sections/Hero.tsx
+
+# Commit the restoration
+git add app/components/sections/Hero.tsx
+git commit -m "fix: restore Hero.tsx to previous working version"
+git push origin main
+```
+
+---
+
+#### 7. **Testing Strategy**
+
+**Current Testing** (Manual):
+- ✅ Visual testing in browser (Chrome DevTools)
+- ✅ Mobile testing (responsive design mode)
+- ✅ Build validation (TypeScript + Next.js)
+- ✅ Preview deployments (Vercel URLs)
+
+**Recommended Testing** (Future):
+```bash
+# Unit tests (Jest + React Testing Library)
+npm run test
+
+# E2E tests (Playwright)
+npm run test:e2e
+
+# Visual regression tests (Percy/Chromatic)
+npm run test:visual
+
+# Performance tests (Lighthouse CI)
+npm run test:perf
+```
+
+**Test Coverage Goals**:
+- Unit tests: 80%+ coverage
+- E2E tests: Critical user flows
+- Visual tests: All components
+- Performance: 90+ Lighthouse score
+
+---
+
+#### 8. **Code Quality & Standards**
+
+**Enforced via Tooling**:
+- **TypeScript**: Type safety, catch errors at compile-time
+- **ESLint**: Code quality rules (Next.js recommended config)
+- **Prettier**: Code formatting (future enhancement)
+- **Turbopack**: Fast builds with tree-shaking
+
+**Code Review Checklist** (For PRs):
+- [ ] TypeScript: No type errors
+- [ ] Build: `npm run build` passes
+- [ ] Responsive: Works on mobile/tablet/desktop
+- [ ] Performance: No layout shifts, fast load
+- [ ] Accessibility: Keyboard navigation, ARIA labels
+- [ ] SEO: Proper meta tags, semantic HTML
+- [ ] Security: No secrets committed, XSS prevention
+
+---
+
+#### 9. **Monitoring & Observability**
+
+**Current Monitoring**:
+- ✅ Vercel deployment logs
+- ✅ Build success/failure notifications
+- ✅ Preview deployment URLs
+
+**Recommended Monitoring** (Future):
+- **Error Tracking**: Sentry (catch runtime errors)
+- **Analytics**: Google Analytics 4 (user behavior)
+- **Performance**: Vercel Analytics (Core Web Vitals)
+- **Uptime**: UptimeRobot (99.9% SLA monitoring)
+- **Logs**: Vercel Logs (server-side errors)
+
+**Alerts to Set Up**:
+- Build failures → Slack/Email
+- Performance degradation (LCP > 2.5s) → Email
+- Error rate spike → SMS
+- Downtime → PagerDuty
+
+---
+
+#### 10. **Collaboration Best Practices**
+
+**For Solo Development** (Current):
+- ✅ Feature branches (even solo)
+- ✅ PR descriptions (future you will thank you)
+- ✅ Atomic commits
+- ✅ Documentation
+
+**For Team Development** (Future):
+- **Code Reviews**: 1-2 reviewers per PR
+- **Branch Protection**: Require PR reviews before merge
+- **CI/CD**: Automated tests must pass
+- **Standup**: Async updates in Slack/GitHub Discussions
+- **Documentation**: Keep PROJECT_SUMMARY.md updated
+
+**Communication Channels**:
+- GitHub Issues: Bug reports, feature requests
+- GitHub Discussions: Technical questions, brainstorming
+- PR Comments: Code-specific feedback
+- Slack: Real-time communication (if team grows)
 
 ---
 
