@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { createHubSpotContact } from '@/app/lib/hubspot';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -57,6 +58,35 @@ export async function POST(request: NextRequest) {
         { error: 'Failed to send email', details: error },
         { status: 500 }
       );
+    }
+
+    // HubSpot CRM Integration (if marketing consent is given)
+    const marketingConsent = formType === 'consultation'
+      ? formData.consent
+      : formData.marketing;
+
+    if (marketingConsent) {
+      try {
+        const hubspotResult = await createHubSpotContact({
+          email: formData.email,
+          fullName: formType === 'consultation' ? formData.fullName : '',
+          website: formData.website,
+          challenge: formType === 'consultation' ? formData.challenge : formData.needs,
+          marketingConsent: true
+        });
+
+        if (hubspotResult.success) {
+          console.log('HubSpot contact created:', hubspotResult.contactId);
+        } else {
+          // Log error but don't fail the request
+          console.error('HubSpot contact creation failed:', hubspotResult.error);
+        }
+      } catch (hubspotError) {
+        // Log error but don't fail the request
+        console.error('HubSpot integration error:', hubspotError);
+      }
+    } else {
+      console.log('Marketing consent not given, skipping HubSpot integration');
     }
 
     return NextResponse.json({
