@@ -59,8 +59,10 @@ export async function createHubSpotContact(
           message: contactData.challenge,
           // Custom property for lead source
           hs_lead_status: 'NEW',
-          // Marketing consent
-          hs_marketable_status: contactData.marketingConsent ? 'true' : 'false',
+          // Legal basis for processing (GDPR-compliant)
+          hs_legal_basis: contactData.marketingConsent
+            ? 'Freely given consent from contact'
+            : 'Legitimate interest – prospect/lead',
           // Additional tracking
           lifecyclestage: 'lead',
         }
@@ -177,7 +179,9 @@ async function updateHubSpotContact(
             lastname: lastName,
             website: contactData.website,
             message: contactData.challenge,
-            hs_marketable_status: contactData.marketingConsent ? 'true' : 'false',
+            hs_legal_basis: contactData.marketingConsent
+              ? 'Freely given consent from contact'
+              : 'Legitimate interest – prospect/lead',
           }
         })
       }
