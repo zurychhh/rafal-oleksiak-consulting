@@ -60,33 +60,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // HubSpot CRM Integration (if marketing consent is given)
+    // HubSpot CRM Integration (always create contact with consent flag)
     const marketingConsent = formType === 'consultation'
       ? formData.consent
       : formData.marketing;
 
-    if (marketingConsent) {
-      try {
-        const hubspotResult = await createHubSpotContact({
-          email: formData.email,
-          fullName: formType === 'consultation' ? formData.fullName : '',
-          website: formData.website,
-          challenge: formType === 'consultation' ? formData.challenge : formData.needs,
-          marketingConsent: true
-        });
+    try {
+      const hubspotResult = await createHubSpotContact({
+        email: formData.email,
+        fullName: formType === 'consultation' ? formData.fullName : '',
+        website: formData.website,
+        challenge: formType === 'consultation' ? formData.challenge : formData.needs,
+        marketingConsent: marketingConsent
+      });
 
-        if (hubspotResult.success) {
-          console.log('HubSpot contact created:', hubspotResult.contactId);
-        } else {
-          // Log error but don't fail the request
-          console.error('HubSpot contact creation failed:', hubspotResult.error);
-        }
-      } catch (hubspotError) {
+      if (hubspotResult.success) {
+        console.log(
+          `HubSpot contact created: ${hubspotResult.contactId} (marketing consent: ${marketingConsent})`
+        );
+      } else {
         // Log error but don't fail the request
-        console.error('HubSpot integration error:', hubspotError);
+        console.error('HubSpot contact creation failed:', hubspotResult.error);
       }
-    } else {
-      console.log('Marketing consent not given, skipping HubSpot integration');
+    } catch (hubspotError) {
+      // Log error but don't fail the request
+      console.error('HubSpot integration error:', hubspotError);
     }
 
     return NextResponse.json({
