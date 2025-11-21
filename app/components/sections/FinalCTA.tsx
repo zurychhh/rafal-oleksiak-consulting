@@ -2,6 +2,7 @@
 
 import { useEffect, FormEvent } from "react";
 import styles from "./FinalCTA.module.css";
+import { analytics } from '@/app/lib/analytics';
 
 export default function FinalCTA() {
   useEffect(() => {
@@ -68,21 +69,31 @@ export default function FinalCTA() {
           website: formData.get('website'),
           challenge: formData.get('challenge'),
           consent: formData.get('consent') === 'on',
+          auditRequested: formData.get('auditRequested') === 'on',
         }),
       });
 
       if (response.ok) {
+        // Track successful form submission
+        analytics.trackFormSubmission('contact_form', true);
+
         alert("Thank you! I'll be in touch within 24 hours.");
         form.reset();
         document.querySelectorAll(`.${styles.floatingLabel}`).forEach((label) => {
           label.classList.remove(styles.floated);
         });
       } else {
+        // Track failed form submission
+        analytics.trackFormSubmission('contact_form', false);
+
         const error = await response.json();
         alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');
         console.error('Form error:', error);
       }
     } catch (error) {
+      // Track failed form submission (network error)
+      analytics.trackFormSubmission('contact_form', false);
+
       alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');
       console.error('Network error:', error);
     } finally {
@@ -220,6 +231,19 @@ export default function FinalCTA() {
                     rows={4}
                     placeholder="Tell me about your current situation and what you're looking to achieve..."
                   ></textarea>
+                </div>
+
+                {/* Audit Request Checkbox */}
+                <div className={styles.checkboxContainer}>
+                  <input
+                    type="checkbox"
+                    id="auditRequested"
+                    name="auditRequested"
+                    className={styles.customCheckbox}
+                  />
+                  <label htmlFor="auditRequested" className={styles.checkboxLabel}>
+                    <strong>☐ Wyślij mi darmowy audit strony</strong> (wyniki w 90 sekund)
+                  </label>
                 </div>
 
                 {/* Consent Checkbox */}

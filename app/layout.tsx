@@ -3,6 +3,9 @@ import { Poppins, DM_Sans } from "next/font/google";
 import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold only)
 import "./globals.css"; // Remaining below-the-fold styles
 import FontAwesomeLoader from "./components/FontAwesomeLoader";
+import GoogleAnalytics from "./components/GoogleAnalytics";
+import { WebVitals } from "./components/WebVitals";
+import { ScrollTracker } from "./components/ScrollTracker";
 
 // Configure Poppins for headlines - Optimized for mobile performance
 const poppins = Poppins({
@@ -57,6 +60,11 @@ export default function RootLayout({
         {/* Performance: Async load Font Awesome to prevent render blocking */}
         <FontAwesomeLoader />
         {children}
+
+        {/* Google Analytics - loaded AFTER children for optimal performance */}
+        <GoogleAnalytics />
+        <WebVitals />
+        <ScrollTracker />
       </body>
     </html>
   );

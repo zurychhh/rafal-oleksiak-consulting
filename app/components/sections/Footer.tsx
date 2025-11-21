@@ -1,4 +1,7 @@
+'use client'
+
 import styles from "./Footer.module.css";
+import { analytics } from '@/app/lib/analytics'
 
 export default function Footer() {
   return (
@@ -116,6 +119,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.footerLink}
+                  onClick={() => analytics.trackCalendlyClick('footer')}
                 >
                   Book Consultation
                 </a>

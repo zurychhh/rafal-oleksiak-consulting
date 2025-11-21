@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import Navbar from "./components/sections/Navbar";
 import LazySection from "./components/LazySection";
+import HeroCTA from "./components/ui/HeroCTA";
 
 // Dynamic imports for below-fold sections to reduce initial bundle size
 // Each component gets code-split into separate chunk for on-demand loading
@@ -77,16 +78,8 @@ export default function Home() {
             ROI-driven approach proven with Allegro, Booksy, and Accenture
           </p>
 
-          {/* CTA Button */}
-          <a
-            href="https://calendly.com/rafaloleksiakconsulting/30min"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hero-cta-button"
-          >
-            Book Free Consultation
-            <span>→</span>
-          </a>
+          {/* CTA Button with Analytics */}
+          <HeroCTA />
 
         </div>
       </section>
