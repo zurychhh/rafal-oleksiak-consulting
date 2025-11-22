@@ -87,6 +87,36 @@ export async function POST(request: NextRequest) {
       console.error('HubSpot integration error:', hubspotError);
     }
 
+    // LAMA Audit Integration (if requested)
+    if (formType === 'consultation' && formData.auditRequested) {
+      console.log(`[LAMA] Audit requested for ${formData.email} - ${formData.website}`);
+
+      // Trigger audit asynchronously (don't block response)
+      fetch(`${request.nextUrl.origin}/api/lama/audit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: formData.website,
+          email: formData.email,
+          fullName: formData.fullName,
+        }),
+      })
+        .then(async (auditResponse) => {
+          if (auditResponse.ok) {
+            const auditData = await auditResponse.json();
+            console.log(
+              `[LAMA] Audit completed successfully (Score: ${auditData.auditResult?.overallScore}/100)`
+            );
+          } else {
+            const auditError = await auditResponse.json().catch(() => null);
+            console.error('[LAMA] Audit failed:', auditError);
+          }
+        })
+        .catch((auditError) => {
+          console.error('[LAMA] Audit request failed:', auditError);
+        });
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Email sent successfully',

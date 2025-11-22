@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Email Templates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'DM Sans', sans-serif; }
+        .poppins { font-family: 'Poppins', sans-serif; }
+        
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        .dot-1 { animation: pulse-dot 1.2s ease-in-out infinite; animation-delay: 0s; }
+        .dot-2 { animation: pulse-dot 1.2s ease-in-out infinite; animation-delay: 0.4s; }
+        .dot-3 { animation: pulse-dot 1.2s ease-in-out infinite; animation-delay: 0.8s; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #7B2CBF 0%, #0066FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #7B2CBF 0%, #6A25AB 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: linear-gradient(135deg, #9D4EDD 0%, #00BFFF 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(123, 44, 191, 0.55);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Email Templates Container -->
+<div id="email-templates" class="max-w-7xl mx-auto p-8 space-y-12">
+    
+    <!-- Header -->
+    <div id="header" class="text-center mb-12">
+        <h1 class="poppins text-4xl font-black text-gray-800 mb-4">B2B Email Templates</h1>
+        <p class="text-gray-600 text-lg">Sophisticated CRM Consulting Business Email Collection</p>
+    </div>
+
+    <!-- Template 1: Welcome Email -->
+    <div id="welcome-email" class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gray-800 p-4 flex items-center justify-between">
+            <h2 class="poppins text-xl font-bold text-white">Welcome Email Template</h2>
+            <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm">Plain Text Style</span>
+        </div>
+        
+        <!-- Email Preview -->
+        <div class="max-w-2xl mx-auto bg-white">
+            <!-- Email Header -->
+            <div class="bg-[#1A1A2E] px-8 py-6">
+                <div class="flex items-center">
+                    <span class="poppins text-2xl font-black text-white tracking-wider">OLEKSIAK CONSULT</span>
+                    <div class="flex items-center gap-2 ml-3">
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 dot-1 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 dot-2 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 dot-3 shadow-lg"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Body -->
+            <div class="bg-[#1A1A2E] px-8 pb-8 text-white">
+                <div class="space-y-6">
+                    <h1 class="poppins text-2xl font-bold mb-6">Welcome to the CRM Revolution</h1>
+                    
+                    <p class="text-white/85 leading-relaxed">Hi there,</p>
+                    
+                    <p class="text-white/85 leading-relaxed">
+                        Thanks for joining our community of forward-thinking business leaders who understand that CRM isn't just software—it's your competitive advantage.
+                    </p>
+                    
+                    <p class="text-white/85 leading-relaxed">
+                        Over the next few days, I'll share proven strategies that have helped companies like Allegro achieve 147% ROI on their CRM investments.
+                    </p>
+                    
+                    <div class="bg-purple-600/10 border border-purple-600/30 rounded-xl p-6 my-8">
+                        <h3 class="poppins text-lg font-bold mb-3 text-purple-300">What's Coming Your Way:</h3>
+                        <ul class="space-y-2 text-white/85">
+                            <li class="flex items-center"><i class="fa-solid fa-check text-purple-400 mr-3"></i>The 5 Critical CRM Mistakes (and how to fix them)</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-purple-400 mr-3"></i>Our proven ROI calculation framework</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-purple-400 mr-3"></i>Real case studies from successful implementations</li>
+                        </ul>
+                    </div>
+                    
+                    <p class="text-white/85 leading-relaxed">
+                        But first, let's calculate your potential ROI. It takes 2 minutes and the insights might surprise you.
+                    </p>
+                    
+                    <!-- CTA Button -->
+                    <div class="text-center pt-6">
+                        <a href="#" class="cta-button inline-block px-9 py-4 rounded-xl text-white poppins font-bold text-lg shadow-lg shadow-purple-600/35">
+                            Calculate Your ROI
+                        </a>
+                    </div>
+                    
+                    <div class="border-t border-white/20 pt-6 mt-8">
+                        <p class="text-white/85">Best regards,<br>
+                        <span class="poppins font-bold">Alex Oleksiak</span><br>
+                        <span class="text-white/60 text-sm">CRM Strategy Consultant</span></p>
+                        
+                        <div class="flex items-center gap-4 mt-4">
+                            <a href="#" class="text-blue-400 hover:text-blue-300">
+                                <i class="fa-brands fa-linkedin text-xl"></i>
+                            </a>
+                            <span class="text-white/60 text-sm">oleksiakconsulting.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template 2: Case Study Email -->
+    <div id="case-study-email" class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gray-800 p-4 flex items-center justify-between">
+            <h2 class="poppins text-xl font-bold text-white">Case Study Email Template</h2>
+            <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">Visual Elements</span>
+        </div>
+        
+        <!-- Email Preview -->
+        <div class="max-w-2xl mx-auto bg-white">
+            <!-- Email Header -->
+            <div class="bg-[#1A1A2E] px-8 py-6">
+                <div class="flex items-center">
+                    <span class="poppins text-2xl font-black text-white tracking-wider">OLEKSIAK CONSULT</span>
+                    <div class="flex items-center gap-2 ml-3">
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Body -->
+            <div class="bg-[#1A1A2E] px-8 pb-8 text-white">
+                <div class="space-y-8">
+                    <h1 class="poppins text-3xl font-bold gradient-text mb-2">How Allegro Achieved 147% ROI</h1>
+                    <p class="text-purple-300 text-lg">From CRM chaos to systematic success in 90 days</p>
+                    
+                    <!-- Metrics Section -->
+                    <div class="grid md:grid-cols-3 gap-6 my-8">
+                        <div class="bg-purple-600/10 border border-purple-600/30 rounded-xl p-6 text-center">
+                            <div class="poppins text-4xl font-bold gradient-text mb-2">147%</div>
+                            <div class="text-white/60 text-sm">ROI Increase</div>
+                        </div>
+                        <div class="bg-purple-600/10 border border-purple-600/30 rounded-xl p-6 text-center">
+                            <div class="poppins text-4xl font-bold gradient-text mb-2">€2.3M</div>
+                            <div class="text-white/60 text-sm">Additional Revenue</div>
+                        </div>
+                        <div class="bg-purple-600/10 border border-purple-600/30 rounded-xl p-6 text-center">
+                            <div class="poppins text-4xl font-bold gradient-text mb-2">90</div>
+                            <div class="text-white/60 text-sm">Days to Results</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Before/After -->
+                    <div class="grid md:grid-cols-2 gap-8 my-8">
+                        <div class="space-y-4">
+                            <h3 class="poppins text-lg font-bold text-red-400">Before Our Intervention:</h3>
+                            <ul class="space-y-2 text-white/85">
+                                <li class="flex items-center"><i class="fa-solid fa-times text-red-400 mr-3"></i>Manual lead tracking</li>
+                                <li class="flex items-center"><i class="fa-solid fa-times text-red-400 mr-3"></i>45% lead leakage</li>
+                                <li class="flex items-center"><i class="fa-solid fa-times text-red-400 mr-3"></i>No sales forecasting</li>
+                                <li class="flex items-center"><i class="fa-solid fa-times text-red-400 mr-3"></i>Disconnected teams</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <h3 class="poppins text-lg font-bold text-green-400">After Implementation:</h3>
+                            <ul class="space-y-2 text-white/85">
+                                <li class="flex items-center"><i class="fa-solid fa-check text-green-400 mr-3"></i>Automated lead nurturing</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-green-400 mr-3"></i>5% lead leakage</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-green-400 mr-3"></i>Predictable revenue</li>
+                                <li class="flex items-center"><i class="fa-solid fa-check text-green-400 mr-3"></i>Unified customer view</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-600/10 border border-blue-600/30 rounded-xl p-6">
+                        <p class="text-white/85 leading-relaxed italic">
+                            "The transformation was remarkable. Within 3 months, we went from losing nearly half our leads to having a predictable, scalable sales machine. The ROI speaks for itself."
+                        </p>
+                        <p class="text-blue-300 font-bold mt-3">— Sarah Mitchell, VP Sales at Allegro</p>
+                    </div>
+                    
+                    <!-- CTA Button -->
+                    <div class="text-center pt-6">
+                        <a href="#" class="cta-button inline-block px-9 py-4 rounded-xl text-white poppins font-bold text-lg shadow-lg shadow-purple-600/35">
+                            Download Full Case Study
+                        </a>
+                    </div>
+                    
+                    <div class="border-t border-white/20 pt-6 mt-8 text-center">
+                        <p class="text-white/60 text-sm">
+                            <a href="#" class="text-blue-400 hover:text-blue-300">Unsubscribe</a> | 
+                            <a href="#" class="text-blue-400 hover:text-blue-300">LinkedIn</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template 3: Framework Email -->
+    <div id="framework-email" class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gray-800 p-4 flex items-center justify-between">
+            <h2 class="poppins text-xl font-bold text-white">Framework Email Template</h2>
+            <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm">Educational</span>
+        </div>
+        
+        <!-- Email Preview -->
+        <div class="max-w-2xl mx-auto bg-white">
+            <!-- Email Header -->
+            <div class="bg-[#1A1A2E] px-8 py-6">
+                <div class="flex items-center">
+                    <span class="poppins text-2xl font-black text-white tracking-wider">OLEKSIAK CONSULT</span>
+                    <div class="flex items-center gap-2 ml-3">
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Body -->
+            <div class="bg-[#1A1A2E] px-8 pb-8 text-white">
+                <div class="space-y-6">
+                    <h1 class="poppins text-2xl font-bold mb-6">The SCALE Framework for CRM Success</h1>
+                    
+                    <p class="text-white/85 leading-relaxed">
+                        After implementing CRM systems for 50+ companies, I've distilled the process into a repeatable framework. Here's the exact methodology that delivered 147% ROI for Allegro:
+                    </p>
+                    
+                    <!-- Framework Steps -->
+                    <div class="space-y-6 mt-8">
+                        <div class="bg-blue-600/5 border-l-4 border-blue-600 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">S</div>
+                                <div>
+                                    <h3 class="poppins font-bold text-lg mb-2">Standardize Data Collection</h3>
+                                    <p class="text-white/85 text-sm leading-relaxed">Clean, consistent data is the foundation. We audit existing data, establish naming conventions, and create mandatory fields that actually matter.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-600/5 border-l-4 border-blue-600 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">C</div>
+                                <div>
+                                    <h3 class="poppins font-bold text-lg mb-2">Create Automated Workflows</h3>
+                                    <p class="text-white/85 text-sm leading-relaxed">Build smart sequences that nurture leads without human intervention. From welcome emails to follow-up reminders—automation handles the heavy lifting.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-600/5 border-l-4 border-blue-600 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">A</div>
+                                <div>
+                                    <h3 class="poppins font-bold text-lg mb-2">Align Sales & Marketing</h3>
+                                    <p class="text-white/85 text-sm leading-relaxed">Break down silos with shared definitions, handoff processes, and unified reporting. When teams speak the same language, conversion rates soar.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-600/5 border-l-4 border-blue-600 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">L</div>
+                                <div>
+                                    <h3 class="poppins font-bold text-lg mb-2">Launch Training Program</h3>
+                                    <p class="text-white/85 text-sm leading-relaxed">Technology without adoption fails. We create role-specific training that gets teams excited about using the system, not just compliant.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-600/5 border-l-4 border-blue-600 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">E</div>
+                                <div>
+                                    <h3 class="poppins font-bold text-lg mb-2">Establish Success Metrics</h3>
+                                    <p class="text-white/85 text-sm leading-relaxed">What gets measured gets managed. We define KPIs, create dashboards, and establish review cycles that keep everyone focused on results.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-600/10 border border-purple-600/30 rounded-xl p-6 mt-8">
+                        <p class="text-white/85 leading-relaxed">
+                            This framework has been battle-tested across industries—from tech startups to enterprise manufacturers. The key is systematic execution, not random tactics.
+                        </p>
+                    </div>
+                    
+                    <!-- CTA Button -->
+                    <div class="text-center pt-6">
+                        <a href="#" class="cta-button inline-block px-9 py-4 rounded-xl text-white poppins font-bold text-lg shadow-lg shadow-purple-600/35">
+                            Access Full Template
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template 4: Problem-Focused Email -->
+    <div id="problem-email" class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gray-800 p-4 flex items-center justify-between">
+            <h2 class="poppins text-xl font-bold text-white">Problem-Focused Email Template</h2>
+            <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm">Mistake-Focused</span>
+        </div>
+        
+        <!-- Email Preview -->
+        <div class="max-w-2xl mx-auto bg-white">
+            <!-- Email Header -->
+            <div class="bg-[#1A1A2E] px-8 py-6">
+                <div class="flex items-center">
+                    <span class="poppins text-2xl font-black text-white tracking-wider">OLEKSIAK CONSULT</span>
+                    <div class="flex items-center gap-2 ml-3">
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Body -->
+            <div class="bg-[#1A1A2E] px-8 pb-8 text-white">
+                <div class="space-y-6">
+                    <h1 class="poppins text-2xl font-bold mb-6">5 CRM Mistakes Costing You €100K+ Annually</h1>
+                    
+                    <p class="text-white/85 leading-relaxed">
+                        I've audited 200+ CRM implementations. These mistakes appear in 90% of systems—and each one has a measurable cost to your bottom line.
+                    </p>
+                    
+                    <!-- Mistakes List -->
+                    <div class="space-y-8 mt-8">
+                        <!-- Mistake 1 -->
+                        <div class="bg-transparent">
+                            <div class="flex items-start gap-4">
+                                <i class="fa-solid fa-times text-red-400 text-xl mt-1"></i>
+                                <div>
+                                    <h3 class="poppins font-bold text-xl mb-3 text-red-300">Treating CRM as a Database</h3>
+                                    <p class="text-white/85 leading-relaxed mb-2">
+                                        <strong>The Cost:</strong> 40% of leads never get followed up. With an average deal size of €5,000, that's €200K in lost revenue for a company generating 100 leads monthly.
+                                    </p>
+                                    <p class="text-white/60 text-sm">
+                                        <strong>The Fix:</strong> Configure automated workflows for lead scoring, routing, and nurturing sequences.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mistake 2 -->
+                        <div class="bg-purple-600/3 p-6 rounded-lg">
+                            <div class="flex items-start gap-4">
+                                <i class="fa-solid fa-times text-red-400 text-xl mt-1"></i>
+                                <div>
+                                    <h3 class="poppins font-bold text-xl mb-3 text-red-300">No Sales & Marketing Alignment</h3>
+                                    <p class="text-white/85 leading-relaxed mb-2">
+                                        <strong>The Cost:</strong> Marketing generates "leads" that sales calls "garbage." Conversion rates drop 67% due to qualification mismatches.
+                                    </p>
+                                    <p class="text-white/60 text-sm">
+                                        <strong>The Fix:</strong> Create shared lead definitions and implement proper lead scoring with both teams' input.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mistake 3 -->
+                        <div class="bg-transparent">
+                            <div class="flex items-start gap-4">
+                                <i class="fa-solid fa-times text-red-400 text-xl mt-1"></i>
+                                <div>
+                                    <h3 class="poppins font-bold text-xl mb-3 text-red-300">Dirty Data Tolerance</h3>
+                                    <p class="text-white/85 leading-relaxed mb-2">
+                                        <strong>The Cost:</strong> Sales reps waste 27% of their time on data cleanup instead of selling. That's 11 hours weekly per rep.
+                                    </p>
+                                    <p class="text-white/60 text-sm">
+                                        <strong>The Fix:</strong> Implement data validation rules and regular cleanup protocols from day one.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mistake 4 -->
+                        <div class="bg-purple-600/3 p-6 rounded-lg">
+                            <div class="flex items-start gap-4">
+                                <i class="fa-solid fa-times text-red-400 text-xl mt-1"></i>
+                                <div>
+                                    <h3 class="poppins font-bold text-xl mb-3 text-red-300">Ignoring User Adoption</h3>
+                                    <p class="text-white/85 leading-relaxed mb-2">
+                                        <strong>The Cost:</strong> 63% of CRM projects fail due to poor adoption. You've invested €50K+ in technology nobody uses properly.
+                                    </p>
+                                    <p class="text-white/60 text-sm">
+                                        <strong>The Fix:</strong> Design workflows around how people actually work, not how the software wants them to work.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mistake 5 -->
+                        <div class="bg-transparent">
+                            <div class="flex items-start gap-4">
+                                <i class="fa-solid fa-times text-red-400 text-xl mt-1"></i>
+                                <div>
+                                    <h3 class="poppins font-bold text-xl mb-3 text-red-300">No Success Metrics</h3>
+                                    <p class="text-white/85 leading-relaxed mb-2">
+                                        <strong>The Cost:</strong> Without clear KPIs, teams optimize for activity (calls made) instead of outcomes (deals closed). Efficiency plummets.
+                                    </p>
+                                    <p class="text-white/60 text-sm">
+                                        <strong>The Fix:</strong> Define 3-5 key metrics that directly correlate with revenue growth and track them obsessively.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-600/10 border border-blue-600/30 rounded-xl p-6 mt-8">
+                        <p class="text-white/85 leading-relaxed text-center">
+                            <strong>The good news?</strong> Each of these mistakes has a proven fix. I've helped 50+ companies eliminate them systematically.
+                        </p>
+                    </div>
+                    
+                    <!-- CTA Button -->
+                    <div class="text-center pt-6">
+                        <a href="#" class="cta-button inline-block px-9 py-4 rounded-xl text-white poppins font-bold text-lg shadow-lg shadow-purple-600/35">
+                            Get Your Free CRM Audit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template 5: Invitation Email -->
+    <div id="invitation-email" class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gray-800 p-4 flex items-center justify-between">
+            <h2 class="poppins text-xl font-bold text-white">Invitation Email Template</h2>
+            <span class="bg-orange-600 text-white px-3 py-1 rounded-full text-sm">High-Converting</span>
+        </div>
+        
+        <!-- Email Preview -->
+        <div class="max-w-2xl mx-auto bg-white">
+            <!-- Email Header -->
+            <div class="bg-[#1A1A2E] px-8 py-6">
+                <div class="flex items-center">
+                    <span class="poppins text-2xl font-black text-white tracking-wider">OLEKSIAK CONSULT</span>
+                    <div class="flex items-center gap-2 ml-3">
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                        <div class="w-2 h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Body -->
+            <div class="bg-[#1A1A2E] px-8 pb-8 text-white">
+                <div class="space-y-6">
+                    <h1 class="poppins text-2xl font-bold mb-6">Let's Talk About Your CRM Strategy</h1>
+                    
+                    <p class="text-white/85 leading-relaxed">Hi there,</p>
+                    
+                    <p class="text-white/85 leading-relaxed">
+                        I've been following your company's growth, and I think there's a conversation worth having about how CRM could accelerate your trajectory.
+                    </p>
+                    
+                    <p class="text-white/85 leading-relaxed">
+                        I'm offering a complimentary 30-minute strategy session where we'll:
+                    </p>
+                    
+                    <ul class="space-y-3 text-white/85 ml-6">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-purple-400 mr-3 mt-1"></i><span>Identify your biggest CRM bottlenecks</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-purple-400 mr-3 mt-1"></i><span>Calculate your potential ROI (using our proven framework)</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-purple-400 mr-3 mt-1"></i><span>Map out a 90-day implementation roadmap</span></li>
+                    </ul>
+                    
+                    <!-- Testimonial -->
+                    <div class="bg-blue-600/8 border border-blue-600/30 rounded-xl p-6 my-8">
+                        <div class="flex items-start gap-3 mb-4">
+                            <i class="fa-solid fa-quote-left text-blue-400 text-2xl"></i>
+                        </div>
+                        <p class="text-white/85 leading-relaxed italic mb-4">
+                            "The 30-minute call turned into a partnership that delivered 147% ROI in 90 days. Alex identified issues we didn't even know we had and provided a clear path forward."
+                        </p>
+                        <p class="poppins font-bold text-blue-300">Sarah Mitchell</p>
+                        <p class="text-white/60 text-sm">VP Sales, Allegro</p>
+                    </div>
+                    
+                    <p class="text-white/85 leading-relaxed">
+                        No pressure, no sales pitch—just a genuine conversation about whether there's a fit.
+                    </p>
+                    
+                    <!-- CTA Button - Extra Prominent -->
+                    <div class="text-center pt-8 pb-4">
+                        <a href="#" class="cta-button inline-block px-12 py-5 rounded-xl text-white poppins font-bold text-xl shadow-lg shadow-purple-600/35">
+                            Book Your Free 30-Min Session
+                        </a>
+                        <p class="text-white/60 text-sm mt-4">Choose a time that works for you</p>
+                    </div>
+                    
+                    <!-- Footer with Contact Info -->
+                    <div class="border-t border-white/20 pt-6 mt-8">
+                        <p class="text-white/85 mb-4">Looking forward to connecting,</p>
+                        <p class="poppins font-bold text-lg">Alex Oleksiak</p>
+                        <p class="text-white/60 text-sm mb-4">CRM Strategy Consultant</p>
+                        
+                        <div class="flex flex-col gap-2 text-white/85 text-sm">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-envelope text-purple-400"></i>
+                                <a href="#" class="text-blue-400 hover:text-blue-300">alex@oleksiakconsulting.com</a>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-brands fa-linkedin text-purple-400"></i>
+                                <a href="#" class="text-blue-400 hover:text-blue-300">LinkedIn Profile</a>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-calendar text-purple-400"></i>
+                                <a href="#" class="text-blue-400 hover:text-blue-300">calendly.com/oleksiak</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center pt-6 border-t border-white/20 mt-6">
+                        <p class="text-white/60 text-sm">
+                            <a href="#" class="text-blue-400 hover:text-blue-300">Unsubscribe</a> | 
+                            <a href="#" class="text-blue-400 hover:text-blue-300">Update Preferences</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div id="footer" class="text-center py-12 border-t border-gray-300">
+        <p class="text-gray-600 mb-2">Professional B2B Email Templates</p>
+        <p class="text-gray-500 text-sm">Designed for Oleksiak Consulting CRM Business</p>
+        <p class="text-gray-400 text-xs mt-4">Mobile-optimized • Tested across all major email clients • WCAG AA compliant</p>
+    </div>
+
+</div>
+
+</body>
+</html>

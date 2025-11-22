@@ -1,9 +1,9 @@
 # CLAUDE.md - Rafał Oleksiak Consulting Website
 
-**Project Context**: B2B consulting website for CRM & Marketing Automation services  
-**Stack**: Next.js 16 + React 19 + TypeScript 5.9 + Tailwind 4 + CSS Modules  
-**Status**: Production-ready (deployed on Vercel)  
-**Last Updated**: 2025-11-11
+**Project Context**: B2B consulting website for CRM & Marketing Automation services
+**Stack**: Next.js 16 + React 19 + TypeScript 5.9 + Tailwind 4 + CSS Modules
+**Status**: Production-ready (deployed on Vercel)
+**Last Updated**: 2025-11-21
 
 ---
 
@@ -380,7 +380,8 @@ docs/api-documentation
 
 ### High Priority (Week 1-2)
 - [ ] **SEO**: Add metadata, Open Graph tags, sitemap.xml
-- [ ] **Analytics**: Implement GA4 + Hotjar
+- [x] **Analytics - GA4**: ✅ Implemented 2025-11-21 (see `app/lib/analytics.ts`)
+- [ ] **Analytics - Hotjar**: Add heatmaps and session recordings
 - [ ] **API Security**: Rotate Resend API key (if exposed)
 
 ### Medium Priority (Week 3-4)

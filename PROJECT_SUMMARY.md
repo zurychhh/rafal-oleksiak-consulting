@@ -2,8 +2,8 @@
 
 **Project**: oleksiakconsulting.com
 **Technology Stack**: Next.js 16, React, TypeScript, Turbopack, CSS Modules
-**Timeline**: November 7-9, 2025
-**Total PRs Merged**: 14
+**Timeline**: November 7-9, 2025 (Initial), November 11-21, 2025 (Updates)
+**Total PRs Merged**: 17 (14 initial + 3 updates)
 **Status**: ✅ Deployed & Live
 
 ---
@@ -18,6 +18,53 @@ Successfully transformed a consulting website into a high-performance, mobile-op
 - 🎨 Simplified hero section for better conversion
 - 🧭 Fixed navigation system (desktop + mobile)
 - ♿ Enhanced accessibility (WCAG 2.1 AA compliance)
+
+---
+
+## 🆕 Recent Updates (November 11-21, 2025)
+
+### Google Analytics 4 Integration (November 21, 2025)
+**PR**: feat: implement Google Analytics 4 tracking with @next/third-parties
+
+**What was implemented**:
+- ✅ Google Analytics 4 with official `@next/third-parties` package
+- ✅ Automatic page view tracking on route changes
+- ✅ Web Vitals monitoring (LCP, CLS, FID, FCP, TTFB, INP)
+- ✅ Scroll depth tracking (25%, 50%, 75%, 100% milestones)
+- ✅ Event tracking for all CTAs (Hero, Footer, Calendly)
+- ✅ Form submission tracking (success/failure states)
+- ✅ Environment-aware tracking (console logs in dev, GA4 in production)
+
+**Files created**:
+- `app/lib/analytics.ts` - Analytics utilities and event tracking
+- `app/components/GoogleAnalytics.tsx` - GA4 wrapper component
+- `app/components/WebVitals.tsx` - Web Vitals tracking
+- `app/components/ScrollTracker.tsx` - Scroll depth tracking
+- `app/components/ui/HeroCTA.tsx` - Hero CTA with analytics
+
+**Business impact**:
+- 📊 Real-time user behavior insights
+- 🎯 Conversion funnel optimization data
+- ⚡ Performance monitoring (Core Web Vitals)
+- 📈 Data-driven decision making enabled
+
+**Measurement ID**: G-WZWCGQLQ2Y
+
+### HubSpot CRM Integration (November 11-17, 2025)
+**PR #15-17**: HubSpot CRM integration with form submissions
+
+**What was implemented**:
+- ✅ HubSpot contact creation/update on form submission
+- ✅ GDPR-compliant consent tracking
+- ✅ Activity logging to HubSpot timeline
+- ✅ All submissions tracked regardless of consent
+- ✅ Native `hs_legal_basis` field for GDPR compliance
+
+**Business impact**:
+- 🎯 Centralized lead management in HubSpot
+- 📊 Complete visibility into form submissions
+- ⚖️ GDPR compliance for EU market
+- 🔄 Seamless integration with existing CRM workflows
 
 ---
 

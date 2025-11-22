@@ -1,0 +1,1 @@
+{"errors":["aspect_ratio: invalid enum value. Expected '21:9' | '16:9' | '3:2' | '5:4' | '1:1' | '4:5' | '2:3' | '9:16' | '9:21', received '5:2'"],"id":"c76fc2d7aab097eca0242c6a03e3ecd0","name":"bad_request"}
