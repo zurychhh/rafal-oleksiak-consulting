@@ -48,7 +48,14 @@ export default function MobileNav() {
               PROCESS
             </a>
             <a
-              href="#free-consultation"
+              href="#lama-audit"
+              onClick={handleLinkClick}
+              className={styles.mobileLink}
+            >
+              FREE AUDIT
+            </a>
+            <a
+              href="#contact"
               onClick={handleLinkClick}
               className={styles.mobileLink}
             >

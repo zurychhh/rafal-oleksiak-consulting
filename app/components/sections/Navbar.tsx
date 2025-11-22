@@ -20,7 +20,9 @@ export default function Navbar() {
           <span className="nav-divider">|</span>
           <a href="#how-we-work" className="nav-link">PROCESS</a>
           <span className="nav-divider">|</span>
-          <a href="#free-consultation" className="nav-link">CONTACT</a>
+          <a href="#lama-audit" className="nav-link">FREE AUDIT</a>
+          <span className="nav-divider">|</span>
+          <a href="#contact" className="nav-link">CONTACT</a>
         </div>
 
         {/* CTA Button - Right */}

@@ -6,6 +6,35 @@ import { analytics } from '@/app/lib/analytics';
 
 export default function FinalCTA() {
   useEffect(() => {
+    // Check for LAMA pre-fill from sessionStorage
+    const lamaPrefillUrl = sessionStorage.getItem('lama_prefill_url');
+    const lamaAutoCheck = sessionStorage.getItem('lama_auto_check');
+
+    if (lamaPrefillUrl) {
+      const websiteInput = document.getElementById('website') as HTMLInputElement;
+      if (websiteInput) {
+        websiteInput.value = lamaPrefillUrl;
+        // Float the label
+        const label = websiteInput.parentElement?.querySelector<HTMLLabelElement>(
+          `.${styles.floatingLabel}`
+        );
+        if (label) {
+          label.classList.add(styles.floated);
+        }
+      }
+      // Clear from sessionStorage
+      sessionStorage.removeItem('lama_prefill_url');
+    }
+
+    if (lamaAutoCheck === 'true') {
+      const auditCheckbox = document.getElementById('auditRequested') as HTMLInputElement;
+      if (auditCheckbox) {
+        auditCheckbox.checked = true;
+      }
+      // Clear from sessionStorage
+      sessionStorage.removeItem('lama_auto_check');
+    }
+
     // Floating labels functionality
     const inputs = document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
       `.${styles.formInput}, .${styles.formTextarea}`
@@ -105,7 +134,7 @@ export default function FinalCTA() {
   };
 
   return (
-    <section className={styles.finalCTA} id="free-consultation">
+    <section className={styles.finalCTA} id="contact">
       {/* Floating shapes */}
       <div className={`${styles.floatingShape} ${styles.shape1}`}></div>
       <div className={`${styles.floatingShape} ${styles.shape2}`}></div>

@@ -29,6 +29,10 @@ const CaseStudiesSection = dynamic(() => import('./components/sections/CaseStudi
   loading: () => <div style={{ minHeight: '900px' }} />,
 });
 
+const LamaAuditSection = dynamic(() => import('./components/sections/LamaAuditSection'), {
+  loading: () => <div style={{ minHeight: '600px' }} />,
+});
+
 const ExpertiseBreaker = dynamic(() => import('./components/sections/ExpertiseBreaker'), {
   loading: () => <div style={{ minHeight: '200px' }} />,
 });
@@ -111,6 +115,9 @@ export default function Home() {
 
       {/* Case Studies Section - Not lazy (has nav link) */}
       <CaseStudiesSection />
+
+      {/* LAMA Free Audit Section - Lead Magnet (soft CTA) */}
+      <LamaAuditSection />
 
       {/* Expertise Breaker - Auto-scrolling Tags */}
       <LazySection>

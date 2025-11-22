@@ -1,0 +1,285 @@
+/* LAMA Audit Section - Branded Purple Gradient */
+
+.lamaSection {
+  position: relative;
+  background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
+  padding: 80px 20px;
+  overflow: hidden;
+}
+
+/* Floating gradient orbs (subtle, like hero) */
+.lamaSection::before,
+.lamaSection::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.lamaSection::before {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #00BFFF 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+  animation: float 20s infinite ease-in-out;
+}
+
+.lamaSection::after {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #7B2CBF 0%, transparent 70%);
+  bottom: -150px;
+  right: -150px;
+  animation: float 25s infinite ease-in-out reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, 30px); }
+}
+
+/* Container */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Emoji Journey Indicator */
+.emojiJourney {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  font-size: 24px;
+  opacity: 0.9;
+}
+
+.emojiJourney span {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.emojiJourney .arrow {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Headlines */
+.headline {
+  font-family: 'Poppins', sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.subheadline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 40px 0;
+  line-height: 1.6;
+}
+
+.dimensions {
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: 600;
+  color: #00BFFF;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* Form */
+.form {
+  margin-bottom: 32px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.input {
+  width: 100%;
+  padding: 18px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: #1A1A2E;
+  background: #ffffff;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.input:focus {
+  border-color: #00BFFF;
+  box-shadow: 0 6px 20px rgba(0, 191, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input::placeholder {
+  color: rgba(26, 26, 46, 0.4);
+}
+
+.button {
+  width: 100%;
+  padding: 18px 48px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0066FF 0%, #00BFFF 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #00BFFF 0%, #7B2CBF 100%);
+  box-shadow: 0 8px 24px rgba(0, 191, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button .arrow {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.button:hover:not(:disabled) .arrow {
+  transform: translateX(4px);
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Features (Value Props) */
+.features {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.featureIcon {
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.featureText {
+  font-weight: 500;
+}
+
+/* Social Proof */
+.socialProof {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.socialProof strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Tablet breakpoint */
+@media (min-width: 769px) {
+  .lamaSection {
+    padding: 100px 40px;
+  }
+
+  .headline {
+    font-size: 52px;
+  }
+
+  .subheadline {
+    font-size: 20px;
+  }
+
+  .inputGroup {
+    flex-direction: row;
+  }
+
+  .input {
+    flex: 1;
+  }
+
+  .button {
+    width: auto;
+    flex-shrink: 0;
+  }
+}
+
+/* Desktop breakpoint */
+@media (min-width: 1025px) {
+  .lamaSection {
+    padding: 120px 60px;
+  }
+
+  .headline {
+    font-size: 56px;
+  }
+
+  .emojiJourney {
+    font-size: 28px;
+    gap: 12px;
+  }
+}
