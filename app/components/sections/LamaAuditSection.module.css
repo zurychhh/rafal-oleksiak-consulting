@@ -106,7 +106,7 @@
 .inputGroup {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -199,6 +199,84 @@
   to { transform: rotate(360deg); }
 }
 
+/* Success Message */
+.successMessage {
+  margin-top: 24px;
+  padding: 24px;
+  background: rgba(0, 255, 136, 0.1);
+  border: 2px solid rgba(0, 255, 136, 0.3);
+  border-radius: 12px;
+  animation: slideIn 0.3s ease;
+}
+
+.successTitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #00ff88;
+  margin: 0 0 12px 0;
+}
+
+.successText {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.successText strong {
+  color: #00BFFF;
+  font-weight: 600;
+}
+
+/* Error Message */
+.errorMessage {
+  margin-top: 24px;
+  padding: 24px;
+  background: rgba(255, 77, 77, 0.1);
+  border: 2px solid rgba(255, 77, 77, 0.3);
+  border-radius: 12px;
+  animation: slideIn 0.3s ease;
+}
+
+.errorTitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff4d4d;
+  margin: 0 0 12px 0;
+}
+
+.errorText {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.errorText a {
+  color: #00BFFF;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.errorText a:hover {
+  color: #7B2CBF;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Features (Value Props) */
 .features {
   display: flex;
@@ -254,17 +332,9 @@
     font-size: 20px;
   }
 
+  /* Keep stacked on tablet for better UX with 2 inputs */
   .inputGroup {
-    flex-direction: row;
-  }
-
-  .input {
-    flex: 1;
-  }
-
-  .button {
-    width: auto;
-    flex-shrink: 0;
+    gap: 12px;
   }
 }
 

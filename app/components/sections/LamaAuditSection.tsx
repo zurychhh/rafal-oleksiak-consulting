@@ -8,42 +8,86 @@ import styles from './LamaAuditSection.module.css'
  * LAMA (Lead Acquisition Maturity Agent) - Dedicated Section
  *
  * Strategic placement: After Case Studies, before Process Timeline
- * User journey: Saw results → Want to check own site → Understand process → Book consultation
+ * User journey: Saw results → Want to check own site → Get audit → Book consultation
  *
  * Design: Purple gradient background, centered layout, prominent input
  * CTA Hierarchy: This is a "soft CTA" (low friction, cold leads)
+ *
+ * REAL AUDIT: Calls /api/lama/audit directly and sends email with results
  */
 export default function LamaAuditSection() {
   const [url, setUrl] = useState('')
+  const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!url.trim()) return
+    if (!url.trim() || !email.trim()) return
 
     // Track analytics
     trackEvent({
-      action: 'lama_audit_section_submit',
+      action: 'lama_audit_submit',
       category: 'conversion',
-      label: 'dedicated_section',
+      label: 'lama_section',
     })
 
     setIsSubmitting(true)
+    setSubmitStatus('idle')
+    setErrorMessage('')
 
-    // Scroll to FinalCTA section which has the full form with LAMA checkbox
-    const finalCTA = document.getElementById('contact')
-    if (finalCTA) {
-      // Store URL in sessionStorage so FinalCTA can pre-fill it
-      sessionStorage.setItem('lama_prefill_url', url)
-      sessionStorage.setItem('lama_auto_check', 'true')
+    try {
+      const response = await fetch('/api/lama/audit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url,
+          email,
+          fullName: email.split('@')[0], // Use email prefix as fallback name
+        }),
+      })
 
-      finalCTA.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const data = await response.json()
 
-      // Reset after scroll
-      setTimeout(() => {
-        setIsSubmitting(false)
-      }, 1000)
+      if (response.ok && data.success) {
+        // Success!
+        setSubmitStatus('success')
+        trackEvent({
+          action: 'lama_audit_success',
+          category: 'conversion',
+          label: `score_${data.auditResult?.overallScore || 0}`,
+        })
+
+        // Reset form after 3 seconds
+        setTimeout(() => {
+          setUrl('')
+          setEmail('')
+          setSubmitStatus('idle')
+        }, 5000)
+      } else {
+        // API returned error
+        setSubmitStatus('error')
+        setErrorMessage(data.error || 'Something went wrong. Please try again.')
+        trackEvent({
+          action: 'lama_audit_error',
+          category: 'conversion',
+          label: 'api_error',
+        })
+      }
+    } catch (error) {
+      // Network error
+      setSubmitStatus('error')
+      setErrorMessage('Network error. Please check your connection and try again.')
+      trackEvent({
+        action: 'lama_audit_error',
+        category: 'conversion',
+        label: 'network_error',
+      })
+      console.error('LAMA audit error:', error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -85,28 +129,68 @@ export default function LamaAuditSection() {
               placeholder="https://your-website.com"
               className={styles.input}
               required
-              disabled={isSubmitting}
-              pattern="https?://.*"
-              title="Please enter a valid URL starting with http:// or https://"
+              disabled={isSubmitting || submitStatus === 'success'}
+              title="Enter your website URL (e.g., https://example.com)"
+            />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className={styles.input}
+              required
+              disabled={isSubmitting || submitStatus === 'success'}
+              title="Enter your email to receive the audit results"
             />
             <button
               type="submit"
               className={styles.button}
-              disabled={isSubmitting || !url.trim()}
+              disabled={isSubmitting || submitStatus === 'success' || !url.trim() || !email.trim()}
             >
               {isSubmitting ? (
                 <>
                   <span className={styles.spinner}></span>
                   Analyzing...
                 </>
+              ) : submitStatus === 'success' ? (
+                <>
+                  ✓ Check Your Email!
+                </>
               ) : (
                 <>
-                  Analyze My Website
+                  Get Free Audit
                   <span className={styles.arrow}>→</span>
                 </>
               )}
             </button>
           </div>
+
+          {/* Success Message */}
+          {submitStatus === 'success' && (
+            <div className={styles.successMessage}>
+              <p className={styles.successTitle}>✓ Audit Complete!</p>
+              <p className={styles.successText}>
+                We've analyzed your website and sent the results to <strong>{email}</strong>.
+                <br />
+                Check your inbox in ~90 seconds for your personalized audit report!
+              </p>
+            </div>
+          )}
+
+          {/* Error Message */}
+          {submitStatus === 'error' && (
+            <div className={styles.errorMessage}>
+              <p className={styles.errorTitle}>⚠ Something went wrong</p>
+              <p className={styles.errorText}>
+                {errorMessage}
+                <br />
+                Need help? Email us at{' '}
+                <a href="mailto:contact@oleksiakconsulting.com">
+                  contact@oleksiakconsulting.com
+                </a>
+              </p>
+            </div>
+          )}
         </form>
 
         {/* Value Props */}
