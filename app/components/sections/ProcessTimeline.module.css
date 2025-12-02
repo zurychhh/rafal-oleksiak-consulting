@@ -6,6 +6,19 @@
   background: #2D3142;
   overflow-x: hidden;
   box-sizing: border-box;
+  scroll-margin-top: 140px; /* Increased to account for navbar + container padding + spacing */
+}
+
+@media (max-width: 1024px) {
+  .processTimeline {
+    scroll-margin-top: 136px; /* 96px navbar + 40px spacing */
+  }
+}
+
+@media (max-width: 768px) {
+  .processTimeline {
+    scroll-margin-top: 128px; /* 88px navbar + 40px spacing */
+  }
 }
 
 .container {

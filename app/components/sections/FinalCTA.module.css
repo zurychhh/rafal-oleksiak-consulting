@@ -8,6 +8,19 @@
   padding: 128px 0;
   overflow: hidden;
   box-sizing: border-box;
+  scroll-margin-top: 248px; /* Increased to account for navbar + section padding + spacing */
+}
+
+@media (max-width: 1024px) {
+  .finalCTA {
+    scroll-margin-top: 244px; /* 96px navbar + 148px spacing */
+  }
+}
+
+@media (max-width: 768px) {
+  .finalCTA {
+    scroll-margin-top: 236px; /* 88px navbar + 148px spacing */
+  }
 }
 
 .container {

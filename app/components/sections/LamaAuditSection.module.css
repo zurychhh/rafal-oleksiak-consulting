@@ -5,6 +5,19 @@
   background: #2D3142; /* Dark slate background matching design */
   padding: 120px 20px; /* Keep original padding - no changes */
   overflow: hidden;
+  scroll-margin-top: 240px; /* Increased to account for navbar + section padding + spacing */
+}
+
+@media (max-width: 1024px) {
+  .lamaSection {
+    scroll-margin-top: 236px; /* 96px navbar + 140px spacing */
+  }
+}
+
+@media (max-width: 768px) {
+  .lamaSection {
+    scroll-margin-top: 228px; /* 88px navbar + 140px spacing */
+  }
 }
 
 /* Container - Match Services section */
