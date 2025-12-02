@@ -35,9 +35,12 @@
 .floatingShape {
   position: absolute;
   border-radius: 50%;
-  filter: blur(40px);
+  filter: blur(30px); /* Reduced from 40px for better performance */
   opacity: 0.15;
   animation: float 6s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout style paint; /* Performance optimization */
   background: linear-gradient(45deg, #7B2CBF, #0066FF);
   pointer-events: none;
 
@@ -201,7 +204,7 @@
 .formCard {
   width: 100%;
   background: rgba(45, 49, 66, 0.8);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(15px); /* Reduced from 20px for better performance */
   border-radius: 16px;
   padding: 48px;
   box-shadow: 0 12px 40px rgba(123, 44, 191, 0.3);

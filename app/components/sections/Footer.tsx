@@ -36,12 +36,26 @@ export default function Footer() {
                 <span>in</span>
               </a>
               <a
-                href="mailto:contact@oleksiakconsulting.com"
+                href="mailto:rafal@oleksiakconsulting.com"
                 className={styles.socialLink}
                 aria-label="Email"
               >
                 <span>@</span>
               </a>
+            </div>
+
+            {/* Contact Information */}
+            <div className={styles.contactInfo}>
+              <p className={styles.contactItem}>
+                <a href="mailto:rafal@oleksiakconsulting.com" className={styles.contactLink}>
+                  rafal@oleksiakconsulting.com
+                </a>
+              </p>
+              <p className={styles.contactItem}>
+                <a href="tel:+48571903167" className={styles.contactLink}>
+                  +48 571 903 167
+                </a>
+              </p>
             </div>
           </div>
 

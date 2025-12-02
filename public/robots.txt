@@ -1,0 +1,13 @@
+# robots.txt for oleksiakconsulting.com
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Disallow admin or private areas (if any)
+Disallow: /api/
+Disallow: /_next/
+
+# Sitemap location (add when sitemap is created)
+# Sitemap: https://oleksiakconsulting.com/sitemap.xml
+

@@ -3,6 +3,13 @@ import Navbar from "./components/sections/Navbar";
 import LazySection from "./components/LazySection";
 import HeroCTA from "./components/ui/HeroCTA";
 
+// Performance optimization: Import sections that are navigable via anchor links as SSR
+// These sections should be immediately available for smooth navigation
+import Services from './components/sections/Services';
+import CaseStudiesSection from './components/sections/CaseStudiesSection';
+import ProcessTimeline from './components/sections/ProcessTimeline';
+import FinalCTA from './components/sections/FinalCTA';
+
 // Dynamic imports for below-fold sections to reduce initial bundle size
 // Each component gets code-split into separate chunk for on-demand loading
 const Bio = dynamic(() => import('./components/sections/Bio'), {
@@ -17,16 +24,8 @@ const GradientBreaker = dynamic(() => import('./components/ui/GradientBreaker'),
   loading: () => <div style={{ minHeight: '100px' }} />,
 });
 
-const Services = dynamic(() => import('./components/sections/Services'), {
-  loading: () => <div style={{ minHeight: '600px' }} />,
-});
-
 const Collaboration = dynamic(() => import('./components/sections/Collaboration'), {
   loading: () => <div style={{ minHeight: '800px' }} />,
-});
-
-const CaseStudiesSection = dynamic(() => import('./components/sections/CaseStudiesSection'), {
-  loading: () => <div style={{ minHeight: '900px' }} />,
 });
 
 const LamaAuditSection = dynamic(() => import('./components/sections/LamaAuditSection'), {
@@ -37,16 +36,8 @@ const ExpertiseBreaker = dynamic(() => import('./components/sections/ExpertiseBr
   loading: () => <div style={{ minHeight: '200px' }} />,
 });
 
-const ProcessTimeline = dynamic(() => import('./components/sections/ProcessTimeline'), {
-  loading: () => <div style={{ minHeight: '700px' }} />,
-});
-
 const AchievementsTicker = dynamic(() => import('./components/sections/AchievementsTicker'), {
   loading: () => <div style={{ minHeight: '150px' }} />,
-});
-
-const FinalCTA = dynamic(() => import('./components/sections/FinalCTA'), {
-  loading: () => <div style={{ minHeight: '700px' }} />,
 });
 
 const Footer = dynamic(() => import('./components/sections/Footer'), {
@@ -108,10 +99,8 @@ export default function Home() {
       {/* Services Section */}
       <Services />
 
-      {/* Collaboration Section */}
-      <LazySection>
-        <Collaboration />
-      </LazySection>
+      {/* Collaboration Section - Not lazy loaded to ensure form is always in HTML for LAMA audit */}
+      <Collaboration />
 
       {/* Case Studies Section - Not lazy (has nav link) */}
       <CaseStudiesSection />

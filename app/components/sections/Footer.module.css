@@ -138,6 +138,33 @@
   transform: translateY(-2px);
 }
 
+/* Contact Information */
+.contactInfo {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactItem {
+  margin: 0;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #FFFFFF;
+  line-height: 1.6;
+}
+
+.contactLink {
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contactLink:hover {
+  color: #9D4EDD;
+  text-decoration: underline;
+}
+
 /* Column */
 .column {
   display: flex;

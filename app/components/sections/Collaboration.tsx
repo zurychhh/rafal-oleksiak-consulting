@@ -263,7 +263,10 @@ export default function Collaboration() {
               Describe your needs and I will contact you with the most efficient proposal suited to your goals.
             </p>
 
-            <form className={styles.proposalForm} onSubmit={async (e) => {
+            <form 
+              id="proposal-form"
+              className={styles.proposalForm} 
+              onSubmit={async (e) => {
               e.preventDefault();
 
               const form = e.currentTarget;
@@ -292,7 +295,7 @@ export default function Collaboration() {
                   alert('Thank you! Your proposal request has been received. I will contact you within 24 hours.');
                   form.reset();
                 } else {
-                  alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');
+                  alert('Something went wrong. Please try again or email me directly at rafal@oleksiakconsulting.com');
                 }
               } catch (error) {
                 alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');

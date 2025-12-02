@@ -354,6 +354,13 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+.proposalForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .proposalTitle {
   font-family: var(--font-poppins), 'Poppins', sans-serif;
   font-weight: 900;

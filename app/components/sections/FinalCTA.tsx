@@ -87,7 +87,7 @@ export default function FinalCTA() {
         analytics.trackFormSubmission('contact_form', false);
 
         const error = await response.json();
-        alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');
+        alert('Something went wrong. Please try again or email me directly at rafal@oleksiakconsulting.com');
         console.error('Form error:', error);
       }
     } catch (error) {

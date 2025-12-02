@@ -30,6 +30,34 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Rafał Oleksiak - CRM & Marketing Automation Consultant",
   description: "Expert CRM and Marketing Automation consulting services. Specializing in customer relationship management strategies and marketing automation solutions.",
+  keywords: ["CRM", "Marketing Automation", "Customer Relationship Management", "Email Automation", "CRM Strategy", "Revenue Growth", "Allegro", "Accenture", "Booksy"],
+  authors: [{ name: "Rafał Oleksiak" }],
+  creator: "Rafał Oleksiak",
+  publisher: "Rafał Oleksiak Consulting",
+  openGraph: {
+    title: "Rafał Oleksiak - CRM & Marketing Automation Consultant",
+    description: "Expert CRM and Marketing Automation consulting services. Specializing in customer relationship management strategies and marketing automation solutions.",
+    url: "https://oleksiakconsulting.com",
+    siteName: "Rafał Oleksiak Consulting",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rafał Oleksiak - CRM & Marketing Automation Consultant",
+    description: "Expert CRM and Marketing Automation consulting services.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export const viewport = {
@@ -53,6 +81,8 @@ export default function RootLayout({
 
         {/* Performance: DNS prefetch for third-party services */}
         <link rel="dns-prefetch" href="https://calendly.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
       <body
         className={`${poppins.variable} ${dmSans.variable} antialiased`}

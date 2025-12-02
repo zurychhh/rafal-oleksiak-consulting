@@ -93,13 +93,22 @@ select:focus-visible {
 .floating-shape {
   position: absolute;
   border-radius: 50%;
-  filter: blur(25px);
+  filter: blur(20px); /* Reduced from 25px for better performance */
   opacity: 0.35;
   animation: float 6s ease-in-out infinite;
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
-  box-shadow: 0 0 80px rgba(123, 44, 191, 0.4);
+  box-shadow: 0 0 60px rgba(123, 44, 191, 0.3); /* Reduced for better performance */
+  contain: layout style paint; /* Performance optimization */
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .floating-shape {
+    animation: none;
+    filter: blur(15px); /* Less intensive blur when animation disabled */
+  }
 }
 
 .floating-shape-1 {

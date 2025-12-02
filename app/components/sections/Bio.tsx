@@ -14,8 +14,8 @@ export default function Bio() {
 
           {/* LEFT: Name + Tagline */}
           <div className={styles.headerContent}>
-            <h1 className={styles.bioName}>Rafał Oleksiak</h1>
-            <h2 className={styles.bioTagline}>Transforming CRM & Automation into Revenue Engines</h2>
+            <h2 className={styles.bioName}>Rafał Oleksiak</h2>
+            <h3 className={styles.bioTagline}>Transforming CRM & Automation into Revenue Engines</h3>
           </div>
 
           {/* RIGHT: Photo */}
