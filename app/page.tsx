@@ -40,9 +40,8 @@ const AchievementsTicker = dynamic(() => import('./components/sections/Achieveme
   loading: () => <div style={{ minHeight: '150px' }} />,
 });
 
-const Footer = dynamic(() => import('./components/sections/Footer'), {
-  loading: () => <div style={{ minHeight: '400px' }} />,
-});
+// Footer is SSR (not lazy) to ensure contact info is always in HTML for LAMA audit
+import Footer from './components/sections/Footer';
 
 export default function Home() {
   return (
@@ -125,9 +124,7 @@ export default function Home() {
       <FinalCTA />
 
       {/* Footer */}
-      <LazySection>
-        <Footer />
-      </LazySection>
+      <Footer />
     </main>
   );
 }

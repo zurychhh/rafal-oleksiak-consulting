@@ -1,15 +1,29 @@
 "use client";
 
-import { useEffect, FormEvent } from "react";
+import { useEffect, FormEvent, useState } from "react";
 import styles from "./FinalCTA.module.css";
 import { analytics } from '@/app/lib/analytics';
+import SuccessModal from '../ui/SuccessModal';
 
 export default function FinalCTA() {
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [wantAudit, setWantAudit] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    // Only run after hydration
+    if (!isMounted) return;
+
     // Floating labels functionality
     const inputs = document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
       `.${styles.formInput}, .${styles.formTextarea}`
     );
+
+    const cleanupFunctions: Array<() => void> = [];
 
     inputs.forEach((input) => {
       const label = input.parentElement?.querySelector<HTMLLabelElement>(
@@ -38,13 +52,18 @@ export default function FinalCTA() {
         label.classList.add(styles.floated);
       }
 
-      // Cleanup
-      return () => {
+      // Store cleanup function
+      cleanupFunctions.push(() => {
         input.removeEventListener("focus", handleFocus);
         input.removeEventListener("blur", handleBlur);
-      };
+      });
     });
-  }, []);
+
+    // Return cleanup function
+    return () => {
+      cleanupFunctions.forEach(cleanup => cleanup());
+    };
+  }, [isMounted]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,7 +96,11 @@ export default function FinalCTA() {
         // Track successful form submission
         analytics.trackFormSubmission('contact_form', true);
 
-        alert("Thank you! I'll be in touch within 24 hours.");
+        // Check if LAMA audit was requested
+        const auditRequested = formData.get('consent') === 'on';
+        setWantAudit(auditRequested);
+        setShowSuccessModal(true);
+        
         form.reset();
         document.querySelectorAll(`.${styles.floatingLabel}`).forEach((label) => {
           label.classList.remove(styles.floated);
@@ -94,7 +117,7 @@ export default function FinalCTA() {
       // Track failed form submission (network error)
       analytics.trackFormSubmission('contact_form', false);
 
-      alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');
+      alert('Something went wrong. Please try again or email me directly at rafal@oleksiakconsulting.com');
       console.error('Network error:', error);
     } finally {
       if (submitButton) {
@@ -150,6 +173,16 @@ export default function FinalCTA() {
                   rel="noopener noreferrer"
                 >
                   LinkedIn Profile →
+                </a>
+              </p>
+              <p className={styles.directContact}>
+                Or reach me directly:{" "}
+                <a href="mailto:rafal@oleksiakconsulting.com" className={styles.contactLink}>
+                  rafal@oleksiakconsulting.com
+                </a>
+                {" "} | {" "}
+                <a href="tel:+48571903167" className={styles.contactLink}>
+                  +48 571 903 167
                 </a>
               </p>
             </div>
@@ -248,6 +281,15 @@ export default function FinalCTA() {
           </div>
         </div>
       </div>
+
+      {/* Success Modal - Only render after hydration */}
+      {isMounted && (
+        <SuccessModal
+          isOpen={showSuccessModal}
+          onClose={() => setShowSuccessModal(false)}
+          showLamaMessage={wantAudit}
+        />
+      )}
     </section>
   );
 }

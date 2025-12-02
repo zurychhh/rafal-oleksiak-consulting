@@ -1,0 +1,205 @@
+/* Success Modal Component */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 26, 46, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal {
+  background: #2D3142;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 420px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(123, 44, 191, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.modalAnimate {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Checkmark Circle */
+.checkmarkCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.checkmarkPath {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: checkmark 0.5s ease-out 0.2s forwards;
+}
+
+@keyframes checkmark {
+  from {
+    stroke-dashoffset: 50;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Typography */
+.headline {
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtext {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* LAMA Box */
+.lamaBox {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.lamaBox i {
+  font-size: 20px;
+  color: #9D4EDD;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.lamaBox p {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.5;
+  text-align: left;
+}
+
+/* Button */
+.button {
+  width: 100%;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 8px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(123, 44, 191, 0.4);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button:focus-visible {
+  outline: 2px solid #00BFFF;
+  outline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal {
+    padding: 32px 24px;
+    max-width: 100%;
+    margin: 0 20px;
+  }
+
+  .headline {
+    font-size: 24px;
+  }
+
+  .subtext {
+    font-size: 15px;
+  }
+
+  .checkmarkCircle {
+    width: 56px;
+    height: 56px;
+  }
+
+  .checkmarkCircle svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .button {
+    padding: 14px 28px;
+    font-size: 15px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .modalAnimate {
+    animation: none;
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .checkmarkPath {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .button:hover {
+    transform: none;
+  }
+}
+

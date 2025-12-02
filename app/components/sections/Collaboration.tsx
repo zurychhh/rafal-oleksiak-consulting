@@ -3,9 +3,12 @@
 import { useState } from "react";
 import styles from "./Collaboration.module.css";
 import StatsTicker from "../ui/StatsTicker";
+import SuccessModal from "../ui/SuccessModal";
 
 export default function Collaboration() {
   const [activeTab, setActiveTab] = useState<'partnership' | 'project' | 'quickwins'>('partnership');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [wantAudit, setWantAudit] = useState(false);
 
   const partnershipBenefits = [
     {
@@ -149,16 +152,6 @@ export default function Collaboration() {
                 ))}
               </div>
 
-              {/* CTA Button */}
-              <a
-                href="https://calendly.com/rafaloleksiakconsulting/30min"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.ctaButton} ${styles.partnershipCta}`}
-              >
-                Explore Partnership
-              </a>
-
             </div>
           )}
 
@@ -192,16 +185,6 @@ export default function Collaboration() {
                   </div>
                 ))}
               </div>
-
-              {/* CTA Button */}
-              <a
-                href="https://calendly.com/rafaloleksiakconsulting/30min"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.ctaButton} ${styles.projectCta}`}
-              >
-                Discuss Your Project
-              </a>
 
             </div>
           )}
@@ -239,16 +222,6 @@ export default function Collaboration() {
                   </div>
                 ))}
               </div>
-
-              {/* CTA Button */}
-              <a
-                href="https://calendly.com/rafaloleksiakconsulting/30min"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.ctaButton} ${styles.quickwinsCta}`}
-              >
-                Book Quick Win Session
-              </a>
 
             </div>
           )}
@@ -292,13 +265,16 @@ export default function Collaboration() {
                 });
 
                 if (response.ok) {
-                  alert('Thank you! Your proposal request has been received. I will contact you within 24 hours.');
+                  // Check if LAMA audit was requested
+                  const auditRequested = formData.get('marketing') === 'on';
+                  setWantAudit(auditRequested);
+                  setShowSuccessModal(true);
                   form.reset();
                 } else {
                   alert('Something went wrong. Please try again or email me directly at rafal@oleksiakconsulting.com');
                 }
               } catch (error) {
-                alert('Something went wrong. Please try again or email me directly at contact@oleksiakconsulting.com');
+                alert('Something went wrong. Please try again or email me directly at rafal@oleksiakconsulting.com');
                 console.error('Network error:', error);
               } finally {
                 if (submitButton) {
@@ -386,6 +362,12 @@ export default function Collaboration() {
 
       </div>
 
+      {/* Success Modal */}
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        showLamaMessage={wantAudit}
+      />
     </section>
   );
 }
