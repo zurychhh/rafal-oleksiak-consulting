@@ -7,23 +7,23 @@ import GoogleAnalytics from "./components/GoogleAnalytics";
 import { WebVitals } from "./components/WebVitals";
 import { ScrollTracker } from "./components/ScrollTracker";
 
-// Configure Poppins for headlines - Optimized for mobile performance
+// Configure Poppins for headlines - Optimized for LCP
 const poppins = Poppins({
   subsets: ["latin"], // Latin subset includes Polish special characters
   weight: ["400", "600", "700", "900"],
   variable: "--font-poppins",
-  display: "swap",
-  adjustFontFallback: false, // Reduces CLS and prevents extra system font loading
+  display: "optional", // Better for LCP - shows fallback immediately if font not ready
+  adjustFontFallback: true, // Better CLS prevention
   preload: true, // Prioritizes font in network waterfall
 });
 
-// Configure DM Sans for body text - Optimized for mobile performance
+// Configure DM Sans for body text - Optimized for LCP
 const dmSans = DM_Sans({
   subsets: ["latin"], // Latin subset includes Polish special characters
   weight: ["400", "500", "700"],
   variable: "--font-dm-sans",
-  display: "swap",
-  adjustFontFallback: false, // Reduces CLS and prevents extra system font loading
+  display: "optional", // Better for LCP - shows fallback immediately if font not ready
+  adjustFontFallback: true, // Better CLS prevention
   preload: true, // Prioritizes font in network waterfall
 });
 
@@ -83,6 +83,14 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://calendly.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        
+        {/* Performance: Preload critical image for LCP optimization */}
+        <link
+          rel="preload"
+          href="/images/rafal-oleksiak.png"
+          as="image"
+          fetchPriority="high"
+        />
       </head>
       <body
         className={`${poppins.variable} ${dmSans.variable} antialiased`}

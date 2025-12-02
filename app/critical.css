@@ -88,6 +88,8 @@ select:focus-visible {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  content-visibility: auto; /* Optimize rendering performance */
+  contain: layout style paint; /* Performance optimization */
 }
 
 .floating-shape {
@@ -165,6 +167,23 @@ select:focus-visible {
   margin-bottom: 32px;
 }
 
+/* Hero Section - Content Container - Better vertical centering */
+.hero-content-container {
+  padding-top: 16vh; /* Add top padding to lower content and improve vertical centering */
+}
+
+@media (max-width: 1024px) {
+  .hero-content-container {
+    padding-top: 12vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-content-container {
+    padding-top: 8vh;
+  }
+}
+
 /* Hero Section - Headline (Simplified - No Gradient) */
 .hero-headline {
   font-family: var(--font-poppins), sans-serif;
@@ -176,6 +195,8 @@ select:focus-visible {
   max-width: 900px;
   margin: 0 auto 24px;
   text-wrap: balance; /* CRITICAL: Better text wrapping for longer headlines */
+  content-visibility: auto; /* Optimize rendering performance */
+  contain-intrinsic-size: auto 200px; /* Estimate for better performance */
 }
 
 /* Hero Section - Subheadline (Simplified) */

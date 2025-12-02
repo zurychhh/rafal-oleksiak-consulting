@@ -50,7 +50,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#2D3142]">
+      <section id="hero" className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-[#2D3142]">
 
         {/* Floating Gradient Shapes */}
         <div className="floating-shapes-container">
@@ -60,7 +60,7 @@ export default function Home() {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 max-w-5xl mx-auto px-8 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-8 text-center hero-content-container">
 
           {/* Headline */}
           <h1 className="hero-headline">

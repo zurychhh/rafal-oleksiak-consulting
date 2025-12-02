@@ -29,6 +29,8 @@ export default function Bio() {
                 sizes="(max-width: 480px) 180px, (max-width: 768px) 220px, (max-width: 1024px) 260px, 280px"
                 className={styles.bioPhoto}
                 priority
+                fetchPriority="high"
+                quality={90}
               />
             </div>
           </div>
