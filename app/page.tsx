@@ -74,12 +74,12 @@ export default function Home() {
 
           {/* Headline */}
           <h1 className="hero-headline">
-            I double revenue from owned marketing channels
+            I turn underperforming CRM systems into your #1 revenue driver
           </h1>
 
           {/* Subheadline */}
           <p className="hero-subheadline">
-            ROI-driven approach proven with Allegro, Booksy, and Accenture
+            Proven results: 11.5pp revenue growth (Allegro), 30% efficiency gain (Booksy), 34% YoY increase (Accenture)
           </p>
 
           {/* CTA Button with Analytics */}
@@ -89,10 +89,10 @@ export default function Home() {
       </section>
 
       {/* Statistics / Credibility Section */}
-      <section className="bg-[#2D3142] py-12 text-center">
+      <section className="bg-[#2D3142] py-8 text-center">
         <p className="hero-credibility">
           <span className="hero-checkmark">✓</span>
-          <strong>Join</strong> 15+ companies that <strong>transformed</strong> their CRM & automation with Rafal Oleksiak Consulting
+          Trusted by Allegro, Booksy, Accenture, McDonald's, and mBank for CRM transformation
         </p>
       </section>
 
@@ -116,9 +116,6 @@ export default function Home() {
       {/* Case Studies Section - Not lazy (has nav link) */}
       <CaseStudiesSection />
 
-      {/* LAMA Free Audit Section - Lead Magnet (soft CTA) */}
-      <LamaAuditSection />
-
       {/* Expertise Breaker - Auto-scrolling Tags */}
       <LazySection>
         <ExpertiseBreaker />
@@ -131,6 +128,9 @@ export default function Home() {
       <LazySection>
         <AchievementsTicker />
       </LazySection>
+
+      {/* LAMA Free Audit Section - Lead Magnet (soft CTA) - Before Contact */}
+      <LamaAuditSection />
 
       {/* Final CTA + Contact Form - Not lazy (has nav link) */}
       <FinalCTA />

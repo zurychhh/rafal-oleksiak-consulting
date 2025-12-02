@@ -23,7 +23,7 @@
   display: flex;
   gap: 16px;
   width: fit-content;
-  animation: scrollTags 30s linear infinite;
+  animation: scrollTags 50s linear infinite; /* Unified speed: 50s to match all breakers */
   will-change: transform;
 }
 
@@ -85,6 +85,6 @@
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .tagsWrapper {
-    animation: scrollTags 60s linear infinite;
+    animation: scrollTags 50s linear infinite; /* Unified speed: 50s to match all breakers */
   }
 }

@@ -1,93 +1,72 @@
 'use client'
 
-import { useState } from 'react'
 import { trackEvent } from '@/app/lib/analytics'
 import styles from './LamaAuditSection.module.css'
 
 /**
- * LAMA (Lead Acquisition Maturity Agent) - Dedicated Section
+ * LAMA (Lead Acquisition Maturity Assessment) - Dedicated Section
  *
- * Strategic placement: After Case Studies, before Process Timeline
- * User journey: Saw results → Want to check own site → Get audit → Book consultation
+ * Strategic placement: After AchievementsTicker, before FinalCTA
+ * User journey: Saw process → Understand LAMA methodology → Scroll to contact
  *
- * Design: Purple gradient background, centered layout, prominent input
- * CTA Hierarchy: This is a "soft CTA" (low friction, cold leads)
- *
- * REAL AUDIT: Calls /api/lama/audit directly and sends email with results
+ * Design: Purple gradient background with glass morphism cards
+ * CTA: Scroll to contact form (#contact)
  */
+
+const LAMA_STEPS = [
+  {
+    id: 'find',
+    title: 'Find',
+    icon: 'fa-magnifying-glass',
+    gradient: 'linear-gradient(135deg, #0066FF, #00BFFF)',
+    description: 'I analyze your SEO fundamentals - meta tags, H1 structure, robots.txt, and schema markup to ensure search engines can discover your site.',
+    why: "If search engines can't find you, you don't exist"
+  },
+  {
+    id: 'stay',
+    title: 'Stay',
+    icon: 'fa-bolt',
+    gradient: 'linear-gradient(135deg, #F59E0B, #FCD34D)',
+    description: 'I measure your page speed, mobile optimization, and Core Web Vitals (LCP, CLS, FCP) using Google PageSpeed Insights API.',
+    why: '1 second delay = 7% loss in conversions'
+  },
+  {
+    id: 'understand',
+    title: 'Understand',
+    icon: 'fa-lightbulb',
+    gradient: 'linear-gradient(135deg, #10B981, #34D399)',
+    description: 'My AI analyzes your messaging - H1 clarity, value proposition, navigation structure, and content readability.',
+    why: "Confused visitors don't convert"
+  },
+  {
+    id: 'trust',
+    title: 'Trust',
+    icon: 'fa-shield-halved',
+    gradient: 'linear-gradient(135deg, #0066FF, #00BFFF)',
+    description: 'I check your credibility signals - SSL certificate, privacy policy, contact information, testimonials, and trust badges.',
+    why: 'No trust = no leads'
+  },
+  {
+    id: 'convert',
+    title: 'Convert',
+    icon: 'fa-bullseye',
+    gradient: 'linear-gradient(135deg, #EF4444, #F87171)',
+    description: 'I assess your lead capture mechanisms - forms, CTA buttons, contact methods, and chat widgets across your site.',
+    why: 'Great traffic without CTAs = missed opportunities'
+  }
+] as const
+
 export default function LamaAuditSection() {
-  const [url, setUrl] = useState('')
-  const [email, setEmail] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [errorMessage, setErrorMessage] = useState('')
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!url.trim() || !email.trim()) return
-
-    // Track analytics
+  const scrollToContact = () => {
     trackEvent({
-      action: 'lama_audit_submit',
+      action: 'lama_cta_click',
       category: 'conversion',
-      label: 'lama_section',
+      label: 'scroll_to_contact',
     })
 
-    setIsSubmitting(true)
-    setSubmitStatus('idle')
-    setErrorMessage('')
-
-    try {
-      const response = await fetch('/api/lama/audit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url,
-          email,
-          fullName: email.split('@')[0], // Use email prefix as fallback name
-        }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok && data.success) {
-        // Success!
-        setSubmitStatus('success')
-        trackEvent({
-          action: 'lama_audit_success',
-          category: 'conversion',
-          label: `score_${data.auditResult?.overallScore || 0}`,
-        })
-
-        // Reset form after 3 seconds
-        setTimeout(() => {
-          setUrl('')
-          setEmail('')
-          setSubmitStatus('idle')
-        }, 5000)
-      } else {
-        // API returned error
-        setSubmitStatus('error')
-        setErrorMessage(data.error || 'Something went wrong. Please try again.')
-        trackEvent({
-          action: 'lama_audit_error',
-          category: 'conversion',
-          label: 'api_error',
-        })
-      }
-    } catch (error) {
-      // Network error
-      setSubmitStatus('error')
-      setErrorMessage('Network error. Please check your connection and try again.')
-      trackEvent({
-        action: 'lama_audit_error',
-        category: 'conversion',
-        label: 'network_error',
-      })
-      console.error('LAMA audit error:', error)
-    } finally {
-      setIsSubmitting(false)
+    const contactSection = document.getElementById('contact')
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
@@ -95,124 +74,49 @@ export default function LamaAuditSection() {
     <section id="lama-audit" className={styles.lamaSection}>
       <div className={styles.container}>
 
-        {/* Emoji Journey Indicator */}
-        <div className={styles.emojiJourney}>
-          <span title="Find">🔍</span>
-          <span className={styles.arrow}>→</span>
-          <span title="Stay">⚡</span>
-          <span className={styles.arrow}>→</span>
-          <span title="Understand">💡</span>
-          <span className={styles.arrow}>→</span>
-          <span title="Trust">🛡️</span>
-          <span className={styles.arrow}>→</span>
-          <span title="Convert">🎯</span>
+        {/* Title + Subtitle */}
+        <div className={styles.header}>
+          <h2 className={styles.headline}>
+            Free Website Audit: <span className={styles.highlight}>5 Ways</span><br />
+            You're Losing Leads
+          </h2>
+          <p className={styles.subtitle}>
+            I'll show you exactly where visitors are dropping off - and how to fix it in 30 days
+          </p>
         </div>
 
-        {/* Main Headline */}
-        <h2 className={styles.headline}>
-          Get Your Free Website Audit
-        </h2>
-
-        {/* Subheadline */}
-        <p className={styles.subheadline}>
-          See how your website performs across the 5 critical dimensions:<br />
-          <span className={styles.dimensions}>Find · Stay · Understand · Trust · Convert</span>
-        </p>
-
-        {/* Input Form */}
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://your-website.com"
-              className={styles.input}
-              required
-              disabled={isSubmitting || submitStatus === 'success'}
-              title="Enter your website URL (e.g., https://example.com)"
-            />
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              className={styles.input}
-              required
-              disabled={isSubmitting || submitStatus === 'success'}
-              title="Enter your email to receive the audit results"
-            />
-            <button
-              type="submit"
-              className={styles.button}
-              disabled={isSubmitting || submitStatus === 'success' || !url.trim() || !email.trim()}
-            >
-              {isSubmitting ? (
-                <>
-                  <span className={styles.spinner}></span>
-                  Analyzing...
-                </>
-              ) : submitStatus === 'success' ? (
-                <>
-                  ✓ Check Your Email!
-                </>
-              ) : (
-                <>
-                  Get Free Audit
-                  <span className={styles.arrow}>→</span>
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Success Message */}
-          {submitStatus === 'success' && (
-            <div className={styles.successMessage}>
-              <p className={styles.successTitle}>✓ Audit Complete!</p>
-              <p className={styles.successText}>
-                We've analyzed your website and sent the results to <strong>{email}</strong>.
-                <br />
-                Check your inbox in ~90 seconds for your personalized audit report!
-              </p>
-            </div>
-          )}
-
-          {/* Error Message */}
-          {submitStatus === 'error' && (
-            <div className={styles.errorMessage}>
-              <p className={styles.errorTitle}>⚠ Something went wrong</p>
-              <p className={styles.errorText}>
-                {errorMessage}
-                <br />
-                Need help? Email us at{' '}
-                <a href="mailto:contact@oleksiakconsulting.com">
-                  contact@oleksiakconsulting.com
-                </a>
-              </p>
-            </div>
-          )}
-        </form>
-
-        {/* Value Props */}
-        <div className={styles.features}>
-          <div className={styles.feature}>
-            <span className={styles.featureIcon}>✓</span>
-            <span className={styles.featureText}>No signup required</span>
-          </div>
-          <div className={styles.feature}>
-            <span className={styles.featureIcon}>⚡</span>
-            <span className={styles.featureText}>Results in 90 seconds</span>
-          </div>
-          <div className={styles.feature}>
-            <span className={styles.featureIcon}>🎁</span>
-            <span className={styles.featureText}>Free forever</span>
-          </div>
+        {/* Cards Grid */}
+        <div className={styles.cardsGrid}>
+          {LAMA_STEPS.map((step) => (
+            <article key={step.id} className={styles.cardWrapper}>
+              <div className={styles.cardBorder}>
+                <div className={styles.card}>
+                  <div
+                    className={styles.icon}
+                    style={{ background: step.gradient }}
+                  >
+                    <i className={`fa-solid ${step.icon}`}></i>
+                  </div>
+                  <h3 className={styles.cardTitle}>{step.title}</h3>
+                  <p className={styles.cardDescription}>{step.description}</p>
+                  <p className={styles.cardWhy}>{step.why}</p>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
 
-        {/* Social Proof */}
-        <p className={styles.socialProof}>
-          Trusted by <strong>15+ companies</strong> including Allegro, Booksy, and Accenture
-        </p>
+        {/* CTA Button - Arrow points DOWN */}
+        <div className={styles.ctaContainer}>
+          <button
+            onClick={scrollToContact}
+            className={styles.ctaButton}
+            type="button"
+          >
+            Yes, Audit My Website (Free, 90 Seconds)
+            <i className={`fa-solid fa-arrow-down ${styles.arrow}`}></i>
+          </button>
+        </div>
 
       </div>
     </section>

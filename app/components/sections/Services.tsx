@@ -6,72 +6,72 @@ export default function Services() {
       id: 1,
       iconGradient: "linear-gradient(135deg, #7B2CBF, #9D4EDD)",
       icon: "fa-chart-line",
-      title: "CRM Strategy & Implementation",
-      description: "Complete CRM setup, data migration, and process optimization to maximize customer lifetime value and retention rates.",
+      title: "CRM Strategy That Retains 30% More Customers",
+      description: "I build CRM systems that turn one-time buyers into repeat customers. My proven frameworks help you retain 20-30% more customers than industry average.",
       deliverables: [
-        "HubSpot, Salesforce, Pipedrive setup",
-        "Custom workflow automation",
-        "Lead scoring & segmentation"
+        "HubSpot, Salesforce, Pipedrive setup - configured to your business model, not generic templates",
+        "Custom workflow automation that saves your team 15+ hours per week",
+        "Lead scoring & segmentation so sales focuses on ready-to-buy prospects"
       ]
     },
     {
       id: 2,
       iconGradient: "linear-gradient(135deg, #0066FF, #00BFFF)",
       icon: "fa-envelope",
-      title: "Email Marketing Automation",
-      description: "Advanced email sequences, behavioral triggers, and personalization strategies that convert prospects into customers.",
+      title: "Email Automation That Converts 25%+ More Prospects",
+      description: "I design email sequences that feel like 1-on-1 conversations. You'll convert 20-30% more prospects - automatically.",
       deliverables: [
-        "Welcome series optimization",
-        "Abandoned cart recovery",
-        "Re-engagement campaigns"
+        "Welcome series that convert 40%+ of new subscribers (vs 10% industry average)",
+        "Abandoned cart recovery flows recovering 15-25% of lost revenue",
+        "Re-engagement campaigns that win back 20% of dormant customers"
       ]
     },
     {
       id: 3,
       iconGradient: "linear-gradient(135deg, #10B981, #34D399)",
       icon: "fa-gears",
-      title: "Marketing Automation",
-      description: "Multi-channel automation workflows that nurture leads through the entire customer journey with precision.",
+      title: "Marketing Automation That Nurtures Leads While You Sleep",
+      description: "I build marketing machines that work 24/7. Your team focuses on closing, not chasing cold leads.",
       deliverables: [
-        "Lead nurturing sequences",
-        "Cross-channel integration",
-        "Behavioral trigger setup"
+        "Lead nurturing sequences that move 30% more prospects from MQL to SQL",
+        "Cross-channel integration (email + SMS + web + ads) for consistent messaging",
+        "Behavioral triggers that respond to customer actions in real-time"
       ]
     },
     {
       id: 4,
       iconGradient: "linear-gradient(135deg, #F59E0B, #FBBF24)",
       icon: "fa-users",
-      title: "Customer Retention",
-      description: "Data-driven retention strategies that increase customer lifetime value and reduce churn through targeted campaigns.",
+      title: "Customer Retention That Reduces Churn by 25%",
+      description: "I predict which customers are about to churn - before they leave. My frameworks reduce churn by 20-30% and increase LTV by 40%+.",
       deliverables: [
-        "Churn prediction models",
-        "Loyalty program automation",
-        "Win-back campaigns"
+        "Churn prediction models that flag at-risk customers 30-60 days before they cancel",
+        "Loyalty program automation that rewards top 20% of customers driving 80% of revenue",
+        "Win-back campaigns that reactivate 15-20% of churned customers"
       ]
     },
     {
       id: 5,
       iconGradient: "linear-gradient(135deg, #EF4444, #F87171)",
       icon: "fa-chart-column",
-      title: "Analytics & Optimization",
-      description: "Comprehensive tracking, reporting, and continuous optimization to ensure maximum ROI from your automation efforts.",
+      title: "Analytics That Show Exactly Where to Double ROI",
+      description: "I don't just give you dashboards - I tell you what they mean. My frameworks identify the 3 levers that will double your ROI.",
       deliverables: [
-        "Custom dashboard creation",
-        "A/B testing frameworks",
-        "Performance optimization"
+        "Custom dashboards showing the 5 metrics that actually matter to revenue",
+        "A/B testing frameworks that increase conversion rates by 15-30% per quarter",
+        "Monthly optimization sprints delivering 5-10% compound improvements"
       ]
     },
     {
       id: 6,
       iconGradient: "linear-gradient(135deg, #8B5CF6, #A78BFA)",
       icon: "fa-graduation-cap",
-      title: "Team Training & Support",
-      description: "Comprehensive training programs and ongoing support to ensure your team can maintain and optimize systems independently.",
+      title: "Team Training That Makes Your Team Self-Sufficient",
+      description: "I don't create dependence - I create capability. My programs reduce external consulting costs by 70%+ over 2 years.",
       deliverables: [
-        "Platform training sessions",
-        "Best practices workshops",
-        "Ongoing support packages"
+        "Hands-on platform training (HubSpot/Salesforce/Pipedrive) customized to your workflows",
+        "Best practices workshops based on 8+ years of enterprise CRM leadership",
+        "30/60/90-day support packages with guaranteed <24h response times"
       ]
     }
   ];
@@ -82,9 +82,9 @@ export default function Services() {
 
         {/* Header */}
         <div className={styles.header}>
-          <h2 className={styles.headline}>Revenue-Driving Services</h2>
+          <h2 className={styles.headline}>Services That Drive Revenue</h2>
           <p className={styles.subheadline}>
-            Comprehensive CRM and marketing automation solutions designed to maximize your owned channel revenue
+            Transform your CRM from cost center to revenue engine - with measurable ROI in 30 days
           </p>
         </div>
 

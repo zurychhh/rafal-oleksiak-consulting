@@ -1,8 +1,8 @@
 # ROADMAP.md - Rafał Oleksiak Consulting Website
 
-**Last Updated**: 2025-11-21
+**Last Updated**: 2025-12-02
 **Project Phase**: Post-Launch Optimization + LAMA MVP
-**Current Focus**: LAMA Lead Generation System (Priority #1) + Analytics (GA4 ✅)
+**Current Focus**: LAMA Production Polish + UX Enhancements
 
 ---
 
@@ -624,16 +624,95 @@ HUBSPOT_ACCESS_TOKEN=pat-xxxxx (already have)
 
 ## 🎯 Currently In Progress
 
-**LAMA Stage 3: Polish & Production** 🏗️ 2025-11-21 (Ready to start)
+**Wording Optimization Implementation** 🏗️ 2025-12-02
 
 Next priorities:
-- LAMA Stage 3: Email design, error handling, loading UX, testing
-- Security & Setup (Rotate API Key if needed)
-- Week 1-2 Foundation tasks (SEO - metadata, sitemap)
+1. **CSS Layout Adjustments (before copy changes)** - 4 CRITICAL + 8 HIGH changes
+2. **Copy Implementation** - 108 elements across 9 sections
+3. LAMA Stage 3: Email design, error handling, loading UX, testing
+4. Security & Setup (Rotate API Key if needed)
+
+### Wording Optimization - Implementation Plan
+
+**Phase 1: CSS Changes (CRITICAL - do first)**
+- [ ] `critical.css`: Add `text-wrap: balance` for `.hero-headline`
+- [ ] `critical.css`: Increase `max-width` from 600px → 800px for `.hero-subheadline`
+- [ ] `FinalCTA.module.css`: Add list styling for `.subdescription`
+- [ ] `FinalCTA.module.css`: Decrease `font-size` 18px → 15px for `.submitButton` (mobile)
+
+**Phase 1b: CSS Changes (HIGH - recommended)**
+- [ ] `Services.module.css`: Increase `line-height` 1.3 → 1.4 for `.cardTitle`
+- [ ] `Services.module.css`: Decrease `font-size` 15px → 14px for `.description` (desktop)
+- [ ] `CaseStudiesSection.module.css`: Add `overflow-wrap: break-word` for `.challengeText`
+- [ ] `CaseStudiesSection.module.css`: Check `line-height` for `.cardTitle`
+
+**Phase 2: Copy Implementation (section by section)**
+- [ ] Hero Section (4 elements) - 🔥 CRITICAL priority
+- [ ] Services Section (30 elements) - 🔥 CRITICAL priority
+- [ ] Final CTA Section (13 elements) - 🔥 CRITICAL priority
+- [ ] Case Studies (30 elements) - ⚠️ HIGH priority
+- [ ] Collaboration Section (24 elements) - ℹ️ MEDIUM priority
+- [ ] Process Timeline (11 elements) - ℹ️ MEDIUM priority
+- [ ] Bio Section (13 elements) - ✅ LOW priority
+- [ ] LAMA Section (15 elements) - ✅ LOW priority (already strong)
+- [ ] Footer (2 elements) - ✅ LOW priority
+
+**Phase 3: Testing & QA**
+- [ ] Mobile preview (all sections)
+- [ ] Desktop preview (all sections)
+- [ ] Form submission test
+- [ ] LAMA audit test
+- [ ] Lighthouse score check
+
+**Documentation**: See `WORDING_MASTER_DOCUMENT_WITH_LAYOUT.md`
 
 ---
 
 ## ✅ Recently Completed
+
+- [x] **Wording Optimization - Layout Analysis Document** ✅ 2025-12-02
+  - Created `WORDING_MASTER_DOCUMENT_WITH_LAYOUT.md` with 108 optimized elements
+  - Added LAYOUT NOTES column to all tables identifying CSS changes needed
+  - **Layout Changes Identified:**
+    - 🔥 CRITICAL: 4 (Hero headline/subheadline, Final CTA button/subdescription)
+    - ⚠️ HIGH: 8 (Services titles/descriptions, Case Studies challenge text)
+    - ℹ️ MEDIUM: 10 (Process Timeline, Collaboration, LAMA)
+    - ✅ OK: 86 (no changes needed)
+  - **Key CSS Files to Modify:**
+    - `critical.css` - Hero section width + text-wrap
+    - `Services.module.css` - Card title line-height, description font-size
+    - `CaseStudiesSection.module.css` - Challenge text overflow handling
+    - `FinalCTA.module.css` - Subdescription list styling, button mobile font-size
+  - **Ready for Implementation:** CSS changes first, then copy changes
+  - **Time**: 1 hour (analysis + documentation)
+  - Owner: Claude
+
+- [x] **LAMA Section Premium Redesign + Hero CTA Dual-Button** ✅ 2025-12-02
+  - **LAMA Section:**
+    - Complete visual redesign with glass morphism cards
+    - 5 methodology cards: Find, Stay, Understand, Trust, Convert
+    - FontAwesome icons with gradient backgrounds (#00BFFF → #0066FF, etc.)
+    - Double shadow effects for premium depth (box-shadow layering)
+    - Font-weight: 900 for maximum impact on titles
+    - Centered CTA button (flex + margin auto)
+    - Repositioned to optimal user journey: after AchievementsTicker, before FinalCTA
+  - **Hero Section:**
+    - Dual-CTA vertical stack with proper hierarchy
+    - Primary: "Book Free Consultation →" (purple gradient, 16px, 16px/40px padding)
+    - Secondary: "Get Free Website Audit ↓" (transparent, white border, smooth scroll)
+    - Reduced spacing to social proof (py-12 → py-8)
+    - Responsive breakpoints for mobile
+  - **Analytics:**
+    - Primary CTA tracks: `hero_cta_click`
+    - Secondary CTA tracks: `hero_lama_cta_click` with label `scroll_to_lama`
+  - **Files modified:**
+    - `app/components/sections/LamaAuditSection.tsx` - Removed form, added LAMA_STEPS data
+    - `app/components/sections/LamaAuditSection.module.css` - Glass morphism, gradients, shadows
+    - `app/components/ui/HeroCTA.tsx` - Integrated dual CTA (removed separate component)
+    - `app/critical.css` - Hero CTA container + secondary button styles
+    - `app/page.tsx` - Repositioned LAMA section, reduced statistics padding
+  - **Time**: 3 hours actual
+  - Owner: Claude Code
 
 - [x] **LAMA Stage 2: Full 5-Category Audit** ✅ 2025-11-21
   - Created 3 new analyzers:

@@ -16,21 +16,21 @@ export default function HeroCTA() {
     trackEvent({
       action: 'hero_lama_cta_click',
       category: 'conversion',
-      label: 'secondary_cta',
+      label: 'scroll_to_lama',
     })
   }
 
-  const scrollToLama = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const scrollToLama = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     handleSecondaryClick()
     const lamaSection = document.getElementById('lama-audit')
     if (lamaSection) {
-      lamaSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      lamaSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 mt-8">
+    <div className="hero-cta-container">
       {/* Primary CTA - Book Consultation (HIGH PRIORITY) */}
       <a
         href="https://calendly.com/rafaloleksiakconsulting/30min"
@@ -39,26 +39,19 @@ export default function HeroCTA() {
         className="hero-cta-button"
         onClick={handlePrimaryClick}
       >
-        Book Free Consultation
+        Get Your Free Strategy Session
         <span>→</span>
       </a>
 
-      {/* Secondary CTA - LAMA Audit (LOW FRICTION) */}
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-sm text-gray-400">
-          Not ready yet?
-        </p>
-        <a
-          href="#lama-audit"
-          onClick={scrollToLama}
-          className="text-sm font-medium text-[#9D4EDD] hover:text-[#00BFFF] transition-colors duration-300 flex items-center gap-2 group"
-        >
-          <span className="border-b border-[#9D4EDD] group-hover:border-[#00BFFF] transition-colors">
-            Get a free website audit first
-          </span>
-          <span className="text-xs opacity-70">(90 seconds)</span>
-        </a>
-      </div>
+      {/* Secondary CTA - LAMA Audit (LOW FRICTION) - Now a proper button */}
+      <button
+        onClick={scrollToLama}
+        className="hero-lama-cta"
+        aria-label="Scroll to free LAMA audit section"
+      >
+        Get Free Website Audit
+        <span className="hero-lama-arrow">↓</span>
+      </button>
     </div>
   )
 }

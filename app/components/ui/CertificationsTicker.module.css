@@ -39,7 +39,7 @@
   display: inline-flex;
   gap: 40px;
   white-space: nowrap;
-  animation: scrollLeft 30s linear infinite;
+  animation: scrollLeft 50s linear infinite; /* Unified speed: 50s to match all breakers */
   will-change: transform;
 }
 
@@ -64,14 +64,14 @@
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.85); /* Increased from 0.5 to 0.85 for better visibility */
   letter-spacing: 0.03em;
 }
 
 /* Separator */
 .separator {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7); /* Increased from 0.3 to 0.7 for better visibility */
   font-weight: 700;
 }
 

@@ -15,27 +15,27 @@ export default function CaseStudiesSection() {
   const caseStudies: CaseStudy[] = [
     {
       badge: "ALLEGRO",
-      title: "Building Enterprise-Scale Automation",
-      challenge: "Untapped revenue opportunity in owned channels - automation delivering less than 1% of total company revenue",
-      result: "Transformed automation into primary revenue driver, scaling from 0.5% to 12% of company revenue (+11.5pp growth). Built 15-person team and managed $2M budget while integrating AI/ML capabilities for predictive personalization.",
+      title: "From 0.5% to 12%: Scaling Allegro's Automation Revenue",
+      challenge: "Allegro's marketing automation generated just 0.5% of total revenue despite €50M+ investment. Leadership demanded 10x growth or shutdown.",
+      result: "Scaled automation from 0.5% to 12% revenue contribution in 18 months. Built 15-person team. Managed $2M budget. 102% YoY growth.",
       heroMetric: "+11.5pp",
       metricLabel: "REVENUE GROWTH",
       badges: ["102% YoY Growth", "$2M Budget", "15-Person Team", "AI/ML Integration"]
     },
     {
       badge: "ALLEGRO",
-      title: "Traffic & Conversion Excellence",
-      challenge: "Fragmented customer communication across channels with suboptimal traffic and conversion performance",
-      result: "Orchestrated omnichannel communication strategy delivering 34% year-over-year revenue growth and 1.2pp CTR improvement through cross-departmental alignment and data-driven optimization.",
+      title: "34% Revenue Growth Through Omnichannel Strategy",
+      challenge: "Customer touchpoints siloed across 8 channels. No single customer view. Rates lagged 15-20% behind benchmarks.",
+      result: "Unified 8 channels. Delivered 34% YoY revenue, 1.2pp CTR, 1.5pp traffic growth. Cross-departmental alignment became best practice.",
       heroMetric: "34%",
       metricLabel: "YOY REVENUE GROWTH",
       badges: ["1.2pp CTR Lift", "1.5pp Traffic Increase", "Omnichannel Alignment", "Cross-departmental"]
     },
     {
       badge: "BOOKSY",
-      title: "B2B SaaS Conversion Excellence",
-      challenge: "Suboptimal conversion path limiting growth of SaaS subscription base",
-      result: "Optimized full B2B funnel from prospect to paying customer, achieving 0.3pp conversion rate improvement while establishing CRM procedures that improved go-to-market efficiency by 30% and reduced costs by 14%.",
+      title: "30% Efficiency + 14% Cost Reduction in B2B Funnel",
+      challenge: "B2B funnel broken: 60% drop-off at demo request, 40% no-show rate, 90-day sales cycles. Growth stalled at 15% YoY.",
+      result: "Rebuilt funnel: drop-off 60%→35%, no-show 40%→18%, cycle 90→62 days. Result: 0.3pp conversion, 30% efficiency, 14% cost reduction. Global standard.",
       heroMetric: "+0.3pp",
       metricLabel: "CONVERSION LIFT",
       badges: ["30% Efficiency Gain", "14% Cost Reduction", "B2B SaaS Expertise", "Full Funnel Optimization"]
@@ -53,9 +53,9 @@ export default function CaseStudiesSection() {
 
         {/* Header */}
         <div className={styles.header}>
-          <h2 className={styles.headline}>Transformation Results</h2>
+          <h2 className={styles.headline}>Proven Results</h2>
           <p className={styles.subheadline}>
-            Real projects. Real numbers. Real growth.
+            11.5pp revenue growth. 34% YoY increase. 30% efficiency gain. These aren't projections - they're results.
           </p>
         </div>
 

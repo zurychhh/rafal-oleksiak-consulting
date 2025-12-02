@@ -21,9 +21,23 @@ section {
   padding: clamp(48px, 8vw + 1rem, 120px) 0;
 }
 
-/* Smooth scroll offset for fixed navbar */
+/* Smooth scroll offset for fixed navbar - Responsive based on navbar height */
 section[id] {
-  scroll-margin-top: 80px; /* Adjust based on navbar height */
+  scroll-margin-top: 100px; /* Desktop: navbar 88px + extra spacing */
+}
+
+/* Tablet: navbar 80px */
+@media (max-width: 1024px) {
+  section[id] {
+    scroll-margin-top: 96px; /* 80px navbar + 16px spacing */
+  }
+}
+
+/* Mobile: navbar 72px */
+@media (max-width: 768px) {
+  section[id] {
+    scroll-margin-top: 88px; /* 72px navbar + 16px spacing */
+  }
 }
 
 /* Gradient Number - Universal class used across multiple sections */

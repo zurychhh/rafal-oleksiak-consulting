@@ -20,7 +20,7 @@
 .tickerContent {
   display: inline-flex;
   white-space: nowrap;
-  animation: tickerScroll 30s linear infinite;
+  animation: tickerScroll 50s linear infinite; /* Unified speed: 50s to match all breakers */
   will-change: transform;
 }
 
@@ -67,6 +67,6 @@
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .tickerContent {
-    animation: tickerScroll 60s linear infinite;
+    animation: tickerScroll 50s linear infinite; /* Unified speed: 50s to match all breakers */
   }
 }

@@ -40,25 +40,25 @@ export default function Bio() {
 
           {/* Block 1 */}
           <div className={styles.expertiseBlock}>
-            <h3 className={styles.blockTitle}>Enterprise-Scale CRM & Automation Leadership</h3>
+            <h3 className={styles.blockTitle}>8+ Years Leading CRM at €Billion-Scale Companies</h3>
             <p className={styles.blockContent}>
-              Over 8 years leading CRM and Marketing Automation strategy for international corporations including Allegro, Accenture, and Booksy. Experience managing cross-functional teams of up to 15 specialists and overseeing multi-million dollar automation budgets. Deep expertise in both B2C marketplace ecosystems and B2B subscription models, with proven ability to deliver measurable business impact at enterprise scale.
+              I've led CRM strategy at Allegro (Poland's #1 marketplace), Accenture (global consulting), and Booksy (B2B SaaS). Built and managed 15-person teams, $2M+ budgets. Results: 11.5pp revenue growth, 102% YoY increase, 30% efficiency gains.
             </p>
           </div>
 
           {/* Block 2 */}
           <div className={styles.expertiseBlock}>
-            <h3 className={styles.blockTitle}>Digital Transformation & Agile Delivery</h3>
+            <h3 className={styles.blockTitle}>From Zero to 12% Revenue: Building Automation Programs</h3>
             <p className={styles.blockContent}>
-              Specialized in end-to-end MarTech transformation projects, from strategic planning through implementation and optimization. Built and scaled marketing automation practices from ground zero, establishing teams, processes, and technology foundations that became revenue-driving engines. Expert in Agile/Scrum methodologies for marketing technology projects.
+              I don't just consult – I build. I've launched 3 automation programs from scratch (Allegro, Booksy, Jameel Motors), taking them from 0% to 10%+ revenue contribution in 18 months. Full-stack delivery: strategy → implementation → optimization.
             </p>
           </div>
 
           {/* Block 3 */}
           <div className={styles.expertiseBlock}>
-            <h3 className={styles.blockTitle}>Marketing Automation Education & Industry Authority</h3>
+            <h3 className={styles.blockTitle}>Teaching Marketing Automation at Top Business Schools</h3>
             <p className={styles.blockContent}>
-              Marketing Automation Lead Instructor at LABA Business School and Guest Lecturer at Collegium Da Vinci in partnership with Nowy Marketing. Author of comprehensive marketing automation curriculum covering strategy, implementation, and optimization. Certified Salesforce Marketing Cloud Specialist with additional credentials.
+              Lead Instructor at LABA Business School (Warsaw), Guest Lecturer at Collegium Da Vinci. I created the marketing automation curriculum from scratch – now used by 200+ students. Salesforce Marketing Cloud certified.
             </p>
           </div>
 

@@ -46,7 +46,7 @@
 .logoStrip {
   display: flex;
   align-items: center;
-  animation: scrollLeftToRight 60s linear infinite;
+  animation: scrollLeftToRight 8.33s linear infinite; /* Adjusted: 16.67s / 2 = 8.33s for faster visual speed to match other breakers */
   will-change: transform;
 }
 

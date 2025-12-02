@@ -38,7 +38,7 @@
   display: inline-flex;
   gap: 24px;
   white-space: nowrap;
-  animation: scrollLeft 60s linear infinite;
+  animation: scrollLeft 50s linear infinite; /* Unified speed: 50s to match all breakers */
   will-change: transform;
 }
 

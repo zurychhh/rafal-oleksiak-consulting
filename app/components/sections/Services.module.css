@@ -4,7 +4,7 @@
   width: 100%;
   max-width: 100vw;
   background: #2D3142;
-  padding: 120px 0;
+  padding: 96px 0 120px 0; /* Top padding reduced to 96px to match spacing above breaker, bottom kept at 120px */
   overflow-x: hidden;
   box-sizing: border-box;
 }
@@ -29,7 +29,10 @@
   font-size: 48px;
   line-height: 1.1;  /* Tighter line height */
   letter-spacing: -0.02em;  /* Tighter for black weight */
-  color: #FFFFFF;
+  background: linear-gradient(135deg, #7B2CBF 0%, #00BFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 16px;
 }
 
@@ -58,6 +61,7 @@
   border-radius: 16px;
   padding: 40px;
   transition: all 0.3s ease;
+  cursor: default; /* Explicitly set default cursor - no pointer change on hover */
 }
 
 /* Gradient Border Effect */
@@ -110,14 +114,14 @@
   letter-spacing: -0.01em;
   color: #FFFFFF;
   margin-bottom: 16px;
-  line-height: 1.3;
+  line-height: 1.4; /* HIGH: Increased from 1.3 for better readability with longer titles */
 }
 
 /* Description */
 .description {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 14px; /* HIGH: Reduced from 15px to 14px (desktop) for better text density */
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
   margin-bottom: 24px;

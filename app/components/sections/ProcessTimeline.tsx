@@ -18,36 +18,36 @@ export default function ProcessTimeline() {
   const stages: Stage[] = [
     {
       number: "01",
-      title: "Discovery & Goal Setting",
-      description: "Understanding your business context and setting clear KPIs that align with strategic objectives.",
+      title: "Discovery: Understanding Your Revenue Gap",
+      description: "I analyze your CRM setup, identify the revenue gap, set KPIs - not vanity metrics.",
       position: "top",
       icon: "search"
     },
     {
       number: "02",
-      title: "Strategic Roadmap",
-      description: "Creating detailed action plan with prioritized initiatives and transparent roadmap.",
+      title: "Roadmap: Your 90-Day Action Plan",
+      description: "I create roadmap showing what to do in days 1-30, 31-60, 61-90. Every initiative has estimated ROI.",
       position: "bottom",
       icon: "path"
     },
     {
       number: "03",
-      title: "Quick Wins Implementation",
-      description: "Delivering immediate results within 30 days to build momentum and demonstrate ROI.",
+      title: "Quick Wins: Measurable Results in 30 Days",
+      description: "I implement 3-5 quick wins showing immediate ROI. Typical wins: 15-25% improvement.",
       position: "top",
       icon: "lightning"
     },
     {
       number: "04",
-      title: "Full-Scale Execution",
-      description: "Executing transformation with sustainable solutions and building team capabilities.",
+      title: "Execution: Building Your Revenue Engine",
+      description: "I implement the full framework while training your team - no vendor lock-in, just capability building.",
       position: "bottom",
       icon: "arrow"
     },
     {
       number: "05",
-      title: "Optimization & Growth",
-      description: "Measuring results against KPIs and continuously improving through data-driven optimization.",
+      title: "Optimization: Continuous 5-10% Improvements",
+      description: "I establish monthly optimization sprints delivering 5-10% compound improvements.",
       position: "top",
       icon: "chart"
     }
@@ -146,11 +146,9 @@ export default function ProcessTimeline() {
       <div className={styles.container}>
 
         {/* Header */}
-        <h2 className={styles.headline}>How We'll Work Together</h2>
+        <h2 className={styles.headline}>My 5-Step Process: From Audit to Revenue Growth</h2>
         <p className={styles.description}>
-          Every project starts with understanding your business goals and ends with measurable ROI.
-          I combine strategic thinking with hands-on technical expertise to deliver results that
-          matter—not just implementation, but transformation that drives revenue.
+          First results in 30 days. Full transformation in 6-12 months. No consultants who disappear after delivering a 200-page PDF.
         </p>
 
         {/* Timeline */}

@@ -69,7 +69,7 @@ export default function FinalCTA() {
           website: formData.get('website'),
           challenge: formData.get('challenge'),
           consent: formData.get('consent') === 'on',
-          auditRequested: formData.get('auditRequested') === 'on',
+          auditRequested: formData.get('consent') === 'on', // LAMA audit requires consent
         }),
       });
 
@@ -99,7 +99,7 @@ export default function FinalCTA() {
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
-        submitButton.textContent = 'Book Free Consultation';
+        submitButton.textContent = 'Yes, I Want to Double CRM Revenue →';
       }
     }
   };
@@ -115,22 +115,20 @@ export default function FinalCTA() {
         <div className={styles.grid}>
           {/* LEFT COLUMN */}
           <div className={styles.leftColumn}>
-            <h2 className={styles.headline}>Get Your Free Consultation</h2>
+            <h2 className={styles.headline}>Ready to Double Your CRM Revenue?</h2>
 
             <p className={styles.description}>
-              Schedule free consultation to explore how we can double your
-              revenue from owned channels. No commitment required.
+              In this 30-minute call, I'll show you where you're leaving money on the table. No pitch, no pressure.
             </p>
 
             <p className={styles.subdescription}>
-              Discuss your challenges, review your current setup, and receive
-              strategic recommendations tailored to your business goals.
+              You'll walk away with: (1) 3 quick wins, (2) ROI projection, (3) Roadmap to 2x revenue
             </p>
 
             {/* Credibility */}
             <div className={styles.credibility}>
               <p className={styles.credibilityText}>
-                Join 15+ companies that transformed their CRM & automation
+                Trusted by Allegro, Booksy, Accenture, McDonald's, mBank
               </p>
 
               <div className={styles.logoGrid}>
@@ -144,12 +142,6 @@ export default function FinalCTA() {
 
             {/* Alternative contact */}
             <div className={styles.alternativeContact}>
-              <p>
-                Prefer email? Reach out directly at{" "}
-                <a href="mailto:contact@oleksiakconsulting.com">
-                  contact@oleksiakconsulting.com
-                </a>
-              </p>
               <p>
                 Connect on LinkedIn:{" "}
                 <a
@@ -189,7 +181,7 @@ export default function FinalCTA() {
                 {/* Email */}
                 <div className={styles.floatingLabelContainer}>
                   <label className={styles.floatingLabel} htmlFor="email">
-                    Email Address
+                    Work Email
                   </label>
                   <input
                     type="email"
@@ -219,9 +211,9 @@ export default function FinalCTA() {
                 </div>
 
                 {/* Challenge Textarea */}
-                <div className={styles.floatingLabelContainer}>
-                  <label className={styles.floatingLabel} htmlFor="challenge">
-                    What's your biggest challenge?
+                <div>
+                  <label htmlFor="challenge" className={styles.textareaLabel}>
+                    What's blocking you from doubling CRM revenue?
                   </label>
                   <textarea
                     id="challenge"
@@ -229,24 +221,10 @@ export default function FinalCTA() {
                     required
                     className={styles.formTextarea}
                     rows={4}
-                    placeholder="Tell me about your current situation and what you're looking to achieve..."
                   ></textarea>
                 </div>
 
-                {/* Audit Request Checkbox */}
-                <div className={styles.checkboxContainer}>
-                  <input
-                    type="checkbox"
-                    id="auditRequested"
-                    name="auditRequested"
-                    className={styles.customCheckbox}
-                  />
-                  <label htmlFor="auditRequested" className={styles.checkboxLabel}>
-                    <strong>☐ Wyślij mi darmowy audit strony</strong> (wyniki w 90 sekund)
-                  </label>
-                </div>
-
-                {/* Consent Checkbox */}
+                {/* Combined Consent Checkbox - LAMA Audit requires marketing consent */}
                 <div className={styles.checkboxContainer}>
                   <input
                     type="checkbox"
@@ -256,15 +234,14 @@ export default function FinalCTA() {
                     className={styles.customCheckbox}
                   />
                   <label htmlFor="consent" className={styles.checkboxLabel}>
-                    I agree to receive strategic insights and updates from Rafał
-                    about CRM, Marketing Automation, and revenue growth
-                    strategies
+                    <strong>Yes, send me a free LAMA Audit</strong> (results in 90 seconds - 5 categories analyzed). 
+                    I also want CRM insights (1 email/month, no spam, unsubscribe anytime).
                   </label>
                 </div>
 
                 {/* Submit Button */}
                 <button type="submit" className={styles.ctaButton}>
-                  Book Free Consultation <span>→</span>
+                  Yes, I Want to Double CRM Revenue <span>→</span>
                 </button>
               </form>
             </div>

@@ -355,18 +355,17 @@ export default function Collaboration() {
 
               </div>
 
-              {/* Marketing Consent */}
-              <div className={`${styles.formGroup} ${styles.checkboxGroup}`}>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    id="marketing"
-                    name="marketing"
-                  />
-                  <span className={styles.checkboxCustom}></span>
-                  <span className={styles.checkboxText}>
-                    I agree to receive marketing communications and updates about services
-                  </span>
+              {/* Marketing Consent - Combined with LAMA Audit */}
+              <div className={styles.checkboxContainer}>
+                <input
+                  type="checkbox"
+                  id="marketing"
+                  name="marketing"
+                  className={styles.customCheckbox}
+                />
+                <label htmlFor="marketing" className={styles.checkboxLabel}>
+                  <strong>Yes, send me a free LAMA Audit</strong> (results in 90 seconds - 5 categories analyzed). 
+                  I also want CRM insights (1 email/month, no spam, unsubscribe anytime).
                 </label>
               </div>
 
