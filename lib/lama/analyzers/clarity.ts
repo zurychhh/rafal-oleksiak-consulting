@@ -183,15 +183,15 @@ function extractContentForAnalysis(html: string): {
     }
   }
 
-  // Extract first 3 paragraphs after H1
+  // Extract first 7 paragraphs to give Claude more context for value proposition analysis
   const paragraphs: string[] = [];
   const pMatches = html.matchAll(/<p[^>]*>(.*?)<\/p>/gi);
 
   for (const match of pMatches) {
     const text = match[1].replace(/<[^>]+>/g, '').trim();
-    if (text.length > 20) { // Skip very short paragraphs
+    if (text.length > 15) { // Skip very short paragraphs (lowered from 20 to capture more content)
       paragraphs.push(text);
-      if (paragraphs.length >= 3) break;
+      if (paragraphs.length >= 7) break; // Increased from 3 to 7 for better value prop detection
     }
   }
 
