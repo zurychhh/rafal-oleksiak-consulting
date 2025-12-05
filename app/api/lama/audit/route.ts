@@ -8,6 +8,7 @@ import { analyzePerformance } from '@/lib/lama/analyzers/performance';
 import { analyzeClarity } from '@/lib/lama/analyzers/clarity';
 import { analyzeTrust } from '@/lib/lama/analyzers/trust';
 import { analyzeConversion } from '@/lib/lama/analyzers/conversion';
+import { analyzeEngagement } from '@/lib/lama/analyzers/engagement';
 import { createOrUpdateLAMAContact } from '@/lib/lama/hubspot';
 import { generateAuditEmail } from '@/lib/lama/email-template';
 import type { AuditRequest, AuditResult, CategoryScore } from '@/lib/lama/types';
@@ -44,18 +45,20 @@ export async function POST(request: NextRequest) {
 
     console.log(`[LAMA] Starting audit for ${validUrl} (${email})`);
 
-    // 2. Run all 5 analyses in parallel (Stage 2: Full audit)
+    // 2. Run all 6 analyses in parallel (Stage 2: Full audit)
     const [
       visibilityResult,
       performanceResult,
       clarityResult,
       trustResult,
+      engagementResult,
       conversionResult,
     ] = await Promise.allSettled([
       analyzeVisibility(validUrl),
       analyzePerformance(validUrl),
       analyzeClarity(validUrl),
       analyzeTrust(validUrl),
+      analyzeEngagement(validUrl),
       analyzeConversion(validUrl),
     ]);
 
@@ -121,6 +124,22 @@ export async function POST(request: NextRequest) {
           severity: 'critical',
           title: 'Analysis failed',
           description: 'Unable to analyze trust signals',
+        }],
+        recommendations: ['Check if website is publicly accessible'],
+      });
+    }
+
+    if (engagementResult.status === 'fulfilled') {
+      categories.push(engagementResult.value);
+    } else {
+      console.error('[LAMA] Engage analysis failed:', engagementResult.reason);
+      categories.push({
+        category: 'Engage',
+        score: 0,
+        issues: [{
+          severity: 'critical',
+          title: 'Analysis failed',
+          description: 'Unable to analyze CRM & marketing automation maturity',
         }],
         recommendations: ['Check if website is publicly accessible'],
       });

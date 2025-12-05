@@ -9,7 +9,7 @@ export interface AuditRequest {
 }
 
 export interface CategoryScore {
-  category: 'Find' | 'Stay' | 'Understand' | 'Trust' | 'Convert';
+  category: 'Find' | 'Stay' | 'Understand' | 'Trust' | 'Engage' | 'Convert';
   score: number; // 0-100
   issues: Issue[];
   recommendations: string[];

@@ -482,7 +482,7 @@ function getSeverityIcon(severity: 'critical' | 'warning' | 'info'): string {
   }
 }
 
-function getCategoryMeta(category: 'Find' | 'Stay' | 'Understand' | 'Trust' | 'Convert'): { emoji: string; title: string; question: string } {
+function getCategoryMeta(category: 'Find' | 'Stay' | 'Understand' | 'Trust' | 'Engage' | 'Convert'): { emoji: string; title: string; question: string } {
   switch (category) {
     case 'Find':
       return {
@@ -507,6 +507,12 @@ function getCategoryMeta(category: 'Find' | 'Stay' | 'Understand' | 'Trust' | 'C
         emoji: '🛡️',
         title: 'Trust',
         question: 'Will people trust my business?'
+      };
+    case 'Engage':
+      return {
+        emoji: '🤝',
+        title: 'Engage',
+        question: 'How mature is my CRM & marketing automation?'
       };
     case 'Convert':
       return {
