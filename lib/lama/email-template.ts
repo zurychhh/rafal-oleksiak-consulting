@@ -508,17 +508,17 @@ function getCategoryMeta(category: 'Find' | 'Stay' | 'Understand' | 'Trust' | 'E
         title: 'Trust',
         question: 'Will people trust my business?'
       };
-    case 'Engage':
-      return {
-        emoji: '🤝',
-        title: 'Engage',
-        question: 'How mature is my CRM & marketing automation?'
-      };
     case 'Convert':
       return {
         emoji: '🎯',
         title: 'Convert',
         question: 'Will people convert into customers?'
+      };
+    case 'Engage':
+      return {
+        emoji: '🤝',
+        title: 'Engage',
+        question: 'How mature is my CRM & marketing automation?'
       };
   }
 }

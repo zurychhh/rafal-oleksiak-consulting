@@ -281,11 +281,14 @@
     font-size: 18px; /* Adjusted to match other section subheadlines (Services) */
   }
 
-  /* Cards: 5 columns in a row */
+  /* Cards: 3 columns x 2 rows */
   .cardsGrid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 32px;
     margin-bottom: 80px;
+    max-width: 1200px; /* Limit width for better visual balance */
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .cardTitle {

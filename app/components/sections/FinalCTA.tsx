@@ -267,8 +267,8 @@ export default function FinalCTA() {
                     className={styles.customCheckbox}
                   />
                   <label htmlFor="consent" className={styles.checkboxLabel}>
-                    <strong>Yes, send me a free LAMA Audit</strong> (results in 90 seconds - 5 categories analyzed). 
-                    I also want CRM insights (1 email/month, no spam, unsubscribe anytime).
+                    <strong>Yes, send me a Free Website Audit</strong> (results in 90 seconds – 6 categories analyzed).
+                    I also agree to receive marketing emails with best practices on lead acquisition, lead nurturing, CRM, and updates about my AI automation tools and offers.
                   </label>
                 </div>
 

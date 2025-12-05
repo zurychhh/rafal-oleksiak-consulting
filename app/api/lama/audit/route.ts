@@ -51,15 +51,15 @@ export async function POST(request: NextRequest) {
       performanceResult,
       clarityResult,
       trustResult,
-      engagementResult,
       conversionResult,
+      engagementResult,
     ] = await Promise.allSettled([
       analyzeVisibility(validUrl),
       analyzePerformance(validUrl),
       analyzeClarity(validUrl),
       analyzeTrust(validUrl),
-      analyzeEngagement(validUrl),
       analyzeConversion(validUrl),
+      analyzeEngagement(validUrl),
     ]);
 
     // Extract results (handle failures gracefully)
@@ -129,22 +129,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    if (engagementResult.status === 'fulfilled') {
-      categories.push(engagementResult.value);
-    } else {
-      console.error('[LAMA] Engage analysis failed:', engagementResult.reason);
-      categories.push({
-        category: 'Engage',
-        score: 0,
-        issues: [{
-          severity: 'critical',
-          title: 'Analysis failed',
-          description: 'Unable to analyze CRM & marketing automation maturity',
-        }],
-        recommendations: ['Check if website is publicly accessible'],
-      });
-    }
-
     if (conversionResult.status === 'fulfilled') {
       categories.push(conversionResult.value);
     } else {
@@ -156,6 +140,22 @@ export async function POST(request: NextRequest) {
           severity: 'critical',
           title: 'Analysis failed',
           description: 'Unable to analyze if people will convert into customers',
+        }],
+        recommendations: ['Check if website is publicly accessible'],
+      });
+    }
+
+    if (engagementResult.status === 'fulfilled') {
+      categories.push(engagementResult.value);
+    } else {
+      console.error('[LAMA] Engage analysis failed:', engagementResult.reason);
+      categories.push({
+        category: 'Engage',
+        score: 0,
+        issues: [{
+          severity: 'critical',
+          title: 'Analysis failed',
+          description: 'Unable to analyze CRM & marketing automation maturity',
         }],
         recommendations: ['Check if website is publicly accessible'],
       });

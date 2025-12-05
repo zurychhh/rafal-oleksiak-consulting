@@ -53,6 +53,14 @@ const LAMA_STEPS = [
     gradient: 'linear-gradient(135deg, #EF4444, #F87171)',
     description: 'I assess your lead capture mechanisms - forms, CTA buttons, contact methods, and chat widgets across your site.',
     why: 'Great traffic without CTAs = missed opportunities'
+  },
+  {
+    id: 'engage',
+    title: 'Engage',
+    icon: 'fa-handshake',
+    gradient: 'linear-gradient(135deg, #7B2CBF, #9D4EDD)',
+    description: 'I evaluate your CRM maturity - email marketing setup, GDPR compliance, marketing automation tools, and MarTech stack integration.',
+    why: 'Leads without nurturing = 80% revenue loss'
   }
 ] as const
 
@@ -77,7 +85,7 @@ export default function LamaAuditSection() {
         {/* Title + Subtitle */}
         <div className={styles.header}>
           <h2 className={styles.headline}>
-            Free Website Audit: <span className={styles.highlight}>5 Ways</span><br />
+            Free Website Audit: <span className={styles.highlight}>6 Ways</span><br />
             You're Losing Leads
           </h2>
           <p className={styles.subtitle}>
