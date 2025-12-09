@@ -252,7 +252,7 @@ export function generateAuditEmail(data: EmailData): string {
                                             "Rafał doubled our marketing automation revenue in 6 months"
                                         </p>
                                         <p style="margin: 0; font-family: 'DM Sans', Arial, sans-serif; font-size: 13px; color: rgba(255, 255, 255, 0.5);">
-                                            — Previous clients: Allegro, Accenture, Booksy, mBank
+                                            — Previous clients: Allegro, Accenture, Booksy
                                         </p>
                                     </td>
                                 </tr>

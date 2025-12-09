@@ -4,7 +4,6 @@ export default function CompanyCarousel() {
   const companies = [
     { name: "Accenture", badge: null },
     { name: "McDonald's", badge: null },
-    { name: "mBank", badge: null },
     { name: "Booksy", badge: null },
     { name: "Moll", badge: null },
     { name: "Travelist", badge: null },

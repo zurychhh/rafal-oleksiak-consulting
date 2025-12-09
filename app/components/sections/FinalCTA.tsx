@@ -151,14 +151,13 @@ export default function FinalCTA() {
             {/* Credibility */}
             <div className={styles.credibility}>
               <p className={styles.credibilityText}>
-                Trusted by Allegro, Booksy, Accenture, McDonald's, mBank
+                Trusted by Allegro, Booksy, Accenture, McDonald's
               </p>
 
               <div className={styles.logoGrid}>
                 <div className={styles.logoItem}>Allegro</div>
                 <div className={styles.logoItem}>Accenture</div>
                 <div className={styles.logoItem}>McDonald's</div>
-                <div className={styles.logoItem}>mBank</div>
                 <div className={styles.logoItem}>Booksy</div>
               </div>
             </div>
