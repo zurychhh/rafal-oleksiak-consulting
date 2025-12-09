@@ -14,15 +14,15 @@ export default function Navbar() {
 
         {/* Navigation Links - Center-Right */}
         <div className="navbar-links">
-          <a href="#revenue-driving-services" className="nav-link">SERVICES</a>
+          <a href="#bio" className="nav-link">WHO</a>
           <span className="nav-divider">|</span>
-          <a href="#transformation-results" className="nav-link">WORK</a>
+          <a href="#revenue-driving-services" className="nav-link">WHAT</a>
           <span className="nav-divider">|</span>
-          <a href="#how-we-work" className="nav-link">PROCESS</a>
+          <a href="#how-we-work" className="nav-link">HOW</a>
           <span className="nav-divider">|</span>
-          <a href="#lama-audit" className="nav-link">FREE AUDIT</a>
+          <a href="#lama-audit" className="nav-link">WHY</a>
           <span className="nav-divider">|</span>
-          <a href="#contact" className="nav-link">CONTACT</a>
+          <a href="#contact" className="nav-link">WHEN</a>
         </div>
 
         {/* CTA Button - Right */}

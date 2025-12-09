@@ -27,39 +27,39 @@ export default function MobileNav() {
         <div className={styles.overlay} onClick={() => setIsOpen(false)}>
           <nav className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
             <a
+              href="#bio"
+              onClick={handleLinkClick}
+              className={styles.mobileLink}
+            >
+              WHO
+            </a>
+            <a
               href="#revenue-driving-services"
               onClick={handleLinkClick}
               className={styles.mobileLink}
             >
-              SERVICES
-            </a>
-            <a
-              href="#transformation-results"
-              onClick={handleLinkClick}
-              className={styles.mobileLink}
-            >
-              WORK
+              WHAT
             </a>
             <a
               href="#how-we-work"
               onClick={handleLinkClick}
               className={styles.mobileLink}
             >
-              PROCESS
+              HOW
             </a>
             <a
               href="#lama-audit"
               onClick={handleLinkClick}
               className={styles.mobileLink}
             >
-              FREE AUDIT
+              WHY
             </a>
             <a
               href="#contact"
               onClick={handleLinkClick}
               className={styles.mobileLink}
             >
-              CONTACT
+              WHEN
             </a>
             <a
               href="https://calendly.com/rafaloleksiakconsulting/30min"
