@@ -12,7 +12,7 @@ const poppins = Poppins({
   subsets: ["latin"], // Latin subset includes Polish special characters
   weight: ["400", "600", "700", "900"],
   variable: "--font-poppins",
-  display: "optional", // Better for LCP - shows fallback immediately if font not ready
+  display: "swap", // Swap ensures font loads visibly
   adjustFontFallback: true, // Better CLS prevention
   preload: true, // Prioritizes font in network waterfall
 });
@@ -22,7 +22,7 @@ const dmSans = DM_Sans({
   subsets: ["latin"], // Latin subset includes Polish special characters
   weight: ["400", "500", "700"],
   variable: "--font-dm-sans",
-  display: "optional", // Better for LCP - shows fallback immediately if font not ready
+  display: "swap", // Swap ensures font loads visibly
   adjustFontFallback: true, // Better CLS prevention
   preload: true, // Prioritizes font in network waterfall
 });
