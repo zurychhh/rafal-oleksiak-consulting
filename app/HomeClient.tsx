@@ -63,7 +63,7 @@ export default function HomeClient() {
             </h1>
 
             <p className="hero-subheadline">
-              Proven results: 11.5pp revenue growth (Allegro), 30% efficiency gain (Booksy), 34% YoY increase (Accenture)
+              From CRM strategy to marketing automation — I analyze your entire revenue pipeline and show you the gaps holding you back. Start with a free website audit.
             </p>
 
             <HeroCTA />
