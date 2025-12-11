@@ -1,8 +1,19 @@
-# Exclude local development files from Vercel deployment
+# Exclude test and development files from Vercel deployment
+# Note: Only exclude files that are NOT used by the production build
+
+# Test files
+**/test-*.ts
+**/test-*.tsx
+**/test-*.js
+
+# Development scripts (root level)
+debug-*.js
+fix-*.js
+add-components-import.js
+
+# Local API drafts
 api/
-app/lib/lama/pro/
-app/HomeClient.tsx
-app/components/ui/FinalSuccessScreen.tsx
-app/components/ui/FinalSuccessScreen.module.css
-app/components/ui/useTypewriter.ts
-app/api/pdf-generator/
+
+# PDF test generation files (CLI tools, not needed in production)
+app/lib/lama/pro/pdf-generator-cli.ts
+app/lib/lama/pro/pdf-generator-cjs.js
