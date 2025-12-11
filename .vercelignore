@@ -1,0 +1,8 @@
+# Exclude local development files from Vercel deployment
+api/
+app/lib/lama/pro/
+app/HomeClient.tsx
+app/components/ui/FinalSuccessScreen.tsx
+app/components/ui/FinalSuccessScreen.module.css
+app/components/ui/useTypewriter.ts
+app/api/pdf-generator/

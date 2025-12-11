@@ -1,8 +1,8 @@
 # ROADMAP.md - Rafał Oleksiak Consulting Website
 
-**Last Updated**: 2025-12-02
-**Project Phase**: Post-Launch Optimization + LAMA MVP
-**Current Focus**: LAMA Production Polish + UX Enhancements
+**Last Updated**: 2025-12-10
+**Project Phase**: Post-Launch Optimization + LAMA PRO
+**Current Focus**: Documentation cleanup, Production maintenance
 
 ---
 
@@ -624,51 +624,98 @@ HUBSPOT_ACCESS_TOKEN=pat-xxxxx (already have)
 
 ## 🎯 Currently In Progress
 
-**Wording Optimization Implementation** 🏗️ 2025-12-02
+**Production Maintenance** 🏗️ 2025-12-10
 
 Next priorities:
-1. **CSS Layout Adjustments (before copy changes)** - 4 CRITICAL + 8 HIGH changes
-2. **Copy Implementation** - 108 elements across 9 sections
-3. LAMA Stage 3: Email design, error handling, loading UX, testing
-4. Security & Setup (Rotate API Key if needed)
+1. LAMA Stage 3: Email design, error handling, loading UX, testing
+2. SEO improvements (sitemap.xml, Open Graph)
+3. Hotjar integration for heatmaps
 
-### Wording Optimization - Implementation Plan
+### Documentation Status
+- [x] Archived 38 legacy documentation files to `archive/`
+- [x] Updated CLAUDE.md with current project state
+- [x] Updated ROADMAP.md
 
-**Phase 1: CSS Changes (CRITICAL - do first)**
-- [ ] `critical.css`: Add `text-wrap: balance` for `.hero-headline`
-- [ ] `critical.css`: Increase `max-width` from 600px → 800px for `.hero-subheadline`
-- [ ] `FinalCTA.module.css`: Add list styling for `.subdescription`
-- [ ] `FinalCTA.module.css`: Decrease `font-size` 18px → 15px for `.submitButton` (mobile)
-
-**Phase 1b: CSS Changes (HIGH - recommended)**
-- [ ] `Services.module.css`: Increase `line-height` 1.3 → 1.4 for `.cardTitle`
-- [ ] `Services.module.css`: Decrease `font-size` 15px → 14px for `.description` (desktop)
-- [ ] `CaseStudiesSection.module.css`: Add `overflow-wrap: break-word` for `.challengeText`
-- [ ] `CaseStudiesSection.module.css`: Check `line-height` for `.cardTitle`
-
-**Phase 2: Copy Implementation (section by section)**
-- [ ] Hero Section (4 elements) - 🔥 CRITICAL priority
-- [ ] Services Section (30 elements) - 🔥 CRITICAL priority
-- [ ] Final CTA Section (13 elements) - 🔥 CRITICAL priority
-- [ ] Case Studies (30 elements) - ⚠️ HIGH priority
-- [ ] Collaboration Section (24 elements) - ℹ️ MEDIUM priority
-- [ ] Process Timeline (11 elements) - ℹ️ MEDIUM priority
-- [ ] Bio Section (13 elements) - ✅ LOW priority
-- [ ] LAMA Section (15 elements) - ✅ LOW priority (already strong)
-- [ ] Footer (2 elements) - ✅ LOW priority
-
-**Phase 3: Testing & QA**
-- [ ] Mobile preview (all sections)
-- [ ] Desktop preview (all sections)
-- [ ] Form submission test
-- [ ] LAMA audit test
-- [ ] Lighthouse score check
-
-**Documentation**: See `WORDING_MASTER_DOCUMENT_WITH_LAYOUT.md`
+### Archived Documentation (2025-12-10)
+Moved to `archive/` folder:
+- `archive/lama-sessions/` - 20+ LAMA development session files
+- `archive/old-docs/` - Legacy GA4, HubSpot, audit reports
+- `archive/wording/` - Wording optimization documents
 
 ---
 
 ## ✅ Recently Completed
+
+- [x] **Documentation Cleanup + Production Fixes** ✅ 2025-12-10
+  - **Archived 38 documentation files:**
+    - Moved LAMA session files to `archive/lama-sessions/`
+    - Moved old docs (GA4, HubSpot, audits) to `archive/old-docs/`
+    - Moved wording optimization docs to `archive/wording/`
+  - **Updated project documentation:**
+    - CLAUDE.md: Added LAMA section, navigation structure, tech stack updates
+    - ROADMAP.md: Updated current focus, cleaned up pending items
+  - **Navigation redesign:** SERVICES/WORK/PROCESS → WHO/WHAT/HOW/WHY/WHEN
+  - **mBank removal:** Removed from CompanyCarousel, FinalCTA, email template
+  - **Next.js security update:** 16.0.1 → 16.0.8 (fixed Vercel deployment)
+  - **Font display fix:** Changed from `display: optional` to `display: swap`
+  - **Commits:** 514ca28, 2d69bef, cc92478, 5e8dbbe
+  - **Time**: 2 hours
+  - Owner: Claude Code
+
+- [x] **Final Success Screen + LAMA PDF Generation Fix** ✅ 2025-12-08
+  - **Fullscreen Non-Dismissable Success Screen:**
+    - Created typewriter animation system with cascading reveals
+    - Custom `useTypewriter` React hook with configurable speed/delay
+    - CRT shutdown animation (800ms) + visual effects (grain, vignette, scanlines)
+    - Precise timing calculations for perfect content cascade
+    - Two paths displayed: [01] Consultation Path (purple), [02] Full Report Path (blue)
+    - Terminal-style confirmation: Process ID #ROC-2025-LEAD, Status: ACTIVE
+    - Mobile-responsive with breakpoints for all screen sizes
+    - Accessibility: Reduced motion support for prefers-reduced-motion
+  - **LAMA PDF Generation Fix:**
+    - Fixed hardcoded `localhost:3000` → dynamic `request.headers.get('host')`
+    - Added protocol detection (http for local dev, https for Vercel)
+    - Added logging: `[LAMA] PDF endpoint: ${baseUrl}/api/pdf-generator`
+    - Resolves 500 Internal Server Error when port 3000 was occupied
+    - PDF now generates correctly on any port (tested on 3001)
+  - **Files Created:**
+    - `app/components/ui/FinalSuccessScreen.tsx` - Main component (289 lines)
+    - `app/components/ui/FinalSuccessScreen.module.css` - Styles (432 lines)
+    - `app/components/ui/useTypewriter.ts` - Custom hook (57 lines)
+  - **Files Modified:**
+    - `app/HomeClient.tsx` - Added state management for success screen
+    - `app/api/lama/audit/route.ts` - Dynamic host detection (lines 211-218)
+  - **Test Results:**
+    - Typewriter animations work smoothly across all sections
+    - PDF generation confirmed: "super, generuje sie" (user feedback)
+    - Email delivery with 104-page PDF attachment successful
+  - **Time**: 5 hours total (3h success screen + 1h PDF debug + 1h testing)
+  - Owner: Claude Code
+
+- [x] **LAMA PRO PDF Quality Improvements** ✅ 2025-12-07
+  - **Translation & Localization (50+ fixes):**
+    - Translated all Polish phrases to English across 4 major files
+    - Fixed category naming: "2. LISTEN" → "2. STAY" (correct LAMA framework)
+    - Standardized abbreviations: /mc → /mo, /rok → /year, "Strona" → "Page"
+    - Files: CategorySectionV5.tsx, LISTENSection8Pages.tsx, CRMSectionEnhanced.tsx, FINDSection7Pages.tsx
+  - **Font Consistency & Readability:**
+    - CRMSection12Pages.tsx: categoryName 10px → 18px, scoreText 9px → 12px
+    - Added fontWeight: 'bold' for better visibility
+    - Standardized all category headers to 18px bold, score badges to 12px bold
+  - **Missing Score Displays (3 sections):**
+    - Added score/benchmark displays to ACQUIRE, MONETIZE, AUTOMATE sections
+    - Created categoryHeader structure with scoreBadge component
+    - Added TypeScript interfaces (Props with score & benchmark)
+    - All 6 categories now show consistent "{score}/{benchmark}" format
+  - **Layout Standardization:**
+    - Standardized padding to 40px across all sections
+    - Fixed CRMSection12Pages.tsx padding: 30px → 40px
+  - **Files Modified (8 total):**
+    - Translation: CategorySectionV5.tsx, LISTENSection8Pages.tsx, CRMSectionEnhanced.tsx, FINDSection7Pages.tsx
+    - Styling: CRMSection12Pages.tsx, ACQUIRESection8Pages.tsx, MONETIZESection8Pages.tsx, AUTOMATESection8Pages.tsx
+  - **Test Results:** PDF generated successfully (396KB, 12.8s) with all fixes applied
+  - **Time**: 4 hours (investigation + implementation + testing)
+  - Owner: Claude Code
 
 - [x] **Wording Optimization - Layout Analysis Document** ✅ 2025-12-02
   - Created `WORDING_MASTER_DOCUMENT_WITH_LAYOUT.md` with 108 optimized elements
@@ -819,6 +866,30 @@ claude
 ---
 
 ## 📝 Notes & Decisions
+
+### 2025-12-10: mBank References Removed (Temporary)
+- **Action**: Removed all mBank references from website
+- **Reason**: Client request (to be re-added later)
+- **Files Modified:**
+  - `app/components/ui/CompanyCarousel.tsx` - Removed from companies array
+  - `app/components/sections/FinalCTA.tsx` - Removed from credibility text + logo grid
+  - `lib/lama/email-template.ts` - Removed from "Previous clients" line (255)
+- **Commit**: `514ca28` - "chore: remove mBank from client references"
+- **To Re-add Later**: Search for "Allegro, Accenture, Booksy" and add ", mBank" back
+- **Note**: Also check documentation files (WORDING_*.md) when re-adding
+
+### 2025-12-10: Navigation Labels Changed
+- **Action**: Changed navigation from SERVICES/WORK/PROCESS/FREE AUDIT/CONTACT to WHO/WHAT/HOW/WHY/WHEN
+- **Files Modified:**
+  - `app/components/sections/Navbar.tsx` - Desktop navigation
+  - `app/components/sections/MobileNav.tsx` - Mobile navigation
+- **Mapping:**
+  - WHO → #bio (Bio section)
+  - WHAT → #revenue-driving-services (Services)
+  - HOW → #how-we-work (Process)
+  - WHY → #lama-audit (Free Audit)
+  - WHEN → #contact (Contact)
+- **Commit**: `2d69bef` - "feat: update navigation to WHO/WHAT/HOW/WHY/WHEN"
 
 ### 2025-11-11: Hybrid CSS Strategy
 - **Decision**: Keep Tailwind 4 + CSS Modules (no migration)

@@ -1,6 +1,10 @@
 // LAMA - Main Audit API Endpoint
 // Orchestrates website audit, HubSpot integration, and email delivery
 
+// Use Node.js runtime to bypass Turbopack for PDF generation
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { analyzeVisibility } from '@/lib/lama/analyzers/visibility';
@@ -11,6 +15,8 @@ import { analyzeConversion } from '@/lib/lama/analyzers/conversion';
 import { analyzeEngagement } from '@/lib/lama/analyzers/engagement';
 import { createOrUpdateLAMAContact } from '@/lib/lama/hubspot';
 import { generateAuditEmail } from '@/lib/lama/email-template';
+// TODO: PDF import disabled - Turbopack cannot compile .tsx modules even with runtime='nodejs'
+// import { generateLAMAProPDF } from '@/lib/lama/pro/pdf-generator';
 import type { AuditRequest, AuditResult, CategoryScore } from '@/lib/lama/types';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -197,19 +203,70 @@ export async function POST(request: NextRequest) {
       console.error('[LAMA] HubSpot integration failed:', hubspotResult.error);
     }
 
-    // 6. Generate email HTML
+    // 6. Generate LAMA PRO PDF via Serverless Function
+    let pdfBuffer: Buffer | null = null;
+    try {
+      console.log('[LAMA] Calling PDF generation serverless function...');
+
+      // Detect base URL from request or environment
+      const host = request.headers.get('host') || 'localhost:3000';
+      const protocol = process.env.VERCEL_URL ? 'https' : 'http';
+      const baseUrl = process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : `${protocol}://${host}`;
+
+      console.log(`[LAMA] PDF endpoint: ${baseUrl}/api/pdf-generator`);
+
+      const pdfResponse = await fetch(`${baseUrl}/api/pdf-generator`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          auditResult,
+          fullName,
+          company,
+        }),
+      });
+
+      if (!pdfResponse.ok) {
+        const errorText = await pdfResponse.text();
+        throw new Error(`PDF generation failed: ${pdfResponse.statusText} - ${errorText}`);
+      }
+
+      const pdfData = await pdfResponse.json();
+
+      if (pdfData.success && pdfData.pdf) {
+        pdfBuffer = Buffer.from(pdfData.pdf, 'base64');
+        console.log(`[LAMA] PDF generated: ${(pdfBuffer.length / 1024).toFixed(0)}KB in ${(pdfData.generationTime / 1000).toFixed(1)}s`);
+      } else {
+        throw new Error('PDF generation returned unsuccessful response');
+      }
+
+    } catch (pdfError) {
+      console.error('[LAMA] PDF generation failed (continuing without PDF):', pdfError);
+      // Continue without PDF - don't fail the entire audit
+    }
+
+    // 7. Generate email HTML
     const emailHtml = generateAuditEmail({
       recipientName: fullName || email.split('@')[0],
       auditResult,
       ctaLink: 'https://calendly.com/rafal-oleksiak/consultation', // TODO: Replace with actual Calendly link
     });
 
-    // 7. Send email via Resend
+    // 8. Send email via Resend with PDF attachment (if available)
     const emailResult = await resend.emails.send({
       from: `Rafał Oleksiak <${process.env.FROM_EMAIL}>`,
       to: [email],
       subject: `Your Website Audit Results (Score: ${overallScore}/100) 🚀`,
       html: emailHtml,
+      ...(pdfBuffer && {
+        attachments: [
+          {
+            filename: `LAMA-PRO-Audit-${new URL(validUrl).hostname}.pdf`,
+            content: pdfBuffer,
+          },
+        ],
+      }),
     });
 
     if (emailResult.error) {
@@ -226,7 +283,7 @@ export async function POST(request: NextRequest) {
 
     console.log(`[LAMA] Audit email sent to ${email} (${emailResult.data?.id})`);
 
-    // 8. Return success response
+    // 9. Return success response
     return NextResponse.json({
       success: true,
       message: 'Audit completed and email sent successfully',
@@ -235,6 +292,8 @@ export async function POST(request: NextRequest) {
         executionTime,
         emailSent: true,
         hubspotLogged: hubspotResult.success,
+        pdfGenerated: pdfBuffer !== null,
+        pdfSize: pdfBuffer ? `${(pdfBuffer.length / 1024).toFixed(0)}KB` : null,
       },
     });
 
@@ -256,8 +315,8 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     service: 'LAMA Audit API',
-    version: '2.0.0',
-    stage: 'Stage 2 (Full 5-category audit)',
+    version: '3.0.0',
+    stage: 'Stage 3 (Full audit + LAMA PRO PDF)',
     status: 'operational',
     features: {
       visibility: 'enabled',
@@ -265,6 +324,8 @@ export async function GET() {
       clarity: 'enabled (Claude AI)',
       trust: 'enabled',
       conversion: 'enabled',
+      engagement: 'enabled',
+      pdf: 'enabled (104-page LAMA PRO report)',
     },
   });
 }

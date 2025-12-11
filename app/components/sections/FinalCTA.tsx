@@ -3,11 +3,12 @@
 import { useEffect, FormEvent, useState } from "react";
 import styles from "./FinalCTA.module.css";
 import { analytics } from '@/app/lib/analytics';
-import SuccessModal from '../ui/SuccessModal';
 
-export default function FinalCTA() {
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [wantAudit, setWantAudit] = useState(false);
+interface FinalCTAProps {
+  onSuccess?: () => void;
+}
+
+export default function FinalCTA({ onSuccess }: FinalCTAProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -96,11 +97,9 @@ export default function FinalCTA() {
         // Track successful form submission
         analytics.trackFormSubmission('contact_form', true);
 
-        // Check if LAMA audit was requested
-        const auditRequested = formData.get('consent') === 'on';
-        setWantAudit(auditRequested);
-        setShowSuccessModal(true);
-        
+        // Show final success screen (fullscreen, non-dismissable)
+        onSuccess?.();
+
         form.reset();
         document.querySelectorAll(`.${styles.floatingLabel}`).forEach((label) => {
           label.classList.remove(styles.floated);
@@ -280,15 +279,6 @@ export default function FinalCTA() {
           </div>
         </div>
       </div>
-
-      {/* Success Modal - Only render after hydration */}
-      {isMounted && (
-        <SuccessModal
-          isOpen={showSuccessModal}
-          onClose={() => setShowSuccessModal(false)}
-          showLamaMessage={wantAudit}
-        />
-      )}
     </section>
   );
 }

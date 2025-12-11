@@ -3,12 +3,13 @@
 import { useState } from "react";
 import styles from "./Collaboration.module.css";
 import StatsTicker from "../ui/StatsTicker";
-import SuccessModal from "../ui/SuccessModal";
 
-export default function Collaboration() {
+interface CollaborationProps {
+  onSuccess?: () => void;
+}
+
+export default function Collaboration({ onSuccess }: CollaborationProps) {
   const [activeTab, setActiveTab] = useState<'partnership' | 'project' | 'quickwins'>('partnership');
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [wantAudit, setWantAudit] = useState(false);
 
   const partnershipBenefits = [
     {
@@ -265,11 +266,8 @@ export default function Collaboration() {
                 });
 
                 if (response.ok) {
-                  // Check if LAMA audit was requested
-                  const auditRequested = formData.get('marketing') === 'on';
-                  setWantAudit(auditRequested);
-                  setShowSuccessModal(true);
                   form.reset();
+                  onSuccess?.();
                 } else {
                   alert('Something went wrong. Please try again or email me directly at rafal@oleksiakconsulting.com');
                 }
@@ -361,13 +359,6 @@ export default function Collaboration() {
         </div>
 
       </div>
-
-      {/* Success Modal */}
-      <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
-        showLamaMessage={wantAudit}
-      />
     </section>
   );
 }

@@ -35,3 +35,26 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Dev/test files
+*.pdf
+test-*.js
+debug-*.js
+fix-*.js
+add-components-import.js
+/archive/
+/assets/
+/api/
+
+# Session documentation (not for production)
+DEBUGGING_*.md
+LAMA_*_SESSION*.md
+LAMA_*_SUMMARY.md
+LAMA_*_PLAN.md
+LAMA_*_STATUS.md
+LAMA_*_LOG.md
+V6_*.md
+WORDING_*.md
+EMAIL-*.md
+UXPILOT.md
+*.eml

@@ -1,9 +1,10 @@
 # CLAUDE.md - Rafał Oleksiak Consulting Website
 
 **Project Context**: B2B consulting website for CRM & Marketing Automation services
-**Stack**: Next.js 16 + React 19 + TypeScript 5.9 + Tailwind 4 + CSS Modules
+**Stack**: Next.js 16.0.8 + React 19 + TypeScript 5.9 + Tailwind 4 + CSS Modules
 **Status**: Production-ready (deployed on Vercel)
-**Last Updated**: 2025-12-02
+**URL**: https://oleksiakconsulting.com
+**Last Updated**: 2025-12-10
 
 ---
 
@@ -28,6 +29,38 @@
   - Primary: Poppins (headings, bold statements)
   - Secondary: DM Sans (body text, descriptions)
 - **Aesthetic**: Sophisticated dark theme, minimalist, no "90s-style" flashy effects
+
+### Navigation Structure
+```
+WHO    → #bio (Bio section)
+WHAT   → #revenue-driving-services (Services section)
+HOW    → #how-we-work (Process section)
+WHY    → #lama-audit (Free Audit section)
+WHEN   → #contact (Contact section)
+```
+
+---
+
+## 🦙 LAMA Audit Feature
+
+**LAMA** (Lead Acquisition & Marketing Audit) - Free AI-powered website analysis tool.
+
+### How It Works
+1. User enters website URL + email + consent
+2. Backend scrapes website content (Cheerio)
+3. Claude AI analyzes across 6 categories (ATTRACT, ENGAGE, CONVERT, EXPAND, ANALYZE, RETAIN)
+4. Results displayed with scores + AI recommendations
+5. PDF report generated and emailed via Resend
+
+### Key Files
+- **Frontend**: `app/components/sections/LamaAuditSection.tsx`
+- **API**: `app/api/lama/audit/route.ts`
+- **Email Template**: `lib/lama/email-template.ts`
+- **Types**: `lib/lama/types.ts`
+
+### Local Development (LAMA Pro)
+⚠️ **Note**: Local `app/lib/lama/pro/` contains experimental PDF generation features.
+These files are in `.vercelignore` and NOT deployed to production.
 
 ---
 
@@ -68,8 +101,15 @@ rafal-oleksiak-consulting/
 │   ├── layout.tsx              # Root layout + metadata
 │   └── page.tsx                # Main page composition
 ├── public/                     # Static assets
+├── lib/
+│   └── lama/                   # LAMA audit utilities
+│       ├── types.ts            # TypeScript types
+│       └── email-template.ts   # Email HTML template
+├── archive/                    # Archived documentation
+│   ├── lama-sessions/          # LAMA development history
+│   ├── old-docs/               # Legacy documentation
+│   └── wording/                # Wording optimization docs
 ├── .claude/                    # Claude Code configuration
-│   ├── context/                # Project context files
 │   └── commands/               # Custom commands
 ├── CLAUDE.md                   # This file
 ├── ROADMAP.md                  # Project roadmap
@@ -81,16 +121,18 @@ rafal-oleksiak-consulting/
 ## 🔧 Tech Stack & Dependencies
 
 ### Core
-- **Next.js**: 16.0.1 (App Router + Turbopack)
+- **Next.js**: 16.0.8 (App Router + Turbopack)
 - **React**: 19.2.0
 - **TypeScript**: 5.9.3 (strict mode)
 - **Tailwind CSS**: 4.1.16
 
 ### Integrations
-- **Resend**: Email delivery (API: `/api/send-email`)
+- **Resend**: Email delivery (API: `/api/send-email`, `/api/lama/audit`)
+- **Anthropic Claude**: AI-powered website analysis (LAMA audit)
+- **@react-pdf/renderer**: PDF report generation
 - **Font Awesome**: Icons (CDN with SRI hash)
 - **Calendly**: Booking system
-- **Google Fonts**: Poppins + DM Sans (preloaded)
+- **Google Fonts**: Poppins + DM Sans (display: swap)
 
 ### Dev Tools
 - **ESLint**: `next/core-web-vitals` + `next/typescript`
@@ -372,28 +414,30 @@ docs/api-documentation
 
 ### Documentation
 - **Project summary**: `PROJECT_SUMMARY.md`
-- **Project info**: `project_information.md`
 - **Roadmap**: `ROADMAP.md`
+- **Archived docs**: `archive/` (LAMA sessions, old docs, wording)
 
 ---
 
 ## 🐛 Known Issues & TODOs
 
-### High Priority (Week 1-2)
-- [ ] **SEO**: Add metadata, Open Graph tags, sitemap.xml
-- [x] **Analytics - GA4**: ✅ Implemented 2025-11-21 (see `app/lib/analytics.ts`)
+### Completed
+- [x] **Analytics - GA4**: Implemented 2025-11-21
+- [x] **Navigation redesign**: WHO/WHAT/HOW/WHY/WHEN (2025-12-10)
+- [x] **mBank removal**: Removed from all sections (2025-12-10)
+- [x] **Next.js security update**: 16.0.1 → 16.0.8 (2025-12-10)
+- [x] **Font display fix**: Changed to `display: swap` (2025-12-10)
+- [x] **Documentation cleanup**: Archived 38 legacy docs (2025-12-10)
+
+### Pending
+- [ ] **SEO**: Add sitemap.xml, improve Open Graph
 - [ ] **Analytics - Hotjar**: Add heatmaps and session recordings
-- [ ] **API Security**: Rotate Resend API key (if exposed)
-
-### Medium Priority (Week 3-4)
-- [ ] **Floating labels**: Refactor FinalCTA.tsx to use React state (no querySelector)
 - [ ] **Error boundaries**: Add app/error.tsx and app/global-error.tsx
-- [ ] **Email validation**: Strengthen validation in send-email API
+- [ ] **LAMA Pro deployment**: Finalize PDF generation for production
 
-### Low Priority (Month 2+)
-- [ ] **Testing**: Add Jest + Playwright
-- [ ] **Root README**: Create setup instructions
-- [ ] **Key props**: Replace key={index} in CompanyCarousel with unique IDs
+### Notes
+- **mBank**: Removed per client request. Logo and references can be re-added later if needed.
+- **Local LAMA Pro files**: In `.vercelignore`, not deployed. Experimental PDF features.
 
 ---
 
