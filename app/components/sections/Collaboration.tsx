@@ -232,9 +232,9 @@ export default function Collaboration({ onSuccess }: CollaborationProps) {
         {/* Custom Proposal Form */}
         <div className={styles.customProposalSection}>
           <div className={styles.proposalContainer}>
-            <h3 className={styles.proposalTitle}>Not Sure What Support Is Best for You?</h3>
+            <h3 className={styles.proposalTitle}>Not Sure What's Holding Your CRM Back?</h3>
             <p className={styles.proposalSubtitle}>
-              Describe your needs and I will contact you with the most efficient proposal suited to your goals.
+              Start with a free website audit — I'll identify the gaps in your revenue pipeline and follow up with a CRM strategy proposal tailored to your goals.
             </p>
 
             <form 
