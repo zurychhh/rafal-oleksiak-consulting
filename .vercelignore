@@ -11,8 +11,8 @@ debug-*.js
 fix-*.js
 add-components-import.js
 
-# Local API drafts
-api/
+# Local API drafts (root level only, NOT app/api/)
+/api/
 
 # PDF test generation files (CLI tools, not needed in production)
 app/lib/lama/pro/pdf-generator-cli.ts
