@@ -137,10 +137,10 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
         <div className={styles.grid}>
           {/* LEFT COLUMN */}
           <div className={styles.leftColumn}>
-            <h2 className={styles.headline}>Ready to Double Your CRM Revenue?</h2>
+            <h2 className={styles.headline}>Your CRM Has Blind Spots. Let's Find Them.</h2>
 
             <p className={styles.description}>
-              In this 30-minute call, I'll show you where you're leaving money on the table. No pitch, no pressure.
+              Free audit + 30-minute strategy call. No fluff, just a clear roadmap to more revenue.
             </p>
 
             <p className={styles.subdescription}>
