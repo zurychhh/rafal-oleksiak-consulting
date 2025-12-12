@@ -87,35 +87,8 @@ export async function POST(request: NextRequest) {
       console.error('HubSpot integration error:', hubspotError);
     }
 
-    // LAMA Audit Integration (if requested)
-    // Must await to ensure Vercel doesn't kill the function before audit completes
-    if (formType === 'consultation' && formData.auditRequested) {
-      console.log(`[LAMA] Audit requested for ${formData.email} - ${formData.website}`);
-
-      try {
-        const auditResponse = await fetch(`${request.nextUrl.origin}/api/lama/audit`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            url: formData.website,
-            email: formData.email,
-            fullName: formData.fullName,
-          }),
-        });
-
-        if (auditResponse.ok) {
-          const auditData = await auditResponse.json();
-          console.log(
-            `[LAMA] Audit completed successfully (Score: ${auditData.auditResult?.overallScore}/100)`
-          );
-        } else {
-          const auditError = await auditResponse.json().catch(() => null);
-          console.error('[LAMA] Audit failed:', auditError);
-        }
-      } catch (auditError) {
-        console.error('[LAMA] Audit request failed:', auditError);
-      }
-    }
+    // NOTE: LAMA Audit is now triggered from the client-side (FinalCTA.tsx)
+    // This allows the success popup to show immediately while audit runs in background
 
     return NextResponse.json({
       success: true,

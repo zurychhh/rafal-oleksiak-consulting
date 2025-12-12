@@ -97,6 +97,14 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
         // Track successful form submission
         analytics.trackFormSubmission('contact_form', true);
 
+        // Capture form values before reset (needed for audit)
+        const auditData = {
+          website: formData.get('website') as string,
+          email: formData.get('email') as string,
+          fullName: formData.get('fullName') as string,
+          consent: formData.get('consent') === 'on',
+        };
+
         // Show final success screen (fullscreen, non-dismissable)
         onSuccess?.();
 
@@ -104,6 +112,19 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
         document.querySelectorAll(`.${styles.floatingLabel}`).forEach((label) => {
           label.classList.remove(styles.floated);
         });
+
+        // Trigger LAMA Audit in background (runs while popup animates)
+        if (auditData.consent) {
+          fetch('/api/lama/audit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              url: auditData.website,
+              email: auditData.email,
+              fullName: auditData.fullName,
+            }),
+          }).catch((err) => console.error('[LAMA] Audit request failed:', err));
+        }
       } else {
         // Track failed form submission
         analytics.trackFormSubmission('contact_form', false);
