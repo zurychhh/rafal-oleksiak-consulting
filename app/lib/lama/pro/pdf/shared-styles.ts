@@ -260,6 +260,51 @@ export const components = StyleSheet.create({
     color: COLORS.lightGrey,
     flex: 1,
   },
+
+  // Highlight box (for important callouts)
+  highlightBox: {
+    backgroundColor: COLORS.darkGrey,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.neonGreen,
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 10,
+  },
+  highlightTitle: {
+    fontFamily: DEFAULT_FONT_FAMILY,
+    fontSize: 9,
+    fontWeight: 'bold',
+    color: COLORS.neonGreen,
+    marginBottom: 6,
+  },
+
+  // Calculation box (for revenue/impact calculations)
+  calculationBox: {
+    backgroundColor: COLORS.darkGrey,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.vividPurple,
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 10,
+  },
+  calcTitle: {
+    fontFamily: DEFAULT_FONT_FAMILY,
+    fontSize: 9,
+    fontWeight: 'bold',
+    color: COLORS.vividPurple,
+    marginBottom: 6,
+  },
+  calcStep: {
+    fontFamily: DEFAULT_FONT_FAMILY,
+    fontSize: 7,
+    color: COLORS.lightGrey,
+    marginBottom: 3,
+    lineHeight: 1.4,
+  },
+  calcValue: {
+    color: COLORS.electricBlue,
+    fontWeight: 'bold',
+  },
 });
 
 /**

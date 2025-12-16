@@ -17,6 +17,8 @@ const COLORS = {
   darkGrey: '#2A2A3E',
   neonGreen: '#00FF00',
   orange: '#FF8C00',
+  red: '#EF4444',
+  yellow: '#FFD700',
   codeBackground: '#0D0D1A',
   codeGreen: '#00FF00',
 };

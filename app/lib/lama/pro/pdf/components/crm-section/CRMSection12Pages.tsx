@@ -198,7 +198,46 @@ const styles = StyleSheet.create({
   situationBox: {
     borderLeft: `4px solid ${COLORS.electricBlue}`,
   },
-  });
+  // Calculation box (copied from CRMSectionEnhanced)
+  calculationBox: {
+    backgroundColor: COLORS.darkGrey,
+    borderLeft: `4px solid ${COLORS.vividPurple}`,
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 10,
+  },
+  calcTitle: {
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
+    color: COLORS.vividPurple,
+    marginBottom: 6,
+  },
+  calcStep: {
+    fontFamily: DEFAULT_FONT_FAMILY,
+    fontSize: 7,
+    color: COLORS.lightGrey,
+    marginBottom: 3,
+    lineHeight: 1.4,
+  },
+  calcValue: {
+    color: COLORS.electricBlue,
+    fontFamily: 'Helvetica-Bold',
+  },
+  // Highlight box
+  highlightBox: {
+    backgroundColor: COLORS.darkGrey,
+    borderLeft: `4px solid ${COLORS.neonGreen}`,
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 10,
+  },
+  highlightTitle: {
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
+    color: COLORS.neonGreen,
+    marginBottom: 6,
+  },
+});
 
 // ==================== INTERFACE ====================
 interface CRMSection12PagesProps {

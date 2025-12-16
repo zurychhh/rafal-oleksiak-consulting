@@ -316,6 +316,20 @@ const styles = StyleSheet.create({
   situationBox: {
     borderLeftColor: COLORS.electricBlue,
   },
+  // Highlight box (added to fix TypeScript errors)
+  highlightBox: {
+    backgroundColor: "#2A2A3E",
+    borderLeft: "4px solid #00FF00",
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 10,
+  },
+  highlightTitle: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: "#00FF00",
+    marginBottom: 6,
+  },
 });
 
 interface LISTENSectionProps {
@@ -629,6 +643,20 @@ document.querySelector('form').addEventListener('submit', function(e) {
     'form_id': 'contact-form',
     'form_type': 'lead_generation'
   });
+  // Highlight box (added to fix TypeScript errors)
+  highlightBox: {
+    backgroundColor: "#2A2A3E",
+    borderLeft: "4px solid #00FF00",
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 10,
+  },
+  highlightTitle: {
+    fontSize: 9,
+    fontFamily: "Helvetica-Bold",
+    color: "#00FF00",
+    marginBottom: 6,
+  },
 });
 
 // Step 3: E-commerce Purchase Tracking

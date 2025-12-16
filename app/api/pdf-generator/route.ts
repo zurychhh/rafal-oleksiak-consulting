@@ -1,17 +1,17 @@
 /**
- * PDF Generator API Route - Uses spawn to bypass Turbopack
- * Executes standalone PDF generator in separate process
+ * PDF Generator API Route - Direct import (no subprocess)
+ * Uses @react-pdf/renderer directly in Node.js runtime
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { spawn } from 'child_process';
-import { writeFile, unlink } from 'fs/promises';
-import { tmpdir } from 'os';
-import { join } from 'path';
+import { generateLAMAProPDF } from '@/app/lib/lama/pro/pdf-generator-core';
 import type { AuditResult } from '@/lib/lama/types';
 
+// Force Node.js runtime for React PDF compatibility
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+// Increase timeout for PDF generation (max 60s on Vercel Pro)
+export const maxDuration = 60;
 
 interface PDFRequest {
   auditResult: AuditResult;
@@ -20,6 +20,8 @@ interface PDFRequest {
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+
   try {
     const { auditResult, fullName, company } = await request.json() as PDFRequest;
 
@@ -32,58 +34,18 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`[PDF API] Generating PDF for ${auditResult.url}...`);
-    const startTime = Date.now();
 
-    // Write request data to temp file
-    const inputPath = join(tmpdir(), `pdf-input-${Date.now()}.json`);
-    const outputPath = join(tmpdir(), `pdf-output-${Date.now()}.pdf`);
-
-    await writeFile(inputPath, JSON.stringify({
+    // Generate PDF directly (no subprocess)
+    const pdfBuffer = await generateLAMAProPDF({
       auditResult,
       fullName,
       company,
-      outputPath
-    }));
-
-    // Spawn tsx to run PDF generator
-    const pdfProcess = spawn('npx', ['tsx', join(process.cwd(), 'app/lib/lama/pro/pdf-generator-cli.ts'), inputPath], {
-      stdio: ['ignore', 'pipe', 'pipe'],
     });
-
-    let stdout = '';
-    let stderr = '';
-
-    pdfProcess.stdout.on('data', (data) => {
-      stdout += data.toString();
-    });
-
-    pdfProcess.stderr.on('data', (data) => {
-      stderr += data.toString();
-    });
-
-    const exitCode = await new Promise<number>((resolve) => {
-      pdfProcess.on('close', resolve);
-    });
-
-    // Clean up input file
-    await unlink(inputPath).catch(() => {});
-
-    if (exitCode !== 0) {
-      await unlink(outputPath).catch(() => {});
-      throw new Error(`PDF generation failed: ${stderr || stdout}`);
-    }
-
-    // Read generated PDF
-    const { readFile } = await import('fs/promises');
-    const pdfBuffer = await readFile(outputPath);
-
-    // Clean up output file
-    await unlink(outputPath).catch(() => {});
 
     const duration = Date.now() - startTime;
     const sizeKB = (pdfBuffer.length / 1024).toFixed(0);
 
-    console.log(`[PDF API] Generated in ${(duration / 1000).toFixed(1)}s (${sizeKB}KB)`);
+    console.log(`[PDF API] Generated ${sizeKB}KB PDF in ${(duration / 1000).toFixed(1)}s`);
 
     return NextResponse.json({
       success: true,
@@ -93,11 +55,14 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('[PDF API] Generation failed:', error);
+    const duration = Date.now() - startTime;
+    console.error(`[PDF API] Generation failed after ${(duration / 1000).toFixed(1)}s:`, error);
+
     return NextResponse.json(
       {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
+        generationTime: duration,
       },
       { status: 500 }
     );
