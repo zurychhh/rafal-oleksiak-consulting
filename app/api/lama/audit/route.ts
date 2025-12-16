@@ -15,8 +15,7 @@ import { analyzeConversion } from '@/lib/lama/analyzers/conversion';
 import { analyzeEngagement } from '@/lib/lama/analyzers/engagement';
 import { createOrUpdateLAMAContact } from '@/lib/lama/hubspot';
 import { generateAuditEmail } from '@/lib/lama/email-template';
-// TODO: PDF import disabled - Turbopack cannot compile .tsx modules even with runtime='nodejs'
-// import { generateLAMAProPDF } from '@/lib/lama/pro/pdf-generator';
+import { generateLAMAProPDF } from '@/app/lib/lama/pro/pdf-generator-core';
 import type { AuditRequest, AuditResult, CategoryScore } from '@/lib/lama/types';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -203,43 +202,20 @@ export async function POST(request: NextRequest) {
       console.error('[LAMA] HubSpot integration failed:', hubspotResult.error);
     }
 
-    // 6. Generate LAMA PRO PDF via Serverless Function
+    // 6. Generate LAMA PRO PDF directly (no HTTP call)
     let pdfBuffer: Buffer | null = null;
     try {
-      console.log('[LAMA] Calling PDF generation serverless function...');
+      console.log('[LAMA] Generating PDF directly...');
+      const pdfStartTime = Date.now();
 
-      // Detect base URL from request or environment
-      const host = request.headers.get('host') || 'localhost:3000';
-      const protocol = process.env.VERCEL_URL ? 'https' : 'http';
-      const baseUrl = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : `${protocol}://${host}`;
-
-      console.log(`[LAMA] PDF endpoint: ${baseUrl}/api/pdf-generator`);
-
-      const pdfResponse = await fetch(`${baseUrl}/api/pdf-generator`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          auditResult,
-          fullName,
-          company,
-        }),
+      pdfBuffer = await generateLAMAProPDF({
+        auditResult,
+        fullName,
+        company,
       });
 
-      if (!pdfResponse.ok) {
-        const errorText = await pdfResponse.text();
-        throw new Error(`PDF generation failed: ${pdfResponse.statusText} - ${errorText}`);
-      }
-
-      const pdfData = await pdfResponse.json();
-
-      if (pdfData.success && pdfData.pdf) {
-        pdfBuffer = Buffer.from(pdfData.pdf, 'base64');
-        console.log(`[LAMA] PDF generated: ${(pdfBuffer.length / 1024).toFixed(0)}KB in ${(pdfData.generationTime / 1000).toFixed(1)}s`);
-      } else {
-        throw new Error('PDF generation returned unsuccessful response');
-      }
+      const pdfDuration = Date.now() - pdfStartTime;
+      console.log(`[LAMA] PDF generated: ${(pdfBuffer.length / 1024).toFixed(0)}KB in ${(pdfDuration / 1000).toFixed(1)}s`);
 
     } catch (pdfError) {
       console.error('[LAMA] PDF generation failed (continuing without PDF):', pdfError);
