@@ -11,6 +11,7 @@ const mockAuditResult: AuditResult = {
   url: 'https://example.com',
   timestamp: new Date().toISOString(),
   overallScore: 62,
+  executionTime: 5000,
   categories: [
     {
       category: 'Find',
