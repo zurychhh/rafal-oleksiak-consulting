@@ -421,6 +421,113 @@
   box-shadow: 0 4px 16px rgba(123, 44, 191, 0.4);
 }
 
+/* Or Divider */
+.orDivider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 8px 0;
+}
+
+.orDivider::before,
+.orDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.orDivider span {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+}
+
+/* Paid Audit Button */
+.paidAuditButton {
+  width: 100%;
+  height: 56px;
+  min-height: 48px;
+  background: transparent;
+  border: 2px solid #06B6D4;
+  border-radius: 8px;
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #06B6D4;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.paidAuditButton:hover {
+  background: rgba(6, 182, 212, 0.1);
+  box-shadow: 0 0 24px rgba(6, 182, 212, 0.4);
+  transform: translateY(-2px);
+}
+
+.paidAuditButton:active {
+  transform: translateY(0);
+}
+
+.paidAuditButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.paidAuditPrice {
+  background: linear-gradient(135deg, #06B6D4, #0891B2);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Paid Audit Error */
+.paidAuditError {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #FF4757;
+  margin: 0;
+  padding: 12px;
+  background: rgba(255, 71, 87, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 71, 87, 0.3);
+}
+
+/* Paid Audit Benefits */
+.paidAuditBenefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.paidAuditBenefits li {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  padding-left: 20px;
+  position: relative;
+}
+
+.paidAuditBenefits li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #06B6D4;
+  font-weight: bold;
+}
+
 /* Responsive - Tablet */
 @media (max-width: 1024px) {
   .finalCTA {

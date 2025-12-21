@@ -26,7 +26,11 @@ export async function POST(request: NextRequest) {
   try {
     // 1. Parse request body
     const body: AuditRequest = await request.json();
-    const { url, email, fullName, company } = body;
+    const { url, email, fullName, company, paid = false, paymentId } = body;
+
+    // Log audit type
+    const auditType = paid ? 'PAID' : 'FREE';
+    console.log(`[LAMA] ${auditType} audit requested for ${email}`);
 
     // Validation
     if (!url || !email) {
@@ -202,38 +206,50 @@ export async function POST(request: NextRequest) {
       console.error('[LAMA] HubSpot integration failed:', hubspotResult.error);
     }
 
-    // 6. Generate LAMA PRO PDF directly (no HTTP call)
+    // 6. Generate LAMA PRO PDF directly (ONLY for PAID audits)
     let pdfBuffer: Buffer | null = null;
-    try {
-      console.log('[LAMA] Generating PDF directly...');
-      const pdfStartTime = Date.now();
 
-      pdfBuffer = await generateLAMAProPDF({
-        auditResult,
-        fullName,
-        company,
-      });
+    if (paid) {
+      try {
+        console.log('[LAMA] PAID audit - Generating PDF directly...');
+        const pdfStartTime = Date.now();
 
-      const pdfDuration = Date.now() - pdfStartTime;
-      console.log(`[LAMA] PDF generated: ${(pdfBuffer.length / 1024).toFixed(0)}KB in ${(pdfDuration / 1000).toFixed(1)}s`);
+        pdfBuffer = await generateLAMAProPDF({
+          auditResult,
+          fullName,
+          company,
+        });
 
-    } catch (pdfError) {
-      console.error('[LAMA] PDF generation failed (continuing without PDF):', pdfError);
-      // Continue without PDF - don't fail the entire audit
+        const pdfDuration = Date.now() - pdfStartTime;
+        console.log(`[LAMA] PDF generated: ${(pdfBuffer.length / 1024).toFixed(0)}KB in ${(pdfDuration / 1000).toFixed(1)}s`);
+
+      } catch (pdfError) {
+        console.error('[LAMA] PDF generation failed (continuing without PDF):', pdfError);
+        // Continue without PDF - don't fail the entire audit
+      }
+    } else {
+      console.log('[LAMA] FREE audit - Skipping PDF generation');
     }
 
-    // 7. Generate email HTML
+    // 7. Generate email HTML (different for paid vs free)
     const emailHtml = generateAuditEmail({
       recipientName: fullName || email.split('@')[0],
       auditResult,
-      ctaLink: 'https://calendly.com/rafal-oleksiak/consultation', // TODO: Replace with actual Calendly link
+      ctaLink: 'https://calendly.com/rafal-oleksiak/consultation',
+      paid,
+      paymentId,
     });
 
-    // 8. Send email via Resend with PDF attachment (if available)
+    // Different subject line for paid vs free
+    const emailSubject = paid
+      ? `Your Premium Audit Report is Ready (Score: ${overallScore}/100)`
+      : `Your FREE Website Audit Results (Score: ${overallScore}/100)`;
+
+    // 8. Send email via Resend with PDF attachment (only for paid)
     const emailResult = await resend.emails.send({
       from: `Rafał Oleksiak <${process.env.FROM_EMAIL}>`,
       to: [email],
-      subject: `Your Website Audit Results (Score: ${overallScore}/100) 🚀`,
+      subject: emailSubject,
       html: emailHtml,
       ...(pdfBuffer && {
         attachments: [
@@ -257,19 +273,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`[LAMA] Audit email sent to ${email} (${emailResult.data?.id})`);
+    console.log(`[LAMA] ${auditType} audit email sent to ${email} (${emailResult.data?.id})`);
 
     // 9. Return success response
     return NextResponse.json({
       success: true,
-      message: 'Audit completed and email sent successfully',
+      message: `${auditType} audit completed and email sent successfully`,
       auditResult: {
         overallScore,
         executionTime,
+        auditType,
         emailSent: true,
         hubspotLogged: hubspotResult.success,
         pdfGenerated: pdfBuffer !== null,
         pdfSize: pdfBuffer ? `${(pdfBuffer.length / 1024).toFixed(0)}KB` : null,
+        paymentId: paid ? paymentId : undefined,
       },
     });
 
