@@ -6,6 +6,9 @@ export interface AuditRequest {
   email: string;
   fullName?: string;
   company?: string;
+  consent?: boolean;
+  paid?: boolean;
+  paymentId?: string;
 }
 
 export interface CategoryScore {
@@ -57,9 +60,17 @@ export interface PerformanceAnalysis {
 
 export interface HubSpotActivity {
   contactId: string;
-  activityType: 'audit_sent' | 'audit_opened' | 'cta_clicked';
+  activityType: 'audit_sent' | 'audit_opened' | 'cta_clicked' | 'paid_audit_purchased';
   timestamp: string;
   metadata?: Record<string, unknown>;
+}
+
+export interface PaymentInfo {
+  paid: boolean;
+  paymentId?: string;
+  amount?: number;
+  currency?: string;
+  purchaseDate?: string;
 }
 
 export interface EmailTemplateData {
@@ -69,4 +80,6 @@ export interface EmailTemplateData {
   categories: CategoryScore[];
   ctaLink: string;
   auditDate: string;
+  paid?: boolean;
+  paymentId?: string;
 }

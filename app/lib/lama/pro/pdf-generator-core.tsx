@@ -457,26 +457,19 @@ export async function generateLAMAProPDF(
         thinContent: 0, // Would need content analysis
         noAltText: 0, // Would need image analysis
       },
-      // These require external API (Ahrefs, SEMrush) - using placeholder data
-      keywordGaps: findCategory?.issues.filter(i =>
-        i.title.toLowerCase().includes('keyword') || i.description.toLowerCase().includes('keyword')
-      ).slice(0, 3).map((i, idx) => ({
-        keyword: i.title.slice(0, 30),
-        volume: 1000 - (idx * 300), // Placeholder
-        difficulty: 50 + (idx * 10), // Placeholder
-        priority: i.severity === 'critical' ? 'HIGH' as const : 'MEDIUM' as const,
-      })) || [],
+      // Note: Keyword gaps, backlinks, and local citations require external API (Ahrefs/SEMrush)
+      // The PDF now displays guidance on how to obtain this data instead of placeholder values
+      keywordGaps: [], // Not displayed - user directed to use Ahrefs/SEMrush
       backlinks: {
-        // Note: Would need Ahrefs/SEMrush API integration for real data
         current: 0,
         competitor1: 0,
         competitor2: 0,
         competitor3: 0,
-      },
+      }, // Not displayed - user directed to check via Ahrefs/SEMrush
       localPresence: {
         gmb: !findCategory?.issues.some(i => i.title.toLowerCase().includes('google my business')),
-        citations: 0,
-        reviews: 0,
+        citations: 0, // Not displayed - user directed to check via BrightLocal
+        reviews: 0,   // Not displayed - user directed to check GMB profile
       },
     };
 

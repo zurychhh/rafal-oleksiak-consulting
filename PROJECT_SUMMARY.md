@@ -2,9 +2,9 @@
 
 **Project**: oleksiakconsulting.com
 **Technology Stack**: Next.js 16.0.8, React 19, TypeScript 5.9, Turbopack, CSS Modules
-**Timeline**: November 7-9, 2025 (Initial), November 11 - December 10, 2025 (Updates)
-**Total PRs Merged**: 20+ (14 initial + 6+ updates)
-**Status**: ✅ Deployed & Live
+**Timeline**: November 7-9, 2025 (Initial), November 11 - December 21, 2025 (Updates)
+**Total PRs Merged**: 25+ (14 initial + 11+ updates)
+**Status**: ✅ Deployed & Live with Stripe Monetization
 
 ---
 
@@ -21,7 +21,81 @@ Successfully transformed a consulting website into a high-performance, mobile-op
 
 ---
 
-## 🆕 Recent Updates (November 11 - December 10, 2025)
+## 🆕 Recent Updates (November 11 - December 21, 2025)
+
+### Stripe Paid Audit + PDF Production Fixes (December 20-21, 2025)
+**What was implemented**:
+- ✅ **Stripe Paid Audit (€99/199):**
+  - Full Stripe Checkout integration
+  - Webhook handler for payment confirmation
+  - Success page with next steps
+  - Metadata passing (url, email, fullName, company)
+  - Files: `app/api/stripe/create-checkout/route.ts`, `webhook/route.ts`
+
+- ✅ **PDF Generation on Vercel Production:**
+  - Fixed: Direct PDF generator call instead of HTTP fetch
+  - Fixed: TypeScript errors blocking production build
+  - PDF now generates reliably on Vercel
+
+- ✅ **Mobile Email Layout:**
+  - Single-column layout for mobile clients
+  - Dark theme consistency across all email clients
+
+- ✅ **Client-Side Audit Flow:**
+  - Moved audit trigger to client-side
+  - Instant CRT success screen popup
+  - Reliable email delivery on Vercel
+
+**Files created**:
+- `app/api/stripe/create-checkout/route.ts`
+- `app/api/stripe/webhook/route.ts`
+- `app/audit-success/page.tsx`
+- `app/audit-success/SuccessContent.tsx`
+- `lib/stripe.ts`
+- `lib/lama/followup-email-template.ts`
+
+**Business impact**:
+- 💰 New revenue stream: €99-199 per paid audit
+- 📧 3-day follow-up email template ready for automation
+- 📱 Better mobile email experience
+
+---
+
+### Website Copy Optimization + Vercel Fix (December 11, 2025)
+**What was implemented**:
+- ✅ **Hero Section Update:**
+  - Changed subheadline from client results focus to audit/services focus
+  - Old: "Proven results: 11.5pp revenue growth (Allegro)..."
+  - New: "From CRM strategy to marketing automation — I analyze your entire revenue pipeline and show you the gaps holding you back. Start with a free website audit."
+
+- ✅ **Collaboration Section Update:**
+  - Changed "Not Sure What Support Is Best for You?" → "Not Sure What's Holding Your CRM Back?"
+  - New subtitle: "Start with a free website audit — I'll identify the gaps in your revenue pipeline and follow up with a CRM strategy proposal tailored to your goals."
+
+- ✅ **FinalCTA Section Update:**
+  - Changed "Ready to Double Your CRM Revenue?" → "Your CRM Has Blind Spots. Let's Find Them."
+  - New description: "Free audit + 30-minute strategy call. No fluff, just a clear roadmap to more revenue."
+
+- ✅ **Critical Fix: .vercelignore API routing:**
+  - Fixed pattern `api/` → `/api/` to exclude only root-level folder
+  - Root cause: Pattern was excluding `app/api/` (all API routes!)
+  - Symptom: Form submissions returning 404/405 on production
+  - Resolution: Changed to `/api/` (leading slash = root only)
+
+**Files modified**:
+- `app/HomeClient.tsx` - Hero subheadline
+- `app/components/sections/Collaboration.tsx` - Proposal section headline/subtitle
+- `app/components/sections/FinalCTA.tsx` - CTA headline/description
+- `.vercelignore` - Fixed API exclusion pattern
+
+**Commits**: 699319c, 8dc9007, 6dd7481
+
+**Business impact**:
+- 🎯 Clearer value proposition focusing on free audit and CRM expertise
+- 🔧 Fixed critical production bug (form submissions now work)
+- 📝 Consistent messaging across all conversion points
+
+---
 
 ### Documentation Cleanup + Production Fixes (December 10, 2025)
 **What was implemented**:
@@ -1438,6 +1512,10 @@ Built with [Claude Code](https://claude.com/claude-code) by Anthropic.
 
 ---
 
-**Last Updated**: December 10, 2025
-**Version**: 1.1
-**Project Status**: ✅ Complete & Deployed
+**Last Updated**: December 21, 2025
+**Version**: 1.3
+**Project Status**: ✅ Complete & Deployed with Stripe Monetization
+
+---
+
+**See also**: `STATUS.md` for current project snapshot

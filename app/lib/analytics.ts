@@ -170,4 +170,17 @@ export const analytics = {
       value: percentage,
     })
   },
+
+  /**
+   * Track paid audit checkout started
+   * Event: paid_audit_checkout_started
+   * @param url - The website URL being audited
+   */
+  trackPaidAuditCheckout: (url: string) => {
+    trackEvent({
+      action: 'paid_audit_checkout_started',
+      category: 'conversion',
+      label: url,
+    })
+  },
 }

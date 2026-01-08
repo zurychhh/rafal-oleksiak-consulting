@@ -821,54 +821,68 @@ using descriptive anchor text.</p>
         <Text style={styles.pageTitle}>Content Strategy: Keyword Gaps = Revenue Opportunities</Text>
         <Text style={styles.pageSubtitle}>
           Twoi konkurenci rankują for setek słów kluczowych, których Ty nie masz. Każde missed keyword =
-          utracony revenue. Poniżej top keyword gaps z konkretnym ROI i implementation plan.
+          utracony revenue. Poniżej framework do identyfikacji keyword gaps i implementation plan.
         </Text>
 
-        {/* Top Keyword Gaps */}
-        <Text style={styles.sectionLabel}>◉ TOP KEYWORD OPPORTUNITIES</Text>
-        {keywordGaps.slice(0, 5).map((keyword, idx) => (
-          <View key={idx} style={styles.keywordBox}>
-            <View style={styles.keywordHeader}>
-              <Text style={styles.keywordText}>{keyword.keyword}</Text>
-              <Text style={[styles.priorityBadge, keyword.priority === 'HIGH' ? styles.highPriority : styles.mediumPriority]}>
-                {keyword.priority}
+        {/* Why Content Gaps Matter */}
+        <View style={[styles.box, styles.infoBox]}>
+          <Text style={styles.bodyText}>
+            <Text style={styles.boldText}>Dlaczego keyword gaps są ważne: </Text>
+            Każde słowo kluczowe, dla którego Twoja konkurencja rankuje a Ty nie, to utracony traffic i revenue.
+            <Text style={styles.highlightText}> Ahrefs data</Text>: średnia strona w top 10 rankuje dla 1,000+ keywords.
+            Identyfikacja i targetowanie keyword gaps to najszybsza droga do wzrostu organic traffic.
+          </Text>
+        </View>
+
+        {/* How to Find Keyword Gaps */}
+        <Text style={styles.sectionLabel}>🔍 JAK ZNALEŹĆ KEYWORD GAPS</Text>
+        <View style={[styles.box, styles.solutionBox]}>
+          <Text style={styles.bodyText}>
+            <Text style={styles.boldText}>Narzędzia do keyword gap analysis: </Text>
+          </Text>
+          <View style={styles.bulletList}>
+            <View style={styles.bulletItem}>
+              <Text style={styles.bulletDot}>●</Text>
+              <Text style={styles.bulletText}>
+                <Text style={styles.boldText}>Ahrefs Content Gap:</Text> Wpisz swoją domenę vs 3 konkurentów → lista keywords gdzie oni rankują, Ty nie
               </Text>
             </View>
-            <View style={styles.keywordMetrics}>
-              <Text style={styles.keywordMetric}>
-                Volume: <Text style={styles.keywordMetricValue}>{keyword.volume}/mc</Text>
+            <View style={styles.bulletItem}>
+              <Text style={styles.bulletDot}>●</Text>
+              <Text style={styles.bulletText}>
+                <Text style={styles.boldText}>SEMrush Keyword Gap:</Text> Podobna funkcjonalność, plus intent classification
               </Text>
-              <Text style={styles.keywordMetric}>
-                Difficulty: <Text style={styles.keywordMetricValue}>{keyword.difficulty}/100</Text>
-              </Text>
-              <Text style={styles.keywordMetric}>
-                Est. Revenue: <Text style={styles.keywordMetricValue}>€{Math.round(keyword.volume * 0.025 * 250)}/mc</Text>
+            </View>
+            <View style={styles.bulletItem}>
+              <Text style={styles.bulletDot}>●</Text>
+              <Text style={styles.bulletText}>
+                <Text style={styles.boldText}>Google Search Console:</Text> Darmowe - sprawdź queries z wysokimi impressions ale niskim CTR
               </Text>
             </View>
           </View>
-        ))}
+        </View>
 
-        {/* Why Content Gaps Matter */}
+        {/* ROI Framework */}
         <View style={[styles.box, styles.impactBox]}>
           <Text style={styles.bodyText}>
-            <Text style={styles.boldText}>Jak liczymy revenue opportunity: </Text>
+            <Text style={styles.boldText}>Framework obliczania ROI dla keyword: </Text>
           </Text>
           <View style={styles.calculationBox}>
-            <Text style={styles.calcTitle}>€ ROI Calculation (przykład: "{keywordGaps[0]?.keyword}")</Text>
+            <Text style={styles.calcTitle}>€ ROI Calculation Template</Text>
             <Text style={styles.calcStep}>
-              <Text style={styles.calcValue}>Krok 1:</Text> Monthly search volume = {keywordGaps[0]?.volume}
+              <Text style={styles.calcValue}>Krok 1:</Text> Monthly search volume (z Ahrefs/SEMrush)
             </Text>
             <Text style={styles.calcStep}>
-              <Text style={styles.calcValue}>Krok 2:</Text> Realistic CTR for position 3-5 = 8% = {Math.round(keywordGaps[0]?.volume * 0.08)} clicks/mc
+              <Text style={styles.calcValue}>Krok 2:</Text> Realistic CTR for position 3-5 = 8% of volume
             </Text>
             <Text style={styles.calcStep}>
-              <Text style={styles.calcValue}>Krok 3:</Text> Conversion rate (Twoje Analytics) = 2.5% = {Math.round(keywordGaps[0]?.volume * 0.08 * 0.025)} conversions/mc
+              <Text style={styles.calcValue}>Krok 3:</Text> Conversion rate (z Twojego Analytics) × clicks
             </Text>
             <Text style={styles.calcStep}>
-              <Text style={styles.calcValue}>Krok 4:</Text> Avg deal size = €250
+              <Text style={styles.calcValue}>Krok 4:</Text> × Avg deal size = Monthly revenue per keyword
             </Text>
             <Text style={styles.calcStep}>
-              <Text style={styles.calcValue}>Result:</Text> {Math.round(keywordGaps[0]?.volume * 0.08 * 0.025)} × €250 × 12 = €{Math.round(keywordGaps[0]?.volume * 0.08 * 0.025 * 250 * 12)}/rok z JEDNEGO słowa kluczowego
+              <Text style={styles.calcValue}>Przykład:</Text> 1000 volume × 8% CTR × 2.5% conv × €250 = €500/mc
             </Text>
           </View>
         </View>
@@ -995,29 +1009,17 @@ using descriptive anchor text.</p>
         <Text style={styles.pageTitle}>Link Building: Authority That Drives Rankings</Text>
         <Text style={styles.pageSubtitle}>
           Backlinks = votes of confidence from other sites. Google uses ich jako główny ranking factor.
-          Twój backlink deficit vs konkurencja = główna przyczyna niskich rankingów. Oto jak to naprawić.
+          Więcej high-quality backlinks = wyższe pozycje w wynikach wyszukiwania. Oto jak budować linki.
         </Text>
 
-        {/* Backlink Gap Analysis */}
-        <Text style={styles.sectionLabel}>▉ BACKLINK GAP VS KONKURENCJA</Text>
-        <View style={styles.competitorBox}>
-          <Text style={styles.competitorTitle}>Competitive Backlink Analysis</Text>
-          <View style={styles.competitorRow}>
-            <Text style={styles.competitorLabel}>Twoja strona:</Text>
-            <Text style={styles.competitorValue}>{backlinks.current} backlinks</Text>
-          </View>
-          <View style={styles.competitorRow}>
-            <Text style={styles.competitorLabel}>Competitor #1:</Text>
-            <Text style={styles.competitorValue}>{backlinks.competitor1} backlinks (+{backlinks.competitor1 - backlinks.current})</Text>
-          </View>
-          <View style={styles.competitorRow}>
-            <Text style={styles.competitorLabel}>Competitor #2:</Text>
-            <Text style={styles.competitorValue}>{backlinks.competitor2} backlinks (+{backlinks.competitor2 - backlinks.current})</Text>
-          </View>
-          <View style={styles.competitorRow}>
-            <Text style={styles.competitorLabel}>Competitor #3:</Text>
-            <Text style={styles.competitorValue}>{backlinks.competitor3} backlinks (+{backlinks.competitor3 - backlinks.current})</Text>
-          </View>
+        {/* Why Links Matter */}
+        <View style={[styles.box, styles.infoBox]}>
+          <Text style={styles.bodyText}>
+            <Text style={styles.boldText}>Jak sprawdzić swój backlink profile: </Text>
+            Użyj <Text style={styles.highlightText}>Ahrefs Site Explorer</Text> lub <Text style={styles.highlightText}>SEMrush Backlink Analytics</Text>
+            żeby zobaczyć ile backlinków ma Twoja strona vs konkurencja. Wpisz swoją domenę i 3 głównych konkurentów.
+            Gap analysis pokaże dokładnie ile linków musisz zbudować.
+          </Text>
         </View>
 
         {/* Why Links Matter */}
@@ -1026,8 +1028,8 @@ using descriptive anchor text.</p>
             <Text style={styles.boldText}>Why backlinks are tak important: </Text>
             Google's original PageRank algorithm (still core today): strony z więcej high-quality backlinks
             rankują wyżej. <Text style={styles.highlightText}>Backlinko study (1M wyników)</Text>: #1 ranking
-            ma średnio 3.8x więcej backlinks niż positions 2-10. Twój gap ({backlinks.competitor1 - backlinks.current} backlinks
-            vs top competitor) = dlaczego rankujesz na page 2-3, nie page 1.
+            ma średnio 3.8x więcej backlinks niż positions 2-10. Jeśli masz mniej backlinków niż konkurencja,
+            to główna przyczyna dlaczego rankujesz na page 2-3 zamiast page 1.
           </Text>
         </View>
 

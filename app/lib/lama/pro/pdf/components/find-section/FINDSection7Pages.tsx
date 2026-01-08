@@ -401,16 +401,25 @@ export const FINDSection7Pages: React.FC<FINDSection7PagesProps> = (props) => {
         <View style={styles.statsGrid}>
           <View style={[styles.statCard, localPresence.gmb ? styles.statCardGreen : styles.statCardRed]}>
             <Text style={styles.statLabel}>Google My Business</Text>
-            <Text style={styles.statValue}>{localPresence.gmb ? 'Setup [OK]' : 'Missing [X]'}</Text>
+            <Text style={styles.statValue}>{localPresence.gmb ? 'Detected [OK]' : 'Not Found [!]'}</Text>
           </View>
-          <View style={[styles.statCard, localPresence.citations > 20 ? styles.statCardGreen : styles.statCardOrange]}>
+          <View style={[styles.statCard, styles.statCardOrange]}>
             <Text style={styles.statLabel}>Local Citations</Text>
-            <Text style={styles.statValue}>{localPresence.citations}/50 target</Text>
+            <Text style={styles.statValue}>Check Below</Text>
           </View>
-          <View style={[styles.statCard, localPresence.reviews > 15 ? styles.statCardGreen : styles.statCardRed]}>
+          <View style={[styles.statCard, styles.statCardOrange]}>
             <Text style={styles.statLabel}>Google Reviews</Text>
-            <Text style={styles.statValue}>{localPresence.reviews} (min 50)</Text>
+            <Text style={styles.statValue}>Check GMB</Text>
           </View>
+        </View>
+
+        {/* How to Check */}
+        <View style={[styles.box, styles.infoBox]}>
+          <Text style={styles.bodyText}>
+            <Text style={styles.boldText}>Jak sprawdzić Local SEO metrics: </Text>
+            Wyszukaj swoją firmę w Google → kliknij w profil GMB → zobacz liczbę reviews.
+            Dla citation audit użyj <Text style={styles.highlightText}>BrightLocal</Text> lub <Text style={styles.highlightText}>Whitespark</Text> (darmowy trial).
+          </Text>
         </View>
 
         {/* Why Local SEO Matters - Deep Dive */}
