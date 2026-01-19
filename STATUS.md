@@ -1,7 +1,7 @@
 # STATUS.md - Aktualny Stan Projektu
 
 **Projekt**: oleksiakconsulting.com  
-**Ostatnia Aktualizacja**: 2026-01-07  
+**Ostatnia Aktualizacja**: 2026-01-17  
 **Wersja**: Next.js 16.0.8 | React 19 | TypeScript 5.9  
 **URL Produkcji**: https://oleksiakconsulting.com
 
@@ -12,13 +12,13 @@
 | Funkcja | Status | Opis |
 |---------|--------|------|
 | **Main Website** | ✅ LIVE | Responsive, 90+ Lighthouse, SEO-optimized |
-| **LAMA Audit (Free)** | ✅ LIVE | 6-kategoriowy audit strony z PDF |
-| **LAMA Audit (Paid)** | ✅ LIVE | Stripe Checkout €99/€199 |
+| **LAMA Audit (Free)** | ✅ LIVE | 6-kategoriowy audit strony → konsultacja |
+| **LAMA Audit (Paid)** | 📦 ARCHIVED | Stripe Checkout €99 - tymczasowo wyłączone |
 | **CRT Success Screen** | ✅ LIVE | Typewriter animation po audycie |
 | **Follow-up Email** | ✅ READY | Template 3-dniowego retargetingu |
 | **HubSpot Integration** | ✅ LIVE | Automatyczne tworzenie kontaktów |
 | **GA4 Analytics** | ✅ LIVE | Event tracking + Web Vitals |
-| **PDF Generation** | ✅ LIVE | 100+ stron raportu |
+| **PDF Generation** | ✅ LIVE | 100+ stron raportu (tylko dla paid - backend ready) |
 
 ---
 
@@ -67,6 +67,16 @@ app/api/
 
 ## 📅 Ostatnie Zmiany
 
+### 2026-01-17 ✅
+- ✅ **Archived Paid Audit Feature** - tymczasowo wyłączono z UI
+  - Usunięto przycisk płatnego audytu z FinalCTA
+  - Usunięto Path 02 (FULL REPORT PATH) z FinalSuccessScreen
+  - Usunięto UPGRADE CTA z email template
+  - Utworzono `PAID_AUDIT_ARCHIVE.md` dla przyszłego przywrócenia
+  - Zachowano backend infrastructure (Stripe endpoints, PDF generation)
+  - **Impact:** Strona gotowa do reklamowania z prostym flow: free audit → konsultacja
+  - **Files:** `FinalSuccessScreen.tsx`, `FinalCTA.tsx`, `email-template.ts`, `audit/route.ts`
+
 ### 2026-01-07 ✅
 - ✅ **PDF Cleanup: Usunięto placeholder/fake data z raportu**
   - Usunięto fake keyword volume/difficulty z Page 4 (Content Strategy)
@@ -106,22 +116,23 @@ app/api/
 
 ## 🔄 Flow Użytkownika
 
-### Free Audit Flow
+### Free Audit Flow (Current - Active)
 ```
 User wypełnia formularz → Zaznacza "Send audit" →
 Backend scrape website → Claude AI analysis →
-PDF generated → Email z PDF → HubSpot contact created →
-CRT Success Screen wyświetlony
+Email z wynikami audytu → HubSpot contact created →
+CRT Success Screen (rekomendacja: zarezerwuj konsultację)
 ```
 
-### Paid Audit Flow
+### Paid Audit Flow (📦 ARCHIVED - patrz PAID_AUDIT_ARCHIVE.md)
 ```
-User wypełnia formularz → Klika "Get Full Audit €99" →
+[WYŁĄCZONE] User wypełnia formularz → Klika "Get Full Audit €99" →
 Stripe Checkout Session → User płaci →
 Webhook checkout.session.completed →
 LAMA audit triggered z paid=true →
 Email z PDF → HubSpot updated → /audit-success page
 ```
+**Uwaga:** Backend infrastructure zachowany dla przyszłego przywrócenia.
 
 ---
 

@@ -11,11 +11,10 @@ export interface EmailData {
   ctaLink: string;
   paid?: boolean;
   paymentId?: string;
-  stripeCheckoutUrl?: string | null; // For FREE audit upsell
 }
 
 export function generateAuditEmail(data: EmailData): string {
-  const { recipientName, auditResult, ctaLink, paid = false, paymentId, stripeCheckoutUrl } = data;
+  const { recipientName, auditResult, ctaLink, paid = false, paymentId } = data;
   const { overallScore, categories, url, timestamp } = auditResult;
 
   const scoreColor = getScoreColor(overallScore);
@@ -321,70 +320,6 @@ export function generateAuditEmail(data: EmailData): string {
                         </td>
                     </tr>
 
-                    ${!paid ? `
-                    <!-- UPGRADE CTA - Only for FREE audits -->
-                    <tr>
-                        <td style="padding: 32px 24px; background-color: #0D0D14;" class="mobile-padding">
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: 16px;">
-                                <tr>
-                                    <td style="padding: 32px; text-align: center;">
-                                        <!-- Icon -->
-                                        <p style="margin: 0 0 16px 0; font-size: 40px;">&#128203;</p>
-
-                                        <!-- Title -->
-                                        <h3 style="font-family: Arial, Helvetica, sans-serif; font-size: 22px; font-weight: 700; color: #F9FAFB; margin: 0 0 12px 0;">
-                                            Unlock the Full 100+ Page Report
-                                        </h3>
-
-                                        <!-- Description -->
-                                        <p style="font-family: Arial, sans-serif; font-size: 15px; color: #9CA3AF; margin: 0 0 24px 0; line-height: 1.6;">
-                                            Your free audit shows <strong style="color: #F9FAFB;">${criticalIssues.length} critical issues</strong>.
-                                            Get the complete roadmap to fix them all and reach 90+/100.
-                                        </p>
-
-                                        <!-- 3 Key Benefits -->
-                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto 24px auto;">
-                                            <tr>
-                                                <td style="padding: 10px 16px; font-family: Arial, sans-serif; font-size: 15px; color: #10B981; text-align: left;">
-                                                    <strong>&#10003; Step-by-step 180-day action plan</strong>
-                                                    <p style="margin: 4px 0 0 0; font-size: 13px; color: #9CA3AF;">Prioritized tasks with exact implementation steps</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 10px 16px; font-family: Arial, sans-serif; font-size: 15px; color: #10B981; text-align: left;">
-                                                    <strong>&#10003; ROI calculator per issue</strong>
-                                                    <p style="margin: 4px 0 0 0; font-size: 13px; color: #9CA3AF;">Know exactly how much each fix is worth in revenue</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 10px 16px; font-family: Arial, sans-serif; font-size: 15px; color: #10B981; text-align: left;">
-                                                    <strong>&#10003; DIY, Agency, or Hybrid paths</strong>
-                                                    <p style="margin: 4px 0 0 0; font-size: 13px; color: #9CA3AF;">Choose the implementation path that fits your budget</p>
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                        <!-- CTA Button -->
-                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
-                                            <tr>
-                                                <td style="border-radius: 12px; background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);">
-                                                    <a href="${stripeCheckoutUrl || 'https://oleksiakconsulting.com/#contact'}" target="_blank" style="display: inline-block; padding: 18px 48px; font-family: Arial, sans-serif; font-size: 17px; font-weight: 700; color: #FFFFFF; text-decoration: none;">
-                                                        Get Full Report &bull; €99 &#8594;
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                        <!-- Price note -->
-                                        <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6B7280; margin: 16px 0 0 0;">
-                                            One-time payment &bull; PDF delivered instantly &bull; Secure checkout
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    ` : ''}
 
                     <!-- TRUST STRIP -->
                     <tr>

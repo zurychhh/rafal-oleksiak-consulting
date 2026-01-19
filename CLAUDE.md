@@ -33,6 +33,8 @@ vercel env pull      # Pull environment variables
 
 ### Project Structure
 
+There are two `lib/` directories - one at project root (shared code) and one under `app/` (Next.js specific):
+
 ```
 app/
 ├── api/
@@ -48,11 +50,11 @@ app/
 ├── lib/
 │   ├── analytics.ts             # GA4 event tracking
 │   ├── constants/               # Colors, copy text
-│   └── lama/pro/                # PDF generation components
+│   └── lama/pro/                # PDF generation components (excluded from TS)
 │       └── pdf/                 # React-PDF report components
 └── HomeClient.tsx               # Main client component
 
-lib/
+lib/                             # Root-level shared code
 ├── lama/
 │   ├── analyzers/               # 6 audit category analyzers
 │   │   ├── visibility.ts        # Find (SEO)

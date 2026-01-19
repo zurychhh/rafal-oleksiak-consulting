@@ -10,8 +10,6 @@ interface FinalCTAProps {
 
 export default function FinalCTA({ onSuccess }: FinalCTAProps) {
   const [isMounted, setIsMounted] = useState(false);
-  const [isPaidLoading, setIsPaidLoading] = useState(false);
-  const [paidError, setPaidError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -146,95 +144,6 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
         submitButton.disabled = false;
         submitButton.textContent = 'Yes, I Want to Double CRM Revenue →';
       }
-    }
-  };
-
-  // Handle Paid Audit - Redirects to Stripe Checkout
-  const handlePaidAudit = async () => {
-    setPaidError(null);
-
-    // Get form element
-    const form = document.getElementById('consultation-form') as HTMLFormElement;
-    if (!form) {
-      setPaidError('Form not found. Please refresh the page.');
-      return;
-    }
-
-    const formData = new FormData(form);
-
-    // Validate required fields
-    const url = formData.get('website') as string;
-    const email = formData.get('email') as string;
-    const fullName = formData.get('fullName') as string;
-    const consent = formData.get('consent') === 'on';
-
-    if (!url || !email || !fullName) {
-      setPaidError('Please fill in all required fields (Name, Email, Website).');
-      return;
-    }
-
-    if (!consent) {
-      setPaidError('Please accept the consent checkbox to continue.');
-      return;
-    }
-
-    // Validate URL format
-    let validUrl = url;
-    try {
-      if (!url.startsWith('http')) {
-        validUrl = `https://${url}`;
-      }
-      new URL(validUrl);
-    } catch {
-      setPaidError('Please enter a valid website URL.');
-      return;
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setPaidError('Please enter a valid email address.');
-      return;
-    }
-
-    setIsPaidLoading(true);
-
-    try {
-      // Track paid audit click
-      analytics.trackPaidAuditCheckout(validUrl);
-
-      // Create Stripe Checkout session
-      const response = await fetch('/api/stripe/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: validUrl,
-          email,
-          fullName,
-          company: formData.get('company') as string || undefined,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create checkout session');
-      }
-
-      // Redirect to Stripe Checkout
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error('No checkout URL received');
-      }
-    } catch (error) {
-      console.error('[Paid Audit] Error:', error);
-      setPaidError(
-        error instanceof Error
-          ? error.message
-          : 'Something went wrong. Please try again.'
-      );
-      setIsPaidLoading(false);
     }
   };
 
@@ -386,40 +295,6 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
                 <button type="submit" className={styles.ctaButton}>
                   Yes, I Want to Double CRM Revenue <span>→</span>
                 </button>
-
-                {/* Divider */}
-                <div className={styles.orDivider}>
-                  <span>or get the full report</span>
-                </div>
-
-                {/* Paid Audit Button */}
-                <button
-                  type="button"
-                  className={styles.paidAuditButton}
-                  onClick={handlePaidAudit}
-                  disabled={isPaidLoading}
-                >
-                  {isPaidLoading ? (
-                    'Redirecting to checkout...'
-                  ) : (
-                    <>
-                      Get Full 100+ Page Report
-                      <span className={styles.paidAuditPrice}>€99</span>
-                    </>
-                  )}
-                </button>
-
-                {/* Paid Audit Error */}
-                {paidError && (
-                  <p className={styles.paidAuditError}>{paidError}</p>
-                )}
-
-                {/* Paid Audit Benefits */}
-                <ul className={styles.paidAuditBenefits}>
-                  <li>Detailed 100+ page PDF report</li>
-                  <li>Actionable recommendations per category</li>
-                  <li>Priority email delivery</li>
-                </ul>
               </form>
             </div>
           </div>

@@ -16,7 +16,8 @@ import { analyzeEngagement } from '@/lib/lama/analyzers/engagement';
 import { createOrUpdateLAMAContact } from '@/lib/lama/hubspot';
 import { generateAuditEmail } from '@/lib/lama/email-template';
 import { generateLAMAProPDF } from '@/app/lib/lama/pro/pdf-generator-core';
-import { stripe, STRIPE_CONFIG } from '@/lib/stripe';
+// Note: Stripe imports removed - paid audit upsell disabled temporarily
+// import { stripe, STRIPE_CONFIG } from '@/lib/stripe';
 import type { AuditRequest, AuditResult, CategoryScore } from '@/lib/lama/types';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -232,53 +233,13 @@ export async function POST(request: NextRequest) {
       console.log('[LAMA] FREE audit - Skipping PDF generation');
     }
 
-    // 6b. Create Stripe checkout session for FREE audits (upsell link in email)
-    let stripeCheckoutUrl: string | null = null;
-
-    if (!paid && STRIPE_CONFIG.priceId) {
-      try {
-        console.log('[LAMA] Creating Stripe checkout session for upsell...');
-        const origin = process.env.NEXT_PUBLIC_SITE_URL || 'https://oleksiakconsulting.com';
-
-        const session = await stripe.checkout.sessions.create({
-          payment_method_types: ['card'],
-          line_items: [
-            {
-              price: STRIPE_CONFIG.priceId,
-              quantity: 1,
-            },
-          ],
-          mode: 'payment',
-          success_url: `${origin}${STRIPE_CONFIG.successUrl}?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${origin}${STRIPE_CONFIG.cancelUrl}`,
-          customer_email: email,
-          metadata: {
-            audit_url: validUrl,
-            full_name: fullName || '',
-            company: company || '',
-            source: 'free_audit_upsell',
-          },
-          billing_address_collection: 'auto',
-          allow_promotion_codes: true,
-          // Session expires in 24 hours (default)
-        });
-
-        stripeCheckoutUrl = session.url;
-        console.log(`[LAMA] Stripe checkout session created: ${session.id}`);
-      } catch (stripeError) {
-        console.error('[LAMA] Stripe checkout creation failed (continuing without upsell link):', stripeError);
-        // Continue without Stripe link - use fallback in email template
-      }
-    }
-
     // 7. Generate email HTML (different for paid vs free)
     const emailHtml = generateAuditEmail({
       recipientName: fullName || email.split('@')[0],
       auditResult,
-      ctaLink: 'https://calendly.com/rafal-oleksiak/consultation',
+      ctaLink: 'https://calendly.com/rafaloleksiakconsulting/30min',
       paid,
       paymentId,
-      stripeCheckoutUrl, // Pass checkout URL for FREE audit upsell
     });
 
     // Different subject line for paid vs free

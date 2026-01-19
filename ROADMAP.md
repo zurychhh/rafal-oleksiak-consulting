@@ -1,9 +1,9 @@
 # 🗺️ ROADMAP - Rafał Oleksiak Consulting
 ## Project Status & Progress Tracker
 
-**Last Updated:** 2026-01-07  
-**Current Phase:** Phase 2 - LAMA System Live + Enhancements  
-**Overall Progress:** 75% (Website ✅ Complete, LAMA ✅ MVP Live, Enhancements 🚧)
+**Last Updated:** 2026-01-17
+**Current Phase:** Phase 2 - LAMA System Live + Enhancements
+**Overall Progress:** 75% (Website ✅ Complete, LAMA Free ✅ Live, Paid 📦 Archived, Enhancements 🚧)
 
 ---
 
@@ -13,7 +13,7 @@
 |-----------|--------|----------|----------|--------------|
 | Main Website | ✅ Live | 100% | - | 2025-11-09 |
 | LAMA Free Audit | ✅ Live | 100% | - | 2025-12-11 |
-| LAMA Paid Audit (Stripe) | ✅ Live | 100% | - | 2025-12-11 |
+| LAMA Paid Audit (Stripe) | 📦 Archived | 100% | LOW | 2026-01-17 |
 | PDF Report | ✅ Production-Ready | 100% | - | 2026-01-07 |
 | Follow-up Automation | 🚧 Template Ready | 50% | HIGH | 2025-12-21 |
 | SEO Enhancement | ❌ Not Started | 0% | HIGH | - |
@@ -25,18 +25,21 @@
 ## 🔄 RESUME POINT (dla Claude Code)
 
 **Exact State:**
-- Projekt: LAMA system complete (Free + Paid), PDF 100% production-ready
+- Projekt: LAMA Free Audit live, Paid Audit archived (backend zachowany)
 - Aktualny fokus: Follow-up automation + SEO + Growth
-- Status: All core features deployed and live, no placeholder data
+- Status: Free audit flow gotowy do reklamowania
 
 **Co działa:**
 - ✅ Main website deployed (90+ Lighthouse scores)
-- ✅ LAMA Free Audit (6 categories, PDF generation, email delivery)
-- ✅ LAMA Paid Audit (Stripe integration, €99/€199 tiers)
+- ✅ LAMA Free Audit (6 categories, email delivery, CTA do konsultacji)
 - ✅ HubSpot CRM integration (auto contact creation)
 - ✅ GA4 Analytics (event tracking)
-- ✅ CRT Success Screen (typewriter animation)
-- ✅ PDF Report - 100% production-ready (no fake/placeholder data)
+- ✅ CRT Success Screen (typewriter animation, tylko konsultacja)
+- ✅ PDF Report - 100% production-ready (backend ready, tylko dla paid)
+
+**Co jest Archived (do przywrócenia później):**
+- 📦 LAMA Paid Audit (Stripe integration, €99)
+- 📦 Patrz: `PAID_AUDIT_ARCHIVE.md` dla pełnej dokumentacji
 
 **Co jest In Progress:**
 - ⏳ Follow-up email automation (template ready, needs implementation)
@@ -50,11 +53,20 @@
 
 **Blockers:** None ✅
 
-**Context:** Project is in production and generating leads. PDF reports are now fully production-ready with no misleading data. Focus on automation and content expansion.
+**Context:** Free audit flow gotowy do reklamowania. Paid audit tymczasowo wyłączony z UI, ale backend infrastructure zachowany dla przyszłego przywrócenia. Patrz `PAID_AUDIT_ARCHIVE.md`.
 
 ---
 
 ## ✅ RECENTLY COMPLETED (Last 15 items)
+
+### 2026-01-17
+- ✅ **Paid Audit Feature Archived**
+  - Reason: Focus on free audit → consultation flow for advertising
+  - Removed from UI: paid button (FinalCTA), Path 02 (FinalSuccessScreen), UPGRADE CTA (email)
+  - Created: `PAID_AUDIT_ARCHIVE.md` with full restoration guide
+  - Preserved: Backend infrastructure (Stripe endpoints, PDF generation)
+  - Files: `FinalSuccessScreen.tsx`, `FinalCTA.tsx`, `email-template.ts`, `audit/route.ts`
+  - Impact: Clean free audit flow ready for ads, easy to restore later
 
 ### 2026-01-07
 - ✅ **PDF Placeholder Data Removal**

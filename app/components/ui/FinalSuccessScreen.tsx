@@ -16,7 +16,6 @@ export default function FinalSuccessScreen({ isOpen }: FinalSuccessScreenProps) 
     notification2: false,
     pathsIntro: false,
     path1: false,
-    path2: false,
     farewell: false,
     terminal: false,
   })
@@ -29,11 +28,9 @@ export default function FinalSuccessScreen({ isOpen }: FinalSuccessScreenProps) 
   const text1 = 'TRANSMISSION RECEIVED.'
   const text2 = 'Your free website audit is being generated now.'
   const text3 = 'Check your inbox — results arriving within seconds.'
-  const text4 = 'Two paths forward await you there:'
-  const text5 = 'CONSULTATION PATH'
-  const text6 = 'Review your audit and book a free strategy call. No cost. No obligation.'
-  const text7 = 'FULL REPORT PATH'
-  const text8 = 'Unlock complete paid analysis — 100+ pages of actionable solutions. Target: 90/100 minimum score.'
+  const text4 = 'Your recommended next step:'
+  const text5 = 'BOOK A STRATEGY CALL'
+  const text6 = 'Review your audit results, then schedule a free 30-min call to discuss your roadmap to 2x CRM revenue. No cost. No obligation.'
   const text10 = 'SEE YOU IN YOUR INBOX'
 
   // Calculate cumulative delays for cascade effect
@@ -54,10 +51,6 @@ export default function FinalSuccessScreen({ isOpen }: FinalSuccessScreenProps) 
   const path1TitleDelay = cumulativeDelay
   const path1DescDelay = cumulativeDelay + 600
   cumulativeDelay += (text5.length * (SPEED - 10)) + 600 + (text6.length * SPEED) + 1500
-
-  const path2TitleDelay = cumulativeDelay
-  const path2DescDelay = cumulativeDelay + 600
-  cumulativeDelay += (text7.length * (SPEED - 10)) + 600 + (text8.length * SPEED) + 2000
 
   const farewellDelay = cumulativeDelay
 
@@ -98,18 +91,6 @@ export default function FinalSuccessScreen({ isOpen }: FinalSuccessScreenProps) 
     delay: path1DescDelay,
   })
 
-  const path2Title = useTypewriter({
-    text: text7,
-    speed: SPEED - 10,
-    delay: path2TitleDelay,
-  })
-
-  const path2Desc = useTypewriter({
-    text: text8,
-    speed: SPEED,
-    delay: path2DescDelay,
-  })
-
   const farewell = useTypewriter({
     text: text10,
     speed: SPEED + 10,
@@ -131,7 +112,6 @@ export default function FinalSuccessScreen({ isOpen }: FinalSuccessScreenProps) 
       setTimeout(() => setShowSection(s => ({ ...s, notification2: true })), notification2Delay - 50)
       setTimeout(() => setShowSection(s => ({ ...s, pathsIntro: true })), pathsIntroDelay - 50)
       setTimeout(() => setShowSection(s => ({ ...s, path1: true })), path1TitleDelay - 50)
-      setTimeout(() => setShowSection(s => ({ ...s, path2: true })), path2TitleDelay - 50)
       setTimeout(() => setShowSection(s => ({ ...s, farewell: true })), farewellDelay - 50)
       setTimeout(() => setShowSection(s => ({ ...s, terminal: true })), farewellDelay + (text10.length * (SPEED + 10)) + 1000)
     }
@@ -139,7 +119,7 @@ export default function FinalSuccessScreen({ isOpen }: FinalSuccessScreenProps) 
     return () => {
       document.body.style.overflow = ''
     }
-  }, [isOpen, headlineDelay, notification1Delay, notification2Delay, pathsIntroDelay, path1TitleDelay, path2TitleDelay, farewellDelay, text10.length, SPEED])
+  }, [isOpen, headlineDelay, notification1Delay, notification2Delay, pathsIntroDelay, path1TitleDelay, farewellDelay, text10.length, SPEED])
 
   if (!isOpen) return null
 
@@ -198,11 +178,11 @@ export default function FinalSuccessScreen({ isOpen }: FinalSuccessScreenProps) 
 
               {pathsIntro.isComplete && (
                 <div className={styles.pathsGrid}>
-                  {/* Path 01 */}
+                  {/* Recommended Action - Book a Call */}
                   {showSection.path1 && (
                     <div className={`${styles.pathCard} ${styles.purpleAccent}`}>
                       <div className={styles.pathContent}>
-                        <span className={`${styles.pathNumber} ${styles.purple}`}>[01]</span>
+                        <span className={`${styles.pathNumber} ${styles.purple}`}>[RECOMMENDED]</span>
                         <div className={styles.pathDetails}>
                           <h3 className={styles.pathTitle}>
                             {path1Title.displayedText}
@@ -212,27 +192,6 @@ export default function FinalSuccessScreen({ isOpen }: FinalSuccessScreenProps) 
                             <p className={styles.pathDescription}>
                               {path1Desc.displayedText}
                               {!path1Desc.isComplete && path1Desc.displayedText && <span className={styles.cursorSmall}>█</span>}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Path 02 */}
-                  {showSection.path2 && (
-                    <div className={`${styles.pathCard} ${styles.blueAccent}`}>
-                      <div className={styles.pathContent}>
-                        <span className={`${styles.pathNumber} ${styles.blue}`}>[02]</span>
-                        <div className={styles.pathDetails}>
-                          <h3 className={styles.pathTitle}>
-                            {path2Title.displayedText}
-                            {!path2Title.isComplete && path2Title.displayedText && <span className={styles.cursorSmall}>█</span>}
-                          </h3>
-                          {path2Title.isComplete && (
-                            <p className={styles.pathDescription}>
-                              {path2Desc.displayedText}
-                              {!path2Desc.isComplete && path2Desc.displayedText && <span className={styles.cursorSmall}>█</span>}
                             </p>
                           )}
                         </div>
