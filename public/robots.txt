@@ -8,6 +8,6 @@ Allow: /
 Disallow: /api/
 Disallow: /_next/
 
-# Sitemap location (add when sitemap is created)
-# Sitemap: https://oleksiakconsulting.com/sitemap.xml
+# Sitemap location
+Sitemap: https://oleksiakconsulting.com/sitemap.xml
 

@@ -11,6 +11,7 @@ import ProcessTimeline from './components/sections/ProcessTimeline'
 import FinalCTA from './components/sections/FinalCTA'
 import Footer from './components/sections/Footer'
 import FinalSuccessScreen from './components/ui/FinalSuccessScreen'
+import CookieConsent from './components/ui/CookieConsent'
 
 const Bio = dynamic(() => import('./components/sections/Bio'), {
   loading: () => <div style={{ minHeight: '500px' }} />,
@@ -59,7 +60,7 @@ export default function HomeClient() {
 
           <div className="relative z-10 max-w-5xl mx-auto px-8 text-center hero-content-container">
             <h1 className="hero-headline">
-              From first click to loyal customer
+              I help ecommerce brands turn visitors into loyal customers
             </h1>
 
             <p className="hero-subheadline">
@@ -105,6 +106,9 @@ export default function HomeClient() {
 
       {/* Final Success Screen - fullscreen overlay, renders on top of everything */}
       {showFinalScreen && <FinalSuccessScreen isOpen={true} />}
+
+      {/* Cookie consent banner - GDPR compliance */}
+      <CookieConsent />
     </>
   )
 }

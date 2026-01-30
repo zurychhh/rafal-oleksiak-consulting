@@ -28,24 +28,24 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Rafał Oleksiak - CRM & Marketing Automation Consultant",
-  description: "Expert CRM and Marketing Automation consulting services. Specializing in customer relationship management strategies and marketing automation solutions.",
-  keywords: ["CRM", "Marketing Automation", "Customer Relationship Management", "Email Automation", "CRM Strategy", "Revenue Growth", "Allegro", "Accenture", "Booksy"],
+  title: "Rafał Oleksiak — Ecommerce Conversion & CRM Consultant",
+  description: "I help ecommerce brands convert more visitors into loyal customers. 15 years optimizing traffic, UX, CRM and marketing automation for Allegro, Booksy, mBank and more.",
+  keywords: ["ecommerce conversion", "CRM consultant", "marketing automation", "UX optimization", "traffic quality", "customer retention", "Allegro", "Booksy", "mBank"],
   authors: [{ name: "Rafał Oleksiak" }],
   creator: "Rafał Oleksiak",
   publisher: "Rafał Oleksiak Consulting",
   openGraph: {
-    title: "Rafał Oleksiak - CRM & Marketing Automation Consultant",
-    description: "Expert CRM and Marketing Automation consulting services. Specializing in customer relationship management strategies and marketing automation solutions.",
+    title: "Rafał Oleksiak — Ecommerce Conversion & CRM Consultant",
+    description: "I help ecommerce brands convert more visitors into loyal customers. 15 years optimizing traffic, UX, CRM and marketing automation.",
     url: "https://oleksiakconsulting.com",
-    siteName: "Rafał Oleksiak Consulting",
+    siteName: "Oleksiak Consulting",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rafał Oleksiak - CRM & Marketing Automation Consultant",
-    description: "Expert CRM and Marketing Automation consulting services.",
+    title: "Rafał Oleksiak — Ecommerce Conversion & CRM Consultant",
+    description: "I help ecommerce brands convert more visitors into loyal customers. 15 years in ecommerce.",
   },
   robots: {
     index: true,

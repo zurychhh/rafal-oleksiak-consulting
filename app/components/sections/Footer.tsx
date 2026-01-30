@@ -146,6 +146,8 @@ export default function Footer() {
         <div className={styles.footerBottom}>
           <p className={styles.copyright}>
             © 2026 Rafał Oleksiak. All rights reserved.
+            {' · '}
+            <a href="/privacy" className={styles.footerLink}>Privacy Policy</a>
           </p>
         </div>
       </div>
