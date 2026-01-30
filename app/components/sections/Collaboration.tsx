@@ -330,7 +330,12 @@ export default function Collaboration({ onSuccess }: CollaborationProps) {
 
               </div>
 
-              {/* Marketing Consent - Combined with LAMA Audit */}
+              {/* Info about audit delivery */}
+              <p className={styles.auditInfoText}>
+                Enter your email to receive your free audit results.
+              </p>
+
+              {/* Marketing Consent - OPTIONAL, unbundled from audit (GDPR Art. 7(4)) */}
               <div className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
@@ -339,8 +344,7 @@ export default function Collaboration({ onSuccess }: CollaborationProps) {
                   className={styles.customCheckbox}
                 />
                 <label htmlFor="marketing" className={styles.checkboxLabel}>
-                  <strong>Yes, send me a Free Website Audit</strong> (results in 90 seconds – 6 categories analyzed).
-                  I also agree to receive marketing emails with best practices on lead acquisition, lead nurturing, CRM, and updates about my AI automation tools and offers.
+                  I'd like to receive occasional emails with tips on lead acquisition, CRM, and marketing automation.
                 </label>
               </div>
 

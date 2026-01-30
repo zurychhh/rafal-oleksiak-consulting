@@ -12,6 +12,7 @@ export interface LAMAHubSpotContact {
   auditTimestamp: string;
   paid?: boolean;
   paymentId?: string;
+  marketingConsent?: boolean;
 }
 
 export interface LAMAHubSpotResponse {
@@ -41,7 +42,7 @@ export async function createOrUpdateLAMAContact(
       fullName: contactData.fullName,
       website: contactData.website,
       challenge: challengeMessage,
-      marketingConsent: true, // Implied consent by requesting audit
+      marketingConsent: contactData.marketingConsent ?? false,
     });
 
     if (!contactResult.success || !contactResult.contactId) {

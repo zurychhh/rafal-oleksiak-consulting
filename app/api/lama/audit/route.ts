@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   try {
     // 1. Parse request body
     const body: AuditRequest = await request.json();
-    const { url, email, fullName, company, paid = false, paymentId } = body;
+    const { url, email, fullName, company, paid = false, paymentId, marketingConsent = false } = body;
 
     // Log audit type
     const auditType = paid ? 'PAID' : 'FREE';
@@ -214,6 +214,7 @@ export async function POST(request: NextRequest) {
         website: validUrl,
         auditScore: overallScore,
         auditTimestamp: auditResult.timestamp,
+        marketingConsent,
       },
       auditResult
     );

@@ -341,6 +341,15 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
+/* Audit info text */
+.auditInfoText {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 4px 0;
+}
+
 /* Checkbox */
 .checkboxContainer {
   display: flex;

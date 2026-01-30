@@ -7,6 +7,7 @@ export interface AuditRequest {
   fullName?: string;
   company?: string;
   consent?: boolean;
+  marketingConsent?: boolean;
   paid?: boolean;
   paymentId?: string;
 }

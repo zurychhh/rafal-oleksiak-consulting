@@ -88,8 +88,8 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
           email: formData.get('email'),
           website: formData.get('website'),
           challenge: formData.get('challenge'),
-          consent: formData.get('consent') === 'on',
-          auditRequested: formData.get('consent') === 'on', // LAMA audit requires consent
+          consent: formData.get('marketingConsent') === 'on',
+          auditRequested: true, // Audit always runs, independent of marketing consent
         }),
       });
 
@@ -102,7 +102,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
           website: formData.get('website') as string,
           email: formData.get('email') as string,
           fullName: formData.get('fullName') as string,
-          consent: formData.get('consent') === 'on',
+          marketingConsent: formData.get('marketingConsent') === 'on',
         };
 
         // Show final success screen (fullscreen, non-dismissable)
@@ -113,8 +113,8 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
           label.classList.remove(styles.floated);
         });
 
-        // Trigger LAMA Audit in background (runs while popup animates)
-        if (auditData.consent) {
+        // Trigger LAMA Audit in background (always runs, independent of marketing consent)
+        if (auditData.website && auditData.email) {
           fetch('/api/lama/audit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -122,6 +122,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
               url: auditData.website,
               email: auditData.email,
               fullName: auditData.fullName,
+              marketingConsent: auditData.marketingConsent,
             }),
           }).catch((err) => console.error('[LAMA] Audit request failed:', err));
         }
@@ -275,18 +276,21 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
                   ></textarea>
                 </div>
 
-                {/* Combined Consent Checkbox - LAMA Audit requires marketing consent */}
+                {/* Info about audit delivery */}
+                <p className={styles.auditInfoText}>
+                  Enter your email to receive your free audit results.
+                </p>
+
+                {/* Marketing Consent - OPTIONAL, unbundled from audit (GDPR Art. 7(4)) */}
                 <div className={styles.checkboxContainer}>
                   <input
                     type="checkbox"
-                    id="consent"
-                    name="consent"
-                    required
+                    id="marketingConsent"
+                    name="marketingConsent"
                     className={styles.customCheckbox}
                   />
-                  <label htmlFor="consent" className={styles.checkboxLabel}>
-                    <strong>Yes, send me a Free Website Audit</strong> (results in 90 seconds – 6 categories analyzed).
-                    I also subscribe to receive marketing emails with best practices on lead acquisition, lead nurturing, CRM, and updates about my AI automation tools and offers.
+                  <label htmlFor="marketingConsent" className={styles.checkboxLabel}>
+                    I'd like to receive occasional emails with tips on lead acquisition, CRM, and marketing automation.
                   </label>
                 </div>
 
