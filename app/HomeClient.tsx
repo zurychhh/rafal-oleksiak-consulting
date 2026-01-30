@@ -75,7 +75,7 @@ export default function HomeClient() {
         <section className="bg-[#2D3142] py-8 text-center">
           <p className="hero-credibility">
             <span className="hero-checkmark">✓</span>
-            Trusted by Allegro, Booksy, Accenture, McDonald's, and mBank for ecommerce & CRM transformation
+            Trusted by Allegro, Booksy, Accenture, and mBank for ecommerce & CRM transformation
           </p>
         </section>
 

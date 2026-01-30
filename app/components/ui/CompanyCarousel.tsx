@@ -3,7 +3,6 @@ import styles from "./CompanyCarousel.module.css";
 export default function CompanyCarousel() {
   const companies = [
     { name: "Accenture", badge: null },
-    { name: "McDonald's", badge: null },
     { name: "Booksy", badge: null },
     { name: "Mall", badge: null },
     { name: "mBank", badge: null },
