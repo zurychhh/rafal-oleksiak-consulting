@@ -60,7 +60,7 @@ export default function HomeClient() {
 
           <div className="relative z-10 max-w-5xl mx-auto px-8 text-center hero-content-container">
             <h1 className="hero-headline">
-              I help ecommerce brands turn visitors into loyal customers
+              From click to loyal customers. Together.
             </h1>
 
             <p className="hero-subheadline">
