@@ -60,7 +60,7 @@ export default function HomeClient() {
 
           <div className="relative z-10 max-w-5xl mx-auto px-8 text-center hero-content-container">
             <h1 className="hero-headline">
-              From click to loyal customers. Together.
+              From first click to loyal customers. Together.
             </h1>
 
             <p className="hero-subheadline">
