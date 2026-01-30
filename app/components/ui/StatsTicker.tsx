@@ -3,7 +3,7 @@ import styles from "./StatsTicker.module.css";
 export default function StatsTicker() {
   const metrics = [
     { number: "+11.5pp", text: "revenue growth" },
-    { number: "$2M", text: "automation budget" },
+    { number: "€2M", text: "automation budget" },
     { number: "15-person", text: "team" },
     { number: "102%", text: "YoY growth" },
     { number: "34%", text: "YoY increase" },
