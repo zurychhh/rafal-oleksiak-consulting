@@ -287,7 +287,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
                   />
                   <label htmlFor="consent" className={styles.checkboxLabel}>
                     <strong>Yes, send me a Free Website Audit</strong> (results in 90 seconds – 6 categories analyzed).
-                    I also agree to receive marketing emails with best practices on lead acquisition, lead nurturing, CRM, and updates about my AI automation tools and offers.
+                    I also subscribe to receive marketing emails with best practices on lead acquisition, lead nurturing, CRM, and updates about my AI automation tools and offers.
                   </label>
                 </div>
 

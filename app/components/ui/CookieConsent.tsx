@@ -3,34 +3,31 @@
 import { useState, useEffect } from 'react'
 
 export default function CookieConsent() {
-  const [visible, setVisible] = useState(false)
+  const [hidden, setHidden] = useState(true)
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent')
     if (!consent) {
-      // Delay showing banner to not block initial paint
-      const timer = setTimeout(() => setVisible(true), 1500)
+      const timer = setTimeout(() => setHidden(false), 1500)
       return () => clearTimeout(timer)
     }
   }, [])
 
   const accept = () => {
     localStorage.setItem('cookie-consent', 'accepted')
-    setVisible(false)
+    setHidden(true)
   }
 
   const decline = () => {
     localStorage.setItem('cookie-consent', 'declined')
-    setVisible(false)
+    setHidden(true)
   }
-
-  if (!visible) return null
 
   return (
     <div
       role="dialog"
-      aria-label="Cookie consent"
-      data-cookie-consent="banner"
+      aria-label="Cookie consent banner"
+      data-gdpr-consent="cookie-banner"
       style={{
         position: 'fixed',
         bottom: 0,
@@ -41,16 +38,16 @@ export default function CookieConsent() {
         backdropFilter: 'blur(12px)',
         borderTop: '1px solid rgba(123, 44, 191, 0.3)',
         padding: '16px 24px',
-        display: 'flex',
+        display: hidden ? 'none' : 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '16px',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap' as const,
       }}
     >
       <p style={{ color: '#ccc', fontSize: '14px', margin: 0, maxWidth: '600px' }}>
-        This site uses cookies and Google Analytics to improve your experience.
-        By continuing, you consent to our use of cookies.
+        This site uses cookies and Google Analytics to improve your experience and
+        comply with GDPR requirements. By continuing, you consent to our use of cookies.
         See our <a href="/privacy" style={{ color: '#9D4EDD', textDecoration: 'underline' }}>Privacy Policy</a>.
       </p>
       <div style={{ display: 'flex', gap: '8px' }}>

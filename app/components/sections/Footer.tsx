@@ -138,6 +138,11 @@ export default function Footer() {
                   Book Consultation
                 </a>
               </li>
+              <li>
+                <a href="/privacy" className={styles.footerLink}>
+                  Privacy Policy
+                </a>
+              </li>
             </ul>
           </div>
         </div>

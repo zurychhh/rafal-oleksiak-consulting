@@ -29,7 +29,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Rafał Oleksiak — Ecommerce Conversion & CRM Consultant",
-  description: "I help ecommerce brands convert more visitors into loyal customers. 15 years optimizing traffic, UX, CRM and marketing automation for Allegro, Booksy, mBank and more.",
+  description: "I help ecommerce brands convert more visitors into loyal customers. 15 years optimizing traffic, UX, CRM and automation at Allegro, Booksy, mBank.",
   keywords: ["ecommerce conversion", "CRM consultant", "marketing automation", "UX optimization", "traffic quality", "customer retention", "Allegro", "Booksy", "mBank"],
   authors: [{ name: "Rafał Oleksiak" }],
   creator: "Rafał Oleksiak",
