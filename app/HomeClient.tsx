@@ -59,11 +59,11 @@ export default function HomeClient() {
 
           <div className="relative z-10 max-w-5xl mx-auto px-8 text-center hero-content-container">
             <h1 className="hero-headline">
-              I turn underperforming CRM systems into your #1 revenue driver
+              From first click to loyal customer
             </h1>
 
             <p className="hero-subheadline">
-              From CRM strategy to marketing automation — I analyze your entire revenue pipeline and show you the gaps holding you back. Start with a free website audit.
+              I optimize your traffic quality, fix UX bottlenecks, automate processes, and shift you from paid to free traffic through a CRM 2.0 approach. 15 years in ecommerce. Start with a free website audit.
             </p>
 
             <HeroCTA />
@@ -74,7 +74,7 @@ export default function HomeClient() {
         <section className="bg-[#2D3142] py-8 text-center">
           <p className="hero-credibility">
             <span className="hero-checkmark">✓</span>
-            Trusted by Allegro, Booksy, Accenture, McDonald's, and mBank for CRM transformation
+            Trusted by Allegro, Booksy, Accenture, McDonald's, and mBank for ecommerce & CRM transformation
           </p>
         </section>
 

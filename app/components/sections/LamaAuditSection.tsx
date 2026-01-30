@@ -19,7 +19,7 @@ const LAMA_STEPS = [
     title: 'Find',
     icon: 'fa-magnifying-glass',
     gradient: 'linear-gradient(135deg, #0066FF, #00BFFF)',
-    description: 'I analyze your SEO fundamentals - meta tags, H1 structure, robots.txt, and schema markup to ensure search engines can discover your site.',
+    description: 'I analyze your SEO fundamentals - meta titles, meta descriptions, H1 tags, XML sitemap, and robots.txt to ensure search engines can discover and properly crawl your site.',
     why: "If search engines can't find you, you don't exist"
   },
   {
@@ -27,7 +27,7 @@ const LAMA_STEPS = [
     title: 'Stay',
     icon: 'fa-bolt',
     gradient: 'linear-gradient(135deg, #F59E0B, #FCD34D)',
-    description: 'I measure your page speed, mobile optimization, and Core Web Vitals (LCP, CLS, FCP) using Google PageSpeed Insights API.',
+    description: 'I measure your page speed across mobile and desktop, analyzing Core Web Vitals (LCP, CLS, FCP), blocking time, and speed index using Google PageSpeed Insights API.',
     why: '1 second delay = 7% loss in conversions'
   },
   {
@@ -121,7 +121,7 @@ export default function LamaAuditSection() {
             className={styles.ctaButton}
             type="button"
           >
-            Yes, Audit My Website (Free, 90 Seconds)
+            Run My Free Audit Now
             <i className={`fa-solid fa-arrow-down ${styles.arrow}`}></i>
           </button>
         </div>

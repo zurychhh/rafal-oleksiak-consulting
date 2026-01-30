@@ -120,7 +120,7 @@ export function generateAuditEmail(data: EmailData): string {
                             ${paid
                               ? `<p style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #9CA3AF; margin: 0 0 8px 0;">Thank you for your purchase! Here's your comprehensive audit for <span style="color: #FFFFFF; font-weight: 700;">${new URL(url).hostname.replace(/\./g, '&#8203;.')}</span></p>
                             <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #10B981; margin: 0 0 32px 0;">&#10003; Full 100+ page PDF report attached below</p>`
-                              : `<p style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #9CA3AF; margin: 0 0 32px 0;">We've analyzed <span style="color: #FFFFFF; font-weight: 700; text-decoration: none;">${new URL(url).hostname.replace(/\./g, '&#8203;.')}</span> and found opportunities for improvement</p>`
+                              : `<p style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #9CA3AF; margin: 0 0 32px 0;">Hi ${recipientName.split(' ')[0] || 'there'}, I've analyzed <span style="color: #FFFFFF; font-weight: 700; text-decoration: none;">${new URL(url).hostname.replace(/\./g, '&#8203;.')}</span> and found opportunities for improvement</p>`
                             }
 
                             <!-- Score Circle - Bulletproof for mobile (fixed aspect ratio) -->
@@ -303,13 +303,13 @@ export function generateAuditEmail(data: EmailData): string {
                             </table>
 
                             <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6B7280; margin: 16px 0 0 0;">Free 30-min call to discuss your audit findings</p>`
-                              : `<p style="font-family: Arial, sans-serif; font-size: 15px; color: #9CA3AF; margin: 0 0 24px 0;">Ready to fix these issues?</p>
+                              : `<p style="font-family: Arial, sans-serif; font-size: 15px; color: #9CA3AF; margin: 0 0 24px 0;">I can walk you through these findings and show you exactly what to fix first.</p>
 
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                                 <tr>
                                     <td style="border-radius: 12px; background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 50%, #A78BFA 100%);">
                                         <a href="${ctaLink}" target="_blank" style="display: inline-block; padding: 18px 48px; font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; color: #FFFFFF; text-decoration: none;">
-                                            Book Strategy Call &#8594;
+                                            Book Free Strategy Call &#8594;
                                         </a>
                                     </td>
                                 </tr>
@@ -328,7 +328,8 @@ export function generateAuditEmail(data: EmailData): string {
                                 Trusted by teams at
                                 <span style="color: #9CA3AF; font-weight: 600;">Allegro</span>,
                                 <span style="color: #9CA3AF; font-weight: 600;">Accenture</span>,
-                                <span style="color: #9CA3AF; font-weight: 600;">Booksy</span>
+                                <span style="color: #9CA3AF; font-weight: 600;">Booksy</span>,
+                                <span style="color: #9CA3AF; font-weight: 600;">mBank</span>
                             </p>
                         </td>
                     </tr>
@@ -340,12 +341,12 @@ export function generateAuditEmail(data: EmailData): string {
                                 <tr>
                                     <td style="padding-top: 24px;">
                                         <p style="font-family: Arial, sans-serif; font-size: 14px; color: #9CA3AF; margin: 0 0 4px 0;">Best regards,</p>
-                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: 600; color: #F9FAFB; margin: 0 0 2px 0;">Rafal Oleksiak</p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: 600; color: #F9FAFB; margin: 0 0 2px 0;">Rafa&#322; Oleksiak</p>
                                         <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6B7280; margin: 0 0 12px 0;">CRM & Marketing Automation Consultant</p>
                                         <p style="margin: 0;">
                                             <a href="mailto:rafal@oleksiakconsulting.com" style="font-family: Arial, sans-serif; font-size: 13px; color: #8B5CF6; text-decoration: none;">rafal@oleksiakconsulting.com</a>
                                             <span style="color: #4B5563; margin: 0 8px;">|</span>
-                                            <a href="https://www.linkedin.com/in/rafal-oleksiak" style="font-family: Arial, sans-serif; font-size: 13px; color: #8B5CF6; text-decoration: none;">LinkedIn &#8594;</a>
+                                            <a href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/" style="font-family: Arial, sans-serif; font-size: 13px; color: #8B5CF6; text-decoration: none;">LinkedIn &#8594;</a>
                                         </p>
                                     </td>
                                 </tr>

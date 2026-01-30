@@ -17,10 +17,10 @@ export default function CaseStudiesSection() {
       badge: "ALLEGRO",
       title: "From 0.5% to 12%: Scaling Allegro's Automation Revenue",
       challenge: "Allegro's marketing automation generated just 0.5% of total revenue despite €50M+ investment. Leadership demanded 10x growth or shutdown.",
-      result: "Scaled automation from 0.5% to 12% revenue contribution in 18 months. Built 15-person team. Managed $2M budget. 102% YoY growth.",
+      result: "Scaled automation from 0.5% to 12% revenue contribution in 18 months. Built 15-person team. Managed €2M budget. 102% YoY growth.",
       heroMetric: "+11.5pp",
       metricLabel: "REVENUE GROWTH",
-      badges: ["102% YoY Growth", "$2M Budget", "15-Person Team", "AI/ML Integration"]
+      badges: ["102% YoY Growth", "€2M Budget", "15-Person Team", "AI/ML Integration"]
     },
     {
       badge: "ALLEGRO",

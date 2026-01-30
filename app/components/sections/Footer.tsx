@@ -21,13 +21,13 @@ export default function Footer() {
             </div>
 
             <p className={styles.description}>
-              Transforming CRM & Marketing Automation into revenue engines for
-              enterprise and scale-up companies.
+              Increasing conversions through UX optimization, marketing automation,
+              and data-driven CRM for ecommerce and scale-up companies.
             </p>
 
             <div className={styles.socialLinks}>
               <a
-                href="https://www.linkedin.com/in/rafal-oleksiak"
+                href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.socialLink}
@@ -145,7 +145,7 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className={styles.footerBottom}>
           <p className={styles.copyright}>
-            © 2025 Rafał Oleksiak. All rights reserved.
+            © 2026 Rafał Oleksiak. All rights reserved.
           </p>
         </div>
       </div>

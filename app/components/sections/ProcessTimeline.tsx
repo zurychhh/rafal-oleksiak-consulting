@@ -19,21 +19,21 @@ export default function ProcessTimeline() {
     {
       number: "01",
       title: "Discovery: Understanding Your Revenue Gap",
-      description: "I analyze your CRM setup, identify the revenue gap, set KPIs - not vanity metrics.",
+      description: "I audit your CRM, map your revenue pipeline, and set KPIs that tie directly to revenue — not vanity metrics.",
       position: "top",
       icon: "search"
     },
     {
       number: "02",
       title: "Roadmap: Your 90-Day Action Plan",
-      description: "I create roadmap showing what to do in days 1-30, 31-60, 61-90. Every initiative has estimated ROI.",
+      description: "You get a 90-day action plan with exact priorities for days 1-30, 31-60, 61-90. Every initiative has projected ROI.",
       position: "bottom",
       icon: "path"
     },
     {
       number: "03",
       title: "Quick Wins: Measurable Results in 30 Days",
-      description: "I implement 3-5 quick wins showing immediate ROI. Typical wins: 15-25% improvement.",
+      description: "I deploy 3-5 quick wins that show immediate ROI. Typical result: 15-25% uplift in the first month.",
       position: "top",
       icon: "lightning"
     },
@@ -47,7 +47,7 @@ export default function ProcessTimeline() {
     {
       number: "05",
       title: "Optimization: Continuous 5-10% Improvements",
-      description: "I establish monthly optimization sprints delivering 5-10% compound improvements.",
+      description: "Monthly optimization sprints that deliver 5-10% compound improvements — your revenue engine keeps accelerating.",
       position: "top",
       icon: "chart"
     }

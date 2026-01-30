@@ -81,7 +81,7 @@ export default function Collaboration({ onSuccess }: CollaborationProps) {
         <div className={styles.header}>
           <h2 className={styles.headline}>How We Can Work Together</h2>
           <p className={styles.subheadline}>
-            Specializing in CRM strategy, Marketing Automation implementation, and end-to-end consulting project management. My ROI-driven approach combines technical expertise with business strategy to deliver measurable results.
+            From UX and conversion optimization to CRM strategy, marketing automation, and full process management. 15 years of ecommerce experience, data-driven approach, real actions — not presentations.
           </p>
         </div>
 
@@ -288,13 +288,12 @@ export default function Collaboration({ onSuccess }: CollaborationProps) {
                 {/* Left Column - Textarea */}
                 <div className={`${styles.formColumn} ${styles.formColumnLeft}`}>
                   <div className={styles.formGroup}>
-                    <label htmlFor="needs">Describe Your Needs *</label>
+                    <label htmlFor="needs">Describe Your Needs</label>
                     <textarea
                       id="needs"
                       name="needs"
                       rows={7}
-                      placeholder="Tell me about your challenges, goals, and what you're looking to achieve..."
-                      required
+                      placeholder="E.g. 'We lose 30% of leads after demo — need help with follow-up automation and CRM setup.'"
                     />
                   </div>
                 </div>
@@ -305,13 +304,12 @@ export default function Collaboration({ onSuccess }: CollaborationProps) {
                   <div className={styles.formGroup}>
                     <label htmlFor="website">Your Website URL *</label>
                     <input
-                      type="url"
+                      type="text"
                       id="website"
                       name="website"
-                      placeholder="https://yourwebsite.com"
+                      placeholder="e.g. yourcompany.com"
                       required
                       autoComplete="url"
-                      inputMode="url"
                     />
                   </div>
 

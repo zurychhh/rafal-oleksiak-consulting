@@ -142,7 +142,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
-        submitButton.textContent = 'Yes, I Want to Double CRM Revenue →';
+        submitButton.textContent = 'Double My CRM Revenue →';
       }
     }
   };
@@ -158,10 +158,10 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
         <div className={styles.grid}>
           {/* LEFT COLUMN */}
           <div className={styles.leftColumn}>
-            <h2 className={styles.headline}>Your CRM Has Blind Spots. Let's Find Them.</h2>
+            <h2 className={styles.headline}>You're Losing Customers Between Click and Checkout. Let's Fix That.</h2>
 
             <p className={styles.description}>
-              Free audit + 30-minute strategy call. No fluff, just a clear roadmap to more revenue.
+              Free audit + 30-minute strategy call. No fluff — just data, real actions, and a clear roadmap to more revenue.
             </p>
 
             <p className={styles.subdescription}>
@@ -171,7 +171,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
             {/* Credibility */}
             <div className={styles.credibility}>
               <p className={styles.credibilityText}>
-                Trusted by Allegro, Booksy, Accenture, McDonald's
+                Trusted by Allegro, Booksy, Accenture, McDonald's, mBank
               </p>
 
               <div className={styles.logoGrid}>
@@ -179,6 +179,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
                 <div className={styles.logoItem}>Accenture</div>
                 <div className={styles.logoItem}>McDonald's</div>
                 <div className={styles.logoItem}>Booksy</div>
+                <div className={styles.logoItem}>mBank</div>
               </div>
             </div>
 
@@ -187,7 +188,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
               <p>
                 Connect on LinkedIn:{" "}
                 <a
-                  href="https://www.linkedin.com/in/rafal-oleksiak"
+                  href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -252,25 +253,24 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
                     Company Website
                   </label>
                   <input
-                    type="url"
+                    type="text"
                     id="website"
                     name="website"
                     required
                     className={styles.formInput}
                     autoComplete="url"
-                    inputMode="url"
+                    placeholder="e.g. yourcompany.com"
                   />
                 </div>
 
                 {/* Challenge Textarea */}
                 <div>
                   <label htmlFor="challenge" className={styles.textareaLabel}>
-                    What's blocking you from doubling CRM revenue?
+                    What's your biggest conversion or revenue challenge?
                   </label>
                   <textarea
                     id="challenge"
                     name="challenge"
-                    required
                     className={styles.formTextarea}
                     rows={4}
                   ></textarea>
@@ -293,7 +293,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
 
                 {/* Submit Button - FREE Audit */}
                 <button type="submit" className={styles.ctaButton}>
-                  Yes, I Want to Double CRM Revenue <span>→</span>
+                  Double My CRM Revenue <span>→</span>
                 </button>
               </form>
             </div>

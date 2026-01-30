@@ -4,7 +4,7 @@ export default function AchievementsTicker() {
   const achievements = [
     "Automation channel 0.5% → 12%",
     "Built 15-person team",
-    "$2M budget managed",
+    "€2M budget managed",
     "102% YoY growth achieved",
     "Hebe MarTech transformation",
     "AI/ML integration",

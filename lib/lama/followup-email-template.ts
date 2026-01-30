@@ -301,7 +301,7 @@ export function generateFollowupEmail(data: FollowupEmailData): string {
                                             </a>
                                         </p>
                                         <p style="margin: 0 0 16px 0;">
-                                            <a href="https://www.linkedin.com/in/rafal-oleksiak" style="font-family: Arial, Helvetica, sans-serif; color: #8B5CF6; text-decoration: none; font-size: 13px;">
+                                            <a href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/" style="font-family: Arial, Helvetica, sans-serif; color: #8B5CF6; text-decoration: none; font-size: 13px;">
                                                 LinkedIn
                                             </a>
                                         </p>

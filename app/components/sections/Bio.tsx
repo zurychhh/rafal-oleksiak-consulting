@@ -15,7 +15,7 @@ export default function Bio() {
           {/* LEFT: Name + Tagline */}
           <div className={styles.headerContent}>
             <h2 className={styles.bioName}>Rafał Oleksiak</h2>
-            <h3 className={styles.bioTagline}>Transforming CRM & Automation into Revenue Engines</h3>
+            <h3 className={styles.bioTagline}>15 Years Turning Ecommerce Traffic into Revenue</h3>
           </div>
 
           {/* RIGHT: Photo */}
@@ -42,25 +42,25 @@ export default function Bio() {
 
           {/* Block 1 */}
           <div className={styles.expertiseBlock}>
-            <h3 className={styles.blockTitle}>8+ Years Leading CRM at €Billion-Scale Companies</h3>
+            <h3 className={styles.blockTitle}>15 Years in Ecommerce. Practitioner, Not Just Consultant.</h3>
             <p className={styles.blockContent}>
-              I've led CRM strategy at Allegro (Poland's #1 marketplace), Accenture (global consulting), and Booksy (B2B SaaS). Built and managed 15-person teams, $2M+ budgets. Results: 11.5pp revenue growth, 102% YoY increase, 30% efficiency gains.
+              I've led conversion and CRM strategy at Allegro, Accenture, Booksy, and mBank. Built 15-person teams, managed €2M+ budgets. I don't give presentations — I ship results: 11.5pp revenue growth, 102% YoY increase, 30% efficiency gains.
             </p>
           </div>
 
           {/* Block 2 */}
           <div className={styles.expertiseBlock}>
-            <h3 className={styles.blockTitle}>From Zero to 12% Revenue: Building Automation Programs</h3>
+            <h3 className={styles.blockTitle}>From Zero to 12% Revenue: Full-Funnel Execution</h3>
             <p className={styles.blockContent}>
-              I don't just consult – I build. I've launched 3 automation programs from scratch (Allegro, Booksy, Jameel Motors), taking them from 0% to 10%+ revenue contribution in 18 months. Full-stack delivery: strategy → implementation → optimization.
+              I build from scratch — websites, automation programs, lifecycle systems. At Allegro and Booksy I took automation from 0% to 10%+ revenue in 18 months. UX, traffic optimization, CRM, automation — full-stack delivery with data as the first source of truth.
             </p>
           </div>
 
           {/* Block 3 */}
           <div className={styles.expertiseBlock}>
-            <h3 className={styles.blockTitle}>Teaching Marketing Automation at Top Business Schools</h3>
+            <h3 className={styles.blockTitle}>Sharing What Works: Instructor at LABA & Collegium Da Vinci</h3>
             <p className={styles.blockContent}>
-              Lead Instructor at LABA Business School (Warsaw), Guest Lecturer at Collegium Da Vinci. I created the marketing automation curriculum from scratch – now used by 200+ students. Salesforce Marketing Cloud certified.
+              I teach what I practice. Lead Instructor at LABA Business School (Warsaw), Guest Lecturer at Collegium Da Vinci. 200+ students trained on real-world automation frameworks — no theory, only battle-tested playbooks. Salesforce Marketing Cloud certified.
             </p>
           </div>
 
@@ -76,7 +76,7 @@ export default function Bio() {
               <div className={styles.metricLabel}>revenue growth</div>
             </div>
             <div className={styles.badge}>
-              <span className="gradient-number" style={{ fontSize: '40px' }}>$2M</span>
+              <span className="gradient-number" style={{ fontSize: '40px' }}>€2M</span>
               <div className={styles.metricLabel}>managed</div>
             </div>
             <div className={styles.badge}>
@@ -87,7 +87,7 @@ export default function Bio() {
 
           {/* Mission Statement */}
           <p className={styles.mission}>
-            Mission: Turn your owned channels into your #1 revenue driver.
+            Mission: More conversions, less ad spend. Real actions, not presentations.
           </p>
 
         </div>

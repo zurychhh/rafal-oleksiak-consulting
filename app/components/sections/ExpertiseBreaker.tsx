@@ -2,18 +2,18 @@ import styles from "./ExpertiseBreaker.module.css";
 
 export default function ExpertiseBreaker() {
   const tags = [
+    "◆ UX & Conversion Optimization",
     "◆ CRM Strategy",
     "◆ Marketing Automation",
+    "◆ Traffic Optimization",
     "◆ Data Analytics",
-    "◆ Personalization",
+    "◆ Lifecycle Management",
     "◆ Lead Generation",
-    "◆ Customer Lifecycle",
-    "◆ Digital Transformation",
+    "◆ Process Automation",
+    "◆ Paid → Free Traffic",
     "◆ AI/ML Integration",
     "◆ Omnichannel",
-    "◆ Process Optimization",
-    "◆ Churn Prevention",
-    "◆ Behavioral Segmentation"
+    "◆ Churn Prevention"
   ];
 
   return (

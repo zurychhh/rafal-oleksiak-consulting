@@ -82,9 +82,9 @@ export default function Services() {
 
         {/* Header */}
         <div className={styles.header}>
-          <h2 className={styles.headline}>Services That Drive Revenue</h2>
+          <h2 className={styles.headline}>How I Drive Your Revenue</h2>
           <p className={styles.subheadline}>
-            Transform your CRM from cost center to revenue engine - with measurable ROI in 30 days
+            From traffic optimization and UX to CRM and lifecycle automation — measurable ROI in 30 days
           </p>
         </div>
 
