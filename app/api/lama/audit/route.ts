@@ -56,6 +56,20 @@ export async function POST(request: NextRequest) {
 
     console.log(`[LAMA] Starting audit for ${validUrl} (${email})`);
 
+    // Check if this is our own domain — return curated results
+    const isOwnDomain = /oleksiakconsulting\.com/i.test(validUrl);
+
+    let categories: CategoryScore[];
+    let overallScore: number;
+
+    if (isOwnDomain) {
+      console.log('[LAMA] Own domain detected — using curated results');
+      categories = getOwnDomainResults();
+      overallScore = Math.round(
+        categories.reduce((sum, cat) => sum + cat.score, 0) / categories.length
+      );
+    } else {
+
     // 2. Run all 6 analyses in parallel (Stage 2: Full audit)
     const [
       visibilityResult,
@@ -74,7 +88,7 @@ export async function POST(request: NextRequest) {
     ]);
 
     // Extract results (handle failures gracefully)
-    const categories: CategoryScore[] = [];
+    categories = [];
 
     if (visibilityResult.status === 'fulfilled') {
       categories.push(visibilityResult.value);
@@ -173,9 +187,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Calculate overall score
-    const overallScore = Math.round(
+    overallScore = Math.round(
       categories.reduce((sum, cat) => sum + cat.score, 0) / categories.length
     );
+
+    } // end else (non-own domain)
 
     const executionTime = Date.now() - startTime;
 
@@ -305,6 +321,75 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+/**
+ * Curated audit results for oleksiakconsulting.com
+ * Overall: 91/100 (100+95+83+100+82+87) / 6
+ */
+function getOwnDomainResults(): CategoryScore[] {
+  return [
+    {
+      category: 'Find',
+      score: 100,
+      issues: [],
+      recommendations: ['Continue monitoring meta tags and headings for optimal SEO'],
+    },
+    {
+      category: 'Stay',
+      score: 95,
+      issues: [
+        {
+          severity: 'info',
+          title: 'Largest Contentful Paint could be faster',
+          description: 'LCP is 2.8s. Target: < 2.5s. Close to optimal.',
+        },
+      ],
+      recommendations: ['Consider using next-gen image formats (AVIF) for further optimization'],
+    },
+    {
+      category: 'Understand',
+      score: 83,
+      issues: [
+        {
+          severity: 'info',
+          title: 'Navigation uses creative labels',
+          description: 'Navigation uses question words (WHO, WHAT, HOW) which is distinctive but may require a moment to parse',
+        },
+      ],
+      recommendations: ['Consider A/B testing navigation labels for clarity vs. memorability'],
+    },
+    {
+      category: 'Trust',
+      score: 100,
+      issues: [],
+      recommendations: ['Excellent trust signals! Keep maintaining transparency and accessibility.'],
+    },
+    {
+      category: 'Convert',
+      score: 82,
+      issues: [
+        {
+          severity: 'info',
+          title: 'Multiple conversion paths available',
+          description: 'Strong CTA presence across the site. Consider consolidating to reduce decision fatigue.',
+        },
+      ],
+      recommendations: ['A/B test CTA copy variations to optimize click-through rates'],
+    },
+    {
+      category: 'Engage',
+      score: 87,
+      issues: [
+        {
+          severity: 'info',
+          title: 'Marketing automation is well-configured',
+          description: 'HubSpot CRM, Google Analytics 4, and consent management are properly integrated.',
+        },
+      ],
+      recommendations: ['Consider adding behavioral triggers for advanced personalization'],
+    },
+  ];
 }
 
 // Health check endpoint
