@@ -8,7 +8,7 @@
 
 ---
 
-## KROK A: Railway Backend — zmiany (3 zmiany)
+## KROK A: Railway Backend — zmiany (2 zmiany + seed data)
 
 ### A1. Dodać `?agent_id=` filtr na publicznych endpointach
 
@@ -49,13 +49,13 @@ Skrypt seed (uruchomiony raz po deploy):
 
 Alternatywnie: przez istniejące API endpointy (POST /tenants, POST /agents, POST /auth/register) po zalogowaniu jako superadmin.
 
-### A3. Dodać `tenant_id` do GET /agents/me (lub stworzyć endpoint)
+### A3. `/agents/me` — NIE POTRZEBNY
 
-Sprawdzić czy `/agents/me` istnieje. Spec go wymaga. Aktualnie istnieje `/tenants/me` i `GET /agents` (filtruje po tenant). Jeśli `/agents/me` nie istnieje — dodać jako alias do `GET /agents` z filtrem po user's tenant.
+`GET /agents` już filtruje po `tenant_id` zalogowanego usera. Dodatkowo istnieje `GET /tenants/me` i `GET /auth/me`. Osobny endpoint `/agents/me` nie jest potrzebny.
 
 ### A3.2. Testy backward compatibility (po KAŻDYM deploy)
 
-6 curl testów z sekcji A3.2 specyfikacji — uruchomić po każdym push do Railway.
+7 testów z sekcji A5 specyfikacji v2 — uruchomić po każdym push do Railway. Test #6 weryfikuje że fake UUID (`00000000-...`) zwraca 0 postów (potwierdzenie że filtr działa).
 
 ---
 
