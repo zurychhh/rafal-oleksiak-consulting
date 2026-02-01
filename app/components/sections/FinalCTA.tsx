@@ -95,7 +95,7 @@ export default function FinalCTA({ onSuccess }: FinalCTAProps) {
 
       if (response.ok) {
         // Track successful form submission
-        analytics.trackFormSubmission('contact_form', true);
+        analytics.trackFormSubmission('contact_form', true, formData.get('email') as string);
 
         // Capture form values before reset (needed for audit)
         const auditData = {

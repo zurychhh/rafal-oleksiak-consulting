@@ -3,6 +3,9 @@ import { Poppins, DM_Sans } from "next/font/google";
 import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold only)
 import "./globals.css"; // Remaining below-the-fold styles
 import FontAwesomeLoader from "./components/FontAwesomeLoader";
+import ConsentMode from "./components/ConsentMode";
+import { GTMScript, GTMNoScript } from "./components/GTMScript";
+import SchemaOrg from "./components/SchemaOrg";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { WebVitals } from "./components/WebVitals";
 import { ScrollTracker } from "./components/ScrollTracker";
@@ -74,16 +77,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Consent Mode v2 - MUST be first script (before GTM/GA4) */}
+        <ConsentMode />
+
         {/* Performance: Preconnect to external domains for faster DNS resolution */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
 
         {/* Performance: DNS prefetch for third-party services */}
         <link rel="dns-prefetch" href="https://calendly.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        
+        <link rel="dns-prefetch" href="https://www.googleadservices.com" />
+
         {/* Performance: Preload critical image for LCP optimization */}
         <link
           rel="preload"
@@ -91,15 +99,23 @@ export default function RootLayout({
           as="image"
           fetchPriority="high"
         />
+
+        {/* Schema.org JSON-LD structured data for rich snippets */}
+        <SchemaOrg />
       </head>
       <body
         className={`${poppins.variable} ${dmSans.variable} antialiased`}
       >
+        {/* GTM noscript fallback - must be first in body */}
+        <GTMNoScript />
+
         {/* Performance: Async load Font Awesome to prevent render blocking */}
         <FontAwesomeLoader />
         {children}
 
-        {/* Google Analytics - loaded AFTER children for optimal performance */}
+        {/* GTM container (loads GA4, Google Ads, remarketing via GTM) */}
+        <GTMScript />
+        {/* Fallback: direct GA4 when GTM is not configured */}
         <GoogleAnalytics />
         <WebVitals />
         <ScrollTracker />

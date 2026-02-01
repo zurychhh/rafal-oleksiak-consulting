@@ -243,6 +243,31 @@ export default function AutoPublishClient() {
   const [revealed, setRevealed] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
 
+  // Trial form state
+  const [trialForm, setTrialForm] = useState({ company: '', email: '', website: '', cms: '', message: '' });
+  const [trialLoading, setTrialLoading] = useState(false);
+  const [trialSuccess, setTrialSuccess] = useState(false);
+  const [trialError, setTrialError] = useState('');
+
+  async function handleTrialSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setTrialLoading(true);
+    setTrialError('');
+    try {
+      const res = await fetch('/api/auto-publish-trial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(trialForm),
+      });
+      if (!res.ok) throw new Error('Failed to submit');
+      setTrialSuccess(true);
+    } catch {
+      setTrialError('Something went wrong. Please try again or email us directly.');
+    } finally {
+      setTrialLoading(false);
+    }
+  }
+
   // IntersectionObserver for timeline reveal
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -317,14 +342,9 @@ export default function AutoPublishClient() {
             and publishes &mdash; you get organic traffic growth without lifting a finger.
           </p>
           <div className={s.heroCtas}>
-            <a
-              href="https://calendly.com/rafaloleksiakconsulting/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={s.ctaPrimary}
-            >
+            <button onClick={() => scrollTo('trial')} className={s.ctaPrimary}>
               Start Free Trial &rarr;
-            </a>
+            </button>
             <button onClick={() => scrollTo('demo')} className={s.ctaGhost}>
               See How It Works &darr;
             </button>
@@ -607,14 +627,23 @@ export default function AutoPublishClient() {
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="https://calendly.com/rafaloleksiakconsulting/30min"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={plan.highlighted ? s.ctaPrimary : s.ctaGhost}
-                >
-                  {plan.cta}
-                </a>
+                {plan.cta === 'Book a Call' ? (
+                  <a
+                    href="https://calendly.com/rafaloleksiakconsulting/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={s.ctaGhost}
+                  >
+                    {plan.cta}
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => scrollTo('trial')}
+                    className={plan.highlighted ? s.ctaPrimary : s.ctaGhost}
+                  >
+                    {plan.cta}
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -643,6 +672,106 @@ export default function AutoPublishClient() {
         </div>
       </section>
 
+      {/* ─── TRIAL FORM ─── */}
+      <section id="trial" className={s.trialSection}>
+        <div className={s.container}>
+          <h2 className={s.sectionTitle}>
+            Start Your Free <span className={s.gradientText}>Trial</span>
+          </h2>
+          <p className={s.sectionSub}>
+            Tell us about your business and we&apos;ll set up your AI content agent within 24 hours.
+          </p>
+          <div className={s.trialFormWrapper}>
+            {trialSuccess ? (
+              <div className={s.trialSuccess}>
+                <div className={s.trialSuccessIcon}>&#10003;</div>
+                <h3>Request Received!</h3>
+                <p>We&apos;ll configure your AI agent and send you login credentials within 24 hours. Check your email at <strong>{trialForm.email}</strong> for next steps.</p>
+                <a
+                  href="https://calendly.com/rafaloleksiakconsulting/30min"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={s.ctaGhost}
+                >
+                  Or book a call to discuss your strategy
+                </a>
+              </div>
+            ) : (
+              <form onSubmit={handleTrialSubmit} className={s.trialForm}>
+                <div className={s.trialRow}>
+                  <div className={s.trialField}>
+                    <label className={s.trialLabel}>Company Name *</label>
+                    <input
+                      type="text"
+                      required
+                      className={s.trialInput}
+                      placeholder="Your ecommerce brand"
+                      value={trialForm.company}
+                      onChange={(e) => setTrialForm({ ...trialForm, company: e.target.value })}
+                    />
+                  </div>
+                  <div className={s.trialField}>
+                    <label className={s.trialLabel}>Email *</label>
+                    <input
+                      type="email"
+                      required
+                      className={s.trialInput}
+                      placeholder="you@company.com"
+                      value={trialForm.email}
+                      onChange={(e) => setTrialForm({ ...trialForm, email: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <div className={s.trialRow}>
+                  <div className={s.trialField}>
+                    <label className={s.trialLabel}>Website URL</label>
+                    <input
+                      type="url"
+                      className={s.trialInput}
+                      placeholder="https://yourstore.com"
+                      value={trialForm.website}
+                      onChange={(e) => setTrialForm({ ...trialForm, website: e.target.value })}
+                    />
+                  </div>
+                  <div className={s.trialField}>
+                    <label className={s.trialLabel}>CMS / Blog Platform</label>
+                    <select
+                      className={s.trialInput}
+                      value={trialForm.cms}
+                      onChange={(e) => setTrialForm({ ...trialForm, cms: e.target.value })}
+                    >
+                      <option value="">Select platform...</option>
+                      <option value="WordPress">WordPress</option>
+                      <option value="Shopify">Shopify</option>
+                      <option value="WooCommerce">WooCommerce</option>
+                      <option value="Custom / Headless CMS">Custom / Headless CMS</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div className={s.trialField}>
+                  <label className={s.trialLabel}>Anything else we should know?</label>
+                  <textarea
+                    className={s.trialTextarea}
+                    placeholder="Tell us about your content goals, niche, target keywords..."
+                    rows={3}
+                    value={trialForm.message}
+                    onChange={(e) => setTrialForm({ ...trialForm, message: e.target.value })}
+                  />
+                </div>
+                {trialError && <p className={s.trialError}>{trialError}</p>}
+                <button type="submit" className={s.ctaPrimary} disabled={trialLoading}>
+                  {trialLoading ? 'Submitting...' : 'Request Free Trial →'}
+                </button>
+                <p className={s.trialDisclaimer}>
+                  No credit card required. 14-day free trial with full Growth plan features.
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* ─── FINAL CTA ─── */}
       <section className={s.finalCta}>
         <div className={s.floatingShapes}>
@@ -659,14 +788,9 @@ export default function AutoPublishClient() {
             Start publishing SEO-optimized content today. No credit card required.
           </p>
           <div className={s.finalCtas}>
-            <a
-              href="https://calendly.com/rafaloleksiakconsulting/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={s.ctaPrimary}
-            >
+            <button onClick={() => scrollTo('trial')} className={s.ctaPrimary}>
               Start Free Trial &rarr;
-            </a>
+            </button>
             <a
               href="https://calendly.com/rafaloleksiakconsulting/30min"
               target="_blank"

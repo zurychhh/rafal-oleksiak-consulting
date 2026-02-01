@@ -1,31 +1,118 @@
 /**
- * Google Analytics 4 utilities for Next.js 16
- * Standardized implementation using @next/third-parties
+ * Analytics & Conversion Tracking
  *
- * @see https://nextjs.org/docs/app/guides/third-party-libraries#google-analytics
+ * Dual-mode: Works with both GTM (dataLayer) and direct gtag.
+ * - If GTM is configured: events go to dataLayer → GTM routes to GA4/Google Ads
+ * - If only GA4: events go via @next/third-parties sendGAEvent
+ *
+ * Google Ads conversion tracking:
+ * - form_submission → Google Ads "Lead" conversion
+ * - calendly_click → Google Ads "Schedule" conversion
+ * - Enhanced conversions: hashed email sent with conversion events
  */
 import { sendGAEvent } from '@next/third-parties/google'
 
 // Environment variables
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || ''
+const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || ''
+const GOOGLE_ADS_CONVERSION_LABEL = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL || ''
 
 /**
- * Check if GA should be enabled (not in development)
- * @returns boolean - true if GA should load
+ * Check if analytics should be enabled
  */
 export const isAnalyticsEnabled = (): boolean => {
   return (
     process.env.NODE_ENV !== 'development' &&
-    Boolean(GA_MEASUREMENT_ID) &&
-    GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX'
+    (Boolean(GA_MEASUREMENT_ID) || Boolean(GTM_ID))
   )
 }
 
 /**
- * Web Vitals metric interface
- * Core Web Vitals: LCP, FID, CLS
- * Other metrics: FCP, TTFB, INP
+ * Check if GTM is configured (preferred path)
  */
+const isGTMEnabled = (): boolean => {
+  return Boolean(GTM_ID) && typeof window !== 'undefined'
+}
+
+// ---------------------------------------------------------------------------
+// Core event dispatch
+// ---------------------------------------------------------------------------
+
+/**
+ * Push event to dataLayer (for GTM) or send via sendGAEvent
+ */
+function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
+  if (!isAnalyticsEnabled()) {
+    console.log('Event (dev):', eventName, params)
+    return
+  }
+
+  if (isGTMEnabled()) {
+    // GTM path: push to dataLayer
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any
+    w.dataLayer = w.dataLayer || []
+    w.dataLayer.push({
+      event: eventName,
+      ...params,
+    })
+  } else {
+    // Direct GA4 path
+    sendGAEvent({
+      event_name: eventName,
+      ...params,
+    })
+  }
+}
+
+/**
+ * Send Google Ads conversion event
+ * Works with both GTM (via dataLayer) and direct gtag
+ */
+function trackGoogleAdsConversion(params: {
+  conversionLabel?: string;
+  value?: number;
+  currency?: string;
+  transactionId?: string;
+  enhancedConversions?: { email?: string; phone?: string };
+}) {
+  if (!GOOGLE_ADS_ID) return
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const w = window as any
+  if (typeof w.gtag !== 'function') return
+
+  const conversionData: Record<string, unknown> = {
+    send_to: `${GOOGLE_ADS_ID}/${params.conversionLabel || GOOGLE_ADS_CONVERSION_LABEL}`,
+  }
+
+  if (params.value !== undefined) {
+    conversionData.value = params.value
+    conversionData.currency = params.currency || 'PLN'
+  }
+
+  if (params.transactionId) {
+    conversionData.transaction_id = params.transactionId
+  }
+
+  // Enhanced conversions - hashed user data for better attribution
+  if (params.enhancedConversions?.email) {
+    w.gtag('set', 'user_data', {
+      email: params.enhancedConversions.email,
+      ...(params.enhancedConversions.phone
+        ? { phone_number: params.enhancedConversions.phone }
+        : {}),
+    })
+  }
+
+  w.gtag('event', 'conversion', conversionData)
+}
+
+// ---------------------------------------------------------------------------
+// Web Vitals
+// ---------------------------------------------------------------------------
+
 export interface WebVitalsMetric {
   id: string
   name: string
@@ -34,153 +121,127 @@ export interface WebVitalsMetric {
   delta: number
 }
 
-/**
- * Custom Google Analytics event interface
- */
-export interface GAEvent {
-  action: string          // Event name (snake_case)
-  category?: string       // Event category (e.g., 'conversion', 'engagement')
-  label?: string          // Event label (additional context)
-  value?: number          // Numeric value (optional)
-}
-
-/**
- * Reports Web Vitals metrics to Google Analytics
- * Automatically converts CLS to milliseconds for consistency
- *
- * @param metric - Web Vitals metric object
- */
 export function reportWebVitals(metric: WebVitalsMetric): void {
-  if (!isAnalyticsEnabled()) {
-    // Log to console in development
-    console.log('Web Vitals (dev):', {
-      name: metric.name,
-      value: metric.value,
-      rating: metric.rating,
-    })
-    return
-  }
-
-  // Convert metric values to proper format
-  // CLS is multiplied by 1000 for better readability in GA4
   const value = Math.round(
     metric.name === 'CLS' ? metric.value * 1000 : metric.value
   )
 
-  // Send to GA4 using @next/third-parties
-  sendGAEvent({
-    event_name: 'web_vitals',
+  pushEvent('web_vitals', {
     event_category: 'Web Vitals',
     event_label: metric.name,
-    value: value,
+    value,
     metric_id: metric.id,
     metric_rating: metric.rating,
     metric_delta: metric.delta,
   })
 }
 
-/**
- * Sends custom events to Google Analytics
- * Use this for tracking user interactions
- *
- * @param event - Custom event object
- */
-export function trackEvent(event: GAEvent): void {
-  if (!isAnalyticsEnabled()) {
-    // Log to console in development
-    console.log('Event (dev):', event)
-    return
-  }
+// ---------------------------------------------------------------------------
+// Custom event types
+// ---------------------------------------------------------------------------
 
-  sendGAEvent({
-    event_name: event.action,
+export interface GAEvent {
+  action: string
+  category?: string
+  label?: string
+  value?: number
+}
+
+export function trackEvent(event: GAEvent): void {
+  pushEvent(event.action, {
     event_category: event.category || 'engagement',
     event_label: event.label,
     value: event.value,
   })
 }
 
-/**
- * Common event trackers for Rafał Oleksiak Consulting website
- * Pre-configured events for easy implementation
- */
+// ---------------------------------------------------------------------------
+// Pre-configured event trackers
+// ---------------------------------------------------------------------------
+
 export const analytics = {
-  /**
-   * Track hero section CTA click
-   * Event: cta_hero_click
-   */
+  /** Hero CTA click */
   trackHeroCTA: () => {
-    trackEvent({
-      action: 'cta_hero_click',
-      category: 'conversion',
-      label: 'hero_section',
-    })
+    pushEvent('cta_hero_click', { event_category: 'conversion', event_label: 'hero_section' })
   },
 
-  /**
-   * Track footer CTA click
-   * Event: cta_footer_click
-   */
+  /** Footer CTA click */
   trackFooterCTA: () => {
-    trackEvent({
-      action: 'cta_footer_click',
-      category: 'conversion',
-      label: 'footer_section',
-    })
+    pushEvent('cta_footer_click', { event_category: 'conversion', event_label: 'footer_section' })
   },
 
   /**
-   * Track Calendly link click
-   * Event: calendly_click
-   * @param location - Where the Calendly link was clicked (e.g., 'footer', 'hero')
+   * Calendly click - tracked as Google Ads conversion
    */
   trackCalendlyClick: (location: string) => {
-    trackEvent({
-      action: 'calendly_click',
-      category: 'conversion',
-      label: location,
+    pushEvent('calendly_click', { event_category: 'conversion', event_label: location })
+
+    // Google Ads: schedule conversion
+    trackGoogleAdsConversion({
+      conversionLabel: process.env.NEXT_PUBLIC_GOOGLE_ADS_CALENDLY_LABEL,
     })
   },
 
   /**
-   * Track contact form submission
-   * Event: form_submission
-   * @param formName - Name of the form (e.g., 'contact_form')
-   * @param success - Whether submission was successful
+   * Form submission - tracked as Google Ads lead conversion
+   * Includes enhanced conversions (hashed email)
    */
-  trackFormSubmission: (formName: string, success: boolean) => {
-    trackEvent({
-      action: 'form_submission',
-      category: 'conversion',
-      label: formName,
+  trackFormSubmission: (formName: string, success: boolean, email?: string) => {
+    pushEvent('form_submission', {
+      event_category: 'conversion',
+      event_label: formName,
       value: success ? 1 : 0,
     })
+
+    // GA4 recommended event for lead gen
+    if (success) {
+      pushEvent('generate_lead', {
+        event_category: 'conversion',
+        event_label: formName,
+        value: 1,
+        currency: 'PLN',
+      })
+
+      // Google Ads: lead conversion with enhanced conversions
+      trackGoogleAdsConversion({
+        value: 1,
+        currency: 'PLN',
+        enhancedConversions: email ? { email } : undefined,
+      })
+    }
   },
 
-  /**
-   * Track scroll depth milestones
-   * Event: scroll_milestone
-   * @param percentage - Scroll depth percentage (25, 50, 75, 100)
-   */
+  /** Scroll depth milestone */
   trackScrollDepth: (percentage: number) => {
-    trackEvent({
-      action: 'scroll_milestone',
-      category: 'engagement',
-      label: `${percentage}%`,
+    pushEvent('scroll_milestone', {
+      event_category: 'engagement',
+      event_label: `${percentage}%`,
       value: percentage,
     })
   },
 
-  /**
-   * Track paid audit checkout started
-   * Event: paid_audit_checkout_started
-   * @param url - The website URL being audited
-   */
+  /** LAMA audit started */
+  trackAuditStarted: (url: string) => {
+    pushEvent('audit_started', {
+      event_category: 'conversion',
+      event_label: url,
+    })
+  },
+
+  /** LAMA audit completed */
+  trackAuditCompleted: (url: string, score: number) => {
+    pushEvent('audit_completed', {
+      event_category: 'conversion',
+      event_label: url,
+      value: score,
+    })
+  },
+
+  /** Paid audit checkout (archived but preserved) */
   trackPaidAuditCheckout: (url: string) => {
-    trackEvent({
-      action: 'paid_audit_checkout_started',
-      category: 'conversion',
-      label: url,
+    pushEvent('paid_audit_checkout_started', {
+      event_category: 'conversion',
+      event_label: url,
     })
   },
 }
