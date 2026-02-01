@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Logo from '../components/ui/Logo';
 import s from './auto-publish.module.css';
 
 /* ═══════════════════════════════════════════════════════════
@@ -305,9 +306,7 @@ export default function AutoPublishClient() {
       {/* ─── HEADER ─── */}
       <header className={s.header}>
         <div className={s.headerInner}>
-          <Link href="/" className={s.logo}>
-            Oleksiak<span className={s.logoDot}>.</span>
-          </Link>
+          <Logo />
           <nav className={s.nav}>
             <a href="#features" className={s.navLink}>Features</a>
             <a href="#pricing" className={s.navLink}>Pricing</a>
