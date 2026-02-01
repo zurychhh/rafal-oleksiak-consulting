@@ -382,7 +382,7 @@ export function PostsClient({
                   {(() => {
                     const seo = computeSeoScore(post);
                     return (
-                      <span className={styles.ovSeoScoreBadge} style={{ background: seoColor(seo) }}>
+                      <span className={styles.ovSeoScoreBadge} style={{ color: seoColor(seo), borderColor: seoColor(seo) }}>
                         {seo}
                       </span>
                     );

@@ -197,7 +197,7 @@ export function OverviewClient({
       <div className={styles.ovStatGrid}>
         <div className={styles.ovStatCard}>
           <p className={styles.ovStatLabel}>Posts Published</p>
-          <p className={styles.ovStatValue}>{scheduleStats.successful_posts}</p>
+          <p className={styles.ovStatValue}>{publishedPosts.length}</p>
         </div>
         <div className={styles.ovStatCard}>
           <p className={styles.ovStatLabel}>Draft / Scheduled</p>
@@ -261,7 +261,7 @@ export function OverviewClient({
                     className={styles.ovChartBarFill}
                     style={{
                       height: `${Math.min(
-                        (scheduleStats.posts_last_7_days / Math.max(scheduleStats.posts_last_30_days, 1)) * 100,
+                        (scheduleStats.posts_last_7_days / Math.max(posts.length, 1)) * 100,
                         100,
                       )}%`,
                     }}
@@ -272,7 +272,15 @@ export function OverviewClient({
               </div>
               <div className={styles.ovChartBarGroup}>
                 <div className={styles.ovChartBarTrack}>
-                  <div className={styles.ovChartBarFill} style={{ height: '100%' }} />
+                  <div
+                    className={styles.ovChartBarFill}
+                    style={{
+                      height: `${Math.min(
+                        (scheduleStats.posts_last_30_days / Math.max(posts.length, 1)) * 100,
+                        100,
+                      )}%`,
+                    }}
+                  />
                 </div>
                 <span className={styles.ovChartBarLabel}>30d</span>
                 <span className={styles.ovChartBarValue}>{scheduleStats.posts_last_30_days}</span>
@@ -285,10 +293,10 @@ export function OverviewClient({
                   />
                 </div>
                 <span className={styles.ovChartBarLabel}>All</span>
-                <span className={styles.ovChartBarValue}>{scheduleStats.total_posts_generated}</span>
+                <span className={styles.ovChartBarValue}>{posts.length}</span>
               </div>
             </div>
-            <p className={styles.ovChartCaption}>Posts Generated</p>
+            <p className={styles.ovChartCaption}>Total Posts</p>
           </div>
 
           {/* Overall SEO Score Circle */}
