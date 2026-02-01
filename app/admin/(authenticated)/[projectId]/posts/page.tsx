@@ -15,7 +15,7 @@ export default async function PostsPage({
   let posts, agents, tenants;
   try {
     [posts, agents, tenants] = await Promise.all([
-      getPosts(token),
+      getPosts(token, 1, 100),
       getAgents(token),
       getTenants(token),
     ]);
@@ -25,10 +25,12 @@ export default async function PostsPage({
 
   // Find current tenant by slug and filter agents/posts to this project
   const tenant = tenants.find((t) => t.slug === projectId);
+  let tenantAgentIdList: string[] = [];
   if (tenant) {
     const tenantAgentIds = new Set(
       agents.filter((a) => a.tenant_id === tenant.id).map((a) => a.id),
     );
+    tenantAgentIdList = Array.from(tenantAgentIds);
     agents = agents.filter((a) => tenantAgentIds.has(a.id));
     posts = {
       ...posts,
@@ -41,6 +43,7 @@ export default async function PostsPage({
     <PostsClient
       initialPosts={posts}
       agents={agents}
+      tenantAgentIds={tenantAgentIdList}
       projectSlug={projectId}
       token={token}
     />

@@ -22,17 +22,67 @@ async function apiFetch(path: string, token: string, options?: RequestInit) {
   return res.json();
 }
 
+/** Compute a composite SEO score (0-100) for a single post */
+function computeSeoScore(post: PostListResponse['items'][0]): number {
+  let score = 0;
+  let maxScore = 0;
+
+  maxScore += 25;
+  const wc = post.word_count ?? 0;
+  if (wc >= 1500) score += 25;
+  else if (wc >= 1000) score += 20;
+  else if (wc >= 600) score += 12;
+  else if (wc >= 300) score += 6;
+
+  maxScore += 15;
+  const mt = post.meta_title ?? '';
+  if (mt.length > 0) { score += 7; if (mt.length >= 30 && mt.length <= 65) score += 8; else if (mt.length >= 20 && mt.length <= 80) score += 4; }
+
+  maxScore += 15;
+  const md = post.meta_description ?? '';
+  if (md.length > 0) { score += 7; if (md.length >= 120 && md.length <= 165) score += 8; else if (md.length >= 80 && md.length <= 200) score += 4; }
+
+  maxScore += 15;
+  const kwCount = (post.keywords ?? []).length;
+  if (kwCount >= 2 && kwCount <= 5) score += 15; else if (kwCount === 1) score += 8; else if (kwCount > 5) score += 10;
+
+  maxScore += 15;
+  const density = post.keyword_density;
+  if (density && typeof density === 'object') {
+    const values = Object.values(density);
+    if (values.length > 0) {
+      const primary = Math.max(...values);
+      if (primary >= 0.5 && primary <= 2.5) score += 15; else if (primary > 0 && primary < 0.5) score += 8; else if (primary > 2.5 && primary <= 4) score += 8; else if (primary > 0) score += 4;
+    }
+  }
+
+  maxScore += 15;
+  const rs = post.readability_score ?? 0;
+  if (rs >= 40 && rs <= 80) score += 15; else if (rs >= 20 && rs < 40) score += 10; else if (rs > 80) score += 10; else if (rs > 0) score += 5;
+
+  return maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+}
+
+function seoColor(score: number): string {
+  if (score >= 75) return '#4ade80';
+  if (score >= 50) return '#fbbf24';
+  return '#f87171';
+}
+
 export function PostsClient({
   initialPosts,
   agents,
+  tenantAgentIds,
   projectSlug,
   token,
 }: {
   initialPosts: PostListResponse;
   agents: AgentResponse[];
+  tenantAgentIds: string[];
   projectSlug: string;
   token: string;
 }) {
+  const agentIdSet = new Set(tenantAgentIds);
   const router = useRouter();
   const [posts, setPosts] = useState(initialPosts.items);
   const [showCreate, setShowCreate] = useState(false);
@@ -56,8 +106,8 @@ export function PostsClient({
 
   async function refreshPosts() {
     try {
-      const data = await apiFetch('/posts?page_size=50', token);
-      setPosts(data.items);
+      const data = await apiFetch('/posts?page_size=100', token);
+      setPosts(data.items.filter((p: { agent_id: string }) => agentIdSet.has(p.agent_id)));
     } catch { /* ignore */ }
   }
 
@@ -313,6 +363,7 @@ export function PostsClient({
           <thead>
             <tr>
               <th>Title</th>
+              <th>SEO</th>
               <th>Status</th>
               <th>Words</th>
               <th>Date</th>
@@ -327,6 +378,16 @@ export function PostsClient({
                       {post.title || 'Untitled'}
                     </Link>
                   </td>
+                <td>
+                  {(() => {
+                    const seo = computeSeoScore(post);
+                    return (
+                      <span className={styles.ovSeoScoreBadge} style={{ background: seoColor(seo) }}>
+                        {seo}
+                      </span>
+                    );
+                  })()}
+                </td>
                 <td>
                   <span
                     className={
