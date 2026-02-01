@@ -356,44 +356,60 @@ export function OverviewClient({
       </div>
 
       {/* SEO Impact Estimation */}
-      {publishedPosts.length > 0 && (
-        <div className={styles.ovSeoImpactSection}>
-          <h3 className={styles.ovSectionTitle}>SEO Impact Estimation</h3>
-          <div className={styles.ovSeoImpactGrid}>
-            <div className={styles.ovSeoImpactCard}>
-              <p className={styles.ovSeoImpactLabel}>Total Indexed Content</p>
-              <p className={styles.ovSeoImpactValue}>{totalWords.toLocaleString()} words</p>
-              <p className={styles.ovSeoImpactMeta}>{publishedPosts.length} published articles</p>
+      {publishedPosts.length > 0 && (() => {
+        const uniqueKeywords = [...new Set(publishedPosts.flatMap((p) => p.keywords))];
+        // Backlinko B2B Content Marketing Report: avg B2B blog post ranks for 29 keywords
+        const estRankableKeywords = uniqueKeywords.length + Math.round(publishedPosts.length * 29);
+        // Backlinko: median B2B blog post = 49 organic visits/month (after 3-12 months maturity)
+        // Top 10% = ~2,001/month. We use conservative: median 49, optimistic top-quartile ~200
+        // Weighted by SEO score: score/100 acts as quality multiplier
+        const medianPerPost = 49;
+        const topQuartilePerPost = 200;
+        const qualityMultiplier = avgSeoScore / 100;
+        const estTrafficLow = Math.round(publishedPosts.length * medianPerPost * qualityMultiplier);
+        const estTrafficHigh = Math.round(publishedPosts.length * topQuartilePerPost * qualityMultiplier);
+        // Content velocity from schedule
+        const velocityPerMonth = activeSchedule
+          ? activeSchedule.interval === 'daily' ? 30 : activeSchedule.interval === 'every_3_days' ? 10 : activeSchedule.interval === 'weekly' ? 4 : 2
+          : 0;
+
+        return (
+          <div className={styles.ovSeoImpactSection}>
+            <h3 className={styles.ovSectionTitle}>SEO Impact Estimation</h3>
+            <div className={styles.ovSeoImpactGrid}>
+              <div className={styles.ovSeoImpactCard}>
+                <p className={styles.ovSeoImpactLabel}>Total Indexed Content</p>
+                <p className={styles.ovSeoImpactValue}>{totalWords.toLocaleString()} words</p>
+                <p className={styles.ovSeoImpactMeta}>{publishedPosts.length} published articles &middot; avg {publishedPosts.length > 0 ? Math.round(totalWords / publishedPosts.length).toLocaleString() : 0} words/post</p>
+              </div>
+              <div className={styles.ovSeoImpactCard}>
+                <p className={styles.ovSeoImpactLabel}>Est. Rankable Keywords</p>
+                <p className={styles.ovSeoImpactValue}>
+                  ~{estRankableKeywords.toLocaleString()}
+                </p>
+                <p className={styles.ovSeoImpactMeta}>{uniqueKeywords.length} targeted + ~{publishedPosts.length * 29} variations (avg post ranks for 29 keywords &mdash; Backlinko)</p>
+              </div>
+              <div className={styles.ovSeoImpactCard}>
+                <p className={styles.ovSeoImpactLabel}>Est. Monthly Organic Potential</p>
+                <p className={styles.ovSeoImpactValue}>
+                  {estTrafficLow.toLocaleString()} &ndash; {estTrafficHigh.toLocaleString()}
+                </p>
+                <p className={styles.ovSeoImpactMeta}>visits/mo after 3-12 months maturity ({publishedPosts.length} posts &times; 49-200 visits &times; {avgSeoScore}% quality)</p>
+              </div>
+              <div className={styles.ovSeoImpactCard}>
+                <p className={styles.ovSeoImpactLabel}>Content Velocity</p>
+                <p className={styles.ovSeoImpactValue}>
+                  {velocityPerMonth}
+                </p>
+                <p className={styles.ovSeoImpactMeta}>posts/month projected &middot; 9+ posts/mo = +35.8% YoY traffic (StrataBeat)</p>
+              </div>
             </div>
-            <div className={styles.ovSeoImpactCard}>
-              <p className={styles.ovSeoImpactLabel}>Est. Keywords Targeted</p>
-              <p className={styles.ovSeoImpactValue}>
-                {[...new Set(publishedPosts.flatMap((p) => p.keywords))].length}
-              </p>
-              <p className={styles.ovSeoImpactMeta}>unique keywords across all posts</p>
-            </div>
-            <div className={styles.ovSeoImpactCard}>
-              <p className={styles.ovSeoImpactLabel}>Est. Monthly Organic Potential</p>
-              <p className={styles.ovSeoImpactValue}>
-                {Math.round(publishedPosts.length * 45 * (avgSeoScore / 100)).toLocaleString()} – {Math.round(publishedPosts.length * 120 * (avgSeoScore / 100)).toLocaleString()}
-              </p>
-              <p className={styles.ovSeoImpactMeta}>visits/month (based on {publishedPosts.length} posts, score {avgSeoScore}/100)</p>
-            </div>
-            <div className={styles.ovSeoImpactCard}>
-              <p className={styles.ovSeoImpactLabel}>SEO Content Velocity</p>
-              <p className={styles.ovSeoImpactValue}>
-                {activeSchedule
-                  ? activeSchedule.interval === 'daily' ? '30' : activeSchedule.interval === 'every_3_days' ? '10' : activeSchedule.interval === 'weekly' ? '4' : '2'
-                  : '0'}
-              </p>
-              <p className={styles.ovSeoImpactMeta}>posts/month projected</p>
-            </div>
+            <p className={styles.ovSeoImpactNote}>
+              Formulas: Traffic per post uses Backlinko B2B Content Report median (49 visits/mo) and top-quartile (200 visits/mo), weighted by SEO score. Keyword estimate uses avg 29 rankable keywords per post (Backlinko). New content typically takes 3-12 months to reach full organic potential (Ahrefs: only 5.7% of pages reach top 10 within 1 year). 96.55% of all pages get zero Google traffic (Ahrefs) &mdash; well-optimized content with proper keyword targeting significantly outperforms the median.
+            </p>
           </div>
-          <p className={styles.ovSeoImpactNote}>
-            Estimates based on industry averages for well-optimized content. Actual results depend on domain authority, competition, and niche. Publishing consistently with a high SEO score accelerates organic growth — every 10 posts can add 50-300 organic visits/month.
-          </p>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Schedule Status */}
       {schedules.length > 0 && (
