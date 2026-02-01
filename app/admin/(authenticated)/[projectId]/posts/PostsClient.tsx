@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import type { PostListResponse, AgentResponse } from '@/lib/blog/types';
 import styles from '../../../admin.module.css';
 
@@ -46,6 +47,10 @@ export function PostsClient({
   // AI create form
   const [topic, setTopic] = useState('');
   const [keyword, setKeyword] = useState('');
+
+  // Topic suggestions
+  const [suggestions, setSuggestions] = useState<{ topic: string; target_keyword: string; reasoning: string }[]>([]);
+  const [suggestLoading, setSuggestLoading] = useState(false);
 
   const agentId = agents[0]?.id;
 
@@ -113,6 +118,28 @@ export function PostsClient({
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleSuggestTopics() {
+    if (!agentId) return;
+    setSuggestLoading(true);
+    try {
+      const data = await apiFetch('/topics/suggest', token, {
+        method: 'POST',
+        body: JSON.stringify({ agent_id: agentId, count: 5 }),
+      });
+      setSuggestions(data.suggestions || []);
+    } catch {
+      setError('Failed to get topic suggestions');
+    } finally {
+      setSuggestLoading(false);
+    }
+  }
+
+  function selectSuggestion(s: { topic: string; target_keyword: string }) {
+    setTopic(s.topic);
+    setKeyword(s.target_keyword);
+    setSuggestions([]);
   }
 
   async function handleToggleStatus(postId: string, currentStatus: string) {
@@ -206,6 +233,35 @@ export function PostsClient({
               </form>
             ) : (
               <form onSubmit={handleCreateAI}>
+                {/* Suggest Topics Button */}
+                <div style={{ marginBottom: 16 }}>
+                  <button
+                    type="button"
+                    className={styles.btnSecondary}
+                    onClick={handleSuggestTopics}
+                    disabled={suggestLoading || !agentId}
+                  >
+                    {suggestLoading ? 'Thinking...' : 'Suggest Topics with AI'}
+                  </button>
+                </div>
+
+                {/* Topic Suggestions */}
+                {suggestions.length > 0 && (
+                  <div className={styles.suggestionsGrid}>
+                    {suggestions.map((s, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        className={styles.suggestionChip}
+                        onClick={() => selectSuggestion(s)}
+                      >
+                        <span className={styles.suggestionTopic}>{s.topic}</span>
+                        <span className={styles.suggestionKeyword}>{s.target_keyword}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Topic</label>
                   <input
@@ -266,7 +322,11 @@ export function PostsClient({
           <tbody>
             {posts.map((post) => (
               <tr key={post.id}>
-                <td>{post.title}</td>
+                <td>
+                    <Link href={`/admin/${projectSlug}/posts/${post.id}`} className={styles.ovPostLink}>
+                      {post.title || 'Untitled'}
+                    </Link>
+                  </td>
                 <td>
                   <span
                     className={
@@ -284,6 +344,13 @@ export function PostsClient({
                 <td>{formatDate(post.published_at || post.created_at)}</td>
                 <td>
                   <div className={styles.btnGroup}>
+                    <Link
+                      href={`/admin/${projectSlug}/posts/${post.id}`}
+                      className={`${styles.btnSecondary} ${styles.btnSmall}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      Edit
+                    </Link>
                     <button
                       className={`${styles.btnSecondary} ${styles.btnSmall}`}
                       onClick={() => handleToggleStatus(post.id, post.status)}

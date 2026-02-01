@@ -510,3 +510,458 @@
   color: #fff;
   border-bottom-color: #7B2CBF;
 }
+
+/* ─── Overview Dashboard ─── */
+.ovStatGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.ovStatCard {
+  background: #242738;
+  border: 1px solid #3a3d50;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.ovStatLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #8b8fa3;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px;
+}
+
+.ovStatValue {
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.ovSectionTitle {
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 16px;
+}
+
+/* Usage */
+.ovUsageSection {
+  margin-bottom: 32px;
+  background: #242738;
+  border: 1px solid #3a3d50;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.ovUsageGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.ovUsageItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ovUsageHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #c4c7d4;
+}
+
+.ovProgressBar {
+  height: 8px;
+  background: #3a3d50;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ovProgressFill {
+  height: 100%;
+  background: linear-gradient(135deg, #7B2CBF 0%, #0066FF 100%);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+/* Schedule */
+.ovScheduleSection {
+  margin-bottom: 32px;
+}
+
+.ovScheduleCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ovScheduleCard {
+  background: #242738;
+  border: 1px solid #3a3d50;
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.ovScheduleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ovDotActive,
+.ovDotInactive {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ovDotActive {
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.4);
+}
+
+.ovDotInactive {
+  background: #8b8fa3;
+}
+
+.ovScheduleName {
+  font-weight: 600;
+  color: #fff;
+  font-size: 14px;
+}
+
+.ovScheduleMeta {
+  font-size: 13px;
+  color: #8b8fa3;
+  margin-left: auto;
+}
+
+.ovScheduleNext {
+  font-size: 13px;
+  color: #c4c7d4;
+  margin: 8px 0 0 20px;
+}
+
+/* Recent Posts */
+.ovRecentSection {
+  margin-bottom: 32px;
+}
+
+.ovRecentHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.ovRecentHeader .ovSectionTitle {
+  margin: 0;
+}
+
+.ovViewAll {
+  font-size: 13px;
+  color: #7B2CBF;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ovViewAll:hover {
+  text-decoration: underline;
+}
+
+.ovPostLink {
+  color: #c4c7d4;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ovPostLink:hover {
+  color: #fff;
+}
+
+/* Messages */
+.ovSuccessMsg {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.ovErrorMsg {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* Quick Actions */
+.ovQuickActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ─── Post Editor ─── */
+.editorLayout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.editorMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.editorTextarea {
+  composes: input;
+  min-height: 500px;
+  resize: vertical;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.editorMeta {
+  float: right;
+  font-size: 12px;
+  font-weight: 400;
+  color: #8b8fa3;
+}
+
+.editorSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.editorSidebarCard {
+  background: #242738;
+  border: 1px solid #3a3d50;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.editorSidebarTitle {
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 12px;
+}
+
+.editorStatusRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editorKeywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.editorKeyword {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(123, 44, 191, 0.15);
+  color: #c084fc;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.editorKeywordRemove {
+  background: none;
+  border: none;
+  color: #c084fc;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+}
+
+.editorKeywordRemove:hover {
+  color: #f87171;
+}
+
+.editorKeywordInput {
+  display: flex;
+  gap: 8px;
+}
+
+.editorKeywordInput .formInput {
+  flex: 1;
+}
+
+.editorInfoRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #c4c7d4;
+  padding: 4px 0;
+  margin: 0;
+}
+
+/* ─── Charts / Analytics ─── */
+.ovChartsSection {
+  margin-bottom: 32px;
+}
+
+.ovChartsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.ovChartCard {
+  background: #242738;
+  border: 1px solid #3a3d50;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ovChartBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  height: 120px;
+  margin-bottom: 12px;
+}
+
+.ovChartBarGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.ovChartBarTrack {
+  width: 32px;
+  height: 100px;
+  background: #3a3d50;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.ovChartBarFill {
+  background: linear-gradient(180deg, #7B2CBF, #0066FF);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.6s ease;
+  min-height: 2px;
+}
+
+.ovChartBarTotal {
+  background: linear-gradient(180deg, #4ade80, #22c55e);
+}
+
+.ovChartBarLabel {
+  font-size: 11px;
+  color: #8b8fa3;
+  font-weight: 500;
+}
+
+.ovChartBarValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ovChartCaption {
+  font-size: 13px;
+  color: #8b8fa3;
+  margin: 8px 0 0;
+}
+
+.ovCircleChart {
+  width: 140px;
+  height: 140px;
+}
+
+/* ─── Topic Suggestions ─── */
+.suggestionsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.suggestionChip {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  background: rgba(123, 44, 191, 0.08);
+  border: 1px solid rgba(123, 44, 191, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.suggestionChip:hover {
+  background: rgba(123, 44, 191, 0.15);
+  border-color: #7B2CBF;
+}
+
+.suggestionTopic {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.suggestionKeyword {
+  font-size: 12px;
+  color: #c084fc;
+}
+
+@media (max-width: 1024px) {
+  .editorLayout {
+    grid-template-columns: 1fr;
+  }
+  .editorTextarea {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ovStatGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ovUsageGrid {
+    grid-template-columns: 1fr;
+  }
+  .ovChartsGrid {
+    grid-template-columns: 1fr;
+  }
+  .ovScheduleMeta {
+    display: none;
+  }
+}

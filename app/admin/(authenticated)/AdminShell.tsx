@@ -23,6 +23,12 @@ export function AdminShell({
 
   const isSuperadmin = user.role === 'superadmin';
 
+  // Extract projectSlug from pathname (e.g., /admin/oleksiak-consulting/overview)
+  const pathParts = pathname.split('/');
+  const projectSlug = pathParts.length >= 3 && pathParts[1] === 'admin' && pathParts[2] !== 'dashboard'
+    ? pathParts[2]
+    : null;
+
   return (
     <div className={styles.adminLayout}>
       <aside className={styles.sidebar}>
@@ -34,19 +40,35 @@ export function AdminShell({
         </div>
 
         <nav className={styles.sidebarNav}>
-          <a
-            href="/admin/dashboard"
-            className={pathname === '/admin/dashboard' ? styles.navLinkActive : styles.navLink}
-          >
-            Dashboard
-          </a>
           {isSuperadmin && (
             <a
               href="/admin/dashboard"
-              className={styles.navLink}
+              className={pathname === '/admin/dashboard' ? styles.navLinkActive : styles.navLink}
             >
               All Projects
             </a>
+          )}
+          {projectSlug && (
+            <>
+              <a
+                href={`/admin/${projectSlug}/overview`}
+                className={pathname.includes('/overview') ? styles.navLinkActive : styles.navLink}
+              >
+                Overview
+              </a>
+              <a
+                href={`/admin/${projectSlug}/posts`}
+                className={pathname.includes('/posts') ? styles.navLinkActive : styles.navLink}
+              >
+                Posts
+              </a>
+              <a
+                href={`/admin/${projectSlug}/schedules`}
+                className={pathname.includes('/schedules') ? styles.navLinkActive : styles.navLink}
+              >
+                Schedules
+              </a>
+            </>
           )}
         </nav>
 

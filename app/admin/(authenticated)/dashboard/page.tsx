@@ -36,7 +36,7 @@ export default async function DashboardPage() {
             {tenants.map((t) => (
               <Link
                 key={t.id}
-                href={`/admin/${t.slug}/posts`}
+                href={`/admin/${t.slug}/overview`}
                 className={styles.card}
               >
                 <h2 className={styles.cardName}>{t.name}</h2>
@@ -57,12 +57,12 @@ export default async function DashboardPage() {
     );
   }
 
-  // Admin: get agents for their tenant and redirect to first one
+  // Admin: get agents for their tenant and redirect to overview
   try {
     const agents = await getAgents(token);
     if (agents.length > 0) {
       const tenant = await getMyTenant(token);
-      redirect(`/admin/${tenant.slug}/posts`);
+      redirect(`/admin/${tenant.slug}/overview`);
     }
   } catch {
     // fall through
