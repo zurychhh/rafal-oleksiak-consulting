@@ -8,6 +8,7 @@ import HeroCTA from "./components/ui/HeroCTA"
 import Services from './components/sections/Services'
 import CaseStudiesSection from './components/sections/CaseStudiesSection'
 import ProcessTimeline from './components/sections/ProcessTimeline'
+import Accelerators from './components/sections/Accelerators'
 import FinalCTA from './components/sections/FinalCTA'
 import Footer from './components/sections/Footer'
 import FinalSuccessScreen from './components/ui/FinalSuccessScreen'
@@ -91,6 +92,7 @@ export default function HomeClient() {
         </LazySection>
 
         <ProcessTimeline />
+        <Accelerators />
 
         <LazySection>
           <AchievementsTicker />
