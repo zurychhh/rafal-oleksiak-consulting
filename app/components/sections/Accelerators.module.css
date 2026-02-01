@@ -97,6 +97,12 @@
   cursor: pointer;
 }
 
+/* Link wrapper for clickable cards */
+.toolCardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
 .toolCardActive:hover::before {
   opacity: 1;
 }

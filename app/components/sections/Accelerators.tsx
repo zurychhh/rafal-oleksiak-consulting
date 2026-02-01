@@ -135,12 +135,12 @@ export default function Accelerators() {
                     ))}
                   </ul>
 
-                  {/* CTA */}
-                  {isLive && tool.href && tool.ctaText && (
-                    <Link href={tool.href} className={styles.toolCta}>
+                  {/* CTA label */}
+                  {isLive && tool.ctaText && (
+                    <span className={styles.toolCta}>
                       {tool.ctaText}
                       <span className={styles.toolCtaArrow}>&rarr;</span>
-                    </Link>
+                    </span>
                   )}
                 </div>
               </>
@@ -148,9 +148,9 @@ export default function Accelerators() {
 
             if (isLive && tool.href) {
               return (
-                <article key={tool.id} className={cardClass}>
+                <Link key={tool.id} href={tool.href} className={`${cardClass} ${styles.toolCardLink}`}>
                   {cardContent}
-                </article>
+                </Link>
               );
             }
 
