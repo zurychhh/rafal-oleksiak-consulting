@@ -14,6 +14,81 @@ import styles from '../../../admin.module.css';
 
 const API_URL = process.env.NEXT_PUBLIC_BLOG_API_URL;
 
+/** Compute a composite SEO score (0-100) for a single post */
+function computeSeoScore(post: PostResponse): number {
+  let score = 0;
+  let maxScore = 0;
+
+  // 1. Word count (25 pts) — 1500+ words = full marks
+  maxScore += 25;
+  const wc = post.word_count ?? 0;
+  if (wc >= 1500) score += 25;
+  else if (wc >= 1000) score += 20;
+  else if (wc >= 600) score += 12;
+  else if (wc >= 300) score += 6;
+
+  // 2. Meta title (15 pts) — present + 30-60 chars optimal
+  maxScore += 15;
+  const mt = post.meta_title ?? '';
+  if (mt.length > 0) {
+    score += 7;
+    if (mt.length >= 30 && mt.length <= 65) score += 8;
+    else if (mt.length >= 20 && mt.length <= 80) score += 4;
+  }
+
+  // 3. Meta description (15 pts) — present + 120-160 chars optimal
+  maxScore += 15;
+  const md = post.meta_description ?? '';
+  if (md.length > 0) {
+    score += 7;
+    if (md.length >= 120 && md.length <= 165) score += 8;
+    else if (md.length >= 80 && md.length <= 200) score += 4;
+  }
+
+  // 4. Keywords targeted (15 pts) — 2-5 keywords is optimal
+  maxScore += 15;
+  const kwCount = (post.keywords ?? []).length;
+  if (kwCount >= 2 && kwCount <= 5) score += 15;
+  else if (kwCount === 1) score += 8;
+  else if (kwCount > 5) score += 10;
+
+  // 5. Keyword density (15 pts) — primary keyword 0.5-2.5% is optimal
+  maxScore += 15;
+  const density = post.keyword_density;
+  if (density && typeof density === 'object') {
+    const values = Object.values(density);
+    if (values.length > 0) {
+      const primaryDensity = Math.max(...values);
+      if (primaryDensity >= 0.5 && primaryDensity <= 2.5) score += 15;
+      else if (primaryDensity > 0 && primaryDensity < 0.5) score += 8;
+      else if (primaryDensity > 2.5 && primaryDensity <= 4) score += 8;
+      else if (primaryDensity > 0) score += 4;
+    }
+  }
+
+  // 6. Readability (15 pts) — readability_score closer to 60 is best (Flesch)
+  maxScore += 15;
+  const rs = post.readability_score ?? 0;
+  if (rs >= 40 && rs <= 80) score += 15;
+  else if (rs >= 20 && rs < 40) score += 10;
+  else if (rs > 80) score += 10;
+  else if (rs > 0) score += 5;
+
+  return maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+}
+
+function seoScoreColor(score: number): string {
+  if (score >= 75) return '#4ade80';
+  if (score >= 50) return '#fbbf24';
+  return '#f87171';
+}
+
+function seoScoreLabel(score: number): string {
+  if (score >= 75) return 'Good';
+  if (score >= 50) return 'Fair';
+  return 'Needs Work';
+}
+
 interface OverviewProps {
   posts: PostResponse[];
   agents: AgentResponse[];
@@ -40,9 +115,13 @@ export function OverviewClient({
 
   const publishedPosts = posts.filter((p) => p.status === 'published');
   const draftPosts = posts.filter((p) => p.status === 'draft' || p.status === 'scheduled');
+
+  // Compute per-post SEO scores
+  const postSeoScores = posts.map((p) => computeSeoScore(p));
   const avgSeoScore = posts.length > 0
-    ? Math.round(posts.reduce((sum, p) => sum + (p.readability_score ?? 0), 0) / posts.length)
+    ? Math.round(postSeoScores.reduce((a, b) => a + b, 0) / postSeoScores.length)
     : 0;
+  const totalWords = posts.reduce((sum, p) => sum + (p.word_count ?? 0), 0);
 
   const activeSchedule = schedules.find((s) => s.is_active);
 
@@ -125,8 +204,10 @@ export function OverviewClient({
           <p className={styles.ovStatValue}>{draftPosts.length}</p>
         </div>
         <div className={styles.ovStatCard}>
-          <p className={styles.ovStatLabel}>Avg. Readability</p>
-          <p className={styles.ovStatValue}>{avgSeoScore || '—'}</p>
+          <p className={styles.ovStatLabel}>Avg. SEO Score</p>
+          <p className={styles.ovStatValue} style={{ color: posts.length > 0 ? seoScoreColor(avgSeoScore) : undefined }}>
+            {posts.length > 0 ? `${avgSeoScore}/100` : '—'}
+          </p>
         </div>
         <div className={styles.ovStatCard}>
           <p className={styles.ovStatLabel}>Next Publish</p>
@@ -210,6 +291,30 @@ export function OverviewClient({
             <p className={styles.ovChartCaption}>Posts Generated</p>
           </div>
 
+          {/* Overall SEO Score Circle */}
+          <div className={styles.ovChartCard}>
+            <svg viewBox="0 0 100 100" className={styles.ovCircleChart}>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#3a3d50" strokeWidth="8" />
+              <circle
+                cx="50"
+                cy="50"
+                r="42"
+                fill="none"
+                stroke={seoScoreColor(avgSeoScore)}
+                strokeWidth="8"
+                strokeLinecap="round"
+                strokeDasharray={`${(avgSeoScore / 100) * 264} 264`}
+                transform="rotate(-90 50 50)"
+              />
+              <text x="50" y="46" textAnchor="middle" fill="#fff" fontSize="20" fontWeight="700">
+                {posts.length > 0 ? avgSeoScore : '—'}
+              </text>
+              <text x="50" y="62" textAnchor="middle" fill="#8b8fa3" fontSize="9">
+                SEO Score
+              </text>
+            </svg>
+          </div>
+
           {/* Success Rate Circle */}
           <div className={styles.ovChartCard}>
             <svg viewBox="0 0 100 100" className={styles.ovCircleChart}>
@@ -241,6 +346,46 @@ export function OverviewClient({
           </div>
         </div>
       </div>
+
+      {/* SEO Impact Estimation */}
+      {publishedPosts.length > 0 && (
+        <div className={styles.ovSeoImpactSection}>
+          <h3 className={styles.ovSectionTitle}>SEO Impact Estimation</h3>
+          <div className={styles.ovSeoImpactGrid}>
+            <div className={styles.ovSeoImpactCard}>
+              <p className={styles.ovSeoImpactLabel}>Total Indexed Content</p>
+              <p className={styles.ovSeoImpactValue}>{totalWords.toLocaleString()} words</p>
+              <p className={styles.ovSeoImpactMeta}>{publishedPosts.length} published articles</p>
+            </div>
+            <div className={styles.ovSeoImpactCard}>
+              <p className={styles.ovSeoImpactLabel}>Est. Keywords Targeted</p>
+              <p className={styles.ovSeoImpactValue}>
+                {[...new Set(publishedPosts.flatMap((p) => p.keywords))].length}
+              </p>
+              <p className={styles.ovSeoImpactMeta}>unique keywords across all posts</p>
+            </div>
+            <div className={styles.ovSeoImpactCard}>
+              <p className={styles.ovSeoImpactLabel}>Est. Monthly Organic Potential</p>
+              <p className={styles.ovSeoImpactValue}>
+                {Math.round(publishedPosts.length * 45 * (avgSeoScore / 100)).toLocaleString()} – {Math.round(publishedPosts.length * 120 * (avgSeoScore / 100)).toLocaleString()}
+              </p>
+              <p className={styles.ovSeoImpactMeta}>visits/month (based on {publishedPosts.length} posts, score {avgSeoScore}/100)</p>
+            </div>
+            <div className={styles.ovSeoImpactCard}>
+              <p className={styles.ovSeoImpactLabel}>SEO Content Velocity</p>
+              <p className={styles.ovSeoImpactValue}>
+                {activeSchedule
+                  ? activeSchedule.interval === 'daily' ? '30' : activeSchedule.interval === 'every_3_days' ? '10' : activeSchedule.interval === 'weekly' ? '4' : '2'
+                  : '0'}
+              </p>
+              <p className={styles.ovSeoImpactMeta}>posts/month projected</p>
+            </div>
+          </div>
+          <p className={styles.ovSeoImpactNote}>
+            Estimates based on industry averages for well-optimized content. Actual results depend on domain authority, competition, and niche. Publishing consistently with a high SEO score accelerates organic growth — every 10 posts can add 50-300 organic visits/month.
+          </p>
+        </div>
+      )}
 
       {/* Schedule Status */}
       {schedules.length > 0 && (
@@ -285,36 +430,45 @@ export function OverviewClient({
             <thead>
               <tr>
                 <th>Title</th>
+                <th>SEO Score</th>
                 <th>Status</th>
                 <th>Words</th>
                 <th>Date</th>
               </tr>
             </thead>
             <tbody>
-              {posts.slice(0, 5).map((post) => (
-                <tr key={post.id}>
-                  <td>
-                    <Link href={`/admin/${projectSlug}/posts/${post.id}`} className={styles.ovPostLink}>
-                      {post.title || 'Untitled'}
-                    </Link>
-                  </td>
-                  <td>
-                    <span
-                      className={
-                        post.status === 'published'
-                          ? styles.statusPublished
-                          : post.status === 'scheduled'
-                            ? styles.statusScheduled
-                            : styles.statusDraft
-                      }
-                    >
-                      {post.status}
-                    </span>
-                  </td>
-                  <td>{post.word_count.toLocaleString()}</td>
-                  <td>{formatDate(post.published_at || post.created_at)}</td>
-                </tr>
-              ))}
+              {posts.slice(0, 5).map((post) => {
+                const score = computeSeoScore(post);
+                return (
+                  <tr key={post.id}>
+                    <td>
+                      <Link href={`/admin/${projectSlug}/posts/${post.id}`} className={styles.ovPostLink}>
+                        {post.title || 'Untitled'}
+                      </Link>
+                    </td>
+                    <td>
+                      <span className={styles.ovSeoScoreBadge} style={{ color: seoScoreColor(score), borderColor: seoScoreColor(score) }}>
+                        {score}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        className={
+                          post.status === 'published'
+                            ? styles.statusPublished
+                            : post.status === 'scheduled'
+                              ? styles.statusScheduled
+                              : styles.statusDraft
+                        }
+                      >
+                        {post.status}
+                      </span>
+                    </td>
+                    <td>{post.word_count.toLocaleString()}</td>
+                    <td>{formatDate(post.published_at || post.created_at)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}

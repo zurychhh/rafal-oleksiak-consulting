@@ -831,7 +831,7 @@
 
 .ovChartsGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
 }
 
@@ -942,12 +942,81 @@
   color: #c084fc;
 }
 
+/* ─── SEO Score Badge ─── */
+.ovSeoScoreBadge {
+  display: inline-block;
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 6px;
+  border: 1px solid;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ─── SEO Impact Estimation ─── */
+.ovSeoImpactSection {
+  margin-bottom: 32px;
+}
+
+.ovSeoImpactGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.ovSeoImpactCard {
+  background: #242738;
+  border: 1px solid #3a3d50;
+  border-radius: 12px;
+  padding: 20px;
+  border-left: 3px solid #7B2CBF;
+}
+
+.ovSeoImpactLabel {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8b8fa3;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px;
+}
+
+.ovSeoImpactValue {
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 4px;
+}
+
+.ovSeoImpactMeta {
+  font-size: 12px;
+  color: #8b8fa3;
+  margin: 0;
+}
+
+.ovSeoImpactNote {
+  font-size: 12px;
+  color: #6b6f84;
+  line-height: 1.5;
+  margin: 0;
+  padding: 12px 16px;
+  background: rgba(123, 44, 191, 0.06);
+  border-radius: 8px;
+  border: 1px solid rgba(123, 44, 191, 0.15);
+}
+
 @media (max-width: 1024px) {
   .editorLayout {
     grid-template-columns: 1fr;
   }
   .editorTextarea {
     min-height: 300px;
+  }
+  .ovSeoImpactGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -963,5 +1032,8 @@
   }
   .ovScheduleMeta {
     display: none;
+  }
+  .ovSeoImpactGrid {
+    grid-template-columns: 1fr;
   }
 }
