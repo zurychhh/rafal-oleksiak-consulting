@@ -62,6 +62,13 @@ export default function MobileNav() {
               WHEN
             </a>
             <a
+              href="/radar"
+              onClick={handleLinkClick}
+              className={styles.mobileBlogLink}
+            >
+              RADAR
+            </a>
+            <a
               href="/blog"
               onClick={handleLinkClick}
               className={styles.mobileBlogLink}
