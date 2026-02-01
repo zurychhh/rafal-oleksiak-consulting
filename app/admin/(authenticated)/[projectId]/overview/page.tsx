@@ -15,19 +15,28 @@ export default async function OverviewPage({
 
   let posts, agents, tenants, schedules;
   try {
-    [posts, agents, tenants, schedules] = await Promise.all([
-      getPosts(token, 1, 200),
-      getAgents(token),
+    [tenants, agents] = await Promise.all([
       getTenants(token),
-      getSchedules(token),
+      getAgents(token),
     ]);
   } catch {
     redirect('/admin');
   }
 
-  // Find current tenant by slug
+  // Find current tenant by slug (before fetching heavy data)
   const tenant = tenants.find((t) => t.slug === projectId);
   if (!tenant) redirect('/admin/dashboard');
+
+  try {
+    [posts, schedules] = await Promise.all([
+      getPosts(token, 1, 100),
+      getSchedules(token),
+    ]);
+  } catch {
+    // Gracefully handle API failures — show page with empty data
+    posts = { items: [], total: 0, page: 1, page_size: 100, total_pages: 0 };
+    schedules = { items: [], total: 0 };
+  }
 
   // Filter data to this tenant
   const tenantAgentIds = new Set(
