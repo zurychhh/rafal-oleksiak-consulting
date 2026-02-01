@@ -62,6 +62,13 @@ export default function MobileNav() {
               WHEN
             </a>
             <a
+              href="/blog"
+              onClick={handleLinkClick}
+              className={styles.mobileBlogLink}
+            >
+              BLOG
+            </a>
+            <a
               href="https://calendly.com/rafaloleksiakconsulting/30min"
               target="_blank"
               rel="noopener noreferrer"

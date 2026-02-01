@@ -25,8 +25,11 @@ export default function Navbar() {
           <a href="#contact" className="nav-link">WHEN</a>
         </div>
 
-        {/* CTA Button - Right */}
+        {/* Blog Link + CTA Button - Right */}
         <div className="navbar-cta">
+          <a href="/blog" className="navbar-blog-link">
+            BLOG
+          </a>
           <a
             href="https://calendly.com/rafaloleksiakconsulting/30min"
             target="_blank"
