@@ -281,10 +281,17 @@ export function PostEditorClient({ post, projectSlug, token }: EditorProps) {
                 <span>Readability:</span> <span>{post.readability_score}</span>
               </p>
             )}
-            {post.keyword_density != null && (
-              <p className={styles.editorInfoRow}>
-                <span>Keyword Density:</span> <span>{(post.keyword_density * 100).toFixed(1)}%</span>
-              </p>
+            {post.keyword_density != null && typeof post.keyword_density === 'object' && Object.keys(post.keyword_density).length > 0 && (
+              <div>
+                <p className={styles.editorInfoRow} style={{ marginBottom: 4 }}>
+                  <span>Keyword Density:</span>
+                </p>
+                {Object.entries(post.keyword_density).map(([kw, density]) => (
+                  <p key={kw} className={styles.editorInfoRow} style={{ paddingLeft: 8, fontSize: '0.85em' }}>
+                    <span>{kw}:</span> <span>{(density * 100).toFixed(1)}%</span>
+                  </p>
+                ))}
+              </div>
             )}
             {post.tokens_used > 0 && (
               <p className={styles.editorInfoRow}>

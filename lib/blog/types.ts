@@ -13,7 +13,7 @@ export interface PostResponse {
   og_image_url: string | null;
   canonical_url: string | null;
   readability_score: number | null;
-  keyword_density: number | null;
+  keyword_density: Record<string, number> | null;
   word_count: number;
   status: 'draft' | 'published' | 'scheduled';
   scheduled_at: string | null;
