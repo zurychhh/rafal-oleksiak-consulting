@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import type { RadarUser } from '@/lib/radar/types';
 import styles from './dashboard.module.css';

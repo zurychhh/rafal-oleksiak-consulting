@@ -23,9 +23,8 @@ export async function POST(request: NextRequest) {
 
     const { token } = await createMagicLink(normalizedEmail);
 
-    const baseUrl = process.env.RADAR_BASE_URL || process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000';
+    const baseUrl = process.env.RADAR_BASE_URL
+      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
     const verifyUrl = `${baseUrl}/api/radar/auth/verify?token=${token}`;
 
     const emailHtml = generateMagicLinkEmail(verifyUrl, normalizedEmail);
