@@ -2,9 +2,9 @@
 
 **Project**: oleksiakconsulting.com
 **Technology Stack**: Next.js 16.0.8, React 19, TypeScript 5.9, Turbopack, CSS Modules
-**Timeline**: November 7-9, 2025 (Initial), November 11 - December 21, 2025 (Updates)
-**Total PRs Merged**: 25+ (14 initial + 11+ updates)
-**Status**: ✅ Deployed & Live with Stripe Monetization
+**Timeline**: November 7-9, 2025 (Initial) → February 2, 2026 (Current)
+**Total PRs Merged**: 40+ (14 initial + 26+ updates)
+**Status**: ✅ Deployed & Live with Full Tracking Infrastructure + Google Ads
 
 ---
 
@@ -14,10 +14,14 @@ Successfully transformed a consulting website into a high-performance, mobile-op
 
 **Key Achievements**:
 - 📱 Complete mobile responsiveness (320px - 2560px)
-- ⚡ Optimized performance for mobile devices
+- ⚡ Optimized performance for mobile devices (90+ Lighthouse)
 - 🎨 Simplified hero section for better conversion
 - 🧭 Fixed navigation system (desktop + mobile)
 - ♿ Enhanced accessibility (WCAG 2.1 AA compliance)
+- 📊 Full tracking infrastructure (GTM, Consent Mode v2, Schema.org)
+- 📢 Google Ads ready (remarketing, conversions, API OAuth2)
+- 📝 Blog + Admin Panel with Railway backend
+- 🚀 3 product pages (Auto-Publish, RADAR AI, LAMA Pro)
 
 ---
 
@@ -213,6 +217,83 @@ Successfully transformed a consulting website into a high-performance, mobile-op
 - 📊 Dual CTA strategy: hot leads (consultation) + cold leads (audit)
 - ✨ Premium visual quality matches Services section
 - 🔄 Better user journey: learn LAMA → scroll to contact
+
+### Google Ads Tracking Infrastructure (February 2, 2026)
+**What was implemented**:
+- ✅ **Google Tag Manager (GTM-PTPCV5FD):**
+  - Container with 3 tags: GA4 Configuration, Google Ads Remarketing, Conversion Linker
+  - Published as Version 2
+  - GTMScript.tsx + GTMNoScript components
+  - Files: `app/components/GTMScript.tsx`
+
+- ✅ **Consent Mode v2 (GDPR):**
+  - Defaults `denied` for ad_storage, analytics_storage, ad_personalization, ad_user_data
+  - 31 EEA countries + UK automatically `denied`, rest `granted`
+  - Cookie consent banner updates consent mode dynamically
+  - Must load FIRST in `<head>` before any tracking scripts
+  - Files: `app/components/ConsentMode.tsx`, `app/components/ui/CookieConsent.tsx`
+
+- ✅ **Schema.org JSON-LD (4 blocks):**
+  - Organization, Person (Rafał Oleksiak), ProfessionalService, WebSite
+  - Files: `app/components/SchemaOrg.tsx`
+
+- ✅ **Google Ads Account Setup:**
+  - Account: 544-648-7427 (Rafał Oleksiak Consulting)
+  - Manager Account (MCC): 759-448-7243 (Oleksiak Consulting MCC)
+  - Accounts linked (manager → client)
+  - GA4 (G-WZWCGQLQ2Y) auto-linked with Google Ads
+  - Conversion: `form_submission_lead` event (Active in Google Ads)
+
+- ✅ **Google Ads API OAuth2:**
+  - Enabled: Google Ads API, Tag Manager API, Google Analytics Admin API
+  - OAuth2 client: `236619926081-...` (Oleksiak MCC)
+  - 3 API routes: auth initiation, callback, status
+  - Token management: auto-refresh, file storage, in-memory cache (5s TTL)
+  - Developer token: test access (Basic Access application submitted)
+  - Files: `app/api/mcc/auth/*`, `lib/mcc/google-auth.ts`
+
+- ✅ **Layout.tsx Update:**
+  - Loading order: ConsentMode → preconnect → SchemaOrg → GTMNoScript → GTMScript → GoogleAnalytics (fallback)
+  - GoogleAnalytics.tsx updated to skip when GTM is active
+
+- ✅ **Vercel Deployment:**
+  - Added: NEXT_PUBLIC_GTM_ID=GTM-PTPCV5FD, NEXT_PUBLIC_GOOGLE_ADS_ID=AW-17922704201
+  - Deployed to production
+
+**Business impact**:
+- 📢 Ready for Google Ads campaigns (Search, Display, Remarketing)
+- 📊 Full GDPR-compliant tracking
+- 🔍 Schema.org for rich search results
+- 🔄 Conversion tracking for ROI measurement
+
+---
+
+### Blog + Admin Panel + Product Pages (January-February 2026)
+**What was implemented**:
+- ✅ **Blog System:**
+  - Railway backend for blog content management
+  - Blog listing page with posts
+  - SEO score per post + overall SEO score
+  - Files: `app/blog/`
+
+- ✅ **Admin Panel:**
+  - Overview dashboard with tenant-specific stats
+  - Post editor with topic suggestions
+  - Visual analytics
+  - Auto-publish scheduling
+  - Files: `app/admin/`
+
+- ✅ **Product Pages:**
+  - Auto-Publish (/auto-publish) with trial form
+  - RADAR AI Competitor Intelligence (informational page)
+  - Accelerators section on homepage (3 tool cards)
+
+**Business impact**:
+- 📝 Content marketing capability
+- 🤖 AI-powered content automation
+- 📊 SEO tracking and optimization
+
+---
 
 ### Google Analytics 4 Integration (November 21, 2025)
 **PR**: feat: implement Google Analytics 4 tracking with @next/third-parties
@@ -1512,9 +1593,9 @@ Built with [Claude Code](https://claude.com/claude-code) by Anthropic.
 
 ---
 
-**Last Updated**: December 21, 2025
-**Version**: 1.3
-**Project Status**: ✅ Complete & Deployed with Stripe Monetization
+**Last Updated**: February 2, 2026
+**Version**: 2.0
+**Project Status**: ✅ Deployed with Full Tracking, Google Ads, Blog, MCC Infrastructure
 
 ---
 

@@ -61,3 +61,39 @@ export interface ActionItem {
   description: string;
   estimatedImpact: string;
 }
+
+// Dashboard-specific types
+
+export interface RadarUser {
+  id: string;
+  email: string;
+  name: string | null;
+  company: string | null;
+  yourUrl: string | null;
+  createdAt: string;
+  lastLogin: string | null;
+}
+
+export interface RadarReportSummary {
+  id: string;
+  yourUrl: string;
+  overallPosition: string;
+  competitorCount: number;
+  highThreatCount: number;
+  criticalActionCount: number;
+  executionTime: number;
+  createdAt: string;
+}
+
+export interface ScanRequest {
+  yourUrl: string;
+  competitorUrls: string[];
+  sendEmail?: boolean;
+}
+
+export interface TrendData {
+  positionHistory: Array<{ date: string; position: string }>;
+  threatHistory: Array<{ date: string; low: number; medium: number; high: number }>;
+  competitorFrequency: Array<{ url: string; scanCount: number; latestThreatLevel: string }>;
+  metricsHistory: Array<{ date: string; competitorCount: number; highThreats: number; criticalActions: number }>;
+}

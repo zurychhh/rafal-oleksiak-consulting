@@ -41,17 +41,31 @@ app/
 │   ├── lama/audit/route.ts      # Main LAMA audit orchestrator
 │   ├── pdf-generator/route.ts   # PDF generation endpoint
 │   ├── send-email/route.ts      # Contact form
-│   └── stripe/
-│       ├── create-checkout/     # Stripe session creation
-│       └── webhook/             # Payment confirmation webhook
+│   ├── stripe/
+│   │   ├── create-checkout/     # Stripe session creation
+│   │   └── webhook/             # Payment confirmation webhook
+│   └── mcc/                     # Marketing Command Center
+│       ├── auth/                # OAuth2 flow (Google Ads API)
+│       ├── campaigns/           # Campaign management
+│       ├── creative/            # Ad copy generation
+│       ├── intelligence/        # Competitor monitoring
+│       ├── analytics/           # Cross-platform reporting
+│       └── platforms/           # google/, meta/, linkedin/
 ├── components/
 │   ├── sections/                # Page sections (Navbar, Hero, FinalCTA, etc.)
-│   └── ui/                      # Reusable UI components
+│   ├── ui/                      # Reusable UI components (CookieConsent, etc.)
+│   ├── ConsentMode.tsx          # Google Consent Mode v2 defaults
+│   ├── GTMScript.tsx            # GTM container + noscript
+│   ├── SchemaOrg.tsx            # 4x JSON-LD structured data
+│   └── GoogleAnalytics.tsx      # GA4 fallback (skip when GTM active)
 ├── lib/
-│   ├── analytics.ts             # GA4 event tracking
+│   ├── analytics.ts             # GA4/dataLayer event tracking + Google Ads conversions
 │   ├── constants/               # Colors, copy text
 │   └── lama/pro/                # PDF generation components (excluded from TS)
 │       └── pdf/                 # React-PDF report components
+├── blog/                        # Blog pages
+├── admin/                       # Admin panel
+├── auto-publish/                # Auto-Publish product page
 └── HomeClient.tsx               # Main client component
 
 lib/                             # Root-level shared code
@@ -67,6 +81,15 @@ lib/                             # Root-level shared code
 │   ├── email-template.ts        # Audit result email HTML
 │   ├── followup-email-template.ts
 │   └── hubspot.ts               # HubSpot CRM integration
+├── mcc/                         # Marketing Command Center
+│   ├── google-auth.ts           # OAuth2 token management (auto-refresh)
+│   ├── types.ts                 # MCC TypeScript interfaces
+│   ├── index.ts                 # Main MCC orchestrator
+│   ├── platforms/               # Ad platform connectors (Google, Meta, LinkedIn)
+│   ├── campaign/                # Campaign CRUD + optimizer
+│   ├── creative/                # AI ad copy generation
+│   ├── intelligence/            # Competitor monitoring
+│   └── analytics/               # Cross-platform reporting
 └── stripe.ts                    # Stripe client
 ```
 
@@ -94,7 +117,39 @@ The core business logic lives in `/app/api/lama/audit/route.ts`:
 | HubSpot | CRM | `HUBSPOT_ACCESS_TOKEN` |
 | Anthropic | AI analysis (clarity) | `ANTHROPIC_API_KEY` |
 | Stripe | Payments | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID` |
-| GA4 | Analytics | `NEXT_PUBLIC_GA_MEASUREMENT_ID` |
+| GA4 | Analytics (via GTM) | `NEXT_PUBLIC_GA_MEASUREMENT_ID` |
+| GTM | Tag management | `NEXT_PUBLIC_GTM_ID` |
+| Google Ads | Remarketing + Conversions | `NEXT_PUBLIC_GOOGLE_ADS_ID` |
+| Google Ads API | Campaign management (MCC) | `GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CUSTOMER_ID`, `GOOGLE_ADS_MANAGER_CUSTOMER_ID` |
+
+### Tracking Loading Order (layout.tsx)
+
+Critical: ConsentMode must load FIRST, before any tracking scripts.
+
+```
+<head>
+  1. ConsentMode          ← Sets defaults BEFORE tags load
+  2. Preconnect links     ← GTM + Google Ads domains
+  3. SchemaOrg            ← JSON-LD structured data
+</head>
+<body>
+  4. GTMNoScript          ← First in body
+  5. {children}
+  6. GTMScript            ← Loads GTM container
+  7. GoogleAnalytics      ← Fallback (returns null when GTM active)
+  8. WebVitals
+  9. ScrollTracker
+</body>
+```
+
+### MCC (Marketing Command Center)
+
+OAuth2 flow for Google Ads API:
+- `lib/mcc/google-auth.ts` — Token management (auto-refresh, file storage)
+- Tokens in `.google-ads-token.json` (gitignored)
+- In-memory cache with 5s TTL
+- API routes: `/api/mcc/auth`, `/api/mcc/auth/callback`, `/api/mcc/auth/status`
+- **Status:** OAuth2 working, Basic Access pending Google approval
 
 ## Important Patterns
 

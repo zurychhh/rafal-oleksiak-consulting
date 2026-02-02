@@ -1,9 +1,9 @@
 # 🗺️ ROADMAP - Rafał Oleksiak Consulting
 ## Project Status & Progress Tracker
 
-**Last Updated:** 2026-01-17
-**Current Phase:** Phase 2 - LAMA System Live + Enhancements
-**Overall Progress:** 75% (Website ✅ Complete, LAMA Free ✅ Live, Paid 📦 Archived, Enhancements 🚧)
+**Last Updated:** 2026-02-02
+**Current Phase:** Phase 3 - Advertising Infrastructure + Growth
+**Overall Progress:** 85% (Website ✅, LAMA ✅, Tracking ✅, Blog ✅, Ads 🚧)
 
 ---
 
@@ -15,230 +15,196 @@
 | LAMA Free Audit | ✅ Live | 100% | - | 2025-12-11 |
 | LAMA Paid Audit (Stripe) | 📦 Archived | 100% | LOW | 2026-01-17 |
 | PDF Report | ✅ Production-Ready | 100% | - | 2026-01-07 |
-| Follow-up Automation | 🚧 Template Ready | 50% | HIGH | 2025-12-21 |
-| SEO Enhancement | ❌ Not Started | 0% | HIGH | - |
-| Analytics | ✅ GA4 Live | 80% | MEDIUM | 2025-12-08 |
-| Case Studies Pages | ❌ Not Started | 0% | MEDIUM | - |
+| Blog + Admin Panel | ✅ Live | 100% | - | 2026-02-01 |
+| Auto-Publish | ✅ Live | 100% | - | 2026-02-01 |
+| RADAR AI | ✅ Live | 100% | - | 2026-02-01 |
+| GTM + Consent Mode v2 | ✅ Live | 100% | - | 2026-02-02 |
+| Schema.org JSON-LD | ✅ Live | 100% | - | 2026-02-02 |
+| Google Ads (Remarketing + Conversions) | ✅ Live (via GTM) | 100% | - | 2026-02-02 |
+| Google Ads API (MCC) | ⏳ Basic Access Pending | 80% | HIGH | 2026-02-02 |
+| LinkedIn Ads Integration | ❌ Not Started | 0% | HIGH | - |
+| Follow-up Automation | 🚧 Template Ready | 50% | MEDIUM | 2025-12-21 |
 
 ---
 
 ## 🔄 RESUME POINT (dla Claude Code)
 
 **Exact State:**
-- Projekt: LAMA Free Audit live, Paid Audit archived (backend zachowany)
-- Aktualny fokus: Follow-up automation + SEO + Growth
-- Status: Free audit flow gotowy do reklamowania
+- Projekt: Full tracking infrastructure deployed, Google Ads API Basic Access pending
+- Aktualny fokus: LinkedIn Ads integration → paid social campaign
+- Status: Strona gotowa do reklamowania na Google i LinkedIn
 
 **Co działa:**
 - ✅ Main website deployed (90+ Lighthouse scores)
 - ✅ LAMA Free Audit (6 categories, email delivery, CTA do konsultacji)
 - ✅ HubSpot CRM integration (auto contact creation)
-- ✅ GA4 Analytics (event tracking)
-- ✅ CRT Success Screen (typewriter animation, tylko konsultacja)
-- ✅ PDF Report - 100% production-ready (backend ready, tylko dla paid)
+- ✅ Blog + Admin Panel (Railway backend, post editor, SEO scores)
+- ✅ Auto-Publish product page + RADAR AI competitor intelligence
+- ✅ GTM (GTM-PTPCV5FD) z GA4, Google Ads Remarketing, Conversion Linker
+- ✅ Consent Mode v2 (GDPR-compliant, 31 krajów EEA)
+- ✅ Schema.org JSON-LD (4 blocks: Organization, Person, ProfessionalService, WebSite)
+- ✅ Google Ads conversions: form_submission_lead → GA4 → Google Ads (imported)
+- ✅ MCC OAuth2 flow (token refresh, file storage, in-memory cache)
 
-**Co jest Archived (do przywrócenia później):**
-- 📦 LAMA Paid Audit (Stripe integration, €99)
-- 📦 Patrz: `PAID_AUDIT_ARCHIVE.md` dla pełnej dokumentacji
+**Co jest Archived:**
+- 📦 LAMA Paid Audit (Stripe integration, €99) — patrz `PAID_AUDIT_ARCHIVE.md`
 
-**Co jest In Progress:**
-- ⏳ Follow-up email automation (template ready, needs implementation)
-- ⏳ SEO enhancement (sitemap, Open Graph, structured data)
+**Co jest In Progress / Blocked:**
+- ⏳ Google Ads API Basic Access — application submitted 2026-02-02, czeka na Google review
+- ⏳ Remarketing audience — zbiera dane (min 1000 users required)
+- ⏳ Follow-up email automation (template ready, needs scheduling implementation)
 
 **Next Immediate Steps:**
-1. Implement 3-day follow-up email automation (Klaviyo or cron)
-2. SEO implementation (sitemap.xml, meta tags, structured data)
-3. Error boundaries (app/error.tsx)
-4. Case studies detailed pages
+1. LinkedIn Ads integration — user ma post do promowania
+2. Czekać na Google Ads API Basic Access approval
+3. Pierwsza Google Ads Search campaign (po approval)
+4. Follow-up email automation
 
-**Blockers:** None ✅
+**Blockers:**
+- Google Ads API Basic Access pending (blokuje programmatyczne zarządzanie kampaniami)
 
-**Context:** Free audit flow gotowy do reklamowania. Paid audit tymczasowo wyłączony z UI, ale backend infrastructure zachowany dla przyszłego przywrócenia. Patrz `PAID_AUDIT_ARCHIVE.md`.
+**Context:** Kompletna infrastruktura trackingowa deployed na production. Google Ads konto połączone z MCC (manager account). OAuth2 działa. Czekamy na Basic Access dla API. LinkedIn Ads to następny krok.
 
 ---
 
 ## ✅ RECENTLY COMPLETED (Last 15 items)
 
+### 2026-02-02
+- ✅ **Google Ads Tracking Infrastructure (Complete)**
+  - Consent Mode v2 — GDPR defaults `denied` for 31 EEA countries
+  - GTM Container GTM-PTPCV5FD — 3 tags: GA4, Remarketing, Conversion Linker
+  - Schema.org JSON-LD — 4 blocks (Organization, Person, ProfessionalService, WebSite)
+  - Preconnect to GTM/Google Ads domains in layout.tsx
+  - GoogleAnalytics.tsx updated to fallback mode (skip when GTM active)
+  - CookieConsent banner integrated with Consent Mode v2
+  - Files: `ConsentMode.tsx`, `GTMScript.tsx`, `SchemaOrg.tsx`, `CookieConsent.tsx`, `layout.tsx`
+  - Impact: Full Google Ads campaign readiness
+
+- ✅ **Google Ads Account Setup**
+  - Created Google Ads account (544-648-7427)
+  - Created Manager Account (MCC): 759-448-7243
+  - Linked accounts (manager → client)
+  - GA4 auto-linked with Google Ads
+  - Created conversion event: `form_submission_lead` (Active in Google Ads)
+  - Deployed Remarketing tag + Conversion Linker via GTM (Version 2 published)
+  - Impact: Ready for Search, Display, and Remarketing campaigns
+
+- ✅ **Google Ads API OAuth2 Flow**
+  - Enabled 3 APIs: Google Ads API, Tag Manager API, Google Analytics Admin API
+  - Created OAuth2 client credentials in Google Cloud Console
+  - Built 3 API routes: auth initiation, callback, status check
+  - Built token management: auto-refresh, file storage, in-memory cache (5s TTL)
+  - No external OAuth libraries — pure fetch()
+  - Files: `app/api/mcc/auth/*`, `lib/mcc/google-auth.ts`
+  - Impact: OAuth2 working, tokens refreshing
+
+- ✅ **Google Ads API Basic Access Application**
+  - Generated MCC-Design-Document.rtf for application
+  - Submitted application form with: MCC ID, business description, API capabilities
+  - Status: Pending Google review
+  - Impact: Will unlock programmatic campaign management
+
+- ✅ **Vercel Deployment Update**
+  - Added env vars: NEXT_PUBLIC_GTM_ID, NEXT_PUBLIC_GOOGLE_ADS_ID
+  - Deployed to production via `npx vercel --prod`
+  - Verified: GTM 2x in HTML (script + noscript), Consent Mode, Schema.org
+
+### 2026-01-17 → 2026-02-01
+- ✅ **Blog + Admin Panel**
+  - Railway backend, post editor, topic suggestions, SEO scores, visual analytics
+  - Overview dashboard with tenant-specific stats
+  - Files: `app/blog/`, `app/admin/`
+
+- ✅ **Auto-Publish Product Page**
+  - /auto-publish with trial form + CSS styles
+  - Files: `app/auto-publish/`
+
+- ✅ **RADAR AI Competitor Intelligence**
+  - Informational product page, added to Accelerators section
+  - Files: various
+
+- ✅ **Accelerators Section**
+  - 3 tool cards on homepage (Auto-Publish, RADAR, LAMA Pro)
+
 ### 2026-01-17
 - ✅ **Paid Audit Feature Archived**
-  - Reason: Focus on free audit → consultation flow for advertising
-  - Removed from UI: paid button (FinalCTA), Path 02 (FinalSuccessScreen), UPGRADE CTA (email)
-  - Created: `PAID_AUDIT_ARCHIVE.md` with full restoration guide
-  - Preserved: Backend infrastructure (Stripe endpoints, PDF generation)
-  - Files: `FinalSuccessScreen.tsx`, `FinalCTA.tsx`, `email-template.ts`, `audit/route.ts`
-  - Impact: Clean free audit flow ready for ads, easy to restore later
+  - Clean free audit flow ready for ads, easy to restore later
+  - See `PAID_AUDIT_ARCHIVE.md`
 
 ### 2026-01-07
 - ✅ **PDF Placeholder Data Removal**
-  - Audited PDF generation for production readiness
-  - Identified 3 pages with fake/placeholder data in FIND Section
-  - Removed fake keyword volume/difficulty (Page 4)
-  - Removed backlink comparison table with zeros (Page 5)
-  - Removed fake citations/reviews stats (Page 6)
-  - Replaced with actionable guidance (how to get real data)
-  - Files: `FINDSection6Pages.tsx`, `FINDSection7Pages.tsx`, `pdf-generator-core.tsx`
-  - Impact: PDF now 100% production-ready, no misleading data
+  - PDF now 100% production-ready, no misleading data
 
 ### 2025-12-21
-- ✅ **Documentation Setup**
-  - Created STATUS.md (current snapshot)
-  - Updated CLAUDE.md (coding standards)
-  - Updated ROADMAP.md (this file)
-  - Consolidated docs from 6 files → 4 files
-  - Impact: Better project management, easier handoffs
-
-- ✅ **PDF Generation Fix**
-  - Fixed: Vercel production PDF generation failing
-  - Root cause: HTTP fetch to own API not working
-  - Solution: Direct function call instead of fetch
-  - Files: `app/api/lama/audit/route.ts`
-  - Impact: PDF reports now work in production
-
-- ✅ **TypeScript Build Fixes**
-  - Resolved: Build errors blocking deployment
-  - Fixed type issues in analyzers
-  - Impact: Clean production builds
+- ✅ Documentation Setup + PDF Generation Fix + TypeScript Build Fixes
 
 ### 2025-12-20
-- ✅ **Mobile Email Layout Fix**
-  - Fixed: Email not responsive on mobile devices
-  - Solution: Single column + dark theme
-  - Files: `lib/lama/email-template.ts`
-  - Impact: Better email readability on mobile
-
-- ✅ **Client-side Audit Popup**
-  - Moved audit trigger to client-side
-  - Added instant success popup
-  - Impact: Better UX, faster perceived performance
+- ✅ Mobile Email Layout Fix + Client-side Audit Popup
 
 ### 2025-12-11
-- ✅ **Stripe Paid Audit Implementation**
-  - Implemented: €99/€199 pricing tiers
-  - Created: Stripe checkout flow
-  - Added: Webhook handler for payment confirmation
-  - Files: `app/api/stripe/*`, `lib/stripe.ts`
-  - Impact: Monetization of LAMA system
-
-- ✅ **Follow-up Email Template**
-  - Created: 3-day retargeting email template
-  - Content: Value proposition + consultation CTA
-  - File: `lib/lama/followup-email-template.ts`
-  - Status: Ready for automation
-  - Impact: Will increase conversion rate
-
-- ✅ **Content Updates**
-  - Updated: Hero section messaging
-  - Improved: Collaboration section
-  - Enhanced: FinalCTA copy
-  - Impact: Clearer value proposition
-
-- ✅ **Vercel Configuration Fix**
-  - Fixed: `.vercelignore` blocking API routes
-  - Solution: Removed problematic patterns
-  - Impact: All API endpoints now work
+- ✅ Stripe Paid Audit + Follow-up Email Template + Content Updates
 
 ### 2025-12-10
-- ✅ **Navigation Restructure**
-  - Changed to: WHO/WHAT/HOW/WHY/WHEN
-  - Clearer information architecture
-  - Impact: Better user flow
-
-- ✅ **Reference Update**
-  - Removed: mBank (temporary)
-  - Reason: To be re-added with permission
-  - Impact: Maintain credibility
-
-- ✅ **Next.js Security Update**
-  - Updated: Next.js 16.0.7 → 16.0.8
-  - Reason: Security patch
-  - Impact: Production security
-
-- ✅ **Font Display Optimization**
-  - Added: font-display: swap
-  - Impact: Better FCP scores
+- ✅ Navigation WHO/WHAT/HOW/WHY/WHEN + Next.js 16.0.8 security fix
 
 ### 2025-12-08
-- ✅ **CRT Success Screen**
-  - Implemented: Typewriter animation
-  - Component: `FinalSuccessScreen.tsx`
-  - Impact: Delightful UX after audit submission
-
-- ✅ **PDF Port Detection Fix**
-  - Fixed: Dynamic port detection for local dev
-  - Impact: PDF generation works in all environments
+- ✅ CRT Success Screen + PDF Port Detection Fix
 
 ### 2025-11-09 (Website Launch)
-- ✅ **PR #14 - Hero Section Simplification**
-  - Removed: badge, gradient, long subheadline, statistics from hero
-  - Simplified: plain white headline, single-line subheadline
-  - Enhanced: CTA prominence (48px padding, 12px radius)
-  - Moved: Statistics to separate section below hero
-  - Impact: Reduced cognitive load, improved conversion potential
-  - Commit: [see git log]
+- ✅ PR #14 - Hero Section Simplification
 
 ---
 
 ## 🚧 CURRENTLY IN PROGRESS
 
-### Phase 2: Enhancements & Optimization
+### Phase 3: Advertising Infrastructure + Growth
 
-**Current Sprint:** Documentation + Automation + SEO
+**Current Sprint:** LinkedIn Ads + Google Ads Campaigns
 
 **Active Tasks:**
-- [x] **Project Documentation** (TODAY - 2025-12-21)
-  - [x] STATUS.md created
-  - [x] CLAUDE.md updated
-  - [x] ROADMAP.md updated
-  - [x] Consolidated from 6 → 4 files
-  - Time: 2h
 
-- [ ] **Follow-up Email Automation** (HIGH PRIORITY - Week 1)
+- [ ] **LinkedIn Ads Integration** (HIGH PRIORITY — NEXT)
+  - [ ] LinkedIn Marketing API credentials
+  - [ ] OAuth2 flow for LinkedIn
+  - [ ] Promote existing LinkedIn post
+  - Context: User ma post gotowy do promowania
+  - Impact: Paid social media lead generation
+
+- [ ] **Google Ads API — Basic Access** (BLOCKED)
+  - [x] OAuth2 flow built and working
+  - [x] Application submitted 2026-02-02
+  - [ ] Await Google approval
+  - [ ] First API-managed Search campaign
+  - Impact: Programmatic campaign management
+
+- [ ] **Follow-up Email Automation** (MEDIUM PRIORITY)
   - [ ] Choose solution (Klaviyo vs cron job)
   - [ ] Implement 3-day delay trigger
-  - [ ] Test with real users
   - Template: Ready ✅
-  - Time: 4h
   - Impact: +10-15% conversion rate
-
-- [ ] **SEO Implementation** (HIGH PRIORITY - Week 1)
-  - [ ] sitemap.xml generation
-  - [ ] Open Graph meta tags
-  - [ ] Schema.org structured data (Organization, Service)
-  - [ ] Test with Google Rich Results
-  - Time: 3h
-  - Impact: Better organic visibility
-
-- [ ] **Error Boundaries** (HIGH PRIORITY - Week 1)
-  - [ ] app/error.tsx (global)
-  - [ ] Graceful API error handling
-  - [ ] User-friendly error messages
-  - Time: 2h
-  - Impact: Better UX, fewer lost leads
 
 ---
 
 ## 📋 NEXT UP (Priorytetyzowane)
 
-### 🔴 HIGH PRIORITY (Week 1-2)
+### 🔴 HIGH PRIORITY
 
-1. **Follow-up Email Automation** - Increase free→paid conversion
-2. **SEO Enhancement** - Organic visibility (sitemap, Open Graph, Schema.org)
-3. **Error Boundaries** - Better error handling
-4. **Performance Monitoring** - Lighthouse CI, budgets
+1. **LinkedIn Ads Integration** — Promote existing LinkedIn post
+2. **Google Ads Search Campaign** — First keyword campaign (after Basic Access)
+3. **Follow-up Email Automation** — 3-day retargeting
+4. **Error Boundaries** — app/error.tsx
 
-### 🟡 MEDIUM PRIORITY (Week 3-4)
+### 🟡 MEDIUM PRIORITY
 
-5. **Case Studies Detailed Pages** - Social proof, trust building
-6. **Hotjar Integration** - Heatmaps, session recordings
-7. **A/B Testing Framework** - Hero variants, form optimization
-8. **Blog Setup** - MDX, SEO content marketing
+5. **Analytics Enhancement** — Hotjar, funnel analysis, A/B testing
+6. **Case Studies Detailed Pages** — Social proof, trust building
+7. **Performance Monitoring** — Lighthouse CI, budgets
 
-### 🟢 LOW PRIORITY (Month 2+)
+### 🟢 LOW PRIORITY
 
-9. **Multi-language Support** - Polish + English
-10. **Chatbot Integration** - AI-powered FAQ
-11. **Advanced Analytics** - Funnel analysis, cohort analysis
-12. **White-label LAMA** - For agencies
+8. **Multi-language Support** — Polish + English
+9. **Chatbot Integration** — AI-powered FAQ
+10. **White-label LAMA** — For agencies
 
 ---
 
@@ -344,8 +310,69 @@ PDF generation now works perfectly in production. Cost savings: €300-500/month
 
 ---
 
+### Decision: GTM-Centralized Tracking Over Direct Scripts
+**Date:** 2026-02-02
+**Category:** Architecture / Marketing
+
+**Context:**
+Need tracking infrastructure for Google Ads campaigns (remarketing, conversions). Options: direct script tags in HTML vs GTM container.
+
+**Options:**
+1. **Direct scripts** — GA4, Google Ads tags directly in layout.tsx
+2. **GTM container** — All tags managed via GTM, single script in HTML
+
+**Decision:**
+GTM container (GTM-PTPCV5FD) because:
+- Single point of management for all marketing tags
+- Non-dev can add/modify tags without deployment
+- Built-in consent mode integration
+- Tag firing rules and triggers manageable via UI
+- Versioning and preview mode for safe changes
+
+**Loading order in layout.tsx:**
+1. ConsentMode (first in `<head>` — sets defaults BEFORE any tags load)
+2. Preconnect to GTM/Google Ads domains
+3. SchemaOrg JSON-LD
+4. GTMNoScript (first in `<body>`)
+5. GTMScript (loads container)
+6. GoogleAnalytics (fallback — returns null when GTM is active)
+
+**Trade-offs:**
+- Slight additional load from GTM container (~30KB)
+- Need to manage two places (code + GTM UI)
+- But flexibility and ease of adding new tags outweighs
+
+**Status:** ✅ Implemented
+
+---
+
+### Decision: OAuth2 Without External Libraries
+**Date:** 2026-02-02
+**Category:** Architecture / Security
+
+**Context:**
+Need OAuth2 flow for Google Ads API. Options: use passport.js/next-auth vs build custom.
+
+**Decision:**
+Custom implementation with plain fetch() because:
+- Single user (company owner) — no need for complex auth framework
+- File-based token storage (`.google-ads-token.json`)
+- In-memory cache with 5s TTL for performance
+- Auto-refresh with 5-minute buffer before expiration
+- Zero external dependencies
+
+**Implementation:**
+- `lib/mcc/google-auth.ts` — getAccessToken(), getAuthHeaders(), auto-refresh
+- `app/api/mcc/auth/route.ts` — Redirect to Google OAuth2 consent screen
+- `app/api/mcc/auth/callback/route.ts` — Exchange code for tokens, save to file
+- `app/api/mcc/auth/status/route.ts` — Check auth status
+
+**Status:** ✅ Implemented
+
+---
+
 ### Decision: Documentation Structure (4 Files)
-**Date:** 2025-12-21  
+**Date:** 2025-12-21
 **Category:** Project Management  
 
 **Context:**  
@@ -416,36 +443,39 @@ PDF is now 100% production-ready with honest, actionable content.
 ## 🎯 MILESTONES & PHASES
 
 ### ✅ Phase 0: Main Website (COMPLETE - Nov 2025)
-- Complete mobile responsiveness
-- Performance optimization (90+ scores)
-- Navigation system
-- Hero section simplified
-- SEO-friendly structure
+- Complete mobile responsiveness, 90+ Lighthouse, navigation
 
 ### ✅ Phase 1: LAMA MVP (COMPLETE - Dec 2025)
-- 6-category audit system
-- PDF generation
-- Email delivery
-- Free audit flow
-- HubSpot integration
+- 6-category audit, PDF, email, free audit flow, HubSpot
 
-### ✅ Phase 1.5: LAMA Paid (COMPLETE - Dec 2025)
-- Stripe integration
-- €99/€199 pricing tiers
-- Webhook payment confirmation
-- Paid audit flow
+### ✅ Phase 1.5: LAMA Paid (COMPLETE - Dec 2025, ARCHIVED Jan 2026)
+- Stripe, €99 pricing, webhook, paid audit flow — backend preserved
 
-### 🚧 Phase 2: Enhancements (IN PROGRESS - Dec 2025)
-- ✅ Documentation setup
-- ⏳ Follow-up automation
-- ⏳ SEO enhancement
+### ✅ Phase 2: Content & SEO (COMPLETE - Jan-Feb 2026)
+- ✅ Blog + Admin Panel (Railway backend)
+- ✅ Auto-Publish product page
+- ✅ RADAR AI Competitor Intelligence
+- ✅ Accelerators section
+- ✅ Schema.org structured data (4 JSON-LD blocks)
+- ✅ Documentation updates
+
+### ✅ Phase 2.5: Tracking Infrastructure (COMPLETE - Feb 2026)
+- ✅ GTM Container (GA4, Remarketing, Conversion Linker)
+- ✅ Consent Mode v2 (GDPR, 31 EEA countries)
+- ✅ Google Ads account setup + Manager Account (MCC)
+- ✅ Conversion tracking: form_submission_lead → GA4 → Google Ads
+- ✅ Google Ads API OAuth2 flow
+- ⏳ Basic Access pending
+
+### 🚧 Phase 3: Advertising & Growth (IN PROGRESS - Feb 2026)
+- ⏳ LinkedIn Ads integration (promote existing post)
+- ⏳ Google Ads Search campaign (after Basic Access)
+- ⏳ Follow-up email automation
 - ⏳ Error boundaries
-- ⏳ Case studies pages
 
-### ⏳ Phase 3: Scale & Optimization (FUTURE - Q1 2026)
-- Analytics deep dive
+### ⏳ Phase 4: Scale & Optimization (FUTURE)
+- Analytics deep dive (Hotjar, funnel analysis)
 - A/B testing
-- Blog + content marketing
 - Multi-language support
 - White-label LAMA for agencies
 
@@ -466,13 +496,22 @@ PDF is now 100% production-ready with honest, actionable content.
 4. **Stripe Integration** - Worth higher fees for better DX
 5. **"Zawsze Syntezuj"** - Users pay for solutions, not analysis
 
+### From Tracking & Google Ads Setup (Feb 2026):
+1. **Tracking before campaigns** - Zainstaluj tracking zanim wydasz budżet na reklamy
+2. **Google Ads API test access** - Nie działa z production accounts, trzeba Basic Access
+3. **GTM Polish UI** - "Conversion Linker" = "Tag łączący konwersje" po polsku
+4. **OAuth2 without libraries** - Czysty fetch() wystarczy, nie trzeba external packages
+5. **Consent Mode ordering** - Musi być FIRST w `<head>`, przed GTM i GA4
+6. **File-based token storage** - Prosty pattern: `.google-ads-token.json` + `.gitignore`
+7. **GTM Preview + ad blocker** - Preview może nie działać z ad blockerem, ale tag działa
+
 ---
 
 **END OF ROADMAP**
 
 *Update after each completed task. At 90% context → document → commit → alert user.*
 
-**Next Update:** After implementing follow-up automation or SEO
+**Next Update:** After LinkedIn Ads integration or Google Ads Basic Access approval
 
 **See Also:**
 - STATUS.md - Current snapshot, integrations, blockers

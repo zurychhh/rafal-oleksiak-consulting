@@ -60,3 +60,6 @@ UXPILOT.md
 *.eml
 test-email-output.html
 test-screenshots/
+
+# Google Ads OAuth tokens
+.google-ads-token.json

@@ -1,8 +1,8 @@
 # STATUS.md - Aktualny Stan Projektu
 
-**Projekt**: oleksiakconsulting.com  
-**Ostatnia Aktualizacja**: 2026-01-17  
-**Wersja**: Next.js 16.0.8 | React 19 | TypeScript 5.9  
+**Projekt**: oleksiakconsulting.com
+**Ostatnia Aktualizacja**: 2026-02-02
+**Wersja**: Next.js 16.0.8 | React 19 | TypeScript 5.9
 **URL Produkcji**: https://oleksiakconsulting.com
 
 ---
@@ -17,8 +17,16 @@
 | **CRT Success Screen** | ✅ LIVE | Typewriter animation po audycie |
 | **Follow-up Email** | ✅ READY | Template 3-dniowego retargetingu |
 | **HubSpot Integration** | ✅ LIVE | Automatyczne tworzenie kontaktów |
-| **GA4 Analytics** | ✅ LIVE | Event tracking + Web Vitals |
+| **GA4 Analytics** | ✅ LIVE | Via GTM (GTM-PTPCV5FD), event tracking + Web Vitals |
 | **PDF Generation** | ✅ LIVE | 100+ stron raportu (tylko dla paid - backend ready) |
+| **Blog + Admin Panel** | ✅ LIVE | Blog z Railway backend, panel administracyjny |
+| **Auto-Publish** | ✅ LIVE | Strona produktowa z formularzem trial |
+| **RADAR AI** | ✅ LIVE | Competitor Intelligence informational page |
+| **GTM (Google Tag Manager)** | ✅ LIVE | Kontener GTM-PTPCV5FD z GA4 + Google Ads tags |
+| **Consent Mode v2** | ✅ LIVE | GDPR-compliant, 31 krajów EEA domyślnie denied |
+| **Schema.org JSON-LD** | ✅ LIVE | Organization, Person, ProfessionalService, WebSite |
+| **Google Ads Remarketing** | ✅ LIVE | Tag remarketing + Conversion Linker w GTM |
+| **Google Ads Conversion** | ✅ LIVE | form_submission_lead event → GA4 → Google Ads |
 
 ---
 
@@ -30,8 +38,44 @@
 | **HubSpot** | ✅ OK | `HUBSPOT_ACCESS_TOKEN` | CRM integration |
 | **Anthropic Claude** | ✅ OK | `ANTHROPIC_API_KEY` | AI analysis (Clarity category) |
 | **Google PageSpeed** | ✅ OK | - | Wbudowany (no key needed) |
-| **Stripe** | ✅ OK | `STRIPE_SECRET_KEY`<br>`STRIPE_WEBHOOK_SECRET`<br>`STRIPE_PRICE_ID` | Payment processing |
-| **Google Analytics 4** | ✅ OK | G-WZWCGQLQ2Y | Event tracking |
+| **Stripe** | ✅ OK | `STRIPE_SECRET_KEY` etc. | Payment processing |
+| **Google Analytics 4** | ✅ OK | `G-WZWCGQLQ2Y` | Via GTM, event tracking |
+| **Google Tag Manager** | ✅ OK | `GTM-PTPCV5FD` | 3 tagi: GA4, Remarketing, Conversion Linker |
+| **Google Ads** | ✅ OK | `AW-17922704201` | Remarketing + Conversions via GTM |
+| **Google Ads API** | ⏳ PENDING | `GOOGLE_ADS_DEVELOPER_TOKEN` | Basic Access pending Google approval |
+
+---
+
+## 📊 Google Ads & Tracking Infrastructure
+
+### Konta Google Ads
+
+| Konto | ID | Typ | Status |
+|-------|-----|-----|--------|
+| Oleksiak Consulting MCC | 759-448-7243 | Manager | ✅ Active |
+| Rafał Oleksiak Consulting | 544-648-7427 | Client (own) | ✅ Linked to MCC |
+
+### GTM Tags (Version 2, Published)
+
+| Tag | Typ | Trigger |
+|-----|-----|---------|
+| GA4 Configuration | Google Tag | All Pages |
+| Google Ads Remarketing | Google Ads Remarketing | All Pages |
+| Conversion Linker (Tag łączący konwersje) | Conversion Linker | All Pages |
+
+### Google Ads API Access
+
+- **OAuth2**: ✅ Configured (OAuth client `236619926081-...`)
+- **Developer Token**: `EfdPrqI-OI_u_fBUNNIVYg` (test access)
+- **Basic Access**: ⏳ Application submitted 2026-02-02, czeka na review Google
+- **Token Refresh**: ✅ Auto-refresh działa, tokeny w `.google-ads-token.json`
+
+### Consent Mode v2
+
+- Defaults: `denied` dla ad_storage, analytics_storage, ad_personalization, ad_user_data
+- 31 krajów EEA + UK automatycznie `denied`
+- Reszta świata: `granted`
+- Cookie consent banner aktualizuje consent mode dynamicznie
 
 ---
 
@@ -43,9 +87,41 @@ app/api/
 │   └── audit/route.ts          # Główny endpoint audytu (free + paid)
 ├── pdf-generator/route.ts      # Generowanie PDF (Vercel-safe)
 ├── send-email/route.ts         # Formularz kontaktowy
-└── stripe/
-    ├── create-checkout/route.ts # Tworzenie sesji Stripe
-    └── webhook/route.ts         # Webhook dla płatności
+├── stripe/
+│   ├── create-checkout/route.ts # Tworzenie sesji Stripe
+│   └── webhook/route.ts         # Webhook dla płatności
+└── mcc/                         # Marketing Command Center
+    ├── auth/route.ts            # OAuth2 initiation → Google consent screen
+    ├── auth/callback/route.ts   # OAuth2 callback → save tokens
+    ├── auth/status/route.ts     # Auth status check
+    ├── campaigns/route.ts       # Campaign management
+    ├── creative/route.ts        # Ad creative generation
+    ├── intelligence/route.ts    # Competitor monitoring
+    ├── analytics/route.ts       # Cross-platform analytics
+    └── platforms/
+        ├── google/route.ts      # Google Ads connector
+        ├── meta/route.ts        # Meta Ads connector (planned)
+        └── linkedin/route.ts    # LinkedIn Ads connector (planned)
+
+lib/mcc/                         # MCC shared code
+├── google-auth.ts               # OAuth2 token management (auto-refresh)
+├── types.ts                     # MCC TypeScript interfaces
+├── index.ts                     # Main MCC orchestrator
+├── platforms/
+│   ├── types.ts                 # Platform connector interfaces
+│   ├── index.ts                 # Platform registry
+│   ├── google-ads.ts            # Google Ads platform connector
+│   ├── meta-ads.ts              # Meta Ads connector (planned)
+│   └── linkedin-ads.ts          # LinkedIn Ads connector (planned)
+├── campaign/
+│   ├── manager.ts               # Campaign CRUD operations
+│   └── optimizer.ts             # Budget/bid optimization
+├── creative/
+│   └── copy-generator.ts        # AI-powered ad copy generation
+├── intelligence/
+│   └── competitor-monitor.ts    # Competitor tracking
+└── analytics/
+    └── aggregator.ts            # Cross-platform reporting
 ```
 
 ---
@@ -67,50 +143,58 @@ app/api/
 
 ## 📅 Ostatnie Zmiany
 
+### 2026-02-02 ✅
+- ✅ **Kompletna infrastruktura trackingowa Google Ads**
+  - Consent Mode v2 (GDPR, 31 krajów EEA)
+  - GTM Container GTM-PTPCV5FD z 3 tagami (GA4, Remarketing, Conversion Linker)
+  - Schema.org JSON-LD (Organization, Person, ProfessionalService, WebSite)
+  - Preconnect do GTM/Google Ads domains
+  - GoogleAnalytics.tsx → fallback mode (skip when GTM active)
+  - **Files:** `ConsentMode.tsx`, `GTMScript.tsx`, `SchemaOrg.tsx`, `layout.tsx`, `GoogleAnalytics.tsx`
+- ✅ **Google Ads Account Setup**
+  - Konto Google Ads: 544-648-7427
+  - Manager Account (MCC): 759-448-7243
+  - GA4 linked z Google Ads
+  - Conversion: `form_submission_lead` (Active)
+  - Remarketing tag deployed via GTM
+- ✅ **Google Ads API OAuth2 Flow**
+  - OAuth2 consent screen + client credentials
+  - 3 API routes: auth initiation, callback, status check
+  - Token management: auto-refresh, file storage, in-memory cache
+  - **Blocker:** Developer token = test access only. Basic Access application submitted.
+  - **Files:** `app/api/mcc/auth/*`, `lib/mcc/google-auth.ts`
+- ✅ **MCC Design Document** — wygenerowano dla Google Ads API Basic Access application
+- ✅ **Deployed to Vercel** — env vars: NEXT_PUBLIC_GTM_ID, NEXT_PUBLIC_GOOGLE_ADS_ID
+
+### 2026-01-17 → 2026-02-01
+- ✅ **Blog + Admin Panel** — overview dashboard, post editor, topic suggestions, SEO scores
+- ✅ **Auto-Publish product page** — /auto-publish z formularzem trial
+- ✅ **RADAR AI Competitor Intelligence** — informational product page
+- ✅ **Accelerators Section** — 3 tool cards on homepage
+
 ### 2026-01-17 ✅
 - ✅ **Archived Paid Audit Feature** - tymczasowo wyłączono z UI
-  - Usunięto przycisk płatnego audytu z FinalCTA
-  - Usunięto Path 02 (FULL REPORT PATH) z FinalSuccessScreen
-  - Usunięto UPGRADE CTA z email template
-  - Utworzono `PAID_AUDIT_ARCHIVE.md` dla przyszłego przywrócenia
-  - Zachowano backend infrastructure (Stripe endpoints, PDF generation)
   - **Impact:** Strona gotowa do reklamowania z prostym flow: free audit → konsultacja
-  - **Files:** `FinalSuccessScreen.tsx`, `FinalCTA.tsx`, `email-template.ts`, `audit/route.ts`
 
 ### 2026-01-07 ✅
 - ✅ **PDF Cleanup: Usunięto placeholder/fake data z raportu**
-  - Usunięto fake keyword volume/difficulty z Page 4 (Content Strategy)
-  - Usunięto tabelę backlinków z zerami z Page 5 (Link Building)
-  - Usunięto fake citations/reviews z Page 6 (Local SEO)
-  - Zastąpiono instrukcjami jak uzyskać prawdziwe dane (Ahrefs, SEMrush, BrightLocal)
   - **Impact:** PDF jest teraz 100% production-ready, bez wprowadzających w błąd danych
-  - **Files:** `FINDSection6Pages.tsx`, `FINDSection7Pages.tsx`, `pdf-generator-core.tsx`
 
 ### 2025-12-21 ✅
 - ✅ Naprawiono generowanie PDF (bezpośrednie wywołanie zamiast HTTP fetch)
-- ✅ Włączono PDF generation na Vercel production
-- ✅ Naprawiono błędy TypeScript blokujące build
-- ✅ Utworzono dokumentację projektową (STATUS, CLAUDE, ROADMAP, PROJECT_SUMMARY)
+- ✅ Utworzono dokumentację projektową
 
 ### 2025-12-20 ✅
 - ✅ Naprawiono mobile email layout (single column + dark theme)
-- ✅ Przeniesiono audit na client-side dla instant popup
 
 ### 2025-12-11 ✅
-- ✅ Zaimplementowano Stripe Paid Audit
-- ✅ Stworzono Follow-up Email Template
-- ✅ Zaktualizowano content: Hero, Collaboration, FinalCTA
-- ✅ Naprawiono `.vercelignore` (API routes działają)
+- ✅ Zaimplementowano Stripe Paid Audit + Follow-up Email Template
 
 ### 2025-12-10 ✅
-- ✅ Nawigacja: WHO/WHAT/HOW/WHY/WHEN
-- ✅ Usunięto mBank z referencji (do ponownego dodania później)
-- ✅ Next.js 16.0.8 (security fix)
-- ✅ Font display: swap
+- ✅ Nawigacja: WHO/WHAT/HOW/WHY/WHEN, Next.js 16.0.8 security fix
 
 ### 2025-12-08 ✅
 - ✅ CRT Success Screen z typewriter animation
-- ✅ Naprawiono dynamic port detection dla PDF
 
 ---
 
@@ -124,15 +208,19 @@ Email z wynikami audytu → HubSpot contact created →
 CRT Success Screen (rekomendacja: zarezerwuj konsultację)
 ```
 
+### Google Ads Conversion Flow
+```
+User trafia na stronę (z reklamy lub organicznie) →
+GTM ładuje: GA4 + Remarketing + Conversion Linker →
+User wypełnia formularz → form_submission_lead event →
+GA4 → Google Ads Conversion (imported) →
+Enhanced Conversion z hashed email
+```
+
 ### Paid Audit Flow (📦 ARCHIVED - patrz PAID_AUDIT_ARCHIVE.md)
 ```
-[WYŁĄCZONE] User wypełnia formularz → Klika "Get Full Audit €99" →
-Stripe Checkout Session → User płaci →
-Webhook checkout.session.completed →
-LAMA audit triggered z paid=true →
-Email z PDF → HubSpot updated → /audit-success page
+[WYŁĄCZONE] Backend infrastructure zachowany dla przyszłego przywrócenia.
 ```
-**Uwaga:** Backend infrastructure zachowany dla przyszłego przywrócenia.
 
 ---
 
@@ -142,20 +230,28 @@ Email z PDF → HubSpot updated → /audit-success page
 ```
 app/
 ├── HomeClient.tsx                        # Główny klient strony
+├── layout.tsx                            # Root layout (ConsentMode, GTM, SchemaOrg)
 ├── components/
 │   ├── sections/
 │   │   ├── Navbar.tsx                    # Navigation
-│   │   ├── Hero.tsx                      # Hero section (simplified)
+│   │   ├── Hero.tsx                      # Hero section
 │   │   ├── Services.tsx                  # Services showcase
 │   │   ├── CaseStudiesSection.tsx        # Case studies
 │   │   ├── ProcessTimeline.tsx           # How we work
-│   │   ├── FinalCTA.tsx                  # Formularz z LAMA audit
+│   │   ├── FinalCTA.tsx                  # Formularz z LAMA audit + enhanced conversions
 │   │   └── Footer.tsx                    # Footer
-│   └── ui/
-│       ├── FinalSuccessScreen.tsx        # CRT animation
-│       ├── Logo.tsx                      # Logo component
-│       └── CompanyCarousel.tsx           # Company logos
-└── audit-success/page.tsx                # Strona sukcesu Stripe
+│   ├── ui/
+│   │   ├── FinalSuccessScreen.tsx        # CRT animation
+│   │   ├── CookieConsent.tsx             # GDPR cookie consent banner
+│   │   ├── Logo.tsx                      # Logo component
+│   │   └── CompanyCarousel.tsx           # Company logos
+│   ├── ConsentMode.tsx                   # Google Consent Mode v2 defaults
+│   ├── GTMScript.tsx                     # GTM container script + noscript
+│   ├── SchemaOrg.tsx                     # 4x JSON-LD structured data
+│   └── GoogleAnalytics.tsx               # GA4 fallback (skip when GTM active)
+├── blog/                                 # Blog pages
+├── admin/                                # Admin panel
+└── auto-publish/                         # Auto-Publish product page
 ```
 
 ### Backend
@@ -163,22 +259,23 @@ app/
 app/api/
 ├── lama/audit/route.ts                   # Core audit logic
 ├── pdf-generator/route.ts                # PDF generation
-└── stripe/
-    ├── create-checkout/route.ts          # Stripe session
-    └── webhook/route.ts                  # Payment webhook
+├── stripe/                               # Payment processing
+└── mcc/                                  # Marketing Command Center
+    ├── auth/                             # OAuth2 flow (Google Ads API)
+    └── platforms/                        # Ad platform connectors
 
 lib/
-├── lama/
+├── lama/                                 # Audit system
 │   ├── analyzers/                        # 6 kategorii audytu
-│   │   ├── visibility.ts
-│   │   ├── performance.ts
-│   │   ├── conversion.ts
-│   │   ├── clarity.ts
-│   │   ├── trust.ts
-│   │   └── engagement.ts
 │   ├── email-template.ts                 # HTML email template
-│   ├── followup-email-template.ts        # 3-day follow-up
 │   └── hubspot.ts                        # HubSpot integration
+├── mcc/                                  # MCC shared code
+│   ├── google-auth.ts                    # OAuth2 token management
+│   ├── platforms/                        # Platform connectors
+│   ├── campaign/                         # Campaign management
+│   ├── creative/                         # AI ad copy generation
+│   ├── intelligence/                     # Competitor monitoring
+│   └── analytics/                        # Cross-platform reporting
 └── stripe.ts                             # Stripe client
 ```
 
@@ -194,30 +291,34 @@ STATUS.md              # Ten plik - current state
 
 ## 🚫 CURRENT BLOCKERS & ISSUES
 
-### Active Blockers: **NONE** ✅
+### Active Blockers:
+
+**[2026-02-02] Google Ads API — Basic Access Pending**
+- **Issue:** Developer token ma "Dostęp do eksploratora" (test access), nie działa z production accounts
+- **Root Cause:** Test access nie pozwala na dostęp do prawdziwych kont Google Ads
+- **Workaround:** Ręczne zarządzanie kampaniami via Google Ads UI
+- **Resolution:** Aplikacja o Basic Access wysłana 2026-02-02, czeka na review Google (typowo kilka dni)
+- **Impact:** MCC nie może programatycznie zarządzać kampaniami do czasu approval
+
+**[2026-02-02] Remarketing Audience — Zbyt mała**
+- **Issue:** Remarketing audience wymaga 1000+ użytkowników
+- **Root Cause:** Tag remarketing dopiero zainstalowany, brak wystarczającej ilości danych
+- **Resolution:** Automatycznie się rozwiąże wraz ze wzrostem ruchu
+- **Impact:** Nie można targetować audience remarketing w kampaniach (jeszcze)
 
 ### Recently Resolved:
 
-**[2025-12-21] PDF Generation Failing on Vercel**
-- **Issue:** PDF generation worked locally but failed on Vercel
-- **Root Cause:** HTTP fetch to own API endpoint not working on Vercel
-- **Solution:** Direct function call instead of HTTP fetch
-- **Status:** ✅ Resolved
-- **Files Changed:** `app/api/lama/audit/route.ts`
+**[2026-02-02] GTM Preview "nie znaleziono elementu"**
+- **Issue:** GTM Preview mode nie wykrywał kontenera
+- **Root Cause:** Prawdopodobnie ad blocker
+- **Solution:** Zweryfikowano via curl że GTM jest poprawnie osadzony w HTML
+- **Status:** ✅ Resolved (GTM działa, opublikowano Version 2)
 
-**[2025-12-20] Mobile Email Layout Broken**
-- **Issue:** Email template not responsive on mobile
-- **Root Cause:** Multi-column layout + light theme hard to read
-- **Solution:** Single column + dark theme for mobile
+**[2026-02-02] OAuth "Dostęp zablokowany"**
+- **Issue:** OAuth consent screen blokował autoryzację
+- **Root Cause:** Email nie był dodany jako test user
+- **Solution:** Dodano `rafaloleksiakconsulting@gmail.com` jako test user w Google Cloud Console
 - **Status:** ✅ Resolved
-- **Files Changed:** `lib/lama/email-template.ts`
-
-**[2025-11-09] Mobile Navigation Not Scrolling**
-- **Issue:** Anchor links not working on mobile menu
-- **Root Cause:** LazySection wrapper prevented DOM rendering
-- **Solution:** Removed lazy loading from navigable sections
-- **Status:** ✅ Resolved
-- **Impact:** Slightly larger bundle but perfect navigation
 
 ---
 
@@ -225,21 +326,22 @@ STATUS.md              # Ten plik - current state
 
 ### 🔴 HIGH PRIORITY
 
+- [ ] **LinkedIn Ads Integration** — NASTĘPNY KROK
+  - [ ] LinkedIn Marketing API credentials
+  - [ ] OAuth2 flow dla LinkedIn
+  - [ ] Promocja istniejącego posta na LinkedIn
+  - Cel: Paid social media campaign
+
+- [ ] **Google Ads — Pierwsza kampania Search**
+  - Czeka na: Basic Access approval
+  - [ ] Keyword research dla CRM consulting
+  - [ ] Ustawienie campaign budgets
+  - [ ] Ad copy creation
+  - Cel: Lead generation via Google Search
+
 - [ ] **Automatyczny 3-day follow-up email**
   - Implementacja: Klaviyo lub cron job
-  - Cel: Zwiększyć conversion rate z free → paid audit
-  - Estymacja: 4h
-  
-- [ ] **SEO Enhancement**
-  - [ ] sitemap.xml generation
-  - [ ] Open Graph tags (og:image, og:description)
-  - [ ] Structured data (Schema.org - Organization, Service)
-  - Estymacja: 3h
-
-- [ ] **Error Boundaries**
-  - [ ] app/error.tsx (global error boundary)
-  - [ ] Graceful error handling dla API failures
-  - Estymacja: 2h
+  - Cel: Zwiększyć conversion rate z free audit → konsultacja
 
 ### 🟡 MEDIUM PRIORITY
 
@@ -247,38 +349,20 @@ STATUS.md              # Ten plik - current state
   - [ ] Hotjar integration (heatmaps, recordings)
   - [ ] Funnel analysis (form start → completion)
   - [ ] A/B testing setup (hero section variants)
-  - Estymacja: 6h
+
+- [ ] **Error Boundaries**
+  - [ ] app/error.tsx (global error boundary)
+  - [ ] Graceful error handling dla API failures
 
 - [ ] **Case Studies Expansion**
   - [ ] Dedicated pages dla każdego case study
   - [ ] Before/after metrics visualization
-  - [ ] Video testimonials (jeśli dostępne)
-  - Estymacja: 8h
-
-- [ ] **Performance Monitoring**
-  - [ ] Lighthouse CI w GitHub Actions
-  - [ ] Performance budgets
-  - [ ] Core Web Vitals dashboard
-  - Estymacja: 4h
 
 ### 🟢 LOW PRIORITY
 
-- [ ] **Blog Setup**
-  - [ ] MDX integration
-  - [ ] Blog listing page
-  - [ ] SEO dla blog posts
-  - Estymacja: 12h
-
-- [ ] **Multi-language Support**
-  - [ ] Polish + English versions
-  - [ ] i18n routing
-  - [ ] Language switcher
-  - Estymacja: 16h
-
-- [ ] **Chatbot Integration**
-  - [ ] AI-powered FAQ chatbot
-  - [ ] Lead qualification
-  - Estymacja: 8h
+- [ ] **Multi-language Support** — Polish + English
+- [ ] **Chatbot Integration** — AI-powered FAQ
+- [ ] **White-label LAMA** — dla agencji
 
 ---
 
@@ -344,26 +428,31 @@ vercel env pull       # Pull environment variables
 
 ### Production (Vercel)
 ```bash
-# Required
+# Core Services
 RESEND_API_KEY=re_...
 HUBSPOT_ACCESS_TOKEN=pat-eu1-...
 ANTHROPIC_API_KEY=sk-ant-...
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_PRICE_ID=price_...
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-WZWCGQLQ2Y
 
-# Optional
-NODE_ENV=production
+# Tracking & Analytics
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-WZWCGQLQ2Y
+NEXT_PUBLIC_GTM_ID=GTM-PTPCV5FD
+NEXT_PUBLIC_GOOGLE_ADS_ID=AW-17922704201
+
+# Google Ads API (server-side only)
+GOOGLE_OAUTH_CLIENT_ID=236619926081-...
+GOOGLE_OAUTH_CLIENT_SECRET=GOCSPX-...
+GOOGLE_ADS_DEVELOPER_TOKEN=EfdPrqI-OI_u_fBUNNIVYg
+GOOGLE_ADS_MANAGER_CUSTOMER_ID=759-448-7243
+GOOGLE_ADS_CUSTOMER_ID=544-648-7427
 ```
 
 ### Development (Local)
 ```bash
-# Copy from Vercel or use test keys
-RESEND_API_KEY=re_...
-ANTHROPIC_API_KEY=sk-ant-...
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_PRICE_ID=price_...
+# Jak production + ewentualne test keys dla Stripe
+# Google Ads tokeny w .google-ads-token.json (gitignored)
 ```
 
 ---
@@ -371,9 +460,8 @@ STRIPE_PRICE_ID=price_...
 ## 📞 Kontakt
 
 - **Rafał Oleksiak** - właściciel projektu
-- **Email**: rafal@oleksiakconsulting.com
+- **Email**: rafaloleksiakconsulting@gmail.com
 - **Calendly**: https://calendly.com/rafal-oleksiak/30min
-- **LinkedIn**: [To be added]
 
 ---
 
@@ -384,15 +472,19 @@ STRIPE_PRICE_ID=price_...
 2. **Mobile Email** - Always test on actual mobile devices, not just desktop preview
 3. **Lazy Loading** - Can break navigation if sections aren't in DOM
 4. **PDF Generation** - Use server-side libraries, not browser-based solutions
+5. **Google Ads API** - Test access tokens nie działają z production accounts. Trzeba Basic Access.
+6. **GTM Polish UI** - "Conversion Linker" to po polsku "Tag łączący konwersje"
+7. **OAuth2 file-based tokens** - Prosty pattern bez zewnętrznych bibliotek, wystarczy fetch()
 
 ### Business
 1. **"Zawsze syntezuj"** - Deliver actionable solutions, not just analysis
 2. **ROI-driven** - Every feature should have clear business impact
 3. **Mobile-first** - 60%+ traffic expected from mobile
 4. **Fast iteration** - Better to ship and iterate than perfect on first try
+5. **Tracking first** - Zainstaluj tracking zanim odpalasz kampanie reklamowe
 
 ---
 
 **Uwaga**: Ten plik jest źródłem prawdy o aktualnym stanie projektu. Aktualizuj go po każdej większej zmianie lub na końcu każdej sesji.
 
-**Następna aktualizacja:** Po zaimplementowaniu któregoś z HIGH PRIORITY tasks
+**Następna aktualizacja:** Po LinkedIn Ads integration lub Google Ads Basic Access approval
