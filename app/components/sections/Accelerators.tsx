@@ -50,6 +50,32 @@ const tools = [
     ctaText: null,
   },
   {
+    id: 'radar',
+    status: 'progress' as const,
+    iconGradient: 'linear-gradient(135deg, #EF4444, #F97316)',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="6" />
+        <circle cx="12" cy="12" r="2" />
+        <path d="M12 2v4" />
+        <path d="M12 18v4" />
+        <path d="M4.93 4.93l2.83 2.83" />
+        <path d="M16.24 16.24l2.83 2.83" />
+      </svg>
+    ),
+    title: 'RADAR Competitor Intelligence',
+    description:
+      'AI scrapes and analyzes competitor websites. Get strategic intelligence on strengths, weaknesses, threats, and market gaps — delivered to your inbox.',
+    features: [
+      'Automated competitor website scraping and AI analysis',
+      'Strengths, weaknesses, and threat level assessment per competitor',
+      'Strategic action items and market gap identification',
+    ],
+    href: null,
+    ctaText: null,
+  },
+  {
     id: 'crm-autopilot',
     status: 'progress' as const,
     iconGradient: 'linear-gradient(135deg, #10B981, #34D399)',

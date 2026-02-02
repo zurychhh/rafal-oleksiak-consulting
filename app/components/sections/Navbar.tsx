@@ -25,11 +25,8 @@ export default function Navbar() {
           <a href="#contact" className="nav-link">WHEN</a>
         </div>
 
-        {/* Blog Link + RADAR + CTA Button - Right */}
+        {/* Blog Link + CTA Button - Right */}
         <div className="navbar-cta">
-          <a href="/radar" className="navbar-blog-link">
-            RADAR
-          </a>
           <a href="/blog" className="navbar-blog-link">
             BLOG
           </a>
