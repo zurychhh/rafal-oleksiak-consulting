@@ -138,8 +138,8 @@ const ROADMAP = [
   {
     status: 'planned',
     label: 'PLANNED',
-    title: 'SEO Intelligence + Content Gaps',
-    items: ['Competitor keyword ranking tracking', 'Content gap detection & opportunities', 'Backlink profile comparison', 'Smart topic prioritization'],
+    title: 'Pricing & Positioning Intelligence',
+    items: ['Competitor pricing change detection', 'Product catalog overlap analysis', 'Market positioning heatmaps', 'Promotional strategy tracking'],
   },
   {
     status: 'vision',
