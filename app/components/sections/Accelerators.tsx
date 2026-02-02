@@ -27,29 +27,6 @@ const tools = [
     ctaText: 'Explore Auto-Publish',
   },
   {
-    id: 'ad-optimizer',
-    status: 'progress' as const,
-    iconGradient: 'linear-gradient(135deg, #0066FF, #00BFFF)',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <path d="M3 9h18" />
-        <path d="M9 21V9" />
-        <path d="M13 15l2 2 4-4" />
-      </svg>
-    ),
-    title: 'Ad Performance Optimizer',
-    description:
-      'AI-powered campaign analysis across Meta, Google, and LinkedIn. Automatically identifies underperforming ads and suggests budget reallocation.',
-    features: [
-      'Cross-platform campaign intelligence and budget optimization',
-      'Creative performance scoring with AI recommendations',
-      'Automated A/B testing insights and winner detection',
-    ],
-    href: null,
-    ctaText: null,
-  },
-  {
     id: 'radar',
     status: 'progress' as const,
     iconGradient: 'linear-gradient(135deg, #EF4444, #F97316)',
