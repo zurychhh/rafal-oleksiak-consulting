@@ -127,25 +127,25 @@ const ROADMAP = [
     status: 'live',
     label: 'LIVE',
     title: 'AI Competitor Scraping + Analysis',
-    items: ['Website scraping with content extraction', 'Claude AI competitive analysis', 'Threat level assessment per competitor', 'Strategic insights & action items', 'Email report delivery'],
+    items: ['Claude AI-powered competitor analysis', 'Website scraping with content extraction', 'Threat level assessment per competitor', 'Strategic insights & action items', 'Email report delivery'],
   },
   {
     status: 'progress',
     label: 'IN PROGRESS',
-    title: 'Recurring Monitoring + Alerts',
-    items: ['Weekly/monthly automated competitor scans', 'Change detection & alerts', 'Positioning shift notifications', 'Historical trend tracking'],
+    title: 'Dashboard + Recurring Monitoring',
+    items: ['Web-based competitor dashboard', 'Weekly/monthly automated scans', 'Change detection & email alerts', 'Historical trend tracking'],
   },
   {
     status: 'planned',
     label: 'PLANNED',
-    title: 'SEO & Social Intelligence',
-    items: ['Competitor keyword ranking tracking', 'Backlink profile comparison', 'Social media presence analysis', 'Content publishing frequency monitoring'],
+    title: 'SEO Intelligence + Content Gaps',
+    items: ['Competitor keyword ranking tracking', 'Content gap detection & opportunities', 'Backlink profile comparison', 'Smart topic prioritization'],
   },
   {
     status: 'vision',
     label: 'VISION',
-    title: 'Predictive Intelligence',
-    items: ['AI-predicted competitor moves', 'Market trend forecasting', 'Automated counter-strategy generation', 'Industry benchmark scoring'],
+    title: 'Multi-Market + Predictive AI',
+    items: ['Monitor competitors in 20+ markets', 'AI-predicted competitor moves', 'Automated counter-strategy generation', 'Industry benchmark scoring'],
   },
 ];
 
@@ -525,7 +525,7 @@ export default function RadarClient() {
             What&apos;s Coming <span className={s.gradientText}>Next</span>
           </h2>
           <p className={s.sectionSub}>
-            RADAR is evolving into a complete competitive intelligence platform.
+            We&apos;re building the most complete AI competitive intelligence platform. Here&apos;s our roadmap.
           </p>
           <div className={s.roadmap}>
             {ROADMAP.map((phase, i) => (
