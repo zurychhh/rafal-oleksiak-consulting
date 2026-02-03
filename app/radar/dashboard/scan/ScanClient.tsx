@@ -25,9 +25,10 @@ interface ErrorInfo {
 }
 
 const SCAN_PROGRESS_STEPS = [
-  'Scraping websites...',
-  'Analyzing competitors...',
-  'Generating insights...',
+  'Fetching website data...',
+  'Analyzing tech stack & content...',
+  'Checking site structure...',
+  'Running AI analysis...',
 ];
 
 // Parse error message and return user-friendly error info
@@ -288,12 +289,14 @@ export default function ScanClient() {
     setProgressStep(0);
 
     try {
-      const response = await fetch('/api/radar/scan', {
+      const response = await fetch('/api/radar/scan-v2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           yourUrl: yourUrl.trim(),
           competitorUrls: validCompetitors,
+          quickScan: false,
+          includeAiAnalysis: true,
         }),
       });
 
