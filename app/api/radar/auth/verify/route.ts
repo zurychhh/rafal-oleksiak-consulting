@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     response.cookies.set(COOKIE_NAME, sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax', // 'lax' allows cookie on top-level navigation (email link clicks)
       path: '/',
       maxAge: 7 * 24 * 60 * 60, // 7 days
     });
