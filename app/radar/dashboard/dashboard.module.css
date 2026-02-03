@@ -209,6 +209,187 @@
   max-width: 960px;
 }
 
+/* --- Welcome Hero (Empty State) --- */
+.welcomeHero {
+  text-align: center;
+  padding: 64px 48px;
+  margin-bottom: 48px;
+}
+
+.welcomeHero .welcomeIcon {
+  color: #EF4444;
+  margin-bottom: 24px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.welcomeHeroTitle {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  color: #fff;
+  background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.7));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.welcomeHeroSubtitle {
+  font-size: 16px;
+  color: #8b8fa3;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- Onboarding Section --- */
+.onboardingSection {
+  background: #242738;
+  border: 1px solid #3a3d50;
+  border-radius: 16px;
+  padding: 48px;
+  margin-bottom: 32px;
+}
+
+.onboardingTitle {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 40px 0;
+  color: #fff;
+}
+
+.onboardingSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.onboardingStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.onboardingStep:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(239, 68, 68, 0.2);
+  transform: translateX(4px);
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #EF4444, #F97316);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.stepContent {
+  flex: 1;
+  padding-top: 4px;
+}
+
+.stepTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #fff;
+}
+
+.stepDescription {
+  font-size: 14px;
+  color: #8b8fa3;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.onboardingCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #EF4444, #F97316);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 24px rgba(239, 68, 68, 0.4);
+  width: 100%;
+  justify-content: center;
+}
+
+.onboardingCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.5);
+}
+
+.onboardingCta:active {
+  transform: translateY(0);
+}
+
+/* --- Preview Card --- */
+.previewCard {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: #EF4444;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.previewFeatures {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.previewFeature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+.previewFeature svg {
+  color: #4ade80;
+  flex-shrink: 0;
+}
+
+/* --- Legacy Welcome Card (kept for compatibility) --- */
 .welcomeCard {
   background: #242738;
   border: 1px solid #3a3d50;
@@ -363,6 +544,14 @@
   transform: translateX(2px);
 }
 
+/* --- Quick Actions Section --- */
+.quickActionsSection {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
 /* --- CTA Card --- */
 .ctaCard {
   background: #242738;
@@ -415,6 +604,43 @@
 .ctaButton:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* --- Pro Tip Card --- */
+.proTipCard {
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.proTipIcon {
+  color: #F97316;
+  width: 24px;
+  height: 24px;
+}
+
+.proTipContent {
+  flex: 1;
+}
+
+.proTipTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #F97316;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.proTipText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.6;
 }
 
 /* --- Common Components --- */
@@ -620,6 +846,67 @@
     font-size: 22px;
   }
 
+  .welcomeHero {
+    padding: 48px 24px;
+    margin-bottom: 32px;
+  }
+
+  .welcomeHeroTitle {
+    font-size: 28px;
+  }
+
+  .welcomeHeroSubtitle {
+    font-size: 15px;
+  }
+
+  .onboardingSection {
+    padding: 32px 24px;
+  }
+
+  .onboardingTitle {
+    font-size: 20px;
+    margin-bottom: 32px;
+  }
+
+  .onboardingStep {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .stepNumber {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .stepTitle {
+    font-size: 16px;
+  }
+
+  .stepDescription {
+    font-size: 13px;
+  }
+
+  .previewFeatures {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .quickActionsSection {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .ctaCard {
+    flex-direction: column;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .proTipCard {
+    padding: 20px;
+  }
+
   .statsGrid {
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -633,5 +920,22 @@
 @media (max-width: 480px) {
   .statsGrid {
     grid-template-columns: 1fr;
+  }
+
+  .welcomeHeroTitle {
+    font-size: 24px;
+  }
+
+  .onboardingTitle {
+    font-size: 18px;
+  }
+
+  .onboardingCta {
+    padding: 14px 32px;
+    font-size: 15px;
+  }
+
+  .previewCard {
+    padding: 24px;
   }
 }
