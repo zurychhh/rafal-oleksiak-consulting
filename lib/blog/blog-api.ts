@@ -1,7 +1,42 @@
 import type { PostListResponse, PostResponse } from './types';
 
 const API_URL = process.env.BLOG_API_URL || process.env.NEXT_PUBLIC_BLOG_API_URL;
-const AGENT_ID = process.env.NEXT_PUBLIC_BLOG_AGENT_ID;
+const AGENT_ID = process.env.NEXT_PUBLIC_BLOG_AGENT_ID || '2519697e-bb93-47c8-a0bc-f1115e128d88';
+
+// Off-topic keywords — posts containing ONLY these terms (and none of the allowed ones) are rejected.
+// Defense-in-depth: even if agent_id matches, obviously off-topic content won't appear on the blog.
+const OFF_TOPIC_KEYWORDS = [
+  'prawo pracy', 'kodeks pracy', 'zwolnienie dyscyplinarne', 'prawo karne',
+  'terroryzm', 'sankcje', 'podatki', 'pit', 'skala podatkowa', 'e-pit',
+  'pieszy', 'piesi', 'mieszkalnictwo', 'samorząd', 'mundurowy', 'karta rodziny',
+  'paramount', 'skydance',
+];
+
+const ON_TOPIC_KEYWORDS = [
+  'ecommerce', 'e-commerce', 'crm', 'marketing', 'seo', 'konwersja', 'conversion',
+  'sprzedaż', 'sales', 'koszyk', 'cart', 'checkout', 'automatyzacja', 'automation',
+  'analityka', 'analytics', 'reklama', 'ads', 'google ads', 'meta ads', 'facebook',
+  'instagram', 'linkedin', 'email marketing', 'newsletter', 'hubspot', 'shopify',
+  'woocommerce', 'magento', 'prestashop', 'roi', 'kpi', 'ux', 'ui', 'landing page',
+  'lead', 'funnel', 'retargeting', 'remarketing', 'campaign', 'kampania',
+  'personalizacja', 'personalization', 'a/b test', 'ab test', 'customer journey',
+  'omnichannel', 'b2b', 'b2c', 'content marketing', 'social media', 'branding',
+  'digital', 'growth', 'marketplace', 'dropshipping', 'fulfillment',
+];
+
+function isOffTopic(post: PostResponse): boolean {
+  const text = [
+    post.title,
+    post.excerpt,
+    ...(post.keywords || []),
+  ].join(' ').toLowerCase();
+
+  const hasOnTopic = ON_TOPIC_KEYWORDS.some((kw) => text.includes(kw));
+  if (hasOnTopic) return false;
+
+  const hasOffTopic = OFF_TOPIC_KEYWORDS.some((kw) => text.includes(kw));
+  return hasOffTopic;
+}
 
 export async function getPosts(page = 1, pageSize = 20): Promise<PostListResponse> {
   const params = new URLSearchParams({
@@ -36,5 +71,17 @@ export async function getPostBySlug(slug: string): Promise<PostResponse | null> 
   });
 
   if (!res.ok) return null;
-  return res.json();
+  const post: PostResponse = await res.json();
+
+  // Reject posts from other agents/tenants
+  if (AGENT_ID && post.agent_id !== AGENT_ID) {
+    return null;
+  }
+
+  // Reject obviously off-topic content
+  if (isOffTopic(post)) {
+    return null;
+  }
+
+  return post;
 }
