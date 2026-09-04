@@ -1,9 +1,34 @@
 # STATUS.md - Aktualny Stan Projektu
 
 **Projekt**: oleksiakconsulting.com
-**Ostatnia Aktualizacja**: 2026-02-02
+**Ostatnia Aktualizacja**: 2026-02-13
 **Wersja**: Next.js 16.0.8 | React 19 | TypeScript 5.9
 **URL Produkcji**: https://oleksiakconsulting.com
+
+---
+
+## Stan na 4 wrzesnia 2026 — nowa strona i petla dzienna
+
+**PILNE — repozytorium jest publiczne.** Sprawdzone: klonuje sie anonimowo.
+Do uniewaznienia i wygenerowania od nowa: Google Ads Developer Token (byl jawny
+w tym pliku, wartosc usunieta, ale zostaje w historii i na GitHubie) oraz klucz
+API w `generate-all-notion-assets.sh` i `generate-notion-assets-v2.sh`, linia 9
+w obu. `.env.example` ma same wypelniacze — tam czysto.
+
+**Nowa strona glowna i trzy narzedzia** leza w `design/`. Pelny brief i gotowy
+prompt dla Claude Code: `HANDOFF-CC.md`. Commit stoi na galezi `tools/daily`,
+lokalnie, niewypchniety.
+
+**Codzienna petla** chodzi w chmurze jako zaplanowane zadanie i nie dotyka repo
+ani produkcji — chmura nie ma prawa zapisu do tego repozytorium. Ocenia jedna
+z czterech pozycji dziennie w trzech wymiarach (AI, uzytecznosc biznesowa, UX),
+wprowadza najwyzej dwie zmiany i zapisuje do artefaktow roboczych. Wypuszczanie
+na produkcje dzieje sie recznie, z Claude Code w terminalu.
+
+**Otwarte decyzje:** cena na stronie (widelki 8–12 tys. netto, stala `PRICE`
+w skrypcie) — sprawdzic, czy nie podcina obecnego klienta; dowod dla paid
+i search albo zawezenie obietnicy; adres LinkedIna w JSON-LD; `og.png`
+i strona `/stop`.
 
 ---
 
@@ -42,7 +67,8 @@
 | **Google Analytics 4** | ✅ OK | `G-WZWCGQLQ2Y` | Via GTM, event tracking |
 | **Google Tag Manager** | ✅ OK | `GTM-PTPCV5FD` | 3 tagi: GA4, Remarketing, Conversion Linker |
 | **Google Ads** | ✅ OK | `AW-17922704201` | Remarketing + Conversions via GTM |
-| **Google Ads API** | ⏳ PENDING | `GOOGLE_ADS_DEVELOPER_TOKEN` | Basic Access pending Google approval |
+| **Google Ads API** | ✅ OK | `GOOGLE_ADS_DEVELOPER_TOKEN` | Explorer Access (sufficient for our needs) |
+| **LinkedIn Ads** | ⏳ PENDING | `LINKEDIN_CLIENT_ID` etc. | OAuth2 built, waiting for API access approval |
 
 ---
 
@@ -66,9 +92,22 @@
 ### Google Ads API Access
 
 - **OAuth2**: ✅ Configured (OAuth client `236619926081-...`)
-- **Developer Token**: `EfdPrqI-OI_u_fBUNNIVYg` (test access)
-- **Basic Access**: ⏳ Application submitted 2026-02-02, czeka na review Google
+- **Developer Token**: `<w .env.local — ZROTUJ, byl jawny w publicznym repo>`
+- **Access Level**: ✅ Explorer Access (sufficient — 2,880 ops/day)
+- **Basic Access**: ❌ Withdrawn — Explorer Access wystarczający dla naszego use case
 - **Token Refresh**: ✅ Auto-refresh działa, tokeny w `.google-ads-token.json`
+
+### LinkedIn Ads Integration
+
+- **Developer App**: ✅ Created (Client ID: `77qsptldxbru79`)
+- **Company Page**: ✅ Verified ("Oleksiak Consulting")
+- **OAuth2 Routes**: ✅ Built (`/api/mcc/linkedin/auth/*`)
+- **Token Management**: ✅ Built (`lib/mcc/linkedin-auth.ts`)
+- **API Products**: ⏳ Waiting for approval:
+  - Advertising API (requested)
+  - Share on LinkedIn (requested)
+- **First Campaign**: ✅ Live ("Thought Leader - Post Promotion - Feb 2026")
+- **Payment**: ⚠️ Need to add payment card in LinkedIn Billing Center
 
 ### Consent Mode v2
 
@@ -91,9 +130,13 @@ app/api/
 │   ├── create-checkout/route.ts # Tworzenie sesji Stripe
 │   └── webhook/route.ts         # Webhook dla płatności
 └── mcc/                         # Marketing Command Center
-    ├── auth/route.ts            # OAuth2 initiation → Google consent screen
-    ├── auth/callback/route.ts   # OAuth2 callback → save tokens
-    ├── auth/status/route.ts     # Auth status check
+    ├── auth/route.ts            # Google OAuth2 initiation
+    ├── auth/callback/route.ts   # Google OAuth2 callback
+    ├── auth/status/route.ts     # Google auth status
+    ├── linkedin/
+    │   ├── auth/route.ts        # LinkedIn OAuth2 initiation
+    │   ├── auth/callback/route.ts # LinkedIn OAuth2 callback
+    │   └── auth/status/route.ts # LinkedIn auth status
     ├── campaigns/route.ts       # Campaign management
     ├── creative/route.ts        # Ad creative generation
     ├── intelligence/route.ts    # Competitor monitoring
@@ -101,18 +144,21 @@ app/api/
     └── platforms/
         ├── google/route.ts      # Google Ads connector
         ├── meta/route.ts        # Meta Ads connector (planned)
-        └── linkedin/route.ts    # LinkedIn Ads connector (planned)
+        └── linkedin/route.ts    # LinkedIn Ads connector
 
 lib/mcc/                         # MCC shared code
-├── google-auth.ts               # OAuth2 token management (auto-refresh)
+├── google-auth.ts               # Google OAuth2 token management
+├── linkedin-auth.ts             # LinkedIn OAuth2 token management
 ├── types.ts                     # MCC TypeScript interfaces
 ├── index.ts                     # Main MCC orchestrator
+├── GOOGLE_ADS_OAUTH_SETUP.md    # Google OAuth2 setup guide
+├── LINKEDIN_OAUTH_SETUP.md      # LinkedIn OAuth2 setup guide
 ├── platforms/
 │   ├── types.ts                 # Platform connector interfaces
 │   ├── index.ts                 # Platform registry
 │   ├── google-ads.ts            # Google Ads platform connector
 │   ├── meta-ads.ts              # Meta Ads connector (planned)
-│   └── linkedin-ads.ts          # LinkedIn Ads connector (planned)
+│   └── linkedin-ads.ts          # LinkedIn Ads connector
 ├── campaign/
 │   ├── manager.ts               # Campaign CRUD operations
 │   └── optimizer.ts             # Budget/bid optimization
@@ -142,6 +188,29 @@ lib/mcc/                         # MCC shared code
 ---
 
 ## 📅 Ostatnie Zmiany
+
+### 2026-02-13 ✅
+- ✅ **LinkedIn Ads Campaign (Manual)**
+  - Thought Leader Ad campaign live
+  - Campaign: "Thought Leader - Post Promotion - Feb 2026"
+  - Status: Aktywna
+  - ⚠️ Needs: Payment card in LinkedIn Billing Center
+- ✅ **LinkedIn Developer App**
+  - App: "Oleksiak Consulting MCC" (Client ID: `77qsptldxbru79`)
+  - Company Page verified
+  - OAuth2 redirect URLs configured
+  - Products requested: Advertising API, Share on LinkedIn
+- ✅ **LinkedIn OAuth2 Infrastructure**
+  - `lib/mcc/linkedin-auth.ts` — Token management (auto-refresh, file storage)
+  - `app/api/mcc/linkedin/auth/route.ts` — OAuth2 initiation
+  - `app/api/mcc/linkedin/auth/callback/route.ts` — OAuth2 callback
+  - `app/api/mcc/linkedin/auth/status/route.ts` — Status check
+  - `.linkedin-token.json` added to `.gitignore`
+  - `lib/mcc/LINKEDIN_OAUTH_SETUP.md` — Setup documentation
+- ✅ **Google Ads API — Explorer Access Sufficient**
+  - After review: Explorer Access (2,880 ops/day) is enough for our use case
+  - Withdrew Basic Access application
+  - No need for account creation, user management, or billing APIs
 
 ### 2026-02-02 ✅
 - ✅ **Kompletna infrastruktura trackingowa Google Ads**
@@ -293,12 +362,18 @@ STATUS.md              # Ten plik - current state
 
 ### Active Blockers:
 
-**[2026-02-02] Google Ads API — Basic Access Pending**
-- **Issue:** Developer token ma "Dostęp do eksploratora" (test access), nie działa z production accounts
-- **Root Cause:** Test access nie pozwala na dostęp do prawdziwych kont Google Ads
-- **Workaround:** Ręczne zarządzanie kampaniami via Google Ads UI
-- **Resolution:** Aplikacja o Basic Access wysłana 2026-02-02, czeka na review Google (typowo kilka dni)
-- **Impact:** MCC nie może programatycznie zarządzać kampaniami do czasu approval
+**[2026-02-13] LinkedIn Advertising API — Access Pending**
+- **Issue:** OAuth2 infrastructure built, but API products not yet approved
+- **Root Cause:** LinkedIn requires review for Advertising API access
+- **Workaround:** Manual campaign management via Campaign Manager UI
+- **Resolution:** Wait for LinkedIn approval (typically 1-3 business days)
+- **Impact:** Can't programmatically manage campaigns until approval
+
+**[2026-02-13] LinkedIn Ads — Payment Required**
+- **Issue:** Campaign is "Aktywna" but won't actually run without payment method
+- **Root Cause:** No payment card in LinkedIn Billing Center
+- **Resolution:** Add payment card at https://www.linkedin.com/campaignmanager
+- **Impact:** Campaign won't deliver impressions until payment added
 
 **[2026-02-02] Remarketing Audience — Zbyt mała**
 - **Issue:** Remarketing audience wymaga 1000+ użytkowników
@@ -307,6 +382,12 @@ STATUS.md              # Ten plik - current state
 - **Impact:** Nie można targetować audience remarketing w kampaniach (jeszcze)
 
 ### Recently Resolved:
+
+**[2026-02-13] Google Ads API — Basic Access Not Needed**
+- **Issue:** Applied for Basic Access, but Google asked for justification
+- **Root Cause:** Explorer Access (2,880 ops/day) is actually sufficient for our use case
+- **Solution:** Withdrew Basic Access application, will use Explorer Access
+- **Status:** ✅ Resolved (no longer a blocker)
 
 **[2026-02-02] GTM Preview "nie znaleziono elementu"**
 - **Issue:** GTM Preview mode nie wykrywał kontenera
@@ -326,14 +407,16 @@ STATUS.md              # Ten plik - current state
 
 ### 🔴 HIGH PRIORITY
 
-- [ ] **LinkedIn Ads Integration** — NASTĘPNY KROK
-  - [ ] LinkedIn Marketing API credentials
-  - [ ] OAuth2 flow dla LinkedIn
-  - [ ] Promocja istniejącego posta na LinkedIn
-  - Cel: Paid social media campaign
+- [x] **LinkedIn Ads Integration** — ✅ DONE
+  - [x] LinkedIn Developer App created (Client ID: `77qsptldxbru79`)
+  - [x] OAuth2 flow built (`/api/mcc/linkedin/auth/*`)
+  - [x] Token management (`lib/mcc/linkedin-auth.ts`)
+  - [x] First campaign live ("Thought Leader - Post Promotion - Feb 2026")
+  - [ ] **Waiting:** LinkedIn API products approval
+  - [ ] **Action needed:** Add payment card to LinkedIn Billing Center
 
 - [ ] **Google Ads — Pierwsza kampania Search**
-  - Czeka na: Basic Access approval
+  - ✅ Explorer Access sufficient (2,880 ops/day)
   - [ ] Keyword research dla CRM consulting
   - [ ] Ustawienie campaign budgets
   - [ ] Ad copy creation
@@ -444,7 +527,7 @@ NEXT_PUBLIC_GOOGLE_ADS_ID=AW-17922704201
 # Google Ads API (server-side only)
 GOOGLE_OAUTH_CLIENT_ID=236619926081-...
 GOOGLE_OAUTH_CLIENT_SECRET=GOCSPX-...
-GOOGLE_ADS_DEVELOPER_TOKEN=EfdPrqI-OI_u_fBUNNIVYg
+GOOGLE_ADS_DEVELOPER_TOKEN=<w .env.local — token zrotowany>
 GOOGLE_ADS_MANAGER_CUSTOMER_ID=759-448-7243
 GOOGLE_ADS_CUSTOMER_ID=544-648-7427
 ```
@@ -487,4 +570,4 @@ GOOGLE_ADS_CUSTOMER_ID=544-648-7427
 
 **Uwaga**: Ten plik jest źródłem prawdy o aktualnym stanie projektu. Aktualizuj go po każdej większej zmianie lub na końcu każdej sesji.
 
-**Następna aktualizacja:** Po LinkedIn Ads integration lub Google Ads Basic Access approval
+**Następna aktualizacja:** Po LinkedIn API approval lub pierwszej Google Ads Search campaign

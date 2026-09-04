@@ -192,3 +192,18 @@ This project uses 4 documentation files:
 ## Language
 
 Project documentation uses Polish for business context, English for code/comments.
+
+## design/ — nowa strona i narzedzia (wrzesien 2026)
+
+Katalog `design/` trzyma wersje wypracowana poza aplikacja, jeszcze
+nieprzeniesiona do Nexta. `design/production/` to nowa strona glowna plus
+endpoint `/api/lead` i dwa helpery. `design/tools/` to trzy narzedzia FMCG
+z wywolaniami AI. `design/qa.js` to checker Playwright na dziewieciu
+szerokosciach — uruchamiany `node design/qa.js <plik> --scroll`, chromium
+w `/opt/pw-browsers` albo z lokalnego playwrighta.
+
+Port do aplikacji i cala reszta zadan: `HANDOFF-CC.md` w korzeniu repo.
+
+Codzienna petla usprawniajaca chodzi w chmurze i pisze do artefaktow roboczych,
+nie do repo. Chmura nie ma prawa zapisu do tego repozytorium — push dziala
+wylacznie z komputera.

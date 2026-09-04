@@ -1,7 +1,7 @@
 # 🗺️ ROADMAP - Rafał Oleksiak Consulting
 ## Project Status & Progress Tracker
 
-**Last Updated:** 2026-02-02
+**Last Updated:** 2026-02-13
 **Current Phase:** Phase 3 - Advertising Infrastructure + Growth
 **Overall Progress:** 85% (Website ✅, LAMA ✅, Tracking ✅, Blog ✅, Ads 🚧)
 
@@ -21,8 +21,9 @@
 | GTM + Consent Mode v2 | ✅ Live | 100% | - | 2026-02-02 |
 | Schema.org JSON-LD | ✅ Live | 100% | - | 2026-02-02 |
 | Google Ads (Remarketing + Conversions) | ✅ Live (via GTM) | 100% | - | 2026-02-02 |
-| Google Ads API (MCC) | ⏳ Basic Access Pending | 80% | HIGH | 2026-02-02 |
-| LinkedIn Ads Integration | ❌ Not Started | 0% | HIGH | - |
+| Google Ads API (MCC) | ✅ Explorer Access | 100% | - | 2026-02-13 |
+| LinkedIn Ads Integration | ✅ Campaign Live | 90% | HIGH | 2026-02-13 |
+| LinkedIn API (OAuth2) | ⏳ Waiting Approval | 80% | HIGH | 2026-02-13 |
 | Follow-up Automation | 🚧 Template Ready | 50% | MEDIUM | 2025-12-21 |
 
 ---
@@ -30,9 +31,9 @@
 ## 🔄 RESUME POINT (dla Claude Code)
 
 **Exact State:**
-- Projekt: Full tracking infrastructure deployed, Google Ads API Basic Access pending
-- Aktualny fokus: LinkedIn Ads integration → paid social campaign
-- Status: Strona gotowa do reklamowania na Google i LinkedIn
+- Projekt: Full tracking + LinkedIn Ads deployed
+- Aktualny fokus: Wait for LinkedIn API approval, then first Google Ads Search campaign
+- Status: LinkedIn campaign live, API infrastructure ready
 
 **Co działa:**
 - ✅ Main website deployed (90+ Lighthouse scores)
@@ -44,30 +45,65 @@
 - ✅ Consent Mode v2 (GDPR-compliant, 31 krajów EEA)
 - ✅ Schema.org JSON-LD (4 blocks: Organization, Person, ProfessionalService, WebSite)
 - ✅ Google Ads conversions: form_submission_lead → GA4 → Google Ads (imported)
-- ✅ MCC OAuth2 flow (token refresh, file storage, in-memory cache)
+- ✅ Google Ads API OAuth2 (Explorer Access — 2,880 ops/day sufficient)
+- ✅ LinkedIn Ads campaign live ("Thought Leader - Post Promotion - Feb 2026")
+- ✅ LinkedIn OAuth2 infrastructure built (`/api/mcc/linkedin/auth/*`)
+- ✅ LinkedIn Developer App ("Oleksiak Consulting MCC", Client ID: `77qsptldxbru79`)
 
 **Co jest Archived:**
 - 📦 LAMA Paid Audit (Stripe integration, €99) — patrz `PAID_AUDIT_ARCHIVE.md`
 
 **Co jest In Progress / Blocked:**
-- ⏳ Google Ads API Basic Access — application submitted 2026-02-02, czeka na Google review
+- ⏳ LinkedIn API products — waiting for Advertising API + Share on LinkedIn approval
+- ⏳ LinkedIn Ads payment — need to add card in Billing Center
 - ⏳ Remarketing audience — zbiera dane (min 1000 users required)
 - ⏳ Follow-up email automation (template ready, needs scheduling implementation)
 
 **Next Immediate Steps:**
-1. LinkedIn Ads integration — user ma post do promowania
-2. Czekać na Google Ads API Basic Access approval
-3. Pierwsza Google Ads Search campaign (po approval)
+1. Add payment card to LinkedIn Billing Center
+2. Wait for LinkedIn API approval (1-3 days)
+3. Pierwsza Google Ads Search campaign
 4. Follow-up email automation
 
 **Blockers:**
-- Google Ads API Basic Access pending (blokuje programmatyczne zarządzanie kampaniami)
+- LinkedIn API approval pending (can manage campaigns manually in meantime)
+- LinkedIn payment card needed (campaign won't deliver without it)
 
-**Context:** Kompletna infrastruktura trackingowa deployed na production. Google Ads konto połączone z MCC (manager account). OAuth2 działa. Czekamy na Basic Access dla API. LinkedIn Ads to następny krok.
+**Context:** LinkedIn Ads Thought Leader campaign is live. OAuth2 infrastructure for both Google and LinkedIn is complete. Explorer Access for Google Ads API is sufficient (no need for Basic Access). Waiting for LinkedIn API product approval to enable programmatic management.
 
 ---
 
 ## ✅ RECENTLY COMPLETED (Last 15 items)
+
+### 2026-02-13
+- ✅ **LinkedIn Ads Campaign (Manual)**
+  - Created Thought Leader Ad campaign via Campaign Manager
+  - Campaign: "Thought Leader - Post Promotion - Feb 2026"
+  - Targeting: B2B decision makers (CMO, Director, VP, C-level)
+  - Budget: Manual bidding, awareness objective
+  - Status: Aktywna (pending payment method)
+
+- ✅ **LinkedIn Developer App Setup**
+  - App: "Oleksiak Consulting MCC"
+  - Client ID: `77qsptldxbru79`
+  - Company Page: "Oleksiak Consulting" (verified)
+  - OAuth2 redirect URLs configured (localhost + production)
+  - Products requested: Advertising API, Share on LinkedIn
+
+- ✅ **LinkedIn OAuth2 Infrastructure**
+  - `lib/mcc/linkedin-auth.ts` — Token management with auto-refresh
+  - `app/api/mcc/linkedin/auth/route.ts` — Initiate OAuth flow
+  - `app/api/mcc/linkedin/auth/callback/route.ts` — Exchange code for tokens
+  - `app/api/mcc/linkedin/auth/status/route.ts` — Check auth status
+  - `lib/mcc/LINKEDIN_OAUTH_SETUP.md` — Setup documentation
+  - `.linkedin-token.json` added to `.gitignore`
+  - Files: 4 new API routes + 1 auth helper + 1 setup guide
+
+- ✅ **Google Ads API — Explorer Access Confirmed**
+  - Reviewed Google's response about Basic Access
+  - Confirmed Explorer Access (2,880 ops/day) is sufficient
+  - Withdrew Basic Access application
+  - No longer a blocker for MCC development
 
 ### 2026-02-02
 - ✅ **Google Ads Tracking Infrastructure (Complete)**
@@ -159,23 +195,24 @@
 
 ### Phase 3: Advertising Infrastructure + Growth
 
-**Current Sprint:** LinkedIn Ads + Google Ads Campaigns
+**Current Sprint:** LinkedIn API Approval + Google Ads Search Campaign
 
 **Active Tasks:**
 
-- [ ] **LinkedIn Ads Integration** (HIGH PRIORITY — NEXT)
-  - [ ] LinkedIn Marketing API credentials
-  - [ ] OAuth2 flow for LinkedIn
-  - [ ] Promote existing LinkedIn post
-  - Context: User ma post gotowy do promowania
+- [x] **LinkedIn Ads Integration** (✅ MOSTLY DONE)
+  - [x] LinkedIn Developer App created
+  - [x] OAuth2 flow built and working
+  - [x] First campaign live (Thought Leader Ad)
+  - [ ] Add payment card to Billing Center ← **ACTION NEEDED**
+  - [ ] Wait for API products approval (1-3 days)
   - Impact: Paid social media lead generation
 
-- [ ] **Google Ads API — Basic Access** (BLOCKED)
-  - [x] OAuth2 flow built and working
-  - [x] Application submitted 2026-02-02
-  - [ ] Await Google approval
-  - [ ] First API-managed Search campaign
-  - Impact: Programmatic campaign management
+- [ ] **Google Ads Search Campaign** (HIGH PRIORITY — NEXT)
+  - [x] Explorer Access confirmed (sufficient)
+  - [x] OAuth2 flow working
+  - [ ] Keyword research for CRM consulting
+  - [ ] Campaign setup + ad copy
+  - Impact: Lead generation via Google Search
 
 - [ ] **Follow-up Email Automation** (MEDIUM PRIORITY)
   - [ ] Choose solution (Klaviyo vs cron job)
@@ -498,12 +535,20 @@ PDF is now 100% production-ready with honest, actionable content.
 
 ### From Tracking & Google Ads Setup (Feb 2026):
 1. **Tracking before campaigns** - Zainstaluj tracking zanim wydasz budżet na reklamy
-2. **Google Ads API test access** - Nie działa z production accounts, trzeba Basic Access
+2. **Google Ads API Explorer Access** - 2,880 ops/day usually sufficient for small businesses
 3. **GTM Polish UI** - "Conversion Linker" = "Tag łączący konwersje" po polsku
 4. **OAuth2 without libraries** - Czysty fetch() wystarczy, nie trzeba external packages
 5. **Consent Mode ordering** - Musi być FIRST w `<head>`, przed GTM i GA4
 6. **File-based token storage** - Prosty pattern: `.google-ads-token.json` + `.gitignore`
 7. **GTM Preview + ad blocker** - Preview może nie działać z ad blockerem, ale tag działa
+
+### From LinkedIn Ads Setup (Feb 2026):
+8. **LinkedIn requires Company Page** - Personal profile alone can't run ads
+9. **Thought Leader Ads** - Promote personal posts via Company Page sponsorship
+10. **LinkedIn API verification** - Must verify app association with Company Page first
+11. **UTM parameters** - LinkedIn doesn't support custom parameters like `utm_account`
+12. **Don't target connections** - Connections see organic posts free, paid for new audience
+13. **LinkedIn OAuth same pattern** - Same OAuth2 pattern as Google, file-based token storage
 
 ---
 
@@ -511,9 +556,31 @@ PDF is now 100% production-ready with honest, actionable content.
 
 *Update after each completed task. At 90% context → document → commit → alert user.*
 
-**Next Update:** After LinkedIn Ads integration or Google Ads Basic Access approval
+**Next Update:** After LinkedIn API approval or first Google Ads Search campaign
 
 **See Also:**
 - STATUS.md - Current snapshot, integrations, blockers
 - CLAUDE.md - Coding standards
 - PROJECT_SUMMARY.md - Full implementation history
+
+
+---
+
+## Nowa strona + petla dzienna (4 wrzesnia 2026)
+
+Kolejnosc jest wymuszona. Szczegoly i gotowy prompt: `HANDOFF-CC.md`.
+
+- [ ] Uniewaznic trzy klucze — repo jest publiczne, historia je pamieta
+- [ ] `npm i zod` + zaleznosci lintu
+- [ ] Port `design/production/index.html` na strone glowna (CSS module + komponent kliencki)
+- [ ] `app/api/lead/route.ts` + `app/lib/sheet-email.ts` + `app/lib/lead-hubspot.ts`
+- [ ] `node scripts/hubspot-setup.mjs --apply` — dziesiec wlasciwosci kontaktu
+- [ ] `bash scripts/purge-legacy.sh --apply` — 175 plikow legacy
+- [ ] Naprawic `FinalCTA.tsx` (na `/api/lead`) i `Accelerators.tsx` (kafel radaru)
+- [ ] `public/og.png` 1200x630 — bez tego link na LinkedInie jest martwy
+- [ ] Strona `/stop` — stopka kazdego maila ja obiecuje
+- [ ] Zmienne w srodowisku Production na Vercelu
+- [ ] Polecenie „ship" — staging do repo, recznie, nie z crona
+- [ ] Decyzja: cena na stronie vs stawki obecnych klientow
+- [ ] Decyzja: dowod dla paid i search albo zawezenie obietnicy do retencji
+- [ ] LinkedIn w `sameAs` w JSON-LD
