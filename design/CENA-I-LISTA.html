@@ -1,0 +1,260 @@
+<title>Cena i lista wdrożeniowa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FBFAF7; --raise:#FFFFFF; --ink:#171A24; --body:#2C3040; --mute:#6A6E80;
+    --rule:#E3DFD6; --purple:#6D28A8; --purple-soft:#F1E9F8;
+    --now:#A11B2E; --now-soft:#FAECEE; --you:#8A5A00; --you-soft:#FBF1DF;
+    --go:#1B6349; --go-soft:#E8F2ED;
+    --disp:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+    --serif:"Source Serif 4",Georgia,serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#14161C; --raise:#1B1E26; --ink:#F2F0EA; --body:#CFCEC8; --mute:#9195A4;
+      --rule:#2C303B; --purple:#C89BEC; --purple-soft:#252030; --now:#F2909E;
+      --now-soft:#2A1A1F; --you:#E8B863; --you-soft:#282017; --go:#7FD3B0; --go-soft:#16241F;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14161C; --raise:#1B1E26; --ink:#F2F0EA; --body:#CFCEC8; --mute:#9195A4;
+    --rule:#2C303B; --purple:#C89BEC; --purple-soft:#252030; --now:#F2909E;
+    --now-soft:#2A1A1F; --you:#E8B863; --you-soft:#282017; --go:#7FD3B0; --go-soft:#16241F;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--body);font-family:var(--serif);
+    font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+  .page{max-width:940px;margin:0 auto;padding:0 26px 90px;}
+  h1{font-family:var(--disp);font-weight:800;font-size:clamp(30px,4.6vw,46px);line-height:1.06;
+    letter-spacing:-.022em;color:var(--ink);margin:16px 0 0;text-wrap:balance;max-width:18ch;}
+  h2{font-family:var(--disp);font-weight:600;font-size:24px;line-height:1.22;color:var(--ink);
+    margin:0;letter-spacing:-.012em;text-wrap:balance;}
+  h3{font-family:var(--disp);font-weight:600;font-size:17.5px;line-height:1.3;color:var(--ink);
+    margin:0;}
+  p{margin:0;}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--mute);margin:0;}
+  .mast{padding:52px 0 0;}
+  .stand{font-size:18.5px;line-height:1.55;margin:16px 0 34px;max-width:58ch;}
+  .stand b{color:var(--ink);font-weight:600;}
+
+  section{padding:38px 0;border-top:1px solid var(--rule);display:grid;gap:20px;}
+
+  .price{display:grid;gap:16px;background:var(--purple-soft);border-left:3px solid var(--purple);
+    padding:24px;}
+  .price .rec{font-family:var(--disp);font-weight:800;font-size:clamp(22px,3vw,30px);
+    line-height:1.2;color:var(--ink);letter-spacing:-.016em;}
+  .price .rec b{color:var(--purple);}
+  .anchors{display:grid;gap:0;margin-top:4px;}
+  .anchor{display:grid;grid-template-columns:190px minmax(0,1fr);gap:0 20px;padding:10px 0;
+    border-bottom:1px solid var(--rule);align-items:baseline;}
+  .anchor:last-child{border-bottom:0;}
+  .anchor b{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink);
+    font-variant-numeric:tabular-nums;}
+  .anchor span{font-size:15.5px;line-height:1.5;color:var(--body);}
+
+  ol.tasks{list-style:none;margin:0;padding:0;counter-reset:t;display:grid;gap:0;}
+  ol.tasks li{counter-increment:t;display:grid;grid-template-columns:40px minmax(0,1fr);
+    gap:0 18px;padding:22px 0;border-bottom:1px solid var(--rule);align-items:start;}
+  ol.tasks li::before{content:counter(t);font-family:var(--mono);font-size:14px;
+    color:var(--purple);padding-top:4px;font-variant-numeric:tabular-nums;}
+  .task{display:grid;gap:9px;min-width:0;}
+  .what{font-family:var(--disp);font-weight:600;font-size:18px;line-height:1.35;color:var(--ink);}
+  .how{font-size:16px;line-height:1.6;}
+  .how b{color:var(--ink);font-weight:600;}
+  code{font-family:var(--mono);font-size:13.5px;background:var(--raise);border:1px solid var(--rule);
+    padding:1px 6px;border-radius:2px;color:var(--ink);}
+  pre{margin:0;overflow-x:auto;background:var(--raise);border:1px solid var(--rule);
+    padding:12px 14px;font-family:var(--mono);font-size:13px;line-height:1.75;color:var(--ink);}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;padding:3px 8px 4px;white-space:nowrap;}
+  .tag.now{background:var(--now-soft);color:var(--now);}
+  .tag.you{background:var(--you-soft);color:var(--you);}
+  .tag.me{background:var(--go-soft);color:var(--go);}
+  .tagline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .mins{font-family:var(--mono);font-size:11.5px;color:var(--mute);}
+  .note{background:var(--raise);border:1px solid var(--rule);padding:18px 20px;
+    font-size:16px;line-height:1.6;}
+  .note b{color:var(--ink);font-weight:600;}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14.5px;color:var(--mute);}
+  .legend span{display:inline-flex;gap:8px;align-items:center;}
+  .src{font-family:var(--mono);font-size:12px;line-height:1.9;color:var(--mute);display:grid;gap:3px;}
+  .src a{color:var(--purple);text-decoration:none;border-bottom:1px solid var(--rule);}
+  .src a:hover{border-color:var(--purple);}
+  a:focus-visible{outline:2px solid var(--purple);outline-offset:3px;}
+  @media (max-width:640px){
+    body{font-size:16px;}
+    .anchor{grid-template-columns:minmax(0,1fr);gap:3px;}
+    ol.tasks li{grid-template-columns:28px minmax(0,1fr);gap:0 12px;}
+  }
+</style>
+
+<div class="page">
+
+  <header class="mast">
+    <p class="eyebrow">Oleksiak Consulting &middot; wrzesień 2026</p>
+    <h1>Cena i lista wdrożeniowa</h1>
+    <p class="stand">Research cenowy dla polskiego rynku, rekomendacja liczby na stronę, i <b>szesnaście zadań w kolejności, w jakiej się odblokowują</b> — każde z tym, jak je zrobić.</p>
+  </header>
+
+  <section>
+    <h2>Ile powinieneś napisać na stronie</h2>
+
+    <div class="price">
+      <p class="rec">Pierwsze zadanie: <b>8–12 tys. zł netto</b>, stała cena, dwa do trzech tygodni. Potem, jeśli obie strony chcą: <b>6–9 tys. zł netto miesięcznie</b> za jeden dzień w tygodniu.</p>
+      <p>Na stronie wystarczy pierwsza połowa tego zdania. Founder nie potrzebuje cennika — potrzebuje wiedzieć, że nie wpadnie w rozmowę z nieznanym progiem.</p>
+    </div>
+
+    <h3>Skąd te liczby</h3>
+    <div class="anchors">
+      <div class="anchor"><b>200–400 zł / h</b><span>Stawka godzinowa konsultanta na poziomie fractional CMO w Polsce, używana przy audytach i na starcie współpracy.</span></div>
+      <div class="anchor"><b>1,6–3 tys. zł / dzień</b><span>Stawka dzienna przy pracy projektowej w rytmie konkretnych dni w tygodniu.</span></div>
+      <div class="anchor"><b>8–18 tys. zł / mies.</b><span>Retainer fractional CMO, zwykle jeden do dwóch dni tygodniowo. Etatowy dyrektor marketingu na podobnym poziomie to 25–45 tys. zł brutto plus koszty pracodawcy.</span></div>
+      <div class="anchor"><b>8–20 tys. zł</b><span>Audyt strategiczny B2B jako osobna usługa. Strategia marketingowa potrafi iść do 40 tys. i wyżej.</span></div>
+      <div class="anchor"><b>brak benchmarku</b><span>Dla fractional e-commerce managera w Polsce — rynek zbyt młody. W USA retainer to 5–20 tys. USD miesięcznie, ale to nie jest twój rynek.</span></div>
+    </div>
+
+    <div class="note">
+      <p><b>Dlaczego nie górna półka, skoro CV na nią pozwala.</b> Twój cel to młoda marka FMCG. Przy dziewięciuset zamówieniach i koszyku stu pięćdziesięciu złotych taka firma robi około stu trzydziestu pięciu tysięcy przychodu miesięcznie. Retainer po piętnaście tysięcy to ponad dziesięć procent przychodu — nie kupi tego, nawet jeśli chce. Osiem do dwunastu tysięcy za pierwsze zadanie to mniej więcej miesiąc wycieku, który obiecujesz zatkać. Ta proporcja obroni się na rozmowie.</p>
+    </div>
+
+    <div class="note">
+      <p><b>Czego tu nie wiem.</b> Nie znam twoich stawek u mBanku ani w Genactivie, twoich kosztów ani rozliczeń. Jeśli którykolwiek z obecnych klientów płaci więcej, nie wieszaj na stronie liczby, która go podcina — zobaczy ją. Sprawdź to zanim wstawisz.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Szesnaście zadań</h2>
+    <div class="legend">
+      <span><i class="tag now">dziś</i> bezpieczeństwo, nie czeka</span>
+      <span><i class="tag you">tylko ty</i> nikt inny tego nie zdecyduje</span>
+      <span><i class="tag me">mogę zrobić</i> powiedz i robię</span>
+    </div>
+
+    <ol class="tasks">
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag now">dziś</span><span class="mins">15 minut</span></div>
+        <p class="what">Zrotuj token Google Ads</p>
+        <p class="how">Wygeneruj nowy w Google Ads API Center i unieważnij stary. Wartość usunąłem już ze <code>STATUS.md</code>, ale ona siedzi w historii gita, więc samo usunięcie pliku nic nie daje. Po rotacji wstaw nowy do <code>.env.local</code> i do zmiennych na Vercelu.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag you">tylko ty</span><span class="mins">5 minut</span></div>
+        <p class="what">Zdecyduj cenę i wstaw ją na stronę</p>
+        <p class="how">Znajdź w <code>index.html</code> zdanie zaczynające się <b>„How it works"</b> i dopisz na końcu widełki. Sugestia: <em>„one piece of work at a fixed fee agreed up front — typically 8–12k zł net"</em>. To jest dziś zmiana o największej dźwigni na całej stronie.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag you">tylko ty</span><span class="mins">2 minuty</span></div>
+        <p class="what">Wklej swój URL LinkedIna</p>
+        <p class="how">W <code>index.html</code>, w bloku JSON-LD w sekcji head, jest komentarz w miejscu pola <code>sameAs</code>. Usuń komentarz, wstaw <code>"sameAs": ["https://www.linkedin.com/in/..."]</code>. To wiąże stronę z twoim profilem w grafie encji — jedyny kawałek structured data, który ma tu sens.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag you">tylko ty</span><span class="mins">20 minut</span></div>
+        <p class="what">Rozstrzygnij paid i SEO</p>
+        <p class="how">Plan obiecuje cztery obszary, a dowód masz opisany dla jednego. Albo dosypujesz, co realnie masz na paid i search — kampanie, konta, wyniki — albo zawężasz obietnicę do retencji i cyklu zakupowego. Napisz mi, co masz, to wpiszę. Zawężenie też jest dobrą odpowiedzią.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag me">mogę zrobić</span><span class="mins">2 minuty</span></div>
+        <p class="what">Doinstaluj zależności</p>
+        <pre>npm i zod
+npm i -D @eslint/js typescript-eslint @next/eslint-plugin-next</pre>
+        <p class="how">Zod jest potrzebny nowemu endpointowi, reszta lintowi. Uwaga: <code>npm i zod</code> instaluje dziś wersję czwartą — kod jest napisany tak, żeby działał na obu, więc nie „poprawiaj" go z powrotem.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag me">mogę zrobić</span><span class="mins">10 minut</span></div>
+        <p class="what">Przenieś cztery pliki na miejsce</p>
+        <p class="how"><code>api-lead-route.ts</code> idzie do <code>app/api/lead/route.ts</code>, <code>sheet-email.ts</code> i <code>lead-hubspot.ts</code> do <code>app/lib/</code>. Zawartość <code>index.html</code> zastępuje stronę główną — style do modułu CSS, skrypt do komponentu klienckiego, logika bez zmian.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag me">mogę zrobić</span><span class="mins">1 minuta</span></div>
+        <p class="what">Załóż właściwości w HubSpocie</p>
+        <pre>node scripts/hubspot-setup.mjs
+node scripts/hubspot-setup.mjs --apply</pre>
+        <p class="how">Pierwszy przebieg tylko pokazuje, co zrobi. Skrypt jest idempotentny i czyta klucz z <code>.env.local</code>. Jeśli powie, że brakuje uprawnień, dodaj tokenowi <code>crm.schemas.contacts.write</code> w ustawieniach aplikacji prywatnej.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag you">tylko ty</span><span class="mins">30 minut</span></div>
+        <p class="what">Zrób obrazek og.png</p>
+        <p class="how">Tysiąc dwieście na sześćset trzydzieści, do <code>public/og.png</code>. Wystarczy nagłówek strony na ciemnym tle. Bez tego twój link na LinkedInie wyświetla się jako martwy prostokąt, a to jest twój jedyny działający kanał — więc to nie jest kosmetyka.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag me">mogę zrobić</span><span class="mins">20 minut</span></div>
+        <p class="what">Zrób stronę wypisu /stop</p>
+        <p class="how">Stopka każdego maila obiecuje, że jedna linijka zatrzyma korespondencję na zawsze. Musi więc istnieć strona z jednym polem na adres, która zapisuje wypis. Obietnica, której nie da się wykonać, jest gorsza niż jej brak.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag me">mogę zrobić</span><span class="mins">30 minut</span></div>
+        <p class="what">Wytnij radar, lamę, MCC i Stripe</p>
+        <pre>bash scripts/purge-legacy.sh
+bash scripts/purge-legacy.sh --apply</pre>
+        <p class="how">Sto siedemdziesiąt pięć plików, jakieś czterdzieści sześć i pół tysiąca linii. Skrypt najpierw zakłada gałąź i commit, dopiero potem kasuje — powrót jednym <code>git checkout</code>.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag me">mogę zrobić</span><span class="mins">15 minut</span></div>
+        <p class="what">Napraw dwa miejsca, które zerwie wycinanie</p>
+        <p class="how"><code>FinalCTA.tsx</code> strzela do <code>/api/lama/audit</code> — przepnij na <code>/api/lead</code> albo usuń, jeśli sekcja też wylatuje. <code>Accelerators.tsx</code> ma kafel radaru do wyrzucenia. Potem <code>npx tsc --noEmit</code> pokaże resztę.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag me">mogę zrobić</span><span class="mins">10 minut</span></div>
+        <p class="what">Sprawdź zmienne na Vercelu</p>
+        <p class="how"><code>RESEND_API_KEY</code>, <code>FROM_EMAIL</code>, <code>TO_EMAIL</code>, <code>HUBSPOT_API_KEY</code> muszą być ustawione w środowisku <b>Production</b>, nie tylko Preview. Jeśli ich tam nie ma, build przejdzie, a każde zgłoszenie zwróci błąd po cichu — i nigdy się o tym nie dowiesz.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag you">tylko ty</span><span class="mins">5 minut</span></div>
+        <p class="what">Zweryfikuj domenę nadawcy w Resend</p>
+        <p class="how">SPF i DKIM dla domeny z <code>FROM_EMAIL</code>. Bez tego sheet ląduje w spamie i cały mechanizm traci sens — założenie jest takie, że pierwszy mail od ciebie jest użyteczny, a nie że go nie widać.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag me">mogę zrobić</span><span class="mins">10 minut</span></div>
+        <p class="what">Wypuść i przetestuj na sobie</p>
+        <p class="how">Wejdź z telefonu, przejdź całą ścieżkę, wybierz opcję z mark-upem, podaj swój adres. Sprawdź, czy sheet przyszedł, czy nie wpadł w spam, czy powiadomienie ma w temacie <code>[MARK-UP]</code> i czy kontakt wylądował w HubSpocie z wypełnionymi polami.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag you">tylko ty</span><span class="mins">10 minut</span></div>
+        <p class="what">Ustaw atrybucję, zanim ruszy ruch</p>
+        <p class="how">Linkuj z LinkedIna z parametrami, osobno dla postów o narzędziu i osobno z profilu — na przykład <code>?utm_source=linkedin&amp;utm_campaign=tool-post</code>. I zapisuj dosłownie, co ludzie odpowiadają na pytanie „co sprawiło, że piszesz". Bez tego za rok nie odpowiesz, czy ten jeden klient przyszedł przez stronę, czy mimo niej.</p>
+      </div></li>
+
+      <li><div class="task">
+        <div class="tagline"><span class="tag you">tylko ty</span><span class="mins">1 godzina</span></div>
+        <p class="what">Napisz pierwszy post</p>
+        <p class="how">Nie o tym, że masz nową stronę. O jednej rzeczy, którą ta strona liczy: że większość marek FMCG nie zna dnia, w którym klient wraca, i że to jest odczyt na dwie minuty z własnych zamówień. Link na końcu, bez zachęty. Post ma być użyteczny sam w sobie dla kogoś, kto nigdy nie kliknie.</p>
+      </div></li>
+
+    </ol>
+  </section>
+
+  <section>
+    <h2>Kolejność ma znaczenie tylko w trzech miejscach</h2>
+    <p>Reszta jest niezależna, ale te trzy zależności są twarde. <b>Zadanie pierwsze</b> jest przed wszystkim, bo to jedyna rzecz z ryzykiem, które rośnie z czasem. <b>Zadania od piątego do siódmego</b> muszą pójść razem, zanim cokolwiek wypuścisz — endpoint bez zoda się nie zbuduje, a strona bez właściwości w HubSpocie zbierze zgłoszenia, które nie mają gdzie usiąść. <b>Zadanie piętnaste</b> musi być przed czternastym, bo atrybucji nie da się ustawić wstecz.</p>
+    <p>Cena z zadania drugiego nie blokuje technicznie niczego, ale blokuje sens całej reszty. Strona bez niej działa i nie konwertuje.</p>
+  </section>
+
+  <section>
+    <h2>Źródła stawek</h2>
+    <div class="src">
+      <a href="https://fractio.pl/fractional-cmo">fractio.pl &middot; Fractional CMO w Polsce — stawki godzinowe, dzienne i retainery</a>
+      <a href="https://moovi.pl/blog/marketing-dla-firm/ile-kosztuje-marketing-b2b-przewodnik-po-budzetach-stawkach-i-kosztach-pozyskania-klienta-2026/">moovi.pl &middot; Ile kosztuje marketing B2B — budżety, stawki, koszty pozyskania 2026</a>
+      <a href="https://doradztwoecommerce.pl/kim-jest-fractional-ecommerce-manager/">doradztwoecommerce.pl &middot; Fractional e-commerce manager — dlaczego dla Polski brak benchmarku</a>
+      <a href="https://antal.pl/wiedza/kalkulator-b2b">Antal &middot; Kalkulator B2B</a>
+    </div>
+  </section>
+
+</div>
