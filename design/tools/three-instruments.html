@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Three AI-built tools for FMCG replenishment: readiness, the empty calendar, and pack duration.">
+<title>The Replenishment Instruments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#ECEFE9; --card:#FCFDFB; --sunk:#E3E7DF;
+    --ink:#131A18; --body:#454F4B; --soft:#5F6862; --rule:#D2D8CF;
+    --acc:#C43F0D; --acc-soft:#F8E3D8; --good:#186051; --good-soft:#DCEDE5;
+    --disp:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0D0F14; --card:#141821; --sunk:#0A0C10;
+      --ink:#EDF0EA; --body:#B6BFBB; --soft:#8C9591; --rule:#242B33;
+      --acc:#FF7A33; --acc-soft:#2A1810; --good:#4DD0A7; --good-soft:#10231D;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0D0F14; --card:#141821; --sunk:#0A0C10;
+    --ink:#EDF0EA; --body:#B6BFBB; --soft:#8C9591; --rule:#242B33;
+    --acc:#FF7A33; --acc-soft:#2A1810; --good:#4DD0A7; --good-soft:#10231D;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--body);font-family:var(--disp);
+    font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .page{max-width:1000px;margin:0 auto;padding:0 24px 88px;}
+
+  .mark{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--soft);margin:0;}
+  h1{font-family:var(--disp);font-weight:800;font-size:clamp(31px,5.2vw,58px);line-height:.98;
+    letter-spacing:-.035em;color:var(--ink);margin:14px 0 0;max-width:15ch;text-wrap:balance;}
+  h1 span{color:var(--acc);}
+  .thesis{margin:18px 0 0;font-size:17px;line-height:1.5;max-width:52ch;color:var(--body);}
+  .thesis b{color:var(--ink);font-weight:600;}
+  header{padding:56px 0 0;}
+
+  /* one ruler, drawn three times — the through-line of the page */
+  .ruler{display:flex;margin:34px 0 0;height:26px;align-items:flex-end;gap:0;}
+  .ruler i{flex:1;display:block;background:var(--rule);height:5px;}
+  .ruler i:nth-child(5n+1){height:13px;background:var(--soft);}
+
+  .tool{margin-top:26px;background:var(--card);border:1px solid var(--rule);}
+  .thead{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 18px;align-items:start;
+    padding:22px 24px;border-bottom:1px solid var(--rule);}
+  .tno{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+    color:var(--acc);padding-top:5px;}
+  .thead h2{margin:0;font-family:var(--disp);font-weight:700;font-size:23px;line-height:1.15;
+    letter-spacing:-.02em;color:var(--ink);}
+  .thead p{margin:6px 0 0;font-size:14.5px;line-height:1.5;max-width:56ch;}
+  .tbody{padding:24px;display:grid;gap:22px;}
+
+  .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .ctl .cl{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--soft);margin-right:2px;}
+  .chip{border:1px solid var(--rule);background:none;color:var(--body);cursor:pointer;
+    padding:8px 12px;min-height:36px;font-family:var(--mono);font-size:11.5px;
+    transition:border-color .15s,color .15s,background .15s;}
+  .chip:hover{border-color:var(--acc);color:var(--ink);}
+  .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--card);}
+  .num{border:1px solid var(--rule);background:var(--paper);color:var(--ink);width:74px;
+    font-family:var(--mono);font-size:14px;padding:8px 10px;text-align:right;
+    -moz-appearance:textfield;}
+  .num::-webkit-outer-spin-button,.num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--acc);
+    outline-offset:2px;}
+
+  .say{margin:0;font-size:17px;line-height:1.45;color:var(--ink);font-weight:500;max-width:58ch;
+    text-wrap:balance;}
+  .say b{color:var(--acc);font-weight:700;}
+  .say em{font-style:normal;color:var(--good);font-weight:700;}
+  .fine{margin:0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--soft);
+    max-width:60ch;}
+
+  /* ---------- 01 · staircase ------------------------------------------- */
+  .stair{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;align-items:end;
+    min-height:190px;}
+  .st{display:flex;flex-direction:column;justify-content:flex-end;gap:8px;}
+  .st .bar{border:1px dashed var(--rule);background:none;}
+  .st.on .bar{background:var(--ink);border:1px solid var(--ink);}
+  .st.here .bar{background:var(--acc);border:1px solid var(--acc);}
+  .st .cap{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--soft);}
+  .st .ttl{font-weight:600;font-size:13.5px;line-height:1.25;color:var(--soft);opacity:.72;
+    letter-spacing:-.01em;}
+  .st.on .ttl{color:var(--ink);opacity:1;} .st.here .cap{color:var(--acc);}
+  .qs{display:grid;gap:0;border-top:1px solid var(--rule);}
+  .qrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 22px;align-items:center;
+    padding:12px 0;border-bottom:1px solid var(--rule);}
+  .qrow > span{font-size:14.5px;line-height:1.4;color:var(--body);}
+  .qopt{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;}
+
+  /* ---------- 02 · day chart ------------------------------------------- */
+  .chart{display:block;width:100%;height:auto;overflow:visible;}
+  .chart .gridline{stroke:var(--rule);stroke-width:1;}
+  .chart .miss{fill:var(--acc);}
+  .chart .hit{fill:var(--good);}
+  .chart .tick{fill:var(--soft);font-family:"IBM Plex Mono",monospace;font-size:9px;}
+  .chart .axis{fill:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;}
+  .key{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--soft);}
+  .key span{display:inline-flex;align-items:center;gap:7px;}
+  .key i{width:11px;height:11px;display:block;}
+  .key i.m{background:var(--acc);} .key i.h{background:var(--good);}
+
+  /* ---------- 03 · blister --------------------------------------------- */
+  .strip{display:flex;flex-wrap:wrap;gap:4px;padding:14px;background:var(--sunk);
+    border:1px solid var(--rule);}
+  .strip i{width:14px;height:22px;display:block;background:var(--card);
+    border:1px solid var(--rule);border-radius:5px/7px;}
+  .strip i.wk{margin-right:9px;}
+  .strip i.last{background:var(--acc);border-color:var(--acc);}
+  .months{display:flex;gap:0;border:1px solid var(--rule);}
+  .months div{flex:1;padding:12px 14px;border-right:1px solid var(--rule);}
+  .months div:last-child{border-right:0;}
+  .months b{display:block;font-family:var(--mono);font-size:19px;font-weight:600;color:var(--ink);
+    font-variant-numeric:tabular-nums;}
+  .months span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--soft);margin-top:3px;}
+
+  /* ---------- the AI seam, identical in all three ---------------------- */
+  .ai{border:1px solid var(--rule);background:var(--paper);padding:18px;display:grid;gap:12px;}
+  .ai .hd{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  .ai .hd b{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--acc);font-weight:600;}
+  .ai .hd span{font-family:var(--mono);font-size:10.5px;color:var(--soft);}
+  .ai textarea,.ai .ti{width:100%;border:1px solid var(--rule);background:var(--card);
+    color:var(--ink);font-family:var(--mono);font-size:12.5px;line-height:1.7;padding:11px 12px;
+    resize:vertical;}
+  .go{border:1px solid var(--ink);background:var(--ink);color:var(--card);cursor:pointer;
+    padding:11px 17px;min-height:42px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;font-weight:600;justify-self:start;}
+  .go:hover{background:var(--acc);border-color:var(--acc);}
+  .go[disabled]{opacity:.45;cursor:default;}
+  .out{display:grid;gap:0;border-top:1px solid var(--rule);}
+  .orow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;padding:10px 0;
+    border-bottom:1px solid var(--rule);align-items:baseline;}
+  .orow .k{font-size:13.5px;line-height:1.4;color:var(--body);min-width:0;overflow-wrap:anywhere;}
+  .orow .v{font-family:var(--mono);font-size:12.5px;color:var(--ink);white-space:nowrap;
+    font-variant-numeric:tabular-nums;}
+  .orow .v.no{color:var(--acc);}
+  .msg{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--rule);}
+  .msg .w{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--acc);}
+  .msg .s{font-weight:600;font-size:15px;color:var(--ink);line-height:1.35;}
+  .msg .t{font-size:13.5px;line-height:1.5;color:var(--body);}
+  .stat{font-family:var(--mono);font-size:11.5px;color:var(--soft);min-height:17px;}
+
+  .close{margin-top:40px;padding-top:20px;border-top:1px solid var(--rule);
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end;}
+  .close p{margin:0;font-size:15px;line-height:1.55;max-width:56ch;}
+  .close p b{color:var(--ink);font-weight:600;}
+  .close .sig{font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--soft);
+    text-align:right;white-space:nowrap;}
+  .close a{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--rule);}
+
+  @media (max-width:760px){
+    .thead{grid-template-columns:minmax(0,1fr);gap:8px;}
+    .stair{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;min-height:150px;}
+    .st .ttl{font-size:11.5px;}
+    .qrow{grid-template-columns:minmax(0,1fr);}
+    .qopt{justify-content:flex-start;}
+    .close{grid-template-columns:minmax(0,1fr);}
+    .close .sig{text-align:left;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+</style>
+
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <p class="mark">Oleksiak Consulting &middot; built with AI, in days</p>
+    <h1>Three instruments for <span>the day the pack runs out</span></h1>
+    <p class="thesis">Every one of them reads the same axis: the distance between empty and the next
+      order. <b>One starts at the shop average and walks down to the person.</b></p>
+    <div class="ruler" aria-hidden="true"></div>
+  </header>
+
+  <!-- ============================ 01 ============================ -->
+  <section class="tool">
+    <div class="thead">
+      <span class="tno">01</span>
+      <div>
+        <h2>Readiness</h2>
+        <p>Five sources for one estimated reorder date. This says which one your data can carry today
+          — and the single thing blocking the next.</p>
+      </div>
+    </div>
+    <div class="tbody">
+      <div class="stair" id="stair"></div>
+      <p class="say" id="v1">&nbsp;</p>
+      <div class="qs" id="qs"></div>
+      <div class="ai" id="ai1">
+        <div class="hd"><b>AI &middot; unblocks the blocker</b><span>reads free text, returns a field</span></div>
+        <textarea id="titles" rows="5" spellcheck="false"></textarea>
+        <button class="go" id="g1" type="button">Extract pack size</button>
+        <p class="stat" id="s1"></p>
+        <div class="out" id="o1"></div>
+      </div>
+      <p class="fine">Rungs one to three are group estimates. Four and five are per person &mdash;
+        that is where hyperpersonalisation starts, and it is a data question first.</p>
+    </div>
+  </section>
+
+  <!-- ============================ 02 ============================ -->
+  <section class="tool">
+    <div class="thead">
+      <span class="tno">02</span>
+      <div>
+        <h2>The Empty Calendar</h2>
+        <p>Every day, some of your customers finish their pack. This draws that, next to what you
+          actually have firing.</p>
+      </div>
+    </div>
+    <div class="tbody">
+      <div class="ctl">
+        <span class="cl">Orders / month</span>
+        <input class="num" id="ord" type="number" min="20" max="99999" value="900" inputmode="numeric">
+        <span class="cl">Pack lasts</span>
+        <input class="num" id="pak" type="number" min="7" max="120" value="30" inputmode="numeric">
+        <span class="cl">days</span>
+      </div>
+      <div class="ctl">
+        <span class="cl">Running now</span>
+        <button class="chip" id="p0" type="button" aria-pressed="false">Nothing</button>
+        <button class="chip" id="p1" type="button" aria-pressed="true">One blast on day 30</button>
+        <button class="chip" id="p2" type="button" aria-pressed="false">Timed to the person</button>
+      </div>
+      <svg class="chart" id="chart" viewBox="0 0 720 220" role="img"
+           aria-label="Customers finishing their pack each day, and whether a message is timed to reach them"></svg>
+      <div class="key">
+        <span><i class="h"></i>a message lands in their window</span>
+        <span><i class="m"></i>nobody speaks to them</span>
+      </div>
+      <p class="say" id="v2">&nbsp;</p>
+      <div class="ai" id="ai2">
+        <div class="hd"><b>AI &middot; writes what lands</b><span>four moments, four messages</span></div>
+        <div class="ctl">
+          <span class="cl">Category</span>
+          <input class="ti" id="cat" style="width:auto;flex:1 1 200px;" value="colostrum sachets">
+        </div>
+        <button class="go" id="g2" type="button">Draft the sends</button>
+        <p class="stat" id="s2"></p>
+        <div class="out" id="o2"></div>
+      </div>
+      <p class="fine">Example volumes, shaped like a real replenishment curve. Point is the shape:
+        one blast catches one day, and the days either side are the business.</p>
+    </div>
+  </section>
+
+  <!-- ============================ 03 ============================ -->
+  <section class="tool">
+    <div class="thead">
+      <span class="tno">03</span>
+      <div>
+        <h2>How Long It Lasts</h2>
+        <p>On the product page. Answers the question every buyer of a consumable asks and nobody
+          writes down &mdash; and quietly records their real rate of use.</p>
+      </div>
+    </div>
+    <div class="tbody">
+      <div class="ctl">
+        <span class="cl">Pack of</span>
+        <input class="num" id="units" type="number" min="1" max="9999" value="60" inputmode="numeric">
+        <span class="cl">units &middot; taking</span>
+        <input class="num" id="dose" type="number" min="1" max="60" value="2" inputmode="numeric">
+        <span class="cl">a day</span>
+      </div>
+      <div class="strip" id="strip" aria-hidden="true"></div>
+      <p class="say" id="v3">&nbsp;</p>
+      <div class="months" id="months"></div>
+      <div class="ai" id="ai3">
+        <div class="hd"><b>AI &middot; reads the buyer</b><span>plain words in, a rate of use out</span></div>
+        <input class="ti" id="say3" value="I'm 82 kg and I train five times a week">
+        <button class="go" id="g3" type="button">Work out my rate</button>
+        <p class="stat" id="s3"></p>
+        <div class="out" id="o3"></div>
+      </div>
+      <p class="fine">The answer sells the bigger pack. The input is worth more: a declared rate of
+        use puts that buyer on rung three the day they order, with no second purchase to wait for.</p>
+    </div>
+  </section>
+
+  <div class="close">
+    <p><b>Build order is forced.</b> One first, because two and three both need its number. Three
+      second &mdash; it is the only one that pays for itself inside a week.</p>
+    <p class="sig">Rafa&#322; Oleksiak<br><a href="https://oleksiakconsulting.com/">oleksiakconsulting.com</a></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $=function(id){return document.getElementById(id);};
+
+  /* ruler ticks — the same scale runs under all three instruments */
+  (function(){var r=document.querySelector(".ruler"),i;
+    for(i=0;i<45;i++) r.appendChild(document.createElement("i"));})();
+
+  /* ============================ 01 ============================ */
+  var RUNGS=[
+    {n:"Pack physics",  c:"everyone"},
+    {n:"Shop median",   c:"per SKU"},
+    {n:"Cohort",        c:"per group"},
+    {n:"The person",    c:"per buyer"},
+    {n:"Self-correcting",c:"per send"}
+  ];
+  var QS=[
+    {k:"id", q:"Can you tell two orders came from one person?",
+     o:[["yes","Yes"],["some","Guests leak"],["no","No"]]},
+    {k:"rep",q:"Share of buyers who ordered the same thing twice",
+     o:[["none","None"],["low","<1 in 10"],["mid","1 in 5"],["hi","1 in 3+"]]},
+    {k:"pack",q:"Pack size stored as product data — caps, grams, ml",
+     o:[["field","A field"],["title","In the title"],["no","Nowhere"]]},
+    {k:"age", q:"Full pack cycles of history behind you",
+     o:[["lt2","Under 2"],["2to4","2 to 4"],["gt4","4+"]]}
+  ];
+  /* opens on a plausible mid-size shop, not an empty shell */
+  var A={id:"some",rep:"mid",pack:"title",age:"2to4"};
+
+  function assess(){
+    var reach=1,b=null;
+    var repSome=A.rep!=="none", repOK=(A.rep==="mid"||A.rep==="hi"),
+        ageOK=A.age!=="lt2", packOK=A.pack==="field", idOK=A.id==="yes";
+    if(repSome&&ageOK) reach=2;
+    else b= !ageOK
+      ? ["history","You have not sold through two pack cycles yet. Nothing is broken — the second orders have not happened."]
+      : ["repeats","Almost nobody has bought twice, so there is no gap to measure. That is a first-purchase problem, and it comes first."];
+    if(reach>=2){ if(packOK) reach=3;
+      else b=["pack size", A.pack==="title"
+        ? "Pack size lives inside product titles, so quantity never becomes days. Lift it into its own field."
+        : "Pack size is stored nowhere, so two units and one look identical to every system you own."]; }
+    if(reach>=3){ if(idOK&&repOK) reach=4;
+      else b= !idOK
+        ? ["identity","Guest checkouts break the chain, so one repeat buyer looks like two strangers."]
+        : ["repeat depth","Too few people have bought twice for their own interval to mean anything yet."]; }
+    if(reach>=4) b=["the loop","The data carries per-person timing today. What is missing is the feedback — send, record, let the clock correct itself."];
+    return {reach:reach,b:b};
+  }
+
+  function paint1(){
+    var r=assess(), s=$("stair"); s.innerHTML="";
+    RUNGS.forEach(function(R,i){
+      var on=(i+1)<=r.reach, here=(i+1)===r.reach;
+      var d=document.createElement("div");
+      d.className="st"+(on?" on":"")+(here?" here":"");
+      d.innerHTML='<span class="ttl">'+R.n+'</span>'
+        +'<span class="bar" style="height:'+(30+i*30)+'px"></span>'
+        +'<span class="cap">'+(here?"you are here":R.c)+'</span>';
+      s.appendChild(d);
+    });
+    var nm=["pack physics","your own median","cohorts","the person","a self-correcting clock"];
+    $("v1").innerHTML="Your data carries rung <b>"+r.reach+"</b> — "+nm[r.reach-1]
+      +". In the way: <b>"+r.b[0]+"</b>. "+r.b[1];
+  }
+
+  var qs=$("qs");
+  QS.forEach(function(Q){
+    var row=document.createElement("div");row.className="qrow";
+    var t=document.createElement("span");t.textContent=Q.q;row.appendChild(t);
+    var o=document.createElement("div");o.className="qopt";
+    Q.o.forEach(function(pair){
+      var b=document.createElement("button");b.type="button";b.className="chip";
+      b.textContent=pair[1];
+      b.setAttribute("aria-pressed",A[Q.k]===pair[0]?"true":"false");
+      b.onclick=function(){
+        A[Q.k]=pair[0];
+        [].forEach.call(o.children,function(x){x.setAttribute("aria-pressed","false");});
+        b.setAttribute("aria-pressed","true");paint1();
+      };
+      o.appendChild(b);
+    });
+    row.appendChild(o);qs.appendChild(row);
+  });
+
+  /* ============================ 02 ============================ */
+  var plan=1;
+  [0,1,2].forEach(function(i){
+    $("p"+i).onclick=function(){
+      plan=i;[0,1,2].forEach(function(j){$("p"+j).setAttribute("aria-pressed",j===i?"true":"false");});
+      paint2();
+    };
+  });
+  ["ord","pak"].forEach(function(id){$(id).addEventListener("input",paint2);});
+
+  function nInt(id,d,lo,hi){var v=parseInt($(id).value,10);
+    return (isNaN(v)||v<lo||v>hi)?d:v;}
+
+  function paint2(){
+    var orders=nInt("ord",900,20,99999), pak=nInt("pak",30,7,120);
+    var DAYS=45, i, curve=[], total=0;
+    /* a real replenishment curve: a peak at the pack length with a long right tail */
+    for(i=1;i<=DAYS;i++){
+      var z=(i-pak)/(pak*0.28);
+      var v=Math.exp(-0.5*z*z)*(i<pak?1:0.72);
+      curve.push(v);total+=v;
+    }
+    var counts=curve.map(function(v){return Math.round(v/total*orders);});
+
+    var covered=function(day){
+      if(plan===0) return false;
+      if(plan===1) return day===30;
+      return Math.abs(day-(pak-7))<=1 || Math.abs(day-pak)<=1
+          || Math.abs(day-(pak+7))<=1 || Math.abs(day-Math.round(pak/2))<=1;
+    };
+
+    var W=720,H=220,PL=30,PB=26,PT=10,PR=6;
+    var iw=W-PL-PR, ih=H-PB-PT, bw=iw/DAYS, max=Math.max.apply(null,counts)||1;
+    var svg='<line class="gridline" x1="'+PL+'" y1="'+(PT+ih)+'" x2="'+(W-PR)+'" y2="'+(PT+ih)+'"></line>';
+    var miss=0,hit=0;
+    for(i=0;i<DAYS;i++){
+      var day=i+1,c=counts[i],h=c/max*ih,x=PL+i*bw,y=PT+ih-h,cv=covered(day);
+      if(cv)hit+=c; else miss+=c;
+      svg+='<rect class="'+(cv?"hit":"miss")+'" x="'+(x+0.6).toFixed(1)+'" y="'+y.toFixed(1)
+         +'" width="'+(bw-1.2).toFixed(1)+'" height="'+Math.max(h,1).toFixed(1)+'"></rect>';
+      if(day%5===0)
+        svg+='<text class="tick" x="'+(x+bw/2).toFixed(1)+'" y="'+(PT+ih+14)+'" text-anchor="middle">'+day+'</text>';
+    }
+    svg+='<text class="axis" x="'+PL+'" y="'+(PT+ih+24)+'">DAY AFTER THE ORDER</text>';
+    svg+='<text class="tick" x="'+(PL-6)+'" y="'+(PT+8)+'" text-anchor="end">'+max+'</text>';
+    svg+='<text class="tick" x="'+(PL-6)+'" y="'+(PT+ih)+'" text-anchor="end">0</text>';
+    $("chart").innerHTML=svg;
+
+    var pc=Math.round(miss/(miss+hit)*100);
+    $("v2").innerHTML = plan===0
+      ? "All <b>"+miss.toLocaleString("pl-PL")+"</b> of them run out with nothing scheduled."
+      : plan===1
+        ? "One send catches <em>"+hit.toLocaleString("pl-PL")+"</em>. The other <b>"
+          +miss.toLocaleString("pl-PL")+"</b> — "+pc+"% — empty on a day you say nothing."
+        : "Four moments on their clock reach <em>"+hit.toLocaleString("pl-PL")
+          +"</em>. Down to <b>"+pc+"%</b> unspoken to, from the same list.";
+  }
+
+  /* ============================ 03 ============================ */
+  ["units","dose"].forEach(function(id){$(id).addEventListener("input",paint3);});
+  var MON=["January","February","March","April","May","June","July","August","September",
+           "October","November","December"];
+
+  function paint3(){
+    var u=nInt("units",60,1,9999), d=nInt("dose",2,1,60);
+    var days=Math.floor(u/d);
+    var out=new Date(); out.setDate(out.getDate()+days);
+    var st=$("strip");st.innerHTML="";
+    var show=Math.min(days,70);
+    for(var i=0;i<show;i++){
+      var e=document.createElement("i");
+      if((i+1)%7===0) e.className="wk";
+      if(i===days-1) e.className+=" last";
+      st.appendChild(e);
+    }
+    if(days>show){
+      var more=document.createElement("span");
+      more.style.cssText="font-family:var(--mono);font-size:11px;color:var(--soft);"
+        +"align-self:center;padding-left:6px;";
+      more.textContent="+"+(days-show)+" days";
+      st.appendChild(more);
+    }
+    $("v3").innerHTML="This pack lasts <b>"+days+" days</b> — until "
+      +out.getDate()+" "+MON[out.getMonth()]+".";
+    var m=$("months");m.innerHTML="";
+    [1,2,3].forEach(function(k){
+      var div=document.createElement("div");
+      var mo=Math.round(days*k/30*10)/10;
+      div.innerHTML="<b>"+k+" pack"+(k>1?"s":"")+"</b><span>"
+        +mo+(mo===1?" month":" months")+" covered</span>";
+      m.appendChild(div);
+    });
+  }
+
+  paint1();paint2();paint3();
+
+  /* ==================== AI ====================
+     Jedna zdolność, trzy zastosowania. Każde wywołanie na kliknięcie,
+     nigdy w pętli ani z timera — to płaci widz, nie strona.           */
+  var SEED=["Colostrum Premium 40% IgG 120 kaps.",
+            "Odżywka białkowa WPC 80 — 2270 g, wanilia",
+            "Krem nawilżający na dzień 50 ml",
+            "Kapsułki do prania Universal 60 szt.",
+            "Karma sucha dla psa dorosłego 12 kg, średnie rasy"].join("\n");
+  $("titles").value=SEED;
+
+  var COPY={
+    not_granted:"Claude is not allowed for this page in your view.",
+    sampling_disabled:"Claude is not available on this account.",
+    rate_limited:"Too many requests just now — give it a minute.",
+    cancelled:"Stopped.",
+    invalid_json:"Claude answered in the wrong shape. Try again.",
+    refused:"Claude declined that one."
+  };
+  function oops(e){return COPY[e&&e.code]||"That did not go through. Try again.";}
+
+  var SAMPLE=null;
+  ["ai1","ai2","ai3"].forEach(function(id){$(id).style.display="none";});
+  if(window.claude&&claude.use) claude.use("sample").then(function(fn){
+    if(!fn) return;
+    SAMPLE=fn;
+    ["ai1","ai2","ai3"].forEach(function(id){$(id).style.display="grid";});
+  }).catch(function(){});
+
+  function run(btn,stat,work){
+    btn.disabled=true;stat.textContent="Thinking…";
+    work().then(function(){stat.textContent="";},function(e){stat.textContent=oops(e);})
+      .then(function(){btn.disabled=false;});
+  }
+  function row(k,v,bad){
+    return '<div class="orow"><span class="k">'+k+'</span>'
+      +'<span class="v'+(bad?" no":"")+'">'+v+'</span></div>';
+  }
+  function esc(t){return String(t==null?"":t)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  /* --- 01: pack size out of a free-text product title ------------------- */
+  $("g1").onclick=function(){
+    var lines=$("titles").value.split("\n").map(function(x){return x.trim();})
+      .filter(function(x){return x.length;}).slice(0,12);
+    if(!lines.length) return;
+    run($("g1"),$("s1"),function(){
+      return SAMPLE.json(
+        "You are reading ecommerce product titles for consumable goods. For each title return the "
+        +"pack size as structured data. Reply with ONLY a JSON array, one object per title, in the "
+        +"same order, each: {\"units\":number|null,\"unit\":string,\"perDay\":number|null,"
+        +"\"days\":number|null,\"note\":string}. units = how much is in the pack; unit = its measure "
+        +"(caps, g, ml, doses, kg); perDay = a defensible typical daily consumption; days = "
+        +"units/perDay rounded; note = max six words naming the assumption, or why it cannot be "
+        +"determined. Titles:\n"+lines.join("\n"),
+        {modelTier:"quick"}
+      ).then(function(res){
+        var arr=Array.isArray(res)?res:(res&&res.items)||[];
+        var got=0,html="";
+        lines.forEach(function(t,i){
+          var r=arr[i]||{};
+          var ok=r.days&&r.units;
+          if(ok)got++;
+          html+=row(esc(t)+(r.note?' <span style="color:var(--soft)">— '+esc(r.note)+'</span>':""),
+            ok?(r.units+" "+esc(r.unit||"")+" · "+r.days+" days"):"cannot tell", !ok);
+        });
+        $("o1").innerHTML=html;
+        /* Bloker z rungu trzeciego znika dokładnie wtedy, gdy AI go zdejmie. */
+        if(got>=Math.ceil(lines.length*0.6)){ A.pack="field"; paint1();
+          [].forEach.call($("qs").children[2].querySelectorAll("button"),function(b,j){
+            b.setAttribute("aria-pressed",j===0?"true":"false");});
+          $("s1").textContent="Recovered "+got+" of "+lines.length+" — pack size is now a field.";
+        } else {
+          $("s1").textContent="Recovered "+got+" of "+lines.length+".";
+        }
+      });
+    });
+  };
+
+  /* --- 02: the four sends, written --------------------------------------- */
+  $("g2").onclick=function(){
+    var pak=nInt("pak",30,7,120), cat=($("cat").value||"a consumable").slice(0,80);
+    var when=[Math.round(pak/2),pak-7,pak,pak+7];
+    run($("g2"),$("s2"),function(){
+      return SAMPLE.json(
+        "Write four replenishment messages for an ecommerce brand selling "+cat+". A pack lasts "
+        +pak+" days. Send days after the order: "+when.join(", ")+". Reply with ONLY a JSON array of "
+        +"four objects: {\"day\":number,\"channel\":string,\"subject\":string,\"line\":string}. "
+        +"channel is email or push. subject max 8 words, no exclamation marks, no emoji. line is one "
+        +"sentence, max 25 words, and must refer to where the customer is in the pack — not a "
+        +"discount. Plain, adult, specific to the product."
+      ).then(function(res){
+        var arr=Array.isArray(res)?res:(res&&res.items)||[];
+        $("o2").innerHTML=arr.slice(0,4).map(function(m){
+          return '<div class="msg"><span class="w">Day '+esc(m.day)+' &middot; '
+            +esc(m.channel)+'</span><span class="s">'+esc(m.subject)+'</span>'
+            +'<span class="t">'+esc(m.line)+'</span></div>';
+        }).join("")||row("Nothing came back","—",true);
+      });
+    });
+  };
+
+  /* --- 03: plain words to a rate of use ---------------------------------- */
+  $("g3").onclick=function(){
+    var u=nInt("units",60,1,9999), d=nInt("dose",2,1,60);
+    var said=($("say3").value||"").slice(0,300);
+    if(!said.trim()) return;
+    run($("g3"),$("s3"),function(){
+      return SAMPLE.json(
+        "A shopper is looking at a pack of "+u+" units of a consumable. The default assumption is "
+        +d+" units a day. They say: \""+said+"\". Work out how much they would actually use. Reply "
+        +"with ONLY a JSON object: {\"perDay\":number,\"days\":number,\"why\":string,"
+        +"\"packs\":number}. days = "+u+"/perDay rounded down. packs = how many packs cover three "
+        +"months at that rate, rounded up. why = one sentence, max 20 words, naming what in their "
+        +"words changed the rate. If their words do not change it, say so and keep "+d+".",
+        {modelTier:"quick"}
+      ).then(function(res){
+        if(!res||!res.perDay) throw {code:"invalid_json"};
+        var out=new Date(); out.setDate(out.getDate()+res.days);
+        $("o3").innerHTML=
+          row("At your rate","<b>"+res.perDay+" a day</b>")
+          +row("This pack lasts",res.days+" days · to "+out.getDate()+" "+MON[out.getMonth()])
+          +row("Three months takes",res.packs+" pack"+(res.packs>1?"s":""))
+          +row('<span style="color:var(--soft)">'+esc(res.why)+"</span>","");
+      });
+    });
+  };
+})();
+</script>
+
+</body>
+</html>

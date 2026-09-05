@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="robots" content="noindex">
+<title>The Shelf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F5F0E8; --card:#FBF8F3; --fg:#191512; --dim:#6B6259; --line:#DDD4C6;
+    --acc:#A8322A; --ok:#3F5E4B;
+    --disp:"Fraunces",Georgia,serif; --body:"Newsreader",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);
+    font-size:18px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+  input,button{font-family:inherit;}
+  .lab{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--dim);}
+  .wm{font-family:var(--disp);font-weight:900;font-size:15px;letter-spacing:.02em;}
+
+  .wrap{max-width:760px;margin:0 auto;padding:0 30px;}
+  .s1{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;
+    max-width:760px;margin:0 auto;padding:88px 30px 48px;}
+  body.done .s1{display:none;}
+  .s1 .head{position:absolute;top:28px;left:30px;right:30px;display:flex;
+    justify-content:space-between;gap:14px;align-items:baseline;}
+  .hook{margin:0;font-family:var(--disp);font-weight:900;font-size:clamp(34px,6vw,62px);
+    line-height:1.02;letter-spacing:-.02em;}
+  .hook em{font-style:italic;color:var(--acc);}
+  .sub{margin:22px 0 0;font-size:19px;line-height:1.6;color:var(--dim);max-width:52ch;}
+  .step1{margin-top:36px;}
+  .cats{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px;}
+  .cats button{border:1px solid var(--line);background:var(--card);color:var(--dim);
+    cursor:pointer;padding:11px 15px;min-height:42px;font-family:var(--mono);font-size:12px;
+    border-radius:2px;transition:border-color .16s,color .16s,background-color .16s;}
+  .cats button:hover{border-color:var(--acc);color:var(--fg);}
+  .cats button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#FBF8F3;}
+  .row2{display:flex;gap:10px;flex-wrap:wrap;margin-top:11px;}
+  .daybox{display:flex;flex:1 1 220px;min-width:0;border:1px solid var(--fg);background:var(--card);}
+  .daybox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--fg);
+    font-family:var(--disp);font-weight:700;font-size:26px;padding:10px 16px;-moz-appearance:textfield;}
+  .daybox input::-webkit-outer-spin-button,.daybox input::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;}
+  .daybox span{display:flex;align-items:center;padding:0 15px;border-left:1px solid var(--fg);
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);}
+  .go{border:0;background:var(--acc);color:#FBF8F3;cursor:pointer;padding:15px 26px;min-height:52px;
+    font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.01em;}
+  .go:hover{background:var(--fg);}
+
+  .s2{display:none;} body.done .s2{display:block;}
+  .bar{border-bottom:1px solid var(--line);}
+  .barin{max-width:760px;margin:0 auto;padding:18px 30px;display:flex;
+    justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;}
+  #crumb{border:0;background:none;padding:0;cursor:pointer;font-family:var(--mono);font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+  #crumb b{color:var(--acc);font-weight:500;}
+  #crumb u{text-decoration:none;border-bottom:1px solid var(--line);}
+  #crumb:hover u{border-color:var(--acc);color:var(--fg);}
+  .fade{opacity:0;transform:translateY(10px);}
+  body.shown .fade{opacity:1;transform:none;
+    transition:opacity .5s ease var(--d,0ms),transform .5s cubic-bezier(.2,.7,.3,1) var(--d,0ms);}
+
+  .leakline{margin:34px 0 0;font-family:var(--disp);font-weight:700;
+    font-size:clamp(26px,4vw,40px);line-height:1.18;letter-spacing:-.016em;}
+  .leakline b{color:var(--acc);font-weight:900;}
+
+  .byline{margin:30px 0 0;padding:22px 24px;background:var(--card);border:1px solid var(--line);}
+  .byline h3{margin:10px 0 0;font-family:var(--disp);font-weight:700;font-size:19px;line-height:1.35;}
+  .byline ul{list-style:none;margin:16px 0 0;padding:0;
+    display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;}
+  .byline li b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--acc);margin-bottom:4px;}
+  .byline li span{display:block;font-size:15px;line-height:1.55;color:var(--dim);}
+  .rtbnote{margin:18px 0 0;padding-top:16px;border-top:1px solid var(--line);
+    font-family:var(--disp);font-weight:700;font-size:17px;line-height:1.45;}
+
+  .calc{margin-top:38px;border:1px solid var(--fg);background:var(--card);padding:6px 22px;}
+  .crow{display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:14px;align-items:center;
+    padding:12px 0;border-bottom:1px dotted var(--line);font-family:var(--mono);font-size:12px;
+    color:var(--dim);}
+  .crow em{font-style:normal;display:block;margin-top:3px;font-size:10.5px;color:#6F675E;}
+  .cval{text-align:right;white-space:nowrap;font-family:var(--mono);font-size:12px;color:var(--dim);}
+  .n{width:auto;max-width:88px;border:0;border-bottom:1px solid var(--acc);background:none;
+    color:var(--fg);font-family:var(--mono);font-size:14px;text-align:right;padding:2px 4px 3px;
+    outline:none;-moz-appearance:textfield;}
+  .n::-webkit-outer-spin-button,.n::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .crow.out{border-bottom:0;border-top:1px solid var(--fg);color:var(--fg);}
+  .crow.out .cval{font-family:var(--disp);font-weight:900;font-size:23px;color:var(--acc);}
+  .peryear{margin:14px 0 0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--dim);}
+  .peryear b{color:var(--fg);font-weight:500;}
+  .gapline{margin:26px 0 0;padding-left:20px;border-left:3px solid var(--acc);
+    font-size:17px;line-height:1.6;color:var(--dim);}
+  .gapline b{color:var(--acc);font-weight:600;}
+
+  .shead{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;
+    margin-top:56px;padding-bottom:12px;border-bottom:1px solid var(--fg);}
+  ol.steps{list-style:none;margin:0;padding:0;}
+  ol.steps li{display:grid;grid-template-columns:46px minmax(0,1fr) 30px;gap:0 16px;
+    align-items:start;padding:18px 0;border-bottom:1px dotted var(--line);cursor:pointer;}
+  .rank{font-family:var(--disp);font-weight:900;font-size:19px;color:var(--acc);padding-top:1px;}
+  .sbody{min-width:0;}
+  .stop{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .sname{font-family:var(--disp);font-weight:700;font-size:20px;line-height:1.3;
+    letter-spacing:-.008em;}
+  .stag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--dim);}
+  .smeta{display:block;margin-top:6px;font-family:var(--mono);font-size:11px;line-height:1.6;
+    color:var(--dim);}
+  .swhy{display:block;margin-top:9px;font-size:17px;line-height:1.55;max-width:60ch;}
+  li.extra .swhy{display:none;} li.extra.open .swhy{display:block;}
+  li.extra .smeta::after{content:" · why ▾";}
+  li.extra.open .smeta::after{content:" · why ▴";}
+
+  li.extra .sname{font-weight:400;font-size:18px;}
+  .tick{width:22px;height:22px;margin-top:3px;border:1px solid var(--line);background:var(--card);
+    cursor:pointer;padding:0;justify-self:center;border-radius:2px;}
+  .tick:hover{border-color:var(--acc);}
+  .tick[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);}
+  li.done .sname,li.done .smeta,li.done .swhy{text-decoration:line-through;opacity:.42;}
+  .cov{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:26px;
+    font-family:var(--mono);font-size:12px;color:var(--dim);}
+  .cov b{color:var(--fg);font-weight:500;}
+  .covbar{height:3px;background:var(--line);margin-top:9px;}
+  .covbar i{display:block;height:3px;width:var(--pct,0%);background:var(--ok);transition:width .3s ease;}
+  .covnote{margin:11px 0 0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--dim);}
+  .copybtn{margin-top:24px;border:1px solid var(--fg);background:none;color:var(--fg);
+    cursor:pointer;padding:12px 18px;font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;
+    text-transform:uppercase;}
+  .copybtn:hover{background:var(--fg);color:var(--card);}
+
+  .ask{margin-top:56px;padding-top:26px;border-top:1px solid var(--fg);}
+  .askline{margin:0 0 16px;font-family:var(--disp);font-weight:700;font-size:22px;line-height:1.35;}
+  .askline b{color:var(--acc);font-weight:900;}
+  .fbox{display:flex;border:1px solid var(--fg);background:var(--card);max-width:520px;}
+  .fbox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--fg);
+    font-family:var(--body);font-size:18px;padding:13px 15px;}
+  .fbox input::placeholder{color:#6F675E;}
+  .fbox button{border:0;background:var(--acc);color:#FBF8F3;cursor:pointer;padding:0 20px;
+    font-family:var(--disp);font-weight:700;font-size:15px;}
+  .fbox button:hover{background:var(--fg);}
+  .err{display:none;margin:0 0 9px;font-family:var(--mono);font-size:11.5px;color:#8E2018;}
+  .err.on{display:block;}
+  .promise{margin:14px 0 0;font-size:15px;line-height:1.6;color:var(--dim);max-width:58ch;}
+  .sent{display:none;margin-top:22px;padding:18px 20px;background:var(--card);
+    border-left:3px solid var(--ok);} .sent.on{display:block;}
+  .sent h4{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ok);}
+  .sent p{margin:9px 0 0;font-size:15px;line-height:1.6;color:var(--dim);}
+  .foot{margin:44px 0 0;padding:26px 0 90px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:10.5px;line-height:1.75;color:#6F675E;}
+
+  @media (max-width:620px){
+    body{font-size:17px;}
+    .byline ul{grid-template-columns:1fr;}
+    .crow{grid-template-columns:minmax(0,1fr) 104px;}
+    ol.steps li{grid-template-columns:34px minmax(0,1fr) 26px;gap:0 12px;}
+    .row2{flex-direction:column;} .go{width:100%;}
+    .fbox{flex-direction:column;} .fbox button{padding:14px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .fade{opacity:1;transform:none;} body.shown .fade{transition:none;} *{transition:none!important;}
+  }
+  .choice{margin:16px 0 0;display:grid;gap:10px;}
+  .choice label{display:grid;grid-template-columns:18px minmax(0,1fr);gap:11px;align-items:start;
+    cursor:pointer;}
+  .choice input{margin:2px 0 0;width:16px;height:16px;accent-color:var(--acc);cursor:pointer;}
+  .choice span{font-size:16px;line-height:1.55;color:var(--dim);}
+  .choice b{font-weight:600;color:var(--fg);}
+  .copylink{margin-top:18px;border:0;background:none;padding:0;cursor:pointer;
+    font-family:var(--mono);font-size:11.5px;color:var(--dim);text-decoration:underline;
+    text-underline-offset:3px;}
+  .copylink:hover{color:var(--acc);}
+
+</style>
+</head>
+<body>
+
+<div class="s1">
+  <div class="head"><span class="wm">Oleksiak Consult</span><span class="lab">Prototype</span></div>
+  <h1 class="hook">Every customer runs out on a different day. <em>You email all of them on the same one.</em></h1>
+  <p class="sub">Tell me what runs out and how long one pack lasts. I will price the gap and hand you the eighteen steps I would build, in order.</p>
+  <div class="step1">
+    <div class="lab">What runs out</div>
+    <div class="cats" id="cats"></div>
+  </div>
+  <div class="step1">
+    <div class="lab">Days one pack lasts</div>
+    <div class="row2">
+      <div class="daybox"><input id="days" type="number" min="3" max="400" inputmode="numeric" value="30"><span>days</span></div>
+      <button class="go" id="go" type="button">Show me the reckoning</button>
+    </div>
+  </div>
+</div>
+
+<div class="s2">
+  <div class="bar"><div class="barin"><span class="wm">Oleksiak Consult</span>
+    <button id="crumb" type="button"></button></div></div>
+  <div class="wrap">
+    <p class="leakline fade" id="leakline" style="--d:0ms"></p>
+
+    <div class="byline fade" style="--d:90ms">
+      <div class="lab">Who is telling you this</div>
+      <div class="rtb">
+  <h3>Fifteen years on one problem: what happens after the first order.</h3>
+  <ul><li><b>Allegro</b><span>My own FMCG and recurring team, five data scientists, a model that predicted when each user would need their next pack. Email and CRM from 0.5% to 12% of revenue in eighteen months.</span></li><li><b>mBank / mOkazje</b><span>The whole retention strategy built on things that run out: coffee, detergents, contact lenses.</span></li><li><b>Booksy</b><span>The same arithmetic where the pack is an appointment — hair, nails, anything on a cycle.</span></li><li><b>Genactiv</b><span>Colostrum, category leader. Current engagement, one of one.</span></li></ul>
+  <p class="rtbnote">This page is the two-number version of the Allegro model. It is cruder. It points at the same money.</p>
+</div>
+    </div>
+
+    <div class="fade" style="--d:150ms">
+      <div class="calc">
+        <div class="crow"><label for="ord">Orders a month<em>your number</em></label>
+          <span class="cval"><input class="n" id="ord" type="number" min="1" max="9999999" inputmode="numeric" value="800"></span></div>
+        <div class="crow"><label for="loss">Share who never buy a second pack<em>assumption — change it</em></label>
+          <span class="cval"><input class="n" id="loss" type="number" min="1" max="90" inputmode="numeric" value="30">%</span></div>
+        <div class="crow"><label for="win">Share of those a timed sequence wins back<em>assumption — change it</em></label>
+          <span class="cval"><input class="n" id="win" type="number" min="1" max="80" inputmode="numeric" value="20">%</span></div>
+        <div class="crow"><label for="aov">Average order<em>your number</em></label>
+          <span class="cval"><input class="n" id="aov" type="number" min="1" max="99999" inputmode="numeric" value="140"> z&#322;</span></div>
+        <div class="crow out"><span id="calcsum"></span><span class="cval" id="permo"></span></div>
+      </div>
+      <p class="peryear" id="peryear"></p>
+      <p class="gapline" id="gapline"></p>
+    </div>
+
+    <div class="fade" style="--d:210ms">
+      <div class="shead">
+        <div class="lab">The eighteen, in the order I would build them</div>
+        <span class="lab">Tap a step to read why</span>
+      </div>
+      <ol class="steps" id="steps"></ol>
+      <div class="cov" id="cov"></div>
+      <div class="covbar" id="covbar"><i></i></div>
+      <p class="covnote" id="covnote"></p>
+      <button class="copylink" id="copy" type="button">or copy the sheet to the clipboard instead</button>
+    </div>
+
+    <div class="ask fade" style="--d:270ms">
+      <p class="askline" id="askline"></p>
+      <form id="form" novalidate>
+        <p class="err" id="err"></p>
+        <div class="fbox">
+          <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+                 autocapitalize="off" placeholder="name@company.com">
+          <button type="submit">Send the sheet</button>
+        </div>
+        <div class="choice">
+          <label><input type="radio" name="intent" value="sheet" checked>
+            <span>Just send me the sheet.</span></label>
+          <label><input type="radio" name="intent" value="markup">
+            <span><b>Send it, and write back with what you would change.</b>
+              I am considering bringing someone in.</span></label>
+        </div>
+        <p class="promise">I keep the address to send this sheet, and to reply if you asked me to.
+          No list, no sequence, no third party. One line at the bottom of the mail stops it for good.</p>
+      </form>
+      <div class="sent" id="sent"><h4>Sent &middot; now I go and look</h4><p id="rcpt"></p></div>
+    </div>
+
+    <p class="foot">Reorder bands and revenue shares in this prototype are placeholders, and the form
+      is not wired yet. The real version ships my own figures as dated, sourced ranges &mdash; because
+      a tool that invents precision disproves the expertise it was built to demonstrate.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* PLACEHOLDER DATA — the structure is real, the values are for the prototype. */
+  var CATS=[
+    {k:"supp",  label:"Supplements",         pack:30, lo:41, hi:52},
+    {k:"coffee",label:"Coffee & drinks",     pack:21, lo:29, hi:38},
+    {k:"skin",  label:"Skincare",            pack:60, lo:79, hi:96},
+    {k:"clean", label:"Household & cleaning",pack:45, lo:63, hi:81},
+    {k:"pet",   label:"Pet food",            pack:30, lo:31, hi:36},
+    {k:"lens",  label:"Contact lenses",      pack:30, lo:33, hi:41}
+  ];
+
+  var PROG=[
+    {g:"trf",  cl:"Paid",             n:"Stop bidding on people who just bought",
+     t:"Prospecting audiences still contain last cycle’s buyers", m:"CAC −10–18%",
+     at:function(){return "Always on";}},
+    {g:"trf",  cl:"Paid",             n:"Retarget on the consumption clock",
+     t:"The pack is about to end — not “they visited three days ago”", m:"ROAS +15–25%",
+     at:function(P){return "Day "+Math.max(2,P-10);}},
+    {g:"trf",  cl:"SEO",              n:"Own the questions that come at the end",
+     t:"How long a pack lasts, when to reorder, which size to buy", m:"Non-brand +20–35%",
+     at:function(){return "Always on";}},
+    {g:"trf",  cl:"SEO for LLMs",     n:"Be the source the answer engines quote",
+     t:"ChatGPT, Perplexity and AI overviews answer the dosage question for you", m:"LLM referrals +",
+     at:function(){return "Always on";}},
+    {g:"store",cl:"Store · PDP",      n:"Put the duration on the product page",
+     t:"“30 days of supply” — nobody states it, every buyer wonders", m:"CVR +6–11%",
+     at:function(){return "On the page";}},
+    {g:"store",cl:"Store · cart",     n:"Price the pack in months, not in units",
+     t:"Two packs is two months of not thinking about it", m:"AOV +8–15%",
+     at:function(){return "In the cart";}},
+    {g:"store",cl:"Store · checkout", n:"Subscribe-and-save set to the real interval",
+     t:"Not a round 30 chosen by the platform — the interval you actually see", m:"Take-up 9–17%",
+     at:function(){return "At checkout";}},
+    {g:"own",  cl:"Email",            n:"Welcome, and how to use it",
+     t:"Order placed", m:"CRM rev 6–9%", at:function(){return "Day 0";}},
+    {g:"own",  cl:"Email",            n:"Get the pack opened",
+     t:"Delivered — the first dose is the habit", m:"CRM rev 3–5%",
+     at:function(){return "Day 3–5";}},
+    {g:"own",  cl:"Email",            n:"Mid-pack check-in",
+     t:"Half the pack gone", m:"CRM rev 4–7%",
+     at:function(P){return "Day "+Math.max(2,Math.round(P*0.5));}},
+    {g:"own",  cl:"Email + push",     n:"Running low",
+     t:"Seven days of product left", m:"CRM rev 20–28%", key:1,
+     at:function(P){return "Day "+Math.max(2,P-7);}},
+    {g:"own",  cl:"Email + push",     n:"The pack ends",
+     t:"Consumption model says zero", m:"CRM rev 16–22%", key:1,
+     at:function(P){return "Day "+P;}},
+    {g:"own",  cl:"Push",             n:"Missed the refill",
+     t:"A week empty, no order", m:"CRM rev 9–13%", at:function(P){return "Day "+(P+7);}},
+    {g:"own",  cl:"SMS",              n:"Change the channel",
+     t:"Two emails ignored — wrong medium, not wrong clock", m:"CRM rev 6–9%",
+     at:function(P){return "Day "+(P+21);}},
+    {g:"own",  cl:"Email",            n:"Win-back with a reason",
+     t:"Two full cycles missed", m:"CRM rev 5–8%",
+     at:function(P){return "Day "+Math.round(P*2.5);}},
+    {g:"loy",  cl:"Subscription",     n:"Move them to a standing order",
+     t:"Third order — the moment a subscription is accepted", m:"LTV ×1.4–1.9",
+     at:function(){return "Order 3";}},
+    {g:"loy",  cl:"Loyalty",          n:"A tier earned by cycles kept, not by spend",
+     t:"Four packs in a row with no gap", m:"Churn −18–26%",
+     at:function(){return "Cycle 4";}},
+    {g:"loy",  cl:"Loyalty",          n:"Ask for the referral here, not at checkout",
+     t:"Half a year of the product actually working", m:"Referrals 4–9%",
+     at:function(){return "Cycle 6";}}
+  ];
+
+  /* The order is a judgment call. That judgment is the product, so it is argued. */
+  var RANK=[
+    {i:10,why:"It lands while the product is still in the house — the only message that arrives before the decision is made."},
+    {i:11,why:"The day your own consumption model says zero. Highest revenue per send in every account I have run."},
+    {i:6, why:"One checkbox at checkout removes the problem entirely for everyone who accepts it."},
+    {i:12,why:"Cheap to build once the clock exists, and it catches everybody the first two missed."},
+    {i:4, why:"Costs nothing, lifts conversion, and sets the expectation that makes every later message make sense."},
+    {i:1, why:"Stops you paying twice — right now you are bidding on people who are already yours."},
+    {i:13,why:"When two emails were ignored, the clock was right and the channel was wrong."},
+    {i:15,why:"The third order is when a standing order stops feeling like a commitment."},
+    {i:9, why:"Half the pack gone is the cheapest moment to find out it is not being used."},
+    {i:14,why:"Two cycles missed needs a reason to come back, not another reminder."},
+    {i:7, why:"The welcome flow everyone builds first, which is exactly why it is rarely the problem."},
+    {i:8, why:"An unopened pack never runs out, so this row quietly protects every row after it."},
+    {i:5, why:"Two packs framed as two months sells the second one without a discount."},
+    {i:16,why:"A tier earned by cycles kept rewards the behaviour you actually want."},
+    {i:2, why:"The questions people ask at the end of a pack are the ones you should already rank for."},
+    {i:3, why:"Answer engines are quoting somebody on dosage and duration. It may as well be you."},
+    {i:17,why:"Half a year of the product working is when a referral is worth asking for."},
+    {i:0, why:"Housekeeping — but it is money you burn every day it waits."}
+  ];
+
+  var cat=CATS[0], marked={};
+  var $=function(id){return document.getElementById(id);};
+  var catsEl=$("cats"), daysEl=$("days"), stepsEl=$("steps");
+
+  CATS.forEach(function(c,i){
+    var b=document.createElement("button");
+    b.type="button";b.textContent=c.label;b.setAttribute("aria-pressed",i===0?"true":"false");
+    b.onclick=function(){
+      cat=c;
+      [].forEach.call(catsEl.children,function(el){el.setAttribute("aria-pressed","false");});
+      b.setAttribute("aria-pressed","true");
+      daysEl.value=c.pack;
+      if(document.body.classList.contains("done")){paintAll();}
+    };
+    catsEl.appendChild(b);
+  });
+
+  function P(){var v=parseInt(daysEl.value,10);return(!v||v<3)?3:(v>400?400:v);}
+  function band(){return cat.lo+"–"+cat.hi;}
+  function gap(){return Math.round((cat.lo+cat.hi)/2)-P();}
+  daysEl.addEventListener("blur",function(){daysEl.value=P();});
+  daysEl.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();go();}});
+
+  function num(id,d){var e=$(id);if(!e)return d;var v=parseFloat(e.value);
+    return (isNaN(v)||v<=0)?d:v;}
+  function money(n){return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g," ");}
+  function econ(){
+    var o=num("ord",800),l=num("loss",30),w=num("win",20),a=num("aov",140),
+        rec=o*(l/100)*(w/100);
+    return {orders:o,rec:rec,mo:rec*a,yr:rec*a*12};
+  }
+  ["ord","loss","win","aov"].forEach(function(id){
+    var e=$(id); if(e)e.addEventListener("input",paintEcon);
+  });
+
+  function paintEcon(){
+    var e=econ(),g=gap();
+    if($("leakline")){
+      if(g>0) $("leakline").innerHTML="You are leaving about <b>"+money(e.mo)
+        +" zł a month</b> in the "+Math.abs(g)
+        +" days between the pack running out and your customer remembering on their own.";
+      else if(g<0) $("leakline").innerHTML="Your buyers restock before they run out, so the <b>"
+        +money(e.mo)+" zł a month</b> is not in reminders — it is in a standing order you do not offer.";
+      else $("leakline").innerHTML="Your cycle and their reorder line up, so the <b>"+money(e.mo)
+        +" zł a month</b> is not a timing problem — it is how few of them ever get the message.";
+    }
+    if($("calcsum")) $("calcsum").innerHTML="<b>"+money(e.rec)+" orders a month</b> you are not asking for";
+    if($("permo")) $("permo").textContent=money(e.mo)+" zł";
+    if($("peryear")) $("peryear").innerHTML="≈ <b>"+money(e.yr)
+      +" zł a year</b>. Every number above is yours to change — the page only multiplies them.";
+    if($("gapline")) $("gapline").innerHTML="Day "+P()+" the pack is empty. Day "+band()
+      +" they come back on their own. <b>"+Math.abs(gap())+" days</b> when nothing you own is firing.";
+    if($("askline")) $("askline").innerHTML="I take on <b>one more company</b> this quarter. If it is yours, "
+      +"I will send the arithmetic behind that "+money(e.yr)+" zł and where I would start.";
+  }
+
+  /* Every step is on screen from the first paint. Marking one strikes it where it
+     stands; nothing is promoted, nothing is hidden, the scale stays visible.     */
+  function renderSteps(){
+    var p=P(),h="";
+    RANK.forEach(function(r,k){
+      var pr=PROG[r.i];
+      h+='<li class="step ch-'+pr.g+(k>5?" extra":"")+(marked[r.i]?" done":"")
+        +'" data-i="'+r.i+'">'
+        +'<span class="rank">'+(k<9?"0":"")+(k+1)+'</span>'
+        +'<span class="sbody">'
+          +'<span class="stop"><span class="sname">'+pr.n+'</span>'
+          +'<span class="stag">'+pr.cl+'</span></span>'
+          +'<span class="smeta">'+pr.at(p)+' &middot; '+pr.t+' &middot; '+pr.m+'</span>'
+          +'<span class="swhy">'+r.why+'</span>'
+        +'</span>'
+        +'<button class="tick" type="button" aria-pressed="'+(marked[r.i]?"true":"false")
+        +'" aria-label="Mark as already running"></button></li>';
+    });
+    stepsEl.innerHTML=h;
+    [].forEach.call(stepsEl.children,function(li){
+      var idx=+li.getAttribute("data-i");
+      li.querySelector(".tick").onclick=function(ev){
+        ev.stopPropagation();
+        marked[idx]=!marked[idx];
+        li.classList.toggle("done",!!marked[idx]);
+        li.querySelector(".tick").setAttribute("aria-pressed",marked[idx]?"true":"false");
+        cover();
+      };
+      li.onclick=function(){li.classList.toggle("open");};
+    });
+    cover();
+  }
+
+  function cover(){
+    var have=0,key=0,i;
+    for(i=0;i<PROG.length;i++){if(marked[i]){have++;if(PROG[i].key)key++;}}
+    if($("cov")) $("cov").innerHTML="<b>"+have+"</b> of "+PROG.length+" already running";
+    if($("covbar")) $("covbar").style.setProperty("--pct",Math.round(have/PROG.length*100)+"%");
+    if($("covnote")) $("covnote").textContent = have===0
+      ? "Tap the box on any step you already run."
+      : (key<2 ? "You are missing "+(2-key)+" of the two steps anchored to the pack itself — the ones that fire when the product is actually gone."
+               : (have===PROG.length ? "All eighteen. Then the question is which four earn nothing, and that is a different conversation."
+                                     : "Both pack-anchored steps covered, which puts you ahead of most."));
+  }
+
+  function paintAll(){paintEcon();renderSteps();}
+
+  function go(){
+    document.body.classList.add("done");
+    paintAll();
+    window.scrollTo({top:0,behavior:"auto"});
+    requestAnimationFrame(function(){requestAnimationFrame(function(){
+      document.body.classList.add("shown");
+    });});
+    if($("crumb")) $("crumb").innerHTML="<b>"+cat.label+"</b> &middot; "+P()
+      +" days per pack &middot; <u>change</u>";
+  }
+  $("go").onclick=go;
+  if($("crumb")) $("crumb").onclick=function(){
+    document.body.classList.remove("done","shown");
+    window.scrollTo({top:0,behavior:"auto"});daysEl.focus();
+  };
+
+  $("copy").onclick=function(){
+    var p=P(),e=econ(),lines=["Growth plan — "+cat.label+" — pack lasts "+p+" days"
+      +" — observed reorder "+cat.lo+"–"+cat.hi+" days",
+      "Leak: "+money(e.mo)+" zl a month / "+money(e.yr)+" zl a year",""];
+    RANK.forEach(function(r,k){
+      var pr=PROG[r.i];
+      lines.push((marked[r.i]?"[x] ":"[ ] ")+(k+1)+". "+pr.n+"  ·  "+pr.at(p)
+        +"  ·  "+pr.cl+"  ·  "+pr.m);
+    });
+    lines.push("","NOTE: reorder bands and revenue shares are illustrative placeholders.",
+      "Built at oleksiakconsulting.com");
+    var txt=lines.join("\n"),b=$("copy"),lab=b.textContent;
+    var done=function(){b.textContent="Copied";setTimeout(function(){b.textContent=lab;},1600);};
+    if(navigator.clipboard&&navigator.clipboard.writeText)
+      navigator.clipboard.writeText(txt).then(done,done);
+    else{var t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);
+      t.select();try{document.execCommand("copy");}catch(x){}document.body.removeChild(t);done();}
+  };
+
+  $("form").addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var m=$("mail"),v=m.value.trim(),err=$("err");
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      err.textContent=v.indexOf("@")<0?"Missing the @ — try name@company.com."
+                                      :"Missing the domain — try name@company.com.";
+      err.classList.add("on");m.focus();return;
+    }
+    err.classList.remove("on");
+    var have=0,i;for(i=0;i<PROG.length;i++)if(marked[i])have++;
+    var e=econ(),pick=document.querySelector('input[name=intent]:checked'),
+        wants=pick&&pick.value==="markup";
+    /* the two answers mean different things, so they get different promises */
+    $("rcpt").textContent=wants
+      ? "The sheet is on its way to "+v+" — your "+cat.label.toLowerCase()+" clock at "+P()
+        +" days, the arithmetic behind "+money(e.yr)+" zł, and the "+(PROG.length-have)
+        +" steps you have not marked. I read it and write back by this time tomorrow: the build "
+        +"order, the two steps I would cut, and what I would need from your order data."
+      : "The sheet is on its way to "+v+" — your "+cat.label.toLowerCase()+" clock at "+P()
+        +" days and the arithmetic behind "+money(e.yr)+" zł. That is the only mail you get from me.";
+    $("sent").classList.add("on");
+    $("sent").scrollIntoView({behavior:"smooth",block:"center"});
+  });
+  $("mail").addEventListener("input",function(){$("err").classList.remove("on");});
+
+})();
+</script>
+</body>
+</html>

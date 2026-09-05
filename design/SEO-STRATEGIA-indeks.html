@@ -1,0 +1,387 @@
+<title>Polski Indeks Powtórnych Zakupów</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FBFAF7;
+    --raise:#FFFFFF;
+    --ink:#171A24;
+    --body:#2C3040;
+    --mute:#6A6E80;
+    --rule:#E3DFD6;
+    --purple:#6D28A8;
+    --purple-soft:#F1E9F8;
+    --kill:#A11B2E;
+    --kill-soft:#FAECEE;
+    --pass:#1B6349;
+    --pass-soft:#E8F2ED;
+    --disp:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+    --serif:"Source Serif 4",Georgia,serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#14161C; --raise:#1B1E26; --ink:#F2F0EA; --body:#CFCEC8; --mute:#9195A4;
+      --rule:#2C303B; --purple:#C89BEC; --purple-soft:#25203040; --kill:#F2909E;
+      --kill-soft:#2A1A1F; --pass:#7FD3B0; --pass-soft:#16241F;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14161C; --raise:#1B1E26; --ink:#F2F0EA; --body:#CFCEC8; --mute:#9195A4;
+    --rule:#2C303B; --purple:#C89BEC; --purple-soft:#252030; --kill:#F2909E;
+    --kill-soft:#2A1A1F; --pass:#7FD3B0; --pass-soft:#16241F;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--body);font-family:var(--serif);
+    font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+  .page{max-width:1000px;margin:0 auto;padding:0 28px 96px;}
+  .col{max-width:68ch;}
+
+  .mast{padding:56px 0 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--mute);margin:0;}
+  h1{font-family:var(--disp);font-weight:800;font-size:clamp(32px,5vw,52px);line-height:1.04;
+    letter-spacing:-.022em;color:var(--ink);margin:16px 0 0;text-wrap:balance;max-width:16ch;}
+  .stand{font-size:19px;line-height:1.55;color:var(--body);margin:18px 0 34px;max-width:60ch;}
+  .stand b{color:var(--ink);font-weight:600;}
+
+  h2{font-family:var(--disp);font-weight:600;font-size:26px;line-height:1.2;letter-spacing:-.014em;
+    color:var(--ink);margin:0;text-wrap:balance;}
+  h3{font-family:var(--disp);font-weight:600;font-size:19px;line-height:1.3;color:var(--ink);
+    margin:0;}
+  p{margin:0;}
+  section{padding:44px 0;border-bottom:1px solid var(--rule);
+    display:grid;grid-template-columns:78px minmax(0,1fr);gap:0 26px;align-items:start;}
+  .num{font-family:var(--mono);font-size:12px;color:var(--purple);padding-top:7px;
+    font-variant-numeric:tabular-nums;}
+  .flow{display:grid;gap:18px;}
+
+  .verdict{background:var(--purple-soft);border-left:3px solid var(--purple);
+    padding:22px 24px;display:grid;gap:12px;}
+  .verdict p{color:var(--ink);}
+  .verdict .lead{font-family:var(--disp);font-weight:600;font-size:20px;line-height:1.35;}
+
+  .loops{display:grid;gap:0;border-top:1px solid var(--rule);}
+  .loop{display:grid;grid-template-columns:120px minmax(0,1fr);gap:0 22px;
+    padding:16px 0;border-bottom:1px solid var(--rule);align-items:start;}
+  .loop .who{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--mute);
+    text-transform:uppercase;padding-top:3px;}
+  .loop .what{display:grid;gap:5px;}
+  .loop b{font-family:var(--disp);font-weight:600;color:var(--ink);}
+  .loop .out{font-size:15.5px;line-height:1.55;}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;padding:2px 7px 3px;margin-left:8px;vertical-align:2px;}
+  .tag.dead{background:var(--kill-soft);color:var(--kill);}
+  .tag.kept{background:var(--pass-soft);color:var(--pass);}
+
+  .quote{font-family:var(--mono);font-size:13.5px;line-height:1.7;background:var(--raise);
+    border:1px solid var(--rule);padding:16px 18px;color:var(--ink);}
+  .quote span{display:block;margin-top:8px;font-size:11.5px;color:var(--mute);}
+  .quote+.quote{margin-top:10px;}
+
+  .wrong{background:var(--kill-soft);border-left:3px solid var(--kill);padding:18px 20px;}
+  .wrong b{color:var(--kill);font-family:var(--disp);font-weight:600;}
+  .right{background:var(--pass-soft);border-left:3px solid var(--pass);padding:18px 20px;}
+  .right b{color:var(--pass);font-family:var(--disp);font-weight:600;}
+
+  .tblwrap{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;min-width:520px;font-family:var(--mono);font-size:13px;}
+  th{text-align:left;font-weight:500;color:var(--mute);border-bottom:2px solid var(--ink);
+    padding:0 14px 8px 0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;}
+  td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top;
+    color:var(--body);line-height:1.55;}
+  td:first-child{color:var(--purple);white-space:nowrap;font-variant-numeric:tabular-nums;}
+  td b{color:var(--ink);font-weight:500;}
+
+  ul{margin:0;padding-left:1.15em;display:grid;gap:9px;}
+  li::marker{color:var(--purple);}
+  li b{color:var(--ink);font-weight:600;}
+  .gates li::marker{color:var(--pass);}
+  .kills li::marker{color:var(--kill);}
+
+  .math{font-family:var(--mono);font-size:13.5px;line-height:1.9;color:var(--ink);
+    background:var(--raise);border:1px solid var(--rule);padding:16px 18px;
+    font-variant-numeric:tabular-nums;overflow-x:auto;}
+  .math em{font-style:normal;color:var(--mute);}
+
+  .refuse{display:grid;gap:14px;}
+  .refuse div{border-left:2px solid var(--rule);padding-left:16px;}
+  .refuse b{display:block;font-family:var(--disp);font-weight:600;color:var(--ink);
+    margin-bottom:3px;}
+
+  .src{font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--mute);
+    display:grid;gap:4px;}
+  .src a{color:var(--purple);text-decoration:none;border-bottom:1px solid var(--rule);}
+  .src a:hover{border-color:var(--purple);}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--purple);outline-offset:3px;}
+
+  @media (max-width:720px){
+    body{font-size:16px;}
+    section{grid-template-columns:minmax(0,1fr);gap:14px;}
+    .num{padding-top:0;}
+    .loop{grid-template-columns:minmax(0,1fr);gap:6px;}
+  }
+</style>
+
+<div class="page">
+
+  <header class="mast col">
+    <p class="eyebrow">Strategia SEO · pięć pętli · wrzesień 2026</p>
+    <h1>Polski Indeks Powtórnych Zakupów</h1>
+    <p class="stand">Pytałeś o programatyczne SEO na bazie danych. Pięć pętli agentów przeszło przez ten pomysł i <b>zabiło trzy pierwsze wersje</b>. To, co przeżyło, jest mniejsze, wolniejsze i uczciwsze — i jako jedyne nie wymaga publikowania cudzych danych.</p>
+  </header>
+
+  <section>
+    <div class="num">Werdykt</div>
+    <div class="flow">
+      <div class="verdict">
+        <p class="lead">Search nie udźwignie twojego pipeline'u w ciągu dwunastu miesięcy. Nie dlatego, że plan jest zły — dlatego, że tego popytu w polskim wydaniu prawie nie ma.</p>
+        <p>Rekonesans SERP-ów pokazał dwie pule, które nigdy się nie spotykają. Pula konsumencka („ile starcza witamina D") ma wolumen, ale należy do aptek, drogerii i kalkulatorów, i jest dla ciebie warta zero. Pula operatorska (repeat purchase rate, churn, replenishment) jest tą wartościową, ale po angielsku walczy z Klaviyo, Recharge, Recurly i ścianą contentowych młynów AI, a po polsku jest pusta, bo prawie nikt jej nie wpisuje — rząd wielkości to dziesiątki, może setki wyszukań miesięcznie w skali kraju.</p>
+        <p>To nie znaczy „nie robić". To znaczy: budować <b>aktywo wiarygodności, które karmi LinkedIna</b>, a nie kanał pozyskania, który ma zastąpić LinkedIna.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Pętle</div>
+    <div class="flow">
+      <h2>Co zginęło po drodze</h2>
+      <div class="loops">
+
+        <div class="loop">
+          <div class="who">Pętla 1 · A</div>
+          <div class="what">
+            <b>Serwis na twoich danych<span class="tag dead">martwe</span></b>
+            <p class="out">150–400 stron, jedna na podkategorię, z twoim obserwowanym odstępem odkupu jako kolumną-fosą. Zabite przez NDA, tajemnicę bankową mBanku, ryzyko re-identyfikacji przy małych próbkach i przez to, że publikowanie sygnału byłego klienta mówi każdemu przyszłemu klientowi, że jego dane wyciekają.</p>
+          </div>
+        </div>
+
+        <div class="loop">
+          <div class="who">Pętla 1 · B</div>
+          <div class="what">
+            <b>Rodzina kalkulatorów<span class="tag dead">martwe</span></b>
+            <p class="out">Sześćdziesiąt URL-i z czterech generatorów. Sam autor przyznał, że kalkulatory to dziś meble — „revenue leak calculator" ma już kilkunastu właścicieli z wyższym autorytetem. Zostaje mechanizm embedu przebrany za SEO, a bez embedów nie zostaje nic.</p>
+          </div>
+        </div>
+
+        <div class="loop">
+          <div class="who">Pętla 1 · C</div>
+          <div class="what">
+            <b>Warstwa dla silników odpowiedzi<span class="tag kept">częściowo</span></b>
+            <p class="out">JSON, CSV, llms.txt, schema. Kontrolowane testy pokazują, że schema rusza cytowalność w granicach szumu, a llms.txt nie ma udowodnionego efektu. Przeżyła jedna rzecz i jest cenna: <b>samodzielne, datowane zdanie z liczbą i próbką</b> plus świeżość, bo cytowalność wyraźnie spada po trzydziestu i dziewięćdziesięciu dniach.</p>
+          </div>
+        </div>
+
+        <div class="loop">
+          <div class="who">Pętla 2</div>
+          <div class="what">
+            <b>Adwersarz<span class="tag dead">egzekucja</span></b>
+            <p class="out">Google definiuje scaled content abuse jako „wiele stron generowanych głównie po to, by manipulować rankingiem, a nie pomagać użytkownikom". Recenzent otwierający pięć losowych stron tej samej serii widzi wzorzec niezależnie od tego, czy liczby są prawdziwe. Próg ryzyka: około pięćdziesięciu stron jednej serii.</p>
+          </div>
+        </div>
+
+        <div class="loop">
+          <div class="who">Pętla 3</div>
+          <div class="what">
+            <b>Rekonesans popytu<span class="tag dead">rewizja</span></b>
+            <p class="out">Dwanaście zapytań sprawdzonych na żywych SERP-ach. Trzy realne dziury: polskich benchmarków powtarzalności po podkategoriach FMCG <b>nie ma w ogóle</b>; metoda szacowania okna odkupu dla foundera z Shopify wisi między pracami naukowymi a tutorialami vendorów; a dane o czasie zużycia opakowań zostawiono forom.</p>
+          </div>
+        </div>
+
+        <div class="loop">
+          <div class="who">Pętle 4–5</div>
+          <div class="what">
+            <b>Synteza i bramka<span class="tag kept">to budujemy</span></b>
+            <p class="out">Skoro nie możesz opublikować danych swoich klientów — zbierz je od rynku. Twój prototyp już pyta founderów o kategorię i o to, na ile dni starcza opakowanie. To jest ziarno zbioru danych, którego nikt w Polsce nie ma.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Aktywo</div>
+    <div class="flow">
+      <h2>Jedno zdanie</h2>
+      <p>Publiczny, budowany ze zgłoszeń benchmark cykli uzupełniania zapasów dla polskich podkategorii FMCG — <b>indeks, który rośnie za każdym razem, gdy ktoś użyje twojego narzędzia</b>.</p>
+      <p>Nie istnieje, bo jedyne podmioty trzymające te dane — sieci handlowe, banki, platformy, dostawcy lojalnościowi — mają je pod kontraktem i pod prawem. Nikt nie zbudował mechanizmu zbierania ich u źródła zamiast wyciągania z incumbenta. Ty masz ten mechanizm zbudowany od tygodnia i nie wiedziałeś, że go masz.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Dziura</div>
+    <div class="flow">
+      <h2>Rzecz, która zabiłaby to na starcie</h2>
+      <p>Piąta pętla znalazła błąd metodologiczny w syntezie i jest on poważny, bo uderza dokładnie w to, na czym stoi twoja strona.</p>
+
+      <div class="wrong">
+        <p><b>Czego nie wolno napisać.</b> „Mediana odstępu między zakupami wynosi 47 dni". Twoje narzędzie pyta, <b>na ile dni starcza opakowanie</b> — to jest fakt o zużyciu produktu, nie o zachowaniu zakupowym. Klient, któremu szampon starcza na 40 dni, może kupować co 25 (kupuje na zapas) albo co 70 (kończy, odkłada, przechodzi do konkurencji). Różnica między tymi dwiema liczbami to jest dokładnie ta luka, którą sprzedajesz. Wyprowadzenie jednej z drugiej to zmyślona precyzja w przebraniu obserwacji.</p>
+      </div>
+
+      <div class="right">
+        <p><b>Najmniejsza uczciwa poprawka.</b> Dwa dodatkowe pytania w narzędziu, oba jednym kliknięciem. Pierwsze: <b>„Kiedy opakowanie się kończy, klient ma już następne, kupuje od razu, czy mija kilka dni?"</b> — trzy przyciski, nie pole liczbowe. To zamienia czas zużycia w szacowaną lukę bez proszenia kogokolwiek o liczbę, której nie zna. Drugie: <b>„To szacunek czy odczyt z twoich danych sprzedażowych?"</b> — nie zmienia tego, co zbierasz, tylko to, co wolno opublikować jako nagłówek, a co jako przypis.</p>
+      </div>
+
+      <p>Bez tej poprawki indeks publikuje liczbę, której nie zmierzył, i cała reszta — twoje zobowiązanie, że liczby są datowane i źródłowane — przestaje być prawdą.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Jednostka</div>
+    <div class="flow">
+      <h2>Obiekt cytowalny</h2>
+      <p>Silniki odpowiedzi cytują zdania i wiersze, nie strony. Zdanie musi przeżyć wyrwanie z kontekstu razem z atrybucją. Poniżej trzy w formie, w jakiej stanęłyby na stronie — <b>po poprawce z poprzedniej sekcji</b>, czyli mówiące dokładnie to, co zmierzono.</p>
+
+      <div class="quote">Founderzy marek suplementów w Polsce deklarują, że typowe opakowanie starcza na medianę 32 dni (n=41 zgłoszeń, w tym 12 z odczytu danych sprzedażowych; stan na 3 września 2026).
+        <span>Entity · liczba · zakres · jakość źródła · data</span></div>
+
+      <div class="quote">W kategorii karmy dla zwierząt 58% zgłaszających marek deklaruje, że klient kupuje kolejne opakowanie zanim poprzednie się skończy (n=33, wrzesień 2026).
+        <span>Wynik jakościowy, nie wyliczony — nic tu nie jest interpolowane</span></div>
+
+      <div class="quote">Wśród polskich marek kosmetyków do twarzy mediana deklarowanego czasu zużycia opakowania to 61 dni, przy rozstępie międzykwartylowym 45–90 dni (n=28; rozkład wskazuje na zaokrąglanie do 30/60/90, co raportujemy jawnie).
+        <span>Raportowany rozkład ujawnia słabość instrumentu zamiast ją ukrywać</span></div>
+
+      <p>Ostatnie zdanie jest najważniejsze strategicznie. <b>Publikowanie kwartyli zamiast samej mediany sprawia, że heaping na okrągłych liczbach jest widoczny</b> — a instrument, który sam pokazuje swoją słabość, jest jedyną wersją tego pomysłu, która nie kłóci się z resztą twojej strony.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Skala</div>
+    <div class="flow">
+      <h2>Arytmetyka zimnego startu</h2>
+      <p>Synteza proponowała trzydzieści kategorii po trzydzieści zgłoszeń. Piąta pętla policzyła, ile to naprawdę trwa przy jednym człowieku i jednym kanale.</p>
+
+      <div class="math">
+30 kategorii × 30 zgłoszeń  =  900 sesji<br>
+2 posty/tydzień × ~1500 wyświetleń × 1,5% CTR × 27% ukończeń  ≈  <b>10–15 ukończeń na post</b><br>
+900 ÷ ~25 tygodniowo  =  <b>36–45 tygodni</b> <em>— przy równym rozkładzie, którego nie będzie</em>
+      </div>
+
+      <p>W praktyce trzy do pięciu kategorii zapełni się szybko, bo twoja sieć skupia się w kilku branżach, a piętnaście utknie pod progiem na zawsze. Poprawka nie dotyczy koncepcji, tylko liczb:</p>
+
+      <ul>
+        <li><b>Osiem do dziesięciu kategorii</b>, dobranych pod skład twojej sieci na LinkedInie, nie pod taksonomię handlową.</li>
+        <li><b>Próg piętnastu do dwudziestu zgłoszeń</b>, nie trzydziestu — z jawnie podaną próbką przy każdej liczbie.</li>
+        <li><b>Zasiew ręczny:</b> czterdzieści do sześćdziesięciu wiadomości do konkretnych osób, żeby dopchnąć dwie pierwsze kategorie. To zamienia dziewięć miesięcy czekania w punkt dowodowy po pięciu–sześciu tygodniach.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Rozmiar</div>
+    <div class="flow">
+      <h2>Dlaczego to nie wygląda jak spam</h2>
+      <p>Start: <b>dwa URL-e</b> — narzędzie i jedna strona indeksu z żywą tabelą. Żadna kategoria nie ma jeszcze własnego adresu, bo żadna nie ma jeszcze progu.</p>
+      <p>Dojrzałość: <b>maksymalnie dwadzieścia pięć do trzydziestu pięciu URL-i</b>, po jednym na kategorię, tworzonych w momencie przekroczenia progu, ze skończonej listy kategorii — nigdy z permutacji fraz.</p>
+      <p>Reguła, która trzyma to w ryzach, jest jednozdaniowa: <b>URL powstaje z przekroczonej próbki, nie z intencji wyszukiwania.</b> Żadnych stron per miasto, per persona, per „najlepszy X dla Y". Istniejąca strona jest aktualizowana w miejscu, nie klonowana.</p>
+      <p>To jest obrona przed recenzentem, bo odwraca dokładnie ten sygnał, którego szuka: pięć losowych stron pokazuje pięć różnych liczb, pięć różnych próbek, pięć różnych dat i widoczny stan „zbieramy dane" tam, gdzie próg nie padł. Przeciwieństwo szablonu odbitego sto pięćdziesiąt razy.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">12 tyg.</div>
+    <div class="flow">
+      <h2>Pierwsze dziewięćdziesiąt dni</h2>
+      <p>Sześć godzin tygodniowo, zero budżetu. Na końcu każdej dwutygodniówki istnieje coś sprawdzalnego.</p>
+      <div class="tblwrap">
+        <table>
+          <thead><tr><th>Tygodnie</th><th>Robota</th><th>Stan na koniec</th></tr></thead>
+          <tbody>
+            <tr><td>1–2</td><td>Dwa nowe pytania w narzędziu. Logowanie: kategoria, obie odpowiedzi, flaga „szacunek / dane", timestamp, dedup. Wybór 8–10 kategorii. Szkielet indeksu z licznikami „brakuje N".</td><td><b>Narzędzie żyje, zero kategorii opublikowanych.</b></td></tr>
+            <tr><td>3–4</td><td>Zasiew ręczny do 40–60 osób plus dwa posty.</td><td>40–70 ukończeń, jedna–dwie kategorie przy progu.</td></tr>
+            <tr><td>5–6</td><td>Pierwsze strony kategorii, jeśli próg padł. Zdania datowane. Pierwszy post „próg przekroczony" z prawdziwej liczby.</td><td><b>Jedna–dwie żywe strony kategorii.</b></td></tr>
+            <tr><td>7–8</td><td>Druga fala zasiewu. Tygodniowe logowanie lejka. Sprawdzenie indeksacji w Search Console.</td><td>Trzy–pięć kategorii żywych.</td></tr>
+            <tr><td>9–10</td><td>Bramka pierwsza. Publikacja noty metodologicznej. Kontrola dwóch kategorii wobec danych zewnętrznych.</td><td><b>Publiczna metodologia, zapisana decyzja.</b></td></tr>
+            <tr><td>11–12</td><td>Konsolidacja i twarde go / no-go wobec bramek poniżej.</td><td>Karta wyników na dzień 90 — decyzja, nie wrażenie.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Bramki</div>
+    <div class="flow">
+      <h2>Warunki, które muszą być prawdziwe</h2>
+      <h3>Zanim zbudujesz następną rzecz</h3>
+      <ul class="gates">
+        <li>Nie rozszerzasz poza dziesięć kategorii, dopóki <b>trzy nie przekroczą progu</b>, sesji nie będzie <b>co najmniej 150</b>, a ukończalność nie sięgnie <b>25%</b>.</li>
+        <li>Nie automatyzujesz postów, dopóki <b>pięć ręcznie napisanych</b> nie pobije twojej zwykłej średniej zasięgu.</li>
+        <li>Nie dokładasz godzin, dopóki choć jedna strona kategorii nie jest zaindeksowana, a ruch spoza LinkedIna nie sięgnie <b>50 wejść tygodniowo</b>.</li>
+      </ul>
+
+      <h3>Kiedy przestać i oddać godziny LinkedInowi</h3>
+      <ul class="kills">
+        <li>Mniej niż <b>100 ukończonych sesji po dwunastu tygodniach</b>.</li>
+        <li><b>Zero kategorii nawet w połowie progu</b> po dziewięćdziesięciu dniach — to znaczy, że kategorie nie pasują do twojej sieci.</li>
+        <li>Ponad <b>80% odpowiedzi oznaczonych jako „szacunek"</b> — instrument jest zbyt zaszumiony, żeby indeks był wiarygodny publicznie.</li>
+        <li><b>Ani jednej wzmianki przychodzącej o indeksie do szóstego miesiąca</b> — nie robi roboty różnicującej.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Pomiar</div>
+    <div class="flow">
+      <h2>Co logujesz i czego szukasz</h2>
+      <p><b>Co tydzień:</b> sesje rozpoczęte i ukończone, postęp każdej kategorii wobec progu, zasięg postów.</p>
+      <p><b>Co miesiąc:</b> liczba żywych stron, wyświetlenia i kliknięcia w Search Console, linki przychodzące, oraz ręczny <b>audyt cytowań</b> — te same pięć do ośmiu pytań kategorycznych zadane w ChatGPT, Perplexity i Google AI Overviews, z zapisem, czy indeks został wymieniony. Do tego odsyłacze z tych domen w analityce i logi serwera pod kątem GPTBot, PerplexityBot, ClaudeBot i OAI-SearchBot.</p>
+      <p><b>Dzień 90 — dobry wynik:</b> trzy do pięciu żywych stron, 150–250 sesji, jedna wzmianka przychodząca.</p>
+      <p><b>Dzień 365 — dobry wynik:</b> dziesięć do dwudziestu uczciwych stron, co najmniej jedno potwierdzone cytowanie w silniku odpowiedzi, tysiąc skumulowanych sesji, mierzalne leady.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Atrybucja</div>
+    <div class="flow">
+      <h2>Test jednego klienta</h2>
+      <p>Za dwanaście miesięcy będziesz chciał wiedzieć, czy ten jeden klient przyszedł przez indeks, czy przez LinkedIna mimo indeksu. Tego nie da się ustalić wstecz, więc trzeba to ustawić w dniu pierwszym.</p>
+      <ul>
+        <li>Obowiązkowe pole otwarte <b>„co sprawiło, że się odzywasz"</b> przy każdym kontakcie.</li>
+        <li>Osobne kampanie UTM oddzielające ruch z indeksu i narzędzia od zwykłego ruchu z postów.</li>
+        <li>Prosty arkusz CRM z pierwszym i ostatnim dotknięciem per lead.</li>
+      </ul>
+      <p>Atrybucja i tak nie będzie czysta, więc triangulujesz: ślad wejść przed kontaktem zestawiony z tym, co prospekt sam powie na rozmowie. Jeśli klient odwiedzał strony kategorii <b>i</b> powołuje się na dane — aktywo zarobiło na siebie. Jeśli przyszedł z posta i nigdy nie dotknął narzędzia, to jest odpowiedź, którą też chcesz usłyszeć, zamiast dopasowywać historię po fakcie.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Nie</div>
+    <div class="flow">
+      <h2>Czego świadomie nie budujemy</h2>
+      <div class="refuse">
+        <div><b>Farmy treści programatycznej</b>Żadnych stron per miasto, per persona, per fraza z długiego ogona. To jest dokładnie wzorzec, który wpada w przegląd przy pięćdziesięciu stronach, a ta konstrukcja strukturalnie nie może przekroczyć rozmiaru skończonej listy kategorii.</div>
+        <div><b>Republikacji danych klientów</b>Każda liczba pochodzi z samodzielnego zgłoszenia anonimowego odwiedzającego. Nigdy z obserwacji Allegro, mBanku, Booksy ani Genactivu. Ekspozycja prawna, która zabiła oczywistą wersję tego pomysłu, jest wyprojektowana u źródła.</div>
+        <div><b>Gry o pulę konsumencką</b>Żadnych stron „ile starcza opakowanie witaminy D". Ten ruch ma wolumen i nie konwertuje na nic, co możesz sprzedać. Celujemy w pustą, niekontestowaną pulę operatorską świadomie — wolumen nigdy nie był metryką, która się tu liczy.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Uwaga</div>
+    <div class="flow">
+      <h2>Jedna rzecz, której ten dokument nie rozstrzyga</h2>
+      <p>Adwersarz z drugiej pętli postawił tezę, której nie da się obalić z fotela: <b>że najlepszym użyciem tych samych godzin jest po prostu LinkedIn</b>. Post kosztuje jedną–trzy godziny, publikuje się tego samego dnia i daje sygnał w czterdzieści osiem godzin. Każda wersja tego indeksu potrzebuje tygodni, zanim cokolwiek się wydarzy.</p>
+      <p>Argument za indeksem nie brzmi „to pobije LinkedIna". Brzmi: <b>to daje LinkedInowi paliwo, którego inaczej nie ma</b> — dwanaście miesięcy postów wynikających ze zmian stanu indeksu, każdy z prawdziwą liczbą, której nikt inny w Polsce nie ma. Bramki powyżej istnieją po to, żebyś tę tezę mógł obalić po dwunastu tygodniach zamiast po roku.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="num">Źródła</div>
+    <div class="flow">
+      <div class="src">
+        <a href="https://developers.google.com/search/docs/essentials/spam-policies">Google · Spam policies for Google web search</a>
+        <a href="https://developers.google.com/search/blog/2024/03/core-update-spam-policies">Google Search Central · March 2024 core update and new spam policies</a>
+        <a href="https://www.searchenginejournal.com/llms-txt-for-ai-seo/556576/">Search Engine Journal · llms.txt for AI SEO: boost or waste of time</a>
+        <a href="https://ziptie.dev/blog/what-determines-which-sites-perplexity-cites-first/">Ziptie · What determines which sites Perplexity cites first</a>
+        <a href="https://marcodiversi.com/blog/does-schema-help-ai-citations/">Marco Diversi · Does schema markup help AI citations</a>
+        <a href="https://recurly.com/research/churn-rate-benchmarks/">Recurly · Churn rate benchmarks</a>
+        <a href="https://help.klaviyo.com/hc/en-us/articles/360003195232">Klaviyo · How to create a replenishment flow</a>
+        <a href="https://gemius.com/documents/81/RAPORT_E-COMMERCE_2025.pdf">Gemius / IAB Polska · Raport E-commerce w Polsce</a>
+      </div>
+    </div>
+  </section>
+
+</div>

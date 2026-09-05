@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="robots" content="noindex">
+<title>The Reorder Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FFFFFF; --ink:#17192A; --purple:#7B2CBF; --purple-dp:#5B1E8C;
+    --grey:#5A5D70; --note:#43465C; --hair:#E2E0EC; --wash:#F6F4FB;
+    --band:linear-gradient(97deg,#5B1E8C 0%,#33308F 46%,#0047B3 100%);
+    --disp:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
+    -webkit-font-smoothing:antialiased;}
+  input,button{font-family:inherit;}
+  .top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .top h1{margin:0;font-weight:800;font-stretch:125%;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;}
+  .top span{font-family:var(--mono);font-size:11px;color:var(--grey);}
+  .cats{display:flex;flex-wrap:wrap;gap:8px;}
+  .cats button{border:2px solid var(--hair);background:var(--paper);color:var(--note);
+    cursor:pointer;padding:11px 14px;min-height:42px;font-family:var(--mono);font-size:12.5px;
+    transition:border-color .16s,color .16s,background-color .16s;}
+  .cats button:hover{border-color:var(--purple);color:var(--ink);}
+  .cats button[aria-pressed="true"]{background-color:var(--purple);border-color:var(--purple);
+    color:#FFFFFF;}
+  .daybox{display:flex;align-items:stretch;border:2px solid var(--ink);background:var(--paper);
+    flex:1 1 220px;min-width:0;}
+  .daybox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--ink);
+    font-weight:700;font-stretch:110%;font-size:26px;padding:11px 16px;-moz-appearance:textfield;}
+  .daybox input::-webkit-outer-spin-button,.daybox input::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;}
+  .daybox span{display:flex;align-items:center;padding:0 15px;border-left:2px solid var(--ink);
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--note);}
+  .go{flex:0 0 auto;border:0;background-color:var(--purple);color:#FFFFFF;cursor:pointer;
+    padding:15px 22px;min-height:52px;font-weight:700;font-stretch:110%;font-size:14px;
+    letter-spacing:.08em;text-transform:uppercase;transition:background-color .16s;}
+  .go:hover{background-color:var(--ink);}
+  .guessrow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;}
+  .fbox{display:flex;align-items:stretch;border:2px solid var(--ink);background:var(--paper);}
+  .fbox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--ink);
+    font-weight:500;font-size:17px;padding:14px 16px;}
+  .fbox input::placeholder{color:#84879A;}
+  .fbox button{flex:none;border:0;border-left:2px solid var(--ink);background-color:var(--purple);
+    color:#FFFFFF;cursor:pointer;padding:0 22px;font-weight:700;font-stretch:110%;font-size:14px;
+    letter-spacing:.08em;text-transform:uppercase;transition:background-color .16s;}
+  .fbox button:hover{background-color:var(--ink);}
+  .err{display:none;margin:0 0 9px;font-family:var(--mono);font-size:12px;color:#B0122F;}
+  .err.on{display:block;}
+  .st{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
+    border:1.5px solid var(--hair);color:var(--purple);font-family:var(--mono);font-size:12px;
+    line-height:1;justify-self:center;transition:background-color .16s,border-color .16s;}
+  li:hover .st{border-color:var(--purple);}
+  li[aria-pressed="true"] .st{border-color:var(--purple);background-color:var(--purple);color:#FFFFFF;}
+  .ch{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;}
+  .ch::before{content:"";display:inline-block;width:6px;height:6px;background:currentColor;
+    margin-right:6px;}
+  .ch-trf{color:#0047B3;} .ch-store{color:#5B1E8C;} .ch-own{color:#7B2CBF;} .ch-loy{color:#17192A;}
+  li.ph{display:block;cursor:default;border:0;background:none;box-shadow:none;margin:0;
+    padding:36px 0 12px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--purple);}
+  li.ph:first-child{padding-top:4px;}
+  li.ph:hover{background:none;}
+  .out{display:none;} .out.on{display:block;}
+  .sent{display:none;} .sent.on{display:block;}
+  @media (max-width:520px){
+    .guessrow{flex-direction:column;} .go{width:100%;}
+    .fbox{flex-direction:column;} .fbox button{border-left:0;border-top:2px solid var(--ink);
+      padding:15px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+  .shell{max-width:1180px;margin:0 auto;padding:24px 28px 90px;
+    display:grid;grid-template-columns:288px minmax(0,1fr);gap:52px;align-items:start;}
+  .rail{position:sticky;top:24px;}
+  .rail .lab{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--note);margin:26px 0 10px;}
+  .cats{flex-direction:column;gap:0;border:1px solid var(--hair);}
+  .cats button{border:0;border-bottom:1px solid var(--hair);text-align:left;padding:12px 14px;
+    min-height:44px;width:100%;}
+  .cats button:last-child{border-bottom:0;}
+  .cats button:hover{background:var(--wash);color:var(--ink);}
+  .cats button[aria-pressed="true"]{background-color:var(--purple);color:#FFFFFF;}
+  .daybox{margin-top:0;}
+  .go{width:100%;margin-top:10px;}
+  .ped{margin:26px 0 0;padding-top:16px;border-top:1px solid var(--hair);
+    font-family:var(--mono);font-size:11px;line-height:1.75;color:var(--grey);}
+  .ped b{display:block;color:var(--note);font-weight:500;letter-spacing:.12em;
+    text-transform:uppercase;margin-bottom:6px;}
+  .pane{min-width:0;}
+  .lede{margin:26px 0 0;font-weight:800;font-stretch:118%;font-size:34px;line-height:1.08;
+    letter-spacing:-.02em;text-wrap:balance;}
+  .lede em{font-style:normal;background-color:var(--purple);color:#FFFFFF;
+    padding:.02em .12em .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  .setline{margin:24px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--note);}
+  .skel i{display:block;height:9px;background:var(--hair);}
+  .skel li{pointer-events:none;}
+  .skel .st{border-style:dashed;}
+  .tip{margin:14px 0 0;font-family:var(--mono);font-size:11px;color:var(--grey);text-align:right;}
+  .chiprow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:26px;}
+  .chip{background-color:var(--purple);color:#FFFFFF;font-family:var(--mono);font-size:11.5px;
+    font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:8px 12px;white-space:nowrap;}
+  .chip.alt{background-color:var(--ink);}
+  .vline{margin:12px 0 0;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--note);
+    max-width:66ch;}
+  .vline .d{display:block;color:var(--ink);}
+  .vline .i{display:block;margin-top:2px;}
+  .thead,.row{display:grid;grid-template-columns:106px minmax(0,1fr) 196px 116px 34px;gap:14px;
+    align-items:center;}
+  .thead{margin-top:30px;padding-bottom:9px;border-bottom:2px solid var(--ink);
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--note);}
+  .thead .r{text-align:right;} .thead .c{text-align:center;}
+  ol.cal{list-style:none;margin:0;padding:0;}
+  ol.cal li{min-height:48px;padding:11px 0;border-bottom:1px solid var(--hair);cursor:pointer;
+    transition:opacity .18s,background-color .16s;}
+  ol.cal li:hover{background:var(--wash);}
+  ol.cal li.key{box-shadow:inset 3px 0 0 var(--purple);padding-left:11px;}
+  ol.cal li[aria-pressed="true"]{opacity:.5;}
+  .st{border-color:#AFABC2;}
+  .day{font-family:var(--mono);font-size:12.5px;color:var(--purple);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .what .ch{display:block;margin-bottom:4px;}
+  .pname{display:block;font-weight:700;font-stretch:110%;font-size:15px;letter-spacing:-.004em;}
+  .ptrig{display:block;font-family:var(--mono);font-size:12px;line-height:1.5;color:var(--grey);}
+  .share{font-family:var(--mono);font-size:12.5px;color:var(--note);text-align:right;
+    font-variant-numeric:tabular-nums;}
+  .readout{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    margin-top:20px;padding:14px 16px;background-color:var(--ink);color:#FFFFFF;}
+  .readout h2{margin:0;font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.12em;
+    text-transform:uppercase;font-variant-numeric:tabular-nums;}
+  .readout p{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#FFFFFF;}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+  .bar button{border:2px solid var(--ink);background:none;color:var(--ink);cursor:pointer;
+    padding:12px 16px;font-weight:700;font-stretch:110%;font-size:13px;letter-spacing:.07em;
+    text-transform:uppercase;transition:background-color .16s,color .16s;}
+  .bar button:hover{background-color:var(--ink);color:#FFFFFF;}
+  .ask{margin-top:16px;max-width:560px;}
+  .slot{margin:0 0 12px;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--note);}
+  .slot b{color:var(--ink);font-weight:500;}
+  .promise{margin:12px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--grey);}
+  .sent{margin-top:26px;padding:20px;background:var(--wash);}
+  .sent h2{margin:0;font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--purple);}
+  .sent p{margin:10px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--note);}
+  .foot{margin:34px 0 0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--grey);}
+  @media (max-width:960px){
+    .shell{grid-template-columns:minmax(0,1fr);gap:0;}
+    .rail{position:static;}
+    .cats{flex-direction:row;border:0;gap:8px;}
+    .cats button{border:2px solid var(--hair);width:auto;padding:11px 14px;}
+    .go{width:auto;}
+    .ped{margin-top:22px;}
+    .lede{font-size:30px;margin-top:34px;}
+    .thead,.row{grid-template-columns:96px minmax(0,1fr) 104px 30px;row-gap:3px;}
+    .thead .when{display:none;}
+    .row .day{grid-column:1;grid-row:1;} .row .what{grid-column:2;grid-row:1;}
+    .row .share{grid-column:3;grid-row:1;} .row .st{grid-column:4;grid-row:1;}
+    .row .when{grid-column:2/5;grid-row:2;}
+    ol.cal li{padding:14px 0;}
+  }
+  @media (max-width:520px){
+    .lede{font-size:26px;}
+    .thead{display:none;}
+    .row{grid-template-columns:minmax(0,1fr) 30px;row-gap:5px;}
+    .row .day{grid-column:1;grid-row:1;} .row .st{grid-column:2;grid-row:1;}
+    .row .what{grid-column:1/3;grid-row:2;} .row .when{grid-column:1/3;grid-row:3;}
+    .row .share{grid-column:1/3;grid-row:4;text-align:left;}
+    ol.cal li{padding:16px 0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="rail">
+    <div class="top"><h1>Oleksiak Consult</h1></div>
+    <div class="lab">1 &middot; What runs out</div>
+    <div class="cats" id="cats"></div>
+    <div class="lab">2 &middot; Days one pack lasts</div>
+    <div class="daybox"><input id="days" type="number" min="3" max="400" inputmode="numeric" value="30"><span>days</span></div>
+    <button class="go" id="go" type="button">Run the ledger</button>
+    <p class="ped"><b>Pedigree</b>Allegro FMCG and recurring lead &middot; five data scientists &middot; next-pack prediction model. This page: two numbers instead of five people.</p>
+  </div>
+
+  <div class="pane">
+    <h2 class="lede">Every customer runs out on a different day. <em>You email all of them on the same one.</em></h2>
+
+    <div id="prelude">
+      <p class="setline">Set your two numbers &mdash; the ledger fills in, from paid traffic to the loyalty tier.</p>
+      <div class="thead"><span>When</span><span>What you do</span><span class="when">Trigger</span><span class="r">Moves</span><span class="c">Run</span></div>
+      <ol class="cal skel" id="skel"></ol>
+    </div>
+
+    <div class="out" id="out">
+      <div class="chiprow"><span class="chip" id="chip"></span><span class="chip alt" id="chip2"></span></div>
+      <p class="vline" id="verdict"></p>
+
+      <p class="tip">Click a row to mark it as already running.</p>
+      <div class="thead"><span>When</span><span>What you do</span><span class="when">Trigger</span><span class="r">Moves</span><span class="c">Run</span></div>
+      <ol class="cal" id="cal"></ol>
+
+      <div class="readout"><h2 id="tallyHead"></h2><p id="tallyBody"></p></div>
+
+      <div class="bar">
+        <button id="copy" type="button">Take the sheet</button>
+      </div>
+
+      <div class="ask">
+        <form id="form" novalidate>
+          <p class="slot"><b>One more company this quarter.</b> Leave an address and I mark up your version of this ledger.</p>
+          <p class="err" id="err"></p>
+          <div class="fbox">
+            <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+                   autocapitalize="off" placeholder="name@company.com">
+            <button type="submit">Send it</button>
+          </div>
+          <p class="promise">One reply: the build order, the two rows I would cut, and what I would need from your order data to set the real interval. No call, no calendar link.</p>
+        </form>
+      </div>
+
+      <div class="sent" id="sent">
+        <h2>Sent &middot; now I go and look</h2>
+        <p id="rcpt"></p>
+      </div>
+
+      <p class="foot"><b>Fifteen years of the same problem:</b> Allegro (FMCG and recurring, 0.5% &rarr; 12% of revenue in eighteen months), mBank / mOkazje, Booksy, Genactiv (current).<br>
+        Intervals and revenue shares in this prototype are placeholders and the form is not wired yet. The real ledger ships dated, sourced ranges.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* PLACEHOLDER DATA — structure is real, values are for the prototype only.
+     pack = typical days one pack lasts | lo/hi = observed reorder band */
+  var CATS=[
+    {k:"supp",  label:"Supplements",         pack:30, lo:41, hi:52},
+    {k:"coffee",label:"Coffee & drinks",     pack:21, lo:29, hi:38},
+    {k:"skin",  label:"Skincare",            pack:60, lo:79, hi:96},
+    {k:"clean", label:"Household & cleaning",pack:45, lo:63, hi:81},
+    {k:"pet",   label:"Pet food",            pack:30, lo:31, hi:36},
+    {k:"lens",  label:"Contact lenses",      pack:30, lo:33, hi:41}
+  ];
+  var PROG=[
+    {ph:"1 \u00b7 Traffic \u2014 paid, search, answer engines",
+     at:function(){return "Always on";},   g:"trf", cl:"Paid", n:"Stop bidding on people who just bought", t:"Prospecting audiences still contain last cycle\u2019s buyers", m:"CAC \u221210\u201318%"},
+    {at:function(P){return "Day "+Math.max(2,P-10);},
+                                            g:"trf", cl:"Paid", n:"Retarget on the consumption clock",     t:"The pack is about to end \u2014 not \u201cthey visited three days ago\u201d", m:"ROAS +15\u201325%"},
+    {at:function(){return "Always on";},   g:"trf", cl:"SEO", n:"Own the questions that come at the end", t:"How long a pack lasts, when to reorder, which size to buy", m:"Non-brand +20\u201335%"},
+    {at:function(){return "Always on";},   g:"trf", cl:"SEO for LLMs", n:"Be the source the answer engines quote", t:"ChatGPT, Perplexity and AI overviews answer the dosage question for you", m:"LLM referrals +"},
+
+    {ph:"2 \u00b7 Store \u2014 conversion on Shopify or WooCommerce",
+     at:function(){return "On the page";}, g:"store", cl:"Store \u00b7 PDP", n:"Put the duration on the product page",   t:"\u201c30 days of supply\u201d \u2014 nobody states it, every buyer wonders", m:"CVR +6\u201311%"},
+    {at:function(){return "In the cart";}, g:"store", cl:"Store \u00b7 cart", n:"Price the pack in months, not in units", t:"Two packs is two months of not thinking about it", m:"AOV +8\u201315%"},
+    {at:function(P){return "At checkout";},g:"store", cl:"Store \u00b7 checkout", n:"Subscribe-and-save set to the real interval", t:"Every P days, not a round 30 chosen by the platform", m:"Take-up 9\u201317%"},
+
+    {ph:"3 \u00b7 Owned channels \u2014 email, push and SMS on the pack clock",
+     at:function(){return "Day 0";},        g:"own", cl:"Email", n:"Welcome, and how to use it",     t:"Order placed",                          m:"CRM rev 6\u20139%"},
+    {at:function(){return "Day 3\u20135";},   g:"own", cl:"Email", n:"Get the pack opened",            t:"Delivered \u2014 the first dose is the habit", m:"CRM rev 3\u20135%"},
+    {at:function(P){return "Day "+Math.max(2,Math.round(P*0.5));},
+                                             g:"own", cl:"Email", n:"Mid-pack check-in",              t:"Half the pack gone",                    m:"CRM rev 4\u20137%"},
+    {at:function(P){return "Day "+Math.max(2,P-7);},
+                                             g:"own", cl:"Email + push", n:"Running low",                    t:"Seven days of product left",            m:"CRM rev 20\u201328%", key:1},
+    {at:function(P){return "Day "+P;},       g:"own", cl:"Email + push", n:"The pack ends",                  t:"Consumption model says zero",           m:"CRM rev 16\u201322%", key:1},
+    {at:function(P){return "Day "+(P+7);},   g:"own", cl:"Push", n:"Missed the refill",              t:"A week empty, no order",                m:"CRM rev 9\u201313%"},
+    {at:function(P){return "Day "+(P+21);},  g:"own", cl:"SMS", n:"Change the channel",             t:"Two emails ignored \u2014 wrong medium, not wrong clock", m:"CRM rev 6\u20139%"},
+    {at:function(P){return "Day "+Math.round(P*2.5);},
+                                             g:"own", cl:"Email", n:"Win-back with a reason",         t:"Two full cycles missed",                m:"CRM rev 5\u20138%"},
+
+    {ph:"4 \u00b7 Loyalty \u2014 subscription and the programme",
+     at:function(){return "Order 3";},      g:"loy", cl:"Subscription", n:"Move them to a standing order",   t:"Third order \u2014 the moment a subscription is accepted", m:"LTV \u00d71.4\u20131.9"},
+    {at:function(){return "Cycle 4";},      g:"loy", cl:"Loyalty", n:"A tier earned by cycles kept, not by spend", t:"Four packs in a row with no gap", m:"Churn \u221218\u201326%"},
+    {at:function(){return "Cycle 6";},      g:"loy", cl:"Loyalty", n:"Ask for the referral here, not at checkout", t:"Half a year of the product actually working", m:"Referrals 4\u20139%"}
+  ];
+
+
+  var SHEET_LABEL="Take the sheet";
+  function renderRow(pr,p){
+    return '<span class="day">'+pr.at(p)+'</span>'
+      +'<span class="what">'+chip(pr)+'<span class="pname">'+pr.n+'</span></span>'
+      +'<span class="when"><span class="ptrig">'+pr.t+'</span></span>'
+      +'<span class="share">'+pr.m+'</span><span class="st"></span>';
+  }
+  function setVerdict(p){
+    var g=gap(),b=band(),L=cat.label,chip=document.getElementById("chip"),
+        chip2=document.getElementById("chip2");
+    chip2.textContent=L+" \u00b7 "+p+" day pack";
+    var d='<span class="d">Pack empty: day '+p+' \u00b7 reorder observed: day '+b+'</span>';
+    if(g>=5){
+      chip.textContent="Gap: "+g+" days empty";
+      verdict.innerHTML=d+'<span class="i">'+g+' days with nothing in the cupboard \u2014 the cheapest revenue you have.</span>';
+    }else if(g<=-5){
+      chip.textContent="Stockpile pattern";
+      verdict.innerHTML=d+'<span class="i">They reorder before the pack runs out. The money is a standing order, not reminders \u2014 half this ledger is wasted spend.</span>';
+    }else{
+      chip.textContent="Tight cycle";
+      verdict.innerHTML=d+'<span class="i">Timing is not your problem. How few of these ever go out is.</span>';
+    }
+  }
+  function setTally(have,keyMissing,missing){
+    tallyHead.textContent="Coverage "+have+"/"+PROG.length+" \u00b7 pack-anchored "+(2-keyMissing)+"/2";
+    if(have===0) tallyBody.textContent="Tap the rows you already run.";
+    else if(keyMissing>0) tallyBody.textContent="The two anchored rows fire when the product actually runs out.";
+    else if(missing===0) tallyBody.textContent="All "+PROG.length+" \u2014 the next question is which four to cut.";
+    else tallyBody.textContent="Both anchor rows covered \u2014 ahead of most.";
+  }
+  function receipt(v,missing){
+    return "One email to "+v+" before this time tomorrow \u2014 "+cat.label.toLowerCase()
+      +" at "+P()+" days, "+missing+" rows unmarked.";
+  }
+  function onCat(){}
+  function reveal(quiet){
+    out.classList.add("on");
+    document.getElementById("prelude").style.display="none";
+  }
+  /* the empty state shows the shape of the answer, not a sentence describing it */
+  (function(){
+    var sk=document.getElementById("skel"),w=[68,150,120,84];
+    for(var i=0;i<9;i++){
+      var li=document.createElement("li");li.className=i===3||i===4?"row key":"row";
+      li.innerHTML='<span class="day"><i style="width:'+w[0]+'px"></i></span>'
+        +'<span class="what"><i style="width:'+(w[1]-(i%3)*22)+'px"></i></span>'
+        +'<span class="when"><i style="width:'+(w[2]-(i%4)*16)+'px"></i></span>'
+        +'<span class="share"><i style="width:'+w[3]+'px;margin-left:auto"></i></span>'
+        +'<span class="st"></span>';
+      sk.appendChild(li);
+    }
+  })();
+
+
+  var cat=CATS[0], marked={};
+  var catsEl=document.getElementById("cats"), daysEl=document.getElementById("days"),
+      out=document.getElementById("out"), verdict=document.getElementById("verdict"),
+      cal=document.getElementById("cal"), tallyHead=document.getElementById("tallyHead"),
+      tallyBody=document.getElementById("tallyBody"), err=document.getElementById("err"),
+      sent=document.getElementById("sent"), rcpt=document.getElementById("rcpt");
+
+  CATS.forEach(function(c,i){
+    var b=document.createElement("button");
+    b.type="button";b.textContent=c.label;b.setAttribute("aria-pressed",i===0?"true":"false");
+    b.onclick=function(){
+      cat=c;
+      [].forEach.call(catsEl.children,function(el){el.setAttribute("aria-pressed","false");});
+      b.setAttribute("aria-pressed","true");
+      daysEl.value=c.pack; if(typeof onCat==="function")onCat();
+      if(out.classList.contains("on"))run(1);
+    };
+    catsEl.appendChild(b);
+  });
+
+  function chip(pr){return '<span class="ch ch-'+pr.g+'">'+pr.cl+'</span>';}
+  function P(){var v=parseInt(daysEl.value,10);return(!v||v<3)?3:(v>400?400:v);}
+  function band(){return cat.lo+"\u2013"+cat.hi;}
+  function gap(){return Math.round((cat.lo+cat.hi)/2)-P();}
+  daysEl.addEventListener("blur",function(){daysEl.value=P();});
+  daysEl.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();run(0);}});
+  document.getElementById("go").onclick=function(){run(0);};
+
+  function run(quiet){
+    /* editing an input never costs the visitor the rows they already ticked */
+    var p=P();
+    setVerdict(p);
+    cal.innerHTML="";
+    var lastPh=null;
+    PROG.forEach(function(pr,i){
+      if(pr.ph&&pr.ph!==lastPh){
+        lastPh=pr.ph;
+        var h=document.createElement("li");
+        h.className="ph";h.textContent=pr.ph;
+        cal.appendChild(h);
+      }
+      var li=document.createElement("li");
+      li.className=pr.key?"row key":"row";
+      li.setAttribute("role","button");li.tabIndex=0;
+      li.setAttribute("aria-pressed",marked[i]?"true":"false");
+      li.innerHTML=renderRow(pr,p);
+      var s0=li.querySelector(".st"); if(s0&&marked[i])s0.textContent="\u2713";
+      function toggle(){
+        marked[i]=!marked[i];
+        li.setAttribute("aria-pressed",marked[i]?"true":"false");
+        var s=li.querySelector(".st"); if(s)s.textContent=marked[i]?"\u2713":"";
+        tally();
+      }
+      li.onclick=toggle;
+      li.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle();}};
+      cal.appendChild(li);
+    });
+    tally();
+    reveal(quiet);
+  }
+
+  function tally(){
+    var have=0,keyMissing=0;
+    for(var i=0;i<PROG.length;i++){ if(marked[i])have++; else if(PROG[i].key)keyMissing++; }
+    setTally(have,keyMissing,PROG.length-have);
+  }
+
+  document.getElementById("copy").onclick=function(){
+    var p=P(),lines=["Growth plan \u2014 "+cat.label+" \u2014 pack lasts "+p+" days"
+      +" \u2014 observed reorder "+cat.lo+"\u2013"+cat.hi+" days",""],lastPh=null;
+    PROG.forEach(function(pr,i){
+      if(pr.ph&&pr.ph!==lastPh){lastPh=pr.ph;lines.push("",pr.ph.toUpperCase());}
+      lines.push((marked[i]?"[x] ":"[ ] ")+pr.at(p)+"  \u00b7  ["+pr.cl+"]  "+pr.n+"  \u00b7  "+pr.t+"  \u00b7  "+pr.m);
+    });
+    /* the caveat travels with the sheet, or the placeholders leave the page as facts */
+    lines.push("","NOTE: reorder band and revenue shares are placeholders, not measured data.",
+      "Built at oleksiakconsulting.com");
+    var txt=lines.join("\n");
+    var done=function(){var b=document.getElementById("copy");b.textContent="Copied";
+      setTimeout(function(){b.textContent=SHEET_LABEL;},1800);};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,done);
+    else{var t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);
+      t.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(t);done();}
+  };
+
+  document.getElementById("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var mail=document.getElementById("mail"),v=mail.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      err.textContent=v.indexOf("@")<0?"Missing the @ \u2014 try name@company.com."
+                                      :"Missing the domain \u2014 try name@company.com.";
+      err.classList.add("on");mail.focus();return;
+    }
+    err.classList.remove("on");
+    var have=0;for(var k in marked)if(marked[k])have++;
+    rcpt.textContent=receipt(v,PROG.length-have);
+    sent.classList.add("on");
+    sent.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+  document.getElementById("mail").addEventListener("input",function(){err.classList.remove("on");});
+
+})();
+</script>
+</body>
+</html>

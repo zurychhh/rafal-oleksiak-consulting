@@ -83,6 +83,14 @@ export default function RootLayout({
         {/* Performance: Preconnect to external domains for faster DNS resolution */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+
+        {/* IBM Plex — kroje strony głównej (The Audit). Ładowane linkiem, a nie
+            przez next/font, bo arkusz odwołuje się do nich po literalnej nazwie
+            rodziny w --mono/--sans i ta wartość ma zostać nietknięta. */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        />
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://googleads.g.doubleclick.net" />

@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="robots" content="noindex">
+<title>Hazard Field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --ground:#E4FF00;      /* the brand asset */
+    --ink:#101010;
+    --signal:#FF4B00;
+    --white:#FFFFFF;
+    --second:#3D4400;      /* secondary type on the yellow */
+    --onink:#E4FF00;
+    --onink-dim:#B7C400;
+    --disp:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --m:clamp(20px,4.4vw,64px);
+    --fh:68px;
+    --rail:clamp(32px,4.6dvh,44px);
+    --sigh:74px;
+    --sigw:min(38ch,42vw);
+    --labh:30px;
+    --bayh:clamp(104px,15dvh,142px);
+  }
+  html,body{height:100%;}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--disp);
+    overflow:hidden;-webkit-font-smoothing:antialiased;}
+
+  .rail{position:fixed;top:0;left:0;right:0;height:var(--rail);z-index:4;
+    display:flex;align-items:center;overflow:hidden;background:var(--ink);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);}
+  .run{display:flex;flex:none;animation:roll 72s linear infinite;}
+  @keyframes roll{to{transform:translate3d(-50%,0,0);}}
+  .run-h{display:flex;align-items:center;flex:none;}
+  .run em{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--onink-dim);white-space:nowrap;padding:0 .85rem;}
+  .run em.fig{color:var(--ground);font-weight:500;}
+  .run i{flex:none;width:5px;height:5px;background:var(--signal);}
+  .still .run{animation-play-state:paused;}
+
+  .sig{position:fixed;top:calc(var(--rail) + clamp(18px,2.8vh,34px));left:var(--m);z-index:3;
+    max-width:var(--sigw);}
+  .sig h1{margin:0;font-weight:800;font-stretch:125%;font-size:clamp(15px,1.5vw,21px);
+    letter-spacing:.12em;text-transform:uppercase;}
+  .sig p{margin:10px 0 0;font-family:var(--mono);font-size:11.5px;line-height:1.5;
+    color:var(--second);}
+
+  .hookbox{position:fixed;right:var(--m);
+    left:calc(var(--m) + var(--sigw) + clamp(20px,3vw,56px));
+    top:calc(var(--rail) + clamp(14px,2.4vh,32px));
+    bottom:calc(50% + var(--fh)/2 + var(--labh) + 16px);z-index:2;
+    display:flex;justify-content:flex-end;align-items:flex-end;
+    overflow:hidden;pointer-events:none;}
+  .hook{margin:0;width:100%;max-width:19ch;text-align:right;font-weight:800;font-stretch:118%;
+    letter-spacing:-.02em;line-height:1.04;font-size:clamp(22px,min(3.3vw,5vh),54px);}
+  .hook w{display:inline-block;white-space:pre;}
+  .hook mark{background:none;color:var(--ink);box-shadow:inset 0 -.11em 0 var(--signal);}
+  .hook w.in{animation:seat .34s cubic-bezier(.2,.85,.3,1) both;}
+  @keyframes seat{from{opacity:0;transform:translate3d(.12em,0,0);}to{opacity:1;transform:none;}}
+  .hook.out w{animation:leave .16s ease-in both;}
+  @keyframes leave{to{opacity:0;}}
+
+  .fw{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;
+    width:min(600px,calc(100vw - var(--m)*2));}
+  .flab{position:absolute;bottom:calc(100% + 12px);left:0;
+    font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink);}
+  .fbox{display:flex;align-items:stretch;height:var(--fh);box-sizing:border-box;
+    background:var(--ink);}
+  .fbox input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--ground);
+    font-family:var(--disp);font-weight:500;font-size:19px;padding:0 20px;caret-color:var(--signal);}
+  .fbox input::placeholder{color:var(--onink-dim);font-weight:400;}
+  .fbox button{flex:none;border:0;background:var(--signal);color:var(--ink);cursor:pointer;
+    padding:0 clamp(16px,2.4vw,30px);font-family:var(--disp);font-weight:800;font-stretch:110%;
+    font-size:14.5px;letter-spacing:.08em;text-transform:uppercase;
+    transition:background .16s ease,color .16s ease;}
+  .fbox button:hover{background:var(--ground);color:var(--ink);}
+  .fw:focus-within .fbox{outline:3px solid var(--ink);outline-offset:3px;}
+
+  .under{position:absolute;top:calc(100% + 15px);left:0;right:0;}
+  .under .err{margin:0 0 6px;font-family:var(--mono);font-size:12px;font-weight:500;
+    color:var(--white);background:var(--ink);display:none;padding:3px 7px;}
+  .under .err.on{display:inline-block;}
+  .under .re{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.5;color:var(--ink);
+    max-width:56ch;font-weight:500;}
+  .under .dis{margin:6px 0 0;font-family:var(--mono);font-size:11px;color:var(--second);}
+
+  .bay{position:fixed;left:0;right:0;bottom:0;z-index:5;min-height:var(--bayh);
+    background:var(--ink);color:var(--white);
+    padding:clamp(11px,1.7vh,17px) var(--m) clamp(13px,1.9vh,19px);
+    display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.3vh,13px);}
+  .bay .prog{position:absolute;left:0;top:0;height:2px;width:0;background:var(--signal);}
+  .bayhead{display:flex;align-items:baseline;gap:12px;font-family:var(--mono);font-size:11px;
+    color:var(--onink-dim);}
+  .bayhead b{font-weight:400;min-width:0;}
+  .bayhead .idx{margin-left:auto;flex:none;color:var(--ground);letter-spacing:.1em;
+    font-variant-numeric:tabular-nums;text-transform:uppercase;}
+  .baybody{display:flex;align-items:center;gap:clamp(13px,2vw,24px);min-width:0;}
+  .plate{flex:none;background:var(--ground);color:var(--ink);padding:4px 11px 5px;
+    font-family:var(--disp);font-weight:800;font-stretch:118%;
+    font-size:clamp(13px,1.15vw,19px);line-height:1.12;text-transform:uppercase;white-space:nowrap;}
+  .gloss{flex:1;min-width:0;font-family:var(--mono);font-size:clamp(11px,1vw,13px);
+    line-height:1.5;color:var(--white);max-width:70ch;
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;}
+  .baynav{flex:none;display:flex;align-items:center;gap:12px;}
+  .ticks{display:flex;gap:4px;}
+  .ticks i{display:block;width:12px;height:3px;background:#4A4A45;transition:background .25s,width .25s;}
+  .ticks i.on{background:var(--ground);width:26px;}
+  .nextlever{background:none;border:1px solid rgba(228,255,0,.34);color:var(--ground);cursor:pointer;
+    padding:7px 11px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;white-space:nowrap;transition:background .16s,color .16s,border-color .16s;}
+  .nextlever:hover{background:var(--ground);color:var(--ink);border-color:var(--ground);}
+  .nextlever[disabled]{color:#6E6E68;border-color:rgba(228,255,0,.14);cursor:default;}
+
+  .flood{position:fixed;inset:0;background:var(--ink);z-index:8;transform:scaleY(0);
+    transform-origin:center;pointer-events:none;transition:transform .42s cubic-bezier(.62,0,.3,1);}
+  .gone .flood{transform:scaleY(1);}
+  .rail,.sig,.hookbox,.fw,.bay{transition:opacity .16s ease;}
+  .gone .rail,.gone .sig,.gone .hookbox,.gone .fw,.gone .bay{opacity:0;pointer-events:none;}
+
+  .closing{position:fixed;inset:0;z-index:9;display:none;align-items:center;padding:0 var(--m);
+    background:var(--ink);}
+  .gone .closing{display:flex;animation:emerge .4s .4s ease both;}
+  @keyframes emerge{from{opacity:0}to{opacity:1}}
+  .closing div{margin-left:auto;max-width:22ch;text-align:right;}
+  .closing h2{margin:0;font-weight:800;font-stretch:120%;font-size:clamp(26px,3.8vw,56px);
+    letter-spacing:-.02em;line-height:1;color:var(--ground);text-transform:uppercase;}
+  .closing h2 em{font-style:normal;color:var(--signal);}
+  .closing p{margin:18px 0 0;font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--white);}
+  .again{margin-top:20px;background:none;border:1px solid rgba(228,255,0,.34);color:var(--ground);
+    padding:7px 11px;cursor:pointer;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;}
+  .again:hover{background:var(--ground);color:var(--ink);}
+
+  :focus-visible{outline:3px solid var(--ink);outline-offset:3px;}
+  .bay :focus-visible,.closing :focus-visible{outline-color:var(--ground);}
+
+  @media (max-width:900px){
+    :root{--sigh:96px;--bayh:clamp(112px,17dvh,150px);--sigw:min(30ch,40vw);}
+    .hook{max-width:16ch;}
+    .ticks{display:none;}
+  }
+  @media (max-width:620px){
+    :root{--fh:60px;--sigh:104px;--bayh:auto;--sigw:0px;}
+    .sig{max-width:none;right:var(--m);}
+    .hookbox{left:var(--m);top:calc(var(--rail) + var(--sigh) + 14px);}
+    .hook{max-width:none;}
+    .fbox button{padding:0 14px;font-size:13px;}
+    .baybody{flex-wrap:wrap;gap:10px;}
+    .gloss{flex-basis:100%;order:3;-webkit-line-clamp:5;}
+    .baynav{margin-left:auto;}
+  }
+  @media (max-height:640px){
+    :root{--sigh:58px;--bayh:96px;}
+    .hookbox{top:calc(var(--rail) + 10px);}
+    .sig p{font-size:10.5px;margin-top:6px;}
+    .bay{gap:6px;}
+    .gloss{-webkit-line-clamp:2;}
+  }
+  @media (max-height:480px){
+    :root{--sigh:34px;--bayh:74px;}
+    .sig p{display:none;}
+    .under .re{display:none;}
+    .gloss{-webkit-line-clamp:1;}
+  }
+
+  /* short viewports: the block under the field yields before it can meet the band */
+  @media (max-height:700px){
+    .under .re{font-size:11.5px;}
+    .under .dis{margin-top:4px;font-size:10.5px;}
+  }
+  @media (max-height:620px){
+    .under .re{display:none;}
+  }
+  @media (max-height:540px){
+    .under .dis{display:none;}
+  }
+  @media (max-width:620px) and (max-height:900px){
+    .under .re{font-size:11.5px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .run{animation:none;}
+    .hook w.in,.hook.out w{animation-duration:.01ms;}
+    .flood{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="root">
+
+<div class="rail"><div class="run" id="run"></div></div>
+
+<div class="sig">
+  <h1>Oleksiak Consult</h1>
+  <p>I find the revenue an ecommerce site already earned and lost. Conversion and CRM, fifteen years — Allegro, Booksy, mBank, Accenture.</p>
+</div>
+
+<div class="hookbox"><p class="hook" id="hook"></p></div>
+
+<form class="fw" id="form" novalidate>
+  <label class="flab" for="mail">Work email</label>
+  <div class="fbox">
+    <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+           autocapitalize="off" placeholder="name@company.com">
+    <button type="submit">Send it</button>
+  </div>
+  <div class="under">
+    <p class="err" id="err"></p>
+    <p class="slot">I am taking on <b>one more company</b> this quarter. That is the whole plan.</p>
+    <p class="re">You get one email from me — written by hand, not a sequence — before this time tomorrow. No call, no calendar link.</p>
+    <p class="dis" id="dis">This page won't be here after you send it. The link still works.</p>
+  </div>
+</form>
+
+<div class="bay">
+  <span class="prog" id="prog"></span>
+  <div class="bayhead">
+    <b id="bayLabel">I show my work: the big sentence uses a persuasion technique on purpose. Here is which one, and why it moves numbers.</b>
+    <span class="idx" id="idx">01 / 07</span>
+  </div>
+  <div class="baybody">
+    <div class="plate" id="plate"></div>
+    <div class="gloss" id="gloss"></div>
+    <div class="baynav">
+      <div class="ticks" id="ticks"></div>
+      <button class="nextlever" id="nextlever" type="button">Next technique &rarr;</button>
+    </div>
+  </div>
+  
+</div>
+
+<div class="flood"></div>
+
+<div class="closing">
+  <div>
+    <h2>Sent. <em>Now I go and look.</em></h2>
+    <p id="rcpt"></p>
+    <button class="again" id="again" type="button">Demo — run it again</button>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var V=[
+   {t:"This page deletes itself the moment you send your address. |That is the point, not a fault.|",
+    m:"Curiosity gap",
+    g:"The sentence withholds the reason. You finish it yourself, and finishing it is what makes you stay. Same break I put in subject lines."},
+   {t:"Email and CRM went from |0.5% to 12%| of one retailer's revenue. Eighteen months, one team.",
+    m:"Specificity",
+    g:"An uneven number reads as measured, a round one as invented. It is why you will never see me write \u201cup to 3x\u201d on a slide."},
+   {t:"Most of the people who landed on your site today will not come back on their own. |You already paid for them.|",
+    m:"Loss aversion",
+    g:"People work about twice as hard to keep something as to gain it. So I frame the gap as leakage you own, not upside you might buy."},
+   {t:"Traffic quality, conversion, retention — in that order, |because that is the order they break in.|",
+    m:"Reason-why",
+    g:"A claim with a stated reason outperforms the same claim alone. The reason does not even have to be surprising — it has to be there."},
+   {t:"No menu. No pricing page. No nine-field form. |One field. One email back.|",
+    m:"Friction",
+    g:"Every field removed is a decision you no longer make. I removed all of them but one, and told you what arrives when you fill it."},
+   {t:"Allegro. Booksy. mBank. |I worked inside all three. Traffic was never the problem.|",
+    m:"Borrowed authority",
+    g:"Names first, claim second. You lend the claim whatever credibility you already granted the names — so the order is never accidental."},
+   {t:"An agency needs three months and forty slides to find your leak. |I answer tomorrow, in one paragraph.|",
+    m:"Price anchor",
+    g:"Their scope is the reference point. Placed next to it, I never have to argue about my price — only about the time it takes."}
+  ];
+
+  var PROOF=[["Allegro",0],["0.5% \u2192 12% of revenue",1],["CRM 2.0",0],["Booksy",0],["+102% YoY",1],
+    ["Marketing automation",0],["mBank",0],["\u20ac2M budget managed",1],["Conversion optimisation",0],
+    ["Accenture",0],["Team of 15 built",1],["Lifecycle & retention",0],["Mall",0],["+34% YoY",1],
+    ["Traffic quality",0],["Travelist",0],["30% efficiency gain",1],["AI in ecommerce",0],
+    ["LABA",0],["15 years in practice",1],["Collegium Da Vinci",0]];
+
+  var DWELL=14000;
+  var LABEL_IDLE="I show my work: the big sentence uses a persuasion technique on purpose. Here is which one, and why it moves numbers.";
+  var LABEL_PAUSED="Paused while you type — nothing on this page moves once you are in the field.";
+
+  var hook=document.getElementById("hook"),hookbox=document.querySelector(".hookbox"),
+      gloss=document.getElementById("gloss"),plate=document.getElementById("plate"),
+      idx=document.getElementById("idx"),ticks=document.getElementById("ticks"),
+      prog=document.getElementById("prog"),bayLabel=document.getElementById("bayLabel"),
+      err=document.getElementById("err"),rcpt=document.getElementById("rcpt"),
+      root=document.getElementById("root"),form=document.getElementById("form"),
+      mail=document.getElementById("mail"),nextlever=document.getElementById("nextlever"),
+      read=document.getElementById("read");
+
+  var calm=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var i=0,timer=null,dead=false,frozen=false;
+
+  for(var k=0;k<V.length;k++) ticks.appendChild(document.createElement("i"));
+
+  (function(){
+    var r=document.getElementById("run"),h=document.createElement("div");h.className="run-h";
+    PROOF.forEach(function(p){
+      var e=document.createElement("em");e.textContent=p[0];if(p[1])e.className="fig";
+      h.appendChild(e);h.appendChild(document.createElement("i"));
+    });
+    r.appendChild(h);
+    var half=h.scrollWidth||1,copies=1;
+    while(half*copies<innerWidth&&copies<6){r.appendChild(h.cloneNode(true));copies++;}
+    for(var c=0;c<copies;c++) r.appendChild(r.children[c].cloneNode(true));
+  })();
+
+  function setHook(txt,anim){
+    var p=txt.split("|"),f=document.createDocumentFragment(),n=0;
+    p.forEach(function(c,ci){
+      if(!c)return;
+      var lit=ci%2===1;
+      c.split(/\s+/).forEach(function(tok){
+        if(!tok)return;
+        var w=document.createElement("w");
+        if(lit){var m=document.createElement("mark");m.textContent=tok;w.appendChild(m);
+                w.appendChild(document.createTextNode(" "));}
+        else w.textContent=tok+" ";
+        if(anim){w.className="in";w.style.animationDelay=(n*15)+"ms";}
+        f.appendChild(w);n++;
+      });
+    });
+    hook.classList.remove("out");
+    hook.innerHTML="";hook.appendChild(f);
+    fit();
+  }
+
+  /* measure the CLIPPING box, not the text node — glyphs overflow their line box */
+  function fit(){
+    hook.style.fontSize="";
+    var avail=hookbox.clientHeight;
+    if(avail<36){hook.style.fontSize="15px";return;}
+    if(hookbox.scrollHeight<=avail)return;
+    var lo=11,hi=parseFloat(getComputedStyle(hook).fontSize);
+    for(var s=0;s<10;s++){
+      var mid=(lo+hi)/2;
+      hook.style.fontSize=mid+"px";
+      if(hookbox.scrollHeight<=avail)lo=mid;else hi=mid;
+    }
+    hook.style.fontSize=lo+"px";
+    if(hookbox.scrollHeight>avail)hook.style.fontSize=(lo*0.96)+"px";
+  }
+  var rt=null;
+  addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(fit,120);});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+
+  
+
+  function paint(){
+    var v=V[i],n=String(i+1).padStart(2,"0")+" / "+String(V.length).padStart(2,"0");
+    setHook(v.t,true);
+    idx.textContent="Technique "+n;
+    plate.textContent=v.m;
+    gloss.textContent=v.g;
+    [].forEach.call(ticks.children,function(el,k){el.className=(k===i?"on":"");});
+    prog.style.transition="none";prog.style.width="0%";void prog.offsetWidth;
+    if(!frozen&&!dead){prog.style.transition="width "+DWELL+"ms linear";prog.style.width="100%";}
+    clearTimeout(timer);
+    if(!dead&&!frozen) timer=setTimeout(function(){go(i+1);},DWELL);
+    
+  }
+
+  function go(n,instant){
+    i=(n+V.length)%V.length;
+    if(instant||calm){paint();return;}
+    hook.classList.add("out");
+    setTimeout(paint,170);
+  }
+
+  function freeze(){
+    if(frozen)return;
+    frozen=true;clearTimeout(timer);
+    prog.style.transition="none";prog.style.width="0";
+    root.classList.add("still");
+    bayLabel.textContent=LABEL_PAUSED;
+  }
+  function thaw(){
+    if(!frozen||dead||mail.value.trim())return;
+    frozen=false;root.classList.remove("still");
+    bayLabel.textContent=LABEL_IDLE;
+    paint();
+  }
+  mail.addEventListener("focus",freeze);
+  mail.addEventListener("keydown",freeze);
+  mail.addEventListener("blur",thaw);
+
+  nextlever.onclick=function(){ go(i+1); };
+
+  function showErr(msg){err.textContent=msg;err.classList.add("on");}
+  function clearErr(){err.classList.remove("on");}
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    var v=mail.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      showErr(v.indexOf("@")<0
+        ? "That is missing the @ — try name@company.com."
+        : "That is missing the domain — try name@company.com.");
+      mail.focus();return;
+    }
+    clearErr();dead=true;clearTimeout(timer);mail.blur();
+    prog.style.transition="none";prog.style.width="0";
+    rcpt.textContent="One email to "+v+", written by hand, before this time tomorrow. If it is not there, look in spam for Oleksiak.";
+    root.classList.add("gone");
+  });
+  mail.addEventListener("input",clearErr);
+
+  document.getElementById("again").onclick=function(){
+    root.classList.remove("gone");root.classList.remove("still");
+    mail.value="";dead=false;frozen=false;
+    bayLabel.textContent=LABEL_IDLE;
+    go(i+1,true);
+  };
+
+  go(0,true);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Specimen Catalogue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --stock:#E7E5DF;
+    --stock-hi:#F0EEE9;
+    --ink:#131309;
+    --ink-soft:#5D5B4E;
+    --ink-faint:#8C8A7C;
+    --plate:#131309;
+    --plate-type:#C7C4B8;
+    --plate-faint:#6E6C60;
+    --blueprint:#1F3FE0;
+    --rule:rgba(19,19,9,.16);
+    --serif:"Newsreader",Georgia,"Times New Roman",serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+
+  html,body{height:100%;}
+  body{
+    margin:0;background:var(--stock);color:var(--ink);
+    font-family:var(--mono);overflow:hidden;-webkit-font-smoothing:antialiased;
+  }
+
+  .sheet{position:relative;height:100dvh;min-height:100vh;
+    transition:transform .62s cubic-bezier(.6,0,.3,1),opacity .5s ease;}
+  .gone .sheet{transform:translateY(-13vh);opacity:0;}
+
+  /* ---------- running index ---------- */
+  .index{position:fixed;top:0;left:0;right:0;height:32px;z-index:3;
+    display:flex;align-items:center;overflow:hidden;
+    border-bottom:1px solid var(--rule);background:var(--stock);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
+  .rail{display:flex;flex:none;animation:roll 64s linear infinite;}
+  @keyframes roll{to{transform:translate3d(-50%,0,0);}}
+  .rail-half{display:flex;align-items:center;flex:none;}
+  .rail em{font-style:normal;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-faint);white-space:nowrap;padding:0 1.05rem;}
+  .rail em.fig{color:var(--ink);font-weight:500;}
+  .rail i{flex:none;width:3px;height:3px;background:var(--blueprint);}
+
+  /* ---------- masthead ---------- */
+  .masthead{position:fixed;top:32px;left:0;right:0;z-index:3;
+    display:flex;flex-direction:column;align-items:center;gap:7px;padding:24px 22px 0;}
+  .masthead h1{margin:0;font-family:var(--mono);font-weight:500;font-size:10.5px;
+    letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;}
+  .masthead p{margin:0;font-family:var(--serif);font-size:14px;font-style:italic;font-weight:300;
+    color:var(--ink-soft);text-align:center;max-width:44ch;text-wrap:balance;}
+
+  /* ---------- the specimen ---------- */
+  .specimen{position:fixed;left:50%;bottom:calc(50% + 74px);transform:translateX(-50%);
+    width:min(1040px,88vw);margin:0;text-align:center;z-index:2;
+    font-family:var(--serif);font-weight:300;
+    font-size:clamp(27px,min(3.7vw + .55rem,7.1vh),62px);
+    line-height:1.14;letter-spacing:-.013em;text-wrap:balance;}
+  .specimen w{display:inline-block;white-space:pre;}
+  .specimen mark{background:none;color:var(--ink);font-style:italic;font-weight:400;}
+  .specimen w.set{animation:settle .46s cubic-bezier(.22,.85,.28,1) both;}
+  @keyframes settle{from{opacity:0;transform:translate3d(0,.13em,0);}to{opacity:1;transform:none;}}
+  .specimen.lift w{animation:lift .26s ease-in both;}
+  @keyframes lift{to{opacity:0;transform:translate3d(0,-.11em,0);}}
+
+  /* ---------- the field: dead centre of the viewport ---------- */
+  .rule{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
+    width:min(490px,84vw);display:flex;align-items:center;gap:15px;
+    border-bottom:1px solid var(--ink);padding:0 2px 11px;
+    transition:border-color .25s ease;}
+  .rule:focus-within{border-color:var(--blueprint);}
+  .rule label{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);flex:none;}
+  .rule input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--ink);
+    font-family:var(--serif);font-weight:300;font-size:21px;height:32px;}
+  .rule input::placeholder{color:var(--ink-faint);font-style:italic;}
+  .go{flex:none;width:31px;height:31px;border:0;background:none;cursor:pointer;color:var(--ink);
+    display:grid;place-items:center;transition:color .2s ease,transform .2s ease;}
+  .go:hover{color:var(--blueprint);transform:translateX(3px);}
+  .go svg{width:19px;height:19px;}
+
+  .fine{position:fixed;left:50%;top:calc(50% + 44px);transform:translateX(-50%);z-index:2;
+    font-size:10px;letter-spacing:.14em;color:var(--ink-faint);white-space:nowrap;}
+  .fine.err{color:var(--blueprint);}
+
+  /* ---------- catalogue plate ---------- */
+  .plate{position:fixed;left:0;right:0;bottom:0;z-index:3;min-height:11dvh;
+    background:var(--plate);color:var(--plate-type);
+    padding:16px clamp(18px,4vw,44px) 18px;
+    display:flex;align-items:center;gap:clamp(16px,3vw,34px);
+    transition:height .55s cubic-bezier(.6,0,.3,1);}
+  .no{flex:none;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--blueprint);
+    font-variant-numeric:tabular-nums;}
+  .no b{font-weight:500;}
+  .body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;}
+  .mech{font-size:9.5px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--plate-type);}
+  .gloss{font-family:var(--serif);font-weight:300;font-style:italic;
+    font-size:clamp(13px,1.2vw,16px);line-height:1.45;color:var(--plate-type);max-width:80ch;}
+  .aside{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+  .aside b{font-size:9px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--plate-faint);font-variant-numeric:tabular-nums;}
+  .step{display:flex;gap:6px;}
+  .step button{width:26px;height:26px;border:1px solid rgba(199,196,184,.26);background:none;
+    color:var(--plate-faint);cursor:pointer;font-family:var(--mono);font-size:11px;line-height:1;
+    transition:color .18s ease,border-color .18s ease;}
+  .step button:hover{color:var(--blueprint);border-color:var(--blueprint);}
+  .tick{position:absolute;left:0;top:0;height:1px;width:0;background:var(--blueprint);}
+
+  @media (max-width:760px){
+    .gloss{font-size:12.5px;}
+    .masthead p{font-size:12.5px;}
+    .specimen{bottom:calc(50% + 66px);}
+  }
+  @media (max-width:560px){
+    .aside b{display:none;}
+    .plate{gap:13px;padding-top:13px;padding-bottom:15px;}
+  }
+
+  /* ---------- specimen removed: the plate floods the sheet ---------- */
+  .blackout{position:fixed;inset:0;z-index:8;background:var(--plate);
+    transform:scaleY(0);transform-origin:bottom;
+    transition:transform .62s cubic-bezier(.62,0,.3,1);}
+  .gone .blackout{transform:scaleY(1);}
+  .gone .plate{opacity:0;transition:opacity .3s ease;}
+
+  .closing{position:fixed;inset:0;z-index:9;display:none;padding:0 26px;}
+  .gone .closing{display:grid;place-items:center;animation:emerge .5s .5s ease both;}
+  @keyframes emerge{from{opacity:0;}to{opacity:1;}}
+  .closingInner{max-width:30ch;text-align:center;display:flex;flex-direction:column;gap:15px;
+    align-items:center;}
+  .closing h2{margin:0;font-family:var(--serif);font-weight:200;letter-spacing:-.016em;
+    font-size:clamp(29px,3.5vw + .5rem,52px);line-height:1.12;color:var(--stock);text-wrap:balance;}
+  .closing h2 em{font-style:italic;font-weight:300;color:#fff;}
+  .closing p{margin:0;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--plate-faint);}
+  .replay{margin-top:2px;background:none;border:0;border-bottom:1px solid rgba(199,196,184,.28);
+    padding:0 0 3px;color:var(--plate-faint);cursor:pointer;font-family:var(--mono);font-size:9px;
+    letter-spacing:.2em;text-transform:uppercase;transition:color .2s ease;}
+  .replay:hover{color:var(--blueprint);}
+
+  :focus-visible{outline:2px solid var(--blueprint);outline-offset:3px;}
+
+  @media (prefers-reduced-motion:reduce){
+    .rail,.specimen w.set,.specimen.lift w{animation:none !important;}
+    .specimen w.set{opacity:1;transform:none;}
+    .sheet,.plate,.blackout{transition:none;}
+    .gone .blackout{transform:scaleY(1);}
+    .gone .closing{animation-delay:.05s;}
+  }
+</style>
+</head>
+<body>
+
+
+<div id="root">
+
+  <div class="sheet">
+    <div class="index"><div class="rail" id="rail"></div></div>
+
+    <div class="masthead">
+      <h1>Oleksiak Consulting</h1>
+      <p>Traffic quality, conversion and retention for ecommerce and retail.</p>
+    </div>
+
+    <p class="specimen" id="specimen"></p>
+
+    <form id="form" novalidate>
+      <div class="rule">
+        <label for="mail">Email</label>
+        <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+               placeholder="you@company.com">
+        <button class="go" type="submit" aria-label="Send my address">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 12h15M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+      </div>
+      <p class="fine" id="fine">This page disappears once you enter your email.</p>
+    </form>
+  </div>
+
+  <div class="plate" id="plate">
+    <span class="tick" id="tick"></span>
+    <div class="no">№&nbsp;<b id="no">001</b></div>
+    <div class="body">
+      <div class="mech" id="mech"></div>
+      <div class="gloss" id="gloss"></div>
+    </div>
+    <div class="aside">
+      <b id="cat">Catalogue · 7 entries</b>
+      <div class="step">
+        <button type="button" id="prev" aria-label="Previous specimen">&larr;</button>
+        <button type="button" id="next" aria-label="Next specimen">&rarr;</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="blackout"></div>
+
+  <div class="closing">
+    <div class="closingInner">
+      <h2>The rest happens <em>over email.</em></h2>
+      <p>I reply personally — usually within a day</p>
+      <button class="replay" id="replay" type="button">Run the demo again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var SPECIMENS = [
+    { text:"This page deletes itself the moment you type your address. |Not because something broke.|",
+      slug:"curiosity-gap", mech:"Curiosity gap",
+      gloss:"The sentence stops one beat before the answer, so you finish it yourself. It is the same break I put in subject lines — on a decent list it moves open rate by about a fifth." },
+    { text:"I raise traffic quality, conversion and retention in ecommerce and retail. Fifteen years of practice, plus AI that cuts time-to-market |from quarters to weeks.|",
+      slug:"rationale", mech:"Rationale",
+      gloss:"Claim, credential, mechanism — in that order. Reverse it and the same three facts read as bragging. The order is doing more work here than the words are." },
+    { text:"While you read this sentence, a dozen people landed on your site and left. |None of them will come back on their own.|",
+      slug:"loss-aversion", mech:"Loss aversion",
+      gloss:"People work roughly twice as hard to avoid a loss as to chase an equivalent gain. So I frame the gap as leakage you already own, not upside you might buy." },
+    { text:"From |0.5% to 12%| of total revenue. Eighteen months, one team. That is not a projection — it already happened.",
+      slug:"specificity", mech:"Specificity",
+      gloss:"An uneven number reads as measured; a round one reads as invented. It is why you will never see me write “up to 3x” on a slide." },
+    { text:"No menu. No pricing page. No nine-field form. |One field and one promise.|",
+      slug:"pattern-interrupt", mech:"Pattern interrupt",
+      gloss:"Every element I removed is one decision you no longer have to make. Cutting a form from nine fields to one is still the cheapest conversion win available to most teams." },
+    { text:"Allegro. Booksy. mBank. Accenture. All of them had traffic. |The problem started right after that.|",
+      slug:"authority-transfer", mech:"Authority transfer",
+      gloss:"Names first, claim second. The reader lends the claim whatever credibility they already granted the names — which is why the order is never negotiable." },
+    { text:"An agency will scope this in three months and forty slides. I will answer tomorrow morning |in one paragraph.|",
+      slug:"anchoring", mech:"Anchoring",
+      gloss:"I set the expensive reference point before I place myself against it. The contrast does the pricing work, so the price never has to." }
+  ];
+
+  var INDEX = [
+    {t:"Allegro"},{t:"0.5% → 12% of revenue",f:1},{t:"CRM 2.0"},
+    {t:"Booksy"},{t:"+102% YoY",f:1},{t:"Marketing automation"},
+    {t:"mBank"},{t:"€2M budget managed",f:1},{t:"Conversion optimisation"},
+    {t:"Accenture"},{t:"Team of 15 built",f:1},{t:"Lifecycle & retention"},
+    {t:"Mall"},{t:"+34% YoY",f:1},{t:"Traffic quality"},
+    {t:"Travelist"},{t:"30% efficiency gain",f:1},{t:"AI in ecommerce"},
+    {t:"LABA"},{t:"15 years in practice",f:1},{t:"Collegium Da Vinci"}
+  ];
+
+  var DWELL=8400;
+
+  var specEl=document.getElementById("specimen"),
+      mechEl=document.getElementById("mech"),
+      glossEl=document.getElementById("gloss"),
+      noEl=document.getElementById("no"),
+      catEl=document.getElementById("cat"),
+      tickEl=document.getElementById("tick"),
+      fineEl=document.getElementById("fine"),
+      root=document.getElementById("root"),
+      form=document.getElementById("form"),
+      mail=document.getElementById("mail");
+
+  var calm=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var idx=0,timer=null,dead=false,roll=null;
+
+  (function(){
+    var rail=document.getElementById("rail"),half=document.createElement("div");
+    half.className="rail-half";
+    INDEX.forEach(function(it){
+      var e=document.createElement("em");e.textContent=it.t;if(it.f)e.className="fig";
+      half.appendChild(e);half.appendChild(document.createElement("i"));
+    });
+    rail.appendChild(half);rail.appendChild(half.cloneNode(true));
+  })();
+
+  function typeset(text){
+    var parts=text.split("|"),frag=document.createDocumentFragment(),n=0;
+    parts.forEach(function(chunk,ci){
+      if(!chunk)return;
+      var lit=ci%2===1;
+      chunk.split(/\s+/).forEach(function(tok){
+        if(tok==="")return;
+        var w=document.createElement("w");
+        if(lit){var m=document.createElement("mark");m.textContent=tok+" ";w.appendChild(m);}
+        else{w.textContent=tok+" ";}
+        w.className="set";w.style.animationDelay=(n*16)+"ms";
+        frag.appendChild(w);n++;
+      });
+    });
+    specEl.classList.remove("lift");
+    specEl.innerHTML="";specEl.appendChild(frag);
+  }
+
+  /* catalogue number rolls like a counter — the collection is meant to grow */
+  function rollNumber(target){
+    clearInterval(roll);
+    var want=String(target).padStart(3,"0");
+    if(calm){noEl.textContent=want;return;}
+    var f=0;
+    roll=setInterval(function(){
+      f++;
+      var out="";
+      for(var i=0;i<3;i++){
+        out += (i < f-2) ? want[i] : String((Math.random()*10)|0);
+      }
+      noEl.textContent=out;
+      if(f>5){clearInterval(roll);noEl.textContent=want;}
+    },40);
+  }
+
+  function runTick(){
+    tickEl.style.transition="none";tickEl.style.width="0%";
+    void tickEl.offsetWidth;
+    tickEl.style.transition="width "+DWELL+"ms linear";
+    tickEl.style.width="100%";
+  }
+
+  function show(i,first){
+    idx=(i+SPECIMENS.length)%SPECIMENS.length;
+    var s=SPECIMENS[idx];
+
+    function apply(){
+      typeset(s.text);
+      mechEl.textContent=s.mech;
+      glossEl.textContent=s.gloss;
+      rollNumber(idx+1);
+      catEl.textContent="Catalogue · "+SPECIMENS.length+" entries";
+      runTick();schedule();
+    }
+
+    if(first||calm){apply();return;}
+    specEl.classList.add("lift");
+    setTimeout(apply,260);
+  }
+
+  function schedule(){clearTimeout(timer);if(!dead)timer=setTimeout(function(){show(idx+1);},DWELL);}
+
+  document.getElementById("next").addEventListener("click",function(){show(idx+1);});
+  document.getElementById("prev").addEventListener("click",function(){show(idx-1);});
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    var v=mail.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      fineEl.textContent="That does not look like an email address.";
+      fineEl.classList.add("err");mail.focus();return;
+    }
+    fineEl.classList.remove("err");
+    dead=true;clearTimeout(timer);clearInterval(roll);mail.blur();
+    tickEl.style.transition="none";tickEl.style.width="0";
+    root.classList.add("gone");
+  });
+
+  mail.addEventListener("input",function(){
+    if(fineEl.classList.contains("err")){
+      fineEl.classList.remove("err");
+      fineEl.textContent="This page disappears once you enter your email.";
+    }
+  });
+
+  document.getElementById("replay").addEventListener("click",function(){
+    root.classList.remove("gone");
+    mail.value="";dead=false;
+    show(idx+1,true);
+  });
+
+  show(0,true);
+})();
+</script>
+
+</body>
+</html>

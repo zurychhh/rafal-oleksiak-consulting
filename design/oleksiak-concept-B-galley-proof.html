@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Galley Proof</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+  :root{
+    --stock:#F7F8FA;
+    --stock-edge:#EDEFF3;
+    --ink:#14161C;
+    --ink-soft:#6B7180;
+    --ink-faint:#9AA0AC;
+    --red:#E11D2E;
+    --red-wash:rgba(225,29,46,.11);
+    --rule:#D6DAE2;
+    --serif:"Newsreader",Georgia,"Times New Roman",serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--stock);
+    color:var(--ink);
+    font-family:var(--mono);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* registration marks — this is a sheet on a lightbox, not a web page */
+  .crop{position:fixed;width:15px;height:15px;z-index:4;pointer-events:none;}
+  .crop::before,.crop::after{content:"";position:absolute;background:var(--rule);}
+  .crop::before{width:15px;height:1px;top:0;left:0;}
+  .crop::after{width:1px;height:15px;top:0;left:0;}
+  .crop.tl{top:13px;left:13px;}
+  .crop.tr{top:13px;right:13px;transform:scaleX(-1);}
+  .crop.bl{bottom:13px;left:13px;transform:scaleY(-1);}
+  .crop.br{bottom:13px;right:13px;transform:scale(-1,-1);}
+
+  .leader{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:visible;}
+  .leader path{fill:none;stroke:var(--red);stroke-width:1.25;stroke-linecap:round;}
+
+  .sheet{position:relative;z-index:2;height:100dvh;min-height:100vh;
+    display:grid;grid-template-rows:auto auto 1fr auto;}
+
+  /* ---------- running head ---------- */
+  .slug{height:31px;display:flex;align-items:center;overflow:hidden;
+    border-bottom:1px solid var(--rule);background:var(--stock);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
+  .rail{display:flex;flex:none;animation:roll 62s linear infinite;}
+  @keyframes roll{to{transform:translate3d(-50%,0,0);}}
+  .rail-half{display:flex;align-items:center;flex:none;}
+  .rail em{font-style:normal;font-size:10px;font-weight:400;letter-spacing:.19em;
+    text-transform:uppercase;color:var(--ink-faint);white-space:nowrap;padding:0 1.1rem;}
+  .rail em.fig{color:var(--ink);font-weight:500;}
+  .rail i{flex:none;width:9px;height:1px;background:var(--rule);}
+
+  /* ---------- masthead ---------- */
+  .masthead{display:flex;flex-direction:column;align-items:center;gap:8px;padding:26px 22px 0;}
+  .masthead h1{margin:0;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.4em;
+    text-transform:uppercase;color:var(--ink);padding-left:.4em;}
+  .masthead p{margin:0;font-family:var(--serif);font-size:14px;font-style:italic;
+    color:var(--ink-soft);text-align:center;max-width:46ch;text-wrap:balance;}
+
+  /* ---------- the set copy ---------- */
+  .stage{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:0 clamp(22px,6vw,56px);gap:clamp(30px,5vh,58px);min-height:0;}
+
+  .copy{margin:0;max-width:21ch;text-align:center;font-family:var(--serif);font-weight:300;
+    font-size:clamp(30px,3.9vw + .6rem,64px);line-height:1.13;letter-spacing:-.014em;
+    text-wrap:balance;}
+  @media (max-width:760px){.copy{max-width:16ch;}}
+  .copy w{display:inline-block;white-space:pre;will-change:transform,opacity;}
+  .copy mark{background:var(--red-wash);color:var(--ink);
+    box-shadow:inset 0 -1.5px 0 var(--red);padding:0 .02em;}
+  .copy w.set{animation:setType .40s cubic-bezier(.2,.8,.3,1) both;}
+  @keyframes setType{from{opacity:0;transform:translate3d(0,.16em,0);}to{opacity:1;transform:none;}}
+
+  /* strike sweep used when the proof is replaced */
+  .strike{position:absolute;left:0;top:50%;height:2px;width:0;background:var(--red);
+    transform:translateY(-50%);pointer-events:none;}
+  .copywrap{position:relative;display:flex;justify-content:center;width:100%;}
+  .copywrap.striking .strike{animation:sweep .30s linear forwards;}
+  @keyframes sweep{0%{width:0;opacity:1;}70%{width:100%;opacity:1;}100%{width:100%;opacity:0;}}
+
+  /* ---------- fill-in line ---------- */
+  .capture{width:min(540px,100%);display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .field{width:100%;display:flex;align-items:center;gap:14px;
+    border-bottom:1.5px solid var(--ink);padding:0 2px 10px;
+    transition:border-color .25s ease;}
+  .field:focus-within{border-color:var(--red);}
+  .field label{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);
+    flex:none;}
+  .field input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--ink);
+    font-family:var(--serif);font-size:20px;height:34px;letter-spacing:.005em;}
+  .field input::placeholder{color:var(--ink-faint);font-style:italic;}
+  .go{flex:none;width:38px;height:38px;border:1.5px solid var(--ink);border-radius:0;
+    background:transparent;color:var(--ink);cursor:pointer;display:grid;place-items:center;
+    transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease;}
+  .go:hover{background:var(--red);border-color:var(--red);color:#fff;transform:translateX(2px);}
+  .go svg{width:17px;height:17px;}
+
+  .fineprint{font-size:10.5px;letter-spacing:.13em;color:var(--ink-soft);text-align:center;}
+  .fineprint.err{color:var(--red);}
+
+  /* ---------- margin note ---------- */
+  .note{position:relative;min-height:11dvh;background:var(--stock-edge);
+    border-top:1px solid var(--rule);
+    padding:15px clamp(18px,4vw,42px) 17px;
+    display:flex;align-items:center;gap:clamp(14px,2.6vw,28px);}
+  .num{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--red);
+    color:var(--red);display:grid;place-items:center;font-size:11px;font-weight:500;
+    font-variant-numeric:tabular-nums;}
+  .noteBody{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+  .mech{font-size:10px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--red);}
+  .gloss{font-family:var(--serif);font-style:italic;font-size:clamp(13px,1.25vw,16px);
+    line-height:1.42;color:var(--ink);max-width:78ch;}
+  .stamp{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:7px;}
+  .stamp b{font-size:9.5px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-faint);font-variant-numeric:tabular-nums;}
+  .step{display:flex;gap:6px;}
+  .step button{width:26px;height:26px;border:1px solid var(--rule);background:transparent;
+    color:var(--ink-soft);cursor:pointer;font-family:var(--mono);font-size:11px;line-height:1;
+    transition:color .18s ease,border-color .18s ease;}
+  .step button:hover{color:var(--red);border-color:var(--red);}
+  .meter{position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--red);opacity:.5;}
+
+  @media (max-width:820px){
+    .leader{display:none;}
+    .gloss{font-size:12.5px;}
+  }
+  @media (max-width:600px){
+    .stamp b{display:none;}
+    .masthead p{font-size:12.5px;}
+    .note{gap:12px;padding-top:12px;padding-bottom:14px;}
+  }
+
+  /* ---------- the sheet is pulled ---------- */
+  .pull{position:fixed;inset:0;z-index:10;pointer-events:none;display:none;}
+  .pull.on{display:block;}
+  .pull i{position:absolute;left:0;top:50%;height:2.5px;width:0;background:var(--red);}
+  .pull.on i{animation:cross .42s .05s linear forwards;}
+  @keyframes cross{to{width:100%;}}
+  .pull.on ~ .sheet,.pull.on ~ .crop,.pull.on ~ .leader{animation:blank .5s .40s ease forwards;}
+  @keyframes blank{to{opacity:0;}}
+
+  .final{position:fixed;inset:0;z-index:11;display:none;place-items:center;
+    background:var(--stock);padding:0 26px;text-align:center;}
+  .final.on{display:grid;animation:reveal .5s .9s ease both;}
+  @keyframes reveal{from{opacity:0;}to{opacity:1;}}
+  .finalInner{max-width:30ch;display:flex;flex-direction:column;gap:16px;align-items:center;}
+  .finalInner h2{margin:0;font-family:var(--serif);font-weight:300;letter-spacing:-.016em;
+    font-size:clamp(28px,3.4vw + .5rem,50px);line-height:1.12;text-wrap:balance;}
+  .finalInner h2 mark{background:var(--red-wash);color:var(--ink);
+    box-shadow:inset 0 -1.5px 0 var(--red);}
+  .finalInner p{margin:0;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-soft);}
+  .replay{margin-top:4px;background:none;border:0;border-bottom:1px solid var(--rule);
+    padding:0 0 2px;color:var(--ink-faint);cursor:pointer;font-family:var(--mono);
+    font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;transition:color .2s ease;}
+  .replay:hover{color:var(--red);}
+
+  :focus-visible{outline:2px solid var(--red);outline-offset:3px;}
+
+  @media (prefers-reduced-motion:reduce){
+    .rail,.copy w.set,.copywrap.striking .strike,.pull.on i{animation:none !important;}
+    .copy w.set{opacity:1;transform:none;}
+    .leader path{stroke-dasharray:none !important;stroke-dashoffset:0 !important;}
+    .final.on{animation-delay:.1s;}
+  }
+</style>
+</head>
+<body>
+
+
+<i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+<svg class="leader" id="leader" aria-hidden="true"><path id="lead"></path></svg>
+
+<div class="pull" id="pull"><i></i></div>
+
+<div class="sheet" id="sheet">
+
+  <div class="slug"><div class="rail" id="rail"></div></div>
+
+  <div class="masthead">
+    <h1>Oleksiak Consulting</h1>
+    <p>Traffic quality, conversion and retention for ecommerce and retail.</p>
+  </div>
+
+  <main class="stage">
+    <div class="copywrap" id="copywrap">
+      <span class="strike"></span>
+      <p class="copy" id="copy"></p>
+    </div>
+
+    <form class="capture" id="form" novalidate>
+      <div class="field">
+        <label for="mail">Email</label>
+        <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+               placeholder="you@company.com">
+        <button class="go" type="submit" aria-label="Send my address">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h13M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+      </div>
+      <p class="fineprint" id="fine">This page disappears once you enter your email.</p>
+    </form>
+  </main>
+
+  <div class="note" id="note">
+    <div class="num" id="num">1</div>
+    <div class="noteBody">
+      <div class="mech" id="mech"></div>
+      <div class="gloss" id="gloss"></div>
+    </div>
+    <div class="stamp">
+      <b id="stampTxt">Proof 1 of 7 · Rev A</b>
+      <div class="step">
+        <button type="button" id="prev" aria-label="Previous proof">&larr;</button>
+        <button type="button" id="next" aria-label="Next proof">&rarr;</button>
+      </div>
+    </div>
+    <span class="meter" id="meter"></span>
+  </div>
+
+</div>
+
+<div class="final" id="final">
+  <div class="finalInner">
+    <h2>The rest happens <mark>over email.</mark></h2>
+    <p>I reply personally — usually within a day</p>
+    <button class="replay" id="replay" type="button">Run the demo again</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var PROOFS = [
+    { copy:"This page deletes itself the moment you type your address. |Not because something broke.|",
+      mech:"Curiosity gap",
+      gloss:"The sentence stops one beat before the answer, so you finish it yourself. It is the same break I put in subject lines — on a decent list it moves open rate by about a fifth." },
+    { copy:"I raise traffic quality, conversion and retention in ecommerce and retail. Fifteen years of practice, plus AI that cuts time-to-market |from quarters to weeks.|",
+      mech:"Rationale",
+      gloss:"Claim, credential, mechanism — in that order. Reverse it and the same three facts read as bragging. Order is doing more work here than the words are." },
+    { copy:"While you read this sentence, a dozen people landed on your site and left. |None of them will come back on their own.|",
+      mech:"Loss aversion",
+      gloss:"People work roughly twice as hard to avoid a loss as to chase an equivalent gain. So I frame the gap as leakage you already own, not upside you might buy." },
+    { copy:"From |0.5% to 12%| of total revenue. Eighteen months, one team. That is not a projection — it already happened.",
+      mech:"Specificity",
+      gloss:"An uneven number reads as measured; a round one reads as invented. It is why you will never see me write “up to 3x” on a slide." },
+    { copy:"No menu. No pricing page. No nine-field form. |One field and one promise.|",
+      mech:"Pattern interrupt",
+      gloss:"Every element I removed is one decision you no longer have to make. Cutting a form from nine fields to one is still the cheapest conversion win available to most teams." },
+    { copy:"Allegro. Booksy. mBank. Accenture. All of them had traffic. |The problem started right after that.|",
+      mech:"Authority transfer",
+      gloss:"Names first, claim second. The reader lends the claim whatever credibility they already granted the names — which is why the order is never negotiable." },
+    { copy:"An agency will scope this in three months and forty slides. I will answer tomorrow morning |in one paragraph.|",
+      mech:"Anchoring",
+      gloss:"I set the expensive reference point before I place myself against it. The contrast does the pricing work, so the price never has to." }
+  ];
+
+  var SLUG = [
+    {t:"Allegro"},{t:"0.5% → 12% of revenue",f:1},{t:"CRM 2.0"},
+    {t:"Booksy"},{t:"+102% YoY",f:1},{t:"Marketing automation"},
+    {t:"mBank"},{t:"€2M budget managed",f:1},{t:"Conversion optimisation"},
+    {t:"Accenture"},{t:"Team of 15 built",f:1},{t:"Lifecycle & retention"},
+    {t:"Mall"},{t:"+34% YoY",f:1},{t:"Traffic quality"},
+    {t:"Travelist"},{t:"30% efficiency gain",f:1},{t:"AI in ecommerce"},
+    {t:"LABA"},{t:"15 years in practice",f:1},{t:"Collegium Da Vinci"}
+  ];
+
+  var DWELL = 8200;
+
+  var copyEl=document.getElementById("copy"),
+      wrapEl=document.getElementById("copywrap"),
+      mechEl=document.getElementById("mech"),
+      glossEl=document.getElementById("gloss"),
+      numEl=document.getElementById("num"),
+      stampEl=document.getElementById("stampTxt"),
+      meterEl=document.getElementById("meter"),
+      fineEl=document.getElementById("fine"),
+      leadEl=document.getElementById("lead"),
+      sheet=document.getElementById("sheet"),
+      pull=document.getElementById("pull"),
+      final=document.getElementById("final"),
+      form=document.getElementById("form"),
+      mail=document.getElementById("mail");
+
+  var calm=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var idx=0, timer=null, dead=false;
+
+  (function(){
+    var rail=document.getElementById("rail"), half=document.createElement("div");
+    half.className="rail-half";
+    SLUG.forEach(function(it){
+      var e=document.createElement("em"); e.textContent=it.t; if(it.f) e.className="fig";
+      half.appendChild(e); half.appendChild(document.createElement("i"));
+    });
+    rail.appendChild(half); rail.appendChild(half.cloneNode(true));
+  })();
+
+  function set(text){
+    var parts=text.split("|"), frag=document.createDocumentFragment(), n=0;
+    parts.forEach(function(chunk,ci){
+      if(!chunk) return;
+      var lit=ci%2===1;
+      chunk.split(/\s+/).forEach(function(tok){
+        if(tok==="") return;
+        var w=document.createElement("w");
+        if(lit){ var m=document.createElement("mark"); m.textContent=tok+" "; w.appendChild(m); }
+        else { w.textContent=tok+" "; }
+        w.className="set"; w.style.animationDelay=(n*17)+"ms";
+        frag.appendChild(w); n++;
+      });
+    });
+    copyEl.innerHTML=""; copyEl.appendChild(frag);
+  }
+
+  function drawLeader(){
+    var marks=copyEl.querySelectorAll("mark");
+    if(!marks.length || window.innerWidth<=820){ leadEl.setAttribute("d",""); return; }
+    var a=marks[marks.length-1].getBoundingClientRect();
+    var b=numEl.getBoundingClientRect();
+    var x1=a.right-6, y1=a.bottom+2;
+    var x2=b.left+b.width/2, y2=b.top-6;
+    if(y2-y1<40){ leadEl.setAttribute("d",""); return; }
+    var d="M"+x1+","+y1+" L"+x1+","+(y1+22)+" L"+x2+","+y2;
+    leadEl.setAttribute("d",d);
+    var len=leadEl.getTotalLength();
+    leadEl.style.transition="none";
+    leadEl.style.strokeDasharray=len; leadEl.style.strokeDashoffset=len;
+    void leadEl.getBoundingClientRect();
+    leadEl.style.transition="stroke-dashoffset .55s cubic-bezier(.3,.8,.3,1)";
+    leadEl.style.strokeDashoffset=0;
+  }
+
+  function runMeter(){
+    meterEl.style.transition="none"; meterEl.style.width="0%";
+    void meterEl.offsetWidth;
+    meterEl.style.transition="width "+DWELL+"ms linear";
+    meterEl.style.width="100%";
+  }
+
+  function show(i, first){
+    idx=(i+PROOFS.length)%PROOFS.length;
+    var p=PROOFS[idx];
+
+    function apply(){
+      set(p.copy);
+      mechEl.textContent=p.mech;
+      glossEl.textContent=p.gloss;
+      numEl.textContent=String(idx+1);
+      stampEl.textContent="Proof "+(idx+1)+" of "+PROOFS.length+" · Rev A";
+      setTimeout(drawLeader, calm?0:420);
+      runMeter(); schedule();
+    }
+
+    if(first||calm){ apply(); return; }
+    leadEl.setAttribute("d","");
+    wrapEl.classList.add("striking");
+    setTimeout(function(){ wrapEl.classList.remove("striking"); apply(); }, 300);
+  }
+
+  function schedule(){ clearTimeout(timer); if(!dead) timer=setTimeout(function(){ show(idx+1); }, DWELL); }
+
+  document.getElementById("next").addEventListener("click",function(){ show(idx+1); });
+  document.getElementById("prev").addEventListener("click",function(){ show(idx-1); });
+
+  var rt=null;
+  window.addEventListener("resize",function(){ clearTimeout(rt); rt=setTimeout(drawLeader,140); });
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    var v=mail.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      fineEl.textContent="That does not look like an email address.";
+      fineEl.classList.add("err"); mail.focus(); return;
+    }
+    fineEl.classList.remove("err");
+    dead=true; clearTimeout(timer); mail.blur();
+    leadEl.setAttribute("d","");
+    pull.classList.add("on");
+    setTimeout(function(){
+      sheet.style.visibility="hidden";
+      final.classList.add("on");
+    }, calm?250:820);
+  });
+
+  mail.addEventListener("input",function(){
+    if(fineEl.classList.contains("err")){
+      fineEl.classList.remove("err");
+      fineEl.textContent="This page disappears once you enter your email.";
+    }
+  });
+
+  document.getElementById("replay").addEventListener("click",function(){
+    final.classList.remove("on");
+    pull.classList.remove("on");
+    sheet.style.visibility="";
+    mail.value=""; dead=false;
+    show(idx+1,true);
+  });
+
+  show(0,true);
+})();
+</script>
+
+</body>
+</html>

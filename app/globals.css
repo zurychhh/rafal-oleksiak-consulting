@@ -780,3 +780,17 @@ section[id] {
     padding: 16px 32px;
   }
 }
+
+/* ============================================
+   THE AUDIT — zmienne strony głównej.
+   Trzymane globalnie, nie w module: var(--acc) musi działać
+   także w pseudoelementach i w SVG. Wartości przeniesione
+   dosłownie z design/production/index.html — nie zmieniaj ich tutaj.
+   Reszta arkusza tej strony siedzi w app/audit.css.
+   ============================================ */
+:root{
+  --bg:#0D0F14; --panel:#12151C; --fg:#E9E7E1; --dim:#9BA0AD; --line:#242938;
+  --acc:#FF6A1F; --ok:#4DD0A7;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+}

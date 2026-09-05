@@ -44,9 +44,12 @@ export default function CookieConsent() {
     const w = window as any
     w.dataLayer = w.dataLayer || []
     if (typeof w.gtag !== 'function') {
-      w.gtag = function () {
-        w.dataLayer.push(arguments)
-      }
+      // Musi zostać `arguments`, nie rest params: gtag rozpoznaje komendy po
+      // tym, że do dataLayer trafił obiekt Arguments. Zwykła tablica zostanie
+      // zignorowana i zgoda nigdy się nie zaktualizuje. Ten sam shim co
+      // w ConsentMode.tsx.
+      // eslint-disable-next-line prefer-rest-params
+      w.gtag = function () { w.dataLayer.push(arguments) }
     }
 
     const state = granted ? 'granted' : 'denied'

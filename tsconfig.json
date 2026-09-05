@@ -38,6 +38,7 @@
   "exclude": [
     "node_modules",
     "api",
+    "design",
     "app/lib/lama/pro",
     "app/api/pdf-generator",
     "app/HomeClient.tsx",

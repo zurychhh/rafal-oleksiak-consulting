@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAMA Audit — simpleasdata.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --moonlit: #2D3142;
+    --moonlit-light: #3a3f56;
+    --purple: #7B2CBF;
+    --purple-light: #9D4EDD;
+    --blue: #0066FF;
+    --cyan: #00BFFF;
+    --white: #FFFFFF;
+    --lavender: #E8E3F7;
+    --red: #FF4757;
+    --green: #2ECC71;
+    --yellow: #F1C40F;
+    --gradient: linear-gradient(135deg, #7B2CBF 0%, #0066FF 100%);
+    --gradient-light: linear-gradient(135deg, #9D4EDD 0%, #00BFFF 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--moonlit);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* Slide system */
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(48px, 6vw, 100px) clamp(24px, 5vw, 120px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(123,44,191,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .slide::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0,102,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .slide-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Divider */
+  .slide + .slide {
+    border-top: 1px solid rgba(123,44,191,0.2);
+  }
+
+  /* Typography */
+  .gradient-text {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 16px;
+  }
+
+  .slide-title {
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(16px, 1.5vw, 20px);
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    max-width: 700px;
+  }
+
+  /* Score ring */
+  .score-ring {
+    width: 220px;
+    height: 220px;
+    position: relative;
+    margin: 0 auto;
+  }
+
+  .score-ring svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+  }
+
+  .score-ring .bg {
+    fill: none;
+    stroke: rgba(255,255,255,0.08);
+    stroke-width: 10;
+  }
+
+  .score-ring .fg {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s ease-out;
+  }
+
+  .score-ring .score-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .score-ring .score-number {
+    font-family: 'Poppins', sans-serif;
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .score-ring .score-max {
+    font-size: 16px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
+  }
+
+  /* Category bars */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .cat-bar {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cat-bar:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(123,44,191,0.15);
+  }
+
+  .cat-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .cat-bar-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+  }
+
+  .cat-bar-score {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+  }
+
+  .cat-bar-question {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 12px;
+  }
+
+  .cat-bar-track {
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .cat-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1.2s ease-out;
+  }
+
+  .cat-bar-weight {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 8px;
+    text-align: right;
+  }
+
+  /* Issue cards */
+  .issues-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .issue-card {
+    display: flex;
+    gap: 16px;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    border-left: 4px solid;
+    transition: background 0.2s ease;
+  }
+
+  .issue-card:hover {
+    background: rgba(255,255,255,0.06);
+  }
+
+  .issue-card.critical { border-left-color: var(--red); }
+  .issue-card.warning { border-left-color: var(--yellow); }
+  .issue-card.info { border-left-color: var(--cyan); }
+
+  .issue-badge {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    height: fit-content;
+    flex-shrink: 0;
+  }
+
+  .issue-badge.critical { background: rgba(255,71,87,0.15); color: var(--red); }
+  .issue-badge.warning { background: rgba(241,196,15,0.15); color: var(--yellow); }
+  .issue-badge.info { background: rgba(0,191,255,0.15); color: var(--cyan); }
+
+  .issue-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+
+  .issue-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+
+  .issue-impact {
+    font-size: 13px;
+    color: rgba(255,71,87,0.8);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* Recommendation pills */
+  .rec-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .rec-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(123,44,191,0.08);
+    border: 1px solid rgba(123,44,191,0.15);
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .rec-item strong {
+    color: var(--white);
+    font-weight: 700;
+  }
+
+  .rec-arrow {
+    color: var(--cyan);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Metric table */
+  .metric-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+  }
+
+  .metric-table th {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .metric-table td {
+    padding: 16px;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+  }
+
+  .metric-table tr:hover td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .metric-value {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  .metric-good { color: var(--green); }
+  .metric-warn { color: var(--yellow); }
+  .metric-bad { color: var(--red); }
+
+  .metric-target {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* Section score header */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  .section-score-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .section-score-circle::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: var(--gradient);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* Priority list */
+  .priority-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 40px;
+    counter-reset: priority;
+  }
+
+  .priority-item {
+    counter-increment: priority;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 28px 32px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .priority-item:hover {
+    transform: translateX(8px);
+    border-color: rgba(123,44,191,0.3);
+  }
+
+  .priority-num {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 36px;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 48px;
+  }
+
+  .priority-content h4 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .priority-content p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+
+  .priority-impact {
+    margin-top: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 24px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .stat-number {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* Footer bar */
+  .footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px clamp(24px, 5vw, 120px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .footer-bar a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+
+  /* CTA button */
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 40px;
+    background: var(--gradient);
+    color: var(--white);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(123,44,191,0.35);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 32px;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(123,44,191,0.55);
+  }
+
+  /* Two column layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+    .category-grid {
+      grid-template-columns: 1fr;
+    }
+    .stats-row {
+      gap: 16px;
+    }
+    .stat-box {
+      min-width: 100px;
+    }
+    .section-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  /* Print */
+  @media print {
+    .slide {
+      min-height: auto;
+      page-break-after: always;
+      padding: 40px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: COVER -->
+<section class="slide" style="justify-content: center; align-items: center; text-align: center;">
+  <div class="slide-content" style="display: flex; flex-direction: column; align-items: center;">
+    <div class="slide-label">LAMA Website Audit</div>
+    <h1 class="slide-title" style="max-width: 900px;">
+      Audyt strony<br><span class="gradient-text">simpleasdata.com</span>
+    </h1>
+    <p class="slide-subtitle" style="margin: 0 auto 48px; text-align: center;">
+      Lead Acquisition Maturity Agent &mdash; 6 kategorii, 17 zidentyfikowanych problemow, konkretne rekomendacje do wdrozenia.
+    </p>
+
+    <div class="score-ring">
+      <svg viewBox="0 0 120 120">
+        <circle class="bg" cx="60" cy="60" r="52"/>
+        <circle class="fg" cx="60" cy="60" r="52"
+          stroke="url(#grad1)"
+          stroke-dasharray="326.7"
+          stroke-dashoffset="167.6"/>
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7B2CBF"/>
+            <stop offset="100%" stop-color="#0066FF"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="score-value">
+        <div class="score-number gradient-text">49</div>
+        <div class="score-max">/ 100</div>
+      </div>
+    </div>
+
+    <div class="stats-row" style="margin-top: 56px;">
+      <div class="stat-box">
+        <div class="stat-number" style="color: var(--red);">3</div>
+        <div class="stat-label">Critical</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" style="color: var(--yellow);">9</div>
+        <div class="stat-label">Warning</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" style="color: var(--cyan);">5</div>
+        <div class="stat-label">Info</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number gradient-text">6</div>
+        <div class="stat-label">Kategorii</div>
+      </div>
+    </div>
+
+    <p style="margin-top: 48px; font-size: 13px; color: rgba(255,255,255,0.3);">
+      24 lutego 2026 &middot; Oleksiak Consulting
+    </p>
+  </div>
+</section>
+
+<!-- SLIDE 2: OVERVIEW -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-label">Przeglad wynikow</div>
+    <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px);">
+      Wyniki w 6 <span class="gradient-text">kategoriach LAMA</span>
+    </h2>
+    <p class="slide-subtitle">
+      Kazda kategoria odpowiada na jedno kluczowe pytanie, ktore zadaje sobie Twoj potencjalny klient odwiedzajac strone.
+    </p>
+
+    <div class="category-grid">
+      <!-- Find -->
+      <div class="cat-bar">
+        <div class="cat-bar-header">
+          <span class="cat-bar-name">FIND</span>
+          <span class="cat-bar-score" style="color: var(--yellow);">55</span>
+        </div>
+        <div class="cat-bar-question">Czy ludzie znajda moja strone?</div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width: 55%; background: var(--gradient);"></div>
+        </div>
+        <div class="cat-bar-weight">waga: 20%</div>
+      </div>
+
+      <!-- Stay -->
+      <div class="cat-bar">
+        <div class="cat-bar-header">
+          <span class="cat-bar-name">STAY</span>
+          <span class="cat-bar-score" style="color: var(--green);">77</span>
+        </div>
+        <div class="cat-bar-question">Czy ludzie zostana na mojej stronie?</div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width: 77%; background: var(--gradient);"></div>
+        </div>
+        <div class="cat-bar-weight">waga: 20%</div>
+      </div>
+
+      <!-- Understand -->
+      <div class="cat-bar">
+        <div class="cat-bar-header">
+          <span class="cat-bar-name">UNDERSTAND</span>
+          <span class="cat-bar-score" style="color: var(--yellow);">62</span>
+        </div>
+        <div class="cat-bar-question">Czy ludzie zrozumieja co oferuje?</div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width: 62%; background: var(--gradient);"></div>
+        </div>
+        <div class="cat-bar-weight">waga: 20%</div>
+      </div>
+
+      <!-- Trust -->
+      <div class="cat-bar">
+        <div class="cat-bar-header">
+          <span class="cat-bar-name">TRUST</span>
+          <span class="cat-bar-score" style="color: var(--yellow);">70</span>
+        </div>
+        <div class="cat-bar-question">Czy ludzie zaufaja mojej firmie?</div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width: 70%; background: var(--gradient);"></div>
+        </div>
+        <div class="cat-bar-weight">waga: 15%</div>
+      </div>
+
+      <!-- Convert -->
+      <div class="cat-bar">
+        <div class="cat-bar-header">
+          <span class="cat-bar-name">CONVERT</span>
+          <span class="cat-bar-score" style="color: var(--red);">35</span>
+        </div>
+        <div class="cat-bar-question">Czy ludzie stana sie klientami?</div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width: 35%; background: linear-gradient(135deg, #FF4757, #FF6B81);"></div>
+        </div>
+        <div class="cat-bar-weight">waga: 15%</div>
+      </div>
+
+      <!-- Engage -->
+      <div class="cat-bar">
+        <div class="cat-bar-header">
+          <span class="cat-bar-name">ENGAGE</span>
+          <span class="cat-bar-score" style="color: var(--red);">15</span>
+        </div>
+        <div class="cat-bar-question">Jak dojrzaly jest moj CRM i marketing?</div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width: 15%; background: linear-gradient(135deg, #FF4757, #FF6B81);"></div>
+        </div>
+        <div class="cat-bar-weight">waga: 10%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: FIND -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="section-header">
+      <div class="section-score-circle" style="color: var(--yellow);">55</div>
+      <div>
+        <div class="slide-label">Kategoria 1 / 6</div>
+        <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px); margin-bottom: 8px;">
+          FIND <span style="color: rgba(255,255,255,0.3); font-weight: 400;">&mdash; SEO</span>
+        </h2>
+        <p class="slide-subtitle" style="margin: 0;">Czy ludzie znajda Twoja strone w Google?</p>
+      </div>
+    </div>
+
+    <div class="issues-list">
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Meta title pusty (0 znakow)</div>
+          <div class="issue-desc">Tag &lt;title&gt; jest pusty. Rekomendowana dlugosc to 50-60 znakow.</div>
+          <div class="issue-impact">-20% CTR w wynikach wyszukiwania</div>
+        </div>
+      </div>
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Brak meta description</div>
+          <div class="issue-desc">Nie znaleziono meta opisu. Google wygeneruje automatyczny snippet (zwykle slabej jakosci).</div>
+          <div class="issue-impact">-25% CTR w wynikach wyszukiwania</div>
+        </div>
+      </div>
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Brak sitemap.xml</div>
+          <div class="issue-desc">Nie znaleziono mapy strony XML. Sitemap pomaga wyszukiwarkom odkrywac wszystkie podstrony.</div>
+          <div class="issue-impact">Wolniejsze indeksowanie nowych stron (2-4 tygodnie opoznienia)</div>
+        </div>
+      </div>
+      <div class="issue-card info">
+        <span class="issue-badge info">Info</span>
+        <div>
+          <div class="issue-title">Brak robots.txt</div>
+          <div class="issue-desc">Nie znaleziono pliku robots.txt. Nie jest krytyczny, ale zalecany.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-list">
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Dodaj unikalne &lt;title&gt; 50-60 znakow</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Bez tytulu Google nie wie co wyswietlic &mdash; tracisz klikniecia od ludzi szukajacych &bdquo;szkolenie wizualizacja danych&rdquo;. Wystarczy dodac jeden tag w &lt;head&gt;, efekt w wyszukiwarce w kilka dni.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Napisz meta description 150-160 znakow</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">To Twoja &bdquo;reklama&rdquo; w wynikach Google &mdash; bez niej wyszukiwarka wyrwie losowy fragment strony. Napisz jedno zdanie o korzyściach i dodaj jako meta tag obok title.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Stworz i zglos sitemap.xml do Google Search Console</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Mapa strony przyspiesza indeksowanie nowych podstron z tygodni do dni. Wygeneruj darmowo na xml-sitemaps.com i zglos w Search Console &mdash; 15 minut.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Dodaj plik robots.txt</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Daje Ci kontrole nad tym, co Google indeksuje a co pomija. Stwórz plik tekstowy z dwiema liniami (User-agent/Allow) i wrzuc do glownego katalogu &mdash; 5 minut.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: STAY -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="section-header">
+      <div class="section-score-circle" style="color: var(--green);">77</div>
+      <div>
+        <div class="slide-label">Kategoria 2 / 6</div>
+        <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px); margin-bottom: 8px;">
+          STAY <span style="color: rgba(255,255,255,0.3); font-weight: 400;">&mdash; Performance</span>
+        </h2>
+        <p class="slide-subtitle" style="margin: 0;">Czy ludzie zostana na Twojej stronie?</p>
+      </div>
+    </div>
+
+    <table class="metric-table">
+      <thead>
+        <tr>
+          <th>Metryka</th>
+          <th>Mobile</th>
+          <th>Desktop</th>
+          <th>Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PageSpeed Score</td>
+          <td><span class="metric-value metric-warn">61</span></td>
+          <td><span class="metric-value metric-good">92</span></td>
+          <td><span class="metric-target">90+</span></td>
+        </tr>
+        <tr>
+          <td>LCP (Largest Contentful Paint)</td>
+          <td><span class="metric-value metric-bad">9.2s</span></td>
+          <td><span class="metric-value metric-good">1.6s</span></td>
+          <td><span class="metric-target">&lt; 2.5s</span></td>
+        </tr>
+        <tr>
+          <td>FCP (First Contentful Paint)</td>
+          <td><span class="metric-value metric-bad">4.5s</span></td>
+          <td><span class="metric-value metric-good">1.0s</span></td>
+          <td><span class="metric-target">&lt; 1.8s</span></td>
+        </tr>
+        <tr>
+          <td>CLS (Cumulative Layout Shift)</td>
+          <td><span class="metric-value metric-good">0</span></td>
+          <td><span class="metric-value metric-good">~0</span></td>
+          <td><span class="metric-target">&lt; 0.1</span></td>
+        </tr>
+        <tr>
+          <td>TBT (Total Blocking Time)</td>
+          <td><span class="metric-value metric-good">0ms</span></td>
+          <td><span class="metric-value metric-good">0ms</span></td>
+          <td><span class="metric-target">&lt; 200ms</span></td>
+        </tr>
+        <tr>
+          <td>Speed Index</td>
+          <td><span class="metric-value metric-bad">6.5s</span></td>
+          <td><span class="metric-value metric-good">1.1s</span></td>
+          <td><span class="metric-target">&lt; 3.4s</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="issues-list">
+      <div class="issue-card critical">
+        <span class="issue-badge critical">Critical</span>
+        <div>
+          <div class="issue-title">LCP mobile 9.2s &mdash; krytycznie wolne</div>
+          <div class="issue-desc">Glowna tresc laduje sie prawie 4x wolniej niz zalecany target. Desktop wyglada dobrze (1.6s).</div>
+          <div class="issue-impact">32% wyzszy bounce rate przy LCP powyzej 4s</div>
+        </div>
+      </div>
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">FCP mobile 4.5s</div>
+          <div class="issue-desc">Uzytkownik widzi pusty ekran przez ponad 4 sekundy na urzadzeniu mobilnym.</div>
+          <div class="issue-impact">-18% wzrost bounce rate</div>
+        </div>
+      </div>
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Mobile 31 pkt. nizej niz desktop</div>
+          <div class="issue-desc">Mobile: 61/100 vs Desktop: 92/100. Ogromna roznica wskazuje na brak optymalizacji mobile.</div>
+          <div class="issue-impact">60% ruchu to mobile &mdash; tracisz potencjalnych klientow</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-list">
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Zoptymalizuj obrazy (WebP, lazy loading)</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Obrazy to glowna przyczyna LCP 9.2s na mobile &mdash; konwersja do WebP zmniejsza rozmiar o 50-70%. Uzyj squoosh.app do konwersji i dodaj atrybut loading=&quot;lazy&quot; do kazdego &lt;img&gt;.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Zredukuj czas odpowiedzi serwera (CDN)</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">CDN serwuje strone z serwera najblizszego uzytkownikowi zamiast z jednej lokalizacji. Cloudflare ma darmowy plan &mdash; podlaczenie domeny to 20 minut konfiguracji DNS.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Zminimalizuj render-blocking resources</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Przegladarka czeka na zaladowanie calego CSS/JS zanim cos pokaze &mdash; stad 4.5s pustego ekranu. Dodaj atrybut defer do skryptow i przenies niekrytyczny CSS na dol strony.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Priorytet: optymalizacja mobile!</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Desktop (92/100) jest swietny, mobile (61/100) traci klientow. HR-owcy przegladaja oferty szkoleniowe na telefonie &mdash; to oni decyduja o zakupie.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: UNDERSTAND -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="section-header">
+      <div class="section-score-circle" style="color: var(--yellow);">62</div>
+      <div>
+        <div class="slide-label">Kategoria 3 / 6</div>
+        <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px); margin-bottom: 8px;">
+          UNDERSTAND <span style="color: rgba(255,255,255,0.3); font-weight: 400;">&mdash; Clarity</span>
+        </h2>
+        <p class="slide-subtitle" style="margin: 0;">Czy ludzie zrozumieja co oferujesz?</p>
+      </div>
+    </div>
+
+    <div class="issues-list">
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Value proposition niejasne</div>
+          <div class="issue-desc">Strona wymienia uslugi, ale nie wyjasnia dlaczego warto wybrac tego dostawce zamiast konkurencji, ani jakie unikalne korzysci oferuje.</div>
+          <div class="issue-impact">60-80% wzrost bounce rate przy braku jasnej propozycji wartosci</div>
+        </div>
+      </div>
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Nawigacja ograniczona do &bdquo;Strona glowna&rdquo;</div>
+          <div class="issue-desc">Tylko jedna pozycja w menu. Brak struktury nawigacyjnej i jasnych sciezek dla uzytkownika.</div>
+          <div class="issue-impact">Myaca nawigacja zwieksza bounce rate o 30%</div>
+        </div>
+      </div>
+      <div class="issue-card info">
+        <span class="issue-badge info">Info</span>
+        <div>
+          <div class="issue-title">Tresc wymaga lepszego formatowania</div>
+          <div class="issue-desc">Struktura dobrze przemyslana, ale geste akapity moglby skorzystac z bullet pointow i czytelniejszego layoutu.</div>
+          <div class="issue-impact">Slaba czytelnosc = 40% nizsze zrozumienie</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-list">
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Dodaj jasna propozycje wartosci above the fold</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Odwiedzajacy w 3 sekundy decyduje czy zostac &mdash; a strona mowi &bdquo;wizualizacja danych&rdquo; zamiast &bdquo;po tym szkoleniu Twoj zespol tworzy raporty, ktore zarzad rozumie od razu&rdquo;. Przepisz H1 tak, zeby mowil o wyniku, nie o usludze.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Rozbuduj nawigacje o 5-7 pozycji menu</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Jedna pozycja &bdquo;Strona glowna&rdquo; nie daje uzytkownikowi sciezki &mdash; nie wie gdzie kliknac dalej. Dodaj: Szkolenia, O mnie, Opinie klientow, Kontakt &mdash; to standard, ktorego ludzie oczekuja.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Rozbij dlugie paragrafy na punkty i podtytuly</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Ludzie skanuja strone zanim przeczytaja &mdash; blok tekstu omijaja wzrokiem. Zamien akapity na bullet pointy z krotkim boldem na poczatku kazdego &mdash; ta sama tresc, 2x lepsze zrozumienie.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6: TRUST -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="section-header">
+      <div class="section-score-circle" style="color: var(--yellow);">70</div>
+      <div>
+        <div class="slide-label">Kategoria 4 / 6</div>
+        <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px); margin-bottom: 8px;">
+          TRUST <span style="color: rgba(255,255,255,0.3); font-weight: 400;">&mdash; Zaufanie</span>
+        </h2>
+        <p class="slide-subtitle" style="margin: 0;">Czy ludzie zaufaja Twojej firmie?</p>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--green);">Co dziala dobrze</h3>
+        <div class="issues-list" style="margin-top: 0;">
+          <div class="issue-card info" style="border-left-color: var(--green);">
+            <div>
+              <div class="issue-title">HTTPS aktywne</div>
+              <div class="issue-desc">Certyfikat SSL poprawnie skonfigurowany.</div>
+            </div>
+          </div>
+          <div class="issue-card info" style="border-left-color: var(--green);">
+            <div>
+              <div class="issue-title">Informacje kontaktowe</div>
+              <div class="issue-desc">Wykryto dane kontaktowe i strona kontaktowa.</div>
+            </div>
+          </div>
+          <div class="issue-card info" style="border-left-color: var(--green);">
+            <div>
+              <div class="issue-title">Social proof obecny</div>
+              <div class="issue-desc">Wykryto elementy budujace zaufanie (klienci/referencje).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--yellow);">Do poprawy</h3>
+        <div class="issues-list" style="margin-top: 0;">
+          <div class="issue-card warning">
+            <span class="issue-badge warning">Warning</span>
+            <div>
+              <div class="issue-title">Brak polityki prywatnosci</div>
+              <div class="issue-desc">Nie wykryto linku do privacy policy. Wymagane przez RODO.</div>
+              <div class="issue-impact">Ryzyko prawne + utrata zaufania uzytkownikow</div>
+            </div>
+          </div>
+          <div class="issue-card info">
+            <span class="issue-badge info">Info</span>
+            <div>
+              <div class="issue-title">Brak certyfikatow i odznak zaufania</div>
+              <div class="issue-desc">Nie wykryto certyfikatow branzy, nagrod, ani trust badges.</div>
+              <div class="issue-impact">Odznaki zaufania zwiekszaja wiarygodnosc o 25%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-list">
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Dodaj polityke prywatnosci</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Dzialy zakupow duzych firm sprawdzaja zgodnosc z RODO przed zleceniem szkolenia &mdash; brak polityki moze zablokowac zamowienie. Wygeneruj za darmo na iubenda.com i dodaj jako podstrone &mdash; 30 minut.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Wyswietl certyfikaty, nagrody, przynaleznosc do organizacji</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">4.87/5.0 sredniej oceny i 12 lat doswiadczenia to potezne argumenty &mdash; ale dzis sa ukryte. Dodaj sekcje z liczbami i logotypami firm, z ktorymi wspolpracowal Pawel, widoczna od razu na stronie.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: CONVERT -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="section-header">
+      <div class="section-score-circle" style="color: var(--red);">35</div>
+      <div>
+        <div class="slide-label">Kategoria 5 / 6</div>
+        <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px); margin-bottom: 8px;">
+          CONVERT <span style="color: rgba(255,255,255,0.3); font-weight: 400;">&mdash; Konwersja</span>
+        </h2>
+        <p class="slide-subtitle" style="margin: 0;">Czy ludzie stana sie klientami?</p>
+      </div>
+    </div>
+
+    <div class="issues-list">
+      <div class="issue-card critical">
+        <span class="issue-badge critical">Critical</span>
+        <div>
+          <div class="issue-title">Brak formularza kontaktowego</div>
+          <div class="issue-desc">Nie wykryto zadnego formularza na stronie. Formularze to narzedzie nr 1 do generowania leadow.</div>
+          <div class="issue-impact">70% utrata konwersji</div>
+        </div>
+      </div>
+      <div class="issue-card critical">
+        <span class="issue-badge critical">Critical</span>
+        <div>
+          <div class="issue-title">Brak linkow mailto: i tel:</div>
+          <div class="issue-desc">Nie znaleziono klikalnych linkow email ani telefonu. Na mobile to kluczowe narzedzie konwersji.</div>
+          <div class="issue-impact">-60% konwersji na urzadzeniach mobilnych</div>
+        </div>
+      </div>
+      <div class="issue-card info">
+        <span class="issue-badge info">Info</span>
+        <div>
+          <div class="issue-title">Zbyt wiele CTA (113 wykrytych)</div>
+          <div class="issue-desc">Paradoks wyboru &mdash; nadmiar przyciskow i linkow akcji moze paralizowac uzytkownika.</div>
+          <div class="issue-impact">-20% konwersji (paradoks wyboru)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-list">
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Natychmiast dodaj formularz kontaktowy above the fold</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Ktos chce zamowic szkolenie za 9 700 PLN ale nie ma jak to zrobic &mdash; to stracony przychod. Embed z Tally.so lub Typeform (darmowe) z 3 polami: imie, email, &bdquo;jaki termin Cie interesuje?&rdquo; &mdash; 30 minut wdrozenia.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Dodaj klikalne linki email (mailto:) i telefon (tel:)</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Na mobile numer +48 504 842 907 wyswietla sie jako zwykly tekst &mdash; uzytkownik musi go recznie przepisywac. Link tel: pozwala zadzwonic jednym tapnieciem, a mailto: &mdash; napisac maila. Zmiana w HTML zajmuje 2 minuty.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Zredukuj liczbe CTA i hierarchicznie je uporzadkuj</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">113 elementow akcji na stronie sprawia, ze zadne nie jest wazne. Wybierz jedno glowne CTA (&bdquo;Zapytaj o termin&rdquo;) i powtorz je 3-4 razy w kluczowych miejscach &mdash; reszta jako linki drugorzedne.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: ENGAGE -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="section-header">
+      <div class="section-score-circle" style="color: var(--red);">15</div>
+      <div>
+        <div class="slide-label">Kategoria 6 / 6</div>
+        <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px); margin-bottom: 8px;">
+          ENGAGE <span style="color: rgba(255,255,255,0.3); font-weight: 400;">&mdash; CRM & Automation</span>
+        </h2>
+        <p class="slide-subtitle" style="margin: 0;">Jak dojrzaly jest Twoj CRM i marketing automation?</p>
+      </div>
+    </div>
+
+    <div class="issues-list">
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Brak platformy email marketingowej</div>
+          <div class="issue-desc">Nie wykryto integracji z Mailchimp, Klaviyo, HubSpot ani innym ESP. Brak formularza zapisu na newsletter.</div>
+          <div class="issue-impact">Email marketing generuje 25-30% przychodu digitalowego B2B</div>
+        </div>
+      </div>
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Niekompletna zgodnosc z RODO</div>
+          <div class="issue-desc">Brak: link do polityki prywatnosci, checkbox zgody na komunikacje marketingowa.</div>
+          <div class="issue-impact">Kary do 20M EUR lub 4% rocznego obrotu</div>
+        </div>
+      </div>
+      <div class="issue-card warning">
+        <span class="issue-badge warning">Warning</span>
+        <div>
+          <div class="issue-title">Brak marketing automation</div>
+          <div class="issue-desc">Nie wykryto CRM, personalizacji ani narzedzi behavioral tracking.</div>
+          <div class="issue-impact">Manualne procesy kosztuja 10-15h/tydzien utraconej produktywnosci</div>
+        </div>
+      </div>
+      <div class="issue-card info">
+        <span class="issue-badge info">Info</span>
+        <div>
+          <div class="issue-title">Brak narzedzi MarTech (0 wykrytych)</div>
+          <div class="issue-desc">Nie wykryto GTM, GA4, Facebook Pixel, LinkedIn Insight ani innych narzedzi.</div>
+          <div class="issue-impact">Konkurencja z 5+ narzedziami konwertuje 2-3x lepiej</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-list">
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Wdroz zarzadzanie zgodami RODO (CookieBot, OneTrust)</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Bez tego nie mozesz legalnie mierzyc ruchu ani remarketingowac &mdash; a bez danych nie wiesz co dziala. CookieBot ma darmowy plan do 100 podstron, wklejasz jeden skrypt w &lt;head&gt; &mdash; 15 minut.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Skonfiguruj email marketing (MailerLite, Mailchimp)</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Po szkoleniu uczestnicy odchodza i zapominaja &mdash; email pozwala utrzymac kontakt i generowac polecenia. MailerLite jest darmowy do 1000 kontaktow, integruje sie z formularzem na stronie &mdash; konfiguracja w 1h.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Zintegruj prosty CRM</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Przy cenach 9-21 tys. PLN za szkolenie kazdy lead jest warty sledzenia &mdash; dzis zapytania prawdopodobnie koncza w skrzynce mailowej. HubSpot CRM (darmowy) automatycznie zbiera kontakty z formularza i przypomina o follow-upie.</span></div></div>
+      <div class="rec-item"><span class="rec-arrow">&rarr;</span> <div><strong>Wdroz Google Tag Manager + GA4</strong><br><span style="color:rgba(255,255,255,0.5); font-size:13px;">Bez analityki nie wiesz skad przchodza klienci ani co robia na stronie &mdash; dzialasz po omacku. GTM + GA4 to dwa darmowe skrypty, wklejenie zajmuje 20 minut, a od razu widzisz ile osob odwiedza strone i skad trafiaja.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 9: TOP 5 PRIORITIES -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-label">Plan dzialania</div>
+    <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px);">
+      Top 5 <span class="gradient-text">priorytetow</span>
+    </h2>
+    <p class="slide-subtitle">
+      Quick wins, ktore przynios najwiekszy zwrot z inwestycji. Uporadkowane wg potencjalnego wplywu na konwersje.
+    </p>
+
+    <div class="priority-grid">
+      <div class="priority-item">
+        <div class="priority-num gradient-text">01</div>
+        <div class="priority-content">
+          <h4>Dodaj formularz kontaktowy + mailto:/tel: linki</h4>
+          <p>Ktos trafia na strone, chce zamowic szkolenie &mdash; ale nie ma jak tego zrobic jednym kliknieciem. Formularz &bdquo;Zapytaj o termin&rdquo; + klikalny numer telefonu to roznica miedzy &bdquo;ciekawe&rdquo; a &bdquo;zamawiam&rdquo;.</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 6px;">Najszybciej: dodaj prosty formularz Tally/Typeform embed + link <code>tel:+48504842907</code> i <code>mailto:</code> w naglowku &mdash; 1h pracy.</p>
+          <div class="priority-impact">+70% potencjalnego wzrostu konwersji</div>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num gradient-text">02</div>
+        <div class="priority-content">
+          <h4>Zoptymalizuj LCP mobile (z 9.2s do &lt;2.5s)</h4>
+          <p>HR-owiec przegladajacy oferty szkolenowe na telefonie w przerwie miedzy spotkaniami nie poczeka 9 sekund &mdash; zamknie karte i wybierze konkurencje, ktora laduje sie w 2.</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 6px;">Najszybciej: skonwertuj obrazy do WebP, dodaj lazy loading i wlacz kompresje Brotli na serwerze &mdash; poprawa o 50-70% bez zmian w kodzie.</p>
+          <div class="priority-impact">-32% bounce rate na mobile</div>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num gradient-text">03</div>
+        <div class="priority-content">
+          <h4>Napisz meta title i description</h4>
+          <p>Dzis w Google strona wyswietla sie bez tytulu i opisu &mdash; to tak, jakby wizytowka trenera nie miala imienia. Ktos szukajacy &bdquo;szkolenie wizualizacja danych&rdquo; nie ma powodu kliknac.</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 6px;">Najszybciej: dodaj w &lt;head&gt; jeden tag title i meta description &mdash; 10 minut, efekt w Google w ciagu kilku dni.</p>
+          <div class="priority-impact">+20-25% CTR w wynikach wyszukiwania</div>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num gradient-text">04</div>
+        <div class="priority-content">
+          <h4>Dodaj polityke prywatnosci + cookie banner</h4>
+          <p>Klienci korporacyjni przed wyslaniem zamowienia sprawdzaja zgodnosc z RODO &mdash; brak polityki prywatnosci moze byc blokujacy w procesie zakupowym duzej firmy.</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 6px;">Najszybciej: wygeneruj polityke przez iubenda.com (darmowy plan), wklej jako podstrone &mdash; 30 minut.</p>
+          <div class="priority-impact">Eliminacja ryzyka prawnego + wzrost zaufania</div>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num gradient-text">05</div>
+        <div class="priority-content">
+          <h4>Dodaj jasna propozycje wartosci above the fold</h4>
+          <p>Strona mowi &bdquo;wizualizacja danych&rdquo;, ale nie mowi &bdquo;dlaczego Pawel, a nie ktos inny&rdquo;. 12 lat doswiadczenia i 4.87/5.0 sredniej oceny to potezny argument &mdash; a dzis jest ukryty.</p>
+          <p style="color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 6px;">Najszybciej: przepisz H1 na np. &bdquo;Szkolenia z wizualizacji danych, po ktorych Twoj zespol prezentuje dane tak, ze zarzad podejmuje decyzje&rdquo;.</p>
+          <div class="priority-impact">-60% bounce rate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10: EXPERT AUDIT - FROM FIRST CLICK TO LOYAL CUSTOMER -->
+<section class="slide" style="border-top: 2px solid rgba(123,44,191,0.3);">
+  <div class="slide-content">
+    <div class="slide-label" style="color: var(--purple-light);">Audyt ekspercki</div>
+    <h2 class="slide-title" style="font-size: clamp(28px, 3.5vw, 48px);">
+      From first click to loyal customer:<br><span class="gradient-text">co widzi Twoj klient</span>
+    </h2>
+    <p class="slide-subtitle" style="max-width: 800px;">
+      Ponizej przejscie przez strone oczami HR managera, ktory wlasnie wpisala w Google &bdquo;szkolenie wizualizacja danych&rdquo; i trafila na simpleasdata.com. Kazdy etap to moment, w ktorym albo przybliasz ja do zakupu, albo tracisz na zawsze.
+    </p>
+  </div>
+</section>
+
+<!-- SLIDE 10a: FIRST 5 SECONDS -->
+<section class="slide">
+  <div class="slide-content">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-family: Poppins; font-weight: 900; font-size: 20px; flex-shrink: 0;">1</div>
+      <div>
+        <div class="slide-label" style="margin-bottom: 4px;">Etap 1: Pierwsze 5 sekund</div>
+        <h3 style="font-family: Poppins; font-size: clamp(22px, 2.5vw, 32px); font-weight: 900;">&bdquo;Czy to jest to, czego szukam?&rdquo;</h3>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h4 style="color: var(--red); font-size: 14px; letter-spacing: 1px; margin-bottom: 16px;">CO SIE DZIEJE DZIS</h4>
+        <div style="padding: 24px; background: rgba(255,71,87,0.06); border: 1px solid rgba(255,71,87,0.15); border-radius: 12px;">
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.75);">
+            HR managerka widzi logo, ikonke LinkedIn i naglowek <strong>&bdquo;Wizualizacja danych. Po prostu.&rdquo;</strong> Brzmi fajnie &mdash; ale nie odpowiada na jej pytanie. Nie wie czy to kurs, konsulting, narzedzie, czy agencja. Nie wie ile to kosztuje, dla kogo jest, ani co dostanie. Jedyne co moze zrobic to scrollowac w dol i miec nadzieje, ze znajdzie odpowiedzi.
+          </p>
+          <p style="font-size: 13px; color: var(--red); margin-top: 12px; font-weight: 700;">
+            Wynik: 60-70% odwiedzajacych zamknie karte w ciagu 5 sekund.
+          </p>
+        </div>
+      </div>
+      <div>
+        <h4 style="color: var(--green); font-size: 14px; letter-spacing: 1px; margin-bottom: 16px;">JAK POWINNO BYC</h4>
+        <div style="padding: 24px; background: rgba(46,204,113,0.06); border: 1px solid rgba(46,204,113,0.15); border-radius: 12px;">
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.75);">
+            <strong>H1:</strong> &bdquo;Szkolenia z wizualizacji danych, po ktorych Twoj zespol tworzy raporty, ktore zarzad rozumie od razu&rdquo;<br><br>
+            <strong>Pod spodem:</strong> Jedno zdanie &mdash; &bdquo;1- i 2-dniowe warsztaty dla zespolow analitycznych. 12 lat doswiadczenia, 4.87/5 srednia ocena, setki przeszkolonych osob.&rdquo;<br><br>
+            <strong>CTA:</strong> Przycisk &bdquo;Sprawdz dostepne terminy&rdquo;
+          </p>
+          <p style="font-size: 13px; color: var(--green); margin-top: 12px; font-weight: 700;">
+            Wynik: Odwiedzajacy w 3 sekundy wie co, dla kogo, dlaczego warto.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10b: TRUST & SOCIAL PROOF -->
+<section class="slide">
+  <div class="slide-content">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-family: Poppins; font-weight: 900; font-size: 20px; flex-shrink: 0;">2</div>
+      <div>
+        <div class="slide-label" style="margin-bottom: 4px;">Etap 2: Budowanie zaufania</div>
+        <h3 style="font-family: Poppins; font-size: clamp(22px, 2.5vw, 32px); font-weight: 900;">&bdquo;Czy moge mu zaufac?&rdquo;</h3>
+      </div>
+    </div>
+
+    <div style="padding: 24px; background: rgba(255,71,87,0.06); border: 1px solid rgba(255,71,87,0.15); border-radius: 12px; margin-bottom: 24px;">
+      <h4 style="color: var(--red); font-size: 14px; letter-spacing: 1px; margin-bottom: 12px;">KRYTYCZNY PROBLEM</h4>
+      <p style="font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.75);">
+        HR managerka ma budzet szkoleniowy 50 tys. PLN na kwartal. Musi uzasadnic wydatek przed swoim szefem. Na stronie widzi jedno zdjecie i trzy akapity tekstu o pasji do danych. Nie widzi <strong>ani jednego</strong> logo firmy, ktora juz kupila szkolenie. Nie widzi <strong>ani jednego</strong> cytatu uczestnika. Nie widzi <strong>ani jednego</strong> konkretnego wyniku (&bdquo;po szkoleniu czas tworzenia raportow spadl o 40%&rdquo;).
+      </p>
+      <p style="font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.75); margin-top: 12px;">
+        Ocena 4.87/5.0 jest swietna &mdash; ale wisi w prózni. Ile osob ocenilo? Z jakich firm? Na jakiej platformie? Bez kontekstu to tylko liczba.
+      </p>
+    </div>
+
+    <div style="padding: 24px; background: rgba(46,204,113,0.06); border: 1px solid rgba(46,204,113,0.15); border-radius: 12px;">
+      <h4 style="color: var(--green); font-size: 14px; letter-spacing: 1px; margin-bottom: 12px;">CO ZMIENI GRE</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 8px;">
+        <div style="padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+          <strong style="color: var(--cyan);">Pasek logotypow</strong>
+          <p style="font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px;">Nawet 4-5 logotypow firm pod H1 z napisem &bdquo;Zaufali nam m.in.&rdquo; &mdash; natychmiastowy skok wiarygodnosci.</p>
+        </div>
+        <div style="padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+          <strong style="color: var(--cyan);">3 cytaty uczestnikow</strong>
+          <p style="font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px;">Imie, stanowisko, firma, 1-2 zdania. Pawel ma setki przeszkolonych osob &mdash; wystarczy napisac do trzech z prosba o cytat.</p>
+        </div>
+        <div style="padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+          <strong style="color: var(--cyan);">Liczby z kontekstem</strong>
+          <p style="font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px;">&bdquo;487 uczestnikow &middot; 12 lat &middot; 4.87/5 srednia z 200+ ankiet&rdquo; &mdash; konkrety zamiast ogolnikow.</p>
+        </div>
+        <div style="padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+          <strong style="color: var(--cyan);">Jeden case study</strong>
+          <p style="font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px;">&bdquo;Zespol analityczny firmy X po szkoleniu skrocil czas tworzenia raportow o 40%&rdquo; &mdash; to jest argument, ktory HR managerka wysle szefowi.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10c: DECISION & PRICING -->
+<section class="slide">
+  <div class="slide-content">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-family: Poppins; font-weight: 900; font-size: 20px; flex-shrink: 0;">3</div>
+      <div>
+        <div class="slide-label" style="margin-bottom: 4px;">Etap 3: Decyzja zakupowa</div>
+        <h3 style="font-family: Poppins; font-size: clamp(22px, 2.5vw, 32px); font-weight: 900;">&bdquo;Chce to kupic &mdash; ale jak?&rdquo;</h3>
+      </div>
+    </div>
+
+    <p style="font-size: 16px; line-height: 1.7; color: rgba(255,255,255,0.7); max-width: 800px; margin-bottom: 32px;">
+      Zalozmy, ze HR managerka jest przekonana. Wie ze chce &bdquo;Wizualizacja danych&rdquo; za 9 700 PLN netto. Co teraz?
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+      <div style="padding: 28px; background: rgba(255,71,87,0.06); border: 1px solid rgba(255,71,87,0.15); border-radius: 16px;">
+        <h4 style="color: var(--red); margin-bottom: 16px;">Dzis: 4 bariery do zakupu</h4>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="color: var(--red); font-weight: 700; flex-shrink: 0;">1.</span>
+            <span style="font-size: 14px; color: rgba(255,255,255,0.7);">Nie ma przycisku &bdquo;Zamow&rdquo; ani &bdquo;Zapytaj o termin&rdquo; przy cenniku &mdash; trzeba scrollowac na sam dol strony.</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="color: var(--red); font-weight: 700; flex-shrink: 0;">2.</span>
+            <span style="font-size: 14px; color: rgba(255,255,255,0.7);">Jedyna opcja kontaktu to email lub telefon &mdash; nie ma formularza, nie ma Calendly, nie ma czatu.</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="color: var(--red); font-weight: 700; flex-shrink: 0;">3.</span>
+            <span style="font-size: 14px; color: rgba(255,255,255,0.7);">Numer telefonu nie jest klikalny na mobile &mdash; trzeba go recznie przepisac.</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="color: var(--red); font-weight: 700; flex-shrink: 0;">4.</span>
+            <span style="font-size: 14px; color: rgba(255,255,255,0.7);">Brak informacji o procesie: co sie dzieje po kontakcie? Ile trwa ustalenie terminu? Jak wyglada fakturowanie?</span>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--red); margin-top: 16px; font-weight: 700;">
+          Kazda bariera to moment, w ktorym potencjalny klient moze zrezygnowac.
+        </p>
+      </div>
+
+      <div style="padding: 28px; background: rgba(46,204,113,0.06); border: 1px solid rgba(46,204,113,0.15); border-radius: 16px;">
+        <h4 style="color: var(--green); margin-bottom: 16px;">Docelowo: 1 klik do kontaktu</h4>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="color: var(--green); font-weight: 700; flex-shrink: 0;">&checkmark;</span>
+            <span style="font-size: 14px; color: rgba(255,255,255,0.7);"><strong>Przycisk &bdquo;Zapytaj o termin&rdquo;</strong> pod kazda karta cennikowa &mdash; prowadzi do formularza z 3 polami (imie, email, preferowany termin).</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="color: var(--green); font-weight: 700; flex-shrink: 0;">&checkmark;</span>
+            <span style="font-size: 14px; color: rgba(255,255,255,0.7);"><strong>Calendly embed</strong> &mdash; &bdquo;Umow 15-minutowa rozmowe&rdquo; dla osob, ktore wola porozmawiac przed decyzja.</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="color: var(--green); font-weight: 700; flex-shrink: 0;">&checkmark;</span>
+            <span style="font-size: 14px; color: rgba(255,255,255,0.7);"><strong>Sekcja &bdquo;Jak to dziala&rdquo;</strong> w 3 krokach: 1) Wypelniasz formularz &rarr; 2) Ustalamy termin i zakres &rarr; 3) Szkolenie + faktura.</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <span style="color: var(--green); font-weight: 700; flex-shrink: 0;">&checkmark;</span>
+            <span style="font-size: 14px; color: rgba(255,255,255,0.7);"><strong>Klikalny telefon i email</strong> &mdash; tel: i mailto: linki, ktore dzialaja jednym tapnieciem na mobile.</span>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--green); margin-top: 16px; font-weight: 700;">
+          Im mniej krokow do kontaktu, tym wiecej zapytan ofertowych.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10d: DIFFERENTIATION -->
+<section class="slide">
+  <div class="slide-content">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-family: Poppins; font-weight: 900; font-size: 20px; flex-shrink: 0;">4</div>
+      <div>
+        <div class="slide-label" style="margin-bottom: 4px;">Etap 4: Wyroznienie sie</div>
+        <h3 style="font-family: Poppins; font-size: clamp(22px, 2.5vw, 32px); font-weight: 900;">&bdquo;Dlaczego on, a nie ktos inny?&rdquo;</h3>
+      </div>
+    </div>
+
+    <div style="padding: 28px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; margin-bottom: 24px;">
+      <p style="font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.7);">
+        HR managerka ma 3 zakladki otwarte w przegladarce &mdash; simpleasdata.com i dwoch konkurentow. Kazdy mowi, ze ma doswiadczenie i pasje. Kazdy oferuje szkolenia z wizualizacji. <strong style="color: var(--white);">Strona, ktora wygra, to ta, ktora najszybciej odpowie na pytanie: &bdquo;co Twoj zespol bedzie potrafil JUTRO, czego nie potrafi DZIS?&rdquo;</strong>
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <div style="padding: 24px; background: rgba(123,44,191,0.08); border: 1px solid rgba(123,44,191,0.2); border-radius: 12px;">
+        <strong style="color: var(--cyan); font-size: 15px;">Nazwij swoja metode</strong>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 8px; line-height: 1.6;">
+          Kazdy wielki trener ma framework z nazwa. Nie &bdquo;ucze wizualizacji&rdquo; &mdash; ale np. <em>&bdquo;Metoda 3K: Klarownosc, Kontekst, Konkluzja&rdquo;</em>. Nazwa daje wrazenie systemu, a nie improwizacji.
+        </p>
+      </div>
+      <div style="padding: 24px; background: rgba(123,44,191,0.08); border: 1px solid rgba(123,44,191,0.2); border-radius: 12px;">
+        <strong style="color: var(--cyan); font-size: 15px;">Pokaz &bdquo;przed i po&rdquo;</strong>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 8px; line-height: 1.6;">
+          Dla trenera wizualizacji danych to idealny format: pokaz brzydki, nieczytelny wykres PO LEWEJ &rarr; elegancki, czytelny wykres PO PRAWEJ. Jeden screenshot mowi wiecej niz 500 slow tekstu.
+        </p>
+      </div>
+      <div style="padding: 24px; background: rgba(123,44,191,0.08); border: 1px solid rgba(123,44,191,0.2); border-radius: 12px;">
+        <strong style="color: var(--cyan); font-size: 15px;">Specjalizacja zamiast generalizacji</strong>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 8px; line-height: 1.6;">
+          &bdquo;Szkolenia z wizualizacji danych&rdquo; brzmi jak kazdy inny. &bdquo;Szkolenia z wizualizacji danych dla zespolow analitycznych w korporacjach&rdquo; &mdash; to juz mowi do konkretnej osoby i wyklucza reszte (co paradoksalnie przyciaga lepiej).
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10e: AFTER THE SALE -->
+<section class="slide">
+  <div class="slide-content">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-family: Poppins; font-weight: 900; font-size: 20px; flex-shrink: 0;">5</div>
+      <div>
+        <div class="slide-label" style="margin-bottom: 4px;">Etap 5: Po szkoleniu</div>
+        <h3 style="font-family: Poppins; font-size: clamp(22px, 2.5vw, 32px); font-weight: 900;">&bdquo;Niewidoczny etap, ktory generuje 30-50% przychodu&rdquo;</h3>
+      </div>
+    </div>
+
+    <div style="padding: 28px; background: rgba(255,71,87,0.06); border: 1px solid rgba(255,71,87,0.15); border-radius: 16px; margin-bottom: 24px;">
+      <p style="font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.7);">
+        Dzis sciezka klienta konczy sie w momencie szkolenia. Uczestnicy wychodza, zycie wraca do normy, umiejetnosci blakna. Po miesiacu HR managerka nie pamietala zeby polecic Pawla dalej, bo nic jej o tym nie przypomnialo. <strong style="color: var(--white);">Przy cenie 9 700&ndash;21 300 PLN za szkolenie, kazde wewnetrzne polecenie to 10-20 tys. PLN bez kosztu pozyskania.</strong>
+      </p>
+    </div>
+
+    <div style="position: relative; padding-left: 40px;">
+      <!-- Timeline line -->
+      <div style="position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: var(--gradient);"></div>
+
+      <div style="position: relative; margin-bottom: 32px;">
+        <div style="position: absolute; left: -33px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--purple);"></div>
+        <h4 style="font-family: Poppins; font-weight: 700; font-size: 16px; margin-bottom: 4px;">Dzien 0 &mdash; Zakonczenie szkolenia</h4>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6;">Automatyczny email z podziekowaniem, materialami PDF, i linkiem do 1-minutowej ankiety satysfakcji. Zbierz dane do social proof w momencie, gdy entuzjazm jest najwyzszy.</p>
+      </div>
+
+      <div style="position: relative; margin-bottom: 32px;">
+        <div style="position: absolute; left: -33px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--blue);"></div>
+        <h4 style="font-family: Poppins; font-weight: 700; font-size: 16px; margin-bottom: 4px;">Tydzien 2 &mdash; Follow-up z wartoscia</h4>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6;">&bdquo;Jak Ci idzie? Tu masz 3 zaawansowane tipy, ktore nie weszly do szkolenia&rdquo;. Daje wartosc, przypomina o sobie, buduje relacje. Zero sprzedazy.</p>
+      </div>
+
+      <div style="position: relative; margin-bottom: 32px;">
+        <div style="position: absolute; left: -33px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--cyan);"></div>
+        <h4 style="font-family: Poppins; font-weight: 700; font-size: 16px; margin-bottom: 4px;">Miesiac 1 &mdash; Propozycja rozszerzenia</h4>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6;">&bdquo;Twoi koledzy z dzialu X tez mogliby skorzystac &mdash; oto oferta zespolowa ze znizka 15% na drugi termin&rdquo;. Naturalny moment na cross-sell i polecenie wewnetrzne.</p>
+      </div>
+
+      <div style="position: relative;">
+        <div style="position: absolute; left: -33px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--green);"></div>
+        <h4 style="font-family: Poppins; font-weight: 700; font-size: 16px; margin-bottom: 4px;">Kwartal 2 &mdash; Rocznica i upgrade</h4>
+        <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6;">&bdquo;Minely 3 miesiace &mdash; czas na poziom zaawansowany? Oto nowy warsztat: Prezentacje biznesowe&rdquo;. Upsell do drugiego produktu z cennika, ktory dzis kosztuje 16 900 PLN.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 32px; padding: 20px 24px; background: rgba(123,44,191,0.08); border: 1px solid rgba(123,44,191,0.15); border-radius: 12px;">
+      <p style="font-size: 15px; color: rgba(255,255,255,0.75); line-height: 1.6;">
+        <strong style="color: var(--white);">Cala ta sekwencja jest w pelni automatyczna</strong> &mdash; konfiguracja w MailerLite/HubSpot raz, a potem dziala bez udzialu Pawla. Przy 10 szkoleniach rocznie i 30% skutecznosci follow-upu, to potencjalnie <strong class="gradient-text">3 dodatkowe szkolenia &times; ~15 000 PLN = 45 000 PLN rocznie</strong> bez dodatkowego kosztu marketingowego.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 15: VALUE-ADD -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-label">Wartosc dodana</div>
+    <h2 class="slide-title" style="font-size: clamp(28px, 3vw, 44px);">
+      3 dzialania, ktore <span class="gradient-text">zmienia gre</span> dla Simple As Data
+    </h2>
+    <p class="slide-subtitle">
+      Poza naprawianiem tego co nie dziala &mdash; oto co mozna zbudowac, zeby strona aktywnie generowala zapytania zamiast byc cyfrowa wizytowka.
+    </p>
+
+    <div class="priority-grid" style="margin-top: 40px; counter-reset: priority;">
+
+      <div class="priority-item" style="border: 1px solid rgba(123,44,191,0.25); background: rgba(123,44,191,0.06);">
+        <div class="priority-num gradient-text">A</div>
+        <div class="priority-content">
+          <h4>Interaktywny &bdquo;Chart Chooser&rdquo; &mdash; lead magnet, ktory pracuje 24/7</h4>
+          <p>Prosty kalkulator: uzytkownik odpowiada na 3 pytania o swoje dane, a narzedzie podpowiada mu najlepszy typ wykresu z przykladem. Na koncu: &bdquo;Chcesz nauczyc tego caly zespol? Zapytaj o szkolenie.&rdquo;</p>
+          <p style="margin-top: 10px; color: rgba(255,255,255,0.55); font-size: 14px;">
+            <strong style="color: var(--cyan);">Dlaczego to dziala:</strong> Daje natychmiastowa wartosc (rozwiazuje problem), buduje autorytet Pawla jako eksperta, i naturalnie prowadzi do formularza. Kazdy udzielony wynik to potencjalny lead z kontekstem &mdash; wiesz czego szuka i mozesz followup'owac celnie.
+          </p>
+          <div class="priority-impact">Nowy kanal pozyskiwania leadow + pozycjonowanie eksperckie</div>
+        </div>
+      </div>
+
+      <div class="priority-item" style="border: 1px solid rgba(123,44,191,0.25); background: rgba(123,44,191,0.06);">
+        <div class="priority-num gradient-text">B</div>
+        <div class="priority-content">
+          <h4>Strona &bdquo;Dla HR i L&amp;D&rdquo; &mdash; osobna sciezka dla decydentow</h4>
+          <p>Dedykowana podstrona skierowana do osob zamawiajacych szkolenia: case studies z nazwami firm, ROI szkolen (np. &bdquo;po szkoleniu czas tworzenia raportow spadl o 40%&rdquo;), FAQ dot. faktur i logistyki, oraz prosty formularz &bdquo;Zapytaj o termin i wycene&rdquo;.</p>
+          <p style="margin-top: 10px; color: rgba(255,255,255,0.55); font-size: 14px;">
+            <strong style="color: var(--cyan);">Dlaczego to dziala:</strong> HR-owiec nie szuka &bdquo;jak zrobic wykres&rdquo; &mdash; szuka &bdquo;sprawdzonego szkolenia, ktore moge uzasadnic przed szefem&rdquo;. Osobna strona mowi jego jezykiem, odpowiada na jego obiekcje i skraca proces decyzyjny z tygodni do dni.
+          </p>
+          <div class="priority-impact">Skrocenie cyklu sprzedazy B2B + wyzszy conversion rate</div>
+        </div>
+      </div>
+
+      <div class="priority-item" style="border: 1px solid rgba(123,44,191,0.25); background: rgba(123,44,191,0.06);">
+        <div class="priority-num gradient-text">C</div>
+        <div class="priority-content">
+          <h4>Automatyczny follow-up po szkoleniu &mdash; z jednego klienta zrob trzech</h4>
+          <p>Sekwencja 3 emaili po szkoleniu: (1) podsumowanie + materialy, (2) po 2 tygodniach &bdquo;jak Ci idzie? tu masz 3 pro tipy&rdquo;, (3) po miesiacu &bdquo;Twoi koledzy z dzialu X tez moga skorzystac &mdash; oto oferta zespolowa&rdquo;.</p>
+          <p style="margin-top: 10px; color: rgba(255,255,255,0.55); font-size: 14px;">
+            <strong style="color: var(--cyan);">Dlaczego to dziala:</strong> Przy sredniej cenie 9 700&ndash;21 300 PLN za szkolenie, jeden dodatkowy klient z polecenia wewnetrznego to 10-20 tys. PLN wiecej rocznie bez ani zlotowki wydanej na reklame. Automatyzacja sprawia, ze dziala to bez Twojego czasu.
+          </p>
+          <div class="priority-impact">+30-50% wzrost lifetime value klienta</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 16: CTA -->
+<section class="slide" style="text-align: center; background: linear-gradient(180deg, #2D3142 0%, #1E2230 100%);">
+  <div class="slide-content" style="display: flex; flex-direction: column; align-items: center;">
+    <div class="slide-label">Nastepny krok</div>
+    <h2 class="slide-title" style="font-size: clamp(28px, 4vw, 52px); max-width: 800px;">
+      Zamienmy te <span class="gradient-text">49 punktow</span> w <span class="gradient-text">90+</span>
+    </h2>
+    <p class="slide-subtitle" style="text-align: center; margin: 0 auto;">
+      Omowimy priorytety i stworzymy plan dzialania dopasowany do Twojego budzetu.
+    </p>
+    <p style="margin-top: 40px; font-size: 14px; color: rgba(255,255,255,0.35);">
+      oleksiakconsulting.com
+    </p>
+  </div>
+</section>
+
+<div class="footer-bar">
+  <span>LAMA Audit &middot; simpleasdata.com &middot; 24.02.2026</span>
+  <span>Powered by <a href="https://oleksiakconsulting.com">Oleksiak Consulting</a></span>
+</div>
+
+</body>
+</html>

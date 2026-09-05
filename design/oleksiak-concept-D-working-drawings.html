@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Working Drawings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --field:#0A1C3A;
+    --grid-fine:rgba(168,198,246,.055);
+    --grid-bold:rgba(168,198,246,.10);
+    --line:#8FAAD4;
+    --line-dim:#5C749C;
+    --type:#EDF2FB;
+    --signal:#FF8A3D;
+    --block:#071427;
+    --hair:rgba(143,170,212,.22);
+    --display:"Bodoni Moda",Didot,"Bodoni MT",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+
+  html,body{height:100%;}
+  body{
+    margin:0;color:var(--type);font-family:var(--mono);
+    background-color:var(--field);
+    background-image:
+      repeating-linear-gradient(0deg,var(--grid-bold) 0 1px,transparent 1px 96px),
+      repeating-linear-gradient(90deg,var(--grid-bold) 0 1px,transparent 1px 96px),
+      repeating-linear-gradient(0deg,var(--grid-fine) 0 1px,transparent 1px 24px),
+      repeating-linear-gradient(90deg,var(--grid-fine) 0 1px,transparent 1px 24px);
+    overflow:hidden;-webkit-font-smoothing:antialiased;
+  }
+
+  /* drawing border + corner ticks: this is a sheet, not a web page */
+  .frame{position:fixed;inset:12px;border:1px solid var(--hair);z-index:1;pointer-events:none;}
+  .frame::before,.frame::after{content:"";position:absolute;background:var(--line-dim);}
+  .frame::before{left:-1px;top:50%;width:9px;height:1px;}
+  .frame::after{right:-1px;top:50%;width:9px;height:1px;}
+
+  .wrap{position:relative;z-index:2;transition:opacity .45s ease,transform .55s cubic-bezier(.6,0,.3,1);}
+  .void .wrap{opacity:0;transform:scale(.985);}
+
+  /* ---------- index strip ---------- */
+  .strip{position:fixed;top:13px;left:13px;right:13px;height:26px;z-index:3;
+    display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--hair);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);}
+  .rail{display:flex;flex:none;animation:roll 66s linear infinite;}
+  @keyframes roll{to{transform:translate3d(-50%,0,0);}}
+  .rail-half{display:flex;align-items:center;flex:none;}
+  .rail em{font-style:normal;font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--line-dim);white-space:nowrap;padding:0 1rem;}
+  .rail em.fig{color:var(--line);}
+  .rail i{flex:none;width:1px;height:8px;background:var(--hair);}
+
+  /* ---------- sheet head ---------- */
+  .head{position:fixed;top:52px;left:0;right:0;z-index:3;
+    display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 24px;}
+  .head h1{margin:0;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.44em;
+    text-transform:uppercase;color:var(--type);padding-left:.44em;}
+  .head p{margin:0;font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--line-dim);text-align:center;}
+
+  /* ---------- the drawn subject ----------
+     Frame is closed top AND bottom, so it can never collide with the head. */
+  .subject{position:fixed;left:0;right:0;top:108px;bottom:calc(50% + 58px);z-index:2;
+    display:flex;align-items:flex-end;justify-content:center;padding:0 clamp(24px,6vw,64px);}
+  .line{margin:0;max-width:24ch;text-align:center;font-family:var(--display);font-weight:400;
+    font-size:clamp(21px,min(2.35vw + .42rem,4.9vh),41px);
+    line-height:1.24;letter-spacing:-.004em;text-wrap:balance;}
+  .line w{display:inline-block;white-space:pre;}
+  .line mark{background:none;color:var(--signal);font-style:italic;}
+  .line w.set{animation:draw .42s cubic-bezier(.25,.85,.3,1) both;}
+  @keyframes draw{from{opacity:0;transform:translate3d(0,.1em,0);}to{opacity:1;transform:none;}}
+  .line.clear w{animation:undraw .22s ease-in both;}
+  @keyframes undraw{to{opacity:0;}}
+
+  /* callout box drawn around the working phrase */
+  .callout{position:fixed;z-index:2;pointer-events:none;border:1px solid var(--signal);
+    opacity:0;transition:opacity .3s ease;}
+  .callout.on{opacity:.85;}
+  .callout span{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:50%;
+    background:var(--signal);color:var(--block);font-family:var(--mono);font-size:9.5px;
+    font-weight:500;display:grid;place-items:center;}
+  .callout::before,.callout::after{content:"";position:absolute;width:5px;height:5px;
+    border:1px solid var(--signal);}
+  .callout::before{left:-3px;top:-3px;border-right:0;border-bottom:0;}
+  .callout::after{right:-3px;bottom:-3px;border-left:0;border-top:0;}
+
+  /* ---------- the field: dead centre ---------- */
+  .entry{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+    width:min(470px,82vw);display:flex;align-items:center;gap:14px;
+    border-bottom:1px solid var(--line);padding:0 2px 10px;transition:border-color .22s ease;}
+  .entry:focus-within{border-color:var(--signal);}
+  .entry label{font-size:8.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--line-dim);flex:none;}
+  .entry input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--type);
+    font-family:var(--display);font-size:19px;height:30px;}
+  .entry input::placeholder{color:var(--line-dim);font-style:italic;}
+  .go{flex:none;width:29px;height:29px;border:0;background:none;color:var(--line);cursor:pointer;
+    display:grid;place-items:center;transition:color .2s ease,transform .2s ease;}
+  .go:hover{color:var(--signal);transform:translateX(3px);}
+  .go svg{width:18px;height:18px;}
+
+  .fine{position:fixed;left:50%;top:calc(50% + 40px);transform:translateX(-50%);z-index:3;
+    font-size:9.5px;letter-spacing:.15em;color:var(--line-dim);white-space:nowrap;}
+  .fine.err{color:var(--signal);}
+
+  /* ---------- title block ---------- */
+  .titleblock{position:fixed;left:13px;right:13px;bottom:13px;z-index:3;
+    background:var(--block);border:1px solid var(--hair);
+    display:grid;grid-template-columns:auto minmax(0,1fr) auto;min-height:9.5dvh;}
+  .cell{padding:11px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;}
+  .cell + .cell{border-left:1px solid var(--hair);}
+  .lab{font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--line-dim);}
+  .val{font-size:11px;letter-spacing:.1em;color:var(--type);font-variant-numeric:tabular-nums;
+    white-space:nowrap;}
+  .val.sig{color:var(--signal);}
+  .note{font-family:var(--display);font-size:clamp(12.5px,1.15vw,15px);line-height:1.44;
+    color:var(--line);max-width:82ch;}
+  .mech{font-size:9px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:var(--type);}
+  .rev{display:flex;align-items:center;gap:12px;}
+  .step{display:flex;gap:5px;}
+  .step button{width:24px;height:24px;border:1px solid var(--hair);background:none;color:var(--line-dim);
+    cursor:pointer;font-family:var(--mono);font-size:10px;line-height:1;
+    transition:color .18s ease,border-color .18s ease;}
+  .step button:hover{color:var(--signal);border-color:var(--signal);}
+  .tick{position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--signal);}
+
+  @media (max-width:860px){
+    .callout{display:none;}
+    .titleblock{grid-template-columns:auto minmax(0,1fr);}
+    .cell.revcell{display:none;}
+    .note{font-size:12px;}
+  }
+  @media (max-width:520px){
+    .head p{display:none;}
+    .subject{top:96px;bottom:calc(50% + 52px);}
+    .cell{padding:10px 12px;}
+  }
+
+  /* ---------- sheet voided ---------- */
+  .sweep{position:fixed;left:13px;right:13px;top:50%;height:1px;background:var(--signal);
+    transform:scaleX(0);transform-origin:left;z-index:9;
+    transition:transform .5s cubic-bezier(.6,0,.3,1),opacity .3s ease .55s;}
+  .void .sweep{transform:scaleX(1);opacity:0;}
+
+  .closing{position:fixed;inset:0;z-index:10;display:none;place-items:center;padding:0 26px;
+    text-align:center;}
+  .void .closing{display:grid;animation:emerge .5s .62s ease both;}
+  @keyframes emerge{from{opacity:0;}to{opacity:1;}}
+  .closingInner{max-width:28ch;display:flex;flex-direction:column;gap:15px;align-items:center;}
+  .closingInner h2{margin:0;font-family:var(--display);font-weight:400;
+    font-size:clamp(24px,2.9vw + .4rem,42px);line-height:1.2;text-wrap:balance;}
+  .closingInner h2 em{font-style:italic;color:var(--signal);}
+  .closingInner p{margin:0;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--line-dim);}
+  .replay{margin-top:2px;background:none;border:0;border-bottom:1px solid var(--hair);padding:0 0 3px;
+    color:var(--line-dim);cursor:pointer;font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;
+    text-transform:uppercase;transition:color .2s ease;}
+  .replay:hover{color:var(--signal);}
+
+  :focus-visible{outline:2px solid var(--signal);outline-offset:3px;}
+
+  @media (prefers-reduced-motion:reduce){
+    .rail,.line w.set,.line.clear w{animation:none !important;}
+    .line w.set{opacity:1;transform:none;}
+    .wrap,.sweep,.callout{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+
+<div class="frame"></div>
+
+<div id="root">
+<span class="sweep"></span>
+<div class="wrap">
+
+  <div class="strip"><div class="rail" id="rail"></div></div>
+
+  <div class="head">
+    <h1>Oleksiak Consulting</h1>
+    <p>Traffic quality · Conversion · Retention · Ecommerce &amp; retail</p>
+  </div>
+
+  <div class="subject"><p class="line" id="line"></p></div>
+  <div class="callout" id="callout"><span id="balloon">1</span></div>
+
+  <form id="form" novalidate>
+    <div class="entry">
+      <label for="mail">Email</label>
+      <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+             placeholder="you@company.com">
+      <button class="go" type="submit" aria-label="Send my address">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12h15M13 6l6 6-6 6"/>
+        </svg>
+      </button>
+    </div>
+    <p class="fine" id="fine">This page disappears once you enter your email.</p>
+  </form>
+
+  <div class="titleblock">
+    <span class="tick" id="tick"></span>
+    <div class="cell">
+      <span class="lab">Drawing no.</span>
+      <span class="val sig" id="no">OC—001</span>
+    </div>
+    <div class="cell">
+      <span class="mech" id="mech"></span>
+      <span class="note" id="note"></span>
+    </div>
+    <div class="cell revcell">
+      <span class="lab">Sheet · Rev</span>
+      <div class="rev">
+        <span class="val" id="sheet">1 of 7 · A</span>
+        <div class="step">
+          <button type="button" id="prev" aria-label="Previous drawing">&larr;</button>
+          <button type="button" id="next" aria-label="Next drawing">&rarr;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="closing">
+  <div class="closingInner">
+    <h2>The rest happens <em>over email.</em></h2>
+    <p>I reply personally — usually within a day</p>
+    <button class="replay" id="replay" type="button">Run the demo again</button>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var SHEETS = [
+    { text:"This page deletes itself the moment you type your address. |Not because something broke.|",
+      code:"OC—001", mech:"Curiosity gap",
+      note:"The sentence stops one beat before the answer, so you finish it yourself. Same break I put in subject lines — on a decent list it moves open rate by about a fifth." },
+    { text:"I raise traffic quality, conversion and retention in ecommerce. Fifteen years of practice, plus AI that cuts time-to-market |from quarters to weeks.|",
+      code:"OC—002", mech:"Rationale",
+      note:"Claim, credential, mechanism — in that order. Reverse it and the same three facts read as bragging. Order is doing more work here than the words are." },
+    { text:"While you read this, a dozen people landed on your site and left. |None will come back on their own.|",
+      code:"OC—003", mech:"Loss aversion",
+      note:"People work roughly twice as hard to avoid a loss as to chase an equivalent gain. So I frame the gap as leakage you already own, not upside you might buy." },
+    { text:"From |0.5% to 12%| of total revenue. Eighteen months, one team. Not a projection — it already happened.",
+      code:"OC—004", mech:"Specificity",
+      note:"An uneven number reads as measured; a round one reads as invented. It is why you will never see me write “up to 3x” on a slide." },
+    { text:"No menu. No pricing page. No nine-field form. |One field and one promise.|",
+      code:"OC—005", mech:"Pattern interrupt",
+      note:"Every element I removed is one decision you no longer have to make. Cutting a form from nine fields to one is still the cheapest conversion win most teams have left." },
+    { text:"Allegro. Booksy. mBank. Accenture. All of them had traffic. |The problem started right after that.|",
+      code:"OC—006", mech:"Authority transfer",
+      note:"Names first, claim second. The reader lends the claim whatever credibility they already granted the names — which is why the order is never negotiable." },
+    { text:"An agency will scope this in three months and forty slides. I answer tomorrow morning |in one paragraph.|",
+      code:"OC—007", mech:"Anchoring",
+      note:"I set the expensive reference point before I place myself against it. The contrast does the pricing work, so the price never has to." }
+  ];
+
+  var INDEX=[
+    {t:"Allegro"},{t:"0.5% → 12% of revenue",f:1},{t:"CRM 2.0"},
+    {t:"Booksy"},{t:"+102% YoY",f:1},{t:"Marketing automation"},
+    {t:"mBank"},{t:"€2M budget managed",f:1},{t:"Conversion optimisation"},
+    {t:"Accenture"},{t:"Team of 15 built",f:1},{t:"Lifecycle & retention"},
+    {t:"Mall"},{t:"+34% YoY",f:1},{t:"Traffic quality"},
+    {t:"Travelist"},{t:"30% efficiency gain",f:1},{t:"AI in ecommerce"},
+    {t:"LABA"},{t:"15 years in practice",f:1},{t:"Collegium Da Vinci"}
+  ];
+
+  var DWELL=8600;
+
+  var lineEl=document.getElementById("line"),
+      calloutEl=document.getElementById("callout"),
+      balloonEl=document.getElementById("balloon"),
+      noEl=document.getElementById("no"),
+      mechEl=document.getElementById("mech"),
+      noteEl=document.getElementById("note"),
+      sheetEl=document.getElementById("sheet"),
+      tickEl=document.getElementById("tick"),
+      fineEl=document.getElementById("fine"),
+      root=document.getElementById("root"),
+      form=document.getElementById("form"),
+      mail=document.getElementById("mail");
+
+  var calm=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var idx=0,timer=null,dead=false;
+
+  (function(){
+    var rail=document.getElementById("rail"),half=document.createElement("div");
+    half.className="rail-half";
+    INDEX.forEach(function(it){
+      var e=document.createElement("em");e.textContent=it.t;if(it.f)e.className="fig";
+      half.appendChild(e);half.appendChild(document.createElement("i"));
+    });
+    rail.appendChild(half);rail.appendChild(half.cloneNode(true));
+  })();
+
+  function typeset(text){
+    var parts=text.split("|"),frag=document.createDocumentFragment(),n=0;
+    parts.forEach(function(chunk,ci){
+      if(!chunk)return;
+      var lit=ci%2===1;
+      chunk.split(/\s+/).forEach(function(tok){
+        if(tok==="")return;
+        var w=document.createElement("w");
+        if(lit){var m=document.createElement("mark");m.textContent=tok+" ";w.appendChild(m);}
+        else{w.textContent=tok+" ";}
+        w.className="set";w.style.animationDelay=(n*15)+"ms";
+        frag.appendChild(w);n++;
+      });
+    });
+    lineEl.classList.remove("clear");
+    lineEl.innerHTML="";lineEl.appendChild(frag);
+  }
+
+  /* box the working phrase — union of its marks, padded like a drawn callout */
+  function boxPhrase(){
+    var marks=lineEl.querySelectorAll("mark");
+    if(!marks.length||window.innerWidth<=860){calloutEl.classList.remove("on");return;}
+    var l=1e9,t=1e9,r=-1e9,b=-1e9;
+    marks.forEach(function(m){
+      var q=m.getBoundingClientRect();
+      l=Math.min(l,q.left);t=Math.min(t,q.top);r=Math.max(r,q.right);b=Math.max(b,q.bottom);
+    });
+    var pad=9;
+    calloutEl.style.left=(l-pad)+"px";
+    calloutEl.style.top=(t-pad*.6)+"px";
+    calloutEl.style.width=(r-l+pad*2)+"px";
+    calloutEl.style.height=(b-t+pad*1.2)+"px";
+    calloutEl.classList.add("on");
+  }
+
+  function runTick(){
+    tickEl.style.transition="none";tickEl.style.width="0%";
+    void tickEl.offsetWidth;
+    tickEl.style.transition="width "+DWELL+"ms linear";
+    tickEl.style.width="100%";
+  }
+
+  function show(i,first){
+    idx=(i+SHEETS.length)%SHEETS.length;
+    var s=SHEETS[idx];
+
+    function apply(){
+      typeset(s.text);
+      noEl.textContent=s.code;
+      mechEl.textContent=s.mech;
+      noteEl.textContent=s.note;
+      balloonEl.textContent=String(idx+1);
+      sheetEl.textContent=(idx+1)+" of "+SHEETS.length+" · A";
+      setTimeout(boxPhrase,calm?0:380);
+      runTick();schedule();
+    }
+
+    calloutEl.classList.remove("on");
+    if(first||calm){apply();return;}
+    lineEl.classList.add("clear");
+    setTimeout(apply,230);
+  }
+
+  function schedule(){clearTimeout(timer);if(!dead)timer=setTimeout(function(){show(idx+1);},DWELL);}
+
+  document.getElementById("next").addEventListener("click",function(){show(idx+1);});
+  document.getElementById("prev").addEventListener("click",function(){show(idx-1);});
+
+  var rt=null;
+  window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(boxPhrase,130);});
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    var v=mail.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      fineEl.textContent="That does not look like an email address.";
+      fineEl.classList.add("err");mail.focus();return;
+    }
+    fineEl.classList.remove("err");
+    dead=true;clearTimeout(timer);mail.blur();
+    calloutEl.classList.remove("on");
+    tickEl.style.transition="none";tickEl.style.width="0";
+    root.classList.add("void");
+  });
+
+  mail.addEventListener("input",function(){
+    if(fineEl.classList.contains("err")){
+      fineEl.classList.remove("err");
+      fineEl.textContent="This page disappears once you enter your email.";
+    }
+  });
+
+  document.getElementById("replay").addEventListener("click",function(){
+    root.classList.remove("void");
+    mail.value="";dead=false;
+    show(idx+1,true);
+  });
+
+  show(0,true);
+})();
+</script>
+
+</body>
+</html>

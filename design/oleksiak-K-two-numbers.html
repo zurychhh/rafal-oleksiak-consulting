@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="robots" content="noindex">
+<title>Two Numbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FFFFFF; --ink:#17192A; --purple:#7B2CBF; --purple-dp:#5B1E8C;
+    --grey:#5A5D70; --note:#43465C; --hair:#E2E0EC; --wash:#F6F4FB;
+    --band:linear-gradient(97deg,#5B1E8C 0%,#33308F 46%,#0047B3 100%);
+    --disp:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
+    -webkit-font-smoothing:antialiased;}
+  input,button{font-family:inherit;}
+  .top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .top h1{margin:0;font-weight:800;font-stretch:125%;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;}
+  .top span{font-family:var(--mono);font-size:11px;color:var(--grey);}
+  .cats{display:flex;flex-wrap:wrap;gap:8px;}
+  .cats button{border:2px solid var(--hair);background:var(--paper);color:var(--note);
+    cursor:pointer;padding:11px 14px;min-height:42px;font-family:var(--mono);font-size:12.5px;
+    transition:border-color .16s,color .16s,background-color .16s;}
+  .cats button:hover{border-color:var(--purple);color:var(--ink);}
+  .cats button[aria-pressed="true"]{background-color:var(--purple);border-color:var(--purple);
+    color:#FFFFFF;}
+  .daybox{display:flex;align-items:stretch;border:2px solid var(--ink);background:var(--paper);
+    flex:1 1 220px;min-width:0;}
+  .daybox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--ink);
+    font-weight:700;font-stretch:110%;font-size:26px;padding:11px 16px;-moz-appearance:textfield;}
+  .daybox input::-webkit-outer-spin-button,.daybox input::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;}
+  .daybox span{display:flex;align-items:center;padding:0 15px;border-left:2px solid var(--ink);
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--note);}
+  .go{flex:0 0 auto;border:0;background-color:var(--purple);color:#FFFFFF;cursor:pointer;
+    padding:15px 22px;min-height:52px;font-weight:700;font-stretch:110%;font-size:14px;
+    letter-spacing:.08em;text-transform:uppercase;transition:background-color .16s;}
+  .go:hover{background-color:var(--ink);}
+  .guessrow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;}
+  .fbox{display:flex;align-items:stretch;border:2px solid var(--ink);background:var(--paper);}
+  .fbox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--ink);
+    font-weight:500;font-size:17px;padding:14px 16px;}
+  .fbox input::placeholder{color:#84879A;}
+  .fbox button{flex:none;border:0;border-left:2px solid var(--ink);background-color:var(--purple);
+    color:#FFFFFF;cursor:pointer;padding:0 22px;font-weight:700;font-stretch:110%;font-size:14px;
+    letter-spacing:.08em;text-transform:uppercase;transition:background-color .16s;}
+  .fbox button:hover{background-color:var(--ink);}
+  .err{display:none;margin:0 0 9px;font-family:var(--mono);font-size:12px;color:#B0122F;}
+  .err.on{display:block;}
+  .st{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
+    border:1.5px solid var(--hair);color:var(--purple);font-family:var(--mono);font-size:12px;
+    line-height:1;justify-self:center;transition:background-color .16s,border-color .16s;}
+  li:hover .st{border-color:var(--purple);}
+  li[aria-pressed="true"] .st{border-color:var(--purple);background-color:var(--purple);color:#FFFFFF;}
+  .ch{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;}
+  .ch::before{content:"";display:inline-block;width:6px;height:6px;background:currentColor;
+    margin-right:6px;}
+  .ch-trf{--c:#0047B3;} .ch-store{--c:#5B1E8C;} .ch-own{--c:#7B2CBF;} .ch-loy{--c:#17192A;}
+  .ch-trf,.ch-store,.ch-own,.ch-loy{color:var(--c);}
+  li.ph{display:block;cursor:default;border:0;background:none;box-shadow:none;margin:0;
+    padding:36px 0 12px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--purple);}
+  li.ph:first-child{padding-top:4px;}
+  li.ph:hover{background:none;}
+  .out{display:none;} .out.on{display:block;}
+  .sent{display:none;} .sent.on{display:block;}
+  @media (max-width:520px){
+    .guessrow{flex-direction:column;} .go{width:100%;}
+    .fbox{flex-direction:column;} .fbox button{border-left:0;border-top:2px solid var(--ink);
+      padding:15px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+  body.done .s1{display:none;}
+  /* the first screen leaves before the plan arrives — one motion, not a cut */
+  .s1{transition:opacity .26s ease,transform .26s ease;}
+  body.leaving .s1{opacity:0;transform:translateY(-14px);}
+  .rv{opacity:0;transform:translateY(10px);}
+  body.after .rv{opacity:1;transform:none;
+    transition:opacity .45s cubic-bezier(.22,.61,.28,1) var(--d,0ms),
+               transform .45s cubic-bezier(.22,.61,.28,1) var(--d,0ms);}
+
+  /* ── the leak, priced, with the calculation showing ─────────────────────
+     Every factor is on screen and every one of them is the visitor's to change.
+     A calculator with its guts open cannot quietly invent a number.          */
+  .leak{margin-top:20px;}
+  .leakline{margin:0;font-weight:800;font-stretch:118%;font-size:clamp(23px,3.4vw,32px);
+    line-height:1.24;letter-spacing:-.016em;text-wrap:balance;}
+  .leakline b{background-color:var(--purple);color:#FFFFFF;padding:0 6px 3px;
+    font-variant-numeric:tabular-nums;}
+  .calclab{margin-top:26px;font-family:var(--mono);font-size:11px;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--note);}
+  .calc{margin-top:10px;border-top:2px solid var(--ink);}
+  .crow{display:grid;grid-template-columns:minmax(0,1fr) 128px;gap:14px;align-items:center;
+    padding:11px 0;border-bottom:1px solid var(--hair);
+    font-family:var(--mono);font-size:12.5px;color:var(--note);}
+  .crow em{font-style:normal;display:block;margin-top:3px;font-size:11px;color:var(--grey);}
+  .cval{text-align:right;white-space:nowrap;font-family:var(--mono);font-size:12.5px;
+    color:var(--note);}
+  .n{width:auto;max-width:84px;border:0;border-bottom:2px solid var(--purple);
+    background:none;color:var(--ink);font-family:var(--mono);font-size:14px;font-weight:500;
+    text-align:right;padding:2px 4px 3px;outline:none;-moz-appearance:textfield;
+    font-variant-numeric:tabular-nums;}
+  .n::-webkit-outer-spin-button,.n::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .n:focus{background:var(--wash);}
+  .crow.out{border-bottom:0;border-top:2px solid var(--ink);padding-top:15px;
+    color:var(--ink);font-size:13px;}
+  .crow.out .cval{font-family:var(--disp);font-weight:800;font-stretch:118%;font-size:22px;
+    letter-spacing:-.014em;color:var(--purple);}
+  .peryear{margin:10px 0 0;font-family:var(--mono);font-size:11.5px;color:var(--grey);}
+  .peryear b{color:var(--ink);font-weight:500;}
+
+  /* ── the queue: what I would build first, and why ───────────────────────── */
+  .qhead{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+    flex-wrap:wrap;margin-top:52px;border-top:2px solid var(--ink);padding-top:16px;}
+  .qhead p{margin:0;font-family:var(--mono);font-size:12px;color:var(--note);}
+  ol.queue{list-style:none;margin:18px 0 0;padding:0;counter-reset:q;}
+  ol.queue li{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr) 26px;
+    gap:0 16px;align-items:start;padding:18px 0;border-bottom:1px solid var(--hair);
+    cursor:pointer;}
+  ol.queue li[data-done="1"] .qn,ol.queue li[data-done="1"] .qmeta,
+  ol.queue li[data-done="1"] .qwhy{text-decoration:line-through;opacity:.42;}
+  ol.queue li.extra .qwhy{display:none;}
+  ol.queue li.extra.open .qwhy{display:block;}
+  ol.queue li.extra .qn{font-weight:500;font-size:16px;}
+  ol.queue li.extra .qmeta::after{content:" 4 why 93";}
+  ol.queue li.extra.open .qmeta::after{content:" 4 why 91";}
+  ol.queue li .st{margin-top:2px;}
+  ol.queue li::before{counter-increment:q;content:counter(q);font-family:var(--mono);
+    font-size:20px;font-weight:500;color:var(--purple);font-variant-numeric:tabular-nums;
+    line-height:1.1;}
+  ol.queue li:hover .qn{color:var(--purple);}
+  .qn{display:block;font-weight:700;font-stretch:110%;font-size:17px;letter-spacing:-.006em;
+    transition:color .18s;}
+  .qwhy{display:block;margin-top:8px;font-family:var(--mono);font-size:12px;line-height:1.6;
+    color:var(--note);}
+  .qmeta{display:block;margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--grey);}
+  .qdone{margin:16px 0 0;font-family:var(--mono);font-size:11.5px;line-height:1.7;
+    color:var(--grey);}
+  .qdone b{color:var(--ink);font-weight:500;}
+  .qempty{margin:18px 0 0;padding:18px 20px;background:var(--wash);
+    border-left:3px solid var(--purple);font-family:var(--mono);font-size:12.5px;
+    line-height:1.7;color:var(--note);}
+  details.rest{margin-top:46px;border-top:1px solid var(--hair);}
+  details.rest summary{list-style:none;cursor:pointer;padding:18px 0 0;
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--note);}
+  details.rest summary::-webkit-details-marker{display:none;}
+  details.rest summary:hover{color:var(--purple);}
+  details.rest summary::after{content:" 93";}
+  details.rest[open] summary::after{content:" 91";}
+
+  /* ── the map: one screen showing when every step fires ───────────────── */
+  .tlwrap{margin-top:22px;}
+  .tlhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    flex-wrap:wrap;margin-bottom:16px;}
+  .tlhead .lab{margin:0;}
+  .tlgap{font-family:var(--mono);font-size:12px;color:var(--note);
+    font-variant-numeric:tabular-nums;min-height:20px;}
+  .tlgap b{background-color:var(--purple);color:#FFFFFF;padding:2px 6px 3px;font-weight:500;}
+  .tl{display:grid;grid-template-columns:112px minmax(0,1fr);gap:0 18px;}
+  .lanelabs{display:grid;grid-template-rows:repeat(4,44px);align-items:center;}
+  .lanelabs span{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;line-height:1.3;text-align:right;}
+  .plot{position:relative;height:176px;}
+  .axis{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink);
+    transform:scaleX(0);transform-origin:0 50%;}
+  body.draw .axis{transform:scaleX(1);transition:transform .42s cubic-bezier(.3,.7,.3,1);}
+  .lane{position:absolute;left:0;right:0;height:1px;background:var(--hair);
+    top:calc(var(--lane)*44px + 22px);}
+  .band{position:absolute;top:0;bottom:0;left:var(--b1);width:0;background:var(--wash);
+    border-left:2px solid var(--purple);border-right:1px dashed var(--purple);opacity:0;}
+  body.draw .band{width:var(--bw);opacity:1;
+    transition:width .5s cubic-bezier(.3,.7,.3,1) var(--bd,900ms),
+               opacity .01s linear var(--bd,900ms);}
+  .dot{position:absolute;left:var(--t);top:calc(var(--lane)*44px + 22px);
+    transform:translate(-50%,-50%) scale(.3);opacity:0;
+    width:22px;height:22px;border:0;border-radius:50%;cursor:pointer;padding:0;
+    background-color:var(--c);color:#FFFFFF;font-family:var(--mono);font-size:10px;
+    font-variant-numeric:tabular-nums;}
+  .dot b{color:inherit;font-weight:500;}
+  body.draw .dot{opacity:1;transform:translate(-50%,-50%) scale(1);
+    transition:opacity .3s ease var(--dd,0ms),
+               transform .42s cubic-bezier(.34,1.4,.5,1) var(--dd,0ms);}
+  .dot:hover,.dot:focus-visible{outline:0;box-shadow:0 0 0 4px var(--wash),0 0 0 5px var(--c);}
+  .dot[aria-pressed="true"]{background-color:var(--paper);color:var(--c);
+    box-shadow:inset 0 0 0 2px var(--c);}
+  .ticks{position:relative;height:50px;margin-top:8px;}
+  .tick{position:absolute;left:var(--t);transform:translateX(-50%);white-space:nowrap;
+    font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--grey);
+    text-align:center;opacity:0;}
+  body.draw .tick{opacity:1;transition:opacity .35s ease var(--dd,0ms);}
+  .tick.hot{color:var(--purple);}
+  .tick.low{top:20px;} .tick.low i{height:27px;}
+  .tick i{display:block;width:1px;height:9px;background:currentColor;margin:0 auto 5px;}
+  li.row.flash{background:var(--wash);}
+
+  /* ── the plan IS the timeline ──────────────────────────────────
+     Time runs down the page, every step is named where it sits on the clock,
+     and the gap is a real hole between two rows rather than a claim.        */
+  .tin{opacity:0;transform:translateY(8px);}
+  body.draw .tin{opacity:1;transform:none;
+    transition:opacity .34s ease var(--d,0ms),
+               transform .34s cubic-bezier(.25,.7,.3,1) var(--d,0ms);}
+  ol.cal{position:relative;list-style:none;margin:20px 0 0;padding:0;}
+  ol.cal::before{content:"";position:absolute;left:112px;top:10px;bottom:10px;width:1px;
+    background:var(--hair);}
+  ol.cal li.row{position:relative;display:grid;
+    grid-template-columns:112px minmax(0,1fr) 122px 26px;gap:0 18px;align-items:start;
+    padding:15px 0;margin-top:var(--sp,0px);cursor:pointer;transition:opacity .18s;}
+  ol.cal li.row:hover .pname{color:var(--purple);}
+  ol.cal li.row[aria-pressed="true"]{opacity:.45;}
+  .when{text-align:right;padding-right:22px;font-family:var(--mono);font-size:11.5px;
+    line-height:1.5;color:var(--purple);font-variant-numeric:tabular-nums;}
+  .no{display:block;font-size:10px;font-weight:500;color:var(--grey);margin-bottom:2px;}
+  .mk{position:absolute;left:112px;top:22px;transform:translate(-50%,-50%);
+    width:11px;height:11px;border-radius:50%;background:var(--c);
+    box-shadow:0 0 0 4px var(--paper);}
+  li.key .mk{width:16px;height:16px;}
+  li.key .pname{color:var(--purple);}
+  .what{min-width:0;}
+  .what .ch{display:block;margin-bottom:5px;}
+  .pname{display:block;font-weight:700;font-stretch:110%;font-size:16px;letter-spacing:-.006em;
+    transition:color .18s;}
+  .ptrig{display:block;margin-top:5px;font-family:var(--mono);font-size:12px;line-height:1.55;
+    color:var(--grey);}
+  .share{font-family:var(--mono);font-size:12px;color:var(--note);text-align:right;
+    padding-top:2px;font-variant-numeric:tabular-nums;}
+  ol.cal li.ph{position:relative;z-index:1;background:var(--paper);
+    padding:38px 0 8px;color:var(--ink);font-size:11.5px;}
+  ol.cal li.ph:first-child{padding-top:8px;}
+  li.gapblock{position:relative;margin:10px 0 10px 112px;padding:18px 20px;background:var(--wash);
+    border-left:2px solid var(--purple);border-top:1px dashed var(--purple);
+    border-bottom:1px dashed var(--purple);cursor:default;}
+  li.gapblock b{display:inline-block;background-color:var(--purple);color:#FFFFFF;
+    padding:3px 8px 4px;font-family:var(--mono);font-size:13px;font-weight:500;
+    font-variant-numeric:tabular-nums;}
+  li.gapblock em{font-style:normal;font-family:var(--mono);font-size:13px;color:var(--ink);}
+  li.gapblock span{display:block;margin-top:10px;font-family:var(--mono);font-size:11.5px;
+    line-height:1.6;color:var(--note);}
+  @media (prefers-reduced-motion:reduce){
+    .tin{opacity:1;transform:none;} body.draw .tin{transition:none;}
+    .axis{transform:scaleX(1);} .dot{opacity:1;transform:translate(-50%,-50%) scale(1);}
+    .tick{opacity:1;} .band{width:var(--bw);opacity:1;}
+    body.draw .axis,body.draw .dot,body.draw .tick,body.draw .band{transition:none;}
+  }
+  @media (max-width:620px){
+    .crow{grid-template-columns:minmax(0,1fr) 104px;gap:10px;}
+    .crow.out .cval{font-size:19px;}
+    ol.queue li{grid-template-columns:30px minmax(0,1fr) 26px;gap:0 12px;}
+    ol.queue li::before{font-size:17px;}
+    .tl{grid-template-columns:minmax(0,1fr);gap:10px 0;}
+    .lanelabs{grid-template-rows:none;grid-template-columns:repeat(4,1fr);gap:0 4px;
+      align-items:start;}
+    .lanelabs span{font-size:9px;letter-spacing:.04em;text-align:center;}
+    .plot{height:480px;}
+    .axis{left:0;right:auto;top:0;bottom:0;width:2px;height:auto;
+      transform:scaleY(0);transform-origin:50% 0;}
+    body.draw .axis{transform:scaleY(1);}
+    .lane{left:calc(var(--lane)*25% + 12.5%);right:auto;top:0;bottom:0;width:1px;height:auto;}
+    .band{left:0;right:0;width:auto;top:var(--b1);height:0;border-left:0;border-right:0;
+      border-top:2px solid var(--purple);border-bottom:1px dashed var(--purple);}
+    body.draw .band{width:auto;height:var(--bw);
+      transition:height .5s cubic-bezier(.3,.7,.3,1) var(--bd,900ms),
+                 opacity .01s linear var(--bd,900ms);}
+    .dot{left:calc(var(--lane)*25% + 12.5%);top:var(--t);}
+    .ticks{height:auto;margin-top:12px;display:flex;flex-wrap:wrap;gap:6px 16px;}
+    .tick{position:static;transform:none;} .tick i{display:none;} .tick.low{top:auto;}
+    ol.cal::before{left:58px;}
+    ol.cal li.row{grid-template-columns:58px minmax(0,1fr) 26px;gap:0 14px;}
+    .when{padding-right:14px;font-size:10.5px;white-space:normal;}
+    .mk{left:58px;}
+    .row .when{grid-column:1;grid-row:1;} .row .what{grid-column:2;grid-row:1;}
+    .row .st{grid-column:3;grid-row:1;}
+    .row .share{grid-column:2/4;grid-row:2;text-align:left;margin-top:8px;padding-top:0;}
+    li.gapblock{margin-left:58px;padding:14px 16px;}
+  }
+  .s1{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;
+    max-width:660px;margin:0 auto;padding:78px 24px 40px;}
+  .s1 .top{position:absolute;top:24px;left:24px;right:24px;}
+  .hook{margin:0;font-weight:800;font-stretch:118%;font-size:56px;line-height:1.02;
+    letter-spacing:-.024em;text-wrap:balance;}
+  .hook em{font-style:normal;background-color:var(--purple);color:#FFFFFF;
+    padding:.02em .12em .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  .cost{margin:20px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--purple);}
+  .step{margin-top:38px;}
+  .lab{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--note);margin-bottom:11px;}
+  .note{margin:11px 0 0;font-family:var(--mono);font-size:12px;color:var(--grey);}
+  .s2{display:none;max-width:660px;margin:0 auto;padding:26px 24px 110px;}
+  body.done .s2{display:block;}
+  .crumb{display:inline-flex;align-items:center;gap:10px;border:0;background:none;padding:0;
+    margin-top:20px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--grey);}
+  .crumb b{color:var(--purple);font-weight:500;}
+  .crumb u{text-decoration:none;border-bottom:1px solid var(--hair);color:var(--note);}
+  .crumb:hover u{border-color:var(--purple);color:var(--purple);}
+  .peek{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:22px 0 0;padding:12px 14px;
+    border:1px dashed var(--hair);background:var(--wash);font-family:var(--mono);font-size:11.5px;
+    color:var(--grey);}
+  .peek b{color:var(--ink);font-weight:500;}
+  .peek span:first-child{color:var(--purple);}
+  .verdict{margin-top:14px;}
+  .verdict p{margin:0;font-weight:800;font-stretch:118%;font-size:26px;line-height:1.28;
+    letter-spacing:-.016em;text-wrap:balance;}
+  .verdict b{background-color:var(--purple);color:#FFFFFF;padding:0 5px 2px;}
+  /* what the eighteen rows are, before the eighteen rows */
+  .scope{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
+  .scope span{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--hair);
+    padding:10px 13px;font-family:var(--mono);font-size:11.5px;color:var(--note);}
+  .scope i{width:8px;height:8px;background:currentColor;flex:none;}
+  .scope b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;}
+  .calhead{margin-top:48px;border-top:2px solid var(--ink);padding-top:16px;
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .calhead p{margin:0;font-family:var(--mono);font-size:12px;color:var(--note);}
+  .bar{margin-top:34px;}
+  .bar button{border:2px solid var(--ink);background:none;color:var(--ink);cursor:pointer;
+    padding:13px 18px;font-weight:700;font-stretch:110%;font-size:13.5px;letter-spacing:.07em;
+    text-transform:uppercase;transition:background-color .16s,color .16s;}
+  .bar button:hover{background-color:var(--ink);color:#FFFFFF;}
+  .ask{margin-top:52px;}
+  .slot{margin:0 0 14px;font-weight:700;font-stretch:110%;font-size:16px;line-height:1.4;}
+  .slot b{background-color:var(--purple);color:#FFFFFF;padding:0 5px 2px;font-weight:800;}
+  .promise{margin:14px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--note);}
+  .sent{margin-top:44px;background:var(--wash);padding:26px;}
+  .sent h2{margin:0;font-weight:800;font-stretch:118%;font-size:24px;letter-spacing:-.014em;}
+  .sent h2 em{font-style:normal;color:var(--purple);}
+  .sent p{margin:12px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--note);}
+  .cv{margin:44px 0 0;font-family:var(--mono);font-size:12px;line-height:1.75;color:var(--note);}
+  .cv b{color:var(--ink);font-weight:500;}
+  .foot{margin:20px 0 0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--grey);}
+  @media (max-width:620px){
+    .hook{font-size:32px;} .verdict p{font-size:20px;} .tally h2{font-size:20px;} .sent h2{font-size:20px;}
+  }
+  @media (max-height:620px){.hook{font-size:34px;} .s1{padding-top:64px;}}
+</style>
+</head>
+<body>
+
+<div class="s1" id="s1">
+  <div class="top"><h1>Oleksiak Consult</h1><span>Prototype</span></div>
+  <h2 class="hook">Every customer runs out on a different day. <em>You email all of them on the same one.</em></h2>
+  <p class="cost">Two numbers. Twenty seconds.</p>
+  <div class="peek"><span>Day 23</span><b>Running low</b><span>20&ndash;28% of CRM revenue</span><span>&mdash; one of eighteen rows, from paid to loyalty</span></div>
+
+  <div class="step">
+    <div class="lab">What runs out</div>
+    <div class="cats" id="cats"></div>
+  </div>
+
+  <div class="step">
+    <div class="lab">Days one pack lasts</div>
+    <div class="guessrow">
+      <div class="daybox"><input id="days" type="number" min="3" max="400" inputmode="numeric" value="30"><span>days</span></div>
+      <button class="go" id="go" type="button">Show me the plan</button>
+    </div>
+    <p class="note">Same math I ran at Allegro &mdash; two numbers instead of five data scientists.</p>
+  </div>
+</div>
+
+<div class="s2" id="s2">
+  <div class="top"><h1>Oleksiak Consult</h1><span>Prototype</span></div>
+  <div class="out" id="out">
+    <button class="crumb rv" id="crumb" type="button"></button>
+    <div class="leak rv">
+      <p class="leakline" id="leakline"></p>
+      <div class="calclab">The arithmetic &mdash; change anything in it</div>
+      <div class="calc">
+        <div class="crow"><label for="ord">Orders a month<em>your number</em></label>
+          <span class="cval"><input class="n" id="ord" type="number" min="1" max="9999999" inputmode="numeric" value="800"></span></div>
+        <div class="crow"><label for="loss">Share who never buy a second pack<em>assumption &mdash; change it</em></label>
+          <span class="cval"><input class="n" id="loss" type="number" min="1" max="90" inputmode="numeric" value="30">%</span></div>
+        <div class="crow"><label for="win">Share of those a timed sequence wins back<em>assumption &mdash; change it</em></label>
+          <span class="cval"><input class="n" id="win" type="number" min="1" max="80" inputmode="numeric" value="20">%</span></div>
+        <div class="crow"><label for="aov">Average order<em>your number</em></label>
+          <span class="cval"><input class="n" id="aov" type="number" min="1" max="99999" inputmode="numeric" value="140"> z&#322;</span></div>
+        <div class="crow out"><span id="calcsum"></span><span class="cval" id="permo"></span></div>
+      </div>
+      <p class="peryear" id="peryear"></p>
+    </div>
+
+    <div class="tlwrap rv">
+      <div class="tlhead">
+        <div class="lab">The clock &middot; when each step fires</div>
+        <span class="tlgap" id="tlgap"></span>
+      </div>
+      <div class="tl">
+        <div class="lanelabs">
+          <span class="ch-trf">Paid &amp; search</span>
+          <span class="ch-store">Store</span>
+          <span class="ch-own">Email, push &amp; SMS</span>
+          <span class="ch-loy">Subscription &amp; loyalty</span>
+        </div>
+        <div class="plot" id="plot"></div>
+      </div>
+      <div class="ticks" id="ticks"></div>
+    </div>
+
+    <div class="qwrap rv">
+      <div class="qhead">
+        <div class="lab" style="margin:0">Where I would start</div>
+        <p>Tap anything you already run.</p>
+      </div>
+      <ol class="queue" id="queue"></ol>
+      <p class="qdone" id="qdone"></p>
+
+      <details class="rest">
+        <summary id="restsum">The other steps, on the clock</summary>
+        <ol class="cal" id="cal"></ol>
+      </details>
+    </div>
+
+    <div class="bar rv"><button id="copy" type="button">Take the sheet</button></div>
+
+    <div class="ask rv">
+      <form id="form" novalidate>
+        <p class="slot">I&rsquo;m taking on <b>one more company</b> this quarter. That&rsquo;s the whole plan.</p>
+        <p class="err" id="err"></p>
+        <div class="fbox">
+          <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+                 autocapitalize="off" placeholder="name@company.com">
+          <button type="submit">Send it</button>
+        </div>
+        <p class="promise">Send me your version and I reply once: the build order, the two rows I&rsquo;d cut, and what I&rsquo;d need from your order data. No call, no calendar link.</p>
+      </form>
+    </div>
+
+    <div class="sent rv" id="sent">
+      <h2>Sent. <em>Now I go and look.</em></h2>
+      <p id="rcpt"></p>
+    </div>
+
+    <p class="cv rv"><b>Fifteen years of the same problem:</b> Allegro (FMCG and recurring, 0.5% &rarr; 12% of revenue in eighteen months), mBank / mOkazje, Booksy, Genactiv (current).</p>
+    <p class="foot rv">Intervals and revenue shares here are placeholders and the form is not wired yet. The real version ships my own dated, sourced ranges.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* PLACEHOLDER DATA — structure is real, values are for the prototype only.
+     pack = typical days one pack lasts | lo/hi = observed reorder band */
+  var CATS=[
+    {k:"supp",  label:"Supplements",         pack:30, lo:41, hi:52},
+    {k:"coffee",label:"Coffee & drinks",     pack:21, lo:29, hi:38},
+    {k:"skin",  label:"Skincare",            pack:60, lo:79, hi:96},
+    {k:"clean", label:"Household & cleaning",pack:45, lo:63, hi:81},
+    {k:"pet",   label:"Pet food",            pack:30, lo:31, hi:36},
+    {k:"lens",  label:"Contact lenses",      pack:30, lo:33, hi:41}
+  ];
+  var PROG=[
+    {ph:"1 \u00b7 Traffic \u2014 paid, search, answer engines",
+     at:function(){return "Always on";},   g:"trf", cl:"Paid", n:"Stop bidding on people who just bought", t:"Prospecting audiences still contain last cycle\u2019s buyers", m:"CAC \u221210\u201318%"},
+    {at:function(P){return "Day "+Math.max(2,P-10);},
+                                            g:"trf", cl:"Paid", n:"Retarget on the consumption clock",     t:"The pack is about to end \u2014 not \u201cthey visited three days ago\u201d", m:"ROAS +15\u201325%"},
+    {at:function(){return "Always on";},   g:"trf", cl:"SEO", n:"Own the questions that come at the end", t:"How long a pack lasts, when to reorder, which size to buy", m:"Non-brand +20\u201335%"},
+    {at:function(){return "Always on";},   g:"trf", cl:"SEO for LLMs", n:"Be the source the answer engines quote", t:"ChatGPT, Perplexity and AI overviews answer the dosage question for you", m:"LLM referrals +"},
+
+    {ph:"2 \u00b7 Store \u2014 conversion on Shopify or WooCommerce",
+     at:function(){return "On the page";}, g:"store", cl:"Store \u00b7 PDP", n:"Put the duration on the product page",   t:"\u201c30 days of supply\u201d \u2014 nobody states it, every buyer wonders", m:"CVR +6\u201311%"},
+    {at:function(){return "In the cart";}, g:"store", cl:"Store \u00b7 cart", n:"Price the pack in months, not in units", t:"Two packs is two months of not thinking about it", m:"AOV +8\u201315%"},
+    {at:function(P){return "At checkout";},g:"store", cl:"Store \u00b7 checkout", n:"Subscribe-and-save set to the real interval", t:"Not a round 30 chosen by the platform \u2014 the interval you actually see", m:"Take-up 9\u201317%"},
+
+    {ph:"3 \u00b7 Owned channels \u2014 email, push and SMS on the pack clock",
+     at:function(){return "Day 0";},        g:"own", cl:"Email", n:"Welcome, and how to use it",     t:"Order placed",                          m:"CRM rev 6\u20139%"},
+    {at:function(){return "Day 3\u20135";},   g:"own", cl:"Email", n:"Get the pack opened",            t:"Delivered \u2014 the first dose is the habit", m:"CRM rev 3\u20135%"},
+    {at:function(P){return "Day "+Math.max(2,Math.round(P*0.5));},
+                                             g:"own", cl:"Email", n:"Mid-pack check-in",              t:"Half the pack gone",                    m:"CRM rev 4\u20137%"},
+    {at:function(P){return "Day "+Math.max(2,P-7);},
+                                             g:"own", cl:"Email + push", n:"Running low",                    t:"Seven days of product left",            m:"CRM rev 20\u201328%", key:1},
+    {at:function(P){return "Day "+P;},       g:"own", cl:"Email + push", n:"The pack ends",                  t:"Consumption model says zero",           m:"CRM rev 16\u201322%", key:1},
+    {at:function(P){return "Day "+(P+7);},   g:"own", cl:"Push", n:"Missed the refill",              t:"A week empty, no order",                m:"CRM rev 9\u201313%"},
+    {at:function(P){return "Day "+(P+21);},  g:"own", cl:"SMS", n:"Change the channel",             t:"Two emails ignored \u2014 wrong medium, not wrong clock", m:"CRM rev 6\u20139%"},
+    {at:function(P){return "Day "+Math.round(P*2.5);},
+                                             g:"own", cl:"Email", n:"Win-back with a reason",         t:"Two full cycles missed",                m:"CRM rev 5\u20138%"},
+
+    {ph:"4 \u00b7 Loyalty \u2014 subscription and the programme",
+     at:function(){return "Order 3";},      g:"loy", cl:"Subscription", n:"Move them to a standing order",   t:"Third order \u2014 the moment a subscription is accepted", m:"LTV \u00d71.4\u20131.9"},
+    {at:function(){return "Cycle 4";},      g:"loy", cl:"Loyalty", n:"A tier earned by cycles kept, not by spend", t:"Four packs in a row with no gap", m:"Churn \u221218\u201326%"},
+    {at:function(){return "Cycle 6";},      g:"loy", cl:"Loyalty", n:"Ask for the referral here, not at checkout", t:"Half a year of the product actually working", m:"Referrals 4\u20139%"}
+  ];
+
+
+
+  var SHEET_LABEL="Take the sheet";
+
+  /* ── the money ────────────────────────────────────────────────────────────
+     Four factors, all of them on screen, all of them the visitor's to change.
+     Nothing here is asserted by me; the page only does the multiplication.   */
+  function num(id,dflt){
+    var e=document.getElementById(id);if(!e)return dflt;
+    var v=parseFloat(e.value);return (isNaN(v)||v<=0)?dflt:v;
+  }
+  function money(n){
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,"\u2009");
+  }
+  function econ(){
+    var o=num("ord",800),l=num("loss",30),w=num("win",20),a=num("aov",140),
+        rec=o*(l/100)*(w/100);
+    return {orders:o,rec:rec,mo:rec*a,yr:rec*a*12};
+  }
+  function paintEcon(){
+    var e=econ(),g=gap(),line=document.getElementById("leakline");
+    if(!line)return;
+    if(g>0)
+      line.innerHTML="You are leaving about <b>"+money(e.mo)+" z\u0142 a month</b> in the "
+        +Math.abs(g)+" days between the pack running out and your customer remembering on their own.";
+    else if(g<0)
+      line.innerHTML="Your buyers restock before they run out, so the <b>"+money(e.mo)
+        +" z\u0142 a month</b> is not in reminders \u2014 it is in a standing order you are not offering.";
+    else
+      line.innerHTML="Your cycle and their reorder line up, so the <b>"+money(e.mo)
+        +" z\u0142 a month</b> is not a timing problem \u2014 it is how few of them ever get the message.";
+    document.getElementById("calcsum").innerHTML=
+      "<b>"+money(e.rec)+" orders a month</b> you are not asking for";
+    document.getElementById("permo").textContent=money(e.mo)+" z\u0142";
+    document.getElementById("peryear").innerHTML="\u2248 <b>"+money(e.yr)
+      +" z\u0142 a year</b>. Every number above is yours to change \u2014 the page only multiplies them.";
+    var gapEl=document.getElementById("tlgap");
+    if(gapEl&&gapEl.__show)gapEl.__show();
+    var slot=document.querySelector(".slot");
+    if(slot)slot.innerHTML="I&rsquo;m taking on <b>one more company</b> this quarter. If it is yours, "
+      +"I will send the arithmetic behind that "+money(e.yr)+" z\u0142 and where I would start.";
+  }
+  ["ord","loss","win","aov"].forEach(function(id){
+    var e=document.getElementById(id);
+    if(e)e.addEventListener("input",function(){paintEcon();renderQueue();});
+  });
+
+  /* ── the queue ────────────────────────────────────────────────────────────
+     Eighteen rows is a document. Six is a decision. The order is a judgment
+     call, which is the part worth paying for, so each one says why.          */
+  var RANK=[
+    {i:10,why:"It arrives while the product is still in the house \u2014 the only message that lands before the decision is made."},
+    {i:11,why:"The day your own model says zero. Highest revenue per send in every account I have run."},
+    {i:6, why:"One checkbox at checkout removes the problem entirely for everyone who accepts it."},
+    {i:12,why:"Cheap once the clock exists, and it catches everybody the first two missed."},
+    {i:4, why:"Costs nothing, lifts conversion, and sets the expectation that makes every later message make sense."},
+    {i:1, why:"Stops you paying twice \u2014 right now you are bidding on people who are already yours."},
+    {i:13,why:"When two emails were ignored the clock was right and the channel was wrong."},
+    {i:15,why:"The third order is the moment a standing order stops feeling like a commitment."},
+    {i:9, why:"Half the pack gone is the cheapest moment to find out it is not being used."},
+    {i:14,why:"Two cycles missed needs a reason to return, not another reminder."},
+    {i:7, why:"The welcome flow everyone builds first, which is why it is rarely the problem."},
+    {i:8, why:"An unopened pack never runs out, so this row protects every row after it."},
+    {i:5, why:"Two packs framed as two months sells the second one without a discount."},
+    {i:16,why:"A tier earned by cycles kept rewards the behaviour you actually want."},
+    {i:2, why:"The questions people ask at the end of a pack are the ones you should already rank for."},
+    {i:3, why:"Answer engines are quoting somebody on dosage and duration. It may as well be you."},
+    {i:17,why:"Half a year of the product working is when a referral is worth asking for."},
+    {i:0, why:"Housekeeping, but it is money you are lighting on fire every day it waits."}
+  ];
+
+  function renderQueue(){
+    var q=document.getElementById("queue"),done=document.getElementById("qdone");
+    if(!q)return;
+    var h="",ran=0,p=P();
+    /* all eighteen are on screen from the first paint — marking one strikes it
+       where it stands instead of promoting a replacement out of nowhere */
+    RANK.forEach(function(r,k){
+      var pr=PROG[r.i];
+      if(marked[r.i])ran++;
+      h+='<li data-i="'+r.i+'"'+(k>5?' class="extra"':'')+(marked[r.i]?' data-done="1"':'')+'>'
+        +'<span class="qmid"><span class="qn">'+pr.n+'</span>'
+        +'<span class="qmeta">'+pr.at(p)+' &middot; '+pr.cl+' &middot; '+pr.m+'</span>'
+        +'<span class="qwhy">'+r.why+'</span></span>'
+        +'<button class="st" type="button" aria-pressed="'+(marked[r.i]?"true":"false")
+        +'" aria-label="Mark as already running"></button></li>';
+    });
+    q.innerHTML=h;
+    [].forEach.call(q.children,function(li){
+      var idx=+li.getAttribute("data-i");
+      li.querySelector(".st").onclick=function(ev){ev.stopPropagation();toggleRow(idx);};
+      li.onclick=function(){li.classList.toggle("open");};
+    });
+    done.innerHTML=ran
+      ? "<b>"+ran+"</b> of "+PROG.length+" already running."
+      : "Tap the box on any step you already run. Tap the step itself to read why it sits there.";
+  }
+  function toggleRow(i){
+    var li=document.querySelector('#cal li[data-i="'+i+'"]');
+    if(li&&li.__toggle)li.__toggle();
+  }
+  function renderRow(pr,p){
+    return '<span class="pmid"><span class="meta"><span class="day">'+pr.at(p)+'</span>'
+      +chip(pr)+'</span>'
+      +'<span class="pname">'+pr.n+'</span><span class="ptrig">'+pr.t+'</span></span>'
+      +'<span class="share">'+pr.m+'</span><span class="st"></span>';
+  }
+  function setVerdict(p){
+    document.getElementById("crumb").innerHTML="<b>"+cat.label+"</b> &nbsp;/&nbsp; "+p
+      +" days per pack &nbsp; <u>Change</u>";
+    paintEcon();
+  }
+  function setTally(have,keyMissing,missing){ renderQueue(); }
+  function receipt(v,missing){
+    var e=econ();
+    return "One email to "+v+" before this time tomorrow \u2014 the arithmetic behind "
+      +money(e.yr)+" z\u0142, your "+cat.label.toLowerCase()+" clock at "+P()
+      +" days, and the "+missing+" steps you have not marked.";
+  }
+  function onCat(){}
+  /* a dot and its row are the same fact shown twice */
+  /* one mistyped number must never cost the visitor the page */
+  document.getElementById("crumb").addEventListener("click",function(){
+    var rm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    document.body.classList.remove("done","draw","after","leaving");
+    window.scrollTo({top:0,behavior:rm?"auto":"smooth"});
+    document.getElementById("days").focus();
+  });
+  function reduced(){
+    return !!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches);
+  }
+
+  /* Rows are laid out in the order they actually fire, so reading down the page
+     is watching time pass. Days are real days; the gap is real space.        */
+  var ALWAYS={0:1,2:1,3:1}, STORE={4:1,5:1,6:1}, POST={15:1,16:1,17:1};
+
+  function dayOf(i,P){
+    if(i===1)return Math.max(2,P-10);
+    if(i===7)return 0;
+    if(i===8)return 4;
+    if(i===9)return Math.max(2,Math.round(P*0.5));
+    if(i===10)return Math.max(2,P-7);
+    if(i===11)return P;
+    if(i===12)return P+7;
+    if(i===13)return P+21;
+    if(i===14)return Math.round(P*2.5);
+    return null;
+  }
+  function keyOf(i,P){
+    if(ALWAYS[i])return -2000+i;
+    if(STORE[i])return -1000+i;
+    if(POST[i])return 1e6+i;
+    return dayOf(i,P)*10+i;
+  }
+  function orderRows(P){
+    var a=[],i;for(i=0;i<PROG.length;i++)a.push(i);
+    return a.sort(function(x,y){return keyOf(x,P)-keyOf(y,P);});
+  }
+  function groupOf(i,P){
+    if(ALWAYS[i])return "Before the first order — paid, search, answer engines";
+    if(STORE[i])return "The store — Shopify or WooCommerce";
+    if(POST[i])return "After the second order — subscription and loyalty";
+    return "The pack cycle — email, push and SMS, and paid once";
+  }
+  /* days between two consecutive rows become real vertical distance */
+  var lastDay=null;
+  function spaceOf(i,ord,P){
+    var d=dayOf(i,P);
+    if(d===null){lastDay=null;return 0;}
+    var sp=(lastDay===null)?0:Math.min(38,Math.max(0,(d-lastDay)*1.1));
+    lastDay=d;
+    return Math.round(sp);
+  }
+
+  function renderRow(pr,p,i,ord){
+    return '<span class="when"><b class="no">'+(ord+1)+'</b><i class="mk ch-'+pr.g+'"></i>'
+      +pr.at(p)+'</span>'
+      +'<span class="what"><span class="ch ch-'+pr.g+'">'+pr.cl+'</span>'
+      +'<span class="pname">'+pr.n+'</span><span class="ptrig">'+pr.t+'</span></span>'
+      +'<span class="share">'+pr.m+'</span><span class="st"></span>';
+  }
+
+  /* the hole between "the pack is empty" and "they come back" */
+  function insertGap(p,quiet,delay){
+    var anchor=document.querySelector('#cal li[data-i="11"]');
+    if(!anchor)return;
+    var g=gap(),li=document.createElement("li");
+    li.className="gapblock tin";
+    li.style.setProperty("--d",(quiet?0:delay)+"ms");
+    if(g>0){
+      li.innerHTML='<b id="gapn">0 days</b> <em>with the cupboard empty</em>'
+        +'<span>Day '+p+' the pack runs out → day '+band()+' they come back on their own. '
+        +'Nothing you own fires in between.</span>';
+    }else if(g<0){
+      li.innerHTML='<b id="gapn">0 days</b> <em>of stock still on the shelf</em>'
+        +'<span>They reorder on day '+band()+', before the pack is finished. '
+        +'This is a standing-order problem, not a reminder problem.</span>';
+    }else{
+      li.innerHTML='<b id="gapn">0 days</b> <em>between empty and reorder</em>'
+        +'<span>The cycles line up. Your timing is not the problem — reach is.</span>';
+    }
+    anchor.parentNode.insertBefore(li,anchor.nextSibling);
+    var n=Math.abs(g),el=li.querySelector("#gapn");
+    if(quiet||reduced()){el.textContent=n+" days";return;}
+    setTimeout(function(){
+      var k=0,iv=setInterval(function(){
+        k++;el.textContent=Math.round(n*k/12)+" days";
+        if(k>=12)clearInterval(iv);
+      },40);
+    },delay+340);
+  }
+
+  /* ── the map above the list: same rows, same order, same moment ────────
+     A dot and its row are numbered alike and land together, so the overview
+     never asks the reader to hold eighteen numbers in their head.          */
+  var LANE={trf:0,store:1,own:2,loy:3}, Z0=34, ZW=48, MINSEP=5,
+      SLOT_ALWAYS=[4,10,16], SLOT_STORE=[20,26,32], SLOT_POST=[86,91,96];
+
+  function chartPos(p){
+    var t=[],a=0,st=0,po=0,byLane={},i;
+    for(i=0;i<PROG.length;i++){
+      if(ALWAYS[i])t[i]=SLOT_ALWAYS[a++];
+      else if(STORE[i])t[i]=SLOT_STORE[st++];
+      else if(POST[i])t[i]=SLOT_POST[po++];
+      else t[i]=Z0+ZW*Math.max(0,Math.min(1,dayOf(i,p)/Math.max(1,p*2.5)));
+      var L=LANE[PROG[i].g];(byLane[L]=byLane[L]||[]).push(i);
+    }
+    /* two steps on almost the same day would draw as one blob */
+    for(var L2 in byLane){
+      var ids=byLane[L2].slice().sort(function(x,y){return t[x]-t[y];});
+      for(i=1;i<ids.length;i++)
+        if(t[ids[i]]-t[ids[i-1]]<MINSEP)t[ids[i]]=t[ids[i-1]]+MINSEP;
+      var over=t[ids[ids.length-1]]-97;
+      if(over>0)for(i=0;i<ids.length;i++)t[ids[i]]-=over;
+    }
+    return t;
+  }
+
+  function flashRow(i){
+    var li=document.querySelector('#cal li[data-i="'+i+'"]');
+    if(!li)return;
+    li.scrollIntoView({behavior:reduced()?"auto":"smooth",block:"center"});
+    li.classList.add("flash");
+    setTimeout(function(){li.classList.remove("flash");},1200);
+  }
+
+  function buildChart(p,seq,delayOf,quiet){
+    var plot=document.getElementById("plot"),ticks=document.getElementById("ticks"),
+        gapEl=document.getElementById("tlgap"),T=chartPos(p),g=gap(),h="",i;
+    for(i=0;i<4;i++)h+='<i class="lane" style="--lane:'+i+'"></i>';
+    var t1=T[11],t2=Math.max(t1+3,Z0+ZW*Math.min(1,cat.hi/Math.max(1,p*2.5))),
+        bandDelay=delayOf(11)+140;
+    h+='<i class="band" style="--b1:'+t1+'%;--bw:'+(t2-t1)+'%;--bd:'+(quiet?0:bandDelay)+'ms"></i>';
+    seq.forEach(function(idx,ord){
+      h+='<button type="button" class="dot ch-'+PROG[idx].g+'" data-i="'+idx+'" aria-pressed="'
+        +(marked[idx]?"true":"false")+'" aria-label="'+PROG[idx].n+'" style="--t:'+T[idx]
+        +'%;--lane:'+LANE[PROG[idx].g]+';--dd:'+(quiet?0:delayOf(idx))+'ms"><b>'+(ord+1)+'</b></button>';
+    });
+    plot.innerHTML=h;
+
+    ticks.innerHTML=
+      '<span class="tick" style="--t:16%;--dd:'+(quiet?0:delayOf(0))+'ms"><i></i>Before</span>'
+     +'<span class="tick" style="--t:'+T[7]+'%;--dd:'+(quiet?0:delayOf(7))+'ms"><i></i>Day 0</span>'
+     +'<span class="tick hot" style="--t:'+t1+'%;--dd:'+(quiet?0:delayOf(11))+'ms"><i></i>Day '+p+' empty</span>'
+     +'<span class="tick hot low" style="--t:'+t2+'%;--dd:'+(quiet?0:bandDelay)+'ms"><i></i>Day '+band()+' they reorder</span>'
+     +'<span class="tick" style="--t:93%;--dd:'+(quiet?0:delayOf(17))+'ms"><i></i>Later</span>';
+
+    [].forEach.call(plot.querySelectorAll(".dot"),function(d){
+      var idx=+d.getAttribute("data-i"),n=d.textContent;
+      d.onclick=function(){flashRow(idx);};
+      d.onmouseenter=d.onfocus=function(){
+        gapEl.innerHTML=n+" &middot; "+PROG[idx].n+" &mdash; "+PROG[idx].cl;
+      };
+      d.onmouseleave=d.onblur=function(){showGap();};
+    });
+
+    function showGap(v){
+      var n=(v===undefined)?Math.abs(g):v;
+      gapEl.innerHTML=g>0?'<b>'+n+' days</b> with the cupboard empty'
+        :(g<0?'<b>'+n+' days</b> of stock left when they reorder'
+             :'<b>0 days</b> — the cycles line up');
+    }
+    gapEl.__show=showGap;
+    if(quiet||reduced()){showGap();return;}
+    gapEl.innerHTML="";
+    setTimeout(function(){
+      var n=Math.abs(g),k=0,iv=setInterval(function(){
+        k++;showGap(Math.round(n*k/12));
+        if(k>=12)clearInterval(iv);
+      },40);
+    },bandDelay+180);
+  }
+
+  function paint(quiet){
+    var rows=document.querySelectorAll("#cal li"),base=quiet?0:300,step=quiet?0:38,
+        seq=orderRows(P()),ordOf={},gapDelay=base,i,k=0;
+    seq.forEach(function(idx,ord){ordOf[idx]=ord;});
+    var delayOf=function(idx){return base+(ordOf[idx]||0)*step;};
+    for(i=0;i<rows.length;i++){
+      rows[i].classList.add("tin");
+      var di=rows[i].getAttribute("data-i");
+      rows[i].style.setProperty("--d",(di===null?base+k*step:delayOf(+di))+"ms");
+      if(di==="11")gapDelay=delayOf(11)+140;
+      k++;
+    }
+    buildChart(P(),seq,delayOf,quiet);
+    insertGap(P(),quiet,gapDelay);
+    var els=document.querySelectorAll("#s2 .rv");
+    for(i=0;i<els.length;i++)
+      els[i].style.setProperty("--d",(quiet?0:(i<4?i*70:1150+(i-4)*50))+"ms");
+  }
+
+  function reveal(quiet){
+    out.classList.add("on");
+    var again=document.body.classList.contains("done");
+    if(quiet||again){
+      paint(1);document.body.classList.add("draw","after");return;
+    }
+    var rm=reduced();
+    document.body.classList.add("leaving");
+    setTimeout(function(){
+      document.body.classList.add("done");
+      window.scrollTo({top:0,behavior:"auto"});
+      paint(rm?1:0);
+      requestAnimationFrame(function(){requestAnimationFrame(function(){
+        document.body.classList.add("draw","after");
+      });});
+    },rm?0:260);
+  }
+
+
+
+
+  var cat=CATS[0], marked={};
+  var catsEl=document.getElementById("cats"), daysEl=document.getElementById("days"),
+      out=document.getElementById("out"), verdict=document.getElementById("verdict"),
+      cal=document.getElementById("cal"), tallyHead=document.getElementById("tallyHead"),
+      tallyBody=document.getElementById("tallyBody"), err=document.getElementById("err"),
+      sent=document.getElementById("sent"), rcpt=document.getElementById("rcpt");
+
+  CATS.forEach(function(c,i){
+    var b=document.createElement("button");
+    b.type="button";b.textContent=c.label;b.setAttribute("aria-pressed",i===0?"true":"false");
+    b.onclick=function(){
+      cat=c;
+      [].forEach.call(catsEl.children,function(el){el.setAttribute("aria-pressed","false");});
+      b.setAttribute("aria-pressed","true");
+      daysEl.value=c.pack; if(typeof onCat==="function")onCat();
+      if(out.classList.contains("on"))run(1);
+    };
+    catsEl.appendChild(b);
+  });
+
+  function chip(pr){return '<span class="ch ch-'+pr.g+'">'+pr.cl+'</span>';}
+  function P(){var v=parseInt(daysEl.value,10);return(!v||v<3)?3:(v>400?400:v);}
+  function band(){return cat.lo+"\u2013"+cat.hi;}
+  function gap(){return Math.round((cat.lo+cat.hi)/2)-P();}
+  daysEl.addEventListener("blur",function(){daysEl.value=P();});
+  daysEl.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();run(0);}});
+  document.getElementById("go").onclick=function(){run(0);};
+
+  function run(quiet){
+    /* editing an input never costs the visitor the rows they already ticked */
+    var p=P();
+    setVerdict(p);
+    cal.innerHTML="";
+    var lastPh=null;
+    var seq=(typeof orderRows==="function")?orderRows(p):PROG.map(function(_,i){return i;});
+    seq.forEach(function(i,ord){
+      var pr=PROG[i];
+      var head=(typeof groupOf==="function")?groupOf(i,p):pr.ph;
+      if(head&&head!==lastPh){
+        lastPh=head;
+        var h=document.createElement("li");
+        h.className="ph";h.textContent=head;
+        cal.appendChild(h);
+      }
+      var li=document.createElement("li");
+      li.className=pr.key?"row key":"row";
+      li.setAttribute("role","button");li.tabIndex=0;li.setAttribute("data-i",i);
+      li.setAttribute("aria-pressed",marked[i]?"true":"false");
+      if(typeof spaceOf==="function")li.style.setProperty("--sp",spaceOf(i,ord,p)+"px");
+      li.innerHTML=renderRow(pr,p,i,ord);
+      var s0=li.querySelector(".st"); if(s0&&marked[i])s0.textContent="\u2713";
+      function toggle(){
+        marked[i]=!marked[i];
+        li.setAttribute("aria-pressed",marked[i]?"true":"false");
+        var s=li.querySelector(".st"); if(s)s.textContent=marked[i]?"\u2713":"";
+        if(typeof renderQueue==="function")renderQueue();
+        tally();
+      }
+      li.__toggle=toggle;
+      li.onclick=toggle;
+      li.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle();}};
+      cal.appendChild(li);
+    });
+    tally();
+    reveal(quiet);
+  }
+
+  function tally(){
+    var have=0,keyMissing=0;
+    for(var i=0;i<PROG.length;i++){ if(marked[i])have++; else if(PROG[i].key)keyMissing++; }
+    setTally(have,keyMissing,PROG.length-have);
+  }
+
+  document.getElementById("copy").onclick=function(){
+    var p=P(),lines=["Growth plan \u2014 "+cat.label+" \u2014 pack lasts "+p+" days"
+      +" \u2014 observed reorder "+cat.lo+"\u2013"+cat.hi+" days",""],lastPh=null;
+    PROG.forEach(function(pr,i){
+      if(pr.ph&&pr.ph!==lastPh){lastPh=pr.ph;lines.push("",pr.ph.toUpperCase());}
+      lines.push((marked[i]?"[x] ":"[ ] ")+pr.at(p)+"  \u00b7  ["+pr.cl+"]  "+pr.n+"  \u00b7  "+pr.t+"  \u00b7  "+pr.m);
+    });
+    /* the caveat travels with the sheet, or the placeholders leave the page as facts */
+    lines.push("","NOTE: reorder band and revenue shares are placeholders, not measured data.",
+      "Built at oleksiakconsulting.com");
+    var txt=lines.join("\n");
+    var done=function(){var b=document.getElementById("copy");b.textContent="Copied";
+      setTimeout(function(){b.textContent=SHEET_LABEL;},1800);};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,done);
+    else{var t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);
+      t.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(t);done();}
+  };
+
+  document.getElementById("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var mail=document.getElementById("mail"),v=mail.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      err.textContent=v.indexOf("@")<0?"Missing the @ \u2014 try name@company.com."
+                                      :"Missing the domain \u2014 try name@company.com.";
+      err.classList.add("on");mail.focus();return;
+    }
+    err.classList.remove("on");
+    var have=0;for(var k in marked)if(marked[k])have++;
+    rcpt.textContent=receipt(v,PROG.length-have);
+    sent.classList.add("on");
+    sent.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+  document.getElementById("mail").addEventListener("input",function(){err.classList.remove("on");});
+
+})();
+</script>
+</body>
+</html>

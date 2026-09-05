@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="robots" content="noindex">
+<title>The Blank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FFFFFF; --ink:#17192A; --purple:#7B2CBF; --purple-dp:#5B1E8C;
+    --grey:#5A5D70; --note:#43465C; --hair:#E2E0EC; --wash:#F6F4FB;
+    --band:linear-gradient(97deg,#5B1E8C 0%,#33308F 46%,#0047B3 100%);
+    --disp:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
+    -webkit-font-smoothing:antialiased;}
+  input,button{font-family:inherit;}
+  .top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .top h1{margin:0;font-weight:800;font-stretch:125%;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;}
+  .top span{font-family:var(--mono);font-size:11px;color:var(--grey);}
+  .cats{display:flex;flex-wrap:wrap;gap:8px;}
+  .cats button{border:2px solid var(--hair);background:var(--paper);color:var(--note);
+    cursor:pointer;padding:11px 14px;min-height:42px;font-family:var(--mono);font-size:12.5px;
+    transition:border-color .16s,color .16s,background-color .16s;}
+  .cats button:hover{border-color:var(--purple);color:var(--ink);}
+  .cats button[aria-pressed="true"]{background-color:var(--purple);border-color:var(--purple);
+    color:#FFFFFF;}
+  .daybox{display:flex;align-items:stretch;border:2px solid var(--ink);background:var(--paper);
+    flex:1 1 220px;min-width:0;}
+  .daybox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--ink);
+    font-weight:700;font-stretch:110%;font-size:26px;padding:11px 16px;-moz-appearance:textfield;}
+  .daybox input::-webkit-outer-spin-button,.daybox input::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;}
+  .daybox span{display:flex;align-items:center;padding:0 15px;border-left:2px solid var(--ink);
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--note);}
+  .go{flex:0 0 auto;border:0;background-color:var(--purple);color:#FFFFFF;cursor:pointer;
+    padding:15px 22px;min-height:52px;font-weight:700;font-stretch:110%;font-size:14px;
+    letter-spacing:.08em;text-transform:uppercase;transition:background-color .16s;}
+  .go:hover{background-color:var(--ink);}
+  .guessrow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;}
+  .fbox{display:flex;align-items:stretch;border:2px solid var(--ink);background:var(--paper);}
+  .fbox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--ink);
+    font-weight:500;font-size:17px;padding:14px 16px;}
+  .fbox input::placeholder{color:#84879A;}
+  .fbox button{flex:none;border:0;border-left:2px solid var(--ink);background-color:var(--purple);
+    color:#FFFFFF;cursor:pointer;padding:0 22px;font-weight:700;font-stretch:110%;font-size:14px;
+    letter-spacing:.08em;text-transform:uppercase;transition:background-color .16s;}
+  .fbox button:hover{background-color:var(--ink);}
+  .err{display:none;margin:0 0 9px;font-family:var(--mono);font-size:12px;color:#B0122F;}
+  .err.on{display:block;}
+  .st{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
+    border:1.5px solid var(--hair);color:var(--purple);font-family:var(--mono);font-size:12px;
+    line-height:1;justify-self:center;transition:background-color .16s,border-color .16s;}
+  li:hover .st{border-color:var(--purple);}
+  li[aria-pressed="true"] .st{border-color:var(--purple);background-color:var(--purple);color:#FFFFFF;}
+  .ch{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;}
+  .ch::before{content:"";display:inline-block;width:6px;height:6px;background:currentColor;
+    margin-right:6px;}
+  .ch-trf{color:#0047B3;} .ch-store{color:#5B1E8C;} .ch-own{color:#7B2CBF;} .ch-loy{color:#17192A;}
+  li.ph{display:block;cursor:default;border:0;background:none;box-shadow:none;margin:0;
+    padding:36px 0 12px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--purple);}
+  li.ph:first-child{padding-top:4px;}
+  li.ph:hover{background:none;}
+  .out{display:none;} .out.on{display:block;}
+  .sent{display:none;} .sent.on{display:block;}
+  @media (max-width:520px){
+    .guessrow{flex-direction:column;} .go{width:100%;}
+    .fbox{flex-direction:column;} .fbox button{border-left:0;border-top:2px solid var(--ink);
+      padding:15px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+  .wrap{max-width:700px;margin:0 auto;padding:26px 24px 110px;}
+  .top{padding-bottom:0;}
+  .lede{margin:60px 0 0;font-weight:800;font-stretch:118%;font-size:40px;line-height:1.05;
+    letter-spacing:-.022em;text-wrap:balance;}
+  .lede em{font-style:normal;background-color:var(--purple);color:#FFFFFF;
+    padding:.02em .12em .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  .sub{margin:22px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--note);}
+  .step{margin-top:44px;}
+  .lab{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink);margin-bottom:12px;}
+  .verdict{margin-top:64px;border-left:5px solid var(--purple);padding:3px 0 3px 20px;}
+  .verdict p{margin:0;font-weight:700;font-stretch:110%;font-size:20px;line-height:1.45;
+    letter-spacing:-.006em;text-wrap:balance;}
+  .verdict b{background-color:var(--purple);color:#FFFFFF;padding:0 5px 2px;font-weight:800;}
+  .cred{margin:8px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--grey);}
+  .calhead{margin-top:64px;display:flex;align-items:baseline;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;}
+  .calhead p{margin:0;font-family:var(--mono);font-size:12px;color:var(--note);}
+  .thead,.row{display:grid;grid-template-columns:98px minmax(0,1fr) 118px 26px;gap:14px;}
+  .thead{margin-top:18px;padding:0 0 9px;border-bottom:2px solid var(--ink);
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--note);}
+  .thead .r{text-align:right;}
+  ol.cal{list-style:none;margin:0;padding:0;}
+  ol.cal li{align-items:baseline;padding:22px 0;border-bottom:1px solid var(--hair);
+    cursor:pointer;transition:opacity .18s;}
+  ol.cal li.key{background:var(--wash);box-shadow:-14px 0 0 var(--wash),14px 0 0 var(--wash);}
+  ol.cal li:hover .pname{color:var(--purple);}
+  ol.cal li[aria-pressed="true"]{opacity:.5;}
+  .day{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--purple);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .pmid{min-width:0;}
+  .pmid .ch{display:block;margin-bottom:5px;}
+  .pname{display:block;font-weight:700;font-stretch:110%;font-size:15.5px;letter-spacing:-.005em;
+    transition:color .18s;}
+  .ptrig{display:block;margin-top:4px;font-family:var(--mono);font-size:11.5px;line-height:1.5;
+    color:var(--grey);}
+  .share{font-family:var(--mono);font-size:11.5px;color:var(--note);text-align:right;
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .tally{margin-top:56px;background-color:var(--purple-dp);background-image:var(--band);
+    color:#FFFFFF;padding:28px;}
+  .tally h2{margin:0;font-weight:800;font-stretch:118%;font-size:24px;line-height:1.2;
+    letter-spacing:-.014em;}
+  .tally p{margin:12px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:#FFFFFF;}
+  .tally button{margin-top:22px;border:2px solid #FFFFFF;background:none;color:#FFFFFF;
+    cursor:pointer;padding:12px 18px;font-weight:700;font-stretch:110%;font-size:13.5px;
+    letter-spacing:.07em;text-transform:uppercase;transition:background-color .16s,color .16s;}
+  .tally button:hover{background-color:#FFFFFF;color:var(--purple-dp);}
+  .ask{margin-top:56px;}
+  .slot{margin:0 0 14px;font-weight:700;font-stretch:110%;font-size:16px;line-height:1.4;}
+  .slot b{background-color:var(--purple);color:#FFFFFF;padding:0 5px 2px;font-weight:800;}
+  .promise{margin:14px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--note);}
+  .sent{margin-top:56px;background:var(--wash);padding:26px;}
+  .sent h2{margin:0;font-weight:800;font-stretch:118%;font-size:24px;letter-spacing:-.014em;}
+  .sent h2 em{font-style:normal;color:var(--purple);}
+  .sent p{margin:12px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--note);}
+  .cv{margin-top:56px;border-top:1px solid var(--hair);padding-top:22px;}
+  .cv h3{margin:0 0 12px;font-family:var(--mono);font-size:11.5px;font-weight:500;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--note);}
+  .cv ul{margin:0;padding:0;list-style:none;}
+  .cv li{margin-bottom:9px;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--note);}
+  .cv b{color:var(--ink);font-weight:500;}
+  .foot{margin:44px 0 0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--grey);}
+  @media (max-width:620px){
+    .lede{font-size:28px;} .verdict p{font-size:18px;} .tally h2,.sent h2{font-size:20px;}
+    .thead{display:none;}
+    .row{grid-template-columns:96px minmax(0,1fr) 26px;row-gap:4px;}
+    .row .day{grid-column:1;grid-row:1;} .row .pmid{grid-column:2;grid-row:1;}
+    .row .st{grid-column:3;grid-row:1;}
+    .row .share{grid-column:2/4;grid-row:2;text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top"><h1>Oleksiak Consult</h1><span>Prototype</span></div>
+
+  <h2 class="lede">Every customer runs out on a different day. <em>You email all of them on the same one.</em></h2>
+  <p class="sub">Everything you sell has a clock on it. Tell me how long one lasts and I will build the plan around it &mdash; paid, search, the store, and everything after the first order.</p>
+
+  <div class="step">
+    <div class="lab">1 &middot; What runs out</div>
+    <div class="cats" id="cats"></div>
+  </div>
+
+  <div class="step">
+    <div class="lab">2 &middot; Days per pack</div>
+    <div class="guessrow">
+      <div class="daybox"><input id="days" type="number" min="3" max="400" inputmode="numeric" value="30"><span>days</span></div>
+      <button class="go" id="go" type="button">Build the plan</button>
+    </div>
+  </div>
+
+  <div class="out" id="out">
+    <div class="verdict"><p id="verdict"></p></div>
+    <p class="cred">I ran Allegro&rsquo;s FMCG retention team &mdash; this runs the same model on two numbers instead of five data scientists.</p>
+
+    <div class="calhead">
+      <div class="lab" style="margin:0">3 &middot; Your plan</div>
+      <p>Tap the ones you already run.</p>
+    </div>
+    <div class="thead"><span>When</span><span>What you do</span><span class="r">Moves</span><span></span></div>
+    <ol class="cal" id="cal"></ol>
+
+    <div class="tally">
+      <h2 id="tallyHead"></h2>
+      <p id="tallyBody"></p>
+      <button id="copy" type="button">Take the sheet</button>
+    </div>
+
+    <div class="ask">
+      <form id="form" novalidate>
+        <p class="slot">I am taking on <b>one more company</b> this quarter. That is the whole plan.</p>
+        <p class="err" id="err"></p>
+        <div class="fbox">
+          <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+                 autocapitalize="off" placeholder="name@company.com">
+          <button type="submit">Send it</button>
+        </div>
+        <p class="promise">Or send me the sheet. I reply once &mdash; the order I&rsquo;d build it in, the two rows I&rsquo;d cut, what I&rsquo;d need from your data. No call, no calendar link.</p>
+      </form>
+    </div>
+
+    <div class="sent" id="sent">
+      <h2>Sent. <em>Now I go and look.</em></h2>
+      <p id="rcpt"></p>
+    </div>
+
+    <div class="cv">
+      <h3>Fifteen years of the same problem</h3>
+      <ul>
+        <li><b>Allegro</b> &mdash; FMCG team. Email and CRM from 0.5% to 12% of revenue in eighteen months.</li>
+        <li><b>mBank / mOkazje</b> &mdash; retention built on things that run out: coffee, detergents, contact lenses.</li>
+        <li><b>Booksy</b> &mdash; same arithmetic, different unit: the pack is an appointment.</li>
+        <li><b>Genactiv</b> &mdash; colostrum, category leader, current engagement.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="foot"><b>About the numbers.</b> These intervals and revenue shares are placeholders and the form is not wired yet. The real ones are mine, published as ranges, dated, sourced.</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* PLACEHOLDER DATA — structure is real, values are for the prototype only.
+     pack = typical days one pack lasts | lo/hi = observed reorder band */
+  var CATS=[
+    {k:"supp",  label:"Supplements",         pack:30, lo:41, hi:52},
+    {k:"coffee",label:"Coffee & drinks",     pack:21, lo:29, hi:38},
+    {k:"skin",  label:"Skincare",            pack:60, lo:79, hi:96},
+    {k:"clean", label:"Household & cleaning",pack:45, lo:63, hi:81},
+    {k:"pet",   label:"Pet food",            pack:30, lo:31, hi:36},
+    {k:"lens",  label:"Contact lenses",      pack:30, lo:33, hi:41}
+  ];
+  var PROG=[
+    {ph:"1 \u00b7 Traffic \u2014 paid, search, answer engines",
+     at:function(){return "Always on";},   g:"trf", cl:"Paid", n:"Stop bidding on people who just bought", t:"Prospecting audiences still contain last cycle\u2019s buyers", m:"CAC \u221210\u201318%"},
+    {at:function(P){return "Day "+Math.max(2,P-10);},
+                                            g:"trf", cl:"Paid", n:"Retarget on the consumption clock",     t:"The pack is about to end \u2014 not \u201cthey visited three days ago\u201d", m:"ROAS +15\u201325%"},
+    {at:function(){return "Always on";},   g:"trf", cl:"SEO", n:"Own the questions that come at the end", t:"How long a pack lasts, when to reorder, which size to buy", m:"Non-brand +20\u201335%"},
+    {at:function(){return "Always on";},   g:"trf", cl:"SEO for LLMs", n:"Be the source the answer engines quote", t:"ChatGPT, Perplexity and AI overviews answer the dosage question for you", m:"LLM referrals +"},
+
+    {ph:"2 \u00b7 Store \u2014 conversion on Shopify or WooCommerce",
+     at:function(){return "On the page";}, g:"store", cl:"Store \u00b7 PDP", n:"Put the duration on the product page",   t:"\u201c30 days of supply\u201d \u2014 nobody states it, every buyer wonders", m:"CVR +6\u201311%"},
+    {at:function(){return "In the cart";}, g:"store", cl:"Store \u00b7 cart", n:"Price the pack in months, not in units", t:"Two packs is two months of not thinking about it", m:"AOV +8\u201315%"},
+    {at:function(P){return "At checkout";},g:"store", cl:"Store \u00b7 checkout", n:"Subscribe-and-save set to the real interval", t:"Every P days, not a round 30 chosen by the platform", m:"Take-up 9\u201317%"},
+
+    {ph:"3 \u00b7 Owned channels \u2014 email, push and SMS on the pack clock",
+     at:function(){return "Day 0";},        g:"own", cl:"Email", n:"Welcome, and how to use it",     t:"Order placed",                          m:"CRM rev 6\u20139%"},
+    {at:function(){return "Day 3\u20135";},   g:"own", cl:"Email", n:"Get the pack opened",            t:"Delivered \u2014 the first dose is the habit", m:"CRM rev 3\u20135%"},
+    {at:function(P){return "Day "+Math.max(2,Math.round(P*0.5));},
+                                             g:"own", cl:"Email", n:"Mid-pack check-in",              t:"Half the pack gone",                    m:"CRM rev 4\u20137%"},
+    {at:function(P){return "Day "+Math.max(2,P-7);},
+                                             g:"own", cl:"Email + push", n:"Running low",                    t:"Seven days of product left",            m:"CRM rev 20\u201328%", key:1},
+    {at:function(P){return "Day "+P;},       g:"own", cl:"Email + push", n:"The pack ends",                  t:"Consumption model says zero",           m:"CRM rev 16\u201322%", key:1},
+    {at:function(P){return "Day "+(P+7);},   g:"own", cl:"Push", n:"Missed the refill",              t:"A week empty, no order",                m:"CRM rev 9\u201313%"},
+    {at:function(P){return "Day "+(P+21);},  g:"own", cl:"SMS", n:"Change the channel",             t:"Two emails ignored \u2014 wrong medium, not wrong clock", m:"CRM rev 6\u20139%"},
+    {at:function(P){return "Day "+Math.round(P*2.5);},
+                                             g:"own", cl:"Email", n:"Win-back with a reason",         t:"Two full cycles missed",                m:"CRM rev 5\u20138%"},
+
+    {ph:"4 \u00b7 Loyalty \u2014 subscription and the programme",
+     at:function(){return "Order 3";},      g:"loy", cl:"Subscription", n:"Move them to a standing order",   t:"Third order \u2014 the moment a subscription is accepted", m:"LTV \u00d71.4\u20131.9"},
+    {at:function(){return "Cycle 4";},      g:"loy", cl:"Loyalty", n:"A tier earned by cycles kept, not by spend", t:"Four packs in a row with no gap", m:"Churn \u221218\u201326%"},
+    {at:function(){return "Cycle 6";},      g:"loy", cl:"Loyalty", n:"Ask for the referral here, not at checkout", t:"Half a year of the product actually working", m:"Referrals 4\u20139%"}
+  ];
+
+
+  var SHEET_LABEL="Take the sheet";
+  function renderRow(pr,p){
+    return '<span class="day">'+pr.at(p)+'</span>'
+      +'<span class="pmid">'+chip(pr)+'<span class="pname">'+pr.n+'</span>'
+      +'<span class="ptrig">'+pr.t+'</span></span>'
+      +'<span class="share">'+pr.m+'</span><span class="st"></span>';
+  }
+  function setVerdict(p){
+    var g=gap(),b=band(),L=cat.label;
+    if(g>=5) verdict.innerHTML="A pack lasts "+p+" days. "+L+" buyers who reorder at all mostly come back on day <b>"+b+"</b> \u2014 about <b>"+g+" days</b> with nothing in the cupboard. That is the cheapest revenue you have.";
+    else if(g<=-5) verdict.innerHTML="A pack lasts "+p+" days and "+L.toLowerCase()+" buyers reorder at day <b>"+b+"</b> \u2014 before it runs out. They are stockpiling, so the money is in a standing order, not in reminders. <b>Half this calendar is wasted on you.</b>";
+    else verdict.innerHTML="A pack lasts "+p+" days and "+L.toLowerCase()+" buyers reorder at day <b>"+b+"</b>. Your cycle sits close to theirs. The question is not when you send \u2014 it is <b>how few of them ever get the message</b>.";
+  }
+  function setTally(have,keyMissing,missing){
+    tallyHead.textContent="You run "+have+" of "+PROG.length+".";
+    if(have===0) tallyBody.textContent="The two highlighted rows carry most of the money. Start there.";
+    else if(keyMissing>0) tallyBody.textContent="Missing "+keyMissing+" of the two pack-anchored rows \u2014 they outperform the welcome email everyone builds first.";
+    else if(missing===0) tallyBody.textContent="All "+PROG.length+". Now the question is which four earn nothing. Send me the sheet and I will tell you.";
+    else tallyBody.textContent="Both pack-anchored rows covered. The "+missing+" you are missing are cheap to add once the timing engine exists.";
+  }
+  function receipt(v,missing){
+    return "One email to "+v+" by this time tomorrow \u2014 your "+cat.label.toLowerCase()
+      +" plan at "+P()+" days, with the "+missing+" rows you have not marked.";
+  }
+  function reveal(quiet){
+    out.classList.add("on");
+    if(!quiet) out.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+
+
+  var cat=CATS[0], marked={};
+  var catsEl=document.getElementById("cats"), daysEl=document.getElementById("days"),
+      out=document.getElementById("out"), verdict=document.getElementById("verdict"),
+      cal=document.getElementById("cal"), tallyHead=document.getElementById("tallyHead"),
+      tallyBody=document.getElementById("tallyBody"), err=document.getElementById("err"),
+      sent=document.getElementById("sent"), rcpt=document.getElementById("rcpt");
+
+  CATS.forEach(function(c,i){
+    var b=document.createElement("button");
+    b.type="button";b.textContent=c.label;b.setAttribute("aria-pressed",i===0?"true":"false");
+    b.onclick=function(){
+      cat=c;
+      [].forEach.call(catsEl.children,function(el){el.setAttribute("aria-pressed","false");});
+      b.setAttribute("aria-pressed","true");
+      daysEl.value=c.pack; if(typeof onCat==="function")onCat();
+      if(out.classList.contains("on"))run(1);
+    };
+    catsEl.appendChild(b);
+  });
+
+  function chip(pr){return '<span class="ch ch-'+pr.g+'">'+pr.cl+'</span>';}
+  function P(){var v=parseInt(daysEl.value,10);return(!v||v<3)?3:(v>400?400:v);}
+  function band(){return cat.lo+"\u2013"+cat.hi;}
+  function gap(){return Math.round((cat.lo+cat.hi)/2)-P();}
+  daysEl.addEventListener("blur",function(){daysEl.value=P();});
+  daysEl.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();run(0);}});
+  document.getElementById("go").onclick=function(){run(0);};
+
+  function run(quiet){
+    /* editing an input never costs the visitor the rows they already ticked */
+    var p=P();
+    setVerdict(p);
+    cal.innerHTML="";
+    var lastPh=null;
+    PROG.forEach(function(pr,i){
+      if(pr.ph&&pr.ph!==lastPh){
+        lastPh=pr.ph;
+        var h=document.createElement("li");
+        h.className="ph";h.textContent=pr.ph;
+        cal.appendChild(h);
+      }
+      var li=document.createElement("li");
+      li.className=pr.key?"row key":"row";
+      li.setAttribute("role","button");li.tabIndex=0;
+      li.setAttribute("aria-pressed",marked[i]?"true":"false");
+      li.innerHTML=renderRow(pr,p);
+      var s0=li.querySelector(".st"); if(s0&&marked[i])s0.textContent="\u2713";
+      function toggle(){
+        marked[i]=!marked[i];
+        li.setAttribute("aria-pressed",marked[i]?"true":"false");
+        var s=li.querySelector(".st"); if(s)s.textContent=marked[i]?"\u2713":"";
+        tally();
+      }
+      li.onclick=toggle;
+      li.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle();}};
+      cal.appendChild(li);
+    });
+    tally();
+    reveal(quiet);
+  }
+
+  function tally(){
+    var have=0,keyMissing=0;
+    for(var i=0;i<PROG.length;i++){ if(marked[i])have++; else if(PROG[i].key)keyMissing++; }
+    setTally(have,keyMissing,PROG.length-have);
+  }
+
+  document.getElementById("copy").onclick=function(){
+    var p=P(),lines=["Growth plan \u2014 "+cat.label+" \u2014 pack lasts "+p+" days"
+      +" \u2014 observed reorder "+cat.lo+"\u2013"+cat.hi+" days",""],lastPh=null;
+    PROG.forEach(function(pr,i){
+      if(pr.ph&&pr.ph!==lastPh){lastPh=pr.ph;lines.push("",pr.ph.toUpperCase());}
+      lines.push((marked[i]?"[x] ":"[ ] ")+pr.at(p)+"  \u00b7  ["+pr.cl+"]  "+pr.n+"  \u00b7  "+pr.t+"  \u00b7  "+pr.m);
+    });
+    /* the caveat travels with the sheet, or the placeholders leave the page as facts */
+    lines.push("","NOTE: reorder band and revenue shares are placeholders, not measured data.",
+      "Built at oleksiakconsulting.com");
+    var txt=lines.join("\n");
+    var done=function(){var b=document.getElementById("copy");b.textContent="Copied";
+      setTimeout(function(){b.textContent=SHEET_LABEL;},1800);};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,done);
+    else{var t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);
+      t.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(t);done();}
+  };
+
+  document.getElementById("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var mail=document.getElementById("mail"),v=mail.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      err.textContent=v.indexOf("@")<0?"Missing the @ \u2014 try name@company.com."
+                                      :"Missing the domain \u2014 try name@company.com.";
+      err.classList.add("on");mail.focus();return;
+    }
+    err.classList.remove("on");
+    var have=0;for(var k in marked)if(marked[k])have++;
+    rcpt.textContent=receipt(v,PROG.length-have);
+    sent.classList.add("on");
+    sent.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+  document.getElementById("mail").addEventListener("input",function(){err.classList.remove("on");});
+
+})();
+</script>
+</body>
+</html>

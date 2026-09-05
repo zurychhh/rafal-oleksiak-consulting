@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0D0F14">
+<meta name="description" content="Which rung of the replenishment ladder your order data supports today, and the one thing blocking the next.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<title>Hyperpersonalisation Readiness</title>
+<style>
+  :root{
+    --bg:#0D0F14; --panel:#12151C; --fg:#E9E7E1; --dim:#9BA0AD; --line:#242938;
+    --acc:#FF6A1F; --ok:#4DD0A7; --off:#7E8494;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+    --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:44px 26px 80px;}
+  .lab{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--dim);}
+  h1{margin:12px 0 0;font-weight:700;font-size:clamp(27px,4.4vw,42px);line-height:1.08;
+    letter-spacing:-.02em;max-width:19ch;}
+  h1 em{font-style:normal;color:var(--acc);}
+  .sub{margin:14px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--dim);
+    max-width:56ch;}
+
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:48px;margin-top:38px;
+    align-items:start;}
+
+  /* ---- ladder ---------------------------------------------------------- */
+  .ladder{border-top:1px solid var(--line);}
+  .rung{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:0 15px;align-items:baseline;
+    padding:13px 0;border-bottom:1px solid var(--line);}
+  .rung .no{font-family:var(--mono);font-size:11px;color:var(--off);}
+  .rung .nm{font-weight:600;font-size:15.5px;color:var(--off);line-height:1.35;}
+  .rung .nm i{display:block;font-style:normal;font-family:var(--mono);font-size:11px;
+    line-height:1.6;color:var(--off);margin-top:3px;}
+  .rung .st{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--off);white-space:nowrap;}
+  .rung.on .no{color:var(--dim);}
+  .rung.on .nm{color:var(--fg);} .rung.on .nm i{color:var(--dim);}
+  .rung.on .st{color:var(--ok);}
+  .rung.here{background:var(--panel);margin:0 -14px;padding-left:14px;padding-right:14px;
+    border-left:2px solid var(--acc);}
+  .rung.here .st{color:var(--acc);}
+
+  /* ---- verdict --------------------------------------------------------- */
+  .verdict{margin-top:30px;padding:22px;background:var(--panel);border-left:2px solid var(--acc);}
+  .verdict h2{margin:10px 0 0;font-size:clamp(19px,2.5vw,25px);line-height:1.28;font-weight:700;
+    letter-spacing:-.012em;}
+  .verdict h2 b{color:var(--acc);font-weight:700;}
+  .verdict p{margin:12px 0 0;font-size:15px;line-height:1.6;color:var(--dim);max-width:56ch;}
+  .verdict p b{color:var(--fg);font-weight:600;}
+
+  /* ---- questions ------------------------------------------------------- */
+  .q{padding:16px 0;border-bottom:1px solid var(--line);}
+  .q > p{margin:0 0 10px;font-size:15px;line-height:1.45;}
+  .opts{display:flex;flex-wrap:wrap;gap:6px;}
+  .opts button{border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;
+    padding:9px 12px;min-height:38px;font-family:var(--mono);font-size:11.5px;
+    transition:border-color .15s,color .15s;}
+  .opts button:hover{border-color:var(--acc);color:var(--fg);}
+  .opts button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#0D0F14;}
+
+  .modes{display:flex;gap:6px;margin-bottom:22px;}
+  .modes button{border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;
+    padding:10px 15px;min-height:40px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;}
+  .modes button[aria-pressed="true"]{border-color:var(--acc);color:var(--fg);}
+
+  .drop{border:1px dashed var(--line);padding:30px 22px;text-align:center;cursor:pointer;
+    transition:border-color .15s;}
+  .drop:hover,.drop.over{border-color:var(--acc);}
+  .drop p{margin:0;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--dim);}
+  .drop b{color:var(--fg);font-weight:500;}
+  .local{margin:12px 0 0;font-family:var(--mono);font-size:10.5px;line-height:1.7;color:#8E94A4;}
+  .readout{margin-top:16px;border-top:1px solid var(--line);}
+  .rr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;padding:9px 0;
+    border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--dim);}
+  .rr b{color:var(--fg);font-weight:500;white-space:nowrap;}
+  .rr.bad b{color:var(--acc);}
+  .hide{display:none;}
+  .foot{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:11px;line-height:1.8;color:#8E94A4;}
+  .foot a{color:var(--dim);}
+  @media (max-width:860px){
+    .grid{grid-template-columns:minmax(0,1fr);gap:34px;}
+  }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <p class="lab">Oleksiak Consulting &middot; tool 01</p>
+  <h1>How far down can your data actually go — <em>to the shop, or to the person?</em></h1>
+  <p class="sub">Replenishment marketing works on an estimated reorder date. Five rungs, five sources
+    for that date. This says which one you can stand on today, and the one thing blocking the next.</p>
+
+  <div class="grid">
+    <div>
+      <div class="modes">
+        <button id="mQ" type="button" aria-pressed="true">Five questions</button>
+        <button id="mF" type="button" aria-pressed="false">Read my export</button>
+      </div>
+
+      <div id="paneQ"></div>
+
+      <div id="paneF" class="hide">
+        <div class="drop" id="drop">
+          <p><b>Drop your order export here</b><br>CSV from Shopify, WooCommerce or anything else</p>
+        </div>
+        <input type="file" id="file" accept=".csv,text/csv" class="hide">
+        <p class="local">Parsed in this browser. The file is never uploaded, and nothing is stored.</p>
+        <div class="readout hide" id="readout"></div>
+        <div id="paneFQ"></div>
+      </div>
+    </div>
+
+    <div>
+      <p class="lab">The ladder</p>
+      <div class="ladder" id="ladder"></div>
+      <div class="verdict">
+        <p class="lab">Verdict</p>
+        <h2 id="vh">Answer the five and this fills in.</h2>
+        <p id="vp"></p>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">Rungs one to three are group estimates. Four and five are per person — that is where
+    hyperpersonalisation starts, and it is a data question before it is a marketing one.<br>
+    Built by Rafa&#322; Oleksiak &middot; <a href="https://oleksiakconsulting.com/">oleksiakconsulting.com</a></p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $=function(id){return document.getElementById(id);};
+
+  /* Drabina. Każdy szczebel to inne źródło tej samej daty — nie inny produkt.
+     System jest użyteczny na pierwszym i nigdy nie czeka na dane.            */
+  var RUNGS=[
+    {n:"Pack physics",      d:"60 caps, two a day, thirty days. The same number for everyone."},
+    {n:"Your own median",   d:"The real gap between first and second order for that SKU."},
+    {n:"Cohort",            d:"Split by how much they bought, or the dose they declared."},
+    {n:"The person",        d:"Their own observed interval, from their own repeat orders."},
+    {n:"Corrected by reply",d:"They buy three days after your mail, every time. The clock moves."}
+  ];
+
+  var QS=[
+    {k:"id", q:"Can you tell that two orders came from the same person?",
+     o:[["yes","Yes — accounts or matched email"],["some","Mostly, guests leak"],["no","No idea"]]},
+    {k:"rep",q:"What share of buyers have ordered the same product twice?",
+     o:[["none","None yet"],["low","Under one in ten"],["mid","About one in five"],["hi","One in three or more"]]},
+    {k:"pack",q:"Is pack size — caps, grams, ml, doses — stored as product data?",
+     o:[["field","Yes, a field"],["title","Only inside the title"],["no","Nowhere"]]},
+    {k:"dose",q:"Do you ever ask the buyer how much they use?",
+     o:[["yes","Yes, and we keep it"],["no","Never"]]},
+    {k:"age", q:"How many full pack cycles of history do you have?",
+     o:[["lt2","Fewer than two"],["2to4","Two to four"],["gt4","More than four"]]}
+  ];
+
+  var A={};
+
+  function buildQuestions(host,prefix){
+    QS.forEach(function(Q){
+      var w=document.createElement("div");w.className="q";
+      var p=document.createElement("p");p.textContent=Q.q;w.appendChild(p);
+      var o=document.createElement("div");o.className="opts";
+      Q.o.forEach(function(pair){
+        var b=document.createElement("button");b.type="button";b.textContent=pair[1];
+        b.setAttribute("aria-pressed","false");
+        b.onclick=function(){
+          A[Q.k]=pair[0];
+          [].forEach.call(o.children,function(x){x.setAttribute("aria-pressed","false");});
+          b.setAttribute("aria-pressed","true");
+          paint();
+        };
+        o.appendChild(b);
+      });
+      w.appendChild(o);w.setAttribute("data-k",prefix+Q.k);host.appendChild(w);
+    });
+  }
+  buildQuestions($("paneQ"),"q-");
+
+  /* ---- scoring --------------------------------------------------------- */
+  /* Każdy szczebel ma warunek wstępny. Blokerem jest najniższy niespełniony,
+     podany jako jedno zdanie z naprawą — nie lista piętnastu rekomendacji.  */
+  function assess(){
+    var id=A.id, rep=A.rep, pack=A.pack, dose=A.dose, age=A.age;
+    if(!id||!rep||!pack||!dose||!age) return null;
+
+    var repOK   = (rep==="mid"||rep==="hi");
+    var repSome = (rep!=="none");
+    var ageOK   = (age!=="lt2");
+    var packOK  = (pack==="field");
+    var idOK    = (id==="yes");
+
+    var reach=1, blocker=null;
+
+    if(repSome && ageOK) reach=2;
+    else blocker = !ageOK
+      ? {t:"history", s:"You have not sold through two full pack cycles yet. Nothing is broken — the second orders simply have not happened. Rung one carries you until they do."}
+      : {t:"repeats", s:"Almost nobody has bought the same product twice, so there is no gap to measure. That is a first-purchase problem, not a data problem, and it comes before any of this."};
+
+    if(reach>=2){
+      if(packOK||dose==="yes") reach=3;
+      else blocker={t:"pack size",
+        s:pack==="title"
+          ? "Pack size lives only inside product titles, so quantity cannot be turned into days. Lift it into its own field — that one migration is what unlocks everything above rung two."
+          : "Pack size is stored nowhere, so two units and one unit look the same to every system you own. Add the field. It is the cheapest change here and it blocks the most."};
+    }
+    if(reach>=3){
+      if(idOK && repOK) reach=4;
+      else blocker = !idOK
+        ? {t:"identity", s:(id==="some"
+            ? "Guest checkouts break the chain, so a repeat buyer often looks like two strangers. Match on email at order time before you model anything per person."
+            : "You cannot yet tell whether two orders came from one person. Until that is fixed, per-person timing is arithmetic on noise.")}
+        : {t:"repeat depth", s:"Too few people have bought twice for their own interval to mean anything. Rung three — cohorts by pack size and dose — is the honest ceiling for now."};
+    }
+    if(reach>=4) blocker={t:"the loop",
+      s:"The data supports per-person timing today. What is missing is the feedback: send on the estimated day, record what they actually did, and let the clock correct itself."};
+
+    return {reach:reach,blocker:blocker};
+  }
+
+  function paint(){
+    var r=assess();
+    var lad=$("ladder");lad.innerHTML="";
+    RUNGS.forEach(function(R,i){
+      var on=r&&(i+1)<=r.reach, here=r&&(i+1)===r.reach;
+      var d=document.createElement("div");
+      d.className="rung"+(on?" on":"")+(here?" here":"");
+      d.innerHTML='<span class="no">'+(i+1)+'</span>'
+        +'<span class="nm">'+R.n+'<i>'+R.d+'</i></span>'
+        +'<span class="st">'+(here?"you are here":(on?"available":"locked"))+'</span>';
+      lad.appendChild(d);
+    });
+    if(!r){
+      var seen=$("readout")&&!$("readout").classList.contains("hide");
+      $("vh").textContent=seen?"Two answers below and this fills in."
+                              :"Answer the five and this fills in.";
+      $("vp").textContent="";
+      return;
+    }
+    var names=["pack physics","your own median","cohorts","the person","a self-correcting clock"];
+    $("vh").innerHTML="You can stand on rung <b>"+r.reach+"</b> &mdash; "+names[r.reach-1]+".";
+    $("vp").innerHTML="<b>The one thing in the way: "+r.blocker.t+".</b> "+r.blocker.s;
+  }
+  paint();
+
+  /* ---- mode switch ----------------------------------------------------- */
+  var fileQsBuilt=false;
+  function mode(f){
+    $("mQ").setAttribute("aria-pressed",f?"false":"true");
+    $("mF").setAttribute("aria-pressed",f?"true":"false");
+    $("paneQ").classList.toggle("hide",f);
+    $("paneF").classList.toggle("hide",!f);
+    if(f&&!fileQsBuilt){fileQsBuilt=true;}
+  }
+  $("mQ").onclick=function(){mode(false);};
+  $("mF").onclick=function(){mode(true);};
+
+  /* ---- CSV ------------------------------------------------------------- */
+  function splitCSV(line){
+    var out=[],cur="",q=false,i,c;
+    for(i=0;i<line.length;i++){
+      c=line[i];
+      if(q){ if(c==='"'){ if(line[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
+      else if(c==='"') q=true;
+      else if(c===","||c===";"||c==="\t"){out.push(cur);cur="";}
+      else cur+=c;
+    }
+    out.push(cur);return out;
+  }
+  function findCol(head,res){
+    for(var r=0;r<res.length;r++)
+      for(var i=0;i<head.length;i++)
+        if(res[r].test(head[i])) return i;
+    return -1;
+  }
+  function median(a){
+    if(!a.length)return null;a=a.slice().sort(function(x,y){return x-y;});
+    var m=Math.floor(a.length/2);
+    return a.length%2?a[m]:Math.round((a[m-1]+a[m])/2);
+  }
+
+  function analyse(text){
+    var rows=text.replace(/\r/g,"").split("\n").filter(function(l){return l.trim().length;});
+    if(rows.length<2) return {error:"That file has no rows I can read."};
+    var head=splitCSV(rows[0]).map(function(h){return h.trim().toLowerCase();});
+
+    var cOrder=findCol(head,[/^name$/,/order.*(number|id|name)/,/^order$/]),
+        cWho  =findCol(head,[/customer.*id/,/^e-?mail$/,/e-?mail/]),
+        cDate =findCol(head,[/created.?at/,/processed.?at/,/order.*date/,/^date/]),
+        cSku  =findCol(head,[/lineitem sku/,/^sku$/,/variant.*sku/,/item.*sku/]),
+        cName =findCol(head,[/lineitem name/,/product.*(title|name)/,/^item/,/^product/]),
+        cQty  =findCol(head,[/lineitem quantity/,/quantity/,/^qty/]);
+
+    if(cWho<0||cDate<0) return {error:"I could not find a customer column and a date column. Export with email and order date included."};
+    var cItem = cSku>=0?cSku:cName;
+
+    var lastWho={},lastDate={},seenOrders={},idOK=0,idAll=0,by={},minD=null,maxD=null;
+
+    for(var i=1;i<rows.length;i++){
+      var f=splitCSV(rows[i]); if(f.length<2) continue;
+      var ord = cOrder>=0 ? (f[cOrder]||"").trim() : String(i);
+      var who = (f[cWho]||"").trim().toLowerCase();
+      var dat = (f[cDate]||"").trim();
+      /* Shopify powtarza wiersz zamówienia z pustymi polami — dociągamy z góry. */
+      if(!who && lastWho[ord]) who=lastWho[ord]; else if(who) lastWho[ord]=who;
+      if(!dat && lastDate[ord]) dat=lastDate[ord]; else if(dat) lastDate[ord]=dat;
+
+      if(!seenOrders[ord]){ seenOrders[ord]=1; idAll++; if(who) idOK++; }
+      if(!who||!dat) continue;
+
+      var t=Date.parse(dat.replace(" ","T")); if(isNaN(t)) t=Date.parse(dat);
+      if(isNaN(t)) continue;
+      if(minD===null||t<minD)minD=t; if(maxD===null||t>maxD)maxD=t;
+
+      var item = cItem>=0 ? (f[cItem]||"").trim().toLowerCase() : "all";
+      var key = who+"||"+item;
+      (by[key]=by[key]||[]).push(t);
+    }
+
+    var buyers={},repeatBuyers={},gaps=[];
+    Object.keys(by).forEach(function(k){
+      var who=k.split("||")[0]; buyers[who]=1;
+      var ts=by[k].sort(function(a,b){return a-b;});
+      var uniq=[]; ts.forEach(function(t){ if(!uniq.length||t-uniq[uniq.length-1]>36e5) uniq.push(t); });
+      if(uniq.length>1){
+        repeatBuyers[who]=1;
+        for(var j=1;j<uniq.length;j++) gaps.push(Math.round((uniq[j]-uniq[j-1])/864e5));
+      }
+    });
+
+    var nB=Object.keys(buyers).length, nR=Object.keys(repeatBuyers).length;
+    return {
+      orders:idAll,
+      idShare: idAll? idOK/idAll : 0,
+      buyers:nB,
+      repeatShare: nB? nR/nB : 0,
+      medianGap: median(gaps.filter(function(g){return g>=2&&g<=600;})),
+      days: (minD!==null&&maxD!==null)? Math.round((maxD-minD)/864e5) : 0,
+      hasQty: cQty>=0,
+      byItem: cItem>=0
+    };
+  }
+
+  function pct(x){return Math.round(x*100)+"%";}
+
+  function showFile(r){
+    var out=$("readout"); out.classList.remove("hide"); out.innerHTML="";
+    if(r.error){ out.innerHTML='<div class="rr bad"><span>'+r.error+'</span><b>&mdash;</b></div>'; return; }
+    var lines=[
+      ["Orders read", r.orders, false],
+      ["Orders tied to a person", pct(r.idShare), r.idShare<0.9],
+      ["Buyers who ordered the same item twice", pct(r.repeatShare), r.repeatShare<0.2],
+      ["Median days between those orders", r.medianGap===null?"not enough repeats":r.medianGap+" days", r.medianGap===null],
+      ["History depth", r.days+" days", r.days<120],
+      ["Quantity per line", r.hasQty?"present":"missing", !r.hasQty],
+      ["Pack size", "never in an order export", true]
+    ];
+    lines.forEach(function(L){
+      var d=document.createElement("div");d.className="rr"+(L[2]?" bad":"");
+      d.innerHTML="<span>"+L[0]+"</span><b>"+L[1]+"</b>";out.appendChild(d);
+    });
+
+    /* Plik odpowiada za trzy z pięciu pytań. Dwóch pozostałych nie ma
+       w eksporcie zamówień i to jest właśnie ustalenie, nie brak.        */
+    A.id  = r.idShare>0.95?"yes":(r.idShare>0.6?"some":"no");
+    A.rep = r.repeatShare>=0.33?"hi":(r.repeatShare>=0.18?"mid":(r.repeatShare>0.02?"low":"none"));
+    A.age = r.days>=240?"gt4":(r.days>=120?"2to4":"lt2");
+
+    if(!$("paneFQ").childNodes.length){
+      var p=document.createElement("p");p.className="lab";
+      p.style.margin="26px 0 0";p.textContent="Two the file cannot answer";
+      $("paneFQ").appendChild(p);
+      [QS[2],QS[3]].forEach(function(Q){
+        var w=document.createElement("div");w.className="q";
+        var t=document.createElement("p");t.textContent=Q.q;w.appendChild(t);
+        var o=document.createElement("div");o.className="opts";
+        Q.o.forEach(function(pair){
+          var b=document.createElement("button");b.type="button";b.textContent=pair[1];
+          b.setAttribute("aria-pressed","false");
+          b.onclick=function(){A[Q.k]=pair[0];
+            [].forEach.call(o.children,function(x){x.setAttribute("aria-pressed","false");});
+            b.setAttribute("aria-pressed","true");paint();};
+          o.appendChild(b);
+        });
+        w.appendChild(o);$("paneFQ").appendChild(w);
+      });
+    }
+    paint();
+  }
+
+  function read(f){
+    if(!f) return;
+    var fr=new FileReader();
+    fr.onload=function(){ showFile(analyse(String(fr.result))); };
+    fr.readAsText(f);
+  }
+  $("drop").onclick=function(){$("file").click();};
+  $("file").onchange=function(){read($("file").files[0]);};
+  ["dragenter","dragover"].forEach(function(e){
+    $("drop").addEventListener(e,function(ev){ev.preventDefault();$("drop").classList.add("over");});
+  });
+  ["dragleave","drop"].forEach(function(e){
+    $("drop").addEventListener(e,function(ev){ev.preventDefault();$("drop").classList.remove("over");});
+  });
+  $("drop").addEventListener("drop",function(ev){
+    if(ev.dataTransfer&&ev.dataTransfer.files) read(ev.dataTransfer.files[0]);
+  });
+})();
+</script>
+
+</body>
+</html>

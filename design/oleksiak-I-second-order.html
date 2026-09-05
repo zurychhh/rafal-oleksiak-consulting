@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>The Second Order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --ink:#17192A;
+    --purple:#7B2CBF;
+    --purple-dp:#5B1E8C;
+    --blue-dp:#0047B3;
+    --cyan:#00BFFF;
+    --grey:#5A5D70;
+    --note:#43465C;
+    --hair:#E2E0EC;
+    --band:linear-gradient(97deg,#5B1E8C 0%,#33308F 46%,#0047B3 100%);
+    --disp:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --m:clamp(20px,5vw,48px);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 var(--m) 96px;}
+
+  /* ── head ─────────────────────────────────────────────── */
+  .top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    padding:22px 0 0;flex-wrap:wrap;}
+  .top h1{margin:0;font-weight:800;font-stretch:125%;font-size:13px;letter-spacing:.22em;
+    text-transform:uppercase;}
+  .top span{font-family:var(--mono);font-size:11px;color:var(--grey);}
+
+  .lede{margin:clamp(34px,7vw,64px) 0 0;font-weight:800;font-stretch:118%;
+    font-size:clamp(30px,6.4vw,58px);line-height:1.02;letter-spacing:-.022em;text-wrap:balance;}
+  .lede em{font-style:normal;background-color:var(--purple);color:#FFFFFF;
+    padding:.02em .12em .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  .sub{margin:20px 0 0;font-family:var(--mono);font-size:14px;line-height:1.6;color:var(--note);
+    max-width:56ch;}
+
+  /* ── step 1 · the guess ───────────────────────────────── */
+  .step{margin-top:clamp(30px,6vw,52px);}
+  .lab{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink);margin-bottom:11px;}
+  .cats{display:flex;flex-wrap:wrap;gap:8px;}
+  .cats button{border:2px solid var(--hair);background:var(--paper);color:var(--note);
+    cursor:pointer;padding:9px 13px;font-family:var(--mono);font-size:12.5px;
+    transition:border-color .16s,color .16s,background-color .16s;}
+  .cats button:hover{border-color:var(--purple);color:var(--ink);}
+  .cats button[aria-pressed="true"]{background-color:var(--purple);border-color:var(--purple);
+    color:#FFFFFF;}
+
+  .guessrow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;}
+  .daybox{display:flex;align-items:stretch;border:2px solid var(--ink);background:var(--paper);
+    flex:1 1 220px;min-width:0;}
+  .daybox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--ink);
+    font-family:var(--disp);font-weight:700;font-stretch:110%;font-size:26px;
+    padding:12px 16px;-moz-appearance:textfield;}
+  .daybox input::-webkit-outer-spin-button,.daybox input::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;}
+  .daybox input::placeholder{color:#8B8EA0;font-weight:500;}
+  .daybox span{display:flex;align-items:center;padding:0 16px;border-left:2px solid var(--ink);
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--note);}
+  .go{flex:0 0 auto;border:0;background-color:var(--purple);color:#FFFFFF;cursor:pointer;
+    padding:0 22px;font-family:var(--disp);font-weight:700;font-stretch:110%;font-size:14px;
+    letter-spacing:.08em;text-transform:uppercase;transition:background-color .16s;}
+  .go:hover{background-color:var(--ink);}
+  .dunno{flex:0 0 auto;border:2px solid var(--ink);background:var(--paper);color:var(--ink);
+    cursor:pointer;padding:0 20px;font-family:var(--disp);font-weight:700;font-stretch:110%;
+    font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+    transition:background-color .16s,color .16s;}
+  .dunno:hover{background-color:var(--ink);color:#FFFFFF;}
+  .ticksrow{margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--grey);}
+
+  /* ── step 2 · the correction ──────────────────────────── */
+  .out{display:none;}
+  .out.on{display:block;}
+  .verdict{margin-top:clamp(30px,6vw,52px);border-left:5px solid var(--purple);
+    padding:2px 0 2px 18px;}
+  .verdict p{margin:0;font-family:var(--disp);font-weight:700;font-stretch:110%;
+    font-size:clamp(17px,2.6vw,23px);line-height:1.38;letter-spacing:-.008em;text-wrap:balance;}
+  .verdict b{background-color:var(--purple);color:#FFFFFF;padding:0 5px 2px;font-weight:800;}
+
+  /* ── step 3 · the calendar ────────────────────────────── */
+  .calhead{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+    margin-top:clamp(30px,6vw,50px);flex-wrap:wrap;}
+  .calhead p{margin:0;font-family:var(--mono);font-size:12px;color:var(--note);}
+  ol.cal{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--hair);}
+  ol.cal li{display:grid;grid-template-columns:62px 1fr auto;gap:14px;align-items:baseline;
+    padding:13px 0;border-bottom:1px solid var(--hair);cursor:pointer;
+    transition:opacity .18s;}
+  ol.cal li:hover .pname{color:var(--purple);}
+  .day{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--purple);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .pmid{min-width:0;}
+  .pname{font-weight:700;font-stretch:110%;font-size:15.5px;letter-spacing:-.005em;
+    transition:color .18s;}
+  .ptrig{margin-top:3px;font-family:var(--mono);font-size:11.5px;line-height:1.45;color:var(--grey);}
+  .pshare{font-family:var(--mono);font-size:11.5px;color:var(--note);white-space:nowrap;
+    font-variant-numeric:tabular-nums;}
+  .mark{grid-column:1/-1;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--grey);margin-top:6px;}
+  ol.cal li[aria-pressed="true"]{opacity:.42;}
+  ol.cal li[aria-pressed="true"] .day{color:var(--grey);}
+  ol.cal li[aria-pressed="true"] .mark{color:var(--purple);}
+
+  /* ── step 4 · the two doors ───────────────────────────── */
+  .tally{margin-top:clamp(26px,5vw,42px);
+    background-color:var(--purple-dp);background-image:var(--band);color:#FFFFFF;
+    padding:clamp(20px,4vw,30px);}
+  .tally h2{margin:0;font-weight:800;font-stretch:118%;font-size:clamp(19px,3.1vw,27px);
+    line-height:1.18;letter-spacing:-.014em;text-wrap:balance;}
+  .tally p{margin:12px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.6;
+    color:#FFFFFF;max-width:62ch;}
+  .doors{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
+  .doors button{border:2px solid #FFFFFF;background:none;color:#FFFFFF;cursor:pointer;
+    padding:11px 16px;font-family:var(--disp);font-weight:700;font-stretch:110%;font-size:13.5px;
+    letter-spacing:.07em;text-transform:uppercase;transition:background-color .16s,color .16s;}
+  .doors button:hover{background-color:#FFFFFF;color:var(--purple-dp);}
+
+  .mailwrap{margin-top:clamp(26px,5vw,42px);}
+  .fbox{display:flex;align-items:stretch;border:2px solid var(--ink);background:var(--paper);}
+  .fbox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--ink);
+    font-family:var(--disp);font-weight:500;font-size:18px;padding:15px 16px;}
+  .fbox input::placeholder{color:#8B8EA0;}
+  .fbox button{flex:none;border:0;border-left:2px solid var(--ink);
+    background-color:var(--purple);color:#FFFFFF;cursor:pointer;padding:0 20px;
+    font-family:var(--disp);font-weight:700;font-stretch:110%;font-size:14px;letter-spacing:.08em;
+    text-transform:uppercase;transition:background-color .16s;}
+  .fbox button:hover{background-color:var(--ink);}
+  .mailwrap .promise{margin:13px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.6;
+    color:var(--ink);max-width:62ch;}
+  .mailwrap .err{margin:0 0 8px;display:none;font-family:var(--mono);font-size:12px;
+    background-color:var(--purple);color:#FFFFFF;padding:3px 7px;}
+  .mailwrap .err.on{display:inline-block;}
+
+  .sent{display:none;margin-top:clamp(26px,5vw,42px);
+    background-color:var(--ink);color:#FFFFFF;padding:clamp(20px,4vw,30px);}
+  .sent.on{display:block;}
+  .sent h2{margin:0;font-weight:800;font-stretch:118%;font-size:clamp(19px,3.1vw,27px);
+    line-height:1.18;}
+  .sent h2 em{font-style:normal;color:var(--cyan);}
+  .sent p{margin:12px 0 0;font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#FFFFFF;}
+
+  .foot{margin-top:clamp(34px,6vw,56px);padding-top:18px;border-top:1px solid var(--hair);
+    font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--grey);}
+  .foot b{color:var(--note);font-weight:500;}
+
+  :focus-visible{outline:3px solid var(--purple);outline-offset:3px;}
+  .tally :focus-visible,.sent :focus-visible{outline-color:#FFFFFF;}
+
+  @media (max-width:520px){
+    ol.cal li{grid-template-columns:54px 1fr;}
+    .pshare{grid-column:2;margin-top:4px;}
+    .go,.dunno{flex:1 1 100%;padding:13px 18px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+  <div class="top">
+    <h1>Oleksiak Consult</h1>
+    <span>Prototype — one mechanism, five categories</span>
+  </div>
+
+  <h2 class="lede">The first order costs you money. <em>The second one is the business.</em></h2>
+  <p class="sub">So — how many days go by between a customer's first order and their second?
+     Answer it, and you get the lifecycle calendar you should be running. No email needed.</p>
+
+  <div class="step">
+    <div class="lab">1 · What do you sell</div>
+    <div class="cats" id="cats"></div>
+  </div>
+
+  <div class="step">
+    <div class="lab">2 · Your best guess</div>
+    <div class="guessrow">
+      <div class="daybox">
+        <input id="days" type="number" min="1" max="900" inputmode="numeric" placeholder="— —">
+        <span>days</span>
+      </div>
+      <button class="go" id="go" type="button">Show me the calendar</button>
+      <button class="dunno" id="dunno" type="button">I don't know</button>
+    </div>
+    <p class="ticksrow">Typical answers land somewhere between 20 and 400 days, depending on what you sell.</p>
+  </div>
+
+  <div class="out" id="out">
+
+    <div class="verdict"><p id="verdict"></p></div>
+
+    <div class="calhead">
+      <div class="lab" style="margin:0">3 · The calendar for your category</div>
+      <p>Tap the ones you already run.</p>
+    </div>
+    <ol class="cal" id="cal"></ol>
+
+    <div class="tally">
+      <h2 id="tallyHead"></h2>
+      <p id="tallyBody"></p>
+      <div class="doors">
+        <button id="copy" type="button">Take the sheet</button>
+      </div>
+    </div>
+
+    <div class="mailwrap">
+      <form id="form" novalidate>
+        <p class="err" id="err"></p>
+        <div class="fbox">
+          <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+                 autocapitalize="off" placeholder="name@company.com">
+          <button type="submit">Send it</button>
+        </div>
+        <p class="promise">Or I mark up your version. Send me the sheet and I write back with the order
+          I would build it in and what I would skip. I run lifecycle programmes for a living, so you
+          should assume this puts you in one. It does not — one reply from me, then nothing unless you
+          write back.</p>
+      </form>
+    </div>
+
+    <div class="sent" id="sent">
+      <h2>Sent. <em>Now I go and look.</em></h2>
+      <p id="rcpt"></p>
+    </div>
+
+  </div>
+
+  <p class="foot"><b>About the numbers.</b> In this prototype the intervals and revenue shares are
+     placeholders, so you can feel the mechanism. In the real thing they are Rafał's own figures from
+     his work plus public benchmarks, published as ranges, dated, with sources named — because a tool
+     that invents precision disproves the expertise it was built to demonstrate.</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* PLACEHOLDER DATA — shape is real, values are for the prototype only */
+  var CATS=[
+    {k:"supplements", label:"Supplements",  lo:31,  hi:38},
+    {k:"beauty",      label:"Beauty",       lo:45,  hi:58},
+    {k:"food",        label:"Food & drink", lo:21,  hi:29},
+    {k:"fashion",     label:"Fashion",      lo:88,  hi:104},
+    {k:"home",        label:"Home & furniture", lo:210, hi:400}
+  ];
+
+  /* nine programmes, positioned relative to the category's own interval */
+  var PROG=[
+    {at:function(){return "Day 0";},      n:"Welcome and first-purchase context",
+     t:"Order placed", s:"8–12%"},
+    {at:function(){return "Day 3–7";},    n:"Onboarding: how to actually use it",
+     t:"Order delivered", s:"4–7%"},
+    {at:function(M){return "Day "+Math.round(M*0.35);}, n:"Review and photo request",
+     t:"Delivery plus a use window", s:"2–4%"},
+    {at:function(M){return "Day "+Math.round(M*0.75);}, n:"Replenishment nudge",
+     t:"Predicted consumption, before they run out", s:"18–26%"},
+    {at:function(M){return "Day "+Math.round(M);},      n:"Second-order offer",
+     t:"Interval reached, no second order", s:"14–20%"},
+    {at:function(M){return "Day "+Math.round(M*1.2);},  n:"Cross-sell by category affinity",
+     t:"Second order placed, or interval passed", s:"9–14%"},
+    {at:function(M){return "Day "+Math.round(M*1.6);},  n:"Lapse warning",
+     t:"Interval overshot by half", s:"7–11%"},
+    {at:function(M){return "Day "+Math.round(M*2.4);},  n:"Win-back with a reason",
+     t:"Well past the interval", s:"6–10%"},
+    {at:function(){return "On order 3";}, n:"Loyalty tier and early access",
+     t:"Third order placed", s:"10–16%"}
+  ];
+
+  var cat=CATS[0], guess=null, marked={};
+  var catsEl=document.getElementById("cats"),
+      out=document.getElementById("out"),
+      verdict=document.getElementById("verdict"),
+      cal=document.getElementById("cal"),
+      tallyHead=document.getElementById("tallyHead"),
+      tallyBody=document.getElementById("tallyBody"),
+      daysEl=document.getElementById("days"),
+      err=document.getElementById("err"),
+      sent=document.getElementById("sent"),
+      rcpt=document.getElementById("rcpt");
+
+  CATS.forEach(function(c,i){
+    var b=document.createElement("button");
+    b.type="button";b.textContent=c.label;b.setAttribute("aria-pressed",i===0?"true":"false");
+    b.onclick=function(){
+      cat=c;
+      [].forEach.call(catsEl.children,function(el){el.setAttribute("aria-pressed","false");});
+      b.setAttribute("aria-pressed","true");
+      if(out.classList.contains("on")) run(guess);
+    };
+    catsEl.appendChild(b);
+  });
+
+  function mid(){return Math.round((cat.lo+cat.hi)/2);}
+
+  function verdictText(g){
+    var band=cat.lo+"–"+cat.hi+" days";
+    if(g===null)
+      return "You do not know. <b>That is the finding</b>, and it is the most common answer I get. "
+        + cat.label.toLowerCase() + " brands mostly see the second order at " + band
+        + " — so that is the calendar you are working against, whether or not anyone is watching it.";
+    if(g<cat.lo)
+      return cat.label + " brands mostly see the second order at <b>" + band + "</b>. You said " + g
+        + ". If you are right, you are sending at people who have not finished the first thing they bought — "
+        + "and the cost of that lands on your unsubscribe rate, not your revenue line.";
+    if(g>cat.hi)
+      return cat.label + " brands mostly see the second order at <b>" + band + "</b>. You said " + g
+        + ". If you are right, your welcome flow is doing the work of a win-back — and it is not built for it.";
+    return "You said " + g + ", and " + cat.label.toLowerCase() + " brands mostly land at <b>" + band
+      + "</b>. You know your own interval, which puts you ahead of most. The question is whether the calendar below is running.";
+  }
+
+  function run(g){
+    guess=g;marked={};
+    var M=mid();
+    verdict.innerHTML=verdictText(g);
+    cal.innerHTML="";
+    PROG.forEach(function(p,i){
+      var li=document.createElement("li");
+      li.setAttribute("role","button");li.tabIndex=0;li.setAttribute("aria-pressed","false");
+      li.innerHTML='<span class="day">'+p.at(M)+'</span>'
+        +'<span class="pmid"><span class="pname">'+p.n+'</span>'
+        +'<span class="ptrig">'+p.t+'</span></span>'
+        +'<span class="pshare">'+p.s+' of CRM revenue</span>'
+        +'<span class="mark">Tap if you already run this</span>';
+      function toggle(){
+        marked[i]=!marked[i];
+        li.setAttribute("aria-pressed",marked[i]?"true":"false");
+        li.querySelector(".mark").textContent=marked[i]?"You already run this":"Tap if you already run this";
+        tally();
+      }
+      li.onclick=toggle;
+      li.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle();}};
+      cal.appendChild(li);
+    });
+    tally();
+    out.classList.add("on");
+    out.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+
+  function tally(){
+    var have=0;for(var k in marked)if(marked[k])have++;
+    var missing=PROG.length-have;
+    tallyHead.textContent="You run "+have+" of "+PROG.length+".";
+    if(have===0)
+      tallyBody.textContent="Nothing marked yet. Tap the rows you already have and this line will tell you what the rest are worth.";
+    else if(missing===0)
+      tallyBody.textContent="All nine. Then your question is not which programmes to add — it is which of them are actually earning, and that is a different conversation. Send me the sheet and I will tell you which two I would kill.";
+    else
+      tallyBody.textContent="The "+missing+" you are missing are, in my experience, where most of the CRM revenue sits — the ones tied to the interval itself usually carry more than the welcome flow everyone starts with.";
+  }
+
+  document.getElementById("go").onclick=function(){
+    var v=parseInt(daysEl.value,10);
+    if(!v||v<1||v>900){daysEl.focus();return;}
+    run(v);
+  };
+  document.getElementById("dunno").onclick=function(){daysEl.value="";run(null);};
+  daysEl.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){e.preventDefault();document.getElementById("go").click();}
+  });
+
+  document.getElementById("copy").onclick=function(){
+    var M=mid(),lines=["Lifecycle calendar — "+cat.label+" — second order at "+cat.lo+"–"+cat.hi+" days",""];
+    PROG.forEach(function(p,i){
+      lines.push((marked[i]?"[x] ":"[ ] ")+p.at(M)+"  ·  "+p.n+"  ·  "+p.t+"  ·  "+p.s+" of CRM revenue");
+    });
+    lines.push("","Built at oleksiakconsulting.com");
+    var txt=lines.join("\n");
+    var done=function(){var b=document.getElementById("copy");b.textContent="Copied";
+      setTimeout(function(){b.textContent="Take the sheet";},1800);};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,done);
+    else{var t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);
+      t.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(t);done();}
+  };
+
+  document.getElementById("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var mail=document.getElementById("mail"),v=mail.value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      err.textContent=v.indexOf("@")<0
+        ? "That is missing the @ — try name@company.com."
+        : "That is missing the domain — try name@company.com.";
+      err.classList.add("on");mail.focus();return;
+    }
+    err.classList.remove("on");
+    var have=0;for(var k in marked)if(marked[k])have++;
+    rcpt.textContent="One email to "+v+", written by hand, before this time tomorrow — with your "
+      +cat.label.toLowerCase()+" calendar and the "+(PROG.length-have)+" rows you have not marked.";
+    sent.classList.add("on");
+    sent.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+  document.getElementById("mail").addEventListener("input",function(){err.classList.remove("on");});
+})();
+</script>
+
+</body>
+</html>

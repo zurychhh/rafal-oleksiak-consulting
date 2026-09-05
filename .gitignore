@@ -63,3 +63,6 @@ test-screenshots/
 
 # Google Ads OAuth tokens
 .google-ads-token.json
+
+# LinkedIn OAuth tokens
+.linkedin-token.json
