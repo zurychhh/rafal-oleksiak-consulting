@@ -318,13 +318,19 @@ function visualGate() {
 if (!existsSync(SRC)) die(`Nie ma źródła: ${SRC}`);
 
 const src = readFileSync(SRC, 'utf8');
-const snapshot = existsSync(SNAPSHOT) ? readFileSync(SNAPSHOT, 'utf8') : '';
+const hadSnapshot = existsSync(SNAPSHOT);
+const snapshot = hadSnapshot ? readFileSync(SNAPSHOT, 'utf8') : '';
 
-// 1 · czyste drzewo
-const dirty = sh('git', ['status', '--porcelain']).trim();
-if (dirty) {
-  die('Drzewo robocze nie jest czyste. Zacommituj albo odłóż zmiany i spróbuj ponownie:\n'
-    + dirty.split('\n').slice(0, 15).map((l) => '   ' + l).join('\n'));
+// 1 · czyste drzewo — poza samym źródłem, bo to ono ma się zmieniać.
+// Gdyby strażnik obejmował także SRC, narzędzia nie dałoby się użyć: ktoś
+// podmienia stronę w tym pliku i od razu odpala ship. Wszystko inne musi być
+// czyste, żeby automatyczne cofnięcie nie zabrało cudzej niezapisanej pracy.
+const WORKING = [SRC, SNAPSHOT];
+const dirty = sh('git', ['status', '--porcelain']).trim().split('\n').filter(Boolean)
+  .filter((l) => !WORKING.some((f) => l.endsWith(' ' + f) || l.endsWith('/' + f)));
+if (dirty.length) {
+  die('Drzewo robocze nie jest czyste poza źródłem. Zacommituj albo odłóż zmiany:\n'
+    + dirty.slice(0, 15).map((l) => '   ' + l).join('\n'));
 }
 
 // 2 · czy jest co przenosić
@@ -366,9 +372,13 @@ say('\n── bramka ───────────────────�
 const green = gate() && visualGate();
 
 if (!green) {
-  say('\n  Bramka czerwona. Cofam drzewo na stan sprzed przeniesienia.');
-  sh('git', ['checkout', '--', '.']);
-  sh('git', ['clean', '-fdq', '--', SNAPSHOT]);
+  say('\n  Bramka czerwona. Cofam pliki generowane na stan sprzed przeniesienia.');
+  // Wyłącznie to, co ship zapisał. NIE źródło: mogło być niezacommitowane,
+  // a `git checkout -- .` skasowałby czyjąś nową wersję strony bez ostrzeżenia.
+  sh('git', ['checkout', '--', GLOBALS, CSS, RUNTIME, CLIENT]);
+  if (hadSnapshot) sh('git', ['checkout', '--', SNAPSHOT]);
+  else sh('git', ['clean', '-fq', '--', SNAPSHOT]);
+  say('  Źródło zostało nietknięte — twoja wersja strony jest bezpieczna.');
   die('Nic nie zostało przeniesione. Powyżej jest powód.');
 }
 
