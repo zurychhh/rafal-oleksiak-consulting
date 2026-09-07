@@ -53,7 +53,7 @@ export default function bootAudit() {
     {g:"own",  cl:"Email",            n:"Mid-pack check-in",
      t:"Half the pack gone", m:"CRM rev 4–7%",
      at:function(P){return "Day "+Math.max(2,Math.round(P*0.5));}},
-    {g:"own",  cl:"Email + push",     n:"Running low",
+    {g:"own",  cl:"Email + push",     n:"Running low — seven days left",
      t:"Seven days of product left", m:"CRM rev 20–28%", key:1,
      at:function(P){return "Day "+Math.max(2,P-7);}},
     {g:"own",  cl:"Email + push",     n:"The pack ends",

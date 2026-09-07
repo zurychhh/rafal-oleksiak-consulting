@@ -227,8 +227,8 @@
 
 <div class="s1">
   <div class="head"><span class="wm">Oleksiak Consult</span><span class="lab">Replenishment &amp; retention</span></div>
-  <h1 class="hook">Every pack runs out on a different day. <em>Your email hits every customer on the same one.</em></h1>
-  <p class="sub">Bottles, bags, tubs, refills, boxes of lenses — anything a customer finishes and has to buy again. Tell me what runs out and how long one pack lasts. I price the gap between the empty pack and the next order, and rank the eighteen steps I would build.</p>
+  <h1 class="hook">Every pack empties on its own day. <em>Your email hits every customer on the same one.</em></h1>
+  <p class="sub">A brand new sentence about shelf life that did not exist before. Bottles, bags, tubs, refills, boxes of lenses — anything a customer finishes and has to buy again. Tell me what runs out and how long one pack lasts. I price the gap between the empty pack and the next order, and rank the eighteen steps I would build.</p>
   <div class="step1">
     <div class="lab">01 &nbsp;What runs out in your range</div>
     <div class="cats" id="cats"></div>
@@ -240,7 +240,7 @@
     <div class="lab">02 &nbsp;Days one pack lasts before the next order</div>
     <div class="row2">
       <div class="daybox"><input id="days" type="number" min="3" max="400" inputmode="numeric" value="30"><span>days</span></div>
-      <button class="go" id="go" type="button">Run the audit</button>
+      <button class="go" id="go" type="button">Run the FMCG audit</button>
     </div>
   </div>
 </div>
@@ -378,7 +378,7 @@
     {g:"own",  cl:"Email",            n:"Mid-pack check-in",
      t:"Half the pack gone", m:"CRM rev 4–7%",
      at:function(P){return "Day "+Math.max(2,Math.round(P*0.5));}},
-    {g:"own",  cl:"Email + push",     n:"Running low",
+    {g:"own",  cl:"Email + push",     n:"Running low — seven days left",
      t:"Seven days of product left", m:"CRM rev 20–28%", key:1,
      at:function(P){return "Day "+Math.max(2,P-7);}},
     {g:"own",  cl:"Email + push",     n:"The pack ends",

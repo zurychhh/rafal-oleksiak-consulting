@@ -40,8 +40,8 @@ export default function AuditClient() {
       {/* >>> ZE ZRODLA — GENEROWANE, NIE EDYTUJ RECZNIE <<< */}
       <div className="s1">
         <div className="head"><span className="wm">Oleksiak Consult</span><span className="lab">Replenishment &amp; retention</span></div>
-        <h1 className="hook">Every pack runs out on a different day. <em>Your email hits every customer on the same one.</em></h1>
-        <p className="sub">Bottles, bags, tubs, refills, boxes of lenses — anything a customer finishes and has to buy again. Tell me what runs out and how long one pack lasts. I price the gap between the empty pack and the next order, and rank the eighteen steps I would build.</p>
+        <h1 className="hook">Every pack empties on its own day. <em>Your email hits every customer on the same one.</em></h1>
+        <p className="sub">A brand new sentence about shelf life that did not exist before. Bottles, bags, tubs, refills, boxes of lenses — anything a customer finishes and has to buy again. Tell me what runs out and how long one pack lasts. I price the gap between the empty pack and the next order, and rank the eighteen steps I would build.</p>
         <div className="step1">
           <div className="lab">01 &nbsp;What runs out in your range</div>
           <div className="cats" id="cats"></div>
@@ -53,7 +53,7 @@ export default function AuditClient() {
           <div className="lab">02 &nbsp;Days one pack lasts before the next order</div>
           <div className="row2">
             <div className="daybox"><input id="days" type="number" min="3" max="400" inputMode="numeric" defaultValue="30" /><span>days</span></div>
-            <button className="go" id="go" type="button">Run the audit</button>
+            <button className="go" id="go" type="button">Run the FMCG audit</button>
           </div>
         </div>
       </div>
