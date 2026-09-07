@@ -83,18 +83,22 @@ const BOOL_ATTR = new Set(['novalidate', 'checked', 'disabled', 'readonly', 'req
 
 function styleToObject(css) {
   const out = [];
+  let custom = false;
   for (const part of css.split(';')) {
     const i = part.indexOf(':');
     if (i < 0) continue;
     const prop = part.slice(0, i).trim();
     const val = part.slice(i + 1).trim();
     if (!prop || !val) continue;
-    const key = prop.startsWith('--')
-      ? `'${prop}'`
-      : prop.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+    let key;
+    if (prop.startsWith('--')) { key = `'${prop}'`; custom = true; }
+    else key = prop.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
     out.push(`${key}: '${val.replace(/'/g, "\\'")}'`);
   }
-  return `{ ${out.join(', ')} }`;
+  // Typ CSSProperties nie zna wlasciwosci niestandardowych, wiec `--d` bez
+  // rzutowania wywraca typecheck. Rzutujemy tylko tam, gdzie faktycznie sa.
+  const obj = `{ ${out.join(', ')} }`;
+  return custom ? `${obj} as CSSProperties` : obj;
 }
 
 function htmlToJsx(html) {

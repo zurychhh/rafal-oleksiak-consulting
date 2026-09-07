@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+// Uzywane przez generowany region: wlasciwosci niestandardowe (--d) nie
+// mieszcza sie w CSSProperties bez rzutowania.
+import type { CSSProperties } from 'react';
 import bootAudit from './audit-runtime';
 
 /**
