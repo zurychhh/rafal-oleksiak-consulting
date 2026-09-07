@@ -3,8 +3,8 @@
  * w design/production/index.html. Zawartosc miedzy znacznikami generuje
  * scripts/ship.mjs; nie edytuj jej recznie, bo nastepny ship ja nadpisze.
  *
- * Dlaczego to plik .js, a nie .tsx: tsconfig obejmuje tylko **/*.ts i **/*.tsx,
- * a checkJs jest wylaczony, wiec ten plik nie przechodzi typechecku. Dzieki
+ * Dlaczego to plik .js, a nie .tsx: tsconfig obejmuje wylacznie pliki .ts
+ * i .tsx, a checkJs jest wylaczony, wiec ten plik omija typecheck. Dzieki
  * temu kod moze zostac doslownie taki, jak zostal przetestowany wizualnie —
  * bez ani jednej adnotacji dopisanej po to, zeby zadowolic kompilator.
  */
