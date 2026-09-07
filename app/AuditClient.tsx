@@ -125,9 +125,9 @@ export default function AuditClient() {
                   <button type="submit">Send the sheet</button>
                 </div>
                 <div className="choice">
-                  <label><input type="radio" name="intent" defaultValue="sheet" defaultChecked />
+                  <label><input type="radio" name="intent" value="sheet" defaultChecked />
                     <span>Just send me the sheet.</span></label>
-                  <label><input type="radio" name="intent" defaultValue="markup" />
+                  <label><input type="radio" name="intent" value="markup" />
                     <span><b>Send it, and write back with what you would change.</b>
                       I am considering bringing someone in.</span></label>
                 </div>
