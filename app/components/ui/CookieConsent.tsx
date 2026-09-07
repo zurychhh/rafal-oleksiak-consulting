@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 /**
  * GDPR Cookie Consent Banner - Integrated with Google Consent Mode v2
@@ -15,6 +15,37 @@ import { useState, useEffect } from 'react'
  */
 export default function CookieConsent() {
   const [hidden, setHidden] = useState(true)
+  const box = useRef<HTMLDivElement>(null)
+
+  // Pasek stoi na `position:fixed`, więc bez rezerwacji miejsca kładzie się na
+  // treści. Na krótkich viewportach przykrywał przycisk „Run the audit" —
+  // złapała to bramka wizualna, bo klik nie miał jak dojść. Rezerwujemy
+  // wysokość paska na <html>: strona skraca się o tyle, ile pasek zajmuje,
+  // zamiast chować pod nim swój własny CTA.
+  useEffect(() => {
+    const el = box.current
+    const root = document.documentElement
+    if (hidden || !el) {
+      root.style.removeProperty('--consent-h')
+      root.style.removeProperty('padding-bottom')
+      return
+    }
+    const apply = () => {
+      const h = el.offsetHeight
+      root.style.setProperty('--consent-h', h + 'px')
+      root.style.paddingBottom = h + 'px'
+    }
+    apply()
+    const ro = new ResizeObserver(apply)
+    ro.observe(el)
+    window.addEventListener('resize', apply)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', apply)
+      root.style.removeProperty('--consent-h')
+      root.style.removeProperty('padding-bottom')
+    }
+  }, [hidden])
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent')
@@ -84,6 +115,7 @@ export default function CookieConsent() {
 
   return (
     <div
+      ref={box}
       role="dialog"
       aria-label="Cookie consent banner"
       data-gdpr-consent="cookie-banner"
@@ -93,33 +125,39 @@ export default function CookieConsent() {
         left: 0,
         right: 0,
         zIndex: 9999,
-        background: 'rgba(20, 20, 30, 0.97)',
-        backdropFilter: 'blur(12px)',
-        borderTop: '1px solid rgba(123, 44, 191, 0.3)',
-        padding: '16px 24px',
+        background: '#0D0F14',
+        borderTop: '1px solid #242938',
+        padding: '10px 20px',
         display: hidden ? 'none' : 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '16px',
+        gap: '14px',
         flexWrap: 'wrap' as const,
+        // Paleta strony. Bez zaokrągleń, bez gradientu, bez rozmycia tła —
+        // banner ma wyglądać jak część tej strony, a nie jak wtyczka.
+        fontFamily: '"IBM Plex Mono", ui-monospace, Menlo, monospace',
       }}
     >
-      <p style={{ color: '#ccc', fontSize: '14px', margin: 0, maxWidth: '600px' }}>
-        This site uses cookies for analytics and advertising. By accepting, you consent
-        to Google Analytics, Google Ads tracking, and remarketing cookies.
-        See our <a href="/privacy" style={{ color: '#9D4EDD', textDecoration: 'underline' }}>Privacy Policy</a>.
+      {/* Krótko celowo: każda zawinięta linia to wyższy pasek, a na telefonie
+          wysoki pasek zaczyna zasłaniać pole „days". */}
+      <p style={{ color: '#9BA0AD', fontSize: '11.5px', lineHeight: 1.5, margin: 0, maxWidth: '52ch' }}>
+        Analytics cookies, so I can tell whether this page worked. Decline and nothing is set.{' '}
+        <a href="/privacy" style={{ color: '#FF6A1F', textDecoration: 'underline', textUnderlineOffset: '3px' }}>Privacy</a>.
       </p>
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
         <button
           onClick={accept}
           style={{
-            background: 'linear-gradient(135deg, #7B2CBF, #0066FF)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '6px',
-            padding: '8px 20px',
-            fontSize: '13px',
+            background: '#FF6A1F',
+            color: '#0D0F14',
+            border: 0,
+            borderRadius: 0,
+            padding: '9px 18px',
+            fontFamily: 'inherit',
+            fontSize: '11px',
             fontWeight: 600,
+            letterSpacing: '.14em',
+            textTransform: 'uppercase',
             cursor: 'pointer',
           }}
         >
@@ -128,12 +166,15 @@ export default function CookieConsent() {
         <button
           onClick={decline}
           style={{
-            background: 'transparent',
-            color: '#999',
-            border: '1px solid #444',
-            borderRadius: '6px',
-            padding: '8px 20px',
-            fontSize: '13px',
+            background: 'none',
+            color: '#9BA0AD',
+            border: '1px solid #242938',
+            borderRadius: 0,
+            padding: '9px 18px',
+            fontFamily: 'inherit',
+            fontSize: '11px',
+            letterSpacing: '.14em',
+            textTransform: 'uppercase',
             cursor: 'pointer',
           }}
         >

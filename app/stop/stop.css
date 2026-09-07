@@ -1,0 +1,47 @@
+/* /stop — ta sama paleta co strona główna. Zmienne siedzą w globals.css.
+   Reguły trzymane globalnie z tego samego powodu co w audit.css: nazwy klas
+   są dzielone z resztą tej trasy i nic ich nie hashuje. */
+
+/* Reset scenografii po starej stronie, identyczny jak w audit.css.
+   critical.css narzuca białe tło i Poppinsa na nagłówkach. */
+html{overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;}
+/* Tlo i krój musza siedziec na <body>, nie na kolumnie: .stopwrap ma 620px
+   szerokosci, wiec sama pomalowalaby tylko pasek posrodku bialej strony
+   (critical.css ustawia body na biale i DM Sans). */
+body{overflow-x:visible;max-width:none;
+  background:var(--bg);color:var(--fg);font-family:var(--sans);}
+h1,h2,h3,h4,h5,h6{font-family:inherit;}
+
+.stopwrap{min-height:calc(100dvh - var(--consent-h, 0px));
+  display:flex;flex-direction:column;justify-content:center;
+  max-width:620px;margin:0 auto;padding:80px 28px 48px;}
+.stopwrap .lab{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);}
+.stophead{margin:14px 0 0;font-weight:700;font-size:clamp(26px,4.4vw,40px);line-height:1.1;
+  letter-spacing:-.02em;}
+.stopsub{margin:18px 0 0;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--dim);
+  max-width:56ch;}
+.stopform{margin-top:32px;}
+.stopbox{display:flex;border:1px solid var(--line);background:var(--panel);}
+.stopbox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--fg);
+  font-family:var(--mono);font-size:14px;padding:15px 15px;}
+.stopbox input::placeholder{color:#8A90A0;}
+.stopbox button{border:0;background:var(--acc);color:#0D0F14;cursor:pointer;padding:0 22px;
+  font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;}
+.stopbox button:hover{background:var(--fg);}
+.stopbox button:disabled{opacity:.6;cursor:default;}
+.stoperr{display:none;margin:12px 0 0;font-family:var(--mono);font-size:11.5px;color:#FF8A6B;}
+.stoperr.on{display:block;}
+.stopdone{display:none;margin-top:28px;border-left:2px solid var(--ok);padding-left:20px;}
+.stopdone.on{display:block;}
+.stopdone h2{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ok);font-weight:600;}
+.stopdone p{margin:10px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--dim);}
+.stopfoot{margin:40px 0 0;font-family:var(--mono);font-size:10.5px;line-height:1.7;color:#8A90A0;}
+.stopfoot a{color:var(--dim);}
+
+@media (max-width:560px){
+  .stopbox{flex-direction:column;} .stopbox button{padding:15px 0;}
+}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;} }

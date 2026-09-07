@@ -202,3 +202,14 @@ h1,h2,h3,h4,h5,h6{font-family:inherit;}
     text-underline-offset:3px;}
   .copylink:hover{color:var(--acc);}
 
+
+/* --- Rezerwacja miejsca na pasek zgody. NIE jest czescia projektu. ---
+   Musi stac PO przeniesionym bloku: oryginalne `.s1{min-height:100dvh}` ma
+   ta sama specyficznosc, wiec o wyniku decyduje kolejnosc.
+   Pasek stoi na position:fixed, a pierwszy ekran ma dokladnie 100dvh
+   z wysrodkowana trescia — bez tego chowa pod soba wlasne CTA
+   („Run the audit"). Zlapala to bramka wizualna: klik nie mial jak dojsc.
+   --consent-h ustawia CookieConsent po zmierzeniu paska; gdy paska nie ma,
+   fallback 0px sprowadza regule do oryginalnego 100dvh. */
+.s1{min-height:calc(100dvh - var(--consent-h, 0px));
+    padding-bottom:calc(48px + var(--consent-h, 0px));}

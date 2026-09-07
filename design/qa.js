@@ -42,6 +42,13 @@ function lum(c) {
 
   for (const vp of VIEWPORTS) {
     const page = await browser.newPage({ viewport: { width: vp.w, height: vp.h } });
+    // Pasek zgody zdjęty przed pomiarem: człowiek odklikuje go w sekundę, a stojąc
+    // na position:fixed przechwytuje kliknięcia i audyt nie dochodzi do drugiego
+    // ekranu. Samo nakładanie paska na treść ma własny, osobny test — ta bramka
+    // mierzy stronę, nie pasek.
+    await page.addInitScript(() => {
+      try { localStorage.setItem('cookie-consent', 'declined'); } catch { /* tryb prywatny */ }
+    });
     // Przyjmuje i plik z dysku, i adres — port sprawdzamy przeciwko dev serwerowi.
     await page.goto(
       /^https?:\/\//.test(FILE) ? FILE : 'file://' + path.resolve(FILE),

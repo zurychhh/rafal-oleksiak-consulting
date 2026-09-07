@@ -4,6 +4,7 @@ import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold
 import "./globals.css"; // Remaining below-the-fold styles
 import FontAwesomeLoader from "./components/FontAwesomeLoader";
 import ConsentMode from "./components/ConsentMode";
+import CookieConsent from "./components/ui/CookieConsent";
 import { GTMScript, GTMNoScript } from "./components/GTMScript";
 import SchemaOrg from "./components/SchemaOrg";
 import GoogleAnalytics from "./components/GoogleAnalytics";
@@ -127,6 +128,11 @@ export default function RootLayout({
         <GoogleAnalytics />
         <WebVitals />
         <ScrollTracker />
+
+        {/* Banner zgody. Siedzi w layoucie, nie na stronie: ConsentMode ustawia
+            domyślne 'denied' dla EOG, więc bez tego UI nie ma jak zgody udzielić
+            i analityka jest ślepa na całym serwisie, nie tylko na stronie głównej. */}
+        <CookieConsent />
       </body>
     </html>
   );
