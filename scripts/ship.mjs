@@ -110,8 +110,10 @@ function htmlToJsx(html) {
 
   s = s.replace(/<([a-zA-Z][a-zA-Z0-9]*)((?:\s+[^<>]*?)?)(\/?)>/g, (full, tag, attrs, selfClosed) => {
     const lower = tag.toLowerCase();
-    let isInput = lower === 'input';
-    let hasChecked = false;
+    const isInput = lower === 'input';
+    // Radio i checkbox steruje sie przez `checked`, a `value` jest wartoscia
+    // wysylana — zamiana jej na defaultValue dziala, ale myli czytelnika.
+    const isToggle = isInput && /type\s*=\s*["']?(radio|checkbox)/i.test(attrs);
     let out = '';
 
     const re = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+)))?/g;
@@ -130,10 +132,10 @@ function htmlToJsx(html) {
         out += ` style={${styleToObject(value)}}`;
         continue;
       }
-      if (name === 'checked') { hasChecked = true; out += ' defaultChecked'; continue; }
+      if (name === 'checked') { out += ' defaultChecked'; continue; }
       // Pole niekontrolowane: skrypt czyta i pisze .value bezpośrednio, więc
       // `value` musi zostać wartością początkową, nie sterowaną Reactem.
-      if (name === 'value' && isInput) { out += ` defaultValue="${value}"`; continue; }
+      if (name === 'value' && isInput && !isToggle) { out += ` defaultValue="${value}"`; continue; }
       if (value === undefined) {
         if (BOOL_ATTR.has(name)) { out += ` ${ATTR[name] ?? name}`; continue; }
         unknown.push(`atrybut bez wartości: ${rawName} w <${tag}>`);
