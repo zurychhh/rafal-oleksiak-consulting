@@ -37,8 +37,20 @@ export default [
     // Jego wartością jest to, że przeszedł QA wizualne — zamiana `var` na
     // `let` i domykanie pustego `catch` to przepisywanie przetestowanego kodu
     // dla kosmetyki. Wyjątek jest celowo zawężony do tego jednego pliku.
-    files: ['app/AuditClient.tsx'],
-    rules: { 'no-var': 'off' },
+    files: ['app/audit-runtime.js'],
+    languageOptions: {
+      // Plik jest zwyklym .js, wiec nie obejmuje go wylaczenie no-undef dla TS.
+      // Zamiast wylaczac regule, deklarujemy globale przegladarki, ktorych
+      // ten skrypt faktycznie uzywa.
+      globals: {
+        document: 'readonly', window: 'readonly', navigator: 'readonly',
+        location: 'readonly', console: 'readonly',
+        setTimeout: 'readonly', clearTimeout: 'readonly',
+        requestAnimationFrame: 'readonly', fetch: 'readonly',
+        URLSearchParams: 'readonly', AbortController: 'readonly',
+      },
+    },
+    rules: { 'no-var': 'off', 'no-empty': 'off' },
   },
   {
     // `no-undef` nie ma sensu w TypeScripcie — kompilator sprawdza to lepiej

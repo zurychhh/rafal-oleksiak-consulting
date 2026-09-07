@@ -788,9 +788,11 @@ section[id] {
    dosłownie z design/production/index.html — nie zmieniaj ich tutaj.
    Reszta arkusza tej strony siedzi w app/audit.css.
    ============================================ */
+/* >>> ZMIENNE ZE ZRODLA — GENEROWANE <<< */
 :root{
   --bg:#0D0F14; --panel:#12151C; --fg:#E9E7E1; --dim:#9BA0AD; --line:#242938;
   --acc:#FF6A1F; --ok:#4DD0A7;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
   --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
 }
+/* >>> KONIEC ZMIENNYCH ZE ZRODLA <<< */
