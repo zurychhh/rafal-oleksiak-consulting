@@ -126,9 +126,12 @@ Wklej poniższe do Claude Code w katalogu repo.
 
 ## Czego ta strona nadal nie mówi
 
-Cena jest wpisana jako widełki osiem do dwunastu tysięcy netto za jedno zadanie
-i siedzi w jednej stałej `PRICE` w skrypcie — zmiana w jednym miejscu.
+Cena jest wpisana jako widełki osiem do dwunastu tysięcy netto za jedno zadanie.
 Sprawdź, czy nie podcina żadnego obecnego klienta, zanim to pójdzie na żywo.
+
+**Uwaga: wcześniej stało tu, że to „jedna stała `PRICE`, zmiana w jednym
+miejscu". To nieprawda — miejsc są cztery.** Pełna lista i procedura zmiany:
+`design/production/HANDOVER.md`, sekcja „Cena — cztery miejsca".
 
 Plan na stronie obiecuje cztery obszary, a opisany dowód jest dla jednego.
 Albo dosypać, co realnie jest na paid i search, albo zawęzić obietnicę.

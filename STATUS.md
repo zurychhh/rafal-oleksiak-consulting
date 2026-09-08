@@ -33,7 +33,7 @@ Bramka po kazdym etapie: `npm run build`, `npx tsc --noEmit`, `npm run lint`
 (zero bledow), `node design/qa.js <url> --scroll` na `/` i `/stop`, oraz
 `node scripts/ship-compare.mjs` — porownanie stylow obliczonych wobec zrodla.
 
-### DO ZROBIENIA POZNIEJ — dwa punkty, oba czekaja na czlowieka
+### DO ZROBIENIA POZNIEJ — jeden punkt, czeka na czlowieka
 
 **Zadanie 4 — wlasciwosci kontaktu w HubSpocie.** `node scripts/hubspot-setup.mjs`
 zwraca 401 na kazdym endpoincie, lacznie z `/account-info/v3/details`. To nie jest
@@ -52,13 +52,34 @@ enumow `["wants mark-up","sheet only","yes","no"]` po obu stronach identyczne.
 Uwaga: HubSpot **nie zglasza bledu** przy nieznanej wlasciwosci w `POST /contacts`
 — po cichu ja pomija. Dlatego rozjazd nazw kosztowalby leada, a nie komunikat.
 
-**Zadanie 7 — zmienne w srodowisku Production na Vercelu.** Wymagane cztery:
-`RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL`, `HUBSPOT_API_KEY`. Bez nich build
-przechodzi, a `/api/lead` zwraca `503 not_configured` przy kazdym zgloszeniu.
-Opcjonalne: `NEXT_PUBLIC_SITE_URL` (domena kanoniczna, gdy host jest za proxy),
-`LEAD_MAX_PER_HOUR` (limiter, domyslnie 5; poza produkcja limiter jest nieaktywny).
+**Klucz z Vercela jest tym samym kluczem i jest tak samo martwy.** Sprawdzone
+8 wrzesnia: `vercel env pull` do pliku tymczasowego, porownanie z `.env.local`
+— obie wartosci maja 44 znaki i sa identyczne, a produkcyjna zwraca 401 na
+`/account-info/v3/details`, `/crm/v3/objects/contacts` i `/crm/v3/properties/contacts`.
+Nie ma wiec dzialajacego klucza nigdzie; potrzebny nowy.
 
-**Po obu:** test sciezki szczesliwej end-to-end, raz, na wlasny adres — mail
+**Skutek biznesowy, do sprawdzenia po stronie CRM-u.** Stara strona zapisywala
+kontakty przez `createHubSpotContact` w `/api/send-email` i w `/api/lama/audit`.
+Oba miejsca **polykaly blad HubSpota po cichu** (`console.error` z komentarzem
+„Log error but don't fail the request") i zwracaly odwiedzajacemu sukces. Dopoki
+token byl martwy, kazde zgloszenie dawalo maila i **zadnego kontaktu w CRM-ie**.
+Klucz Resend jest osobny i dziala, wiec leady nie przepadly — sa w skrzynce
+`TO_EMAIL`, tylko nie ma ich w HubSpocie. Nie da sie stad ustalic, od kiedy token
+jest martwy; to trzeba porownac w CRM-ie z mailami w skrzynce.
+
+**Zadanie 7 — zmienne na Vercelu: ZROBIONE.** Sprawdzone 8 wrzesnia 2026 przez
+`vercel env ls production`. Wszystkie cztery wymagane sa ustawione w srodowisku
+Production: `RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL`, `HUBSPOT_API_KEY`.
+Opcjonalnych `NEXT_PUBLIC_SITE_URL` i `LEAD_MAX_PER_HOUR` nie ma i nie musi byc:
+origin check porownuje `origin.host` z `host` z zadania, wiec produkcja i deploye
+preview dzialaja bez nich, a limiter stoi na domyslnej piatce.
+
+Wyczyszczone 8 wrzesnia z Production, bo kod ich uzywajacy juz nie istnieje:
+`STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`, `POSTGRES_URL`,
+`RADAR_BASE_URL`. Zostawione swiadomie do uzytku poza tym repo:
+`SERPER_API_KEY`, `GOOGLE_PAGESPEED_API_KEY`.
+
+**Po tokenie:** test sciezki szczesliwej end-to-end, raz, na wlasny adres — mail
 do odwiedzajacego, mail do wlasciciela, kontakt w HubSpocie.
 
 ### Otwarte decyzje tresciowe, nie techniczne

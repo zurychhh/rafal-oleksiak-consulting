@@ -168,3 +168,38 @@ Skrypt najpierw zakłada gałąź i commit-checkpoint, dopiero potem usuwa przez
 Dwa miejsca zostają i się zerwą, skrypt je wypisuje: `FinalCTA.tsx` strzela do
 `/api/lama/audit` (do przepięcia na `/api/lead`) i `Accelerators.tsx` ma kafel
 radaru. Po wszystkim `npx tsc --noEmit` pokaże resztę.
+
+---
+
+## Cena — cztery miejsca, nie jedno
+
+Wcześniejsza wersja tego dokumentu i `HANDOFF-CC.md` obiecywały, że widełki
+siedzą w jednej stałej `PRICE` i zmiana jest w jednym miejscu. **To nieprawda.**
+Zmiana samej stałej zostawiłaby starą kwotę w kafelku RTB na stronie i w obu
+wariantach maila. Zweryfikowane 8 września 2026.
+
+| Plik i linia | Co to jest | Kto to nadpisuje |
+|---|---|---|
+| `design/production/index.html:430` | stała `PRICE` — zasila akapit `.priceline` i tekst kopiowany do schowka | źródło → `npm run ship` |
+| `design/production/index.html:298` | akapit RTB „usually 8–12k zł net", wpisany na sztywno w znacznikach | źródło → `npm run ship` |
+| `app/lib/sheet-email.ts:72` | wariant maila „mark-up" | **ręcznie** |
+| `app/lib/sheet-email.ts:78` | wariant maila „sheet only" | **ręcznie** |
+
+`app/audit-runtime.js:105`, `app/AuditClient.tsx:111` i `app/audit-source.snapshot.html`
+to pochodne dwóch pierwszych pozycji. **Nie edytuj ich** — `ship` je nadpisze.
+
+### Procedura zmiany widełek
+
+1. Popraw **oba** miejsca w `design/production/index.html` (linie 430 i 298).
+2. `npm run ship` — podgląd pokaże zmianę treści, sprawdź, czy widzisz obie.
+3. `npm run ship -- --yes` — przenosi i przepuszcza przez bramkę.
+4. Popraw **ręcznie** dwie linie w `app/lib/sheet-email.ts` (72 i 78).
+   `ship` tego pliku nie dotyka.
+5. `npm run build && npx tsc --noEmit && npm run lint` — lint musi być na zerze.
+
+Sprawdzenie na koniec, powinno dać dokładnie cztery trafienia w plikach
+edytowalnych i trzy w pochodnych:
+
+```bash
+grep -rnE '8[–—-]12k|8&ndash;12k' design/production/index.html app/lib/sheet-email.ts
+```
