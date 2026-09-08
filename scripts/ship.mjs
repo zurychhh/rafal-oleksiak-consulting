@@ -384,7 +384,9 @@ if (!green) {
 
 // 6 · commit; push nigdy
 const stamp = new Date().toISOString().slice(0, 10);
-sh('git', ['add', '-A']);
+// Tylko pliki, ktorymi ship zarzadza. `-A` zgarnalby rownolegle zmiany
+// w innych plikach do commitu opisanego jako przeniesienie tresci.
+sh('git', ['add', '--', GLOBALS, CSS, RUNTIME, CLIENT, SNAPSHOT, SRC]);
 sh('git', ['commit', '-q', '-m',
   `content: przeniesienie strony glownej ze zrodla (${stamp})\n\n`
   + `Zrodlo: ${SRC} (${sha(src)})\n`
