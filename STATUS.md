@@ -33,39 +33,41 @@ Bramka po kazdym etapie: `npm run build`, `npx tsc --noEmit`, `npm run lint`
 (zero bledow), `node design/qa.js <url> --scroll` na `/` i `/stop`, oraz
 `node scripts/ship-compare.mjs` — porownanie stylow obliczonych wobec zrodla.
 
-### DO ZROBIENIA POZNIEJ — jeden punkt, czeka na czlowieka
+### STAN ZADAN 4 i 7
 
-**Zadanie 4 — wlasciwosci kontaktu w HubSpocie.** `node scripts/hubspot-setup.mjs`
-zwraca 401 na kazdym endpoincie, lacznie z `/account-info/v3/details`. To nie jest
-brak zakresu `crm.schemas.contacts.write`: przy samym braku uprawnienia HubSpot
-zwraca 403 z lista brakujacych scope'ow, a `account-info` przechodzi. Token jest
-uniewazniony albo pochodzi z innego konta. Wykluczone bledy parsowania — wartosc
-ma 44 znaki, ksztalt `pat-eu1-` + UUID, bez cudzyslowow i bialych znakow.
+**Zadanie 4 — HubSpot: ZROBIONE 8 wrzesnia 2026.** Dziesiec wlasciwosci kontaktu
+zalozonych przez `node scripts/hubspot-setup.mjs --apply`, zweryfikowanych
+odczytem z `/crm/v3/properties/contacts`. Drugi przebieg: 0 utworzonych,
+10 pominietych — skrypt jest idempotentny.
 
-Potrzebny nowy token private app z `crm.schemas.contacts.write` i
-`crm.objects.contacts.write` w `.env.local`, potem `node scripts/hubspot-setup.mjs`
-(podglad) i `--apply`. Skrypt jest idempotentny.
+Klucz: **klucz uslugi** (service key, funkcja w wersji beta), nie aplikacja
+prywatna. Nazwa `ROC_CLAUDE_CODE`, portal **149284039**, region `eu1`.
+Panel: Settings → Integracje → Klucze uslugi. Ma opcje `Rotacja`.
 
-Sprawdzone statycznie i zgodne 1:1: 10 wlasciwosci zakladanych przez skrypt kontra
-11 wysylanych przez `app/lib/lead-hubspot.ts` (`email` jest standardowe), wartosci
-enumow `["wants mark-up","sheet only","yes","no"]` po obu stronach identyczne.
-Uwaga: HubSpot **nie zglasza bledu** przy nieznanej wlasciwosci w `POST /contacts`
-— po cichu ja pomija. Dlatego rozjazd nazw kosztowalby leada, a nie komunikat.
+Test sciezki szczesliwej end-to-end przeszedl: HTTP 200, kontakt `863193178318`,
+**10/10 wlasciwosci wypelnionych poprawnie**, w tym atrybucja first touch
+(`first_touch_source=linkedin`, `first_touch_campaign=e2e-test`) z parametrow UTM.
+Oba maile wyszly, zero bledow w logu.
 
-**Klucz z Vercela jest tym samym kluczem i jest tak samo martwy.** Sprawdzone
-8 wrzesnia: `vercel env pull` do pliku tymczasowego, porownanie z `.env.local`
-— obie wartosci maja 44 znaki i sa identyczne, a produkcyjna zwraca 401 na
-`/account-info/v3/details`, `/crm/v3/objects/contacts` i `/crm/v3/properties/contacts`.
-Nie ma wiec dzialajacego klucza nigdzie; potrzebny nowy.
+**Dlaczego stary klucz nie dzialal — ustalone.** Nowy portal ma numer 149284039
+i w chwili podlaczenia mial **dwa kontakty, oba przykladowe `@hubspot.com`,
+utworzone tego samego dnia**. To jest swieze, puste konto. Stary token nalezal
+wiec do **innego portalu**, do ktorego nie ma juz dostepu — stad 401
+nieodrozniulny od tokena calkowicie zmyslonego. Sprawdzone tez: stary token
+**nigdy nie byl commitowany** (0 trafien w calej historii gita przy szukaniu
+dokladnej wartosci), wiec wyciek i automatyczne uniewaznienie odpadaja.
 
-**Skutek biznesowy, do sprawdzenia po stronie CRM-u.** Stara strona zapisywala
-kontakty przez `createHubSpotContact` w `/api/send-email` i w `/api/lama/audit`.
-Oba miejsca **polykaly blad HubSpota po cichu** (`console.error` z komentarzem
-„Log error but don't fail the request") i zwracaly odwiedzajacemu sukces. Dopoki
-token byl martwy, kazde zgloszenie dawalo maila i **zadnego kontaktu w CRM-ie**.
-Klucz Resend jest osobny i dziala, wiec leady nie przepadly — sa w skrzynce
-`TO_EMAIL`, tylko nie ma ich w HubSpocie. Nie da sie stad ustalic, od kiedy token
-jest martwy; to trzeba porownac w CRM-ie z mailami w skrzynce.
+**Konsekwencja dla danych: leadow ze starej strony NIE MA w tym portalu.**
+Jesli gdzies sa, to w tamtym, starym koncie. Jedyny pewny rejestr zgloszen
+to skrzynka `TO_EMAIL` — stara strona polykala blad HubSpota po cichu
+(`console.error` z komentarzem „don't fail the request"), wiec odwiedzajacy
+widzial sukces, mail wychodzil, a kontakt nie powstawal.
+
+**POZOSTAJE JEDNO: klucz na Vercelu.** W srodowisku Production nadal siedzi
+**stary, martwy** `HUBSPOT_API_KEY`. Skutkiem nie jest awaria — `/api/lead`
+zwroci 200 i wysle maile — tylko **ciche niezapisywanie kontaktow**, dokladnie
+ten sam tryb awarii co poprzednio. Do podmiany recznie w panelu Vercela
+albo `vercel env rm HUBSPOT_API_KEY production` i `vercel env add`.
 
 **Zadanie 7 — zmienne na Vercelu: ZROBIONE.** Sprawdzone 8 wrzesnia 2026 przez
 `vercel env ls production`. Wszystkie cztery wymagane sa ustawione w srodowisku
@@ -79,8 +81,7 @@ Wyczyszczone 8 wrzesnia z Production, bo kod ich uzywajacy juz nie istnieje:
 `RADAR_BASE_URL`. Zostawione swiadomie do uzytku poza tym repo:
 `SERPER_API_KEY`, `GOOGLE_PAGESPEED_API_KEY`.
 
-**Po tokenie:** test sciezki szczesliwej end-to-end, raz, na wlasny adres — mail
-do odwiedzajacego, mail do wlasciciela, kontakt w HubSpocie.
+**Test sciezki szczesliwej: przeszedl 8 wrzesnia** — szczegoly przy zadaniu 4.
 
 ### Otwarte decyzje tresciowe, nie techniczne
 
@@ -110,9 +111,10 @@ a plan obiecuje tez paid i search: albo dosypac dowod, albo zawezic obietnice.
 | Serwis | Status | Klucz Env | Notatki |
 |--------|--------|-----------|---------|
 | Resend | uzywany | `RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL` | `/api/lead` i `/api/stop` |
-| HubSpot | **ZABLOKOWANY** | `HUBSPOT_API_KEY` | token zwraca 401, patrz zadanie 4 |
+| HubSpot | dziala lokalnie | `HUBSPOT_API_KEY` | klucz uslugi ROC_CLAUDE_CODE, portal 149284039; **na Vercelu nadal stary, martwy** |
 | GA4 / GTM / Google Ads | dziala | `NEXT_PUBLIC_*` | przez GTM |
 | Anthropic, Stripe, Neon, Google Ads API, LinkedIn Ads | **odinstalowane** | — | razem z kodem, ktory ich uzywal |
+
 ---
 
 ## 📊 Google Ads & Tracking Infrastructure
