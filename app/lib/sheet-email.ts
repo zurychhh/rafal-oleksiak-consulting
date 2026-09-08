@@ -111,8 +111,8 @@ export function sheetEmail(lead: Lead) {
       line-height:1.7;color:#6A6E80;">
       <b style="color:#171A24;">About the numbers.</b> Everything in the sum above is yours — I put
       no figure of my own into it. The percentages beside each step are ranges from the work below,
-      not measurements of your shop. Fifteen years on one problem — what happens after the first
-      pack is empty: Allegro (the FMCG and recurring team, next-pack prediction per user),
+      not measurements of your shop. Fifteen years of FMCG ecommerce — traffic, storefront and
+      lifecycle: Allegro (the FMCG and recurring team, next-pack prediction per user),
       mBank/mOkazje (coffee, detergents, contact lenses), Genactiv (colostrum sachets, category
       leader), and Booksy where the pack is an appointment.</p>
   `)

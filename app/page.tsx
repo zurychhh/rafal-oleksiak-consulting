@@ -5,16 +5,16 @@ import './audit.css'
 // Przeniesione z <head> design/production/index.html. Nadpisuje metadata
 // z layoutu tylko dla tej trasy.
 export const metadata: Metadata = {
-  title: 'FMCG replenishment audit · Oleksiak Consulting',
+  title: 'FMCG ecommerce, end to end · Oleksiak Consulting',
   description:
-    'For FMCG brands — supplements, food, beauty, household chemicals. Tell me what runs out and how long one pack lasts, and I price the gap between the empty pack and the next order.',
+    'FMCG ecommerce, end to end — paid, search, storefront, CRM and loyalty for brands whose products run out.',
   alternates: { canonical: 'https://oleksiakconsulting.com/' },
   openGraph: {
     type: 'website',
     url: 'https://oleksiakconsulting.com/',
     title: 'Every pack runs out on a different day',
     description:
-      'Two numbers, and I price the replenishment gap in your FMCG category — then rank the eighteen steps I would build, in order.',
+      'FMCG ecommerce, end to end — paid, search, storefront, CRM and loyalty for brands whose products run out.',
     images: ['https://oleksiakconsulting.com/og.png'],
   },
   twitter: { card: 'summary_large_image' },
@@ -35,16 +35,20 @@ const PERSON_LD = {
   '@type': 'Person',
   name: 'Rafał Oleksiak',
   url: 'https://oleksiakconsulting.com/',
-  jobTitle: 'FMCG replenishment and retention consultant',
+  jobTitle: 'FMCG ecommerce consultant — paid, search, storefront, CRM and loyalty',
   sameAs: ['https://www.linkedin.com/in/rafal-oleksiak/'],
   description:
-    "Fifteen years on replenishment timing in FMCG ecommerce. Led Allegro's FMCG and recurring team building per-user next-pack prediction; built the mBank/mOkazje retention strategy on consumables; Booksy; currently Genactiv.",
+    "Fifteen years of FMCG ecommerce end to end — paid media, search including AI answers, storefront conversion on Shopify, WooCommerce and bespoke platforms, CRM lifecycle and loyalty. Led Allegro's FMCG and recurring team building per-user next-pack prediction; built the mBank/mOkazje retention strategy on consumables; Booksy; currently Genactiv.",
   knowsAbout: [
     'FMCG ecommerce',
-    'replenishment timing',
-    'customer retention',
+    'paid media',
+    'SEO and AI answers',
+    'conversion rate optimisation',
+    'Shopify',
+    'WooCommerce',
     'CRM lifecycle',
     'subscription commerce',
+    'loyalty programmes',
   ],
   worksFor: {
     '@type': 'Organization',

@@ -39,9 +39,9 @@ export default function AuditClient() {
     <>
       {/* >>> ZE ZRODLA — GENEROWANE, NIE EDYTUJ RECZNIE <<< */}
       <div className="s1">
-        <div className="head"><span className="wm">Oleksiak Consult</span><span className="lab">Replenishment &amp; retention</span></div>
+        <div className="head"><span className="wm">Oleksiak Consult</span><span className="lab">FMCG ecommerce &middot; end to end</span></div>
         <h1 className="hook">Every pack runs out on a different day. <em>Your email hits every customer on the same one.</em></h1>
-        <p className="sub">Bottles, bags, tubs, refills, boxes of lenses — anything a customer finishes and has to buy again. Tell me what runs out and how long one pack lasts. I price the gap between the empty pack and the next order, and rank the eighteen steps I would build.</p>
+        <p className="sub">One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM, loyalty. Below, one piece of that work running live: tell me what runs out and how long a pack lasts.</p>
         <div className="step1">
           <div className="lab">01 &nbsp;What runs out in your range</div>
           <div className="cats" id="cats"></div>
@@ -106,9 +106,10 @@ export default function AuditClient() {
             <div className="card fade" style={{ '--d': '120ms' } as CSSProperties}>
               <div className="lab">Fifteen years pricing the day the pack runs out</div>
               <div className="rtb">
-        <h3>Rafał Oleksiak. Fifteen years on one problem: what happens after the first pack is empty.</h3>
-        <ul><li><b>Allegro</b><span>Built the FMCG and recurring team: five data scientists, next-pack prediction per user. Email and CRM from 0.5% to 12% of revenue in eighteen months.</span></li><li><b>mBank / mOkazje</b><span>The whole retention strategy for things that run out: coffee, detergents, contact lenses.</span></li><li><b>Genactiv</b><span>Colostrum sachets, category leader. Current engagement — the one of one.</span></li><li><b>Booksy &mdash; the outlier</b><span>Same replenishment arithmetic where the pack is an appointment. Proof the model is not a fluke of one account.</span></li></ul>
-        <p className="rtbnote">This page is the two-number version of the Allegro model. It is cruder. It points at the same money.</p><p className="rtbnote" style={{ fontSize: '13px', fontWeight: '400', color: 'var(--dim)' }}>How it works: you get the sheet. If you asked for it, I reply once with what I would change. If that is useful we scope one piece of work at a fixed fee agreed up front — usually 8&ndash;12k z&#322; net for two to three weeks. No retainer, no discovery phase you pay for.</p>
+        <h3>Rafał Oleksiak. Fifteen years of FMCG ecommerce — traffic, storefront, and what happens after the first pack.</h3>
+        <ul><li><b>Paid</b><span>Audiences built on the consumption clock, not the last visit.</span></li><li><b>Search &amp; AI answers</b><span>Consumable queries are duration questions. Own those.</span></li><li><b>Storefront</b><span>Shopify, WooCommerce or bespoke. Pack size, duration on the product page, subscribe-and-save set to the real interval.</span></li><li><b>Owned &amp; loyalty</b><span>Email, push and tiers timed to the pack, not to the campaign calendar.</span></li></ul>
+        <ul><li><b>Allegro</b><span>FMCG and recurring team, five data scientists, next-pack prediction. CRM from 0.5% to 12% of revenue.</span></li><li><b>mBank / mOkazje</b><span>Retention strategy across consumables.</span></li><li><b>Genactiv</b><span>Colostrum, category leader. Storefront, search and lifecycle. Current.</span></li><li><b>Booksy</b><span>Same arithmetic where the pack is an appointment.</span></li></ul>
+        <p className="rtbnote" style={{ fontSize: '13px', fontWeight: '400', color: 'var(--dim)' }}>How it works: you get the sheet. If you asked for it, I reply once with what I would change. If that is useful we scope one piece of work at a fixed fee agreed up front — usually 8&ndash;12k z&#322; net for two to three weeks. No retainer, no discovery phase you pay for.</p>
       </div>
             </div>
             <div className="card fade" style={{ '--d': '200ms' } as CSSProperties}>
