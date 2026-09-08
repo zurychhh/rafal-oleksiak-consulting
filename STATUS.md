@@ -63,16 +63,20 @@ to skrzynka `TO_EMAIL` — stara strona polykala blad HubSpota po cichu
 (`console.error` z komentarzem „don't fail the request"), wiec odwiedzajacy
 widzial sukces, mail wychodzil, a kontakt nie powstawal.
 
-**POZOSTAJE JEDNO: klucz na Vercelu.** W srodowisku Production nadal siedzi
-**stary, martwy** `HUBSPOT_API_KEY`. Skutkiem nie jest awaria — `/api/lead`
-zwroci 200 i wysle maile — tylko **ciche niezapisywanie kontaktow**, dokladnie
-ten sam tryb awarii co poprzednio. Do podmiany recznie w panelu Vercela
-albo `vercel env rm HUBSPOT_API_KEY production` i `vercel env add`.
+**Klucz na Vercelu: PODMIENIONY 8 wrzesnia.** Nowy klucz uslugi jest we
+wszystkich trzech srodowiskach (Production, Preview, Development). Zweryfikowane
+nie deklaracja, tylko pobraniem kazdego srodowiska i uderzeniem pobrana wartoscia
+w `/account-info/v3/details` — wszystkie trzy zwracaja 200.
+
+**UWAGA: zmiana zmiennej na Vercelu nie dziala na juz uruchomionym wdrozeniu.**
+Wchodzi dopiero przy nastepnym buildzie. Do czasu redeploya produkcja nadal
+chodzi na starym kluczu i nadal po cichu nie zapisuje kontaktow.
 
 **Zadanie 7 — zmienne na Vercelu: ZROBIONE.** Sprawdzone 8 wrzesnia 2026 przez
 `vercel env ls production`. Wszystkie cztery wymagane sa ustawione w srodowisku
 Production: `RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL`, `HUBSPOT_API_KEY`.
-Opcjonalnych `NEXT_PUBLIC_SITE_URL` i `LEAD_MAX_PER_HOUR` nie ma i nie musi byc:
+Dolozone 8 wrzesnia: `NEXT_PUBLIC_SITE_URL` = https://oleksiakconsulting.com (Production).
+Opcjonalnego `LEAD_MAX_PER_HOUR` nie ma i nie musi byc:
 origin check porownuje `origin.host` z `host` z zadania, wiec produkcja i deploye
 preview dzialaja bez nich, a limiter stoi na domyslnej piatce.
 
@@ -111,7 +115,7 @@ a plan obiecuje tez paid i search: albo dosypac dowod, albo zawezic obietnice.
 | Serwis | Status | Klucz Env | Notatki |
 |--------|--------|-----------|---------|
 | Resend | uzywany | `RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL` | `/api/lead` i `/api/stop` |
-| HubSpot | dziala lokalnie | `HUBSPOT_API_KEY` | klucz uslugi ROC_CLAUDE_CODE, portal 149284039; **na Vercelu nadal stary, martwy** |
+| HubSpot | dziala | `HUBSPOT_API_KEY` | klucz uslugi ROC_CLAUDE_CODE, portal 149284039; wszystkie 3 srodowiska Vercela zweryfikowane (200) |
 | GA4 / GTM / Google Ads | dziala | `NEXT_PUBLIC_*` | przez GTM |
 | Anthropic, Stripe, Neon, Google Ads API, LinkedIn Ads | **odinstalowane** | — | razem z kodem, ktory ich uzywal |
 
