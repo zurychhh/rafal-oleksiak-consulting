@@ -2,240 +2,225 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Read This First: Repo Is Mid-Pivot
+## Read This First
 
-Two facts change what work is worth doing here. Check both before starting anything substantial.
+**Praca toczy się na gałęzi `feature/new-site`, nigdy na `main`.** Odpowiadaj po polsku;
+kod i treść strony po angielsku.
 
-**1. A large deletion is staged but not executed.** `scripts/purge-legacy.sh` removes ~46,600 lines
-across `radar`, `lama`, `mcc`, `stripe`, `admin`, and `auto-publish` — the agreed end state is
-*homepage + blog only*. It is dry-run by default (`--apply` to execute) and branches+commits first.
-Do not invest in refactoring a subsystem on that list without confirming with the user; ask first.
+**Repozytorium jest publiczne i ma sekrety w historii.** Zweryfikowane: klonuje się
+anonimowo. Push jest wstrzymany do czasu rotacji. Nigdy nie commituj wartości sekretu,
+nawet do przykładu. Do unieważnienia: Google Ads Developer Token (jawny w `STATUS.md`
+w HEAD) oraz klucz API w `generate-all-notion-assets.sh` i `generate-notion-assets-v2.sh`,
+linia 9 w obu.
 
-**2. A new homepage exists outside Next.js.** `design/production/index.html` is a tested, standalone
-version that has not been ported. The full brief, task order, and the exact prompt the user intends
-to run live in `HANDOFF-CC.md` (Polish) and `design/production/HANDOVER.md`. Read both before
-touching the homepage.
+**Duża część projektu została wycięta** (wrzesień 2026, 203 pliki, ~65 900 linii).
+LAMA, RADAR, MCC, Stripe, panel admina, Auto-Publish, generowanie PDF i stara strona
+główna **już nie istnieją**. Starsze dokumenty w korzeniu repo (`PROJECT_SUMMARY.md`,
+`project_information.md`, `LAMA_*.md`, `STRIPE_*.md`, `MCC_ARCHITECTURE.md`) opisują
+ten usunięty kod — są archiwum, nie stanem faktycznym.
 
-**3. This repository is public and has secrets in git history.** Verified: it clones anonymously.
-Rotating is the user's call, not something to do unprompted — but never add a secret value to any
-file, including examples, and flag before pushing. `.google-ads-token.json` and `.linkedin-token.json`
-hold live OAuth tokens locally and are gitignored.
+Aktualny stan i otwarte punkty: **`STATUS.md`**. Brief wdrożeniowy: **`HANDOFF-CC.md`**.
 
 ## Build & Development Commands
 
 ```bash
-npm run dev          # Dev server (Next 16 → Turbopack by default)
-npm run build        # Production build
-npm run lint         # ESLint 9 flat config (`eslint .`)
-npm run typecheck    # tsc --noEmit — NOT run by build; run it explicitly
-npm start            # Run production build locally
-ANALYZE=true npm run build   # Bundle analyzer
+npm run dev          # Dev server (Next 16 → Turbopack)
+npm run build        # Produkcyjny build
+npm run lint         # ESLint 9 flat config — musi dawać ZERO błędów
+npm run typecheck    # tsc --noEmit; NIE jest częścią build, uruchamiaj osobno
+npm run ship         # przeniesienie strony ze źródła (patrz niżej)
+npm start
 ```
 
-**There is no test framework.** No jest/vitest, no `test` script. "Testing" in this repo means:
+**Nie ma frameworka testowego.** Weryfikacja opiera się na trzech narzędziach:
 
 ```bash
-node design/qa.js <html-file> --scroll   # Playwright visual QA: 9 viewports, checks
-                                         # clipping, overlap, off-screen, contrast
-npx tsx scripts/send-test-email.ts you@example.com   # Render + send a real audit email
-npx tsx scripts/test-email-template.ts               # Email template only
-node scripts/hubspot-setup.mjs [--apply]             # Idempotent HubSpot property setup
+node design/qa.js http://localhost:3000 --scroll   # 9 szerokości: przycięcia,
+                                                   # nakładanie, przewijanie, kontrast
+node scripts/ship-compare.mjs                      # style OBLICZONE vs źródło
+node scripts/hubspot-setup.mjs [--apply]           # właściwości kontaktu (idempotentny)
 ```
 
-`design/qa.js` needs chromium — from `/opt/pw-browsers` or a local Playwright install.
+`design/qa.js` przyjmuje ścieżkę pliku albo URL. Chromium bierze z przypiętej ścieżki
+(`PW_CHROMIUM` albo `/opt/pw-browsers/...`), a gdy jej nie ma — z lokalnego playwrighta.
 
-**Database (Neon Postgres + Drizzle):**
+### Bramka po każdym etapie
+
+Build, `tsc --noEmit`, lint z **zerem błędów**, `qa.js` na `/` i `/stop`, oraz
+`ship-compare.mjs`. Obowiązuje **zasada zapadki**: liczba błędów lintu po etapie nie
+może być wyższa niż przed nim.
+
+`ship-compare.mjs` nie jest ozdobą. Build, tsc, lint i `qa.js` przechodziły również
+wtedy, gdy nagłówek renderował się Poppinsem zamiast IBM Plex, a separator tysięcy
+zmienił się z cienkiej spacji U+2009 na zwykłą. Oba błędy złapało dopiero porównanie
+stylów obliczonych.
+
+## Architektura
+
+### Stack
+Next.js 16 (App Router, React 19, Turbopack) · TypeScript 5.9 strict · CSS Modules
++ Tailwind 4 · Resend · zod. Siedem zależności produkcyjnych, bez bazy danych.
+
+### Trasy
+
+| Trasa | Co to |
+|---|---|
+| `/` | strona główna „The Audit" — narzędzie FMCG, dwa ekrany |
+| `/stop` | wypis, `noindex`; linkuje do niej stopka każdego maila |
+| `/privacy` | polityka prywatności |
+| `/blog`, `/blog/[slug]` | blog z zewnętrznego backendu na Railway |
+| `/api/lead` | zgłoszenie ze strony głównej → mail + HubSpot |
+| `/api/stop` | wypis → mail do właściciela |
+
+### Strona główna — trzy pliki i jedna zasada
+
+Strona jest **przenoszona ze źródła**, nie pisana ręcznie:
+
+```
+design/production/index.html      ← ŹRÓDŁO. Ktoś inny je podmienia.
+        │  npm run ship
+        ├─→ app/audit.css          reguły, przeniesione dosłownie
+        ├─→ app/globals.css        blok :root ze zmiennymi
+        ├─→ app/audit-runtime.js   skrypt, kopia BAJT W BAJT
+        └─→ app/AuditClient.tsx    znaczniki przekonwertowane na JSX
+```
+
+**Regiony między znacznikami `>>> ZE ZRODLA — GENEROWANE <<<` są nadpisywane przy
+każdym `ship`.** Ręczna zmiana w nich zniknie. Wszystko poza znacznikami jest pisane
+ręcznie i `ship` tego nie dotyka — tam siedzą bloki resetu i rezerwacja miejsca
+na pasek zgody.
+
+Dlaczego `audit-runtime.js` jest plikiem `.js`, a nie `.tsx`: `tsconfig` obejmuje
+wyłącznie `.ts` i `.tsx`, a `checkJs` jest wyłączony, więc ten plik omija typecheck.
+Dzięki temu skrypt może być kopiowany dosłownie, bez ani jednej adnotacji dopisanej
+po to, żeby zadowolić kompilator. Wersja z adnotacjami wymagałaby od `ship` łatania
+kilkunastoma regexami po każdym przeniesieniu.
+
+**Skrypt jest celowo imperatywny i ma taki zostać.** Przeszedł QA wizualne na dziewięciu
+szerokościach; każde „ładniejsze" przepisanie na stan Reacta unieważnia ten wynik.
+Wywołanie idzie do `useEffect` z pustą tablicą zależności, za blokadą `useRef` — bez
+niej `reactStrictMode` odpala bootstrap dwukrotnie i w dev widać czternaście kafli
+kategorii zamiast siedmiu.
+
+Arkusz **nie jest modułem CSS**: skrypt generuje markup z literalnymi nazwami klas
+(`.tick`, `.rank`, `.sname`, `.swhy`), więc zahaszowanie ich rozsypałoby listę kroków.
+
+### `npm run ship`
+
 ```bash
-npx drizzle-kit push       # Push lib/radar/db/schema.ts to POSTGRES_URL
-npx drizzle-kit generate   # Emit SQL migrations to ./drizzle
+npm run ship            # podgląd: co się zmieni w treści, nic nie rusza
+npm run ship -- --yes   # przenosi, przepuszcza przez bramkę, commituje
 ```
 
-**Stripe / Vercel:**
-```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
-vercel dev
-vercel env pull
+Kolejno: czyste drzewo (poza samym źródłem) → czytelny diff treści, nie znaczników →
+brama potwierdzenia → przeniesienie → build, tsc, lint, `qa.js` ×2, `ship-compare` →
+commit z datą. **Którykolwiek punkt czerwony cofa pliki generowane bez pytania,
+nie ruszając źródła.** Push nigdy nie dzieje się automatycznie. Uruchomiony dwa razy
+pod rząd bez zmian mówi „nic do przeniesienia" i wychodzi zerem.
+
+`app/audit-source.snapshot.html` to migawka ostatnio przeniesionego źródła — z niej
+liczony jest diff treści.
+
+### `/api/lead` — wzorzec dla nowych endpointów
+
+1. Origin check liczony **z żądania** (`origin.host === host`), nie ze stałej w env —
+   działa tak samo na produkcji, na deployu preview i na localhoście.
+2. Limiter w pamięci; **nieaktywny poza produkcją** (`NODE_ENV !== 'production'`),
+   próg z `LEAD_MAX_PER_HOUR`, domyślnie 5. Poza produkcją musi być wyłączony, bo
+   bramka wizualna puszcza dziewięć viewportów z jednego adresu i przy aktywnym
+   limicie połowa kończyłaby w innym stanie niż reszta.
+3. Walidacja zodem. `category` ma `regex(/^[^\r\n]*$/)`, bo trafia do nagłówka Subject.
+4. **Klient Resend powstaje dopiero w `POST`, po walidacji.** W zakresie modułu
+   `new Resend(undefined)` rzuca przy ładowaniu trasy i cała warstwa kodów statusu
+   nigdy się nie wykonuje — brak konfiguracji wygląda wtedy jak 500 z HTML-em, także
+   dla żądań, które powinny dostać 403 albo 422. Brak klucza → `503 not_configured`.
+5. Mail do odwiedzającego blokuje żądanie; powiadomienie właściciela i HubSpot to
+   księgowość i nigdy nie mogą przerwać dostawy.
+
+W `/api/stop` jest odwrotnie: mail do właściciela **jest** zapisem wypisu, więc jego
+błąd przerywa żądanie.
+
+### Blog — cienka warstwa nad zewnętrznym backendem
+
+Żadne dane bloga nie leżą tutaj. `lib/blog/blog-api.ts` woła Railway przez `BLOG_API_URL`.
+
+**`filterPosts()` jest krytyczne, nie ozdobne.** Wspólny backend wcześniej wpychał
+polskie treści prawnicze do tego najemcy. Wszystkie trzy publiczne funkcje filtrują po
+`agent_id` plus test on/off-topic, domyślnie odrzucając. Jeśli wpisy znikną z bloga,
+podejrzewaj najpierw ten filtr, nie API.
+
+### Zgoda i śledzenie
+
+Kolejność w `layout.tsx` jest wymogiem poprawności, nie stylu: `ConsentMode` ustawia
+domyślne `denied` dla EOG i musi wykonać się przed jakimkolwiek tagiem.
+
+```
+<head>  ConsentMode → preconnect → IBM Plex → SchemaOrg
+<body>  GTMNoScript → {children} → GTMScript → GoogleAnalytics → WebVitals
+        → ScrollTracker → CookieConsent
 ```
 
-## Architecture Overview
+`CookieConsent` renderuje się w layoucie, nie na stronie — bez niego Consent Mode stoi
+na `denied` i nie ma jak zgody udzielić na żadnej trasie. Banner **rezerwuje własną
+wysokość** przez `--consent-h` ustawiane na `<html>`; stojąc na `position:fixed`
+przykrywał przycisk „Run the audit". Reguła rezerwująca musi stać **na końcu**
+`audit.css`, bo oryginalne `.s1{min-height:100dvh}` ma tę samą specyficzność
+i o wyniku decyduje kolejność.
 
-### Tech Stack
-Next.js 16 (App Router, React 19, Turbopack) · TypeScript 5.9 strict · CSS Modules + Tailwind 4 ·
-Drizzle ORM + `@neondatabase/serverless` · `@react-pdf/renderer` · Cheerio.
+W shimie gtag musi zostać `arguments`, nie rest params: gtag rozpoznaje komendy po tym,
+że do `dataLayer` trafił obiekt `Arguments`. Zwykła tablica jest ignorowana i zgoda
+nigdy się nie aktualizuje. Dotyczy `CookieConsent.tsx` i `ConsentMode.tsx`.
 
-### Four products in one Next app
+## Zmienne środowiskowe
 
-| Product | Routes | Backing store |
-|---|---|---|
-| **Marketing site** | `/`, `/privacy`, `/auto-publish` | none |
-| **LAMA** — website audit → lead | `/api/lama/audit`, `/audit-success` | HubSpot |
-| **RADAR** — competitor intelligence SaaS | `/radar/*`, `/api/radar/*` | Neon Postgres |
-| **Blog + admin** | `/blog/*`, `/admin/*`, `/api/auth` | Railway backend (external) |
-| **MCC** — ad platform automation | `/api/mcc/*` | OAuth token files on disk |
-
-### The two `lib/` directories
-
-This trips people up constantly. There are two, and they are **not** a hierarchy:
-
-- `lib/` (repo root) — LAMA analyzers, RADAR, MCC, blog API clients, Stripe.
-- `app/lib/` — client-side analytics, constants, `hubspot.ts`, and all React-PDF report components.
-
-Both are reachable via `@/*` (aliased to repo root), so imports read `@/lib/radar/db` vs
-`@/app/lib/hubspot`. **HubSpot is duplicated across both** (`lib/lama/hubspot.ts` for audit contacts,
-`app/lib/hubspot.ts` for generic lead upserts) — check which one a route already uses before adding
-a third path.
-
-### LAMA audit flow — `app/api/lama/audit/route.ts`
-
-1. Validate URL/email.
-2. **Own-domain short circuit:** URLs matching `oleksiakconsulting.com` return curated hardcoded
-   scores instead of running analyzers. Expect this when testing against the live site.
-3. Run 6 analyzers in parallel via `Promise.allSettled` — `lib/lama/analyzers/`:
-   visibility (Find/SEO), performance (Stay/PageSpeed), clarity (Understand/Claude AI),
-   trust (SSL, privacy), conversion (forms, CTA), engagement (CRM maturity).
-4. Weighted 0–100 score → HubSpot contact + activity → email via Resend.
-5. **Paid tier is dormant.** The Stripe imports in the route are commented out; the `paid` request
-   flag and the 100+ page PDF branch still exist and work, but nothing sells them. Don't assume
-   `/api/stripe/*` is wired to the audit.
-
-### RADAR — the only part with a database
-
-Passwordless SaaS. Undocumented anywhere else, so in detail:
-
-**Auth** (`lib/radar/auth/session.ts`): magic link → session cookie.
-- Magic links expire in 15 min, single-use, max 3 active per user (rate limit).
-- Sessions last 7 days, cookie `radar_session`, 64-char hex tokens from `randomBytes(32)`.
-- `getRadarSession()` is the server-side accessor every `/api/radar/*` route calls first.
-
-**Schema** (`lib/radar/db/schema.ts`, 5 tables): `radar_users`, `radar_magic_links`,
-`radar_sessions`, `radar_reports` (full report as `jsonb` + denormalized counts for list views),
-`radar_competitors`. All child tables cascade-delete from their parent.
-
-**Two analyzer generations coexist — pick deliberately:**
-- `lib/radar/analyzer.ts` (v1) — used by `/api/radar/scan` and the unauthenticated
-  `/api/radar/analyze` (email-a-report lead magnet).
-- `lib/radar/analyzer-v2.ts` (v2) — used by `/api/radar/scan-v2`. Orchestrates 6 independent
-  providers in `lib/radar/providers/`, each returning a uniform `ProviderResult<T>` so one failing
-  provider degrades the report instead of killing the scan.
-
-**Provider cost model** — v2 was built free-first, which is why `quickScan` exists:
-
-| Provider | Cost | Notes |
-|---|---|---|
-| `content`, `schema`, `sitemap`, `techstack` | free, unlimited | pure HTML/header parsing |
-| `pagespeed` | free | slow; 60s timeout. `skipPageSpeed` to bypass |
-| `serper` | **2,500 queries/month free tier** | quota-bearing. `skipSerper` to bypass |
-
-`opportunity-finder.ts` layers Claude analysis on top (`includeAiAnalysis`, default true).
-Route timeouts are explicit: `maxDuration = 120` (v1) / `180` (v2).
-
-### Blog + admin — thin proxy over an external backend
-
-No blog data lives here. `lib/blog/blog-api.ts` (public) and `lib/blog/admin-api.ts` (authenticated)
-call a Railway service via `BLOG_API_URL`. Admin auth is a JWT from that backend stored in an
-`admin_token` httpOnly cookie; `lib/blog/session.ts` decodes it client-agnostically without
-verifying the signature — the backend is the real gate.
-
-**`filterPosts()` in `blog-api.ts` is load-bearing, not decoration.** The shared backend previously
-fed Polish legal content into this tenant. All three public read functions filter by `agent_id` plus
-an on/off-topic keyword check, defaulting to reject. If posts vanish from the blog, suspect this
-filter before suspecting the API.
-
-Admin routes are multi-tenant: `app/admin/(authenticated)/[projectId]/...`.
-
-### MCC — OAuth against ad platforms
-
-`lib/mcc/google-auth.ts` and `lib/mcc/linkedin-auth.ts` persist tokens to `.google-ads-token.json` /
-`.linkedin-token.json` at `process.cwd()`, with a 5s in-memory cache and auto-refresh. **File-backed
-token storage does not survive Vercel's ephemeral filesystem** — this works locally; treat production
-MCC as unfinished. Google Ads has Explorer Access; LinkedIn Ads is awaiting API approval.
-
-### Auth topology — `middleware.ts`
-
-Two independent cookie realms, one matcher (`/admin/:path*`, `/radar/dashboard/:path*`):
-
-- `admin_token` absent → `/admin/*` redirects to `/admin`; present on `/admin` → redirect to dashboard.
-- `radar_session` absent → `/radar/dashboard/*` redirects to `/radar/login`.
-
-Middleware only checks *presence*. Actual validation happens in the route handlers
-(`getRadarSession()`, backend JWT check). Never treat middleware as authorization.
-
-## Environment Variables
-
-`.env.example` is stale — it covers only the marketing site. Actual usage across the codebase:
-
-| Service | Variables |
+| Serwis | Zmienne |
 |---|---|
 | Resend | `RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL` |
-| HubSpot | `HUBSPOT_API_KEY` ← *not* `HUBSPOT_ACCESS_TOKEN` |
-| Anthropic | `ANTHROPIC_API_KEY` |
-| Neon (RADAR) | `POSTGRES_URL` |
-| RADAR | `RADAR_BASE_URL` (magic-link URLs), `SERPER_API_KEY`, `GOOGLE_PAGESPEED_API_KEY` (optional) |
+| HubSpot | `HUBSPOT_API_KEY` ← *nie* `HUBSPOT_ACCESS_TOKEN` |
 | Blog | `BLOG_API_URL` / `NEXT_PUBLIC_BLOG_API_URL`, `NEXT_PUBLIC_BLOG_AGENT_ID` |
-| Stripe | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID` |
-| Google Ads API | `GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CUSTOMER_ID`, `GOOGLE_ADS_MANAGER_CUSTOMER_ID`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REDIRECT_URI` |
-| LinkedIn / Meta | `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET`, `LINKEDIN_AD_ACCOUNT_ID`, `LINKEDIN_ORGANIZATION_ID`, `META_ACCESS_TOKEN`, `META_PIXEL_ID` |
-| Tracking | `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL`, `NEXT_PUBLIC_GOOGLE_ADS_CALENDLY_LABEL` |
-| Misc | `NEXT_PUBLIC_SITE_URL`, `VERCEL_URL` |
+| Śledzenie | `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL`, `NEXT_PUBLIC_GOOGLE_ADS_CALENDLY_LABEL` |
+| Opcjonalne | `NEXT_PUBLIC_SITE_URL`, `LEAD_MAX_PER_HOUR` |
 
-## Tracking Load Order (layout.tsx)
+`.env.example` jest nieaktualny — opisuje wycięty kod.
 
-Order is a correctness requirement, not a style choice: ConsentMode sets GDPR defaults to *denied*
-and must execute before any tag can fire.
+## Wzorce
 
-```
-<head>   1. ConsentMode  →  2. Preconnect (GTM + Google Ads)  →  3. SchemaOrg (4× JSON-LD)
-<body>   4. GTMNoScript  →  5. {children}  →  6. GTMScript  →  7. GoogleAnalytics (returns null
-         when GTM is active)  →  8. WebVitals  →  9. ScrollTracker
-```
+### ESLint: dwa pliki konfiguracji, czytany jest jeden
+`eslint.config.mjs` (flat, ESLint 9) jest wiążący. `.eslintrc.json` to pozostałość —
+Next 16 usunął `next lint` i już go nie czyta. `no-undef` jest wyłączone dla plików TS
+(kompilator sprawdza to lepiej); `app/audit-runtime.js` ma zawężony wyjątek na `no-var`
+i `no-empty` oraz jawnie zadeklarowane globale przeglądarki.
 
-## Important Patterns
+### tsconfig
+Wyklucza `node_modules`, `api` (stara funkcja Vercela, gitignorowana) i `design`
+(przechowalnia — jej pliki importują ze swoich przyszłych lokalizacji).
 
-### ESLint: two config files, only one is read
-`eslint.config.mjs` (flat, ESLint 9) is authoritative. `.eslintrc.json` is a leftover — Next 16
-removed `next lint` and no longer reads it. Note the flat config **ignores `scripts/**`**, so lint
-passing says nothing about files there.
+### Ograniczenia Vercela
+Bez wewnętrznych `fetch('/api/...')` — importuj funkcję wprost. Trasy używające
+Node API deklarują `runtime = 'nodejs'` i `dynamic = 'force-dynamic'`.
 
-### TypeScript exclusions
-`tsconfig.json` excludes these from type-checking (React-PDF's types are unworkable); they compile
-at runtime but `npm run typecheck` will not catch errors in them:
-`api/`, `app/lib/lama/pro/*`, `app/api/pdf-generator/*`, `app/HomeClient.tsx`,
-`app/components/ui/FinalSuccessScreen.tsx`, `app/components/ui/useTypewriter.ts`.
+### Alias
+`@/*` wskazuje na korzeń repo. Istnieją dwa katalogi `lib/`: `lib/` (blog) i `app/lib/`
+(analityka, stałe, helpery `/api/lead`). To nie jest hierarchia.
 
-`api/` at repo root is a legacy standalone Vercel function — gitignored *and* excluded. Ignore it.
+## `design/` — przechowalnia
 
-### Vercel constraints
-- **No internal HTTP fetches.** Import the function directly instead of `fetch('/api/...')`.
-- PDF generation and anything touching `fs` needs `runtime = 'nodejs'`, never edge.
+`design/production/index.html` to źródło strony głównej. `design/tools/` to trzy
+narzędzia FMCG. `design/qa.js` to checker Playwright.
 
-### Route runtime declarations
-Any route using Node APIs, a DB connection, or cookies:
-```typescript
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
-export const maxDuration = 120;  // long-running scans/audits only
-```
+Codzienna pętla usprawniająca chodzi **w chmurze**, pisze do artefaktów roboczych
+i nie dotyka repo ani produkcji — chmura nie ma prawa zapisu do tego repozytorium.
+Nie odtwarzaj tego harmonogramu lokalnie. Wypuszczanie na produkcję dzieje się ręcznie,
+przez `npm run ship`.
 
-### Path alias
-`@/*` maps to the repo root: `import { db } from '@/lib/radar/db'`.
+## Dokumentacja
 
-## `design/` — new site and tools (September 2026)
+**STATUS.md** — stan bieżący i blokery (czytaj to jako pierwsze) ·
+**CLAUDE.md** — ten plik · **ROADMAP.md** — zadania i decyzje ·
+**HANDOFF-CC.md** — brief wdrożeniowy. Pozostałe pliki `.md` w korzeniu to archiwum
+wyciętego kodu. Aktualizuj dokumenty po zakończeniu zadania.
 
-Holds work produced outside the Next app and not yet ported. `design/production/` is the new
-homepage plus a `/api/lead` endpoint and two helpers; `design/tools/` is three FMCG tools with AI
-calls; `design/qa.js` is the Playwright checker described above.
+## Język
 
-A daily improvement loop runs **in the cloud** and writes to working artifacts, never to this repo —
-the cloud environment has no write access here, and push works only from this machine. Do not
-recreate that scheduler locally.
-
-## Documentation Workflow
-
-Four files, kept current: **STATUS.md** (state, blockers, recent changes) · **CLAUDE.md** (this
-technical reference) · **ROADMAP.md** (tasks, decisions log) · **PROJECT_SUMMARY.md** (history).
-Update after completing tasks. At 90% context usage, stop and commit a checkpoint.
-
-## Language
-
-Documentation uses Polish for business context, English for code and comments. Several root-level
-docs (`HANDOFF-CC.md`, `STATUS.md`, `ROADMAP.md`, `scripts/*.sh`) are written in Polish.
+Dokumentacja po polsku dla kontekstu biznesowego, angielski dla kodu i komentarzy.
+Treść strony po angielsku.

@@ -1,75 +1,97 @@
 # STATUS.md - Aktualny Stan Projektu
 
 **Projekt**: oleksiakconsulting.com
-**Ostatnia Aktualizacja**: 2026-02-13
+**Ostatnia Aktualizacja**: 2026-09-08
 **Wersja**: Next.js 16.0.8 | React 19 | TypeScript 5.9
 **URL Produkcji**: https://oleksiakconsulting.com
 
 ---
 
-## Stan na 4 wrzesnia 2026 — nowa strona i petla dzienna
+## Stan na 8 wrzesnia 2026 — nowa strona przed wypuszczeniem
 
-**PILNE — repozytorium jest publiczne.** Sprawdzone: klonuje sie anonimowo.
-Do uniewaznienia i wygenerowania od nowa: Google Ads Developer Token (byl jawny
-w tym pliku, wartosc usunieta, ale zostaje w historii i na GitHubie) oraz klucz
-API w `generate-all-notion-assets.sh` i `generate-notion-assets-v2.sh`, linia 9
-w obu. `.env.example` ma same wypelniacze — tam czysto.
+Galaz `feature/new-site`, niewypchnieta. Stara strona, LAMA, RADAR, MCC, Stripe,
+panel admina i Auto-Publish sa **wyciete** — 203 pliki, ~65 900 linii. Zostaje
+strona glowna "The Audit", blog, `/privacy` i `/stop`.
 
-**Nowa strona glowna i trzy narzedzia** leza w `design/`. Pelny brief i gotowy
-prompt dla Claude Code: `HANDOFF-CC.md`. Commit stoi na galezi `tools/daily`,
-lokalnie, niewypchniety.
+**PILNE — repozytorium jest publiczne** i klonuje sie anonimowo. Do uniewaznienia:
+Google Ads Developer Token (jawny w historii i w `STATUS.md` w HEAD) oraz klucz API
+w `generate-all-notion-assets.sh` i `generate-notion-assets-v2.sh`, linia 9 w obu.
+Push jest wstrzymany do czasu rotacji.
 
-**Codzienna petla** chodzi w chmurze jako zaplanowane zadanie i nie dotyka repo
-ani produkcji — chmura nie ma prawa zapisu do tego repozytorium. Ocenia jedna
-z czterech pozycji dziennie w trzech wymiarach (AI, uzytecznosc biznesowa, UX),
-wprowadza najwyzej dwie zmiany i zapisuje do artefaktow roboczych. Wypuszczanie
-na produkcje dzieje sie recznie, z Claude Code w terminalu.
+### Zrobione (zadania 1-3, 5, 6, 8 z HANDOFF-CC.md)
 
-**Otwarte decyzje:** cena na stronie (widelki 8–12 tys. netto, stala `PRICE`
-w skrypcie) — sprawdzic, czy nie podcina obecnego klienta; dowod dla paid
-i search albo zawezenie obietnicy; adres LinkedIna w JSON-LD; `og.png`
-i strona `/stop`.
+| Zadanie | Stan |
+|---|---|
+| 1. Zaleznosci | zod 4.5.4, flat config ESLint 9 |
+| 2. Port strony glownej | `app/AuditClient.tsx` + `app/audit-runtime.js` + `app/audit.css` |
+| 3. `/api/lead` + helpery | walidacja zodem, origin check, limiter |
+| 5. Wyciecie starego kodu | 203 pliki, trasy 24 → 10 |
+| 6. og.png, `/stop`, banner zgody, sprzatanie | lint na zerze |
+| 8. `npm run ship` | `scripts/ship.mjs` + `scripts/ship-compare.mjs` |
+
+Bramka po kazdym etapie: `npm run build`, `npx tsc --noEmit`, `npm run lint`
+(zero bledow), `node design/qa.js <url> --scroll` na `/` i `/stop`, oraz
+`node scripts/ship-compare.mjs` — porownanie stylow obliczonych wobec zrodla.
+
+### DO ZROBIENIA POZNIEJ — dwa punkty, oba czekaja na czlowieka
+
+**Zadanie 4 — wlasciwosci kontaktu w HubSpocie.** `node scripts/hubspot-setup.mjs`
+zwraca 401 na kazdym endpoincie, lacznie z `/account-info/v3/details`. To nie jest
+brak zakresu `crm.schemas.contacts.write`: przy samym braku uprawnienia HubSpot
+zwraca 403 z lista brakujacych scope'ow, a `account-info` przechodzi. Token jest
+uniewazniony albo pochodzi z innego konta. Wykluczone bledy parsowania — wartosc
+ma 44 znaki, ksztalt `pat-eu1-` + UUID, bez cudzyslowow i bialych znakow.
+
+Potrzebny nowy token private app z `crm.schemas.contacts.write` i
+`crm.objects.contacts.write` w `.env.local`, potem `node scripts/hubspot-setup.mjs`
+(podglad) i `--apply`. Skrypt jest idempotentny.
+
+Sprawdzone statycznie i zgodne 1:1: 10 wlasciwosci zakladanych przez skrypt kontra
+11 wysylanych przez `app/lib/lead-hubspot.ts` (`email` jest standardowe), wartosci
+enumow `["wants mark-up","sheet only","yes","no"]` po obu stronach identyczne.
+Uwaga: HubSpot **nie zglasza bledu** przy nieznanej wlasciwosci w `POST /contacts`
+— po cichu ja pomija. Dlatego rozjazd nazw kosztowalby leada, a nie komunikat.
+
+**Zadanie 7 — zmienne w srodowisku Production na Vercelu.** Wymagane cztery:
+`RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL`, `HUBSPOT_API_KEY`. Bez nich build
+przechodzi, a `/api/lead` zwraca `503 not_configured` przy kazdym zgloszeniu.
+Opcjonalne: `NEXT_PUBLIC_SITE_URL` (domena kanoniczna, gdy host jest za proxy),
+`LEAD_MAX_PER_HOUR` (limiter, domyslnie 5; poza produkcja limiter jest nieaktywny).
+
+**Po obu:** test sciezki szczesliwej end-to-end, raz, na wlasny adres — mail
+do odwiedzajacego, mail do wlasciciela, kontakt w HubSpocie.
+
+### Otwarte decyzje tresciowe, nie techniczne
+
+Cena na stronie (widelki 8-12 tys. netto, stala `PRICE` w `app/audit-runtime.js`)
+— sprawdzic, czy nie podcina obecnego klienta. RTB mowi wylacznie o retencji,
+a plan obiecuje tez paid i search: albo dosypac dowod, albo zawezic obietnice.
 
 ---
 
-## 🚀 Funkcjonalności LIVE
+## Funkcjonalnosci
 
 | Funkcja | Status | Opis |
 |---------|--------|------|
-| **Main Website** | ✅ LIVE | Responsive, 90+ Lighthouse, SEO-optimized |
-| **LAMA Audit (Free)** | ✅ LIVE | 6-kategoriowy audit strony → konsultacja |
-| **LAMA Audit (Paid)** | 📦 ARCHIVED | Stripe Checkout €99 - tymczasowo wyłączone |
-| **CRT Success Screen** | ✅ LIVE | Typewriter animation po audycie |
-| **Follow-up Email** | ✅ READY | Template 3-dniowego retargetingu |
-| **HubSpot Integration** | ✅ LIVE | Automatyczne tworzenie kontaktów |
-| **GA4 Analytics** | ✅ LIVE | Via GTM (GTM-PTPCV5FD), event tracking + Web Vitals |
-| **PDF Generation** | ✅ LIVE | 100+ stron raportu (tylko dla paid - backend ready) |
-| **Blog + Admin Panel** | ✅ LIVE | Blog z Railway backend, panel administracyjny |
-| **Auto-Publish** | ✅ LIVE | Strona produktowa z formularzem trial |
-| **RADAR AI** | ✅ LIVE | Competitor Intelligence informational page |
-| **GTM (Google Tag Manager)** | ✅ LIVE | Kontener GTM-PTPCV5FD z GA4 + Google Ads tags |
-| **Consent Mode v2** | ✅ LIVE | GDPR-compliant, 31 krajów EEA domyślnie denied |
-| **Schema.org JSON-LD** | ✅ LIVE | Organization, Person, ProfessionalService, WebSite |
-| **Google Ads Remarketing** | ✅ LIVE | Tag remarketing + Conversion Linker w GTM |
-| **Google Ads Conversion** | ✅ LIVE | form_submission_lead event → GA4 → Google Ads |
+| Strona glowna "The Audit" | gotowa na galezi | FMCG, dwa ekrany, formularz do `/api/lead` |
+| Blog | dziala | Railway backend, filtr `agent_id` + off-topic |
+| `/privacy` | dziala | |
+| `/stop` | gotowa na galezi | wypis, powiadomienie do wlasciciela, `noindex` |
+| GTM + Consent Mode v2 | dziala | GTM-PTPCV5FD, domyslnie `denied` dla EOG |
+| Banner zgody | gotowy na galezi | paleta strony, rezerwuje wlasna wysokosc |
+| Schema.org JSON-LD | dziala | Organization, ProfessionalService, WebSite + jedna encja Person ze strony |
+| LAMA, RADAR, MCC, Stripe, Auto-Publish, panel admina | **USUNIETE** | zadanie 5 |
 
 ---
 
-## 🔌 Integracje Aktywne
+## Integracje
 
 | Serwis | Status | Klucz Env | Notatki |
 |--------|--------|-----------|---------|
-| **Resend** | ✅ OK | `RESEND_API_KEY` | Email delivery |
-| **HubSpot** | ✅ OK | `HUBSPOT_ACCESS_TOKEN` | CRM integration |
-| **Anthropic Claude** | ✅ OK | `ANTHROPIC_API_KEY` | AI analysis (Clarity category) |
-| **Google PageSpeed** | ✅ OK | - | Wbudowany (no key needed) |
-| **Stripe** | ✅ OK | `STRIPE_SECRET_KEY` etc. | Payment processing |
-| **Google Analytics 4** | ✅ OK | `G-WZWCGQLQ2Y` | Via GTM, event tracking |
-| **Google Tag Manager** | ✅ OK | `GTM-PTPCV5FD` | 3 tagi: GA4, Remarketing, Conversion Linker |
-| **Google Ads** | ✅ OK | `AW-17922704201` | Remarketing + Conversions via GTM |
-| **Google Ads API** | ✅ OK | `GOOGLE_ADS_DEVELOPER_TOKEN` | Explorer Access (sufficient for our needs) |
-| **LinkedIn Ads** | ⏳ PENDING | `LINKEDIN_CLIENT_ID` etc. | OAuth2 built, waiting for API access approval |
-
+| Resend | uzywany | `RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL` | `/api/lead` i `/api/stop` |
+| HubSpot | **ZABLOKOWANY** | `HUBSPOT_API_KEY` | token zwraca 401, patrz zadanie 4 |
+| GA4 / GTM / Google Ads | dziala | `NEXT_PUBLIC_*` | przez GTM |
+| Anthropic, Stripe, Neon, Google Ads API, LinkedIn Ads | **odinstalowane** | — | razem z kodem, ktory ich uzywal |
 ---
 
 ## 📊 Google Ads & Tracking Infrastructure

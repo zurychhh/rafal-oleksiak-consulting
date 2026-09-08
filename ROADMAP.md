@@ -9,24 +9,27 @@
 
 ## 📊 QUICK STATUS
 
-| Component | Status | Progress | Priority | Last Updated |
-|-----------|--------|----------|----------|--------------|
-| Main Website | ✅ Live | 100% | - | 2025-11-09 |
-| LAMA Free Audit | ✅ Live | 100% | - | 2025-12-11 |
-| LAMA Paid Audit (Stripe) | 📦 Archived | 100% | LOW | 2026-01-17 |
-| PDF Report | ✅ Production-Ready | 100% | - | 2026-01-07 |
-| Blog + Admin Panel | ✅ Live | 100% | - | 2026-02-01 |
-| Auto-Publish | ✅ Live | 100% | - | 2026-02-01 |
-| RADAR AI | ✅ Live | 100% | - | 2026-02-01 |
-| GTM + Consent Mode v2 | ✅ Live | 100% | - | 2026-02-02 |
-| Schema.org JSON-LD | ✅ Live | 100% | - | 2026-02-02 |
-| Google Ads (Remarketing + Conversions) | ✅ Live (via GTM) | 100% | - | 2026-02-02 |
-| Google Ads API (MCC) | ✅ Explorer Access | 100% | - | 2026-02-13 |
-| LinkedIn Ads Integration | ✅ Campaign Live | 90% | HIGH | 2026-02-13 |
-| LinkedIn API (OAuth2) | ⏳ Waiting Approval | 80% | HIGH | 2026-02-13 |
-| Follow-up Automation | 🚧 Template Ready | 50% | MEDIUM | 2025-12-21 |
+**Stan na 8 wrzesnia 2026.** Galaz `feature/new-site`, niewypchnieta.
+
+| Component | Status | Progress | Priority |
+|-----------|--------|----------|----------|
+| Strona glowna „The Audit" | gotowa na galezi | 100% | — |
+| /api/lead + helpery | gotowe | 100% | — |
+| /stop + /api/stop | gotowe | 100% | — |
+| Banner zgody (paleta strony) | gotowy | 100% | — |
+| og.png | gotowy | 100% | — |
+| npm run ship | gotowy | 100% | — |
+| Wyciecie starego kodu | zrobione (203 pliki) | 100% | — |
+| **HubSpot — wlasciwosci kontaktu** | **ZABLOKOWANE** | 0% | **HIGH** |
+| **Zmienne na Vercelu (Production)** | **DO ZROBIENIA** | 0% | **HIGH** |
+| Test sciezki szczesliwej end-to-end | czeka na oba powyzsze | 0% | HIGH |
+| Rotacja sekretow + push | czeka na czlowieka | 0% | **BLOCKER** |
+
+Usuniete w zadaniu 5, juz nie istnieja: LAMA, RADAR, MCC, Stripe,
+panel admina, Auto-Publish, PDF, stara strona glowna.
 
 ---
+
 
 ## 🔄 RESUME POINT (dla Claude Code)
 
