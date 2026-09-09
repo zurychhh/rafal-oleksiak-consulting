@@ -18,6 +18,24 @@ Jedno narzędzie na raz. Trzy płytkie przejścia są gorsze niż jedno głębok
 
 ## Rubryka — w tej kolejności ważności
 
+0. **Zakres — nadrzędne.** Nisza to RYNEK (FMCG, wszystko co się kupuje
+   ponownie), nie dyscyplina. Cały lejek: jakość ruchu płatnego, SEO wraz z
+   odpowiedziami AI, konwersja onsite (standalone, Shopify, WooCommerce),
+   kanały własne (CRM, automation, e-mail, push), zakupy cykliczne, lojalność.
+   Retencja jest ważna, bo kategoria jest powtarzalna — ale nie jest całą
+   ofertą. Zdanie zawężające Rafała do retencji jest błędem do cofnięcia.
+   Pytanie kontrolne: czym według foundera ten człowiek się zajmuje.
+0b. **RTB i USP — nadrzędne, na równi z zakresem.** Trzy przyrządy nie są
+   ilustracją tekstu na stronie. Są dowodem oferty i przewagą: Rafał buduje je
+   sam i szybko, AI vibe codingiem, i tego klient nie dostanie od agencji ani
+   od konkurenta w FMCG. Każdy przyrząd musi spełniać trzy warunki naraz:
+   (a) działa na danych, które klient ma pod ręką, w minutę, bez wdrożenia;
+   (b) odpowiada na pytanie specyficzne dla FMCG, którego generyczne narzędzie
+   marketingowe nie zadaje; (c) da się z niego wyjść na „zbuduję ci takie na
+   twoich danych", i ta ścieżka ma być widoczna. Pytania kontrolne do
+   ewaluatora-foundera, oba obowiązkowe: czy widział coś takiego u kogokolwiek
+   innego, ORAZ czy chciałby mieć taką rzecz u siebie. Odpowiedź „ładny
+   kalkulator", „demo" albo „widziałem podobne" to wynik zerowy.
 1. **Szew AI.** Czy prompt zwraca to, co trzeba, na wejściach z listy niżej?
    Czy błędy są obsłużone kodem, a nie treścią komunikatu? Czy strona ma sens,
    gdy `claude.use("sample")` zwróci null?
@@ -65,6 +83,14 @@ kategorii, jest błędem.
   przechodzi → cofnij zmianę, nie obchodź QA.
 - Nigdy nie usuwaj działającej funkcji, żeby uprościć. Upraszczaj słowa.
 - Nie powtarzaj pomysłu odrzuconego w dzienniku.
+- **Przyrządy są RTB, nie ozdobą.** Każda zmiana ma powiększać dystans do
+  tego, co klient może dostać gdzie indziej. Zmiana czyniąca przyrząd bardziej
+  generycznym — takim, jaki każda agencja mogłaby wkleić u siebie — jest
+  błędem do cofnięcia, nawet jeśli podnosi UX.
+- **Ścieżka od przyrządu do zlecenia musi istnieć i być widoczna** na obu
+  plikach: przyrząd pokazuje, że te rzeczy powstają szybko i na zamówienie,
+  strona odwołuje się do nich jako do dowodu, a nie tylko je opisuje. Brak tej
+  ścieżki traktuj jak usterkę, nie jak brakujący dodatek.
 
 ## Dziennik
 
