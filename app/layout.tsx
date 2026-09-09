@@ -44,6 +44,10 @@ export const metadata: Metadata = {
     description: "One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
     url: "https://oleksiakconsulting.com",
     siteName: "Oleksiak Consulting",
+    // Zapasowy obrazek dla wszystkich tras. Strona glowna nadpisuje metadata
+    // wlasnym openGraph w app/page.tsx, ale /privacy, /stop i /blog dziedzicza
+    // z layoutu — bez tego pola szly na LinkedIna bez zadnego podgladu.
+    images: ["https://oleksiakconsulting.com/og.png"],
     locale: "en_US",
     type: "website",
   },

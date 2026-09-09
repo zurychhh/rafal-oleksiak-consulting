@@ -30,8 +30,6 @@ export default function PrivacyPolicy() {
       <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '32px', marginBottom: '12px' }}>3. How We Use Your Data</h2>
       <ul style={{ lineHeight: 1.7, paddingLeft: '20px' }}>
         <li>To respond to your inquiry and provide consulting services</li>
-        <li>To generate your free website audit report (LAMA)</li>
-        <li>To send marketing communications (only with your explicit consent)</li>
         <li>To improve our website and services through anonymized analytics</li>
       </ul>
 
