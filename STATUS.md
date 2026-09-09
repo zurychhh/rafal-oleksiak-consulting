@@ -1,15 +1,16 @@
 # STATUS.md - Aktualny Stan Projektu
 
 **Projekt**: oleksiakconsulting.com
-**Ostatnia Aktualizacja**: 2026-09-08
+**Ostatnia Aktualizacja**: 2026-09-09
 **Wersja**: Next.js 16.0.8 | React 19 | TypeScript 5.9
 **URL Produkcji**: https://oleksiakconsulting.com
 
 ---
 
-## Stan na 8 wrzesnia 2026 — nowa strona przed wypuszczeniem
+## Stan na 9 wrzesnia 2026 — nowa strona NA PRODUKCJI
 
-Galaz `feature/new-site`, niewypchnieta. Stara strona, LAMA, RADAR, MCC, Stripe,
+Wypuszczona na produkcje 9 wrzesnia (`vercel deploy --prod` z `feature/new-site`).
+oleksiakconsulting.com serwuje nowa strone; www przekierowuje na apex 307. Stara strona, LAMA, RADAR, MCC, Stripe,
 panel admina i Auto-Publish sa **wyciete** — 203 pliki, ~65 900 linii. Zostaje
 strona glowna "The Audit", blog, `/privacy` i `/stop`.
 
@@ -87,6 +88,60 @@ Wyczyszczone 8 wrzesnia z Production, bo kod ich uzywajacy juz nie istnieje:
 
 **Test sciezki szczesliwej: przeszedl 8 wrzesnia** — szczegoly przy zadaniu 4.
 
+---
+
+## NA JUTRO
+
+### 1. Dowody pod RTB maja nazwac dyscypline (zlecone 9 wrzesnia)
+
+Cztery dowody pod blokiem zakresu sa dzis **retencyjne**, a obietnica nad nimi
+obejmuje paid i search. Kazdy dowod ma nazwac dyscypline, ktora realnie
+potwierdza — **bez przyrostu slow**. Stan wyjsciowy: 1582 slowa widoczne.
+
+Dzis brzmia tak:
+
+| Dowod | Tresc | Co realnie potwierdza |
+|---|---|---|
+| Allegro | FMCG and recurring team, five data scientists, next-pack prediction. CRM from 0.5% to 12% of revenue. | CRM + model danych |
+| mBank / mOkazje | Retention strategy across consumables. | retencja |
+| Genactiv | Colostrum, category leader. Storefront, search, lifecycle. Current. | storefront + search + lifecycle |
+| Booksy | Same arithmetic where the pack is an appointment. | przenoszalnosc modelu |
+
+Luka: **paid** nie ma zadnego dowodu, a stoi jako pierwsza pozycja w bloku
+zakresu. Do rozstrzygniecia z Rafalem, czy jest czym ja obsadzic.
+
+Edycja idzie przez `design/production/index.html`, potem `npm run ship`.
+Bilans slow musi wyjsc zero; jesli nowa tresc potrzebuje miejsca, tnij
+w opisach dowodow, nie w mechanizmach.
+
+### 2. Stare JSON-LD na produkcji — ZNALEZIONE 9 wrzesnia, NIENAPRAWIONE
+
+Strona wizualnie jest nowa, ale **trzy z czterech encji danych strukturalnych
+opisuja stary biznes**. Google to czyta.
+
+`app/components/SchemaOrg.tsx` renderuje `Organization`, `ProfessionalService`
+i `WebSite` z trescia sprzed przepozycjonowania:
+
+- `Organization.knowsAbout` = `["Ecommerce Conversion Optimization","CRM Strategy",
+  "Marketing Automation","Customer Retention","UX Optimization","Traffic Quality",
+  "A/B Testing","Data Analytics"]` — stare pozycjonowanie, zero FMCG.
+- `ProfessionalService` (linia ~86) oferuje **`"Free Website Audit"` z opisem
+  „AI-powered LAMA audit analyzing 6 key areas"**. LAMA zostala usunieta
+  w zadaniu 5, a `/api/lama/audit` zwraca 404. To jest **obietnica produktu,
+  ktory nie istnieje**, wystawiona w danych strukturalnych.
+- `WebSite.description` = „Ecommerce conversion & CRM consulting".
+
+Do tego `app/layout.tsx` (linie 35, 42, 51) ma domyslny tytul
+„Rafał Oleksiak — Ecommerce Conversion & CRM Consultant". Na `/` jest
+nadpisany przez `app/page.tsx`, ale zostaje jako zapasowy dla pozostalych tras.
+
+Encja `Person` ze strony glownej jest poprawna i zgodna z nowa rama.
+
+Naprawa to zmiana tresci marketingowej, wiec czeka na decyzje Rafala.
+Priorytet: **usuniecie oferty „Free Website Audit" jest pilniejsze niz
+przepisanie pozycjonowania** — obietnica nieistniejacego produktu w rich
+results szkodzi bardziej niz nieaktualny opis.
+
 ### Otwarte decyzje tresciowe, nie techniczne
 
 Cena na stronie (widelki 8-12 tys. netto, stala `PRICE` w `app/audit-runtime.js`)
@@ -99,12 +154,12 @@ a plan obiecuje tez paid i search: albo dosypac dowod, albo zawezic obietnice.
 
 | Funkcja | Status | Opis |
 |---------|--------|------|
-| Strona glowna "The Audit" | gotowa na galezi | FMCG, dwa ekrany, formularz do `/api/lead` |
+| Strona glowna "The Audit" | **NA PRODUKCJI** | FMCG, dwa ekrany, formularz do `/api/lead` |
 | Blog | dziala | Railway backend, filtr `agent_id` + off-topic |
 | `/privacy` | dziala | |
-| `/stop` | gotowa na galezi | wypis, powiadomienie do wlasciciela, `noindex` |
+| `/stop` | **NA PRODUKCJI** | wypis, powiadomienie do wlasciciela, `noindex` |
 | GTM + Consent Mode v2 | dziala | GTM-PTPCV5FD, domyslnie `denied` dla EOG |
-| Banner zgody | gotowy na galezi | paleta strony, rezerwuje wlasna wysokosc |
+| Banner zgody | **NA PRODUKCJI** | paleta strony, rezerwuje wlasna wysokosc |
 | Schema.org JSON-LD | dziala | Organization, ProfessionalService, WebSite + jedna encja Person ze strony |
 | LAMA, RADAR, MCC, Stripe, Auto-Publish, panel admina | **USUNIETE** | zadanie 5 |
 
