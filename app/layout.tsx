@@ -32,15 +32,16 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Rafał Oleksiak — Ecommerce Conversion & CRM Consultant",
-  description: "I help ecommerce brands convert more visitors into loyal customers. 15 years optimizing traffic, UX, CRM and automation at Allegro, Booksy, mBank.",
-  keywords: ["ecommerce conversion", "CRM consultant", "marketing automation", "UX optimization", "traffic quality", "customer retention", "Allegro", "Booksy", "mBank"],
+  title: "Rafał Oleksiak — FMCG ecommerce, end to end",
+  description: "One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
+  keywords: ["FMCG ecommerce", "replenishment", "subscription commerce", "paid traffic quality", "ecommerce SEO", "conversion rate optimization", "marketing automation", "loyalty", "Shopify", "WooCommerce"],
   authors: [{ name: "Rafał Oleksiak" }],
   creator: "Rafał Oleksiak",
   publisher: "Rafał Oleksiak Consulting",
   openGraph: {
-    title: "Rafał Oleksiak — Ecommerce Conversion & CRM Consultant",
-    description: "I help ecommerce brands convert more visitors into loyal customers. 15 years optimizing traffic, UX, CRM and marketing automation.",
+    // Ten sam tytul i opis co w metadata — nie dwie rozne wersje tej samej strony.
+    title: "Rafał Oleksiak — FMCG ecommerce, end to end",
+    description: "One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
     url: "https://oleksiakconsulting.com",
     siteName: "Oleksiak Consulting",
     locale: "en_US",
@@ -48,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rafał Oleksiak — Ecommerce Conversion & CRM Consultant",
-    description: "I help ecommerce brands convert more visitors into loyal customers. 15 years in ecommerce.",
+    title: "Rafał Oleksiak — FMCG ecommerce, end to end",
+    description: "One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
   },
   robots: {
     index: true,

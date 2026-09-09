@@ -51,14 +51,14 @@ export default function SchemaOrg() {
       geoRadius: '2000',
     },
     knowsAbout: [
-      'Ecommerce Conversion Optimization',
-      'CRM Strategy',
-      'Marketing Automation',
-      'Customer Retention',
-      'UX Optimization',
-      'Traffic Quality',
-      'A/B Testing',
-      'Data Analytics',
+      'FMCG Ecommerce',
+      'Replenishment and Recurring Purchase',
+      'Paid Traffic Quality',
+      'Ecommerce SEO and AI Answers',
+      'Onsite Conversion Optimization',
+      'Subscription and Loyalty Programmes',
+      'CRM and Marketing Automation',
+      'Shopify and WooCommerce',
     ],
   };
 
@@ -67,7 +67,7 @@ export default function SchemaOrg() {
     '@type': 'ProfessionalService',
     name: 'Oleksiak Consulting',
     description:
-      'Expert ecommerce conversion optimization and CRM consulting. Free website audit with AI-powered analysis.',
+      'FMCG ecommerce consulting, end to end — paid, search, storefront, owned channels and loyalty, for categories people finish and buy again.',
     url: 'https://oleksiakconsulting.com',
     provider: {
       '@type': 'Person',
@@ -75,19 +75,13 @@ export default function SchemaOrg() {
     },
     areaServed: 'Europe',
     serviceType: [
-      'Ecommerce Consulting',
+      'FMCG Ecommerce Consulting',
+      'Paid Traffic Quality',
+      'Ecommerce SEO',
       'Conversion Rate Optimization',
-      'CRM Strategy',
-      'Marketing Automation',
-      'Website Audit',
+      'Subscription and Replenishment',
+      'Loyalty Programmes',
     ],
-    offers: {
-      '@type': 'Offer',
-      name: 'Free Website Audit',
-      description: 'AI-powered LAMA audit analyzing 6 key areas of your website performance.',
-      price: '0',
-      priceCurrency: 'PLN',
-    },
   };
 
   const websiteSchema = {
@@ -95,7 +89,8 @@ export default function SchemaOrg() {
     '@type': 'WebSite',
     name: 'Oleksiak Consulting',
     url: 'https://oleksiakconsulting.com',
-    description: 'Ecommerce conversion & CRM consulting by Rafał Oleksiak',
+    description:
+      'One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.',
     publisher: {
       '@type': 'Organization',
       name: 'Oleksiak Consulting',
