@@ -40,7 +40,7 @@ export default function AuditClient() {
       {/* >>> ZE ZRODLA — GENEROWANE, NIE EDYTUJ RECZNIE <<< */}
       <div className="s1">
         <div className="head"><span className="wm">Oleksiak Consult</span><span className="lab">FMCG ecommerce &middot; end to end</span></div>
-        <h1 className="hook">Every pack runs out on a different day. <em>Your email hits every customer on the same one.</em></h1>
+        <h1 className="hook">Every pack runs out on a different day. <em>Everything you run fires on the same one.</em></h1>
         <p className="sub">One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM, loyalty. Below, one piece of that work running live: tell me what runs out and how long a pack lasts.</p>
         <div className="step1">
           <div className="lab">01 &nbsp;What runs out in your range</div>
@@ -107,8 +107,8 @@ export default function AuditClient() {
               <div className="lab">Fifteen years pricing the day the pack runs out</div>
               <div className="rtb">
         <h3>Rafał Oleksiak. Fifteen years of FMCG ecommerce — traffic, storefront, and what happens after the first pack.</h3>
-        <ul><li><b>Paid</b><span>Audiences built on the consumption clock, not the last visit.</span></li><li><b>Search &amp; AI answers</b><span>Consumable queries are duration questions. Own those.</span></li><li><b>Storefront</b><span>Shopify, WooCommerce or bespoke. Pack size, duration on the product page, subscribe-and-save set to the real interval.</span></li><li><b>Owned &amp; loyalty</b><span>Email, push and tiers timed to the pack, not to the campaign calendar.</span></li></ul>
-        <ul><li><b>Allegro</b><span>FMCG and recurring team, five data scientists, next-pack prediction. CRM from 0.5% to 12% of revenue.</span></li><li><b>mBank / mOkazje</b><span>Retention strategy across consumables.</span></li><li><b>Genactiv</b><span>Colostrum, category leader. Storefront, search and lifecycle. Current.</span></li><li><b>Booksy</b><span>Same arithmetic where the pack is an appointment.</span></li></ul>
+        <ul><li><b>Paid</b><span>Audiences built on the consumption clock, not the last visit.</span></li><li><b>Search &amp; AI answers</b><span>Consumable queries are duration questions. Own those.</span></li><li><b>Storefront</b><span>Shopify, WooCommerce or bespoke. Pack size, duration on the product page, subscribe-and-save on the real interval.</span></li><li><b>Owned &amp; loyalty</b><span>Each kept cycle is worth more than the last. Timed to the pack, not the calendar.</span></li></ul>
+        <ul><li><b>Allegro</b><span>FMCG and recurring team, five data scientists, next-pack prediction. CRM from 0.5% to 12% of revenue.</span></li><li><b>mBank / mOkazje</b><span>Retention strategy across consumables.</span></li><li><b>Genactiv</b><span>Colostrum, category leader. Storefront, search, lifecycle. Current.</span></li><li><b>Booksy</b><span>Same arithmetic where the pack is an appointment.</span></li></ul>
         <p className="rtbnote" style={{ fontSize: '13px', fontWeight: '400', color: 'var(--dim)' }}>How it works: you get the sheet. If you asked for it, I reply once with what I would change. If that is useful we scope one piece of work at a fixed fee agreed up front — usually 8&ndash;12k z&#322; net for two to three weeks. No retainer, no discovery phase you pay for.</p>
       </div>
             </div>
