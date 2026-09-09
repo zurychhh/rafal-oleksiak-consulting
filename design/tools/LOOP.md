@@ -87,6 +87,15 @@ kategorii, jest błędem.
   tego, co klient może dostać gdzie indziej. Zmiana czyniąca przyrząd bardziej
   generycznym — takim, jaki każda agencja mogłaby wkleić u siebie — jest
   błędem do cofnięcia, nawet jeśli podnosi UX.
+- **Bodziec dla ewaluatora-foundera MUSI zawierać szwy AI.** Panele AI chowają
+  się same, gdy strona nie ma `window.claude`, więc tekst wyciągnięty z
+  przeglądarki nie zawiera ani jednego z trzech szwów — a to znaczy, że każda
+  dotychczasowa ocena biznesowa przyrządów jest oceną samych kalkulatorów, i że
+  reguły RTB/USP nie da się w ogóle zmierzyć, bo RTB siedzi dokładnie w tych
+  szwach. Zanim zmierzysz cokolwiek innego: dołóż do bodźca statyczny tekst
+  każdego panelu AI plus jedną realną odpowiedź modelu z wejść testowych, w tym
+  samym formacie przed i po. Wyniki sprzed tej poprawki traktuj jako dotyczące
+  kalkulatorów, nie przyrządów.
 - **Ścieżka od przyrządu do zlecenia musi istnieć i być widoczna** na obu
   plikach: przyrząd pokazuje, że te rzeczy powstają szybko i na zamówienie,
   strona odwołuje się do nich jako do dowodu, a nie tylko je opisuje. Brak tej
