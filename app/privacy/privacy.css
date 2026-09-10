@@ -1,0 +1,9 @@
+/* Reset scenografii po starej stronie glownej — ten sam blok co w audit.css
+   i stop.css, tylko dla tej trasy.
+
+   critical.css narzuca html/body { overflow-x:hidden; max-width:100vw }.
+   Na dlugiej, przewijanej stronie robi to z <html> kontener przycinajacy,
+   co bramka wizualna slusznie zglasza jako przyciecie tresci. Kasujemy
+   dokladnie te wlasciwosci i nic wiecej — wyglad strony sie nie zmienia. */
+html{overflow-x:visible;max-width:none;scroll-padding-top:0;}
+body{overflow-x:visible;max-width:none;}

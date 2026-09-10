@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import './privacy.css'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Oleksiak Consulting',
@@ -12,7 +13,7 @@ export default function PrivacyPolicy() {
       <h1 style={{ color: '#fff', fontSize: '32px', marginBottom: '32px' }}>Privacy Policy</h1>
 
       <p style={{ marginBottom: '16px', lineHeight: 1.7 }}>
-        <strong style={{ color: '#fff' }}>Last updated:</strong> January 2026
+        <strong style={{ color: '#fff' }}>Last updated:</strong> September 2026
       </p>
 
       <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '32px', marginBottom: '12px' }}>1. Data Controller</h2>
@@ -24,7 +25,19 @@ export default function PrivacyPolicy() {
 
       <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '32px', marginBottom: '12px' }}>2. Data We Collect</h2>
       <p style={{ lineHeight: 1.7 }}>
-        When you use our contact form or request a website audit, we collect: your name, email address, company website URL, and any additional information you provide. We also collect anonymized usage data through Google Analytics 4 (GA4).
+        When you use the tool on this site, we collect the email address you enter and the answers you
+        type into it: the category you pick, how long a pack lasts, and the figures you set in the
+        calculation. We do not collect your name and we do not collect your company&rsquo;s website address.
+      </p>
+      <p style={{ lineHeight: 1.7, marginTop: '12px' }}>
+        We also record how you got here. If the link you followed carried <code>utm_source</code>,
+        <code> utm_medium</code>, <code> utm_campaign</code>, <code> utm_content</code> or
+        <code> utm_term</code> parameters, those are saved together with your enquiry, along with the
+        page that referred you. They are passed to HubSpot as the source and campaign of your first
+        contact. The reason is plain: so we know where an enquiry came from.
+      </p>
+      <p style={{ lineHeight: 1.7, marginTop: '12px' }}>
+        Separately, we collect anonymized usage data through Google Analytics 4 (GA4).
       </p>
 
       <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '32px', marginBottom: '12px' }}>3. How We Use Your Data</h2>
@@ -35,9 +48,9 @@ export default function PrivacyPolicy() {
 
       <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '32px', marginBottom: '12px' }}>4. Legal Basis (GDPR)</h2>
       <p style={{ lineHeight: 1.7 }}>
-        We process your data based on: (a) your explicit consent (Art. 6(1)(a) GDPR) for marketing communications;
-        (b) legitimate interest (Art. 6(1)(f) GDPR) for responding to inquiries and improving our services;
-        (c) contractual necessity (Art. 6(1)(b) GDPR) when providing consulting services.
+        We process your data based on: (a) legitimate interest (Art. 6(1)(f) GDPR) for responding to
+        inquiries, for recording how an enquiry reached us, and for improving our services;
+        (b) contractual necessity (Art. 6(1)(b) GDPR) when providing consulting services.
       </p>
 
       <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '32px', marginBottom: '12px' }}>5. Third-Party Services</h2>
@@ -46,7 +59,6 @@ export default function PrivacyPolicy() {
         <li><strong style={{ color: '#fff' }}>HubSpot</strong> — CRM and contact management</li>
         <li><strong style={{ color: '#fff' }}>Resend</strong> — email delivery</li>
         <li><strong style={{ color: '#fff' }}>Vercel</strong> — website hosting</li>
-        <li><strong style={{ color: '#fff' }}>Stripe</strong> — payment processing (if applicable)</li>
       </ul>
 
       <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '32px', marginBottom: '12px' }}>6. Cookies</h2>
