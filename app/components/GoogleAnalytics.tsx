@@ -1,28 +1,61 @@
 'use client'
 
-import { GoogleAnalytics as NextGoogleAnalytics } from '@next/third-parties/google'
-import { GA_MEASUREMENT_ID, isAnalyticsEnabled } from '@/app/lib/analytics'
-
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || ''
+import { useEffect, useState } from 'react'
+import Script from 'next/script'
+import {
+  GA_MEASUREMENT_ID,
+  isAnalyticsEnabled,
+  flushAnalyticsBuffer,
+  CONSENT_GRANTED_EVENT,
+} from '@/app/lib/analytics'
 
 /**
- * Google Analytics component using @next/third-parties
+ * GA4 ladowany WYLACZNIE po zgodzie.
  *
- * Fallback for when GTM is NOT configured.
- * When GTM is active, GA4 is loaded via GTM container instead.
+ * Dopoki odwiedzajacy nie kliknie „Accept", ten komponent nie renderuje
+ * niczego — a wiec nie powstaje ani jedno zadanie do googletagmanager.com.
+ * Odmowa oznacza, ze skrypt nie zaladuje sie nigdy, takze przy powrocie.
  *
- * @see https://nextjs.org/docs/app/guides/third-party-libraries#google-analytics
+ * Zgoda z poprzedniej wizyty jest odczytywana z localStorage przy montowaniu,
+ * zeby powracajacy nie musial klikac drugi raz.
  */
 export default function GoogleAnalytics() {
-  // Skip when GTM is active - GA4 is managed by GTM container
-  if (GTM_ID) {
-    return null
-  }
+  const [granted, setGranted] = useState(false)
 
-  // Only render when analytics is enabled (not in development)
-  if (!isAnalyticsEnabled()) {
-    return null
-  }
+  useEffect(() => {
+    if (!isAnalyticsEnabled()) return
+    try {
+      if (localStorage.getItem('cookie-consent') === 'accepted') setGranted(true)
+    } catch { /* tryb prywatny — traktujemy jak brak zgody */ }
 
-  return <NextGoogleAnalytics gaId={GA_MEASUREMENT_ID} />
+    const onGrant = () => setGranted(true)
+    window.addEventListener(CONSENT_GRANTED_EVENT, onGrant)
+    return () => window.removeEventListener(CONSENT_GRANTED_EVENT, onGrant)
+  }, [])
+
+  if (!granted || !isAnalyticsEnabled()) return null
+
+  return (
+    <>
+      <Script
+        id="ga4-lib"
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        onLoad={() => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const w = window as any
+          w.__rocGtagLoaded = true
+          flushAnalyticsBuffer()
+        }}
+      />
+      <Script id="ga4-config" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: true });
+        `}
+      </Script>
+    </>
+  )
 }

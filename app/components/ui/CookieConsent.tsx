@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { CONSENT_GRANTED_EVENT, discardAnalyticsBuffer } from '@/app/lib/analytics'
 
 /**
  * GDPR Cookie Consent Banner - Integrated with Google Consent Mode v2
@@ -94,22 +95,25 @@ export default function CookieConsent() {
       'personalization_storage': state,
     })
 
-    // Push consent event to dataLayer for GTM triggers
-    w.dataLayer.push({
-      event: 'consent_update',
-      consent_granted: granted,
-    })
+    // Bez GTM nie ma po co pchac zdarzenia wyzwalajacego tagi — zostaje
+    // samo gtag('consent','update') powyzej, ktore czyta GA4 po zaladowaniu.
   }
 
   const accept = () => {
     localStorage.setItem('cookie-consent', 'accepted')
     updateConsentState(true)
+    // Dopiero to pozwala GoogleAnalytics zaladowac gtag.js. Przed kliknieciem
+    // nie poszlo ani jedno zadanie do Google.
+    window.dispatchEvent(new Event(CONSENT_GRANTED_EVENT))
     setHidden(true)
   }
 
   const decline = () => {
     localStorage.setItem('cookie-consent', 'declined')
     updateConsentState(false)
+    // Zdarzenia zebrane przed decyzja przepadaja. gtag.js nie zaladuje sie
+    // nigdy, wiec nie ma dokad ich wyslac — i o to chodzi.
+    discardAnalyticsBuffer()
     setHidden(true)
   }
 

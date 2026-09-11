@@ -6,7 +6,6 @@ import "./fonts.css"; // IBM Plex hostowany lokalnie — zero zadan do Google
 import FontAwesomeLoader from "./components/FontAwesomeLoader";
 import ConsentMode from "./components/ConsentMode";
 import CookieConsent from "./components/ui/CookieConsent";
-import { GTMScript, GTMNoScript } from "./components/GTMScript";
 import SchemaOrg from "./components/SchemaOrg";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { WebVitals } from "./components/WebVitals";
@@ -92,8 +91,6 @@ export default function RootLayout({
             bo zaden font nie jest juz pobierany z zewnatrz — <link> do Google
             wysylal IP odwiedzajacego przed zgoda i poza Consent Mode. */}
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
 
         {/* Performance: DNS prefetch for third-party services */}
         <link rel="dns-prefetch" href="https://calendly.com" />
@@ -114,16 +111,13 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${dmSans.variable} antialiased`}
       >
-        {/* GTM noscript fallback - must be first in body */}
-        <GTMNoScript />
-
         {/* Performance: Async load Font Awesome to prevent render blocking */}
         <FontAwesomeLoader />
         {children}
 
-        {/* GTM container (loads GA4, Google Ads, remarketing via GTM) */}
-        <GTMScript />
-        {/* Fallback: direct GA4 when GTM is not configured */}
+        {/* GA4 bezposrednio, wylacznie po zgodzie. GTM usuniety: gtm.js wazyl
+            427 KB, pobieral sie przed jakakolwiek zgoda i woził dwa tagi pod
+            ruch platny, ktorego nie prowadzimy. */}
         <GoogleAnalytics />
         <WebVitals />
         <ScrollTracker />
