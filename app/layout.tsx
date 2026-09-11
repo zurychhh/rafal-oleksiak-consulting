@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, DM_Sans } from "next/font/google";
 import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold only)
 import "./globals.css"; // Remaining below-the-fold styles
+import "./fonts.css"; // IBM Plex hostowany lokalnie — zero zadan do Google
 import FontAwesomeLoader from "./components/FontAwesomeLoader";
 import ConsentMode from "./components/ConsentMode";
 import CookieConsent from "./components/ui/CookieConsent";
@@ -86,17 +87,10 @@ export default function RootLayout({
         {/* Consent Mode v2 - MUST be first script (before GTM/GA4) */}
         <ConsentMode />
 
-        {/* Performance: Preconnect to external domains for faster DNS resolution */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-
-        {/* IBM Plex — kroje strony głównej (The Audit). Ładowane linkiem, a nie
-            przez next/font, bo arkusz odwołuje się do nich po literalnej nazwie
-            rodziny w --mono/--sans i ta wartość ma zostać nietknięta. */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
-        />
+        {/* IBM Plex jest hostowany lokalnie (app/fonts.css + public/fonts).
+            Nie ma tu preconnectow do fonts.googleapis.com ani fonts.gstatic.com,
+            bo zaden font nie jest juz pobierany z zewnatrz — <link> do Google
+            wysylal IP odwiedzajacego przed zgoda i poza Consent Mode. */}
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
