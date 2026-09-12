@@ -675,3 +675,44 @@ GOOGLE_ADS_CUSTOMER_ID=544-648-7427
 **Uwaga**: Ten plik jest źródłem prawdy o aktualnym stanie projektu. Aktualizuj go po każdej większej zmianie lub na końcu każdej sesji.
 
 **Następna aktualizacja:** Po LinkedIn API approval lub pierwszej Google Ads Search campaign
+
+## /tool — ZROBIONE 13.09.2026
+
+Trasa stoi, bramka zielona na `/`, `/stop` i `/tool` (9 szerokości), `ship-compare`
+bez różnic. Mechanika przeniesienia opisana w `CLAUDE.md` → „`/tool` — druga strona
+przenoszona ze źródła". Oba warunki z poprzedniej notatki zamknięte:
+
+1. `ship-tool.mjs --yes` przed buildem — zapisane w `CLAUDE.md`, w bloku komend
+   i w opisie trasy.
+2. Archivo zhostowany lokalnie: `public/fonts/archivo-400-800-latin{,-ext}.woff2`,
+   font zmienny, jeden plik na podzbiór na cały zakres 400–800. Sprawdzone
+   przechwyceniem ruchu: **zero żądań do Google** na `/tool`, a
+   `document.fonts.check('800 58px Archivo')` daje `true`.
+
+`ANTHROPIC_MODEL` stoi teraz na `claude-opus-5` (aktualne ID z dokumentacji; bez
+sufiksu daty). `max_tokens` podniesione 2000 → 4000, bo na tym modelu myślenie jest
+domyślnie włączone i dzieli sufit z odpowiedzią. `ANTHROPIC_API_KEY` ustawiony
+w Vercelu dla Production i Preview; w repo go nie ma.
+
+### Co zostaje otwarte
+
+- **Konto Anthropic nie ma środków.** `POST /api/label` z prawidłowym kluczem wraca
+  `{"code":"refused"}` / 502, bo API odpowiada `Your credit balance is too low`.
+  Ścieżki bez klucza są sprawdzone i działają; **ścieżki ze szczęśliwym zakończeniem
+  nie dało się zweryfikować end-to-end** — kontrola środków w API biegnie PRZED
+  walidacją ciała żądania, więc żadnej odpowiedzi 200 nie da się dziś uzyskać.
+  Po doładowaniu konta trzeba to przejść ponownie.
+- **Sonda `GET /api/label` sprawdza tylko obecność klucza, nie środki.** Skutek na
+  produkcji: panele AI się pokażą i każde kliknięcie zwróci błąd. Gdyby to miało
+  przeszkadzać, sondę trzeba zmienić na realny ping — kosztem tokenów przy każdym
+  wejściu na `/tool`.
+- **Limiter na IP nadal siedzi w pamięci procesu.** Warunek z briefu („jeżeli strona
+  ma ruch") nie jest spełniony: GA4 za ostatnie 28 dni pokazuje **1 sesję** (12.09,
+  najpewniej test instalacji). KV/Upstash to nowa usługa i nowy sekret — do zrobienia,
+  gdy ruch faktycznie ruszy.
+- **Kontrast w źródle narzędzia.** `.ai .hd b` szedł `var(--acc)`, co przy 10.5px daje
+  4.45:1. Poprawione w `tool-index.html` na `#B53707` (ten sam wariant, którego plik
+  już używa dla daty w dzienniku). Umknęło, bo panele AI chowają się bez klucza —
+  **bramkę na `/tool` trzeba puszczać z ustawionym `ANTHROPIC_API_KEY`.**
+  Przy nowej wersji narzędzia z pętli ta poprawka przepadnie i bramka znów zaświeci
+  na czerwono — to jest zamierzone, ma się o siebie upomnieć.

@@ -28,8 +28,12 @@ npm run dev          # Dev server (Next 16 → Turbopack)
 npm run build        # Produkcyjny build
 npm run lint         # ESLint 9 flat config — musi dawać ZERO błędów
 npm run typecheck    # tsc --noEmit; NIE jest częścią build, uruchamiaj osobno
-npm run ship         # przeniesienie strony ze źródła (patrz niżej)
+npm run ship         # przeniesienie strony głównej ze źródła (patrz niżej)
 npm start
+
+# narzędzie /tool — osobne źródło, osobny skrypt; MUSI pójść przed buildem
+node scripts/ship-tool.mjs tool-index.html          # podgląd
+node scripts/ship-tool.mjs tool-index.html --yes    # zapisuje trzy pliki
 ```
 
 **Nie ma frameworka testowego.** Weryfikacja opiera się na trzech narzędziach:
@@ -46,9 +50,11 @@ node scripts/hubspot-setup.mjs [--apply]           # właściwości kontaktu (id
 
 ### Bramka po każdym etapie
 
-Build, `tsc --noEmit`, lint z **zerem błędów**, `qa.js` na `/` i `/stop`, oraz
-`ship-compare.mjs`. Obowiązuje **zasada zapadki**: liczba błędów lintu po etapie nie
-może być wyższa niż przed nim.
+Build, `tsc --noEmit`, lint z **zerem błędów**, `qa.js` na `/`, `/stop` i `/tool`,
+oraz `ship-compare.mjs`. Obowiązuje **zasada zapadki**: liczba błędów lintu po etapie
+nie może być wyższa niż przed nim. `qa.js` na `/tool` biegnie przy **ustawionym**
+`ANTHROPIC_API_KEY` — bez niego panele AI chowają się i bramka sprawdza mniejszą
+stronę niż produkcja.
 
 `ship-compare.mjs` nie jest ozdobą. Build, tsc, lint i `qa.js` przechodziły również
 wtedy, gdy nagłówek renderował się Poppinsem zamiast IBM Plex, a separator tysięcy
@@ -65,11 +71,13 @@ Next.js 16 (App Router, React 19, Turbopack) · TypeScript 5.9 strict · CSS Mod
 
 | Trasa | Co to |
 |---|---|
-| `/` | strona główna „The Audit" — narzędzie FMCG, dwa ekrany |
+| `/` | strona główna — wizytówka, link do `/tool`, pod spodem „The Audit" (dwa ekrany) |
+| `/tool` | narzędzie: dni zapasu z etykiety kontra odstęp między zamówieniami |
 | `/stop` | wypis, `noindex`; linkuje do niej stopka każdego maila |
 | `/privacy` | polityka prywatności |
 | `/blog`, `/blog/[slug]` | blog z zewnętrznego backendu na Railway |
 | `/api/lead` | zgłoszenie ze strony głównej → mail + HubSpot |
+| `/api/label` | dwa panele AI w `/tool` → Claude; klucz nie wychodzi do przeglądarki |
 | `/api/stop` | wypis → mail do właściciela |
 
 ### Strona główna — trzy pliki i jedna zasada
@@ -120,6 +128,49 @@ pod rząd bez zmian mówi „nic do przeniesienia" i wychodzi zerem.
 
 `app/audit-source.snapshot.html` to migawka ostatnio przeniesionego źródła — z niej
 liczony jest diff treści.
+
+### `/tool` — druga strona przenoszona ze źródła
+
+Narzędzie ma własny plik źródłowy i własny skrypt. Ta sama zasada: nic nie jest
+przepisywane ręcznie, bo pętla produkuje jego nowe wersje.
+
+```
+tool-index.html                    ← ŹRÓDŁO. Podmieniane z zewnątrz.
+        │  node scripts/ship-tool.mjs tool-index.html --yes
+        ├─→ app/tool/tool.css       reguły, przeniesione dosłownie
+        ├─→ public/tool-runtime.js  skrypt, kopia BAJT W BAJT (public/ jest poza lintem)
+        └─→ app/tool/body.ts        znaczniki jako `export const BODY`
+```
+
+**Kolejność jest wymuszona: `ship-tool.mjs --yes` musi pójść przed buildem.**
+`app/tool/page.tsx` importuje `./tool.css` i `./body`; bez przeniesienia build pada
+na brakującym module, co wygląda na błąd w kodzie, a jest brakiem przeniesienia.
+
+`body.ts`, a nie `fs.readFileSync` w trasie: czytanie pliku z dysku w App Routerze
+bywa nietrasowane na Vercelu, a import bundler widzi zawsze.
+
+**`app/tool/page.tsx` i `app/tool/tool-reset.css` są pisane ręcznie i `ship-tool`
+ich nie dotyka.** W resecie siedzą dwie rzeczy, bez których trasa wygląda źle,
+a obie pochodzą ze stylów starej strony, nie z narzędzia:
+
+1. `critical.css` daje `html{overflow-x:hidden;max-width:100vw}` — na stronie
+   wysokiej na 2200 px robi z `<html>` kontener przycinający. To samo lekarstwo
+   co w `stop.css` i `privacy.css`.
+2. `globals.css` daje **każdemu** `<section>` `padding:clamp(48px,8vw+1rem,120px)`
+   w pionie plus `overflow-x:hidden` i `transform:translateZ(0)`. Karta narzędzia
+   jest `<section>`, więc dostawała 242 px powietrza na 1440 px. `qa.js` tego nie
+   zgłasza — nadmiarowy padding to ani przycięcie, ani nakładanie, ani kontrast.
+   Transform kasujemy osobno: element z transformem jest blokiem zawierającym dla
+   `position:fixed`.
+
+Oba panele AI (`#ai1`, `#ai2`) **chowają się same**, gdy `GET /api/label` zwróci 503.
+Bramka na `/tool` musi więc biec przy **ustawionym** kluczu — inaczej sprawdza
+mniejszą stronę niż produkcja i przepuszcza błędy w panelach. Tak właśnie przeszedł
+niezauważony kontrast 4.45:1 na nagłówkach obu paneli.
+
+Archivo (`--disp` w narzędziu) jest hostowany lokalnie w `app/fonts.css`, tak samo
+jak IBM Plex. Deklaracja `@font-face` sama nic nie pobiera — plik leci dopiero przy
+użyciu rodziny, a używa jej tylko `/tool`.
 
 ### `/api/lead` — wzorzec dla nowych endpointów
 
@@ -178,8 +229,9 @@ nigdy się nie aktualizuje. Dotyczy `CookieConsent.tsx` i `ConsentMode.tsx`.
 | Resend | `RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL` |
 | HubSpot | `HUBSPOT_API_KEY` ← *nie* `HUBSPOT_ACCESS_TOKEN` |
 | Blog | `BLOG_API_URL` / `NEXT_PUBLIC_BLOG_API_URL`, `NEXT_PUBLIC_BLOG_AGENT_ID` |
+| Claude (`/api/label`) | `ANTHROPIC_API_KEY` — bez niego trasa daje 503 `sampling_disabled`, a `/tool` chowa oba panele i działa dalej |
 | Śledzenie | `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL`, `NEXT_PUBLIC_GOOGLE_ADS_CALENDLY_LABEL` |
-| Opcjonalne | `NEXT_PUBLIC_SITE_URL`, `LEAD_MAX_PER_HOUR` |
+| Opcjonalne | `NEXT_PUBLIC_SITE_URL`, `LEAD_MAX_PER_HOUR`, `LABEL_MAX_PER_HOUR`, `ANTHROPIC_MODEL` |
 
 `.env.example` jest nieaktualny — opisuje wycięty kod.
 

@@ -47,6 +47,10 @@ add-components-import.js
 /api/
 
 # Session documentation (not for production)
+# Briefy zadaniowe wklejane do asystenta — zyja jedna sesje. Trzymane poza
+# repo takze dlatego, ze `npm run ship` przerywa na brudnym drzewie i kazdy
+# nieskomitowany brief blokowalby przeniesienie strony.
+PROMPT-CC-*.md
 DEBUGGING_*.md
 LAMA_*_SESSION*.md
 LAMA_*_SUMMARY.md

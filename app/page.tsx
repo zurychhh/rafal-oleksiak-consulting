@@ -41,6 +41,7 @@ const PERSON_LD = {
     "Fifteen years of FMCG ecommerce end to end — paid media, search including AI answers, storefront conversion on Shopify, WooCommerce and bespoke platforms, CRM lifecycle and loyalty. Led Allegro's FMCG and recurring team building per-user next-pack prediction; built the mBank/mOkazje retention strategy on consumables; Booksy; currently Genactiv.",
   knowsAbout: [
     'FMCG ecommerce',
+    'replenishment and repeat purchase',
     'paid media',
     'SEO and AI answers',
     'conversion rate optimisation',

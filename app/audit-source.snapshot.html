@@ -43,7 +43,38 @@
   .hook em{font-style:normal;color:var(--acc);}
   .sub{margin:20px 0 0;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--dim);
     max-width:60ch;}
-  .step1{margin-top:40px;}
+
+  /* Link do narzedzia. Ma byc drugim najmocniejszym elementem po naglowku,
+     wiec bierze to rozmiarem i pozycja, a nie kolejnym wypelnionym pomaranczem:
+     przycisk "Run the audit" nizej juz jest pelna plama akcentu i dwie takie
+     obok siebie znosza sie nawzajem. */
+  .toolcta{display:block;margin:26px 0 0;padding:17px 21px;max-width:62ch;
+    border:1px solid var(--acc);background:var(--panel);color:var(--fg);
+    text-decoration:none;transition:background .16s,color .16s;}
+  .toolcta b{display:block;font-size:19px;font-weight:700;line-height:1.25;
+    letter-spacing:-.01em;}
+  .toolcta b i{font-style:normal;color:var(--acc);}
+  .toolcta span{display:block;margin-top:7px;font-family:var(--mono);font-size:12px;
+    line-height:1.65;color:var(--dim);}
+  .toolcta:hover{background:var(--acc);color:#0D0F14;}
+  .toolcta:hover b i,.toolcta:hover span{color:#0D0F14;}
+
+  /* Wizytowka. Ta sama tresc co karta w szynie na drugim ekranie, tylko scisnieta
+     do czterech linii: founder, ktory nie kliknie "Run the audit", ma sie dowiedziec
+     kim jestem, zanim zdecyduje, czy klikac. */
+  .card1{margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);max-width:62ch;}
+  .card1 ul{list-style:none;margin:10px 0 0;padding:0;display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 22px;}
+  .card1 li{font-family:var(--mono);font-size:11.5px;line-height:1.55;color:#8A90A0;}
+  .card1 li b{display:block;color:var(--fg);font-weight:600;}
+  .fee{margin:13px 0 0;font-family:var(--mono);font-size:11.5px;line-height:1.7;
+    color:var(--dim);}
+  @media (max-width:560px){.card1 ul{grid-template-columns:minmax(0,1fr);}}
+
+  .bridge{margin:30px 0 0;font-family:var(--mono);font-size:11.5px;line-height:1.75;
+    color:#8A90A0;}
+  .step1{margin-top:14px;}
+  .step1+.step1{margin-top:40px;}
   .cats{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;}
   .cats button{border:1px solid var(--line);background:var(--panel);color:var(--dim);
     cursor:pointer;padding:9px 14px 10px;min-height:48px;font-family:var(--mono);font-size:12px;
@@ -214,7 +245,7 @@
   "jobTitle": "FMCG ecommerce consultant — paid, search, storefront, CRM and loyalty",
   "_comment_sameAs": "Dodaj \"sameAs\": [\"https://www.linkedin.com/in/...\"] — bez prawdziwego URL-a to pole szkodzi, nie pomaga.",
   "description": "Fifteen years of FMCG ecommerce end to end — paid media, search including AI answers, storefront conversion on Shopify, WooCommerce and bespoke platforms, CRM lifecycle and loyalty. Led Allegro's FMCG and recurring team building per-user next-pack prediction; built the mBank/mOkazje retention strategy on consumables; Booksy; currently Genactiv.",
-  "knowsAbout": ["FMCG ecommerce", "paid media", "SEO and AI answers", "conversion rate optimisation", "Shopify", "WooCommerce", "CRM lifecycle", "subscription commerce", "loyalty programmes"],
+  "knowsAbout": ["FMCG ecommerce", "replenishment and repeat purchase", "paid media", "SEO and AI answers", "conversion rate optimisation", "Shopify", "WooCommerce", "CRM lifecycle", "subscription commerce", "loyalty programmes"],
   "worksFor": {
     "@type": "Organization",
     "name": "Oleksiak Consulting",
@@ -228,7 +259,23 @@
 <div class="s1">
   <div class="head"><span class="wm">Oleksiak Consult</span><span class="lab">FMCG ecommerce &middot; end to end</span></div>
   <h1 class="hook">Every pack runs out on a different day. <em>Everything you run fires on the same one.</em></h1>
-  <p class="sub">One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM, loyalty. Below, one piece of that work running live: tell me what runs out and how long a pack lasts.</p>
+  <p class="sub">One market: FMCG and anything bought again &mdash; supplements and colostrum, food, cosmetics, household chemicals, pet food, lenses. Inside it I run the whole funnel: paid, search and AI answers, storefront, CRM, subscription, loyalty.</p>
+
+  <a class="toolcta" href="/tool"><b>Open the pack-duration tool <i>&rarr;</i></b>
+    <span>Days of supply off the label, against the gap between orders in your own export. Runs in your browser.</span></a>
+
+  <div class="card1">
+    <div class="lab">Fifteen years of this</div>
+    <ul>
+      <li><b>Allegro</b>FMCG and recurring team, next-pack prediction.</li>
+      <li><b>mBank / mOkazje</b>Consumables retention.</li>
+      <li><b>Genactiv</b>Colostrum, category leader. Current.</li>
+      <li><b>Booksy</b>Same arithmetic, pack as appointment.</li>
+    </ul>
+    <p class="fee">Fixed fee agreed up front &mdash; usually 8&ndash;12k z&#322; net for two to three weeks. No retainer.</p>
+  </div>
+
+  <p class="bridge">Below, one piece of that work running live.</p>
   <div class="step1">
     <div class="lab">01 &nbsp;What runs out in your range</div>
     <div class="cats" id="cats"></div>

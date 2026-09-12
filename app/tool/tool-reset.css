@@ -1,0 +1,29 @@
+/* Reset scenografii po starej stronie — ten sam blok co w stop.css i privacy.css,
+   tylko dla trasy /tool.
+
+   critical.css narzuca html{overflow-x:hidden;max-width:100vw}. Na krotkiej
+   stronie to nie przeszkadza, ale narzedzie ma ponad dwa tysiace pikseli
+   wysokosci i te dwie wlasciwosci robia z <html> kontener przycinajacy —
+   bramka wizualna slusznie zglaszala przyciecie na wszystkich dziewieciu
+   szerokosciach. Kasujemy dokladnie te wlasciwosci i nic wiecej.
+
+   Ten plik jest PISANY RECZNIE. tool.css obok jest generowany przez
+   scripts/ship-tool.mjs i nadpisywany przy kazdym przeniesieniu, wiec reset
+   nie moze tam mieszkac — przepadlby przy pierwszej nowej wersji narzedzia. */
+html{overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;}
+body{overflow-x:visible;max-width:none;}
+
+/* Druga rzecz ze starej strony, znacznie gorsza od pierwszej i niewidoczna dla
+   qa.js: globals.css ustawia KAZDEMU <section> padding clamp(48px,8vw+1rem,120px)
+   w pionie, overflow-x:hidden, max-width:100vw i transform:translateZ(0).
+   Kazdy z trzech instrumentow narzedzia jest <section class="tool">, wiec kazdy
+   dostawal 120 px pustego pola nad naglowkiem i pod trescia — na 1440 px byly to
+   242 px powietrza w jednej karcie. Bramka wizualna tego nie zglosila, bo nadmiarowy
+   padding nie jest ani przycieciem, ani nakladaniem, ani kontrastem; wylapal to
+   dopiero odczyt stylow obliczonych.
+
+   transform:translateZ(0) kasujemy nie dla kosmetyki: element z transformem staje
+   sie blokiem zawierajacym dla position:fixed, wiec cokolwiek fixed w srodku
+   karty zaczepiloby sie o nia zamiast o okno. */
+section{padding:0;overflow-x:visible;max-width:none;transform:none;
+  backface-visibility:visible;}

@@ -41,7 +41,23 @@ export default function AuditClient() {
       <div className="s1">
         <div className="head"><span className="wm">Oleksiak Consult</span><span className="lab">FMCG ecommerce &middot; end to end</span></div>
         <h1 className="hook">Every pack runs out on a different day. <em>Everything you run fires on the same one.</em></h1>
-        <p className="sub">One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM, loyalty. Below, one piece of that work running live: tell me what runs out and how long a pack lasts.</p>
+        <p className="sub">One market: FMCG and anything bought again &mdash; supplements and colostrum, food, cosmetics, household chemicals, pet food, lenses. Inside it I run the whole funnel: paid, search and AI answers, storefront, CRM, subscription, loyalty.</p>
+
+        <a className="toolcta" href="/tool"><b>Open the pack-duration tool <i>&rarr;</i></b>
+          <span>Days of supply off the label, against the gap between orders in your own export. Runs in your browser.</span></a>
+
+        <div className="card1">
+          <div className="lab">Fifteen years of this</div>
+          <ul>
+            <li><b>Allegro</b>FMCG and recurring team, next-pack prediction.</li>
+            <li><b>mBank / mOkazje</b>Consumables retention.</li>
+            <li><b>Genactiv</b>Colostrum, category leader. Current.</li>
+            <li><b>Booksy</b>Same arithmetic, pack as appointment.</li>
+          </ul>
+          <p className="fee">Fixed fee agreed up front &mdash; usually 8&ndash;12k z&#322; net for two to three weeks. No retainer.</p>
+        </div>
+
+        <p className="bridge">Below, one piece of that work running live.</p>
         <div className="step1">
           <div className="lab">01 &nbsp;What runs out in your range</div>
           <div className="cats" id="cats"></div>
