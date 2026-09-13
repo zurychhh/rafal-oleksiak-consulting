@@ -137,9 +137,23 @@ export async function POST(req: Request) {
   const last = Math.max(text.lastIndexOf(']'), text.lastIndexOf('}'))
   if (first === -1 || last <= first) return fail('invalid_json', 502)
 
+  const body = text.slice(first, last + 1)
   try {
-    return NextResponse.json(JSON.parse(text.slice(first, last + 1)))
+    return NextResponse.json(JSON.parse(body))
   } catch {
+    // Drugie podejscie: JSONL. Prompt prosi o jedna tablice, ale model potrafi
+    // wziac "one object per line" doslownie i zwrocic {...}\n{...} bez nawiasow.
+    // Odpowiedz jest wtedy merytorycznie poprawna, a trasa zglaszala invalid_json
+    // i panel pokazywal blad — to jest sklejenie koperty, nie ratowanie tresci:
+    // kazda linia musi sama byc poprawnym obiektem, inaczej dalej odmawiamy.
+    const lines = body.split('\n').map((l) => l.trim().replace(/,$/, '')).filter(Boolean)
+    if (lines.length > 1 && lines.every((l) => l.startsWith('{') && l.endsWith('}'))) {
+      try {
+        return NextResponse.json(lines.map((l) => JSON.parse(l)))
+      } catch {
+        return fail('invalid_json', 502)
+      }
+    }
     return fail('invalid_json', 502)
   }
 }

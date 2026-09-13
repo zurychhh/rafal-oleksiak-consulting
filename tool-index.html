@@ -535,10 +535,29 @@
      czytelnikow na trzech nazwalo ja wymyslona. Test jest doslowny i dlatego pewny: czy ta
      liczba stoi w zacytowanych slowach. Stoi - to odczyt. Nie stoi - to wyliczenie i ekran
      ma to powiedziec. Zadnej liczby to nie zmienia; zmienia to, czym sie ona podaje.     */
+  /* Test LITERALNY, nie zakresowy. Pytanie jest jedno: czy liczba perDay stoi
+     doslownie w cytacie, ktory model zwrocil. Wykrywanie widelek bylo tu wczesniej
+     i mylilo sie — "ok. 300 g dla psa o masie 15-20 kg" ma przedzial, ale opisuje
+     on mase psa, a dawka 300 JEST wydrukowana i ma taka zostac.
+
+     Kropke i przecinek zdejmujemy z KONCA i POCZATKU tokenu, nigdy ze srodka:
+     poprzednia wersja robila replace(/[.,]/g," ") na calym cytacie, wiec "1,5 miarki"
+     rozpadalo sie na "1" i "5" i uczciwy odczyt dostawal falszywy alarm. Przecinek
+     dziesietny sprowadzamy do kropki, a porownujemy i tekstem, i liczba, zeby "30"
+     zgadzalo sie z 30, a "1.50" z 1.5.                                              */
+  function quoteHasNumber(q,n){
+    if(typeof n!=="number"||!isFinite(n)) return false;
+    var toks=String(q).split(/[^0-9.,]+/);
+    for(var i=0;i<toks.length;i++){
+      var t=toks[i].replace(/^[.,]+/,"").replace(/[.,]+$/,"").replace(",",".");
+      if(!t) continue;
+      if(t===String(n)||parseFloat(t)===n) return true;
+    }
+    return false;
+  }
   function derived(D){
     if(!D||!D.perDay||!D.q) return false;
-    return String(D.q).replace(/[.,]/g," ").split(/\s+/)
-      .indexOf(String(D.perDay))<0;
+    return !quoteHasNumber(D.q,D.perDay);
   }
 
   /* dni zapasu istnieja tylko wtedy, gdy etykieta podaje dobowa ilosc */
@@ -590,9 +609,9 @@
                :'<i class="b0" style="width:100%"></i>';
       marks+=m ?'<i class="b2" style="width:'+at(m)+'%"></i>'
                :'<i class="b0" style="width:100%"></i>';
-      /* Dwoch czytelnikow na trzech, dwa pomiary z rzedu: "1-2 razy dziennie" wraca jako
-         twarde 45 g i dni zapasu stoja na srodku przedzialu. Dawka nadal jest z etykiety
-         i tylko z niej — ale wiersz ma powiedziec, ze to srodek, a nie odczyt.        */
+      /* Ten sam test literalny co w panelu i w widzecie: jesli liczby, z ktorej licza sie
+         dni zapasu, nie ma doslownie w cytowanych slowach, slupek musi to powiedziec.
+         Liczba zostaje, znika tylko jej status odczytu z opakowania.                  */
       if(pd&&m&&derived(DOSE[F.k])) d+='<s>not on the pack</s>';
       if(!pd&&m) d='<s>no dose</s>';
       if(!m) d="";
@@ -658,14 +677,15 @@
      +card("CRM","Send day "+Math.max(1,lo-7)+"&ndash;"+hi,"window, not a date")
      +card("Store &middot; PDP","Show "+(need>1?need*F.units:F.units)+" "+esc(u),
            "covers one full cycle");
-    /* Dwoch czytelnikow na trzech: "1-2 razy dziennie" wraca jako twarde 45 g i to jest
-       ta sama choroba, przeciw ktorej to narzedzie ma regule. Dawka nadal pochodzi
-       wylacznie z etykiety — ale jesli etykieta daje przedzial, ekran ma to powiedziec. */
-    var rng=derived(DOSE[F.k]);
+    /* Ekran ma powiedziec, ZA CO podaje te liczbe. Test jest literalny, wiec wie tylko
+       tyle, ze liczby nie ma w cytowanych slowach — i tylko tyle wolno mu twierdzic.
+       Poprzednia wersja pisala "to srodek przedzialu", czyli zgadywala, skad liczba
+       pochodzi, choc sprawdzala co innego.                                          */
+    var off=derived(DOSE[F.k]);
     $("wb").textContent=F._pd+" days at "+DOSE[F.k].perDay+" "+F.unit+" a day"
-      +(rng?", worked out from the range on the pack.":".");
+      +(off?", a figure the pack does not print.":".");
     $("wn").innerHTML="&ldquo;"+esc(DOSE[F.k].q)+"&rdquo; &mdash; the maker."
-      +(rng?" That daily figure is not printed there; it is the middle of the range."
+      +(off?" That daily number does not appear in those words. It was worked out, not read."
            :" No date, no free text.");
   }
   function shortName(F){return F.t.split(/[,0-9]/)[0].trim();}
@@ -868,16 +888,22 @@
     run($("g2"),$("s2"),function(){
       return SAMPLE.json(
         "Below are the directions printed on consumer product packs, one product per line, in the "
-        +"form: product | directions. Reply with ONLY a JSON array, one object per line, in the "
-        +"same order, each: {\"perDay\":number|null,\"doseUnit\":string,\"quote\":string,"
-        +"\"note\":string}. perDay = how much of the product is used in ONE DAY, in the unit the "
-        +"directions themselves use, and taken ONLY from the words on that line. It is a single "
-        +"JSON number, never a range, never a string: where the directions give a range or a "
-        +"number of times a day, multiply out and return the MIDPOINT as a number, and let the "
-        +"quote carry the range. quote = the exact "
+        +"form: product | directions. Reply with ONLY a JSON array: one single [ ... ] holding "
+        +"one object per input line, in the same order. Do not emit bare objects separated by "
+        +"newlines. Each object: {\"perDay\":number|null,\"doseUnit\":string,\"quote\":string,"
+        +"\"note\":string}. perDay = the amount used in ONE DAY, in the unit the "
+        +"directions themselves use, and ONLY when the line prints that daily number outright. "
+        +"It is a single JSON number, never a range and never a string, and it MUST appear "
+        +"verbatim inside the quote you return. Do NOT average. Do NOT multiply a serving by a "
+        +"frequency. Do NOT take the middle of a range. If reaching a daily figure would need "
+        +"any arithmetic of yours, perDay is null: one scoop of 30 g taken 1-2 times a day is "
+        +"null, not 45 and not 1.5. A daily amount that IS printed but carries a condition — so "
+        +"much a day for a given body weight, for instance — still counts, because the number "
+        +"itself is on the pack: return it. quote = the exact "
         +"run of words from that line which carries the amount, copied character for character, no "
-        +"paraphrase. If nothing on the line states an amount per day, perDay is "
-        +"null, quote is the empty string, and note says in at most eight words what the directions "
+        +"paraphrase. When perDay is null, still return the words that come closest to a dose, so "
+        +"the reader sees what the pack does say; leave quote empty only when the line mentions no "
+        +"amount at all. note says in at most eight words what the directions "
         +"do tell you instead. Never take a dose from the product name, from a body weight you were "
         +"not given, from what people typically do, or from anywhere outside that line; a missing "
         +"dose is a correct answer and an invented one is the failure this tool exists to prevent. "
@@ -888,14 +914,28 @@
         $("o2").innerHTML=lines.map(function(l,i){
           var r=arr[i]||{}, nm=l.split("|")[0].trim();
           var F=null; Object.keys(CAT).forEach(function(k){if(shortName(CAT[k])===nm)F=CAT[k];});
-          if(F) DOSE[F.k]={perDay:(r.perDay>0?r.perDay:null),q:String(r.quote||"").slice(0,80)};
-          return row(esc(nm)+(r.quote?' <span style="color:var(--soft)">&mdash; &ldquo;'
-              +esc(String(r.quote).slice(0,52))+'&rdquo;</span>':""),
-            r.perDay>0?(r.perDay+" "+esc(r.doseUnit||"")+"/day"):"no dose on the label",!(r.perDay>0));
+          var q=String(r.quote||"");
+          var n=(typeof r.perDay==="number"&&r.perDay>0)?r.perDay:null;
+          /* Sprawdzenie po stronie kodu, bo sam prompt tego nie utrzyma. Liczba liczy
+             sie jako ODCZYTANA z opakowania tylko wtedy, gdy stoi doslownie w cytacie.
+             Liczby nie ruszamy — zmienia sie wylacznie to, za co ja podajemy.
+             Trzy stany, nie dwa: cytat z liczba, cytat bez liczby, brak cytatu.     */
+          var onPack=n!==null&&quoteHasNumber(q,n);
+          if(F) DOSE[F.k]={perDay:n,q:q.slice(0,80)};
+          return row(esc(nm)+(q?' <span style="color:var(--soft)">&mdash; &ldquo;'
+              +esc(q.slice(0,52))+'&rdquo;</span>':""),
+            onPack?(n+" "+esc(r.doseUnit||"")+"/day")
+                  :(q?"not on the pack":"no dose on the label"),
+            !onPack);
         }).join("");
-        var got=arr.filter(function(r){return r&&r.perDay>0;}).length;
+        /* Liczymy tylko te, ktore przeszly test literalny. Wczesniej licznik mowil
+           "states an amount" takze o liczbie, ktorej na opakowaniu nie ma.          */
+        var got=arr.filter(function(r){
+          return r&&r.perDay>0&&quoteHasNumber(String(r.quote||""),r.perDay);
+        }).length;
         $("s2").textContent=got+" of "+lines.length
-          +" labels state an amount. The rest get no number, and no model may invent one.";
+          +" labels print a daily amount outright. The rest get no number, and no model "
+          +"may work one out.";
         paint(); flash(["plot","widget"]);
       });
     });
