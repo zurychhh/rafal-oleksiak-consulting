@@ -31,6 +31,11 @@ pasek górny, obie kolumny, blok usług i listwa wyjść.
 Mobile 390 jest osobną decyzją, nie ściśniętym desktopem. Nad zgięciem (712 px w Safari iOS
 z domyślnym paskiem adresu) muszą zmieścić się: claim, linia usługi i wyjście.
 
+**Kolejność DOM jest telefonowa.** Desktop składa z niej dwie kolumny przez siatkę
+z nazwanymi obszarami — nigdy odwrotnie. Wynika to z pomiaru na wdrożeniu 9b: przy kolejności
+desktopowej bursztynowa listwa lądowała pod czterema usługami, czyli pod zgięciem. Po zmianie
+CTA zaczyna się na 539 px przy zgięciu 844 px.
+
 ## Komponenty
 
 **Siatka dni.** Siedemdziesiąt pól, dziesięć w rzędzie. Jasne = dni z etykiety, bursztynowe =
