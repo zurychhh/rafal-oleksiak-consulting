@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Karla:wght@400;500;700&display=swap">
+  <style>
+    body{margin:0;background:#F7F3EA;color:#332F27;
+      font-family:"Karla","Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.7;}
+    a{color:#9A3412;text-decoration:none;border-bottom:1px solid #D9CDB6;} a:hover{color:#7C2D12;}
+    .ser{font-family:"Newsreader",Georgia,serif;color:#1F1C17;}
+    .cap{font-family:"Karla",sans-serif;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8A8270;}
+    .hr{height:1px;background:#DED3BE;}
+  </style>
+</helmet>
+
+<div style="max-width:1440px;margin:0 auto;padding:0 120px 104px;">
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:44px 0 16px;">
+    <span class="cap">Rafał Oleksiak</span>
+    <span class="cap">FMCG ecommerce · end to end</span>
+    <span class="cap">Warszawa</span>
+  </div>
+  <div style="height:3px;background:#1F1C17;"></div>
+  <div class="hr" style="margin-top:3px;"></div>
+
+  <!-- the essay opening -->
+  <div style="padding:66px 0 0;display:flex;flex-direction:column;align-items:center;gap:26px;">
+    <h1 class="ser" style="margin:0;font-weight:400;font-size:76px;line-height:1.02;letter-spacing:-.02em;
+      max-width:19ch;text-align:center;text-wrap:balance;">
+      Every pack runs out on a different day.
+      <em style="font-style:italic;color:#9A3412;">Everything you run fires on the same one.</em>
+    </h1>
+    <p style="margin:0;max-width:60ch;text-align:center;font-size:17px;line-height:1.7;color:#4A453A;">
+      I work one market — FMCG and anything bought again. Supplements and colostrum, food,
+      cosmetics, household chemicals, pet food, lenses. And inside it the whole funnel: paid,
+      search including AI answers, the storefront, CRM, subscription, loyalty.
+    </p>
+  </div>
+
+  <div class="hr" style="margin-top:60px;"></div>
+
+  <!-- two columns of argument, broadsheet style -->
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 64px;padding-top:40px;">
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <p class="cap">The thing nobody measures</p>
+      <p style="margin:0;font-size:16px;line-height:1.75;color:#4A453A;">
+        Your catalogue does not know how long a pack lasts. So the subscription ships every thirty
+        days whether the jar lasts twenty or sixty, the emails go out on a campaign calendar rather
+        than when the cupboard is empty, and the ads chase people who already have three months of
+        product at home.
+      </p>
+      <p style="margin:0;font-size:16px;line-height:1.75;color:#4A453A;">
+        The number that fixes all four is the same number, and it is sitting in your order export
+        already — nobody has put it next to the label.
+      </p>
+    </div>
+
+    <div style="border-left:1px solid #DED3BE;padding-left:64px;display:flex;flex-direction:column;gap:18px;">
+      <p class="cap">What the pack says, against what your buyers do</p>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:grid;grid-template-columns:96px minmax(0,1fr) 62px;gap:14px;align-items:center;">
+          <span class="cap" style="letter-spacing:.12em;">The label</span>
+          <span style="height:10px;background:#E6DCC8;display:block;position:relative;">
+            <span style="position:absolute;inset:0 36% 0 0;background:#1F1C17;display:block;"></span></span>
+          <span class="ser" style="font-size:19px;text-align:right;">50</span>
+        </div>
+        <div style="display:grid;grid-template-columns:96px minmax(0,1fr) 62px;gap:14px;align-items:center;">
+          <span class="cap" style="letter-spacing:.12em;">They return</span>
+          <span style="height:10px;background:#E6DCC8;display:block;position:relative;">
+            <span style="position:absolute;inset:0;background:#9A3412;display:block;"></span></span>
+          <span class="ser" style="font-size:19px;text-align:right;color:#9A3412;">78</span>
+        </div>
+      </div>
+      <p style="margin:0;font-size:15px;line-height:1.7;color:#4A453A;">
+        Twenty-eight days of daylight between the two. That gap is the exclusion window in paid,
+        the interval in the subscription, the send date in CRM and the size on the product page —
+        one measurement, four disciplines.
+      </p>
+      <a href="/tool" class="ser" style="font-size:20px;border-bottom:2px solid #9A3412;padding-bottom:2px;align-self:flex-start;">
+        Run it on your own export →</a>
+    </div>
+  </div>
+
+  <div class="hr" style="margin-top:64px;"></div>
+
+  <!-- the record, as a column of entries -->
+  <p class="cap" style="margin:22px 0 0;">Fifteen years, one market</p>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 48px;margin-top:24px;">
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <span class="ser" style="font-size:26px;">Allegro</span>
+      <span style="font-size:14px;line-height:1.65;color:#4A453A;">The FMCG and recurring team — five data
+        scientists, next-pack prediction per user. CRM from half a percent of revenue to twelve.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <span class="ser" style="font-size:26px;">mBank</span>
+      <span style="font-size:14px;line-height:1.65;color:#4A453A;">mOkazje: a retention strategy built on
+        consumables — coffee, detergents, contact lenses.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <span class="ser" style="font-size:26px;color:#9A3412;">Genactiv</span>
+      <span style="font-size:14px;line-height:1.65;color:#4A453A;">Colostrum, category leader. Ad budgets
+        pooled into one ROAS, storefront, search, lifecycle. Current.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <span class="ser" style="font-size:26px;">Booksy</span>
+      <span style="font-size:14px;line-height:1.65;color:#4A453A;">The same arithmetic, where the pack
+        happens to be an appointment.</span>
+    </div>
+  </div>
+
+  <div style="height:3px;background:#1F1C17;margin-top:58px;"></div>
+
+  <!-- terms, set like a colophon -->
+  <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:0 64px;padding-top:34px;align-items:start;">
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <h2 class="ser" style="margin:0;font-size:40px;font-weight:400;line-height:1.1;max-width:18ch;">
+        One piece of work, priced before it starts.</h2>
+      <p style="margin:0;font-size:16px;line-height:1.7;max-width:50ch;color:#4A453A;">
+        Two to three weeks, a fixed fee of <b style="color:#1F1C17;">8–12k zł net</b> agreed up front.
+        No retainer, and no discovery phase you pay for before anything moves. I am taking one more
+        brand this quarter.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;padding-top:8px;">
+      <p class="cap">Write to me</p>
+      <span style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0;border-bottom:2px solid #1F1C17;">
+        <span style="padding:12px 2px;font-size:16px;color:#9A9280;">you@yourbrand.pl</span>
+        <span class="ser" style="font-size:17px;padding:12px 4px;color:#9A3412;white-space:nowrap;">Send →</span>
+      </span>
+      <span style="font-size:13px;line-height:1.65;color:#8A8270;">One reply, written by hand. No list,
+        no sequence, no third party.</span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
