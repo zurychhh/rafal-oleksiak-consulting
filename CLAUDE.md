@@ -275,10 +275,39 @@ Node API deklarują `runtime = 'nodejs'` i `dynamic = 'force-dynamic'`.
 `design/production/index.html` to źródło strony głównej. `design/tools/` to trzy
 narzędzia FMCG. `design/qa.js` to checker Playwright.
 
-Codzienna pętla usprawniająca chodzi **w chmurze**, pisze do artefaktów roboczych
-i nie dotyka repo ani produkcji — chmura nie ma prawa zapisu do tego repozytorium.
-Nie odtwarzaj tego harmonogramu lokalnie. Wypuszczanie na produkcję dzieje się ręcznie,
-przez `npm run ship`.
+## Wdrażanie na produkcję — CZYTAJ, ZANIM POWIESZ, ŻE COŚ JEST NA ŻYWO
+
+**`git push` na `feature/new-site` NIE wdraża na produkcję. Tworzy wyłącznie Preview.**
+To jest najczęstszy błąd w tym projekcie i kosztował już kilka fałszywych raportów
+„jest na produkcji". Domena zmienia się dopiero po:
+
+```bash
+npx vercel@latest --prod --yes
+```
+
+Globalne `vercel` (41.x) jest za stare dla endpointu wdrożeniowego — wymagane ≥47.2.2 —
+dlatego `npx vercel@latest`, bez ruszania globalnej instalacji.
+
+Weryfikacja wdrożenia: `npx vercel@latest inspect <id>` albo `ls`, stan READY i alias
+`oleksiakconsulting.com`. **Nie odpytuj domeny w pętli co kilkanaście sekund** — 13.09
+takie odpytywanie wywołało automatyczną mitygację Vercela i dziesięciominutowe wyzwanie
+na adresie IP. Klient bez JS dostaje wtedy 403 z `x-vercel-mitigated: challenge`; to nie
+znaczy, że strona jest zepsuta. Attack Mode jest wyłączony i ma taki zostać.
+
+## Pętle i promocja
+
+Pętla budująca chodzi **w chmurze** co trzy godziny, pisze do artefaktów roboczych
+i nie ma prawa zapisu do tego repozytorium. Zostawia w artefakcie maszynową łatkę
+(pola `patch`, `patch_base`, `patch_run`, `patch_status` w `loop-spec`), liczoną jako
+pełen dystans między staginguem a produkcją — nie jako różnica z jednego przebiegu.
+
+Zadanie **Promotor** chodzi **na tym Macu** pół godziny po pętli, bierze tę łatkę,
+przepuszcza przez pełną bramkę i wypuszcza na produkcję. Dlatego:
+**nie zostawiaj niezacommitowanych zmian w plikach śledzonych** — promotor wtedy staje,
+żeby nie nadpisać cudzej roboty ręcznej. Nie odtwarzaj tych harmonogramów lokalnie.
+
+Blokady gita: w tym repo regularnie zostają osierocone `.git/index.lock` i `.git/HEAD.lock`.
+`device_bash` nie umie kasować plików — przenieś je do `.git/_stale/`, nie próbuj `rm`.
 
 ## Dokumentacja
 
