@@ -316,9 +316,32 @@
     grid.classList.add("arm");
     if(leg) leg.classList.add("arm");
     var cells=grid.children;
+    var ruszylo=false;
+
+    /* Trzecia sciezka dokonczenia, obok warunku webdriver i reduced motion.
+       Renderer podgladu linku (LinkedIn, Slack, iMessage) nie ustawia
+       navigator.webdriver i robi zrzut chwile po zaladowaniu — dostawal wiec
+       prawie pusta kratke, czyli karte posta bez tresci, na jedynym kanale,
+       z ktorego idzie ruch. Jezeli obserwator nie ruszyl w ciagu sekundy,
+       siatka dopelnia sie sama, BEZ animacji: zdejmujemy tylko `arm`, wiec
+       wraca stan domyslny DOM-u. Zwykly odwiedzajacy tego nie zobaczy —
+       obserwator odpala sie w pierwszych klatkach, na dlugo przed sekunda. */
+    function dopelnij(){
+      if(ruszylo) return;
+      ruszylo=true;
+      /* Obserwator moze byc podstawiona atrapa bez `disconnect` — wtedy rzucenie
+         wyjatku tutaj zostawiloby siatke zgaszona, czyli dokladnie w stanie,
+         przed ktorym ten bezpiecznik ma chronic. */
+      try{io.disconnect();}catch{}
+      grid.classList.remove("arm");
+      if(leg) leg.classList.remove("arm");
+    }
+
     var io=new IntersectionObserver(function(entries){
       for(var k=0;k<entries.length;k++){
         if(!entries[k].isIntersecting) continue;
+        if(ruszylo) return;
+        ruszylo=true;
         for(var i=0;i<cells.length;i++){
           var d = i<45 ? (i*0.05) : (i<69 ? (2.3+(i-45)*0.075) : 4.2);
           cells[i].style.animationDelay=d.toFixed(2)+"s";
@@ -331,6 +354,7 @@
       }
     },{threshold:0.2});
     io.observe(grid);
+    setTimeout(dopelnij,1000);
   }
 
   /* ---- kropki przy uslugach ----
