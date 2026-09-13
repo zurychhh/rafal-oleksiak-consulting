@@ -122,8 +122,10 @@ h1,h2,h3,h4,h5,h6{font-family:inherit;}
   .brow{display:grid;grid-template-columns:76px minmax(0,1fr) 52px;gap:12px;align-items:center;}
   .track{height:20px;background:var(--track);display:block;position:relative;}
   .track i{position:absolute;top:0;bottom:0;left:0;display:block;}
-  .f50{width:64%;background:#E8DCC2;}
-  .f78{width:100%;background:var(--acc);}
+  /* 45/69 = 65%. Nazwy klas niosa te same liczby co podpis, zeby rozjazd miedzy
+     paskiem a trescia byl widoczny w diffie, a nie dopiero na ekranie.         */
+  .f45{width:65%;background:#E8DCC2;}
+  .f69{width:100%;background:var(--acc);}
   .d{font-family:var(--disp);color:var(--cream);letter-spacing:-.03em;
     font-size:17px;font-weight:600;text-align:right;}
   .d.on{color:var(--acc);}

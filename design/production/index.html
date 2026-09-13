@@ -136,8 +136,10 @@
   .brow{display:grid;grid-template-columns:76px minmax(0,1fr) 52px;gap:12px;align-items:center;}
   .track{height:20px;background:var(--track);display:block;position:relative;}
   .track i{position:absolute;top:0;bottom:0;left:0;display:block;}
-  .f50{width:64%;background:#E8DCC2;}
-  .f78{width:100%;background:var(--acc);}
+  /* 45/69 = 65%. Nazwy klas niosa te same liczby co podpis, zeby rozjazd miedzy
+     paskiem a trescia byl widoczny w diffie, a nie dopiero na ekranie.         */
+  .f45{width:65%;background:#E8DCC2;}
+  .f69{width:100%;background:var(--acc);}
   .d{font-family:var(--disp);color:var(--cream);letter-spacing:-.03em;
     font-size:17px;font-weight:600;text-align:right;}
   .d.on{color:var(--acc);}
@@ -285,21 +287,28 @@
 
   <div class="band">
     <div class="bars">
-      <span class="tag">Colostrum 300 g &middot; 1&#8201;240 orders</span>
+      <!-- Pomiar, nie ilustracja. Metryka Placed Order z 4,8 roku historii jednego
+           sklepu: 1197 odstepow miedzy powtornymi zakupami tej samej pozycji, juz
+           po odjeciu pierwszego dokupienia. Etykieta 45 dni wychodzi z instrukcji
+           producenta (pol miarki 0,5 g dwa razy dziennie, opakowanie 45 g). Te same
+           liczby stoja w probce na /tool i kazda z nich da sie tam odtworzyc.
+           Bez nazwy sklepu i bez nazwy produktu — zgoda dotyczy liczb, nie marki. -->
+      <span class="tag">Anonymous supplement shop &middot; 4.8 years of orders &middot;
+        1,197 repeat gaps</span>
       <div class="rows">
         <div class="brow">
           <span class="tag">Label</span>
-          <span class="track"><i class="f50"></i></span>
-          <span class="d">50 d</span>
+          <span class="track"><i class="f45"></i></span>
+          <span class="d">45 d</span>
         </div>
         <div class="brow">
           <span class="tag">Return</span>
-          <span class="track"><i class="f78"></i></span>
-          <span class="d on">78 d</span>
+          <span class="track"><i class="f69"></i></span>
+          <span class="d on">69 d</span>
         </div>
       </div>
     </div>
-    <p class="claim">Twenty-eight days when your ads, your page and your list are all
+    <p class="claim">Twenty-four days when your ads, your page and your list are all
       <em>talking to a full cupboard</em>.</p>
   </div>
 

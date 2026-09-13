@@ -79,21 +79,28 @@ export default function AuditClient() {
 
         <div className="band">
           <div className="bars">
-            <span className="tag">Colostrum 300 g &middot; 1&#8201;240 orders</span>
+            {/* Pomiar, nie ilustracja. Metryka Placed Order z 4,8 roku historii jednego
+                 sklepu: 1197 odstepow miedzy powtornymi zakupami tej samej pozycji, juz
+                 po odjeciu pierwszego dokupienia. Etykieta 45 dni wychodzi z instrukcji
+                 producenta (pol miarki 0,5 g dwa razy dziennie, opakowanie 45 g). Te same
+                 liczby stoja w probce na /tool i kazda z nich da sie tam odtworzyc.
+                 Bez nazwy sklepu i bez nazwy produktu — zgoda dotyczy liczb, nie marki. */}
+            <span className="tag">Anonymous supplement shop &middot; 4.8 years of orders &middot;
+              1,197 repeat gaps</span>
             <div className="rows">
               <div className="brow">
                 <span className="tag">Label</span>
-                <span className="track"><i className="f50"></i></span>
-                <span className="d">50 d</span>
+                <span className="track"><i className="f45"></i></span>
+                <span className="d">45 d</span>
               </div>
               <div className="brow">
                 <span className="tag">Return</span>
-                <span className="track"><i className="f78"></i></span>
-                <span className="d on">78 d</span>
+                <span className="track"><i className="f69"></i></span>
+                <span className="d on">69 d</span>
               </div>
             </div>
           </div>
-          <p className="claim">Twenty-eight days when your ads, your page and your list are all
+          <p className="claim">Twenty-four days when your ads, your page and your list are all
             <em>talking to a full cupboard</em>.</p>
         </div>
 
