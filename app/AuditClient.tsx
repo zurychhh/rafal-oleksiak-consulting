@@ -38,112 +38,76 @@ export default function AuditClient() {
       <div className="wrap">
 
         <div className="top">
-          <span className="mark">Oleksiak Consulting</span>
-          <span className="tag">FMCG &middot; end to end &middot; Warszawa</span>
+          <span className="brand">Oleksiak Consulting</span>
+          <div className="clients">
+            <span className="cl"><b>Allegro</b><i>CRM 0.5% &rarr; 12% of revenue</i></span>
+            <span className="cl"><b>mBank mOkazje</b><i>Retention on consumables</i></span>
+            <span className="cl"><b>Genactiv</b><i>Colostrum, category leader</i></span>
+            <span className="cl"><b>Booksy</b><i>The pack is an appointment</i></span>
+          </div>
+          <span className="clm">Allegro &middot; mBank mOkazje &middot; Genactiv &middot; Booksy</span>
         </div>
 
-        <div className="hero">
-          <div className="hcell">
-            <h1 className="hook">Every pack runs out on a different day. <em>Everything you run fires on the same one.</em></h1>
-            <p className="sub">One market &mdash; FMCG and anything bought again. Inside it the whole funnel:
-              paid, search including AI answers, the storefront, CRM, subscription, loyalty.</p>
-            <a className="door" href="/tool"><b>Run it on your own export</b><i>&rarr;</i></a>
-          </div>
-
-          <div className="shelf">
-            <span className="tag">The second number</span>
-            <div className="second">
-              <div className="q">
-                <label className="qlab" htmlFor="n1">How many days does one of your packs last?</label>
-                <div className="qrow">
-                  <input className="nin" id="n1" type="text" inputMode="numeric" autoComplete="off" maxLength={3} aria-describedby="note1" />
-                  <span className="unit">days</span>
-                </div>
-                <p className="qnote" id="note1">off the label</p>
-              </div>
-
-              <div className="q q2" id="q2">
-                <label className="qlab" id="lab2" htmlFor="n2">How many days until the same customer comes back
-                  for it?</label>
-                <div className="qrow">
-                  <input className="nin" id="n2" type="text" inputMode="numeric" autoComplete="off" maxLength={3} aria-describedby="note2" />
-                  <button className="dunno" id="dunno" type="button">I don&rsquo;t know</button>
-                </div>
-                <p className="qnote" id="note2"></p>
-              </div>
-
-              <p className="qend" id="qend"><a href="/tool">It is in your order export &rarr;</a></p>
-            </div>
-          </div>
+        <div className="say">
+          <h1 className="claim">Your second order, on time.</h1>
+          <p className="lead">I find the day each pack really runs out, then move ads, emails and
+            subscriptions onto it.</p>
         </div>
 
         <div className="band">
-          <div className="bars">
-            {/* Pomiar, nie ilustracja. Metryka Placed Order z 4,8 roku historii jednego
-                 sklepu: 1197 odstepow miedzy powtornymi zakupami tej samej pozycji, juz
-                 po odjeciu pierwszego dokupienia. Etykieta 45 dni wychodzi z instrukcji
-                 producenta (pol miarki 0,5 g dwa razy dziennie, opakowanie 45 g). Te same
-                 liczby stoja w probce na /tool i kazda z nich da sie tam odtworzyc.
-                 Bez nazwy sklepu i bez nazwy produktu — zgoda dotyczy liczb, nie marki. */}
-            <span className="tag">Anonymous supplement shop &middot; 4.8 years of orders &middot;
-              1,197 repeat gaps</span>
-            <div className="rows">
-              <div className="brow">
-                <span className="tag">Label</span>
-                <span className="track"><i className="f45"></i></span>
-                <span className="d">45 d</span>
-              </div>
-              <div className="brow">
-                <span className="tag">Return</span>
-                <span className="track"><i className="f69"></i></span>
-                <span className="d on">69 d</span>
-              </div>
-            </div>
+          <div className="grid" id="grid"><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c1"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c2"></i><i className="c3"></i></div>
+          <div className="legend">
+            <span>45 days the label sells for</span>
+            <span className="amb" id="leg">24 days of ads to a full cupboard</span>
+            <span className="soft">Day 69: the reorder lands</span>
           </div>
-          <p className="claim">Twenty-four days when your ads, your page and your list are all
-            <em>talking to a full cupboard</em>.</p>
+          <p className="origin">Real orders: an anonymous supplements store, 1,197 first-to-second gaps,
+            4.8 years. Your numbers differ &mdash; that is what the calculator is for.</p>
         </div>
 
-        <div className="record">
-          <div className="rec"><b>Allegro</b><span>FMCG and recurring team, five data scientists,
-            next-pack prediction. CRM 0.5% &rarr; 12% of revenue.</span></div>
-          <div className="rec"><b>mBank &middot; mOkazje</b><span>Retention built on consumables &mdash;
-            coffee, detergents, lenses.</span></div>
-          <div className="rec now"><b>Genactiv</b><span>Colostrum, category leader. Ad budgets pooled into
-            one ROAS, storefront, search, lifecycle. Current.</span></div>
-          <div className="rec"><b>Booksy</b><span>The same arithmetic where the pack is an
-            appointment.</span></div>
+        <div className="exit">
+          <a className="go" href="/tool" aria-label="Calculate your reorder day">
+            <span className="gotxt">Calculate your reorder day</span>
+            <span className="goarr" aria-hidden="true">&rarr;</span>
+          </a>
+          <form id="form" noValidate>
+            <p className="err" id="err"></p>
+            <div className="fbox">
+              <input id="mail" type="email" inputMode="email" autoComplete="email" spellCheck="false" autoCapitalize="off" aria-label="Your email" placeholder="Leave your email" />
+              <button type="submit">Send</button>
+            </div>
+            <span className="fine">One reply, written by me. No sequence, no call.</span>
+          </form>
+          <div className="sent" id="sent"><b>Sent</b><span id="rcpt"></span></div>
         </div>
 
-        <div className="terms">
-          <div className="tcell">
-            <h2>One piece of work, priced before it starts.</h2>
-            <p className="dl">Week 3, on your desk:</p>
-            <ul className="dlist">
-              <li>one table, per SKU: the day the label implies against the day buyers actually come
-                back</li>
-              <li>the ten widest gaps, ranked by how far they miss</li>
-              <li>a corrected send-and-spend calendar: dates, not principles</li>
-            </ul>
-            <p className="dnote">If the gaps turn out to be small, you hear that in week one.</p>
-            <p className="tp">Two to three weeks, fixed fee <b>8&ndash;12k z&#322; net</b>, agreed up front.
-              No retainer, no paid discovery. One more brand this quarter.</p>
+        <p className="ai">AI reads your pack labels and catalogue, works out days of supply per SKU, and
+          compares it with your real gap between orders.</p>
+
+        <div className="svcs" id="svcs">
+          <div className="svc">
+            <span className="hair"></span>
+            <span className="dots"><i></i><i></i><i></i><i></i><i></i></span>
+            <span className="sname">Loyalty programmes for FMCG</span>
+            <span className="sdesc">built on what people actually finish and rebuy, not on points.</span>
           </div>
-          <div className="write">
-            <span className="tag">Write to me</span>
-            <form id="form" noValidate>
-              <p className="err" id="err"></p>
-              <div className="fbox">
-                <input id="mail" type="email" inputMode="email" autoComplete="email" spellCheck="false" autoCapitalize="off" placeholder="you@yourbrand.pl" />
-                <button type="submit">Send</button>
-              </div>
-              <input id="msg" className="msg" type="text" maxLength={140} autoComplete="off" placeholder="What do you sell? (optional)" />
-              <p className="fine">One reply, by hand. No list, no sequence.</p>
-            </form>
-            <div className="sent" id="sent">
-              <h4>Sent</h4>
-              <p id="rcpt"></p>
-            </div>
+          <div className="svc">
+            <span className="hair"></span>
+            <span className="dots"><i></i><i></i><i></i><i></i><i></i></span>
+            <span className="sname">Replenishment cycles, calculated with AI</span>
+            <span className="sdesc">our tool reads your pack labels and works out days of supply per SKU.</span>
+          </div>
+          <div className="svc">
+            <span className="hair"></span>
+            <span className="dots"><i></i><i></i><i></i><i></i><i></i></span>
+            <span className="sname">Shorter time between orders</span>
+            <span className="sdesc">the same customers, one more order a year. That is LTV.</span>
+          </div>
+          <div className="svc">
+            <span className="hair"></span>
+            <span className="dots"><i></i><i></i><i></i><i></i><i></i></span>
+            <span className="sname">Subscription models that fit the pack</span>
+            <span className="sdesc">intervals set by the pack, not by a number someone typed once.</span>
           </div>
         </div>
 

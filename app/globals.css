@@ -790,12 +790,11 @@ section[id] {
    ============================================ */
 /* >>> ZMIENNE ZE ZRODLA — GENEROWANE <<< */
 :root{
-    --bg:#12110F; --panel:#171512; --fg:#CFC9BE; --cream:#F5F1E8; --dim:#AFA89B;
-    --soft:#8C8577; --line:#2A2723; --rule:#4A453D; --track:#221F1B;
-    --acc:#FF6B2C; --acc2:#FF8A57;
-    --ink:#12110F; --sub:#3A362F; --tag2:#5E584E; --field:#E4DED2;
-    --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
-    --sans:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
-    --disp:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+    --bg:#0C0D0C; --fg:#F2F0EA; --dim:#A8A49B; --panel:#101210; --line:#1E201B;
+    --hair:#45473F; --cellc:#2A2C26; --acc:#E0A72B; --origin:#7E8177; --rule:#24261F;
+    --ok:#4DD0A7;
+    --sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+    --mono:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+    --disp:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
   }
 /* >>> KONIEC ZMIENNYCH ZE ZRODLA <<< */

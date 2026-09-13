@@ -27,16 +27,15 @@ const PROPS = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'color',
 // Inwentarz nie zostal skrocony — obejmuje kazdy blok nowej strony, zeby
 // porownanie dalej mialo czego pilnowac.
 const SELECTORS = [
-  'body', '.wrap', '.top', '.top .mark', '.tag',
-  '.hero', '.hcell', '.hook', '.hook em', '.sub', '.door', '.door b',
-  '.shelf', '.second', '.q', '.q2', '.qlab', '.qrow', '.nin', '.unit', '.dunno',
-  '.qnote', '.qend',
-  '.band', '.bars', '.brow', '.track', '.f50', '.f78', '.d', '.d.on', '.claim', '.claim em',
-  '.record', '.rec', '.rec b', '.rec span', '.rec.now b',
-  '.terms', '.terms h2', '.dl', '.dlist', '.dlist li', '.dnote',
-  '.tp', '.write', '.fbox', '.fbox input', '.fbox button',
-  '.msg', '.fine',
-  'p', 'h1', 'h2',
+  'body', '.wrap',
+  '.top', '.brand', '.clients', '.cl', '.cl b', '.cl i', '.clm',
+  '.mid', '.band', '.grid', '.grid i', '.c1', '.c2', '.c3',
+  '.legend', '.legend .amb', '.legend .soft', '.origin',
+  '.say', '.claim', '.lead', '.svcs', '.svc', '.hair', '.dots', '.dots i',
+  '.sname', '.sdesc',
+  '.exit', '.go', '.gotxt', '.goarr', '.exit form', '.fbox', '.fbox input',
+  '.fbox button', '.fine', '.ai',
+  'p', 'h1',
 ];
 
 async function grab(browser, url, { width, height }) {
@@ -62,9 +61,13 @@ async function grab(browser, url, { width, height }) {
     // Porownywanie surowego textContent porownywaloby sposob zapisu zrodla.
     const txt = (sel) => [...document.querySelectorAll(sel)]
       .map((e) => e.textContent.replace(/\s+/g, ' ').trim()).join('|');
-    out.__pytania = txt('.qlab');
-    out.__dni = txt('.d');
-    out.__referencje = txt('.rec b');
+    out.__klienci = txt('.cl b');
+    out.__legenda = txt('.legend span');
+    out.__uslugi = txt('.sname');
+    // Siatka kalendarza: 70 pol, 45 jasnych, 24 bursztynowe, ostatnie wygaszone.
+    // Liczby sa trescia projektu, nie dekoracja — sprawdzamy je po klasach.
+    out.__siatka = ['c1', 'c2', 'c3']
+      .map((c) => c + ':' + document.querySelectorAll('.grid i.' + c).length).join('|');
     for (const s of sels) {
       const el = document.querySelector(s);
       if (!el) { out[s] = null; continue; }

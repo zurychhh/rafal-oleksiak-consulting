@@ -48,6 +48,9 @@ export default [
         setTimeout: 'readonly', clearTimeout: 'readonly',
         requestAnimationFrame: 'readonly', fetch: 'readonly',
         URLSearchParams: 'readonly', AbortController: 'readonly',
+        // Kierunek 9b: animacja kalendarza startuje po wejsciu w kadr
+        // i respektuje preferencje ruchu.
+        IntersectionObserver: 'readonly', matchMedia: 'readonly',
       },
     },
     rules: { 'no-var': 'off', 'no-empty': 'off' },
