@@ -67,14 +67,25 @@ const MAX_PER_WINDOW = Number(process.env.LEAD_MAX_PER_HOUR ?? 5);
 // opisuje dwie różne rzeczy i przestaje cokolwiek znaczyć.
 const LIMITER_ACTIVE = process.env.NODE_ENV === 'production';
 
+// Znacznik czasu dopisujemy WYŁĄCZNIE dla żądania, które zostało przepuszczone.
+// Wcześniej szedł przed sprawdzeniem progu, więc odbite żądanie też przesuwało
+// koniec okna — ponawianie odsuwało odblokowanie zamiast je przybliżać i nadawca
+// w pętli nie przechodził nigdy. Próg jest ten sam: MAX_PER_WINDOW żądań
+// przechodzi, następne dostaje 429.
 function seenRecently(ip: string) {
   if (!LIMITER_ACTIVE) return false;
   const now = Date.now();
   const seen = (HITS.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  if (seen.length >= MAX_PER_WINDOW) {
+    // Zapisujemy przefiltrowaną tablicę, żeby stare znaczniki wypadały z mapy
+    // także wtedy, gdy adres dostaje same odmowy.
+    HITS.set(ip, seen);
+    return true;
+  }
   seen.push(now);
   HITS.set(ip, seen);
   if (HITS.size > 5000) HITS.clear();
-  return seen.length > MAX_PER_WINDOW;
+  return false;
 }
 
 export async function POST(request: NextRequest) {

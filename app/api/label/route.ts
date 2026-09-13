@@ -36,14 +36,21 @@ const WINDOW_MS = 60 * 60 * 1000
 const MAX_PER_HOUR = Number(process.env.LABEL_MAX_PER_HOUR ?? 30)
 const hits = new Map<string, number[]>()
 
+// Znacznik dopisujemy wylacznie dla zadania przepuszczonego — inaczej odbite
+// zadanie tez przesuwa koniec okna i ponawianie nigdy nie przechodzi. Ta sama
+// poprawka co w /api/lead; prog bez zmian.
 function overLimit(ip: string): boolean {
   if (process.env.NODE_ENV !== 'production') return false
   const now = Date.now()
   const seen = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS)
+  if (seen.length >= MAX_PER_HOUR) {
+    hits.set(ip, seen)
+    return true
+  }
   seen.push(now)
   hits.set(ip, seen)
   if (hits.size > 5_000) hits.clear()
-  return seen.length > MAX_PER_HOUR
+  return false
 }
 
 const fail = (code: string, status: number) => NextResponse.json({ code }, { status })

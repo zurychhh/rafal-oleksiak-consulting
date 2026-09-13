@@ -50,13 +50,26 @@ node scripts/hubspot-setup.mjs [--apply]           # właściwości kontaktu (id
 `design/qa.js` przyjmuje ścieżkę pliku albo URL. Chromium bierze z przypiętej ścieżki
 (`PW_CHROMIUM` albo `/opt/pw-browsers/...`), a gdy jej nie ma — z lokalnego playwrighta.
 
+**`qa.js` WYSYŁA formularz — na każdym z dziewięciu viewportów.** Linie 169–175:
+wpisuje `test@company.com` i klika przycisk wysyłki, żeby obejrzeć stan końcowy.
+Puszczona na `http://localhost:3000` jest nieszkodliwa, bo limiter poza produkcją
+jest wyłączony, a `/api/lead` nie ma dokąd wysłać maila bez klucza Resenda.
+
+**Puszczona na produkcyjnym URL-u generuje dziewięć prawdziwych zgłoszeń:** maile
+do właściciela i do „odwiedzającego", zapis kontaktu w HubSpocie i wyczerpanie
+godzinnej puli limitera (5/IP), przez co przez następną godzinę nie da się
+przetestować formularza naprawdę. **Bramkę puszczamy lokalnie.** Na żywej domenie
+tylko wtedy, gdy świadomie godzisz się na te skutki — i wiedząc, że przebieg
+zapisuje zawsze te same wartości domyślne, więc niczego w CRM nie dowodzi.
+
 ### Bramka po każdym etapie
 
 Build, `tsc --noEmit`, lint z **zerem błędów**, `qa.js` na `/`, `/stop` i `/tool`,
 oraz `ship-compare.mjs`. Obowiązuje **zasada zapadki**: liczba błędów lintu po etapie
 nie może być wyższa niż przed nim. `qa.js` na `/tool` biegnie przy **ustawionym**
-`ANTHROPIC_API_KEY` — bez niego panele AI chowają się i bramka sprawdza mniejszą
-stronę niż produkcja.
+`ANTHROPIC_API_KEY` (jest w `.env.local`) — bez niego panele AI chowają się i bramka
+sprawdza mniejszą stronę niż produkcja. To wariant z widocznymi panelami wywraca
+kontrast i układ, nie pusty.
 
 `ship-compare.mjs` nie jest ozdobą. Build, tsc, lint i `qa.js` przechodziły również
 wtedy, gdy nagłówek renderował się Poppinsem zamiast IBM Plex, a separator tysięcy
@@ -231,7 +244,7 @@ nigdy się nie aktualizuje. Dotyczy `CookieConsent.tsx` i `ConsentMode.tsx`.
 | Resend | `RESEND_API_KEY`, `FROM_EMAIL`, `TO_EMAIL` |
 | HubSpot | `HUBSPOT_API_KEY` ← *nie* `HUBSPOT_ACCESS_TOKEN` |
 | Blog | `BLOG_API_URL` / `NEXT_PUBLIC_BLOG_API_URL`, `NEXT_PUBLIC_BLOG_AGENT_ID` |
-| Claude (`/api/label`) | `ANTHROPIC_API_KEY` — bez niego trasa daje 503 `sampling_disabled`, a `/tool` chowa oba panele i działa dalej |
+| Claude (`/api/label`) | `ANTHROPIC_API_KEY` — ustawiony w Production i Preview. Bez niego trasa daje 503 `sampling_disabled`, a `/tool` chowa oba panele i działa dalej. Uwaga na pułapkę: sonda `GET` sprawdza **obecność klucza, nie saldo konta**, więc klucz przy pustym koncie daje widoczne panele i błąd przy każdym kliknięciu. |
 | Śledzenie | `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL`, `NEXT_PUBLIC_GOOGLE_ADS_CALENDLY_LABEL` |
 | Opcjonalne | `NEXT_PUBLIC_SITE_URL`, `LEAD_MAX_PER_HOUR`, `LABEL_MAX_PER_HOUR`, `ANTHROPIC_MODEL` |
 
