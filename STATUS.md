@@ -716,3 +716,69 @@ w Vercelu dla Production i Preview; w repo go nie ma.
   **bramkę na `/tool` trzeba puszczać z ustawionym `ANTHROPIC_API_KEY`.**
   Przy nowej wersji narzędzia z pętli ta poprawka przepadnie i bramka znów zaświeci
   na czerwono — to jest zamierzone, ma się o siebie upomnieć.
+
+---
+
+## Kalibracja /tool danymi GenActiv — ZGODA UDZIELONA
+
+**Status: zmierzone, zgoda klienta udzielona ustnie 2026-09-13, wdrożenie odblokowane.**
+
+GenActiv zgodził się na wykorzystanie tych danych w kalkulatorze — narzędzie powstaje
+w pierwszej kolejności dla nich. Formalne potwierdzenie na piśmie jest w toku po stronie
+Rafała.
+
+Dane surowe zostają w `data/genactiv/` (katalog w .gitignore, **nadal nigdy nie commitować** —
+zgoda dotyczy użycia liczb, nie publikacji pliku z historią zamówień).
+
+Jedno rozróżnienie zostaje w mocy mimo zgody: kalibracja narzędzia to jedno, a wydrukowanie
+median GenActiv na publicznej stronie marketingowej Rafała to drugie. Dopóki papier nie jest
+podpisany, liczby idące na `oleksiakconsulting.com` powinny być albo opisane jako przykład
+bez nazwy klienta, albo poczekać.
+
+### Co zostało zmierzone (2026-09-13)
+
+Źródło: Klaviyo, metryka Placed Order (R6aTMS), 2021-11-15 … 2026-09-12.
+Shopify odpadł — scope `read_orders` widzi tylko 60 dni, a 58,7% realnych luk jest
+dłuższych niż 60 dni, więc cenzurował większość sygnału, nie margines.
+
+- 69 470 zamówień, 41 514 klientów, 18,3% z powtórzeniem tego samego SKU
+- Luki 2→3+ (rytm ustalony): p25 40 / p50 70 / p75 141 / p90 270 dni
+- Luki 1→2 (pierwsze dokupienie): p50 77 dni, dłuższe i bardziej rozwleczone
+- 1 321 luk >365 dni (8%) — reaktywacje, NIE wycięte, decyzja otwarta
+- p75/p50 = 2,0 → to nie jest jeden rozkład; per SKU flaga zapaliła się na
+  CG120KAPSUEKX2, CZM60TABLETEK, CZM60TABLETEKX3, CZB30SASZETEK, CIMK180KAPSUEK
+
+Etykieta vs rzeczywistość, 9 SKU z obiema liczbami (7 dłużej niż etykieta, 1 krócej):
+CZCB30SASZETEK 30→71 (+41) · CZCP30SASZETEK 30→66 (+36) · CZCP30SASZETEKX2 60→91 (+31) ·
+CG45G 45→69 (+24, n=1197) · FIBERBIOM 15→39 (+24) · CZCB30SASZETEKX2 60→47 (−13) ·
+CG45GX2 90→94 · FIBERBIOMX2 30→32 (n=1, odrzucić) · CGA245G 45→45
+
+### Wnioski, które wchodzą do narzędzia NIEZALEŻNIE od zgody
+
+Te są o metodzie, nie o kliencie — wolno je wdrożyć od razu:
+
+1. **Jeden globalny parametr to błąd.** Rozrzut median per SKU: 49 do 155 dni.
+   Kalkulator musi liczyć per produkt.
+2. **Reguła „jednostka dawki musi zgadzać się z jednostką opakowania" jest za ostra.**
+   Producenci podają ekwiwalent w nawiasie — „Pół miarki (0,5 g) dwa razy dziennie".
+   Bez czytania nawiasu odpada najważniejsze wolumenowo SKU. Parser ma go czytać.
+3. **„Maksymalna porcja dzienna to N" to NIE jest dawka.** To sufit. Wzięcie go jest
+   tym samym błędem co środek przedziału — patrz Z8.
+4. **Wielopaki (X2, X3) mnożą dni zapasu, nie dzielą.** Krotność z sufiksu SKU albo
+   z tytułu; zestawy różnych produktów → nieustalone, nie zgadywać.
+5. **Drift zapisu SKU.** Historyczne mają spacje, dzisiejsze nie. Bez normalizacji
+   `[^A-Z0-9]` gubi się 6 pkt dopasowania i zawyża luki.
+6. **Rozdziel lukę 1→2 od 2→3+.** To dwa różne zjawiska; mieszanie ich zawyża wynik.
+7. **Pokrycie etykietą jest wąskie: 17 SKU na 130.** Główny powód odrzuceń (69 SKU) to
+   przedział dawki. To potwierdza, że „not on the pack" musi być pełnoprawnym wynikiem
+   narzędzia, a nie stanem błędu — dla większości katalogu to jest JEDYNA uczciwa
+   odpowiedź.
+
+### Do zrobienia, gdy zgoda będzie
+
+- [x] Zgoda GenActiv — udzielona ustnie 2026-09-13, pełny zakres; papier w toku
+- [ ] Dopiąć formalne potwierdzenie na piśmie (Rafał) — dopiero wtedy liczby z nazwą
+      klienta mogą pójść na publiczną stronę
+- [ ] Zdecydować, co z 1 321 lukami >365 dni: wyciąć, czy raportować osobno
+- [ ] Zastąpić wymyślone liczby na stronie głównej (pasek „50 vs 78") realnymi
+- [ ] Wdrożyć punkty 1–7 powyżej w tool-index.html — te nie czekają na nikogo
