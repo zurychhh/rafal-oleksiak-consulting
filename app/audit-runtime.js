@@ -26,6 +26,63 @@ export default function bootAudit() {
     return out;
   })();
 
+  /* ---- The second number --------------------------------------------------
+     Dwie odpowiedzi, obie prawidlowe. "I don't know" nie jest ucieczka: to jest
+     ta odpowiedz, ktora zgadza sie z rzeczywistoscia, i tekst pod spodem mowi
+     to wprost. Wpisana liczba tez nie jest wpadka — dostaje przekreslenie,
+     zeby pokazac, czym jest (pamiecia), a nie zeby kogokolwiek zlapac.
+     Zadnego timera, zadnej petli animacji, zero bibliotek.                    */
+  (function(){
+    var n1=$("n1"), n2=$("n2"), q2=$("q2"), lab2=$("lab2"),
+        note1=$("note1"), note2=$("note2"), qend=$("qend"), dunno=$("dunno");
+    if(!n1||!n2) return;
+
+    function digits(v){return String(v||"").replace(/[^0-9]/g,"").slice(0,3);}
+    function clean(el){el.value=digits(el.value);}
+    n1.addEventListener("input",function(){clean(n1);});
+    n2.addEventListener("input",function(){clean(n2);});
+
+    function open2(){
+      var v=digits(n1.value);
+      if(!v||Number(v)<1) return false;
+      n1.value=v;
+      note1.classList.add("on");
+      q2.classList.add("on");
+      return true;
+    }
+    n1.addEventListener("blur",open2);
+    n1.addEventListener("keydown",function(e){
+      if(e.key!=="Enter") return;
+      e.preventDefault();
+      if(open2()) n2.focus();
+    });
+
+    function said(){
+      var v=digits(n2.value);
+      if(!v||Number(v)<1) return;
+      n2.value=v;
+      n2.classList.add("said");
+      n2.classList.remove("blank");
+      lab2.textContent="how do you know?";
+      note2.textContent="That was memory, not data.";
+      note2.classList.add("on");
+      qend.classList.add("on");
+    }
+    n2.addEventListener("blur",said);
+    n2.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){e.preventDefault();said();}
+    });
+
+    dunno.addEventListener("click",function(){
+      n2.value="";
+      n2.classList.remove("said");
+      n2.classList.add("blank");
+      note2.textContent="Exactly. That number is in no system you have open.";
+      note2.classList.add("on");
+      qend.classList.add("on");
+    });
+  })();
+
   var form=$("form"), mail=$("mail"), msg=$("msg"), err=$("err"), sent=$("sent");
   if(!form) return;
 

@@ -29,10 +29,12 @@ const PROPS = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'color',
 const SELECTORS = [
   'body', '.wrap', '.top', '.top .mark', '.tag',
   '.hero', '.hcell', '.hook', '.hook em', '.sub', '.door', '.door b',
-  '.shelf', '.packs', '.pk', '.pk b', '.pk i', '.pn', '.note',
+  '.shelf', '.second', '.q', '.q2', '.qlab', '.qrow', '.nin', '.unit', '.dunno',
+  '.qnote', '.qend',
   '.band', '.bars', '.brow', '.track', '.f50', '.f78', '.d', '.d.on', '.claim', '.claim em',
   '.record', '.rec', '.rec b', '.rec span', '.rec.now b',
-  '.terms', '.terms h2', '.tp', '.write', '.fbox', '.fbox input', '.fbox button',
+  '.terms', '.terms h2', '.dl', '.dlist', '.dlist li', '.dnote',
+  '.tp', '.write', '.fbox', '.fbox input', '.fbox button',
   '.msg', '.fine',
   'p', 'h1', 'h2',
 ];
@@ -51,9 +53,18 @@ async function grab(browser, url, { width, height }) {
     const out = {};
     // Tresc, nie tylko styl: liczby na kafelkach i dni na paskach sa wpisane
     // w zrodle i to wlasnie one rozjezdzaja sie przy recznym przepisywaniu.
-    out.__zegary = [...document.querySelectorAll('.pk b')].map((e) => e.textContent).join('|');
-    out.__dni = [...document.querySelectorAll('.d')].map((e) => e.textContent).join('|');
-    out.__referencje = [...document.querySelectorAll('.rec b')].map((e) => e.textContent).join('|');
+    // Kafle z wymyslonymi interwalami zniknely; jedyna liczba w tym bloku pochodzi
+    // teraz od odwiedzajacego, wiec nie ma tu czego porownywac tresciowo.
+    //
+    // Biale znaki zwijamy: w zrodle dluga etykieta jest zawinieta na dwie linie,
+    // a JSX zdejmuje wciecia. To roznica FORMATOWANIA pliku, nie tresci — na
+    // ekranie obie wersje sa identyczne, bo przegladarka i tak zwija spacje.
+    // Porownywanie surowego textContent porownywaloby sposob zapisu zrodla.
+    const txt = (sel) => [...document.querySelectorAll(sel)]
+      .map((e) => e.textContent.replace(/\s+/g, ' ').trim()).join('|');
+    out.__pytania = txt('.qlab');
+    out.__dni = txt('.d');
+    out.__referencje = txt('.rec b');
     for (const s of sels) {
       const el = document.querySelector(s);
       if (!el) { out[s] = null; continue; }

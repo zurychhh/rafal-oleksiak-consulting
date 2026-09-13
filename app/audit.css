@@ -60,21 +60,58 @@ h1,h2,h3,h4,h5,h6{font-family:inherit;}
   .door:hover{background:var(--cream);color:var(--ink);}
   .door:hover b,.door:hover i{color:var(--ink);}
 
+  /* justify-content:center — wysokosc tej komorki narzuca wyzsza kolumna obok
+     (naglowek, zdanie, przycisk), a blok pytan jest od niej nizszy. Bez tego
+     pustka zbiera sie cala na dole i wyglada jak urwana zawartosc.          */
   .shelf{padding:34px 40px 36px;display:flex;flex-direction:column;gap:18px;
-    background:var(--panel);}
-  .packs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-  .pk{padding:14px 12px;display:flex;flex-direction:column;gap:6px;color:var(--ink);}
-  .pk b{font-family:var(--disp);letter-spacing:-.03em;font-size:24px;font-weight:800;
-    color:var(--ink);line-height:1.1;}
-  .pk i{font-style:normal;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
-    line-height:1.45;}
-  .p1{background:#E8DCC2;} .p2{background:#C9D6C2;} .p3{background:#E3C9C2;}
-  .p4{background:#C2CEDD;} .p5{background:#D8CFBF;}
-  /* Kafel spoza cyklu. Makieta daje tu #8C8577 na #2A2723, czyli 4.06:1 — pod
-     poprzeczka 4.5. Rozjasnione do #A69E90 (5.60:1); reszta bez zmian. */
-  .pn{background:var(--line);border:1px dashed var(--rule);color:#A69E90;}
-  .pn b{color:#A69E90;}
-  .note{margin:0;font-size:12.5px;line-height:1.65;color:var(--soft);}
+    justify-content:center;background:var(--panel);}
+  /* ---- The second number ----------------------------------------------------
+     Jedyna liczba w tym bloku pochodzi od odwiedzajacego. Poprzednio staly tu
+     kafle z szescioma wymyslonymi interwalami — i obalaly wlasna teze strony,
+     bo strona mowi wlasnie to, ze liczba wzieta z etykiety nie jest prawdziwa.
+
+     Wysokosc jest zarezerwowana od pierwszej klatki: drugie pytanie, obie notki
+     i linia konczaca stoja w drzewie od razu, a chowa je `visibility`, nie
+     `hidden`. Dzieki temu odslanianie niczego nie przesuwa — ani bloku, ani
+     ceny nizej. visibility:hidden zdejmuje tez te elementy z kolejnosci tabulacji
+     i z drzewa dostepnosci, wiec nie trzeba ich osobno wylaczac.              */
+  .second{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
+    gap:22px 24px;align-content:start;}
+  .q{display:flex;flex-direction:column;gap:9px;min-width:0;}
+  .q2{visibility:hidden;}
+  .q2.on{visibility:visible;}
+  .qlab{margin:0;font-size:12.5px;line-height:1.5;color:var(--dim);}
+  .qrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+  .nin{width:80px;border:1px solid var(--rule);background:var(--bg);color:var(--cream);
+    font-family:var(--mono);font-size:17px;padding:10px 12px;min-height:44px;
+    text-align:center;-moz-appearance:textfield;}
+  .nin:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+  /* Sciezka A: liczba zostaje, ale przestaje uchodzic za pomiar. */
+  .nin.said{color:var(--soft);text-decoration:line-through;}
+  /* Sciezka B: pole zostaje puste, ramka zapala sie akcentem. */
+  .nin.blank{border-color:var(--acc);}
+  .unit{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--soft);}
+  .dunno{border:1px solid var(--rule);background:none;color:var(--soft);cursor:pointer;
+    font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    padding:0 14px;min-height:44px;}
+  .dunno:hover{border-color:var(--acc);color:var(--cream);}
+  .dunno:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
+  /* Rezerwacja liczona z POMIARU, nie z oka. Zmierzone naturalne wysokosci:
+       dluga etykieta pytania  2 wiersze na 1440 i 390, 1 wiersz posrodku
+       dluzsza notka           2 wiersze na 1440 i 390, 1 wiersz posrodku
+       krotka etykieta i notka A  zawsze 1 wiersz
+     Rezerwujemy wiec dwa wiersze tam, gdzie tekst sie zmienia, i jeden przy
+     notce, ktora nigdy sie nie zmienia. Bez tego sciezka A kurczyla blok
+     o 19 px, a sciezka B rozciagala o 6 — i cena nizej jechala razem z nim. */
+  .qnote{margin:0;font-size:12px;line-height:1.55;color:var(--soft);min-height:1.55em;
+    visibility:hidden;}
+  .q2 .qnote{min-height:3.1em;}
+  .q2 .qlab{min-height:3em;}
+  .qnote.on{visibility:visible;}
+  .qend{grid-column:1/-1;margin:0;font-size:12.5px;line-height:1.6;color:var(--dim);
+    min-height:1.6em;visibility:hidden;}
+  .qend.on{visibility:visible;}
 
   /* ---- pasek rozbieznosci ---- */
   .band{margin-top:16px;border:1px solid var(--line);padding:34px 48px 38px;
@@ -111,6 +148,15 @@ h1,h2,h3,h4,h5,h6{font-family:inherit;}
   .tcell{display:flex;flex-direction:column;gap:12px;}
   .tp{margin:0;font-size:14.5px;line-height:1.7;max-width:46ch;color:var(--sub);}
   .tp b{color:var(--ink);font-weight:500;}
+  /* Co klient dostaje, nazwane nad cena. Bez ikon i kafelkow — sama lista.
+     Myslnik jest znacznikiem listy, nie znakiem wpisanym w tresc.           */
+  .dl{margin:0;font-size:13px;line-height:1.6;color:var(--ink);font-weight:500;}
+  .dlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;
+    max-width:46ch;}
+  .dlist li{position:relative;padding-left:18px;font-size:13.5px;line-height:1.6;
+    color:var(--sub);}
+  .dlist li::before{content:"\2014";position:absolute;left:0;top:0;color:var(--tag2);}
+  .dnote{margin:0;font-size:12.5px;line-height:1.6;max-width:46ch;color:var(--tag2);}
   .write{display:flex;flex-direction:column;gap:10px;}
   .write .tag{color:var(--tag2);}
   .fbox{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;}
@@ -144,13 +190,14 @@ h1,h2,h3,h4,h5,h6{font-family:inherit;}
     .band{grid-template-columns:minmax(0,1fr);gap:28px;padding:30px 32px 34px;}
     .record{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 16px;}
     .terms{grid-template-columns:minmax(0,1fr);gap:28px;padding:34px 32px;}
+    /* Drugie pytanie schodzi POD pierwsze, nie obok. */
+    .second{grid-template-columns:minmax(0,1fr);gap:18px;}
   }
   @media (max-width:640px){
     .wrap{padding:0 20px 72px;}
     .top{padding:24px 0 20px;gap:8px;}
     .hcell{padding:34px 22px 32px;gap:22px;}
     .shelf{padding:26px 22px 28px;}
-    .packs{grid-template-columns:repeat(2,minmax(0,1fr));}
     .band{padding:26px 22px 28px;}
     .brow{grid-template-columns:62px minmax(0,1fr) 46px;gap:10px;}
     .record{grid-template-columns:minmax(0,1fr);}

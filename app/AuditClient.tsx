@@ -51,17 +51,29 @@ export default function AuditClient() {
           </div>
 
           <div className="shelf">
-            <span className="tag">Six categories, six different clocks</span>
-            <div className="packs">
-              <span className="pk p1"><b>30</b><i>Colostrum &middot; 60 kaps</i></span>
-              <span className="pk p2"><b>76</b><i>Whey &middot; 2270 g</i></span>
-              <span className="pk p3"><b>50</b><i>Krem &middot; 50 ml</i></span>
-              <span className="pk p4"><b>45</b><i>Kapsu&#322;ki &middot; 60 szt</i></span>
-              <span className="pk p5"><b>40</b><i>Karma &middot; 12 kg</i></span>
-              <span className="pk pn"><b>&mdash;</b><i>&#346;wieca &middot; nie cykliczna</i></span>
+            <span className="tag">The second number</span>
+            <div className="second">
+              <div className="q">
+                <label className="qlab" htmlFor="n1">How many days does one of your packs last?</label>
+                <div className="qrow">
+                  <input className="nin" id="n1" type="text" inputMode="numeric" autoComplete="off" maxLength={3} aria-describedby="note1" />
+                  <span className="unit">days</span>
+                </div>
+                <p className="qnote" id="note1">off the label</p>
+              </div>
+
+              <div className="q q2" id="q2">
+                <label className="qlab" id="lab2" htmlFor="n2">How many days until the same customer comes back
+                  for it?</label>
+                <div className="qrow">
+                  <input className="nin" id="n2" type="text" inputMode="numeric" autoComplete="off" maxLength={3} aria-describedby="note2" />
+                  <button className="dunno" id="dunno" type="button">I don&rsquo;t know</button>
+                </div>
+                <p className="qnote" id="note2"></p>
+              </div>
+
+              <p className="qend" id="qend"><a href="/tool">It is in your order export &rarr;</a></p>
             </div>
-            <p className="note">Your subscription app ships all six on the same thirty days. The last one is
-              not a consumable at all &mdash; and the tool says so instead of inventing a number.</p>
           </div>
         </div>
 
@@ -99,6 +111,14 @@ export default function AuditClient() {
         <div className="terms">
           <div className="tcell">
             <h2>One piece of work, priced before it starts.</h2>
+            <p className="dl">Week 3, on your desk:</p>
+            <ul className="dlist">
+              <li>one table, per SKU: the day the label implies against the day buyers actually come
+                back</li>
+              <li>the ten widest gaps, ranked by how far they miss</li>
+              <li>a corrected send-and-spend calendar: dates, not principles</li>
+            </ul>
+            <p className="dnote">If the gaps turn out to be small, you hear that in week one.</p>
             <p className="tp">Two to three weeks, fixed fee <b>8&ndash;12k z&#322; net</b>, agreed up front.
               No retainer, no paid discovery. One more brand this quarter.</p>
           </div>
