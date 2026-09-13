@@ -22,6 +22,29 @@
     font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
   .page{max-width:1000px;margin:0 auto;padding:0 24px 88px;}
 
+  /* Wyjscie z narzedzia. Bez tego /tool jest slepym zaulkiem: strona glowna
+     linkuje tutaj, a z powrotem nie prowadzi nic. Dwa wyjscia, bo logo jako
+     link jest konwencja, ktorej czesc ludzi nie sprawdza, a trzecie na dole,
+     bo po przewinieciu dwoch tysiecy pikseli nikt nie wraca na gore, zeby wyjsc.
+     white-space:nowrap na obu: na 390 px maja sie lamac MIEDZY soba, nigdy
+     w srodku wyrazu — flex-wrap przenosi caly element do nastepnej linii.     */
+  .nav{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;}
+  /* `.mark.wm`, nie samo `.wm`: regula `.mark` stoi nizej w pliku i przy rownej
+     specyficznosci wygralaby kolejnoscia, zostawiajac wordmark w --soft zamiast
+     w kolorze tekstu. Zlapal to pomiar stylow obliczonych, nie oko.            */
+  .mark.wm{color:var(--body);text-decoration:none;white-space:nowrap;}
+  .mark.wm:hover{color:var(--ink);}
+  /* Akcent jasnego motywu (#C43F0D) daje przy tym stopniu 4.45:1 — zmierzone,
+     pod poprzeczka 4.5. Ten sam ciemniejszy wariant, ktorego plik uzywa juz dla
+     daty w dzienniku i naglowkow paneli AI: 5.15:1. W ciemnym motywie akcent
+     na papierze ma 7.38:1, wiec tam wraca bez zmian.                          */
+  .back{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;color:#B53707;text-decoration:none;white-space:nowrap;}
+  .back:hover{text-decoration:underline;text-underline-offset:3px;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .back{color:var(--acc);}}
+  :root[data-theme="dark"] .back{color:var(--acc);}
+  .backfoot{margin:18px 0 0;}
+
   .mark{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.22em;
     text-transform:uppercase;color:var(--soft);margin:0;}
   h1{font-family:var(--disp);font-weight:800;font-size:clamp(31px,5.2vw,58px);line-height:.98;

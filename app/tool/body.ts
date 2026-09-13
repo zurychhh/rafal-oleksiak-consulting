@@ -3,7 +3,10 @@
 export const BODY = `<div class="page">
 
   <header>
-    <p class="mark">Oleksiak Consulting &middot; FMCG</p>
+    <div class="nav">
+      <a class="mark wm" href="/">Oleksiak Consulting &middot; FMCG</a>
+      <a class="back" href="/">&larr; Back to the homepage</a>
+    </div>
     <h1>What the pack says, against <span>what your buyers do</span></h1>
     <p class="thesis">Days of supply off the label, against the gap between orders in your own
       export.</p>
@@ -78,4 +81,8 @@ export const BODY = `<div class="page">
       three weeks, <b>8&ndash;12k z&#322; net</b>.</p>
     <p class="sig">Rafa&#322; Oleksiak<br><a href="https://oleksiakconsulting.com/">oleksiakconsulting.com</a></p>
   </div>
+
+  <!-- Poza .close celowo: regula \`.close a\` ma wyzsza specyficznosc i przywrocilaby
+       akcent, ktory w jasnym motywie nie przechodzi kontrastu. -->
+  <p class="backfoot"><a class="back" href="/">&larr; Back to the homepage</a></p>
 </div>`
