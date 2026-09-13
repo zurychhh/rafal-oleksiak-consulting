@@ -25,7 +25,7 @@ export const BODY = `<div class="page">
         <div class="srow">
           <span class="cl" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
             text-transform:uppercase;color:var(--soft);">Running on</span>
-          <button class="chip" id="srcS" type="button" aria-pressed="true">A sample shop</button>
+          <button class="chip" id="srcS" type="button" aria-pressed="true">A real shop, anonymised</button>
           <button class="chip" id="srcM" type="button" aria-pressed="false">Paste your own &rarr;</button>
           <span class="sstat" id="sstat">&nbsp;</span>
         </div>
@@ -35,7 +35,8 @@ export const BODY = `<div class="page">
       </div>
       <div class="legend">
         <span><i class="a"></i>label</span>
-        <span><i class="b"></i>they return</span>
+        <span><i class="b"></i>settled rhythm</span>
+        <span><i class="c"></i>first repurchase</span>
         <span>days after the order</span>
         <span id="chk"></span>
       </div>

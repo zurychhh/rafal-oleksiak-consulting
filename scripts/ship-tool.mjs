@@ -28,7 +28,14 @@ const OUT = {
 
 // Kotwice, bez ktorych plik nie jest ta wersja narzedzia, tylko czyms innym.
 // three-instruments.html to wersja sprzed konsolidacji — ma przepasc tutaj.
-const REQUIRED = ['id="orders"', 'id="plot"', 'id="verdict"', 'id="ai1"', 'id="ai2"', 'demo data']
+//
+// 'RULES:BEGIN' stoi tu zamiast dawnego 'demo data' i pilnuje wiecej: to blok
+// regul parsera (normalizacja SKU, ekwiwalent w nawiasie, sufit, wielopaki,
+// podzial luk, kwartyle, reaktywacje). Wersja narzedzia bez niego cofa siedem
+// poprawek kupionych pomiarem na prawdziwym katalogu i ma przepasc GLOSNO,
+// zanim pojdzie do buildu. Ten sam blok wycina scripts/tool-rules.test.mjs.
+const REQUIRED = ['id="orders"', 'id="plot"', 'id="verdict"', 'id="ai1"', 'id="ai2"',
+  'id="srcS"', 'RULES:BEGIN', 'RULES:END']
 
 const die = (msg) => {
   console.error(`\n  ✗ ${msg}\n`)

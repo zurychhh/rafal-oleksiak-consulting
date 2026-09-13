@@ -253,10 +253,13 @@
     overflow-wrap:anywhere;}
   .pn s{display:block;text-decoration:none;font-family:var(--mono);font-size:9.5px;font-weight:400;
     color:var(--soft);letter-spacing:.04em;margin-top:2px;}
-  .pt{position:relative;height:22px;min-width:0;display:grid;gap:2px;align-content:center;}
+  /* Trzy paski, nie dwa: etykieta, rytm ustalony (2->3+) i pierwsze dokupienie.
+     Wysokosc policzona, nie zgadnieta: 3*9 + 2*2 = 31, plus oddech.           */
+  .pt{position:relative;height:33px;min-width:0;display:grid;gap:2px;align-content:center;}
   .pt i{display:block;height:9px;}
   .pt .b1{background:var(--ink);}
   .pt .b2{background:var(--acc);}
+  .pt .b3{background:var(--soft);}
   .pt .b0{background:var(--sunk);}
   .pd{font-family:var(--mono);font-size:15px;font-weight:600;text-align:right;
     font-variant-numeric:tabular-nums;color:var(--soft);white-space:nowrap;}
@@ -270,6 +273,7 @@
   .legend span{display:inline-flex;align-items:center;gap:6px;}
   .legend i{width:14px;height:9px;display:block;}
   .legend i.a{background:var(--ink);} .legend i.b{background:var(--acc);}
+  .legend i.c{background:var(--soft);}
 
   .four{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
     background:var(--rule);border:1px solid var(--rule);}
@@ -320,7 +324,7 @@
         <div class="srow">
           <span class="cl" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
             text-transform:uppercase;color:var(--soft);">Running on</span>
-          <button class="chip" id="srcS" type="button" aria-pressed="true">A sample shop</button>
+          <button class="chip" id="srcS" type="button" aria-pressed="true">A real shop, anonymised</button>
           <button class="chip" id="srcM" type="button" aria-pressed="false">Paste your own &rarr;</button>
           <span class="sstat" id="sstat">&nbsp;</span>
         </div>
@@ -330,7 +334,8 @@
       </div>
       <div class="legend">
         <span><i class="a"></i>label</span>
-        <span><i class="b"></i>they return</span>
+        <span><i class="b"></i>settled rhythm</span>
+        <span><i class="c"></i>first repurchase</span>
         <span>days after the order</span>
         <span id="chk"></span>
       </div>
@@ -421,71 +426,264 @@
   var $=function(id){return document.getElementById(id);};
 
 
+  /* ==== RULES:BEGIN =========================================================
+     Czyste reguly, bez DOM-u i bez stanu. Ten blok jest WYCINANY Z TEGO PLIKU
+     i uruchamiany przez scripts/tool-rules.test.mjs — test czyta zrodlo, nie
+     kopie, wiec poluzowanie ktorejkolwiek reguly tutaj wywraca test zamiast
+     przejsc cicho. Kolejnosc warunkow w doseStatus() jest czescia kontraktu.
+     ========================================================================= */
+
+  /* Normalizacja PRZED jakimkolwiek dopasowaniem. Drift zapisu — ten sam towar
+     jako "CG 60 KAPSULEK" w starych zamowieniach i "CG60KAPSULEK" w nowych —
+     rozszczepia jeden produkt na dwa klucze. Skutek nie jest kosmetyczny:
+     polowa powtorzen laduje w osobnym koszyku, wiec odstepow jest mniej, a te
+     ktore zostaja sa dluzsze. Zmierzone na katalogu prawdziwego sklepu: szesc
+     punktow dopasowania i mediana w gore.                                     */
+  function normKey(s){return String(s==null?"":s).toUpperCase().replace(/[^A-Z0-9]/g,"");}
+
+  /* Kropke i przecinek zdejmujemy z KONCA i POCZATKU tokenu, nigdy ze srodka:
+     replace(/[.,]/g," ") na calym cytacie rozbijalo "1,5 miarki" na "1" i "5",
+     wiec uczciwy odczyt dostawal falszywy alarm. Przecinek dziesietny do kropki,
+     porownanie i tekstem, i liczba, zeby "30" zgadzalo sie z 30, a "1.50" z 1.5. */
+  function quoteHasNumber(q,n){
+    if(typeof n!=="number"||!isFinite(n)) return false;
+    var toks=String(q).split(/[^0-9.,]+/);
+    for(var i=0;i<toks.length;i++){
+      var t=toks[i].replace(/^[.,]+/,"").replace(/[.,]+$/,"").replace(",",".");
+      if(!t) continue;
+      if(t===String(n)||parseFloat(t)===n) return true;
+    }
+    return false;
+  }
+
+  /* Sufit to nie dawka. "Maksymalna porcja dzienna to 6 kapsulek" mowi, czego NIE
+     przekraczac. Wziecie tej liczby za dawke jest tym samym bledem co srodek
+     przedzialu, tylko popelnionym na gornym koncu — wiec blokada jest po stronie
+     kodu, nie w prompcie: prompt sam tego nie utrzyma.                         */
+  var CEIL=/maksymaln|nie przekracz|nie nalezy przekracz|do not exceed|maximum|\bmax\b|at most|no more than/i;
+  /* Przedzial unieważnia WYLICZENIE, nigdy odczytu. Kolejnosc w doseStatus() jest
+     wiec istotna: "ok. 300 g dla psa o masie 15-20 kg" ma przedzial, ale opisuje
+     on mase psa, a dawka 300 JEST wydrukowana i ma zostac odczytem.            */
+  var RANGEQ=/\d\s*(?:[-–—]|\bdo\b|\bto\b)\s*\d/;
+  /* Liczba bywa slowem, nie cyfra: "Jedna saszetka dziennie" jest wydrukowana
+     wprost i jednoznaczna. ALE to samo slowo przed "razy" jest CZESTOTLIWOSCIA,
+     nie iloscia — bez tego rozroznienia narzedzie czytalo "dwa razy dziennie"
+     jako dwie sztuki na dobe i z wyliczenia robil sie falszywy odczyt.
+     Stad dwa osobne testy, a nie jedna lista slow.                             */
+  var UNITN=/^(?:kapsu|tabletk|tabletek|saszetk|saszetek|miark|[lł]y[zż]eczk|ml\b|g\b)/i;
+  var NUMW={1:/\b(jedna|jeden|jedno|jednej|one)\s+(\S+)/i,
+            2:/\b(dwie|dwa|two)\s+(\S+)/i,
+            3:/\b(trzy|three)\s+(\S+)/i,
+            4:/\b(cztery|four)\s+(\S+)/i};
+  /* liczba slowna liczy sie jako ILOSC tylko tuz przed jednostka */
+  function wordQty(q,n){
+    var re=NUMW[n]; if(!re) return false;
+    var m=re.exec(String(q));
+    return !!(m&&UNITN.test(m[2]));
+  }
+  /* ...a jako CZESTOTLIWOSC tylko w zwrocie "N razy dziennie" */
+  var FREQW={1:"raz",2:"dwa|dwie",3:"trzy",4:"cztery"};
+  function wordTimes(q,x){
+    var W=FREQW[x]; if(!W) return false;
+    return new RegExp("\\b(?:"+W+")\\s+razy?\\s+dziennie","i").test(String(q));
+  }
+  function hasQty(q,n){return quoteHasNumber(q,n)||wordQty(q,n);}
+  function hasTimes(q,x){return quoteHasNumber(q,x)||wordTimes(q,x);}
+
+  /* Trzy stany, nie dwa.
+       read     — liczba dobowa stoi doslownie w cytacie.
+       computed — cytat podaje POJEDYNCZA porcje i POJEDYNCZA czestotliwosc, obie
+                  doslownie ("Pol miarki (0,5 g) dwa razy dziennie"), a dawka jest
+                  ich iloczynem. Tu nie ma czego zgadnac: arytmetyka jest wymuszona,
+                  nie wybrana, wiec to NIE jest ten sam blad co srodek przedzialu.
+                  Bez tego stanu odpada najwiekszy wolumenowo produkt prawdziwego
+                  katalogu — producenci sami drukuja ekwiwalent w nawiasie.
+       none     — przedzial, sufit, albo brak liczby. To pelnoprawny wynik.
+     Stan wraca nazwany, bo ekran ma powiedziec, ZA CO podaje liczbe.           */
+  function doseStatus(D){
+    if(!D||typeof D.perDay!=="number"||!(D.perDay>0)) return "none";
+    var q=String(D.q||""); if(!q) return "none";
+    if(CEIL.test(q)) return "none";
+    if(hasQty(q,D.perDay)) return "read";
+    if(RANGEQ.test(q)) return "none";
+    var s=D.serving, x=D.times;
+    if(typeof s==="number"&&s>0&&typeof x==="number"&&x>0
+       && Math.abs(s*x-D.perDay)<1e-9
+       && hasQty(q,s) && hasTimes(q,x)) return "computed";
+    return "none";
+  }
+
+  /* Wielopak MNOZY dni zapasu, nie dzieli: dwupak to dwa razy tyle w tym samym
+     rytmie. Krotnosc z sufiksu (…x2) albo ze slowa w tytule. Uwaga na podwojne
+     liczenie — jesli tytul podaje juz laczna zawartosc ("180 kapsulek") i do tego
+     krotnosc, iloczyn bylby falszywy; dlatego czytamy krotnosc TYLKO z zapisow,
+     ktore opisuja opakowanie zbiorcze, nie zawartosc.                          */
+  function packFactor(title){
+    var s=String(title==null?"":title).toLowerCase().replace(/,/g,".");
+    var m=s.match(/\bzestaw\s*(\d+)\b/)||s.match(/(\d+)\s*[x×]\s*\d/)
+        ||s.match(/[\s\-–]x\s*(\d+)\b/)||s.match(/\bx(\d+)\s*$/);
+    if(m){var n=parseInt(m[1],10); if(n>1&&n<40) return n;}
+    if(/\bdwupak\b|\bdwu-pak\b|\btwin ?pack\b/.test(s)) return 2;
+    if(/\btr[oó]jpak\b|\btrzypak\b|\b3-?pack\b/.test(s)) return 3;
+    if(/\bczteropak\b|\b4-?pack\b/.test(s)) return 4;
+    return 1;
+  }
+
+  /* Czytanie tytulu bez modelu. Sluzy do jednego: zlapac model na rozjezdzie.
+     Konwersja jednostek jest najslabsza strona modeli, wiec nie ufamy jej na slowo.
+     Zestaw ROZNYCH produktow ("120 kapsulek, 60 tabletek") nie ma wspolnej
+     jednostki — wtedy zwracamy null, czyli NIEUSTALONE. Zgadniety mnoznik bylby
+     tu gorszy od braku wyniku.                                                 */
+  function plainUnits(t){
+    var s=String(t==null?"":t).toLowerCase().replace(/,/g,"."), m, best=null, units={};
+    /* gram\w* MUSI stac przed golym g: alternatywa jest uporzadkowana, wiec przy
+       "500 gram" najpierw dopasuje sie g, potem \b oblewa na "r" i cale trafienie
+       przepada. Prawdziwe tytuly pisza i tak, i tak.                            */
+    var re=/(\d+(?:\.\d+)?)\s*(kaps|kapsul\w*|szt|tabl\w*|saszet\w*|ml|gram\w*|l|g|kg)\b/g;
+    while((m=re.exec(s))){
+      var v=parseFloat(m[1]), u=m[2];
+      if(u.indexOf("gram")===0)u="g";
+      if(u==="kg"){v*=1000;u="g";} if(u==="l"){v*=1000;u="ml";}
+      if(u.indexOf("kaps")===0)u="kaps."; if(u.indexOf("tabl")===0)u="szt.";
+      if(u.indexOf("saszet")===0)u="szt."; if(u==="szt")u="szt.";
+      units[u]=1;
+      if(!best||v>best.v) best={v:v,u:u};
+    }
+    if(!best) return null;
+    if(Object.keys(units).length>1) return null;   /* zestaw mieszany — nieustalone */
+    var n=packFactor(s);
+    if(n>1) best={v:best.v*n,u:best.u};
+    return best;
+  }
+
+  function med(a){a=a.slice().sort(function(x,y){return x-y;});
+    if(!a.length) return null;
+    var h=a.length/2;
+    return a.length%2?a[Math.floor(h)]:Math.round((a[h-1]+a[h])/2);}
+  function pct(a,p){a=a.slice().sort(function(x,y){return x-y;});
+    if(!a.length) return null; return a[Math.min(a.length-1,Math.floor(a.length*p))];}
+
+  /* Pierwsze dokupienie to nie ten sam odstep co rytm ustalony. W danych
+     prawdziwego sklepu mediana 1->2 wynosi 77 dni, a 2->3+ juz 70, przy
+     rozrzucie szerszym o polowe: w pierwszej luce siedza ludzie, ktorzy
+     wrocili po miesiacach, i sciagaja wynik w gore. Mieszanie ich zawyza. */
+  function splitGaps(ds){
+    var g=[],i;
+    for(i=1;i<ds.length;i++) g.push(Math.round(ds[i]-ds[i-1]));
+    return {first:g.slice(0,1), later:g.slice(1), all:g};
+  }
+  /* Luka dluzsza niz rok to nie cykl zuzycia, tylko powrot po odejsciu.
+     Liczymy ja OSOBNO i pokazujemy — nie wycinamy po cichu.               */
+  var REACT_DAYS=365;
+  function reactSplit(g){
+    var cyc=[],re=[],i;
+    for(i=0;i<g.length;i++) (g[i]>REACT_DAYS?re:cyc).push(g[i]);
+    return {cycle:cyc,react:re};
+  }
+  /* Gdy trzeci kwartyl jest co najmniej dwukrotnoscia mediany, to nie jest jeden
+     rozkald z dlugim ogonem, tylko dwa nalozone — i srednia dla takiego SKU nie
+     znaczy nic. Ekran ma to powiedziec wprost, a nie zostawiac czytelnikowi.   */
+  function bimodal(m,hi){return !!(m&&hi&&hi>=2*m);}
+  /* ==== RULES:END =========================================================== */
+
   /* ============ katalog ============
      units/unit sa faktem z etykiety. perDay pochodzi WYLACZNIE z instrukcji producenta,
      wklejonej nizej, i niesie ze soba cytat. Gdy instrukcja nie mowi nic o dobie,
-     perDay jest null i dni zapasu po prostu nie istnieja — to nie jest brak do wypelnienia. */
+     perDay jest null i dni zapasu po prostu nie istnieja — to nie jest brak do wypelnienia.
+
+     PROBKA JEST PRAWDZIWA. Cztery rodziny to wycinek eksportu anonimowego sklepu
+     z suplementami, 4,8 roku historii zamowien. Rozklady odstepow ponizej (qf/ql)
+     to kwantyle co 5% policzone z tamtych danych, a nie krzywa dobrana na oko —
+     wiec ogon reaktywacji i rozjazd kwartyli sa takie, jakie byly naprawde.
+     Nazwy sa zdjete celowo: to cudze dane, uzyte za zgoda, ale bez marki.       */
   var FAM=[
-    {k:"col", t:"Colostrum Premium 40% IgG 120 kaps.",              units:120,  unit:"kaps.", price:149,
-     dir:"Zalecane spozycie: 2 kapsulki dziennie, popic woda.",      target:78,
-     vars:[["Colostrum Premium 40% IgG 60 kaps.",79],
-           ["Colostrum Premium 40% IgG 240 kaps.",269]]},
-    {k:"dog", t:"Karma sucha dla psa doroslego 12 kg, srednie rasy", units:12000,unit:"g",     price:189,
-     dir:"Dzienna porcja ok. 300 g dla psa o masie 15-20 kg.",       target:44,
-     vars:[["Karma sucha dla psa doroslego 3 kg, srednie rasy",59]]},
-    {k:"whe", t:"Odzywka bialkowa WPC 80 - 2270 g, wanilia",         units:2270, unit:"g",     price:219,
-     dir:"1 miarke (30 g) rozpuscic w wodzie, 1-2 razy dziennie.",   target:52,
-     vars:[["Odzywka bialkowa WPC 80 - 900 g, wanilia",99]]},
-    {k:"gel", t:"Zel pod prysznic 400 ml - zestaw 3 sztuki",         units:1200, unit:"ml",    price:69,
-     dir:"Naniesc na wilgotna skore, spienic i splukac.",            target:63,
-     vars:[["Zel pod prysznic 400 ml",29]]},
-    {k:"lau", t:"Kapsulki do prania Universal 60 szt.",              units:60,   unit:"szt.",  price:59,
-     dir:"Jedna kapsulke wlozyc do bebna przed praniem.",            target:41,
-     vars:[["Kapsulki do prania Universal 15 szt.",23]]},
-    {k:"gif", t:"Zestaw prezentowy - swieca zapachowa",              units:null, unit:"",      price:129,
-     dir:"Swieca sojowa 180 g, czas palenia ok. 40 godzin.",         target:0, vars:[]}
+    {k:"pwd", t:"Proszek dzienny 45 g",          units:45, unit:"g",    price:89,
+     dir:"Pol miarki (0,5 g) dwa razy dziennie.",
+     nf:1306, nl:1197,
+     qf:[1,17,25,30,36,42,46,51,58,65,73,86,100,116,146,174,206,254,336,413,908],
+     ql:[1,18,25,31,35,40,44,51,56,61,69,78,90,99,114,135,166,205,259,334,744],
+     vars:[["Proszek dzienny 45 g - dwupak",169]]},
+    {k:"imm", t:"Saszetki odpornosc 30 szt.",    units:30, unit:"szt.", price:79,
+     dir:"1-2 saszetki dziennie przed positkiem.",
+     nf:334, nl:246,
+     qf:[1,17,24,29,31,33,38,41,49,57,64,81,101,120,148,197,221,283,353,446,1313],
+     ql:[5,15,25,28,30,30,33,36,40,44,52,61,72,82,104,120,143,173,248,320,683],
+     vars:[]},
+    {k:"jun", t:"Saszetki junior 30 szt.",       units:30, unit:"szt.", price:69,
+     dir:"1 saszetka dziennie przed positkiem.",
+     nf:180, nl:138,
+     qf:[4,18,24,31,32,39,42,51,57,63,66,76,87,96,108,125,159,206,247,369,859],
+     ql:[2,19,28,30,35,39,44,51,56,65,71,77,89,99,125,151,192,208,259,331,613],
+     vars:[]},
+    {k:"fib", t:"Saszetki blonnik 15 szt.",      units:15, unit:"szt.", price:49,
+     dir:"1 saszetka dziennie przed positkiem.",
+     nf:207, nl:64,
+     qf:[2,9,13,15,17,18,20,24,29,31,34,39,43,47,53,60,76,93,135,210,274],
+     ql:[2,15,16,18,21,25,27,28,31,34,39,45,49,50,54,66,70,81,128,201,300],
+     vars:[]}
   ]; /* FAM jest KATALOGIEM PROBKI, nie katalogiem narzedzia. CAT jest katalogiem
      narzedzia i rosnie z tego, co faktycznie stoi we wklejonym eksporcie — bez tego
-     "wlasny eksport" pokazywalby cudze szesc rodzin albo nic.                      */
+     "wlasny eksport" pokazywalby cudze rodziny albo nic.                          */
   var CAT={};
   FAM.forEach(function(F){CAT[F.k]=F;});
-  var DOSE={col:{perDay:2,q:"2 kapsulki dziennie"},
-            dog:{perDay:300,q:"ok. 300 g dla psa o masie 15-20 kg"},
-            whe:{perDay:45,q:"1 miarke (30 g) ... 1-2 razy dziennie"},
-            gel:{perDay:null,q:""},
-            lau:{perDay:null,q:""},
-            gif:{perDay:null,q:""}};
+  /* Trzy stany parsera widoczne od razu na otwarciu: proszek jest WYLICZONY
+     (0,5 g x dwa razy = 1 g), saszetki junior i blonnik ODCZYTANE wprost,
+     a saszetki odpornosc nie maja dawki, bo etykieta podaje przedzial.       */
+  var DOSE={pwd:{perDay:1,serving:0.5,times:2,q:"Pol miarki (0,5 g) dwa razy dziennie."},
+            imm:{perDay:null,q:"1-2 saszetki dziennie przed positkiem."},
+            jun:{perDay:1,q:"1 saszetka dziennie przed positkiem."},
+            fib:{perDay:1,q:"1 saszetka dziennie przed positkiem."}};
 
   /* ============ przykladowy eksport ============
      Generowany deterministycznie, zeby ekran otwieral sie policzony, a nie pusty.
-     Kazda liczba nizej jest liczona z TYCH linii — nic nie jest wpisane na sztywno. */
+     Kazda liczba nizej jest liczona z TYCH linii — nic nie jest wpisane na sztywno.
+     Odstepy bierzemy z tablicy kwantyli przez odwrotna dystrybuante, próbkowana
+     rownomiernie (i+0.5)/n, wiec empiryczne kwartyle wychodza na kropke tam,
+     gdzie stoja w danych zrodlowych.                                           */
   var seed=20260912;
   function rnd(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+  function invq(T,u){
+    if(u<=0) return T[0];
+    if(u>=1) return T[T.length-1];
+    var s=u*(T.length-1), i=Math.floor(s), t=s-i;
+    return T[i]+(T[i+1]-T[i])*t;
+  }
+  function drawGaps(T,n){
+    var out=[],i;
+    for(i=0;i<n;i++) out.push(Math.max(1,Math.round(invq(T,(i+0.5)/n))));
+    /* tasujemy deterministycznie, zeby kolejnosc w eksporcie nie byla posortowana */
+    for(i=out.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1)),v=out[i];out[i]=out[j];out[j]=v;}
+    return out;
+  }
+  var SPAN=1762;                       /* 2021-11-15 .. 2026-09-12, 4,8 roku */
   function makeExport(){
-    var rows=[],f,i,j,c=0;
-    for(f=0;f<FAM.length;f++){
-      var F=FAM[f], buyers=26+f*3;
-      for(i=0;i<buyers;i++){
+    var rows=[],c=0;
+    FAM.forEach(function(F){
+      var first=drawGaps(F.qf,F.nf), later=drawGaps(F.ql,F.nl);
+      /* kazdy kupujacy ma luke 1->2; luki 2->3+ rozkladamy po kolei na tych samych
+         kupujacych, wiec liczba odstepow na ekranie zgadza sie ze zrodlem         */
+      var extra=[],i;
+      for(i=0;i<F.nf;i++) extra.push([]);
+      for(i=0;i<later.length;i++) extra[i%F.nf].push(later[i]);
+      for(i=0;i<F.nf;i++){
         c++;
-        var id="c-"+(1000+c);
-        var day=Math.floor(rnd()*70);
-        /* Rzecz kupowana raz zostaje kupiona raz. Katalog nie sklada sie z samych powrotow. */
-        var n=F.target?1+Math.floor(rnd()*3.4):(rnd()<0.12?2:1);
-        for(j=0;j<n;j++){
-          var d=new Date(2026,0,5); d.setDate(d.getDate()+day);
+        var id="c-"+(10000+c), gaps=[first[i]].concat(extra[i]);
+        var total=gaps.reduce(function(a,b){return a+b;},0);
+        var day=Math.floor(rnd()*Math.max(1,SPAN-total));
+        var j;
+        for(j=0;j<=gaps.length;j++){
+          var d=new Date(2021,10,15); d.setDate(d.getDate()+day);
           /* Jedna rodzina niesie kilka gramatur — i to wlasnie porownanie ceny za
              jednostke MIEDZY NIMI wylapuje zla ekstrakcje. Bez wariantow nie ma czego
              walidowac, bo pojedynczy wiersz nie ma sie z czym rozjechac.              */
-          var V=(F.vars&&F.vars.length&&rnd()<0.45)
+          var V=(F.vars&&F.vars.length&&rnd()<0.30)
                 ? F.vars[Math.floor(rnd()*F.vars.length)] : null;
           rows.push([d.toISOString().slice(0,10),id,V?V[0]:F.t,"1",
                      (V?V[1]:F.price).toFixed(2)]);
-          /* odstep losowany wokol mediany rodziny, z ogonem w prawo */
-          day+=Math.max(6,Math.round((F.target||120)*(0.72+rnd()*0.30+(rnd()<0.18?rnd()*0.55:0))));
-          if(day>300) break;
+          if(j<gaps.length) day+=gaps[j];
         }
       }
-    }
+    });
     rows.sort(function(a,b){return a[0]<b[0]?-1:a[0]>b[0]?1:0;});
     return rows.map(function(r){return r.join(", ");}).join("\n");
   }
@@ -500,17 +698,17 @@
               price:parseFloat(p[p.length-1])||null};
     }).filter(Boolean);
   }
+  /* Dopasowanie idzie po kluczu ZNORMALIZOWANYM — inaczej "Proszek dzienny 45 g"
+     i "Proszek dzienny 45g" z dwoch roznych lat eksportu sa dla narzedzia dwoma
+     produktami. Prefiks liczymy po normalizacji, bo spacje juz z niego wypadly. */
   function key(title){
-    var t=title.toLowerCase();
-    for(var i=0;i<FAM.length;i++) if(t.indexOf(FAM[i].t.slice(0,14).toLowerCase())===0) return FAM[i].k;
-    return t.slice(0,18);
+    var t=normKey(title);
+    for(var i=0;i<FAM.length;i++){
+      var pre=normKey(FAM[i].t).slice(0,12);
+      if(pre&&t.indexOf(pre)===0) return FAM[i].k;
+    }
+    return t.slice(0,16);
   }
-  function med(a){a=a.slice().sort(function(x,y){return x-y;});
-    if(!a.length) return null;
-    var h=a.length/2;
-    return a.length%2?a[Math.floor(h)]:Math.round((a[h-1]+a[h])/2);}
-  function pct(a,p){a=a.slice().sort(function(x,y){return x-y;});
-    if(!a.length) return null; return a[Math.min(a.length-1,Math.floor(a.length*p))];}
 
   var OBS={}, VARS={};
   function observe(){
@@ -528,12 +726,12 @@
       (by[id]=by[id]||[]).push(r.d);
     });
     Object.keys(by).forEach(function(id){
-      var k=id.split("|")[0], ds=by[id].sort(function(a,b){return a-b;}), i;
-      for(i=1;i<ds.length;i++){
-        (OBS[k]=OBS[k]||{gaps:[],buyers:0}).gaps.push(Math.round(ds[i]-ds[i-1]));
-      }
-      if(!OBS[k]) OBS[k]={gaps:[],buyers:0};
-      OBS[k].buyers++;
+      var k=id.split("|")[0], ds=by[id].sort(function(a,b){return a-b;});
+      var O=(OBS[k]=OBS[k]||{gaps:[],first:[],later:[],buyers:0});
+      var s=splitGaps(ds);
+      O.gaps=O.gaps.concat(s.all); O.first=O.first.concat(s.first);
+      O.later=O.later.concat(s.later);
+      O.buyers++;
     });
   }
 
@@ -561,38 +759,14 @@
   function zl(p,ref){var r=(ref==null?p:ref);
     return (r>=0.5?p.toFixed(2):p.toFixed(3)).replace(".",",");}
 
-  /* Dawka z przedzialu ("1-2 razy dziennie" -> 45 g) jest srodkiem, nie odczytem, i dwoch
-     czytelnikow na trzech nazwalo ja wymyslona. Test jest doslowny i dlatego pewny: czy ta
-     liczba stoi w zacytowanych slowach. Stoi - to odczyt. Nie stoi - to wyliczenie i ekran
-     ma to powiedziec. Zadnej liczby to nie zmienia; zmienia to, czym sie ona podaje.     */
-  /* Test LITERALNY, nie zakresowy. Pytanie jest jedno: czy liczba perDay stoi
-     doslownie w cytacie, ktory model zwrocil. Wykrywanie widelek bylo tu wczesniej
-     i mylilo sie — "ok. 300 g dla psa o masie 15-20 kg" ma przedzial, ale opisuje
-     on mase psa, a dawka 300 JEST wydrukowana i ma taka zostac.
-
-     Kropke i przecinek zdejmujemy z KONCA i POCZATKU tokenu, nigdy ze srodka:
-     poprzednia wersja robila replace(/[.,]/g," ") na calym cytacie, wiec "1,5 miarki"
-     rozpadalo sie na "1" i "5" i uczciwy odczyt dostawal falszywy alarm. Przecinek
-     dziesietny sprowadzamy do kropki, a porownujemy i tekstem, i liczba, zeby "30"
-     zgadzalo sie z 30, a "1.50" z 1.5.                                              */
-  function quoteHasNumber(q,n){
-    if(typeof n!=="number"||!isFinite(n)) return false;
-    var toks=String(q).split(/[^0-9.,]+/);
-    for(var i=0;i<toks.length;i++){
-      var t=toks[i].replace(/^[.,]+/,"").replace(/[.,]+$/,"").replace(",",".");
-      if(!t) continue;
-      if(t===String(n)||parseFloat(t)===n) return true;
-    }
-    return false;
-  }
-  function derived(D){
-    if(!D||!D.perDay||!D.q) return false;
-    return !quoteHasNumber(D.q,D.perDay);
-  }
-
-  /* dni zapasu istnieja tylko wtedy, gdy etykieta podaje dobowa ilosc */
+  /* Dni zapasu istnieja tylko wtedy, gdy etykieta daje dobowa ilosc — odczytana
+     wprost albo wymuszona iloczynem dwoch pojedynczych liczb. Stan "none" nie jest
+     bledem do naprawienia; dla wiekszosci katalogu to jedyna uczciwa odpowiedz.
+     Na prawdziwym katalogu policzylo sie 17 pozycji na 130, a glowny powod
+     odrzucenia — 69 pozycji — to przedzial dawki.                               */
   function packDays(F){var D=DOSE[F.k];
-    return (D&&D.perDay&&F.units>0)?Math.round(F.units/D.perDay):null;}
+    if(doseStatus(D)==="none") return null;
+    return (D&&D.perDay>0&&F.units>0)?Math.round(F.units/D.perDay):null;}
 
   /* Jedna os dla calego katalogu. Poprzednia wersja skalowala kazdy wiersz do siebie,
      wiec szesc par slupkow wygladalo identycznie i pod kazdym musialo stac zdanie
@@ -601,11 +775,20 @@
     observe();
     var rows=[], maxd=1;
     Object.keys(OBS).map(function(k){return CAT[k];}).filter(Boolean).forEach(function(F){
-      var o=OBS[F.k]||{gaps:[],buyers:0}, m=med(o.gaps), pd=packDays(F);
-      F._m=m; F._lo=pct(o.gaps,0.25); F._hi=pct(o.gaps,0.75); F._pd=pd;
-      F._n=o.gaps.length; F._thin=o.gaps.length<8;
+      var o=OBS[F.k]||{gaps:[],first:[],later:[],buyers:0}, pd=packDays(F);
+      /* Domyslna liczba narzedzia to RYTM USTALONY (2->3+). Pierwsze dokupienie
+         dostaje wlasny pasek i wlasny wiersz, bo to inne zjawisko: siedza w nim
+         ludzie, ktorzy wrocili po miesiacach, i ciagna mediane w gore.        */
+      var L=o.later, R=reactSplit(L), Fi=o.first, Ri=reactSplit(Fi);
+      F._m=med(L); F._lo=pct(L,0.25); F._hi=pct(L,0.75);
+      F._n=L.length; F._thin=L.length<8; F._re=R.react.length;
+      F._bi=bimodal(F._m,F._hi);
+      F._fm=med(Fi); F._flo=pct(Fi,0.25); F._fhi=pct(Fi,0.75);
+      F._fn=Fi.length; F._fre=Ri.react.length;
+      F._pd=pd;
       if(pd) maxd=Math.max(maxd,pd);
-      if(m&&!F._thin) maxd=Math.max(maxd,m);
+      if(F._m&&!F._thin) maxd=Math.max(maxd,F._m);
+      if(F._fm&&F._fn>=8) maxd=Math.max(maxd,F._fm);
       rows.push(F);
     });
     /* Najwiekszy rozjazd na gorze, wiersze bez wyniku na dole. Czytelnik ma dwie minuty. */
@@ -639,15 +822,20 @@
                :'<i class="b0" style="width:100%"></i>';
       marks+=m ?'<i class="b2" style="width:'+at(m)+'%"></i>'
                :'<i class="b0" style="width:100%"></i>';
-      /* Ten sam test literalny co w panelu i w widzecie: jesli liczby, z ktorej licza sie
-         dni zapasu, nie ma doslownie w cytowanych slowach, slupek musi to powiedziec.
-         Liczba zostaje, znika tylko jej status odczytu z opakowania.                  */
-      if(pd&&m&&derived(DOSE[F.k])) d+='<s>not on the pack</s>';
-      if(!pd&&m) d='<s>no dose</s>';
+      /* Trzeci pasek: pierwsze dokupienie. Osobno, bo to nie ten sam odstep. */
+      marks+=(F._fm&&F._fn>=8)?'<i class="b3" style="width:'+at(F._fm)+'%"></i>':"";
+      /* Trzy stany dawki, nie dwa. "computed" znaczy: liczby nie ma w cytacie, ale
+         jest iloczynem dwoch pojedynczych liczb, ktore w nim stoja — to odczyt
+         wymuszony, nie zgadniety, i ekran nazywa go po imieniu.                  */
+      var ds=doseStatus(DOSE[F.k]);
+      if(pd&&m&&ds==="computed") d+='<s>worked out from the pack</s>';
+      if(!pd&&m) d='<s>not on the pack</s>';
       if(!m) d="";
-      /* "median or mean? outliers?" — szesc odczytow na szesc dzisiaj. Kwartyle stoja
-         przy liczbie odstepow, bez nowej kolumny i bez nowego zdania.                */
-      var spread=(m&&F._lo&&F._hi)?(" &middot; half "+F._lo+"&ndash;"+F._hi):"";
+      /* Rozklad, nie mediana. Kwartyle stoja przy liczbie odstepow, bez nowej
+         kolumny. Reaktywacje licza sie OSOBNO i sa widoczne — nie wycinamy ich
+         po cichu, ale tez nie udajemy, ze powrot po roku to cykl zuzycia.      */
+      var spread=(m&&F._lo&&F._hi)?(" &middot; "+F._lo+" / "+m+" / "+F._hi):"";
+      var react=F._re?(" &middot; "+F._re+" back after a year"):"";
       /* Sprawdzone bez modelu, z tytulu i z ceny zaplaconej. Zgodne gramatury sa
          cicha zielona linia; odstajaca krzyczy, bo to ona psuje dni zapasu.      */
       var U=unitPrices(F.k,plainUnits), price="";
@@ -658,8 +846,13 @@
           : ' &middot; '+U.list.length+' packs, '+zl(U.lo,U.mid)+'&ndash;'+zl(U.hi,U.mid)+' z&#322;/'+U.unit;
         if(U.bad.length) flagged++;
       }
+      var l2=(F._fm&&F._fn>=8)
+        ? '<s>first repurchase '+F._fn+' &middot; '+F._flo+' / '+F._fm+' / '+F._fhi+'</s>' : "";
+      var bi=F._bi?'<s>p75 is twice the median &mdash; two distributions, not one; '
+                  +'an average here means nothing</s>':"";
       return '<div class="pr"><span class="pn">'+esc(shortName(F))
-        +'<s>'+F._n+' gaps'+(F._thin?" &middot; too few":spread)+price+'</s></span>'
+        +'<s>'+F._n+' settled gaps'+(F._thin?" &middot; too few":spread)+react+price+'</s>'
+        +l2+bi+'</span>'
         +'<span class="pt" style="background-image:'+grid+'">'+marks+'</span>'
         +'<span class="pd'+cls+'">'+d+'</span></div>';
     }).join("");
@@ -681,10 +874,15 @@
       Object.keys(OBS).forEach(function(k){var C=CAT[k];
         if(C&&C._m&&!C._thin&&(!best||C._n>best._n)) best=C;});
       $("verdict").innerHTML=best
-        ? "<b>"+esc(shortName(best))+"</b>: your buyers come back every <b>"+best._m
-          +" days</b>, half of them between "+best._lo+" and "+best._hi+". That is the "
-          +"subscription interval, before any label is read. Paste the maker&rsquo;s directions "
-          +"and the days of supply line up beside it."
+        ? "<b>"+esc(shortName(best))+"</b>: once they are in the habit they come back every <b>"
+          +best._m+" days</b>, half of them between "+best._lo+" and "+best._hi
+          +(best._fm?". The first repurchase runs longer, "+best._fm+" days":"")
+          +(best._re?", and "+best._re+" came back only after a year &mdash; those are "
+            +"reactivations, counted apart from the rhythm":"")
+          +". That is the subscription interval, before any label is read. Paste the "
+          +"maker&rsquo;s directions and the days of supply line up beside it."
+          +(best._bi?" <em>Its p75 is twice its median: two distributions sit on top of each "
+            +"other here, so an average for this one means nothing.</em>":"")
         : (Object.keys(OBS).length
         ? "Read and counted, but no family here has enough repeat orders yet to give a median."
         : "Nothing to read yet. Paste an export: date, customer, product title, quantity, price.");
@@ -711,12 +909,18 @@
        tyle, ze liczby nie ma w cytowanych slowach — i tylko tyle wolno mu twierdzic.
        Poprzednia wersja pisala "to srodek przedzialu", czyli zgadywala, skad liczba
        pochodzi, choc sprawdzala co innego.                                          */
-    var off=derived(DOSE[F.k]);
+    /* Ekran ma powiedziec, ZA CO podaje te liczbe. "computed" to nie to samo co
+       zgadniete: iloczyn dwoch pojedynczych liczb, obu wydrukowanych, nie zostawia
+       nic do wyboru. Poprzednia wersja mowila o tym "the pack does not print it",
+       co bylo prawda o cyfrze i falszem o odczycie.                              */
+    var st=doseStatus(DOSE[F.k]);
     $("wb").textContent=F._pd+" days at "+DOSE[F.k].perDay+" "+F.unit+" a day"
-      +(off?", a figure the pack does not print.":".");
+      +(st==="computed"?", the pack&rsquo;s own two figures multiplied.":".");
     $("wn").innerHTML="&ldquo;"+esc(DOSE[F.k].q)+"&rdquo; &mdash; the maker."
-      +(off?" That daily number does not appear in those words. It was worked out, not read."
-           :" No date, no free text.");
+      +(st==="computed"
+        ? " The daily figure is not printed as one number; it is "+DOSE[F.k].serving
+          +" &times; "+DOSE[F.k].times+", both of them in those words. Nothing was chosen."
+        : " No date, no free text.");
   }
   function shortName(F){return F.t.split(/[,0-9]/)[0].trim();}
   function shortName1(t){return t.split(/[,0-9]/)[0].trim()||t;}
@@ -731,7 +935,10 @@
      dwunastu rozpoznalo ja jako cudzy eksport i przestawalo czytac. Wlasny eksport
      wchodzi tu, przed wynikiem, i nie wymaga niczego poza plikiem, ktory sklep juz ma. */
   var SAMPLE_TXT=makeExport(), mine=false;
-  var HELP_S="";
+  /* Probka nie jest wymyslona i ekran ma to powiedziec. Nazwy sklepu ani produktow
+     nie ma celowo — dane sa cudze i uzyte za zgoda, ale marka nie jest czescia zgody. */
+  var HELP_S="Four families from an anonymous supplement shop, <b>4.8 years of orders</b>. "
+    +"The gap distributions are the real ones, quantile for quantile; only the names are gone.";
   var HELP_M="Shopify: <b>Orders &rarr; Export &rarr; plain CSV</b>, then paste it here. Any file "
     +"works that carries date, customer, product title, quantity, price. Parsed in this browser; "
     +"only the product titles are ever sent to a model, never a customer row.";
@@ -741,14 +948,16 @@
     var f=Object.keys(fams).length;
     $("sstat").innerHTML = n
       ? "<b>"+n+"</b> orders &middot; <b>"+f+"</b> famil"+(f===1?"y":"ies")
-        +" &middot; "+(mine?"your export":"demo data")
+        +" &middot; "+(mine?"your export":"a real shop, 4.8 years")
       : (mine?"waiting for your export":"nothing to read");
   }
   function setSrc(m){
     mine=m;
     $("srcS").setAttribute("aria-pressed",m?"false":"true");
     $("srcM").setAttribute("aria-pressed",m?"true":"false");
-    $("shelp").innerHTML=m?HELP_M:HELP_S; $("shelp").hidden=!m;
+    /* Widoczne w OBU stanach: dopoki podpis probki byl chowany, ekran nie mowil
+       nigdzie, ze liczby pochodza z prawdziwego sklepu.                        */
+    $("shelp").innerHTML=m?HELP_M:HELP_S; $("shelp").hidden=false;
     $("orders").value=m?"":SAMPLE_TXT;
     paint(); doseSkeleton(); srcStat();
     if(m){$("orders").focus();}
@@ -768,6 +977,7 @@
     }).filter(Boolean).join("\n");
   }
   $("orders").value=SAMPLE_TXT;
+  $("shelp").innerHTML=HELP_S; $("shelp").hidden=false;
   $("orders").addEventListener("input",function(){
     if(!mine&&$("orders").value!==SAMPLE_TXT){mine=true;
       $("srcS").setAttribute("aria-pressed","false");
@@ -806,23 +1016,6 @@
   }
   function flash(ids){ids.forEach(function(id){var el=$(id);if(!el)return;
     el.classList.add("wrote");setTimeout(function(){el.classList.remove("wrote");},1800);});}
-
-  /* Czytanie tytulu bez modelu. Sluzy do jednego: zlapac model na rozjezdzie.
-     Konwersja jednostek jest najslabsza strona modeli, wiec nie ufamy jej na slowo. */
-  function plainUnits(t){
-    var s=t.toLowerCase().replace(/,/g,"."), m, best=null;
-    var re=/(\d+(?:\.\d+)?)\s*(kaps|kapsul\w*|szt|tabl\w*|ml|l|g|kg)\b/g;
-    while((m=re.exec(s))){
-      var v=parseFloat(m[1]), u=m[2];
-      if(u==="kg"){v*=1000;u="g";} if(u==="l"){v*=1000;u="ml";}
-      if(u.indexOf("kaps")===0)u="kaps."; if(u.indexOf("tabl")===0)u="szt."; if(u==="szt")u="szt.";
-      if(!best||v>best.v) best={v:v,u:u};
-    }
-    if(!best) return null;
-    var pack=s.match(/zestaw\s*(\d+)|(\d+)\s*[x×]\s*\d/);
-    if(pack){var n=parseInt(pack[1]||pack[2],10); if(n>1&&n<40) best.v*=n;}
-    return best;
-  }
 
   $("g1").onclick=function(){
     var titles=[],seen={},rows=parseExport($("orders").value);
@@ -920,16 +1113,23 @@
         "Below are the directions printed on consumer product packs, one product per line, in the "
         +"form: product | directions. Reply with ONLY a JSON array: one single [ ... ] holding "
         +"one object per input line, in the same order. Do not emit bare objects separated by "
-        +"newlines. Each object: {\"perDay\":number|null,\"doseUnit\":string,\"quote\":string,"
+        +"newlines. Each object: {\"perDay\":number|null,\"serving\":number|null,"
+        +"\"times\":number|null,\"doseUnit\":string,\"quote\":string,"
         +"\"note\":string}. perDay = the amount used in ONE DAY, in the unit the "
-        +"directions themselves use, and ONLY when the line prints that daily number outright. "
-        +"It is a single JSON number, never a range and never a string, and it MUST appear "
-        +"verbatim inside the quote you return. Do NOT average. Do NOT multiply a serving by a "
-        +"frequency. Do NOT take the middle of a range. If reaching a daily figure would need "
-        +"any arithmetic of yours, perDay is null: one scoop of 30 g taken 1-2 times a day is "
-        +"null, not 45 and not 1.5. A daily amount that IS printed but carries a condition — so "
-        +"much a day for a given body weight, for instance — still counts, because the number "
-        +"itself is on the pack: return it. quote = the exact "
+        +"directions themselves use. It is a single JSON number, never a range and never a "
+        +"string. Return it in exactly two cases and in no others. (1) The line prints that "
+        +"daily number outright, and it appears verbatim in your quote; leave serving and times "
+        +"null. (2) The line prints ONE serving amount and ONE frequency, both verbatim — "
+        +"\"half a scoop (0.5 g) twice a day\" — in which case perDay is their product, "
+        +"serving is that single amount, times is that single frequency, and both must appear "
+        +"in the quote. Nothing is chosen in case (2): it is arithmetic that is forced, not a "
+        +"judgement. Everywhere else perDay is null. Do NOT average. Do NOT take the middle of "
+        +"a range: one scoop of 30 g taken 1-2 times a day is null, not 45 and not 1.5, because "
+        +"the frequency is a range. Do NOT return a ceiling as a dose — \"maximum daily portion "
+        +"is 6 capsules\" says what not to exceed, and taking it is the same error as taking the "
+        +"middle of a range; perDay is null. A daily amount that IS printed but carries a "
+        +"condition — so much a day for a given body weight, for instance — still counts, "
+        +"because the number itself is on the pack: return it. quote = the exact "
         +"run of words from that line which carries the amount, copied character for character, no "
         +"paraphrase. When perDay is null, still return the words that come closest to a dose, so "
         +"the reader sees what the pack does say; leave quote empty only when the line mentions no "
@@ -946,26 +1146,36 @@
           var F=null; Object.keys(CAT).forEach(function(k){if(shortName(CAT[k])===nm)F=CAT[k];});
           var q=String(r.quote||"");
           var n=(typeof r.perDay==="number"&&r.perDay>0)?r.perDay:null;
-          /* Sprawdzenie po stronie kodu, bo sam prompt tego nie utrzyma. Liczba liczy
-             sie jako ODCZYTANA z opakowania tylko wtedy, gdy stoi doslownie w cytacie.
-             Liczby nie ruszamy — zmienia sie wylacznie to, za co ja podajemy.
-             Trzy stany, nie dwa: cytat z liczba, cytat bez liczby, brak cytatu.     */
-          var onPack=n!==null&&quoteHasNumber(q,n);
-          if(F) DOSE[F.k]={perDay:n,q:q.slice(0,80)};
+          /* Sprawdzenie po stronie kodu, bo sam prompt tego nie utrzyma. Model moze
+             zwrocic sufit albo srodek przedzialu mimo zakazu — doseStatus() to lapie
+             i odbiera liczbie status, a gdy nie ma zadnego stanu, odbiera tez liczbe.
+             Trzy stany: odczytana, wymuszona iloczynem, brak.                       */
+          var cand={perDay:n,serving:(typeof r.serving==="number"?r.serving:null),
+                    times:(typeof r.times==="number"?r.times:null),q:q.slice(0,120)};
+          var st=doseStatus(cand);
+          if(st==="none") cand.perDay=null;
+          if(F) DOSE[F.k]=cand;
           return row(esc(nm)+(q?' <span style="color:var(--soft)">&mdash; &ldquo;'
               +esc(q.slice(0,52))+'&rdquo;</span>':""),
-            onPack?(n+" "+esc(r.doseUnit||"")+"/day")
-                  :(q?"not on the pack":"no dose on the label"),
-            !onPack);
+            st==="read"     ? (n+" "+esc(r.doseUnit||"")+"/day")
+          : st==="computed" ? (n+" "+esc(r.doseUnit||"")+"/day &middot; worked out")
+          : (q?"not on the pack":"no dose on the label"),
+            st==="none");
         }).join("");
-        /* Liczymy tylko te, ktore przeszly test literalny. Wczesniej licznik mowil
-           "states an amount" takze o liczbie, ktorej na opakowaniu nie ma.          */
-        var got=arr.filter(function(r){
-          return r&&r.perDay>0&&quoteHasNumber(String(r.quote||""),r.perDay);
-        }).length;
+        /* Liczymy tylko te, ktore przeszly reguly po stronie kodu. Wczesniej licznik
+           mowil "states an amount" takze o liczbie, ktorej na opakowaniu nie ma.     */
+        var got=0, wk=0;
+        arr.forEach(function(r){
+          var s=doseStatus({perDay:(typeof r.perDay==="number"?r.perDay:null),
+                            serving:(typeof r.serving==="number"?r.serving:null),
+                            times:(typeof r.times==="number"?r.times:null),
+                            q:String(r.quote||"")});
+          if(s==="read") got++; else if(s==="computed") wk++;
+        });
         $("s2").textContent=got+" of "+lines.length
-          +" labels print a daily amount outright. The rest get no number, and no model "
-          +"may work one out.";
+          +" labels print a daily amount outright"
+          +(wk?", "+wk+" more give two figures that multiply to one":"")
+          +". The rest get no number, and no model may work one out.";
         paint(); flash(["plot","widget"]);
       });
     });
