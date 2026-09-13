@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "ship": "node scripts/ship.mjs"
+    "ship": "node scripts/ship.mjs",
+    "og": "node scripts/make-og.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^16.0.3",

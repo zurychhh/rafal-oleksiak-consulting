@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>og-card 1200x630</title>
+<!--
+  Karta podgladu linku. NIE jest zrzutem strony — to osobny obiekt, ktory ma
+  zatrzymac scrolla sam. Na LinkedInie obrazek jest najwiekszym elementem posta,
+  wiekszym niz tekst, wiec obiecuje dokladnie to, co strona dostarcza: siatke dni
+  w stanie koncowym i jedno zdanie.
+
+  Renderowana przez scripts/make-og.mjs do public/og.png (1200x630 @2 = 2400x1260).
+  Nie edytuj public/og.png recznie — wygeneruj go na nowo przez `npm run og`.
+
+  Font laduje sie z ../public/fonts, czyli z tego samego pliku, ktory serwuje
+  strona. Zadnego linku do Google: karty design systemu maja taki link, bo sa
+  podgladem w przegladarce, ale to jest wsad produkcyjny.
+-->
+<style>
+  @font-face{
+    font-family:'Instrument Sans';
+    font-style:normal;
+    font-weight:400 600;
+    font-stretch:100%;
+    font-display:block;
+    src:url('../public/fonts/instrument-sans-400-600-latin.woff2') format('woff2');
+  }
+
+  :root{
+    --bg:#0C0D0C; --fg:#F2F0EA; --dim:#A8A49B; --acc:#E0A72B; --cellc:#2A2C26;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{width:1200px;height:630px;background:var(--bg);color:var(--fg);
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+
+  /* Marginesy 80 px ze wszystkich stron: czesc klientow przycina krawedzie
+     karty, a przyciety claim albo urwana kratka wygladaja jak blad renderu. */
+  .card{width:100%;height:100%;padding:80px;display:flex;flex-direction:column;
+    justify-content:space-between;}
+
+  .mark{font-size:18px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--fg);}
+
+  .body{display:flex;align-items:center;gap:64px;}
+
+  /* Siatka dni w stanie koncowym — 45 jasnych, 24 bursztynowe, ostatnie wygaszone.
+     Ten sam podzial co na stronie, tylko wiekszy: to jest glowny obiekt karty. */
+  .grid{display:grid;grid-template-columns:repeat(10,40px);gap:7px;flex:none;}
+  .grid i{display:block;width:40px;height:40px;}
+  .c1{background:var(--fg);} .c2{background:var(--acc);} .c3{background:var(--cellc);}
+
+  .say{display:flex;flex-direction:column;gap:22px;min-width:0;}
+  .claim{margin:0;font-size:58px;font-weight:500;line-height:1.04;letter-spacing:-.03em;
+    color:var(--fg);}
+  .quiet{margin:0;font-size:22px;line-height:1.45;color:var(--dim);}
+  .quiet b{font-weight:400;color:var(--acc);}
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="mark">Oleksiak Consulting</div>
+
+  <div class="body">
+    <div class="grid"><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c3"></i></div>
+
+    <div class="say">
+      <p class="claim">Your second order,<br>on time.</p>
+      <p class="quiet">45 days on the label. <b>69 days to the reorder.</b></p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
