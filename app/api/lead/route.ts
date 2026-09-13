@@ -14,39 +14,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
 import { createLeadContact } from '@/app/lib/lead-hubspot';
-import { sheetEmail, ownerEmail } from '@/app/lib/sheet-email';
+import { confirmEmail, ownerEmail } from '@/app/lib/lead-email';
 
 // Klient Resend powstaje dopiero w POST, po walidacji. W zakresie modułu
 // `new Resend(undefined)` rzuca przy ładowaniu trasy i cała obsługa kodów
 // statusu poniżej nigdy się nie wykonuje — brak konfiguracji wygląda wtedy
 // jak awaria 500 z HTML-em, także dla żądań, które powinny dostać 403 lub 422.
 
-const StepSchema = z.object({
-  rank: z.number().int().min(1).max(50),
-  step: z.string().max(160),
-  when: z.string().max(40),
-  channel: z.string().max(40),
-  moves: z.string().max(40),
-  already: z.boolean(),
-});
-
+// Kontrakt poszedl za strona. Kalkulator zostal wyciety, wiec kategoria,
+// dlugosc opakowania, dzien odkupu, cztery liczby i lista osiemnastu krokow
+// nie maja skad pochodzic — i nie sa juz przyjmowane. Zostaje adres, jedna
+// opcjonalna linia od odwiedzajacego i to, skad przyszedl.
 const LeadSchema = z.object({
   email: z.string().email().max(254),
-  intent: z.enum(['sheet', 'markup']),
-  // trafia do nagłówka Subject, więc żadnych znaków końca linii
-  category: z.string().max(80).regex(/^[^\r\n]*$/),
-  packDays: z.number().int().min(3).max(400),
-  reorderBand: z.string().max(20),
-  // czy odwiedzający zna swój realny interwał, czy zostawił pole puste
-  reorderKnown: z.boolean(),
-  gapDays: z.number().int().min(-400).max(400),
-  economics: z.object({
-    orders: z.number().min(1).max(9_999_999),
-    recovered: z.number().min(0).max(9_999_999),
-    perMonth: z.number().min(0).max(999_999_999),
-    perYear: z.number().min(0).max(999_999_999),
-  }),
-  steps: z.array(StepSchema).max(50),
+  // Trafia do naglowka Subject, wiec zadnych znakow konca linii.
+  message: z.string().max(140).regex(/^[^\r\n]*$/).optional(),
   source: z.record(z.string(), z.string().max(300)).optional(),
 });
 
@@ -138,17 +120,14 @@ export async function POST(request: NextRequest) {
 
   const from = `Rafał Oleksiak <${process.env.FROM_EMAIL}>`;
 
-  // 1 · To, o co poprosili. Jeśli to padnie, request pada — odwiedzający
-  //     dostaje na stronie adres i wie, że ma napisać wprost.
+  // 1 · Potwierdzenie dla odwiedzajacego. Jesli to padnie, request pada —
+  //     odwiedzajacy dostaje na stronie adres i wie, ze ma napisac wprost.
   const { error } = await resend.emails.send({
     from,
     to: [lead.email],
     replyTo: process.env.TO_EMAIL,
-    subject:
-      lead.intent === 'markup'
-        ? `Twój sheet: ${lead.category.toLowerCase()} — czytam go dziś`
-        : `Twój sheet: ${lead.category.toLowerCase()}`,
-    html: sheetEmail(lead),
+    subject: 'Got it — I reply by hand',
+    html: confirmEmail(),
   });
 
   if (error) {
@@ -162,8 +141,7 @@ export async function POST(request: NextRequest) {
       from,
       to: [process.env.TO_EMAIL!],
       subject:
-        (lead.intent === 'markup' ? '[MARK-UP] ' : '[sheet] ') +
-        `${lead.email} · ${lead.category} · ${lead.economics.perYear.toLocaleString('pl-PL')} zł/rok`,
+        '[lead] ' + lead.email + (lead.message ? ` · ${lead.message.slice(0, 60)}` : ''),
       html: ownerEmail(lead),
     });
   } catch (e) {

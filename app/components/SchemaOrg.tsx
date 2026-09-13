@@ -26,7 +26,7 @@ export default function SchemaOrg() {
     url: 'https://oleksiakconsulting.com',
     logo: 'https://oleksiakconsulting.com/images/rafal-oleksiak.png',
     description:
-      'Ecommerce conversion optimization, CRM strategy, and marketing automation consulting. 15+ years experience at Allegro, Booksy, mBank.',
+      'FMCG ecommerce consulting, end to end — paid, search including AI answers, the storefront, CRM, subscription and loyalty, for anything bought again. Fifteen years at Allegro, mBank, Booksy and Genactiv.',
     foundingDate: '2024',
     founder: {
       '@type': 'Person',
@@ -67,7 +67,7 @@ export default function SchemaOrg() {
     '@type': 'ProfessionalService',
     name: 'Oleksiak Consulting',
     description:
-      'FMCG ecommerce consulting, end to end — paid, search, storefront, owned channels and loyalty, for categories people finish and buy again.',
+      'FMCG ecommerce consulting, end to end — paid, search including AI answers, the storefront, CRM, subscription and loyalty, for anything bought again.',
     url: 'https://oleksiakconsulting.com',
     provider: {
       '@type': 'Person',
@@ -90,7 +90,7 @@ export default function SchemaOrg() {
     name: 'Oleksiak Consulting',
     url: 'https://oleksiakconsulting.com',
     description:
-      'One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.',
+      'One market — FMCG and anything bought again. Inside it the whole funnel: paid, search including AI answers, the storefront, CRM, subscription, loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.',
     publisher: {
       '@type': 'Organization',
       name: 'Oleksiak Consulting',

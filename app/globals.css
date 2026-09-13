@@ -790,9 +790,12 @@ section[id] {
    ============================================ */
 /* >>> ZMIENNE ZE ZRODLA — GENEROWANE <<< */
 :root{
-    --bg:#0D0F14; --panel:#12151C; --fg:#E9E7E1; --dim:#9BA0AD; --line:#242938;
-    --acc:#FF6A1F; --ok:#4DD0A7;
-    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-    --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+    --bg:#12110F; --panel:#171512; --fg:#CFC9BE; --cream:#F5F1E8; --dim:#AFA89B;
+    --soft:#8C8577; --line:#2A2723; --rule:#4A453D; --track:#221F1B;
+    --acc:#FF6B2C; --acc2:#FF8A57;
+    --ink:#12110F; --sub:#3A362F; --tag2:#5E584E; --field:#E4DED2;
+    --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+    --sans:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+    --disp:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
   }
 /* >>> KONIEC ZMIENNYCH ZE ZRODLA <<< */

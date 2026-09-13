@@ -10,7 +10,9 @@ html{overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0
    (critical.css ustawia body na biale i DM Sans). */
 body{overflow-x:visible;max-width:none;
   background:var(--bg);color:var(--fg);font-family:var(--sans);}
-h1,h2,h3,h4,h5,h6{font-family:inherit;}
+/* --sans to od kierunku C DM Mono, wiec naglowki musza jawnie wskazac krój
+   wyswietlaniowy; samo `inherit` daloby naglowek pisany monospacem. */
+h1,h2,h3,h4,h5,h6{font-family:var(--disp);}
 
 .stopwrap{min-height:calc(100dvh - var(--consent-h, 0px));
   display:flex;flex-direction:column;justify-content:center;
@@ -26,7 +28,7 @@ h1,h2,h3,h4,h5,h6{font-family:inherit;}
 .stopbox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--fg);
   font-family:var(--mono);font-size:14px;padding:15px 15px;}
 .stopbox input::placeholder{color:#8A90A0;}
-.stopbox button{border:0;background:var(--acc);color:#0D0F14;cursor:pointer;padding:0 22px;
+.stopbox button{border:0;background:var(--acc);color:var(--bg);cursor:pointer;padding:0 22px;
   font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.14em;
   text-transform:uppercase;}
 .stopbox button:hover{background:var(--fg);}

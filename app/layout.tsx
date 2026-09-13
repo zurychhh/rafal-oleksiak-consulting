@@ -33,7 +33,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Rafał Oleksiak — FMCG ecommerce, end to end",
-  description: "One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
+  description: "One market — FMCG and anything bought again. Inside it the whole funnel: paid, search including AI answers, the storefront, CRM, subscription, loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
   keywords: ["FMCG ecommerce", "replenishment", "subscription commerce", "paid traffic quality", "ecommerce SEO", "conversion rate optimization", "marketing automation", "loyalty", "Shopify", "WooCommerce"],
   authors: [{ name: "Rafał Oleksiak" }],
   creator: "Rafał Oleksiak",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     // Ten sam tytul i opis co w metadata — nie dwie rozne wersje tej samej strony.
     title: "Rafał Oleksiak — FMCG ecommerce, end to end",
-    description: "One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
+    description: "One market — FMCG and anything bought again. Inside it the whole funnel: paid, search including AI answers, the storefront, CRM, subscription, loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
     url: "https://oleksiakconsulting.com",
     siteName: "Oleksiak Consulting",
     // Zapasowy obrazek dla wszystkich tras. Strona glowna nadpisuje metadata
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Rafał Oleksiak — FMCG ecommerce, end to end",
-    description: "One market — things people finish and buy again — and the whole funnel tuned to it: paid, search, storefront, CRM and loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
+    description: "One market — FMCG and anything bought again. Inside it the whole funnel: paid, search including AI answers, the storefront, CRM, subscription, loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
   },
   robots: {
     index: true,

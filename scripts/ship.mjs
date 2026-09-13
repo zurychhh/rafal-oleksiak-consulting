@@ -57,6 +57,17 @@ function extract(html) {
   const script = html.match(/<script>\s*\(function\(\)\{([\s\S]*?)\}\)\(\);?\s*<\/script>/);
   if (!script) die('W źródle nie ma skryptu w formie IIFE `(function(){...})()`. Zatrzymuję się.');
 
+  // Ekstraktor szuka znaczników zwykłym dopasowaniem tekstu, nie parserem. Wzmianka
+  // o `<body>` w komentarzu w nagłówku dokumentu wygrywa wtedy z prawdziwym otwarciem
+  // i markup zostaje ucięty od środka tej wzmianki — a build pada dopiero na JSX,
+  // komunikatem, który nie mówi nic o przyczynie. Lepiej zatrzymać się tutaj.
+  const opens = (html.match(/<body(?=[\s>])/g) || []).length;
+  if (opens !== 1) {
+    die(`W źródle jest ${opens} wystąpień otwarcia <body>, a musi być dokładnie jedno.\n`
+      + '   Najczęstsza przyczyna: nazwa znacznika wymieniona w komentarzu.\n'
+      + '   Zapisz ją opisowo albo encjami — ekstraktor nie odróżnia komentarza od treści.');
+  }
+
   const body = html.match(/<body>([\s\S]*?)<script>/);
   if (!body) die('Nie umiem wyciąć znaczników <body> przed <script>. Zatrzymuję się.');
 
@@ -80,6 +91,15 @@ const ATTR = {
 };
 const VOID_EL = new Set(['input', 'br', 'img', 'hr', 'meta', 'link', 'source', 'area', 'col']);
 const BOOL_ATTR = new Set(['novalidate', 'checked', 'disabled', 'readonly', 'required', 'autofocus', 'selected', 'multiple']);
+
+// Atrybuty, które React typuje jako number. W HTML wszystko jest tekstem, więc
+// `maxlength="140"` przechodziło tu jako string i wywracało `tsc` dopiero
+// w bramce — z komunikatem o typie, który nic nie mówi o źródle. Emitujemy je
+// jako wyrażenie {140}. Wyłącznie wtedy, gdy wartość faktycznie jest liczbą:
+// `size="auto"` czy `rows="{{x}}"` z szablonu ma przejść dalej jako tekst
+// i zatrzymać się na czymś, co widać.
+const NUM_ATTR = new Set(['maxlength', 'minlength', 'rows', 'cols', 'size', 'span',
+  'tabindex', 'colspan', 'rowspan']);
 
 function styleToObject(css) {
   const out = [];
@@ -141,6 +161,10 @@ function htmlToJsx(html) {
         unknown.push(`atrybut bez wartości: ${rawName} w <${tag}>`);
         continue;
       }
+      if (NUM_ATTR.has(name) && /^-?\d+$/.test(value)) {
+        out += ` ${ATTR[name] ?? name}={${value}}`;
+        continue;
+      }
       out += ` ${ATTR[name] ?? name}="${value}"`;
     }
 
@@ -170,9 +194,28 @@ function indent(text, pad) {
   return text.split('\n').map((l) => (l.trim() ? pad + l : '')).join('\n');
 }
 
+// Generowany region moze potrzebowac `as CSSProperties` (wlasciwosci niestandardowe
+// w atrybucie style). Import tego typu siedzi w recznej czesci AuditClient.tsx, wiec
+// ship go nie doda ani nie usunie — ale moze zauwazyc rozjazd i powiedziec, co dopisac,
+// zamiast zostawiac blad kompilatora albo martwy import wiszacy w lincie.
+function checkCssPropsImport(clientText, jsx) {
+  const potrzebny = jsx.includes('as CSSProperties');
+  const jest = /import\s+type\s*\{[^}]*\bCSSProperties\b[^}]*\}\s*from\s*'react'/.test(clientText);
+  if (potrzebny && !jest) {
+    die('Znaczniki uzywaja wlasciwosci niestandardowych w style, wiec generowany region\n'
+      + `   ma \`as CSSProperties\`, a w ${CLIENT} nie ma importu tego typu.\n`
+      + "   Dopisz w czesci recznej:  import type { CSSProperties } from 'react';");
+  }
+  if (!potrzebny && jest) {
+    die(`W ${CLIENT} wisi import CSSProperties, ktorego generowany region juz nie uzywa.\n`
+      + '   Usun go z czesci recznej — inaczej lint zglasza nieuzywana nazwe po kazdym shipie.');
+  }
+}
+
 function build(src) {
   const { rootVars, cssRest, scriptBody, markup } = extract(src);
   const jsx = htmlToJsx(markup);
+  checkCssPropsImport(readFileSync(CLIENT, 'utf8'), jsx);
 
   return {
     globals: replaceRegion(GLOBALS, readFileSync(GLOBALS, 'utf8'),

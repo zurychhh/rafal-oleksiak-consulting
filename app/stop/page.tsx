@@ -28,7 +28,7 @@ export default function Stop() {
 
       <StopClient />
 
-      <p className="stopfoot">I only ever had your address because you asked for the sheet on this
+      <p className="stopfoot">I only ever had your address because you wrote to me on this
         site. There is no list, no sequence and no third party, so there is nothing else to
         unsubscribe from. <a href="/privacy">Privacy policy</a>.</p>
     </main>

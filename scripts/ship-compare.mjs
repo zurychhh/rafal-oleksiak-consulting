@@ -22,15 +22,22 @@ const PROPS = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'color',
   'backgroundColor', 'margin', 'padding', 'letterSpacing', 'textTransform',
   'borderWidth', 'display', 'gridTemplateColumns', 'position'];
 
-const FIRST = ['body', '.hook', '.sub', '.lab', '.wm', '.dq', '.daybox input', '.go',
-  '.step1', '.cats button', '.s1', 'p', 'h1'];
+// Kierunek C jest jednym ekranem: nie ma drugiego widoku ani przycisku, ktory
+// by go odslanial, wiec przebieg "odsloniety" i jego lista selektorow znikly.
+// Inwentarz nie zostal skrocony — obejmuje kazdy blok nowej strony, zeby
+// porownanie dalej mialo czego pilnowac.
+const SELECTORS = [
+  'body', '.wrap', '.top', '.top .mark', '.tag',
+  '.hero', '.hcell', '.hook', '.hook em', '.sub', '.door', '.door b',
+  '.shelf', '.packs', '.pk', '.pk b', '.pk i', '.pn', '.note',
+  '.band', '.bars', '.brow', '.track', '.f50', '.f78', '.d', '.d.on', '.claim', '.claim em',
+  '.record', '.rec', '.rec b', '.rec span', '.rec.now b',
+  '.terms', '.terms h2', '.tp', '.write', '.fbox', '.fbox input', '.fbox button',
+  '.msg', '.fine',
+  'p', 'h1', 'h2',
+];
 
-const SECOND = ['.leakline', '.crow', '.cval', '.n', '.crow.out .cval', 'ol.steps li',
-  '.rank', '.sname', '.stag', '.smeta', '.swhy', '.tick', '.card', '.rtb h3', '.cov',
-  '.covbar i', '.askline', '.fbox input', '.fbox button', '.bar', '.shell', '.rail',
-  '.priceline', '.gapline', '.peryear'];
-
-async function grab(browser, url, { reveal, width, height }) {
+async function grab(browser, url, { width, height }) {
   const page = await browser.newPage({ viewport: { width, height } });
   // Pasek zgody zdejmujemy: nie ma go w źródle, a stojąc na position:fixed
   // przechwytuje kliknięcia. Jego nakładanie na treść ma osobny test.
@@ -39,16 +46,14 @@ async function grab(browser, url, { reveal, width, height }) {
   });
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1500);
-  if (reveal) { await page.click('#go'); await page.waitForTimeout(1200); }
 
-  const data = await page.evaluate(([sels, props, reveal]) => {
+  const data = await page.evaluate(([sels, props]) => {
     const out = {};
-    if (reveal) {
-      out.__kroki = document.querySelectorAll('ol.steps li').length;
-      for (const id of ['leakline', 'cov', 'permo', 'peryear']) {
-        out['__' + id] = (document.getElementById(id) || {}).textContent || null;
-      }
-    }
+    // Tresc, nie tylko styl: liczby na kafelkach i dni na paskach sa wpisane
+    // w zrodle i to wlasnie one rozjezdzaja sie przy recznym przepisywaniu.
+    out.__zegary = [...document.querySelectorAll('.pk b')].map((e) => e.textContent).join('|');
+    out.__dni = [...document.querySelectorAll('.d')].map((e) => e.textContent).join('|');
+    out.__referencje = [...document.querySelectorAll('.rec b')].map((e) => e.textContent).join('|');
     for (const s of sels) {
       const el = document.querySelector(s);
       if (!el) { out[s] = null; continue; }
@@ -58,7 +63,7 @@ async function grab(browser, url, { reveal, width, height }) {
       out[s] = o;
     }
     return out;
-  }, [reveal ? SECOND : FIRST, PROPS, !!reveal]);
+  }, [SELECTORS, PROPS]);
 
   await page.close();
   return data;
@@ -67,12 +72,12 @@ async function grab(browser, url, { reveal, width, height }) {
 const browser = await chromium.launch();
 let diffs = 0;
 
-for (const [width, height] of [[1440, 900], [390, 844]]) {
-  for (const reveal of [false, true]) {
-    const opts = { reveal, width, height };
+for (const [width, height] of [[1440, 900], [1080, 900], [390, 844]]) {
+  {
+    const opts = { width, height };
     const A = await grab(browser, 'file://' + SRC, opts);
     const B = await grab(browser, URL_APP, opts);
-    const tag = `${width}${reveal ? ' odsloniety' : ' startowy'}`;
+    const tag = `${width}`;
 
     for (const k of Object.keys(A)) {
       if (k.startsWith('__')) {
@@ -94,5 +99,5 @@ for (const [width, height] of [[1440, 900], [390, 844]]) {
 }
 
 await browser.close();
-console.log(diffs === 0 ? 'ZERO ROZNIC (style obliczone, oba ekrany, 1440 i 390)' : `ROZNIC: ${diffs}`);
+console.log(diffs === 0 ? 'ZERO ROZNIC (style obliczone i tresc, 1440, 1080 i 390)' : `ROZNIC: ${diffs}`);
 process.exit(diffs === 0 ? 0 : 1);
