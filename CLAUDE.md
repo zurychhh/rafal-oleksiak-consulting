@@ -8,10 +8,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 kod i treść strony po angielsku.
 
 **Repozytorium jest publiczne i ma sekrety w historii.** Zweryfikowane: klonuje się
-anonimowo. Push jest wstrzymany do czasu rotacji. Nigdy nie commituj wartości sekretu,
-nawet do przykładu. Do unieważnienia: Google Ads Developer Token (jawny w `STATUS.md`
-w HEAD) oraz klucz API w `generate-all-notion-assets.sh` i `generate-notion-assets-v2.sh`,
-linia 9 w obu.
+anonimowo. **Push jest ODBLOKOWANY** — Rafał podjął tę decyzję 13.09.2026 świadomie:
+te sekrety są w historii publicznego repo od dawna, więc kolejny push nie zwiększa
+ekspozycji ani o krok, a wstrzymywanie publikacji nic nie chroni. Nigdy nie commituj
+wartości sekretu, nawet do przykładu. Nadal do unieważnienia, niezależnie od pushy:
+Google Ads Developer Token (jawny w `STATUS.md` w HEAD) oraz klucz API
+w `generate-all-notion-assets.sh` i `generate-notion-assets-v2.sh`, linia 9 w obu.
 
 **Duża część projektu została wycięta** (wrzesień 2026, 203 pliki, ~65 900 linii).
 LAMA, RADAR, MCC, Stripe, panel admina, Auto-Publish, generowanie PDF i stara strona
