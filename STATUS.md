@@ -769,8 +769,9 @@ Te są o metodzie, nie o kliencie — wolno je wdrożyć od razu:
 5. **Drift zapisu SKU.** Historyczne mają spacje, dzisiejsze nie. Bez normalizacji
    `[^A-Z0-9]` gubi się 6 pkt dopasowania i zawyża luki.
 6. **Rozdziel lukę 1→2 od 2→3+.** To dwa różne zjawiska; mieszanie ich zawyża wynik.
-7. **Pokrycie etykietą jest wąskie: 17 SKU na 130.** Główny powód odrzuceń (69 SKU) to
-   przedział dawki. To potwierdza, że „not on the pack" musi być pełnoprawnym wynikiem
+7. **Pokrycie etykietą jest wąskie: 17 SKU na 130.** Główny powód odrzuceń (68 SKU) to
+   przedział dawki. (Korekta: pierwotne 69/115 liczyłem po wierszach pliku (136), nie po
+   unikalnych SKU (130) — trzy SKU dublują się jako warianty promocyjne.) To potwierdza, że „not on the pack" musi być pełnoprawnym wynikiem
    narzędzia, a nie stanem błędu — dla większości katalogu to jest JEDYNA uczciwa
    odpowiedź.
 
@@ -781,4 +782,18 @@ Te są o metodzie, nie o kliencie — wolno je wdrożyć od razu:
       klienta mogą pójść na publiczną stronę
 - [ ] Zdecydować, co z 1 321 lukami >365 dni: wyciąć, czy raportować osobno
 - [ ] Zastąpić wymyślone liczby na stronie głównej (pasek „50 vs 78") realnymi
-- [ ] Wdrożyć punkty 1–7 powyżej w tool-index.html — te nie czekają na nikogo
+- [x] Wdrożyć punkty 1–7 w tool-index.html — commit `adcf79e`, blok `RULES:BEGIN…RULES:END`
+      pilnowany testem regresji (130 SKU → 17 policzonych / 113 „not on the pack" / 68 przedział)
+      i sprawdzany przez ship-tool.mjs, żeby kolejna wersja z pętli ich po cichu nie cofnęła.
+      Dawka z ekwiwalentu ma trzeci stan: `read` (wydrukowane wprost) · `computed`
+      (iloczyn dwóch liczb, obu obecnych w cytacie) · `not on the pack`. Z8 zostaje w mocy
+      dla przedziałów i sufitów — wymuszona arytmetyka to nie wybór punktu z przedziału.
+
+- [ ] **PILNE, niezależne od podpisu: strona główna ma wymyślone liczby podpisane realnym
+      klientem.** Pasek „50 vs 78" jest opisany jako „Colostrum 300 g · 1 240 orders", a
+      niżej na tej samej stronie stoi „Genactiv — Colostrum, category leader" i schema.org
+      mówi „currently Genactiv". Czyli zmyślone dane firmowane kategorią produktu realnego
+      klienta, na stronie, która go nazywa. To problem większy niż papier — to fabrykacja,
+      nie kwestia poufności. Zastąpić realnym pomiarem opisanym jak demo w /tool
+      („anonymous supplement shop, 4.8 years of orders"), bez nazwy produktu i bez liczby
+      zamówień przy nim.
