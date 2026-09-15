@@ -1,85 +1,71 @@
-# Design system — Oleksiak Consulting
-Źródło: zatwierdzony wariant **9b Wersja interaktywna** z płótna „Homepage - 5 kierunków".
-Ten plik jest wiążący dla wszystkich kolejnych ekranów: `/tool`, `/stop`, blog, PDF, karty
-na LinkedIna. Wartości, których tu nie ma, odczytuj z pliku 9b — nie zgaduj.
+# Brief wdrożeniowy — Oleksiak Consulting
 
-## Kolor
+**Design system mieszka w Claude Design**, w projekcie „Oleksiak Consulting"
+(`107782f2-7c9d-4950-b48f-4ac5197ccc7f`), a jego źródłem są karty w `design/design-system/`.
+Kolory, typografia, ruch, siatka i komponenty są opisane tam i tylko tam — ten plik ich nie
+powtarza, żeby nie było dwóch źródeł prawdy.
 
-Tło `#0C0D0C`. Tekst główny `#F2F0EA` — kontrast 17,6:1. Pasmo wygaszone `#16180F`,
-używane wyłącznie do „dni, które nie istnieją" w rysunku. Akcent bursztynowy `#E0A72B` —
-9,6:1 na tle, jeden na cały ekran.
+Tutaj zostaje wyłącznie to, czego karta projektowa nie może powiedzieć: jak ten system wdrażać
+w tym repo.
 
-Reguła akcentu: bursztyn oznacza stratę albo wyjście i nic poza tym. Liczba dni, których
-marka nie wykorzystuje, oraz pas z CTA. Nie używamy go do dekoracji, podkreśleń ani
-drugiego przycisku. Jeżeli na ekranie są dwie rzeczy bursztynowe, jedna z nich jest błędem.
+## Fonty
 
-## Typografia
+Instrument Sans 400 / 500 / 600, licencja OFL, **hostowany lokalnie** — `@font-face`
+w `app/fonts.css`, pliki w `public/`, tak samo jak IBM Plex i Archivo. W wyrenderowanym HTML
+na wszystkich trasach ma być **zero wystąpień `fonts.googleapis`**; to zasada twarda po
+commicie 89c6326 i sprawdzana po każdym deployu. Karty w `design/design-system/` linkują
+Google Fonts, bo są podglądem wewnątrz Claude Design — to nie jest wzór dla produkcji.
 
-Instrument Sans, wagi 400 / 500 / 600, licencja OFL, **hostowana lokalnie** — zero żądań do
-Google Fonts w wyrenderowanym HTML, to twarda zasada repo po commicie 89c6326.
+## Gdzie ląduje kod
 
-Role: claim (największy element strony), linia usługi, nazwa bloku, opis, legenda, podpis
-techniczny. Dokładne stopnie i interlinia — z pliku 9b, z zachowaniem proporcji między
-rolami. Wersaliki z rozstrzeleniem tylko w pasku górnym i w podpisach technicznych.
+Strona główna jest przenoszona ze źródła: zmieniasz `design/production/index.html`, potem
+`npm run ship -- --yes`. Regiony między znacznikami `>>> ZE ZRODLA — GENEROWANE <<<` są
+nadpisywane przy każdym shipie — plików w `app/` nie edytuje się ręcznie. Narzędzie ma własne
+źródło `tool-index.html` i własny skrypt `node scripts/ship-tool.mjs tool-index.html --yes`,
+który musi pójść **przed** buildem.
 
-## Siatka i odstępy
+Zmienne koloru idą do bloku `:root` w `app/globals.css` przez ship. Skrypt strony to
+`app/audit-runtime.js` — plik `.js`, kopiowany bajt w bajt, celowo imperatywny, poza
+typecheckiem. Animacji nie przepisujemy na stan Reacta.
 
-Siatka ósemkowa. Marginesy zewnętrzne 88 px na desktopie. Dwie kolumny: rysunek po lewej,
-argumentacja po prawej. Wszystkie bloki stoją na tej samej siatce i tych samych marginesach —
-pasek górny, obie kolumny, blok usług i listwa wyjść.
+## Animacja — trzy warunki dokończenia
 
-Mobile 390 jest osobną decyzją, nie ściśniętym desktopem. Nad zgięciem (712 px w Safari iOS
-z domyślnym paskiem adresu) muszą zmieścić się: claim, linia usługi i wyjście.
+Każda animacja w tym systemie musi kończyć się poprawnie na trzy sposoby, bo każdy z nich
+realnie występuje:
 
-**Kolejność DOM jest telefonowa.** Desktop składa z niej dwie kolumny przez siatkę
-z nazwanymi obszarami — nigdy odwrotnie. Wynika to z pomiaru na wdrożeniu 9b: przy kolejności
-desktopowej bursztynowa listwa lądowała pod czterema usługami, czyli pod zgięciem. Po zmianie
-CTA zaczyna się na 539 px przy zgięciu 844 px.
+1. **Stan końcowy jest stanem domyślnym DOM-u.** Animujemy od pustego do domyślnego.
+2. **`prefers-reduced-motion`** przeskakuje od razu do stanu końcowego.
+3. **`navigator.webdriver`** kończy natychmiast — inaczej `qa.js` łapie ekran w połowie ruchu.
 
-## Komponenty
+Do tego bezpiecznik dla podglądu linku: jeżeli `IntersectionObserver` nie odpalił animacji
+w ciągu sekundy od załadowania, rysunek dopełnia się sam. Renderer karty na LinkedInie nie
+ustawia `webdriver`, a to jedyny kanał, z którego przychodzi ruch.
 
-**Siatka dni.** Siedemdziesiąt pól, dziesięć w rzędzie. Jasne = dni z etykiety, bursztynowe =
-dni straty, wygaszone = dzień odkupu. Mechanizm jest policzalny palcem — odbiorca nie musi
-ufać skali. To jest znak rozpoznawczy marki i wraca wszędzie, gdzie pokazujemy czas.
+## Dostępność i bramka
 
-**Blok pozycji.** Pięć jednakowych białych kropek, cienka kreska, nazwa, jedna linijka opisu.
-Kropki zapełniają się bursztynem po najechaniu; na telefonie raz, przy wejściu w kadr.
-Ten sam komponent obsługuje usługi i referencje — zmienia się tylko treść.
+Tekst główny minimum 12:1, pozostały 4,5:1, od 24 px 3:1 — liczone skryptem względem realnie
+namalowanego tła, nie oceniane na oko. Żaden pojemnik z tekstem nie ma sztywnej wysokości
+razem z `overflow:hidden`. Wszystko działa z klawiatury i z czytnikiem ekranu.
 
-**Listwa wyjść.** Bursztynowy pas przez całą szerokość: po lewej wezwanie ze strzałką,
-wyśrodkowane w pionie, klikalny cały pas, hover przesuwa strzałkę w prawo. Po prawej jedno
-pole e-mail z przyciskiem i jedną linijką obietnicy. Pod pasem wąski czarny pas z jednym
-zdaniem wyjaśniającym mechanizm. Żadnych ramek udających przycisk.
+```
+npm run ship -- --yes
+npm run build
+npx tsc --noEmit
+npm run lint                      # zero bledow, zasada zapadki
+node scripts/ship-compare.mjs
+node design/qa.js http://localhost:3000 --scroll
+node design/qa.js http://localhost:3000/stop --scroll
+node design/qa.js http://localhost:3000/tool --scroll
+```
 
-**Podpis pochodzenia.** Każda liczba na ekranie ma przy sobie informację, skąd pochodzi.
-Wzór: „Real orders: an anonymous supplements store, 1,197 first-to-second gaps, 4.8 years.
-Your numbers differ — that is what the calculator is for."
+`qa.js` puszczamy **lokalnie** — na produkcji wysyła formularz na każdym z dziewięciu
+viewportów. `qa.js` na `/tool` z ustawionym `ANTHROPIC_API_KEY`, inaczej panele AI chowają się
+i bramka sprawdza mniejszą stronę niż produkcja. Push nie wdraża; wdrożenie to
+`npx vercel@latest --prod`, a domenę sprawdzamy jednym przebiegiem, nie pętlą.
 
-## Ruch
+## Kontrakty, które muszą działać
 
-Animacja tylko wtedy, gdy niesie narrację. Kanon z 9b: jasne pola wchodzą co 0,05 s przez
-2,3 s, potem bursztynowe co 0,075 s, każde urasta do 155% i wraca, całość kończy się około
-4,6 s. Jeden przebieg, po wejściu w kadr przy progu 20%, bez pętli.
-
-Trzy warunki obowiązujące każdą animację w tym systemie: stan końcowy jest stanem domyślnym
-DOM-u; `prefers-reduced-motion` przeskakuje od razu do stanu końcowego; bramka `design/qa.js`
-nie może złapać ekranu w połowie ruchu.
-
-## Copy
-
-Angielski. Zdania krótkie, konkretne, bez przymiotników sprzedażowych. Claim mówi, co robimy,
-nie jak bardzo jesteśmy dobrzy. Dowód to rozpiętość, nigdy prestiż: ten sam rachunek
-w marketplace z milionami użytkowników i w firmie z jedenastoma osobami. Żadnego linku do
-kalendarza i żadnego „book a call" — oferta jest asynchroniczna z projektu.
-
-Zakazane: „unlocking growth", „Our Process" w czterech krokach, karuzela logotypów,
-niebieski jako kolor zaufania, monospace w tekście czytanym, kafle z obwódkami.
-
-## Dostępność i kontrola jakości
-
-Tekst główny minimum 12:1, pozostały 4,5:1, od 24 px 3:1 — liczone skryptem względem
-realnie namalowanego tła, nie oceniane na oko. Żaden pojemnik z tekstem nie ma sztywnej
-wysokości razem z `overflow:hidden`. Wszystko działa z klawiatury i z czytnikiem ekranu.
-
-Przed każdą publikacją: `node design/qa.js <url> --scroll` na dziewięciu szerokościach,
-lokalnie, nigdy na produkcji.
+Formularz w listwie wyjść idzie do `/api/lead` — adres plus opcjonalna jedna linia
+wiadomości, mail do właściciela i zapis w HubSpocie. Bursztynowe CTA linkuje do `/tool`.
+Narzędzie kończy się formularzem z osobnym checkboxem zgody na kontakt, domyślnie
+odznaczonym — to wymaga dołożenia pola zgody i źródła do kontraktu `/api/lead`.

@@ -43,7 +43,11 @@
   .mark{font-size:18px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
     color:var(--fg);}
 
-  .body{display:flex;align-items:center;gap:64px;}
+  /* Odstep 48, nie 64: cicha linia urosla do 27 px, zeby po przeskalowaniu karty
+     do szerokosci feedu (552 px) miala ponad 12 px i dala sie przeczytac na telefonie.
+     Miejsce na to bierzemy z odstepu miedzy siatka a tekstem — marginesy zewnetrzne
+     stoja na 80 px i schodzic nizej nie moga, bo czesc klientow przycina krawedzie. */
+  .body{display:flex;align-items:center;gap:48px;}
 
   /* Siatka dni w stanie koncowym — 45 jasnych, 24 bursztynowe, ostatnie wygaszone.
      Ten sam podzial co na stronie, tylko wiekszy: to jest glowny obiekt karty. */
@@ -51,10 +55,13 @@
   .grid i{display:block;width:40px;height:40px;}
   .c1{background:var(--fg);} .c2{background:var(--acc);} .c3{background:var(--cellc);}
 
-  .say{display:flex;flex-direction:column;gap:22px;min-width:0;}
+  .say{flex:1;display:flex;flex-direction:column;gap:22px;min-width:0;}
   .claim{margin:0;font-size:58px;font-weight:500;line-height:1.04;letter-spacing:-.03em;
     color:var(--fg);}
-  .quiet{margin:0;font-size:22px;line-height:1.45;color:var(--dim);}
+  /* Lamanie recznie na granicy zdan. Przy 27 px w tej kolumnie tekst zawijal sie
+     sam i zostawial „reorder." jako sierote w drugim wierszu; tak kazdy wiersz
+     jest calym zdaniem, a bursztynowa polowa dostaje wlasna linie. */
+  .quiet{margin:0;font-size:27px;line-height:1.4;color:var(--dim);}
   .quiet b{font-weight:400;color:var(--acc);}
 </style>
 </head>
@@ -68,7 +75,7 @@
 
     <div class="say">
       <p class="claim">Your second order,<br>on time.</p>
-      <p class="quiet">45 days on the label. <b>69 days to the reorder.</b></p>
+      <p class="quiet">45 days on the label.<br><b>69 days to the reorder.</b></p>
     </div>
   </div>
 
