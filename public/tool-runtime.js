@@ -471,7 +471,7 @@
     if($("chk")) $("chk").innerHTML = checked
       ? (flagged?'<b style="color:var(--acc)">'+flagged+' of '+checked
                  +' families: price per unit says a pack size is wrong</b>'
-                : checked+' families cross-checked on price per unit')
+                : checked+(checked===1?' family':' families')+' cross-checked on price per unit')
       : "";
     verdict(lead);
   }
@@ -525,7 +525,7 @@
        co bylo prawda o cyfrze i falszem o odczycie.                              */
     var st=doseStatus(DOSE[F.k]);
     $("wb").textContent=F._pd+" days at "+DOSE[F.k].perDay+" "+F.unit+" a day"
-      +(st==="computed"?", the pack&rsquo;s own two figures multiplied.":".");
+      +(st==="computed"?", the pack’s own two figures multiplied.":".");
     $("wn").innerHTML="&ldquo;"+esc(DOSE[F.k].q)+"&rdquo; &mdash; the maker."
       +(st==="computed"
         ? " The daily figure is not printed as one number; it is "+DOSE[F.k].serving

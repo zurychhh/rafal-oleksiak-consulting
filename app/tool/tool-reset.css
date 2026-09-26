@@ -27,3 +27,10 @@ body{overflow-x:visible;max-width:none;}
    karty zaczepiloby sie o nia zamiast o okno. */
 section{padding:0;overflow-x:visible;max-width:none;transform:none;
   backface-visibility:visible;}
+
+/* Kolejnosc chunkow CSS w buildzie produkcyjnym nie jest gwarantowana: przy
+   przebudowie narzedzia (DOSAGE, 26.09.2026) critical.css wyladowal PO tym pliku
+   i html znow przycinal. :has() podbija specyficznosc, wiec reset wygrywa
+   niezaleznie od kolejnosci — to samo lekarstwo co w design-reset.css.       */
+html:has(#orders){overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;}
+body:has(#orders){overflow-x:visible;max-width:none;}

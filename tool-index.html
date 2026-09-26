@@ -8,383 +8,361 @@
 
 <title>Instruments &middot; Staging</title>
 <style>
+  /* DOSAGE — ten sam jezyk co strona glowna v66: jasny papier, jedna ciemna farba,
+     cienkie linie, meble etykiety farmaceutycznej. Bez ciemnego motywu: strona
+     glowna go nie ma, a wejscie z niej na /tool nie moze zmieniac swiata.        */
   :root{
-    --paper:#ECEFE9; --card:#FCFDFB; --sunk:#E3E7DF;
-    --ink:#131A18; --body:#454F4B; --soft:#5F6862; --rule:#D2D8CF;
-    --acc:#C43F0D; --acc-soft:#F8E3D8; --good:#186051; --good-soft:#DCEDE5;
-    --disp:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --paper:#F7F5F0; --card:#FFFFFF; --sunk:#EDEAE1;
+    --ink:#14161A; --body:#3A3C40; --soft:#6E6D68; --rule:#DCDAD2;
+    --acc:#C97B1F; --acc-t:#A25C11; --good:#2F6B4F;
+    --disp:"Instrument Sans",system-ui,"Helvetica Neue",Arial,sans-serif;
     --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
-  }
-  @media (prefers-color-scheme:dark){
-    :root:not([data-theme="light"]){
-      --paper:#0D0F14; --card:#141821; --sunk:#0A0C10;
-      --ink:#EDF0EA; --body:#B6BFBB; --soft:#8C9591; --rule:#242B33;
-      --acc:#FF7A33; --acc-soft:#2A1810; --good:#4DD0A7; --good-soft:#10231D;
-    }
-  }
-  :root[data-theme="dark"]{
-    --paper:#0D0F14; --card:#141821; --sunk:#0A0C10;
-    --ink:#EDF0EA; --body:#B6BFBB; --soft:#8C9591; --rule:#242B33;
-    --acc:#FF7A33; --acc-soft:#2A1810; --good:#4DD0A7; --good-soft:#10231D;
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--paper);color:var(--body);font-family:var(--disp);
-    font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
-  .page{max-width:1000px;margin:0 auto;padding:0 24px 88px;}
+    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .page{max-width:1152px;margin:0 auto;padding:0 24px 72px;}
+  input:focus-visible,button:focus-visible,a:focus-visible,textarea:focus-visible,
+  summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
 
-  /* Wyjscie z narzedzia. Bez tego /tool jest slepym zaulkiem: strona glowna
-     linkuje tutaj, a z powrotem nie prowadzi nic. Dwa wyjscia, bo logo jako
-     link jest konwencja, ktorej czesc ludzi nie sprawdza, a trzecie na dole,
-     bo po przewinieciu dwoch tysiecy pikseli nikt nie wraca na gore, zeby wyjsc.
-     white-space:nowrap na obu: na 390 px maja sie lamac MIEDZY soba, nigdy
-     w srodku wyrazu — flex-wrap przenosi caly element do nastepnej linii.     */
-  .nav{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;}
-  /* `.mark.wm`, nie samo `.wm`: regula `.mark` stoi nizej w pliku i przy rownej
-     specyficznosci wygralaby kolejnoscia, zostawiajac wordmark w --soft zamiast
-     w kolorze tekstu. Zlapal to pomiar stylow obliczonych, nie oko.            */
-  .mark.wm{color:var(--body);text-decoration:none;white-space:nowrap;}
-  .mark.wm:hover{color:var(--ink);}
-  /* Akcent jasnego motywu (#C43F0D) daje przy tym stopniu 4.45:1 — zmierzone,
-     pod poprzeczka 4.5. Ten sam ciemniejszy wariant, ktorego plik uzywa juz dla
-     daty w dzienniku i naglowkow paneli AI: 5.15:1. W ciemnym motywie akcent
-     na papierze ma 7.38:1, wiec tam wraca bez zmian.                          */
-  .back{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.14em;
-    text-transform:uppercase;color:#B53707;text-decoration:none;white-space:nowrap;}
-  .back:hover{text-decoration:underline;text-underline-offset:3px;}
-  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .back{color:var(--acc);}}
-  :root[data-theme="dark"] .back{color:var(--acc);}
-  .backfoot{margin:18px 0 0;}
+  /* etykieta — jedyny mebel typograficzny, powtarzany wszedzie */
+  .lab{font-family:var(--disp);font-size:12px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink);margin:0;}
+  .lab.soft{color:var(--soft);}
 
-  .mark{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.22em;
-    text-transform:uppercase;color:var(--soft);margin:0;}
-  h1{font-family:var(--disp);font-weight:800;font-size:clamp(31px,5.2vw,58px);line-height:.98;
-    letter-spacing:-.035em;color:var(--ink);margin:14px 0 0;max-width:15ch;text-wrap:balance;}
-  h1 span{color:var(--acc);}
-  .thesis{margin:18px 0 0;font-size:17px;line-height:1.5;max-width:52ch;color:var(--body);}
-  .thesis b{color:var(--ink);font-weight:600;}
-  header{padding:56px 0 0;}
+  /* ---------- pasek gorny, jak na stronie glownej ---------------------- */
+  .top{border-bottom:1px solid var(--ink);}
+  .top .in{max-width:1152px;margin:0 auto;padding:0 24px;min-height:52px;display:flex;
+    flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 18px;}
+  .wm{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;white-space:nowrap;padding:14px 0;}
+  .back{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;white-space:nowrap;display:inline-flex;
+    align-items:center;min-height:44px;}
+  .back:hover{text-decoration:underline;text-underline-offset:4px;}
 
-  /* one ruler, drawn three times — the through-line of the page */
+  /* ---------- pierwszy ekran ------------------------------------------- */
+  .hero{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:40px 72px;
+    padding:40px 0 56px;align-items:start;}
+  h1{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6.2vw,80px);line-height:.96;
+    letter-spacing:-.045em;color:var(--ink);margin:18px 0 0;max-width:12ch;text-wrap:balance;}
+  h1 span{color:var(--acc-t);}
+  .lede{margin:26px 0 0;padding-top:22px;border-top:1px solid var(--ink);font-size:20px;
+    line-height:1.4;color:var(--ink);max-width:36ch;}
+  .lede small{display:block;margin-top:10px;font-size:15px;line-height:1.5;color:var(--soft);}
+  .cta{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin-top:28px;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;
+    padding:0 26px;background:var(--ink);color:#fff;border:1px solid var(--ink);
+    font-family:var(--disp);font-size:14px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;text-decoration:none;cursor:pointer;}
+  .btn:hover{background:#000;}
+  .btn.line{background:none;color:var(--ink);}
+  .btn.line:hover{background:var(--ink);color:#fff;}
 
-  .tool{margin-top:26px;background:var(--card);border:1px solid var(--rule);}
-  .thead{display:grid;grid-template-columns:minmax(0,1fr);gap:0;align-items:start;
-    padding:22px 24px;border-bottom:1px solid var(--rule);}
-  .disc{display:block;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--soft);margin:0 0 5px;}
-  .thead h2{margin:0;font-family:var(--disp);font-weight:700;font-size:23px;line-height:1.15;
-    letter-spacing:-.02em;color:var(--ink);}
-  .thead p{margin:6px 0 0;font-size:14.5px;line-height:1.5;max-width:56ch;}
-  .tbody{padding:24px;display:grid;gap:22px;}
+  .dir{border-top:1px solid var(--ink);padding-top:14px;margin-top:6px;}
+  .dir ol{list-style:none;margin:14px 0 0;padding:0;counter-reset:d;}
+  .dir li{counter-increment:d;display:grid;grid-template-columns:34px minmax(0,1fr);gap:0 8px;
+    padding:14px 0;border-top:1px solid var(--rule);font-size:15px;line-height:1.45;color:var(--body);}
+  .dir li::before{content:"0" counter(d);font-size:12px;font-weight:700;letter-spacing:.14em;
+    color:var(--ink);padding-top:3px;}
+  .dir li b{color:var(--ink);font-weight:600;}
 
-  .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
-  .ctl .cl{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--soft);margin-right:2px;}
-  .chip{border:1px solid var(--rule);background:none;color:var(--body);cursor:pointer;
-    padding:8px 12px;min-height:36px;font-family:var(--mono);font-size:11.5px;
-    transition:border-color .15s,color .15s,background .15s;}
-  .chip:hover{border-color:var(--acc);color:var(--ink);}
-  .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--card);}
-  .num{border:1px solid var(--rule);background:var(--paper);color:var(--ink);width:74px;
-    min-height:36px;font-family:var(--mono);font-size:14px;padding:8px 10px;text-align:right;
-    -moz-appearance:textfield;}
-  .num::-webkit-outer-spin-button,.num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
-  input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--acc);
-    outline-offset:2px;}
+  /* ---------- sekcje: naglowek z linia, jak "COMPOSITION" na glownej ---- */
+  .sec{padding:0 0 48px;}
+  .sh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    border-bottom:1px solid var(--ink);padding-bottom:10px;margin-bottom:22px;}
+  .sh .n{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);white-space:nowrap;}
+  .sub{margin:0 0 20px;font-size:16px;line-height:1.5;color:var(--body);max-width:62ch;}
 
-  .say{margin:0;font-size:17px;line-height:1.45;color:var(--ink);font-weight:500;max-width:58ch;
-    text-wrap:balance;}
-  .say b{color:var(--acc);font-weight:700;}
-  .say em{font-style:normal;color:var(--good);font-weight:700;}
-  .fine{margin:0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--soft);
-    max-width:60ch;}
-
-  /* ---------- 01 · staircase ------------------------------------------- */
-  .stair{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;align-items:end;
-    min-height:190px;}
-  .st{display:flex;flex-direction:column;justify-content:flex-end;gap:8px;}
-  .st .bar{border:1px dashed var(--rule);background:none;}
-  .st.on .bar{background:var(--ink);border:1px solid var(--ink);}
-  .st.here .bar{background:var(--acc);border:1px solid var(--acc);}
-  .st .cap{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--soft);}
-  .st .ttl{font-weight:600;font-size:13.5px;line-height:1.25;color:var(--soft);opacity:.72;
-    letter-spacing:-.01em;}
-  .st.on .ttl{color:var(--ink);opacity:1;} .st.here .cap{color:var(--acc);}
-  .qs{display:grid;gap:0;border-top:1px solid var(--rule);}
-  .qrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 22px;align-items:center;
-    padding:12px 0;border-bottom:1px solid var(--rule);}
-  .qrow > span{font-size:14.5px;line-height:1.4;color:var(--body);}
-  .qopt{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;}
-
-  /* ---------- 02 · day chart ------------------------------------------- */
-  .chart{display:block;width:100%;height:auto;overflow:visible;}
-  .chart .gridline{stroke:var(--rule);stroke-width:1;}
-  .chart .miss{fill:var(--acc);}
-  .chart .hit{fill:var(--good);}
-  .chart .tick{fill:var(--soft);font-family:"IBM Plex Mono",monospace;font-size:9px;}
-  .chart .axis{fill:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;}
-  .key{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--soft);}
-  .key span{display:inline-flex;align-items:center;gap:7px;}
-  .key i{width:11px;height:11px;display:block;}
-  .key i.m{background:var(--acc);} .key i.h{background:var(--good);}
-
-  /* ---------- 03 · blister --------------------------------------------- */
-  .strip{display:flex;flex-wrap:wrap;gap:4px;padding:14px;background:var(--sunk);
-    border:1px solid var(--rule);}
-  .strip i{width:14px;height:22px;display:block;background:var(--card);
-    border:1px solid var(--rule);border-radius:5px/7px;}
-  .strip i.wk{margin-right:9px;}
-  .strip i.last{background:var(--acc);border-color:var(--acc);}
-  .months{display:flex;gap:0;border:1px solid var(--rule);}
-  .months div{flex:1;padding:12px 14px;border-right:1px solid var(--rule);}
-  .months div:last-child{border-right:0;}
-  .months b{display:block;font-family:var(--mono);font-size:19px;font-weight:600;color:var(--ink);
-    font-variant-numeric:tabular-nums;}
-  .months span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--soft);margin-top:3px;}
-
-  /* ---------- the AI seam, identical in all three ---------------------- */
-  .ai{border:1px solid var(--rule);background:var(--paper);padding:18px;display:grid;gap:12px;}
-  .ai .hd{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;}
-  /* Ten sam problem co przy dacie w dzienniku nizej: akcent przy 10.5px daje
-     4.45:1, o 0.05 pod poprzeczka. Umknal, bo oba panele AI chowaja sie same
-     bez window.claude, wiec bramka wizualna nigdy ich nie widziala.
-     Ciemniejszy wariant tego samego akcentu, tylko w jasnym motywie.          */
-  .ai .hd b{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
-    color:#B53707;font-weight:600;}
-  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ai .hd b{color:var(--acc);}}
-  :root[data-theme="dark"] .ai .hd b{color:var(--acc);}
-  .ai .hd span{font-family:var(--mono);font-size:10.5px;color:var(--soft);}
-  .ai textarea,.ai .ti{width:100%;border:1px solid var(--rule);background:var(--card);
-    color:var(--ink);font-family:var(--mono);font-size:12.5px;line-height:1.7;padding:11px 12px;
-    resize:vertical;}
-  .go{border:1px solid var(--ink);background:var(--ink);color:var(--card);cursor:pointer;
-    padding:11px 17px;min-height:42px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
-    text-transform:uppercase;font-weight:600;justify-self:start;}
-  .go:hover{background:var(--acc);border-color:var(--acc);}
-  .go[disabled]{opacity:.45;cursor:default;}
-  .out{display:grid;gap:0;border-top:1px solid var(--rule);}
-  .orow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;padding:10px 0;
-    border-bottom:1px solid var(--rule);align-items:baseline;}
-  .orow .k{font-size:13.5px;line-height:1.4;color:var(--body);min-width:0;overflow-wrap:anywhere;}
-  .orow .v{font-family:var(--mono);font-size:12.5px;color:var(--ink);white-space:nowrap;
-    font-variant-numeric:tabular-nums;}
-  .orow .v.no{color:var(--acc);}
-  .msg{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--rule);}
-  .msg .w{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--acc);}
-  .msg .s{font-weight:600;font-size:15px;color:var(--ink);line-height:1.35;}
-  .msg .t{font-size:13.5px;line-height:1.5;color:var(--body);}
-  .stat{font-family:var(--mono);font-size:11.5px;color:var(--soft);min-height:17px;}
-  /* Odpowiedz AI przepisuje przyrzad nad soba. Bez tego zmiana dzieje sie poza wzrokiem. */
-  .wrote{outline:2px solid var(--acc);outline-offset:3px;}
-
-
-  /* ---------- the front door -------------------------------------------
-     Do dzisiaj jedyne pole na wlasny eksport siedzialo na DOLE ekranu, w panelu
-     AI, ktory bez window.claude chowa sie sam. Narzedzie obiecywalo "twoj eksport"
-     i nie mialo go gdzie przyjac. Wejscie stoi teraz przed wynikiem i nie zalezy
-     od niczego.                                                                */
-  .src{display:grid;gap:10px;padding:14px 16px;background:var(--sunk);
-    border:1px solid var(--rule);}
-  .src .chip{border-color:var(--acc);color:var(--ink);background:var(--card);}
-  .src .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--card);}
-  .srow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
-  .sstat{font-family:var(--mono);font-size:11px;color:var(--soft);
-    font-variant-numeric:tabular-nums;}
-  .sstat b{color:var(--ink);font-weight:600;}
-  #orders{width:100%;border:1px solid var(--rule);background:var(--card);color:var(--ink);
-    font-family:var(--mono);font-size:12px;line-height:1.65;padding:10px 11px;resize:vertical;}
-  .shelp{margin:0;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--soft);
-    max-width:70ch;}
+  /* ---------- 01 · dane -------------------------------------------------- */
+  .src{display:grid;gap:14px;}
+  .srow{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;}
+  .seg{display:inline-flex;border:1px solid var(--ink);}
+  .chip{border:0;background:none;color:var(--ink);cursor:pointer;min-height:44px;padding:0 18px;
+    font-family:var(--disp);font-size:13px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;transition:background .15s,color .15s;}
+  .chip + .chip{border-left:1px solid var(--ink);}
+  .chip:hover{background:var(--sunk);}
+  .chip[aria-pressed="true"]{background:var(--ink);color:#fff;}
+  .sstat{font-size:14px;color:var(--soft);font-variant-numeric:tabular-nums;}
+  .sstat b{color:var(--ink);font-weight:700;}
+  .shelp{margin:0;font-size:15px;line-height:1.55;color:var(--body);max-width:72ch;}
   .shelp b{color:var(--ink);font-weight:600;}
+  #orders{width:100%;border:1px solid var(--rule);border-top:1px solid var(--ink);
+    background:var(--card);color:var(--ink);font-family:var(--mono);font-size:13px;
+    line-height:1.7;padding:12px 14px;resize:vertical;min-height:132px;}
 
-  .log{margin-top:34px;border-top:1px solid var(--rule);padding-top:14px;}
-  .log summary{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--soft);cursor:pointer;list-style:none;}
-  .log summary::-webkit-details-marker{display:none;}
-  .log summary::after{content:" \25BE";}
-  .log[open] summary::after{content:" \25B4";}
-  .log .e{padding:14px 0;border-bottom:1px solid var(--rule);display:grid;gap:5px;}
-  /* Data w dzienniku szla akcentem, ktory przy 10.5px daje 4.45:1 — pod poprzeczka.
-     Ciemniejszy wariant tego samego akcentu, tylko tutaj.                          */
-  .log .e .d{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:#B53707;
-    text-transform:uppercase;}
-  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .log .e .d{color:var(--acc);}}
-  :root[data-theme="dark"] .log .e .d{color:var(--acc);}
-  .log .e .b{font-size:14px;line-height:1.55;color:var(--body);}
-
-  .close{margin-top:40px;padding-top:20px;border-top:1px solid var(--rule);
-    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end;}
-  .close p{margin:0;font-size:15px;line-height:1.55;max-width:56ch;}
-  .close p b{color:var(--ink);font-weight:600;}
-  .close .sig{font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--soft);
-    text-align:right;white-space:nowrap;}
-  .close a{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--rule);}
-
-  @media (max-width:760px){
-    .axis{grid-template-columns:minmax(0,1fr) 46px;gap:0 10px;}
-    .axis .al{display:none;}
-    .pr{grid-template-columns:minmax(0,1fr) 46px;gap:4px 10px;}
-    .pn{grid-column:1/-1;}
-    .thead{grid-template-columns:minmax(0,1fr);gap:8px;}
-    .stair{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;min-height:150px;}
-    .st .ttl{font-size:11.5px;}
-    .qrow{grid-template-columns:minmax(0,1fr);}
-    .qopt{justify-content:flex-start;}
-    .close{grid-template-columns:minmax(0,1fr);}
-    .close .sig{text-align:left;}
-  }
-
-  /* ---------- one axis, drawn once ------------------------------------- */
-  .axis{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) 52px;gap:0 14px;
-    align-items:end;padding-bottom:6px;}
-  .axis .ax{position:relative;height:13px;}
-  .axis .ax b{position:absolute;bottom:0;transform:translateX(-50%);font-family:var(--mono);
-    font-size:9.5px;font-weight:500;color:var(--soft);letter-spacing:.04em;}
-  .axis .al{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--soft);}
-  .axis .ar{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--soft);text-align:right;}
-  .plot{display:grid;gap:0;border-top:1px solid var(--rule);}
-  .pr{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) 52px;gap:0 14px;
-    align-items:center;padding:10px 0;border-bottom:1px solid var(--rule);}
-  .pn{font-size:13.5px;line-height:1.3;color:var(--ink);font-weight:600;letter-spacing:-.01em;
+  /* ---------- 02 · odczyt: jedna os ------------------------------------ */
+  .legend{display:flex;gap:10px 22px;flex-wrap:wrap;font-size:13px;color:var(--body);
+    margin-bottom:18px;}
+  .legend span{display:inline-flex;align-items:center;gap:8px;}
+  .legend i{width:22px;height:10px;display:block;}
+  .legend i.a{background:var(--ink);} .legend i.b{background:var(--acc);}
+  .legend i.c{background:#B9B7AF;}
+  #chk{color:var(--soft);}
+  .axis{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 96px;gap:0 22px;
+    align-items:end;padding-bottom:8px;}
+  .axis .ax{position:relative;height:16px;}
+  .axis .ax b{position:absolute;bottom:0;transform:translateX(-50%);font-size:12px;
+    font-weight:600;color:var(--soft);font-variant-numeric:tabular-nums;}
+  .axis .al,.axis .ar{font-size:12px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--soft);}
+  .axis .ar{text-align:right;}
+  .plot{display:grid;border-top:1px solid var(--ink);}
+  .pr{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 96px;gap:8px 22px;
+    align-items:center;padding:18px 0;border-bottom:1px solid var(--rule);}
+  .pn{font-size:17px;line-height:1.3;color:var(--ink);font-weight:600;letter-spacing:-.01em;
     overflow-wrap:anywhere;}
-  .pn s{display:block;text-decoration:none;font-family:var(--mono);font-size:9.5px;font-weight:400;
-    color:var(--soft);letter-spacing:.04em;margin-top:2px;}
-  /* Trzy paski, nie dwa: etykieta, rytm ustalony (2->3+) i pierwsze dokupienie.
-     Wysokosc policzona, nie zgadnieta: 3*9 + 2*2 = 31, plus oddech.           */
-  .pt{position:relative;height:33px;min-width:0;display:grid;gap:2px;align-content:center;}
-  .pt i{display:block;height:9px;}
+  .pn s{display:block;text-decoration:none;font-size:12px;font-weight:400;line-height:1.45;
+    color:var(--soft);letter-spacing:0;margin-top:4px;font-variant-numeric:tabular-nums;}
+  .pn s b{font-weight:600;}
+  .pt{position:relative;min-height:40px;min-width:0;display:grid;gap:3px;align-content:center;}
+  .pt i{display:block;height:10px;}
   .pt .b1{background:var(--ink);}
   .pt .b2{background:var(--acc);}
-  .pt .b3{background:var(--soft);}
+  .pt .b3{background:#B9B7AF;}
   .pt .b0{background:var(--sunk);}
-  .pd{font-family:var(--mono);font-size:15px;font-weight:600;text-align:right;
-    font-variant-numeric:tabular-nums;color:var(--soft);white-space:nowrap;}
-  .pd.late{color:var(--acc);} .pd.early{color:var(--good);}
-  .pd s{display:block;text-decoration:none;font-size:9.5px;font-weight:400;letter-spacing:.02em;
-    white-space:normal;line-height:1.3;}
-  .note{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--acc);text-align:right;}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;
-    color:var(--soft);letter-spacing:.04em;}
-  .legend span{display:inline-flex;align-items:center;gap:6px;}
-  .legend i{width:14px;height:9px;display:block;}
-  .legend i.a{background:var(--ink);} .legend i.b{background:var(--acc);}
-  .legend i.c{background:var(--soft);}
+  .pd{font-size:28px;font-weight:600;text-align:right;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;color:var(--soft);white-space:nowrap;line-height:1;}
+  .pd.late{color:var(--acc-t);} .pd.early{color:var(--good);}
+  .pd s{display:block;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0;
+    white-space:normal;line-height:1.35;margin-top:6px;color:var(--soft);}
 
-  .four{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
-    background:var(--rule);border:1px solid var(--rule);}
-  .four > div{background:var(--card);padding:13px 15px;display:grid;gap:6px;align-content:start;}
-  .four b{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+  /* ---------- 03 · wskazanie ------------------------------------------- */
+  .say{margin:0 0 30px;font-size:clamp(22px,2.4vw,30px);line-height:1.3;color:var(--ink);
+    font-weight:500;letter-spacing:-.015em;max-width:40ch;text-wrap:pretty;}
+  .say b{color:var(--acc-t);font-weight:600;}
+  .say em{font-style:normal;color:var(--good);font-weight:600;}
+  .four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);}
+  .four:empty{display:none;}
+  .four > div{padding:18px 20px 22px 0;display:grid;gap:8px;align-content:start;
+    border-right:1px solid var(--rule);}
+  .four > div + div{padding-left:20px;}
+  .four > div:last-child{border-right:0;}
+  .four b{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
     color:var(--soft);}
-  .four span{font-size:15px;line-height:1.3;color:var(--ink);font-weight:700;
-    letter-spacing:-.015em;}
-  .four em{font-style:normal;font-family:var(--mono);font-size:10.5px;line-height:1.5;
-    color:var(--soft);}
+  .four span{font-size:24px;line-height:1.15;color:var(--ink);font-weight:600;letter-spacing:-.02em;}
+  .four em{font-style:normal;font-size:14px;line-height:1.45;color:var(--body);}
+  .together{margin:14px 0 0;font-size:14px;color:var(--soft);}
+  .widget{margin-top:30px;border:1px solid var(--ink);background:var(--card);padding:18px 22px;
+    display:grid;gap:6px;max-width:640px;}
+  .widget:has(#wb:empty){display:none;}
+  .widget .wl{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink);padding-bottom:10px;border-bottom:1px solid var(--rule);margin-bottom:4px;}
+  .widget .wb{font-size:20px;font-weight:600;color:var(--ink);line-height:1.3;letter-spacing:-.015em;}
+  .widget .wn{font-size:14px;line-height:1.55;color:var(--body);}
 
-  .widget{border-left:2px solid var(--acc);background:var(--sunk);padding:13px 16px;
-    display:grid;gap:5px;}
-  .widget .wl{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
-    color:var(--soft);}
-  .widget .wb{font-size:15px;font-weight:700;color:var(--ink);line-height:1.3;letter-spacing:-.015em;}
-  .widget .wn{font-family:var(--mono);font-size:10.5px;line-height:1.6;color:var(--soft);}
-  .seams{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+  /* ---------- 04 · szew AI -------------------------------------------- */
+  .aisec:has(#ai1[style*="none"]):has(#ai2[style*="none"]){display:none;}
+  .seams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;}
+  .ai{border-top:1px solid var(--ink);padding-top:14px;display:grid;gap:12px;align-content:start;}
+  .ai .hd{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  .ai .hd b{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);font-weight:700;}
+  .ai .hd span{font-size:13px;color:var(--soft);}
+  .fine{margin:0;font-size:14px;line-height:1.55;color:var(--body);max-width:60ch;}
+  .ai textarea{width:100%;border:1px solid var(--rule);background:var(--card);color:var(--ink);
+    font-family:var(--mono);font-size:13px;line-height:1.7;padding:11px 12px;resize:vertical;}
+  .go{border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;
+    padding:0 22px;min-height:44px;font-family:var(--disp);font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;font-weight:700;justify-self:start;}
+  .go:hover{background:#000;}
+  .go[disabled]{opacity:.45;cursor:default;}
+  .out{display:grid;border-top:1px solid var(--rule);}
+  .out:empty{display:none;}
+  .orow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;padding:10px 0;
+    border-bottom:1px solid var(--rule);align-items:baseline;}
+  .orow .k{font-size:14px;line-height:1.4;color:var(--body);min-width:0;overflow-wrap:anywhere;}
+  .orow .v{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;
+    font-variant-numeric:tabular-nums;}
+  .orow .v.no{color:var(--acc-t);}
+  .msg{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--rule);}
+  .msg .w{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-t);}
+  .msg .s{font-weight:600;font-size:15px;color:var(--ink);line-height:1.35;}
+  .msg .t{font-size:14px;line-height:1.5;color:var(--body);}
+  .stat{font-size:13px;color:var(--soft);min-height:18px;margin:0;}
+  /* Odpowiedz AI przepisuje przyrzad nad soba. Bez tego zmiana dzieje sie poza wzrokiem. */
+  .wrote{outline:2px solid var(--acc);outline-offset:4px;}
 
+  /* ---------- zamkniecie: nastepny krok i cena ------------------------- */
+  .close{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:32px 72px;
+    padding-top:16px;margin-top:8px;}
+  .close h2{margin:12px 0 0;font-family:var(--disp);font-weight:600;font-size:clamp(28px,3.4vw,44px);
+    line-height:1.02;letter-spacing:-.035em;color:var(--ink);max-width:16ch;}
+  .close p.b{margin:18px 0 0;font-size:17px;line-height:1.5;color:var(--body);max-width:48ch;}
+  .fee{border-top:1px solid var(--ink);padding-top:12px;}
+  .fee .amt{margin:10px 0 0;font-size:28px;font-weight:600;letter-spacing:-.02em;color:var(--ink);
+    padding-bottom:12px;border-bottom:1px solid var(--rule);}
+  .fee ul{list-style:none;margin:0;padding:0;}
+  .fee li{padding:11px 0;border-bottom:1px solid var(--rule);font-size:14px;line-height:1.45;color:var(--ink);}
+  .fee .btn{margin-top:18px;width:100%;}
+  .fee .note{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--soft);}
+  footer.foot{margin-top:56px;border-top:1px solid var(--ink);padding-top:6px;display:flex;
+    flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0 24px;font-size:14px;color:var(--body);}
+  footer.foot a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;
+    text-decoration-color:var(--rule);display:inline-flex;align-items:center;min-height:44px;}
+  footer.foot a:hover{text-decoration-color:var(--ink);}
+  footer.foot .l{display:flex;flex-wrap:wrap;gap:0 22px;}
+
+  @media (max-width:900px){
+    .hero,.close{grid-template-columns:minmax(0,1fr);}
+    .hero{padding:28px 0 44px;}
+    .four{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .four > div:nth-child(2){border-right:0;}
+    .four > div:nth-child(3){padding-left:0;}
+    .four > div:nth-child(n+3){border-top:1px solid var(--rule);}
+    .seams{grid-template-columns:minmax(0,1fr);}
+  }
+  @media (max-width:760px){
+    .axis{grid-template-columns:minmax(0,1fr) 64px;gap:0 14px;}
+    .axis .al,.axis .ar{display:none;}
+    .dir{display:none;}
+    .hero{padding-bottom:36px;}
+    .pr{grid-template-columns:minmax(0,1fr) 64px;gap:10px 14px;}
+    .pn{grid-column:1/-1;}
+    .pd{font-size:22px;}
+    .lede{font-size:18px;}
+    .chip{padding:0 14px;font-size:12px;}
+  }
+  @media (max-width:420px){
+    .wm .c{display:none;}
+    .four{grid-template-columns:minmax(0,1fr);}
+    .four > div,.four > div + div{padding:16px 0;border-right:0;}
+    .four > div + div{border-top:1px solid var(--rule);}
+  }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
 </style>
 
 </head>
 <body>
 
+<div class="top"><div class="in">
+  <a class="wm" href="/">Rafa&#322; Oleksiak<span class="c"> &middot; Consultant</span></a>
+  <a class="back" href="/">&larr; Homepage</a>
+</div></div>
+
 <div class="page">
 
-  <header>
-    <div class="nav">
-      <a class="mark wm" href="/">Oleksiak Consulting &middot; FMCG</a>
-      <a class="back" href="/">&larr; Back to the homepage</a>
+  <header class="hero">
+    <div>
+      <p class="lab soft">Instrument &mdash; reorder interval</p>
+      <h1>The pack says 45 days. <span>Customers came back at 69.</span></h1>
+      <p class="lede">What the label promises, against the gap between orders in your own export.
+        <small>Anonymous supplement shop, the real order history with the names removed. Paste
+        your own below &mdash; it is counted in this browser, free.</small></p>
+      <div class="cta">
+        <a class="btn" href="#data">Check your own gap</a>
+        <a class="back" href="#reading">See the reading &darr;</a>
+      </div>
     </div>
-    <h1>What the pack says, against <span>what your buyers do</span></h1>
-    <p class="thesis">Days of supply off the label, against the gap between orders in your own
-      export.</p>
+    <aside class="dir" aria-label="Directions for use">
+      <p class="lab">Directions for use</p>
+      <ol>
+        <li><span><b>Paste an order export.</b> Shopify: Orders &rarr; Export &rarr; plain CSV.
+          Date, customer, product title, quantity, price.</span></li>
+        <li><span><b>Read the gap.</b> Label days against the rhythm buyers settle into and the
+          first repurchase, one axis for every product.</span></li>
+        <li><span><b>Take the four settings.</b> Paid, subscription, CRM and the product page,
+          all timed to the same measured day.</span></li>
+      </ol>
+    </aside>
   </header>
 
-  <section class="tool">
-    <div class="thead">
-      <div>
-        <h2>The discrepancy</h2>
-        <p>Every subscription app sends on an interval someone typed in. Klaviyo&rsquo;s date ignores
-          which product it was. Nothing measures the gap.</p>
+  <section class="sec" id="data" aria-labelledby="h-data">
+    <div class="sh"><p class="lab" id="h-data">01 &mdash; Your data</p><span class="n">Orders in</span></div>
+    <div class="src">
+      <div class="srow">
+        <div class="seg" role="group" aria-label="Data source">
+          <button class="chip" id="srcS" type="button" aria-pressed="true">Sample shop</button>
+          <button class="chip" id="srcM" type="button" aria-pressed="false">Paste your own</button>
+        </div>
+        <span class="sstat" id="sstat">&nbsp;</span>
       </div>
+      <p class="shelp" id="shelp" hidden></p>
+      <textarea id="orders" rows="5" spellcheck="false"
+        aria-label="Order export lines: date, customer, product title, quantity, price"></textarea>
     </div>
-    <div class="tbody">
-      <div class="src">
-        <div class="srow">
-          <span class="cl" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
-            text-transform:uppercase;color:var(--soft);">Running on</span>
-          <button class="chip" id="srcS" type="button" aria-pressed="true">A real shop, anonymised</button>
-          <button class="chip" id="srcM" type="button" aria-pressed="false">Paste your own &rarr;</button>
-          <span class="sstat" id="sstat">&nbsp;</span>
-        </div>
-        <p class="shelp" id="shelp" hidden></p>
-        <textarea id="orders" rows="3" spellcheck="false"
-          aria-label="Order export lines: date, customer, product title, quantity, price"></textarea>
-      </div>
-      <div class="legend">
-        <span><i class="a"></i>label</span>
-        <span><i class="b"></i>settled rhythm</span>
-        <span><i class="c"></i>first repurchase</span>
-        <span>days after the order</span>
-        <span id="chk"></span>
-      </div>
-      <div class="axis" id="axis"></div>
-      <div class="plot" id="plot"></div>
-      <p class="say" id="verdict">&nbsp;</p>
-      <div class="four" id="four"></div>
-      <div class="widget" id="widget">
-        <span class="wl">For the product page</span>
-        <span class="wb" id="wb">&nbsp;</span>
-        <span class="wn" id="wn">&nbsp;</span>
-      </div>
+  </section>
 
-      <div class="seams">
-        <div class="ai" id="ai1">
-          <div class="hd"><b>AI &middot; your catalogue</b><span>titles in, pack size out</span></div>
-          <p class="fine">Reads the titles in the export above and returns pack size only. Never a
-            dose, never a number of days.</p>
-          <button class="go" id="g1" type="button">Read pack sizes</button>
-          <p class="stat" id="s1"></p>
-          <div class="out" id="o1"></div>
-        </div>
-        <div class="ai" id="ai2">
-          <div class="hd"><b>AI &middot; the label</b><span>the maker&rsquo;s words, quoted</span></div>
-          <label class="fine" for="doses">Directions off the pack. The only place a dose may come
-            from.</label>
-          <textarea id="doses" rows="3" spellcheck="false"
-            aria-label="Manufacturer directions, one product per line"></textarea>
-          <button class="go" id="g2" type="button">Read the doses</button>
-          <p class="stat" id="s2"></p>
-          <div class="out" id="o2"></div>
-        </div>
+  <section class="sec" id="reading" aria-labelledby="h-read">
+    <div class="sh"><p class="lab" id="h-read">02 &mdash; The reading</p><span class="n">Days after the order</span></div>
+    <p class="sub">Every subscription app sends on an interval someone typed in, and Klaviyo&rsquo;s
+      predicted date ignores which product it was. Here is the gap, product by product.</p>
+    <div class="legend">
+      <span><i class="a"></i>label</span>
+      <span><i class="b"></i>settled rhythm</span>
+      <span><i class="c"></i>first repurchase</span>
+      <span id="chk"></span>
+    </div>
+    <div class="axis" id="axis"></div>
+    <div class="plot" id="plot"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-ind">
+    <div class="sh"><p class="lab" id="h-ind">03 &mdash; Indication</p><span class="n">One day, four channels</span></div>
+    <p class="say" id="verdict">&nbsp;</p>
+    <div class="four" id="four"></div>
+    <p class="together">Set together, not one flow at a time.</p>
+    <div class="widget" id="widget">
+      <span class="wl">For the product page</span>
+      <span class="wb" id="wb"></span>
+      <span class="wn" id="wn">&nbsp;</span>
+    </div>
+  </section>
+
+  <section class="sec aisec" aria-labelledby="h-ai">
+    <div class="sh"><p class="lab" id="h-ai">04 &mdash; Read the labels for me</p><span class="n">AI, quoted only</span></div>
+    <div class="seams">
+      <div class="ai" id="ai1">
+        <div class="hd"><b>Your catalogue</b><span>titles in, pack size out</span></div>
+        <p class="fine">Reads the titles in the export above and returns pack size only. Never a
+          dose, never a number of days.</p>
+        <button class="go" id="g1" type="button">Read pack sizes</button>
+        <p class="stat" id="s1"></p>
+        <div class="out" id="o1"></div>
+      </div>
+      <div class="ai" id="ai2">
+        <div class="hd"><b>The label</b><span>the maker&rsquo;s words, quoted</span></div>
+        <label class="fine" for="doses">Directions off the pack, one product per line. The only
+          place a dose may come from.</label>
+        <textarea id="doses" rows="4" spellcheck="false"
+          aria-label="Manufacturer directions, one product per line"></textarea>
+        <button class="go" id="g2" type="button">Read the doses</button>
+        <p class="stat" id="s2"></p>
+        <div class="out" id="o2"></div>
       </div>
     </div>
   </section>
 
+  <section class="close" aria-labelledby="h-next">
+    <div>
+      <p class="lab soft">Next</p>
+      <h2 id="h-next">The next run is on your export, not this one.</h2>
+      <p class="b">Your orders and your label text in. I re-time the exclusions in paid, the
+        subscription interval, the CRM sends and the pack on the product page to the day your
+        customers actually come back &mdash; together, month by month.</p>
+    </div>
+    <div class="fee">
+      <p class="lab">Fee</p>
+      <p class="amt">EUR 2,500 net per month.</p>
+      <ul>
+        <li>No setup fee. No minimum term.</li>
+        <li>The first month is an as-is audit and the quick wins that come out of it.</li>
+        <li>Two clients at a time.</li>
+      </ul>
+      <a class="btn" href="/#enquiry">Send me your store</a>
+      <p class="note">Store URL and email. I reply personally within 24 hours, with a first
+        observation about your store &mdash; not a calendar link.</p>
+    </div>
+  </section>
 
-
-
-  <div class="close">
-    <p><b>The next run is on your export, not this one.</b> Your orders and your label text in, the
-      bands out, and I set the exclusions, the interval, the sends and the page size myself. Two to
-      three weeks, <b>8&ndash;12k z&#322; net</b>.</p>
-    <p class="sig">Rafa&#322; Oleksiak<br><a href="https://oleksiakconsulting.com/">oleksiakconsulting.com</a></p>
-  </div>
-
-  <!-- Poza .close celowo: regula `.close a` ma wyzsza specyficznosc i przywrocilaby
-       akcent, ktory w jasnym motywie nie przechodzi kontrastu. -->
-  <p class="backfoot"><a class="back" href="/">&larr; Back to the homepage</a></p>
+  <footer class="foot">
+    <span>Rafa&#322; Oleksiak &middot; FMCG and everything bought again</span>
+    <span class="l">
+      <a href="mailto:rafal@oleksiakconsulting.com">rafal@oleksiakconsulting.com</a>
+      <a href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/">LinkedIn</a>
+      <a href="/">&larr; Homepage</a>
+    </span>
+  </footer>
 </div>
 
 <script>
@@ -861,7 +839,7 @@
     if($("chk")) $("chk").innerHTML = checked
       ? (flagged?'<b style="color:var(--acc)">'+flagged+' of '+checked
                  +' families: price per unit says a pack size is wrong</b>'
-                : checked+' families cross-checked on price per unit')
+                : checked+(checked===1?' family':' families')+' cross-checked on price per unit')
       : "";
     verdict(lead);
   }
@@ -915,7 +893,7 @@
        co bylo prawda o cyfrze i falszem o odczycie.                              */
     var st=doseStatus(DOSE[F.k]);
     $("wb").textContent=F._pd+" days at "+DOSE[F.k].perDay+" "+F.unit+" a day"
-      +(st==="computed"?", the pack&rsquo;s own two figures multiplied.":".");
+      +(st==="computed"?", the pack’s own two figures multiplied.":".");
     $("wn").innerHTML="&ldquo;"+esc(DOSE[F.k].q)+"&rdquo; &mdash; the maker."
       +(st==="computed"
         ? " The daily figure is not printed as one number; it is "+DOSE[F.k].serving
