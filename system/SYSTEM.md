@@ -5,20 +5,20 @@ zadania dotykające Claude Design jadą przez Chrome „ROC” na komputerze Raf
 (decyzja Rafała 2026-09-26 — do czasu domknięcia wersji, z której będzie
 zadowolony). Pętle GenActiv (LP subskrypcji) są POZA tym systemem.
 
-## Pamięć wspólna (w repo, gałąź feature/new-site)
+## Pamięć wspólna i gałęzie (od 2026-09-26 13:50)
 
-- `system/USP.md` — USP i brief dla budujących. Pisze strateg.
-- `system/REVIEW.md` — werdykty po każdym cyklu. Pisze recenzent.
-- `system/SYSTEM.md` — ten plik.
+- `system/USP.md`, `system/REVIEW.md`, `system/SYSTEM.md` żyją na gałęzi **`claude/system`**
+  (Vercel jej nie buduje — `vercel.json`). Każdy agent czyta je stamtąd:
+  `https://raw.githubusercontent.com/zurychhh/rafal-oleksiak-consulting/claude/system/system/<plik>`
+  (albo `git clone --depth 1 --branch claude/system`). Pisze: strateg (USP.md), recenzent
+  i promotor (REVIEW.md) — commit tylko pliku z `system/`, `git pull --rebase`, push na
+  `claude/system`.
+- Kod produkcji żyje na **`claude/production`** — to jest gałąź produkcyjna Vercela;
+  push = wdrożenie domeny. Pushuje wyłącznie promotor po zielonej bramce.
+- Dlaczego `claude/…`: zadania cykliczne mogą pushować bez ograniczeń tylko na gałęzie
+  z prefiksem `claude/`. `feature/new-site` zostaje jako historia, nie jest już źródłem prawdy.
 - Artefakt „Instruments · Staging” (loop-spec) — pamięć pętli narzędzia i łatka.
 - Claude Design, projekt 1c71db27-… — strony „Homepage vN …” i „Tool vN …”.
-
-Odczyt bez uprawnień: https://raw.githubusercontent.com/zurychhh/rafal-oleksiak-consulting/feature/new-site/system/<plik>
-Zapis: klon z prawem pusha (mcp__claude-code-remote__add_repo, access "push"),
-commit tylko plików z `system/`, push na feature/new-site. UWAGA: feature/new-site
-jest gałęzią PRODUKCYJNĄ Vercela — każdy push wdraża domenę. Push samych plików
-`system/` jest bezpieczny (kod się nie zmienia), ale nigdy nie pushuj kodu poza
-promotorem.
 
 ## Cykl (co GODZINĘ, minuty UTC) i role
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Read This First
 
-**Praca toczy się na gałęzi `feature/new-site`, nigdy na `main`.** Odpowiadaj po polsku;
+**Produkcja = gałąź `claude/production` (od 26.09.2026), pamięć agentów = `claude/system`; nigdy `main`. `feature/new-site` to historia.** Odpowiadaj po polsku;
 kod i treść strony po angielsku.
 
 **Repozytorium jest publiczne i ma sekrety w historii.** Zweryfikowane: klonuje się
@@ -350,9 +350,9 @@ narzędzia FMCG. `design/qa.js` to checker Playwright.
 
 ## Wdrażanie na produkcję — CZYTAJ, ZANIM POWIESZ, ŻE COŚ JEST NA ŻYWO
 
-**Od 26.09.2026 `feature/new-site` jest gałęzią PRODUKCYJNĄ Vercela** (Settings →
+**Od 26.09.2026 `claude/production` jest gałęzią PRODUKCYJNĄ Vercela** (wcześniej `feature/new-site`) (Settings →
 Environments → Production → Branch Tracking). **Każdy push na nią wdraża domenę.**
-Dlatego kod na `feature/new-site` pushuje wyłącznie promotor po zielonej bramce;
+Dlatego kod na `claude/production` pushuje wyłącznie promotor po zielonej bramce;
 praca ręczna idzie na osobną gałąź (np. `promote/…`), która daje tylko Preview.
 Push samych plików `system/` jest bezpieczny — przebuduje tę samą stronę.
 
@@ -366,12 +366,12 @@ to nie znaczy, że strona jest zepsuta. Attack Mode jest wyłączony i ma taki z
 
 ## System agentów i promocja
 
-Opis: `system/SYSTEM.md`. W skrócie — wszystko w chmurze, cykl co 3 h:
-Strateg USP (raz na dobę, `system/USP.md`) → budujący narzędzie (łatka w `loop-spec`
+Opis: `system/SYSTEM.md` na gałęzi `claude/system`. W skrócie — wszystko w chmurze, cykl co godzinę:
+Strateg USP (`system/USP.md`) → budujący narzędzie (łatka w `loop-spec`
 artefaktu „Instruments · Staging”, tylko `tool-index.html`) i budujący w Claude Design
 (przez Chrome „ROC” na Macu Rafała) → Recenzent całości (`system/REVIEW.md`, wskazuje
 KANDYDATA jako artefakt „Publish as artifact”) → Promotor (bramka + push na produkcję).
-Promotor chodzi w chmurze; **nie zostawiaj niezacommitowanej pracy na `feature/new-site`**
+Promotor chodzi w chmurze; **nie zostawiaj niezacommitowanej pracy na `claude/production`**
 i nie pushuj tam kodu ręcznie — idzie prosto na domenę.
 
 ## Dokumentacja
