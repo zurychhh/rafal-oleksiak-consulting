@@ -327,37 +327,29 @@ narzędzia FMCG. `design/qa.js` to checker Playwright.
 
 ## Wdrażanie na produkcję — CZYTAJ, ZANIM POWIESZ, ŻE COŚ JEST NA ŻYWO
 
-**`git push` na `feature/new-site` NIE wdraża na produkcję. Tworzy wyłącznie Preview.**
-To jest najczęstszy błąd w tym projekcie i kosztował już kilka fałszywych raportów
-„jest na produkcji". Domena zmienia się dopiero po:
+**Od 26.09.2026 `feature/new-site` jest gałęzią PRODUKCYJNĄ Vercela** (Settings →
+Environments → Production → Branch Tracking). **Każdy push na nią wdraża domenę.**
+Dlatego kod na `feature/new-site` pushuje wyłącznie promotor po zielonej bramce;
+praca ręczna idzie na osobną gałąź (np. `promote/…`), która daje tylko Preview.
+Push samych plików `system/` jest bezpieczny — przebuduje tę samą stronę.
 
-```bash
-npx vercel@latest --prod --yes
-```
+Weryfikacja wdrożenia bez CLI: `https://api.github.com/repos/zurychhh/rafal-oleksiak-consulting/commits/<sha>/status`
+(kontekst „Vercel", `success`). **Nie odpytuj domeny w pętli co kilkanaście sekund** —
+13.09 takie odpytywanie wywołało automatyczną mitygację Vercela i dziesięciominutowe
+wyzwanie na adresie IP. Klient bez JS dostaje wtedy 403 z `x-vercel-mitigated: challenge`;
+to nie znaczy, że strona jest zepsuta. Attack Mode jest wyłączony i ma taki zostać.
+`npx vercel@latest --prod --yes` nadal działa jako ręczne obejście (globalne `vercel`
+41.x jest za stare).
 
-Globalne `vercel` (41.x) jest za stare dla endpointu wdrożeniowego — wymagane ≥47.2.2 —
-dlatego `npx vercel@latest`, bez ruszania globalnej instalacji.
+## System agentów i promocja
 
-Weryfikacja wdrożenia: `npx vercel@latest inspect <id>` albo `ls`, stan READY i alias
-`oleksiakconsulting.com`. **Nie odpytuj domeny w pętli co kilkanaście sekund** — 13.09
-takie odpytywanie wywołało automatyczną mitygację Vercela i dziesięciominutowe wyzwanie
-na adresie IP. Klient bez JS dostaje wtedy 403 z `x-vercel-mitigated: challenge`; to nie
-znaczy, że strona jest zepsuta. Attack Mode jest wyłączony i ma taki zostać.
-
-## Pętle i promocja
-
-Pętla budująca chodzi **w chmurze** co trzy godziny, pisze do artefaktów roboczych
-i nie ma prawa zapisu do tego repozytorium. Zostawia w artefakcie maszynową łatkę
-(pola `patch`, `patch_base`, `patch_run`, `patch_status` w `loop-spec`), liczoną jako
-pełen dystans między staginguem a produkcją — nie jako różnica z jednego przebiegu.
-
-Zadanie **Promotor** chodzi **na tym Macu** pół godziny po pętli, bierze tę łatkę,
-przepuszcza przez pełną bramkę i wypuszcza na produkcję. Dlatego:
-**nie zostawiaj niezacommitowanych zmian w plikach śledzonych** — promotor wtedy staje,
-żeby nie nadpisać cudzej roboty ręcznej. Nie odtwarzaj tych harmonogramów lokalnie.
-
-Blokady gita: w tym repo regularnie zostają osierocone `.git/index.lock` i `.git/HEAD.lock`.
-`device_bash` nie umie kasować plików — przenieś je do `.git/_stale/`, nie próbuj `rm`.
+Opis: `system/SYSTEM.md`. W skrócie — wszystko w chmurze, cykl co 3 h:
+Strateg USP (raz na dobę, `system/USP.md`) → budujący narzędzie (łatka w `loop-spec`
+artefaktu „Instruments · Staging”, tylko `tool-index.html`) i budujący w Claude Design
+(przez Chrome „ROC” na Macu Rafała) → Recenzent całości (`system/REVIEW.md`, wskazuje
+KANDYDATA jako artefakt „Publish as artifact”) → Promotor (bramka + push na produkcję).
+Promotor chodzi w chmurze; **nie zostawiaj niezacommitowanej pracy na `feature/new-site`**
+i nie pushuj tam kodu ręcznie — idzie prosto na domenę.
 
 ## Dokumentacja
 
