@@ -7,6 +7,17 @@
 
 ---
 
+## 26 wrzesnia 2026 — v66 („Dosage EFEKT") z Claude Design na galezi `promote/v66`
+
+Strona glowna przeniesiona z eksportu Claude Design nowym mechanizmem
+`scripts/ship-design.mjs` (opis: CLAUDE.md → „Strona glowna"). Galaz `promote/v66`
+daje wylacznie Preview na Vercelu; `feature/new-site` nietkniety. Formularz wysyla
+realnie do `/api/lead` (osobna zgoda, stan „wyslane" dopiero po 2xx, zdarzenia
+`generate_lead` + `form_submission_lead` przez bufor zgody). Zasady tresci pilnuje
+`scripts/content-rules.test.mjs`. Do decyzji Rafala przed promocja: lista watpliwosci
+tresciowych w raporcie z przeniesienia (m.in. „One of the two" przy GenActiv, mBank
+jako „Closed", LinkedIn w Person JSON-LD inny niz w stopce, stary tytul OG).
+
 ## Stan na 9 wrzesnia 2026 — nowa strona NA PRODUKCJI
 
 Wypuszczona na produkcje 9 wrzesnia (`vercel deploy --prod` z `feature/new-site`).

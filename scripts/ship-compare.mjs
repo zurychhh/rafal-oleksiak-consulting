@@ -1,117 +1,97 @@
 #!/usr/bin/env node
 /**
- * Porównuje style OBLICZONE przez przeglądarkę: strona w aplikacji
- * (http://localhost:3000) kontra źródło otwarte z dysku.
+ * Porownuje style OBLICZONE przez przegladarke: strona glowna w aplikacji
+ * (http://localhost:3000/) kontra bundle Claude Design otwarty z dysku
+ * (design/production/claude-design-bundle.html — dokladnie to, co widac
+ * w Claude Design, z odznaka i bez naszych poprawek).
  *
- * Po co, skoro jest build, tsc, lint i qa.js: żaden z nich nie zauważa, że
- * nagłówek renderuje się innym krojem albo że separator tysięcy zmienił się
- * z cienkiej spacji na zwykłą. Oba te błędy realnie wydarzyły się przy porcie
- * i oba złapało dopiero to porównanie.
+ * Po co, skoro jest build, tsc, lint i qa.js: zaden z nich nie zauwazy, ze
+ * naglowek renderuje sie Poppinsem z critical.css zamiast Instrument Sans albo
+ * ze sekcja dostala 120 px paddingu z globals.css. Style starej strony leza
+ * w layoucie i przeciekaja na kazda trase — to porownanie je lapie.
  *
- *   node scripts/ship-compare.mjs            # wymaga działającego dev servera
+ * Porownanie idzie element po elemencie w kolejnosci dokumentu pod #dc-root,
+ * na 1440 i 390, bez przewijania (stan startowy). Oczekiwane roznice tresci
+ * („Rafal" → „Rafał", elementy dolozone przez ship-design) sa normalizowane.
+ *
+ *   node scripts/ship-compare.mjs            # wymaga dzialajacego serwera
+ *   SHIP_URL=http://localhost:3001 node scripts/ship-compare.mjs
+ *
+ * Stara wersja dla „The Audit" zyje w scripts/ship-compare-audit.mjs.
  */
-import { chromium } from 'playwright';
-import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { chromium } from 'playwright'
+import { existsSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-const URL_APP = process.env.SHIP_URL || 'http://localhost:3000';
-const SRC = resolve('design/production/index.html');
-if (!existsSync(SRC)) { console.error('Brak źródła: ' + SRC); process.exit(1); }
+const URL_APP = process.env.SHIP_URL || 'http://localhost:3000/'
+if (/oleksiakconsulting\.com/.test(URL_APP)) { console.error('Porownanie idzie lokalnie, nie na produkcji.'); process.exit(1) }
+const SRC = resolve('design/production/claude-design-bundle.html')
+if (!existsSync(SRC)) { console.error('Brak zrodla: ' + SRC); process.exit(1) }
 
-const PROPS = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'color',
-  'backgroundColor', 'margin', 'padding', 'letterSpacing', 'textTransform',
-  'borderWidth', 'display', 'gridTemplateColumns', 'position'];
+const PROPS = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'textTransform',
+  'color', 'backgroundColor', 'marginTop', 'marginBottom', 'paddingTop', 'paddingRight', 'paddingBottom',
+  'paddingLeft', 'borderTopWidth', 'borderBottomWidth', 'display', 'position', 'gridTemplateColumns',
+  'overflowX', 'transform', 'width', 'height']
 
-// Kierunek C jest jednym ekranem: nie ma drugiego widoku ani przycisku, ktory
-// by go odslanial, wiec przebieg "odsloniety" i jego lista selektorow znikly.
-// Inwentarz nie zostal skrocony — obejmuje kazdy blok nowej strony, zeby
-// porownanie dalej mialo czego pilnowac.
-const SELECTORS = [
-  'body', '.wrap',
-  '.top', '.brand', '.clients', '.cl', '.cl b', '.cl i', '.clm',
-  '.mid', '.band', '.grid', '.grid i', '.c1', '.c2', '.c3',
-  '.legend', '.legend .amb', '.legend .soft', '.origin',
-  '.say', '.claim', '.lead', '.svcs', '.svc', '.hair', '.dots', '.dots i',
-  '.sname', '.sdesc',
-  '.exit', '.go', '.gotxt', '.goarr', '.exit form', '.fbox', '.fbox input',
-  '.fbox button', '.fine', '.ai',
-  'p', 'h1',
-];
-
-async function grab(browser, url, { width, height }) {
-  const page = await browser.newPage({ viewport: { width, height } });
-  // Pasek zgody zdejmujemy: nie ma go w źródle, a stojąc na position:fixed
-  // przechwytuje kliknięcia. Jego nakładanie na treść ma osobny test.
-  await page.addInitScript(() => {
-    try { localStorage.setItem('cookie-consent', 'declined'); } catch { /* tryb prywatny */ }
-  });
-  await page.goto(url, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(1500);
-
-  const data = await page.evaluate(([sels, props]) => {
-    const out = {};
-    // Tresc, nie tylko styl: liczby na kafelkach i dni na paskach sa wpisane
-    // w zrodle i to wlasnie one rozjezdzaja sie przy recznym przepisywaniu.
-    // Kafle z wymyslonymi interwalami zniknely; jedyna liczba w tym bloku pochodzi
-    // teraz od odwiedzajacego, wiec nie ma tu czego porownywac tresciowo.
-    //
-    // Biale znaki zwijamy: w zrodle dluga etykieta jest zawinieta na dwie linie,
-    // a JSX zdejmuje wciecia. To roznica FORMATOWANIA pliku, nie tresci — na
-    // ekranie obie wersje sa identyczne, bo przegladarka i tak zwija spacje.
-    // Porownywanie surowego textContent porownywaloby sposob zapisu zrodla.
-    const txt = (sel) => [...document.querySelectorAll(sel)]
-      .map((e) => e.textContent.replace(/\s+/g, ' ').trim()).join('|');
-    out.__klienci = txt('.cl b');
-    out.__legenda = txt('.legend span');
-    out.__uslugi = txt('.sname');
-    // Siatka kalendarza: 70 pol, 45 jasnych, 24 bursztynowe, ostatnie wygaszone.
-    // Liczby sa trescia projektu, nie dekoracja — sprawdzamy je po klasach.
-    out.__siatka = ['c1', 'c2', 'c3']
-      .map((c) => c + ':' + document.querySelectorAll('.grid i.' + c).length).join('|');
-    for (const s of sels) {
-      const el = document.querySelector(s);
-      if (!el) { out[s] = null; continue; }
-      const cs = getComputedStyle(el);
-      const o = {};
-      for (const p of props) o[p] = cs[p];
-      out[s] = o;
+async function grab(browser, url, vp) {
+  const page = await browser.newPage({ viewport: vp, reducedMotion: 'reduce' })
+  await page.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'declined') } catch { /* */ } })
+  await page.goto(url, { waitUntil: 'networkidle' })
+  await page.waitForSelector('#dc-root', { timeout: 20000 })
+  await page.waitForTimeout(1500)
+  const out = await page.evaluate((props) => {
+    const root = document.getElementById('dc-root')
+    const rows = []
+    for (const el of root.querySelectorAll('*')) {
+      if (el.closest('[data-lead-error]')) continue
+      // Kontener runtime'u (.sc-host) nie jest czescia projektu: w bundlu ma
+      // height:100% okna i krój domyslny przegladarki, u nas dziedziczy z body.
+      // Jesli ktorys potomek dziedziczylby z niego krój albo kolor, roznica
+      // wyjdzie na tym potomku — wiec pominiecie nie chowa bledu.
+      if (el.parentElement === root && el.classList.contains('sc-host')) continue
+      if (el.closest('svg') && el.tagName.toLowerCase() !== 'svg') continue
+      const cs = getComputedStyle(el)
+      const o = { tag: el.tagName.toLowerCase(), text: '' }
+      if (![...el.children].length) o.text = el.textContent.replace(/\s+/g, ' ').trim().replace(/\bRafal\b/g, 'Rafał')
+      for (const p of props) o[p] = cs[p]
+      // Szerokosc/wysokosc zaokraglamy: subpiksele roznia sie miedzy hostami.
+      const r = el.getBoundingClientRect()
+      o.width = Math.round(r.width) + 'px'; o.height = Math.round(r.height) + 'px'
+      rows.push(o)
     }
-    return out;
-  }, [SELECTORS, PROPS]);
-
-  await page.close();
-  return data;
+    return { rows, scrollHeight: document.documentElement.scrollHeight }
+  }, PROPS)
+  await page.close()
+  return out
 }
 
-const browser = await chromium.launch();
-let diffs = 0;
-
-for (const [width, height] of [[1440, 900], [1080, 900], [390, 844]]) {
-  {
-    const opts = { width, height };
-    const A = await grab(browser, 'file://' + SRC, opts);
-    const B = await grab(browser, URL_APP, opts);
-    const tag = `${width}`;
-
-    for (const k of Object.keys(A)) {
-      if (k.startsWith('__')) {
-        if (A[k] !== B[k]) { console.log(`[${tag}] ${k}\n   zrodlo: ${A[k]}\n   apka:   ${B[k]}`); diffs++; }
-        continue;
-      }
-      if (!A[k] || !B[k]) {
-        if (!!A[k] !== !!B[k]) { console.log(`[${tag}] BRAK ELEMENTU ${k} (zrodlo=${!!A[k]} apka=${!!B[k]})`); diffs++; }
-        continue;
-      }
-      for (const p of PROPS) {
-        if (A[k][p] !== B[k][p]) {
-          console.log(`[${tag}] ${k} · ${p}\n   zrodlo: ${A[k][p]}\n   apka:   ${B[k][p]}`);
-          diffs++;
-        }
-      }
-    }
+const pinned = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
+const browser = await chromium.launch(existsSync(pinned) ? { executablePath: pinned } : {})
+let bad = 0
+for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  const [app, src] = await Promise.all([grab(browser, URL_APP, vp), grab(browser, pathToFileURL(SRC).href, vp)])
+  const tag = `${vp.width}×${vp.height}`
+  const diffs = []
+  if (app.rows.length !== src.rows.length) {
+    diffs.push(`liczba elementow: aplikacja ${app.rows.length}, zrodlo ${src.rows.length}`)
+  }
+  const n = Math.min(app.rows.length, src.rows.length)
+  for (let i = 0; i < n; i++) {
+    const a = app.rows[i], s = src.rows[i]
+    if (a.tag !== s.tag) { diffs.push(`#${i} znacznik ${a.tag} ≠ ${s.tag} — drzewo sie rozjechalo, dalej nie porownuje`); break }
+    if (a.text !== s.text) diffs.push(`#${i} <${a.tag}> tresc „${a.text.slice(0, 50)}" ≠ „${s.text.slice(0, 50)}"`)
+    for (const p of PROPS) if (a[p] !== s[p]) diffs.push(`#${i} <${a.tag}> „${(a.text || '').slice(0, 24)}" ${p}: ${a[p]} ≠ ${s[p]}`)
+  }
+  if (Math.abs(app.scrollHeight - src.scrollHeight) > 2) diffs.push(`wysokosc strony: ${app.scrollHeight} ≠ ${src.scrollHeight}`)
+  if (diffs.length) {
+    bad += diffs.length
+    console.log(`[${tag}] ${diffs.length} roznic(a):`)
+    for (const d of diffs.slice(0, 40)) console.log('  · ' + d)
+  } else {
+    console.log(`[${tag}] ${n} elementow, style obliczone i tresc zgodne ze zrodlem`)
   }
 }
-
-await browser.close();
-console.log(diffs === 0 ? 'ZERO ROZNIC (style obliczone i tresc, 1440, 1080 i 390)' : `ROZNIC: ${diffs}`);
-process.exit(diffs === 0 ? 0 : 1);
+await browser.close()
+if (bad) { console.log('\nFAIL — strona w aplikacji rozni sie od zrodla z Claude Design'); process.exitCode = 1 }
+else console.log('\nPASS — strona w aplikacji = zrodlo z Claude Design')

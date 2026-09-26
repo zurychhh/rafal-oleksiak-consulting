@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 /**
+ * UWAGA (wrzesien 2026): strona glowna NIE jest juz przenoszona tym skryptem.
+ * Obowiazuje scripts/ship-design.mjs (eksport Claude Design → `/`). Ten plik
+ * zostaje jako archiwum i droga powrotu do „The Audit": app/page.tsx nie
+ * importuje juz AuditClient, wiec przebieg tego skryptu nie zmienia `/`.
+ *
  * ship — przenosi design/production/index.html do aplikacji.
  *
  *   npm run ship          podgląd: co się zmieni, nic nie rusza
@@ -344,7 +349,7 @@ function visualGate() {
       say(`    qa.js PASS — ${label}`);
     }
 
-    const cmp = execFileSync('node', ['scripts/ship-compare.mjs'], { encoding: 'utf8' });
+    const cmp = execFileSync('node', ['scripts/ship-compare-audit.mjs'], { encoding: 'utf8' });
     say(cmp.trim().split('\n').map((l) => '    ' + l).join('\n'));
     if (!/ZERO ROZNIC/.test(cmp)) return false;
     return true;

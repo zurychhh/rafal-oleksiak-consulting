@@ -1,0 +1,1165 @@
+<!-- GENEROWANE przez scripts/ship-design.mjs — migawka ostatnio przeniesionego zrodla -->
+<x-dc>
+<helmet>
+<style>/* latin-ext */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/dc/21fac8da552a915e.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/dc/6219bc4bfdfc5d9b.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/dc/21fac8da552a915e.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/dc/6219bc4bfdfc5d9b.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/dc/21fac8da552a915e.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/dc/6219bc4bfdfc5d9b.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/dc/21fac8da552a915e.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/dc/6219bc4bfdfc5d9b.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#F7F5F0}
+  a{color:#14161A;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+  a:hover{text-decoration-thickness:2px}
+  input{font:inherit;color:#14161A}
+  input::placeholder{color:#9B9A95}
+  input:focus-visible,button:focus-visible,[role="group"]:focus-visible{outline:1px solid #14161A;outline-offset:2px}
+  [data-seg],[data-settle],[data-div]{will-change:auto}
+</style>
+</helmet>
+<div style="padding-top:{{L.meterReserve}};background:#F7F5F0;color:#14161A;font-family:'Instrument Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:{{L.barSpace}}">
+
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:{{L.hpad}};border-bottom:1px solid #14161A">
+    <span style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase">Rafał Oleksiak · Consultant</span>
+      <span aria-hidden="true" style="display:flex;align-items:flex-end;gap:1px;height:10px;flex:none"><sc-for list="{{ sig }}" as="g" hint-placeholder-count="70"><span style="display:block;width:1px;height:{{ g.h }};background-color:{{ g.bg }}"></span></sc-for></span>
+    </span>
+  </header>
+
+  <sc-if value="{{ meterOn }}" hint-placeholder-val="{{ false }}">
+  <div aria-hidden="{{ meterHidden }}" style="position:fixed;{{L.meterPos}};z-index:25;display:{{ meterDisplay }};flex-direction:{{L.meterDir}};gap:{{L.meterGap}};align-items:{{L.meterAlign}};justify-content:{{L.meterJustify}};background:#F7F5F0;border-bottom:{{L.meterBorder}};padding:{{L.meterPad}}">
+    <sc-for list="{{ meter }}" as="g" hint-placeholder-count="5">
+      <span style="display:flex;align-items:center;gap:7px">
+        <span style="display:block;width:{{L.markW}};height:{{L.markH}};border:1px solid #14161A;background-color:{{ g.bg }}"></span>
+        <span style="font-size:12px;font-weight:600;letter-spacing:.14em;color:#6E6D68;white-space:nowrap">{{ g.label }}</span>
+      </span>
+    </sc-for>
+    <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;white-space:nowrap">{{ meterReadout }}</span>
+  </div>
+  </sc-if>
+
+  <main style="padding:{{L.mpad}};display:grid;grid-template-areas:{{L.areas}};grid-template-columns:{{L.gridCols}};column-gap:{{L.colGap}};row-gap:{{L.rowGap}}">
+
+    <div style="grid-area:head;min-width:0;display:flex;flex-direction:column;gap:{{L.headGap}}">
+      <sc-if value="{{ showIndication }}" hint-placeholder-val="{{ true }}"><p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#6E6D68;margin:0">Indication</p></sc-if>
+      <h1 style="font-size:{{L.h1}};font-weight:600;line-height:.94;letter-spacing:-.035em;margin:0;max-width:17ch;text-wrap:balance">You don't pay twice for the same customer.</h1>
+      <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch;border-top:1px solid #14161A;padding-top:{{L.leadPad}}">E-commerce for brands whose customers come back.<span style="display:{{L.leadTail}}"> I build the tools myself — calculators, counters, progress bars — the kind of thing that normally waits in an IT queue.</span></p>
+      <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch">You bought the same customer twice this quarter, and you only found out because you recognised the name.</p>
+      <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch;color:#6E6D68">The label says 45 days. The order data says 69.</p>
+
+      <sc-if value="{{ phoneFee }}" hint-placeholder-val="{{ false }}">
+        <section data-fee-band="1" style="min-width:0;display:flex;flex-direction:column;gap:{{L.feeHeadGap}};margin-top:{{L.feeLift}}">
+          <span data-fee-rule="1" aria-hidden="true" style="display:block;height:1px;background:#14161A;transform-origin:left center"></span>
+          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;line-height:1">Fee</p>
+          <p style="font-size:{{L.feeLead}};font-weight:600;line-height:1.15;margin:0;color:#14161A">{{ feeLead }}</p>
+        </section>
+      </sc-if>
+      <sc-if value="{{ live.phone }}" hint-placeholder-val="{{ true }}">
+      <form id="enquiry-phone" ref="{{ phoneFormRef }}" sc-camel-on-submit="{{ submit.phone }}" style="display:{{ heroFormDisplay }};flex-direction:column;gap:{{L.formGap}};border:1px solid #14161A;padding:{{L.formPad}}">
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;border-bottom:1px solid #14161A;padding-bottom:10px">Enquiry form</p>
+        <label style="display:flex;flex-direction:column;gap:5px;width:100%">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your store URL</span>
+          <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" required="required" name="url0" placeholder="yourstore.com" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.field}};width:100%;min-height:44px;box-sizing:border-box">
+        </label>
+        <label style="display:flex;flex-direction:column;gap:5px;width:100%">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your email</span>
+          <input type="email" required="required" name="email0" placeholder="you@yourstore.com" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.field}};width:100%;min-height:44px;box-sizing:border-box">
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;width:100%;min-height:44px">
+          <input type="checkbox" required="required" name="consent0" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+          <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry</span>
+        </label>
+        <p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about <span data-echo="phone" style="position:relative;display:inline-block;max-width:min(100%,13em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span> — not a calendar link.</p>
+        <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;padding:12px 16px;font-size:{{L.body}};font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;width:100%;text-align:center;min-height:44px" style-hover="background:#3A3C40">Send</button>
+      </form>
+      </sc-if>
+      <sc-if value="{{ done.phone }}" hint-placeholder-val="{{ false }}">
+        <div style="display:{{ heroFormDisplay }};flex-direction:column;gap:{{L.formGap}};border:1px solid #14161A;padding:{{L.formPad}};min-height:{{ sentH.phone }}"><p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;border-bottom:1px solid #14161A;padding-bottom:10px">Enquiry received</p><div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your store URL</span><span style="font-size:{{L.field}};font-weight:600;overflow-wrap:anywhere;border-bottom:1px solid #14161A;padding:7px 0">{{ sentHost.phone }}</span></div><p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about your store — not a calendar link.</p><p style="font-size:{{L.body}};line-height:1.45;margin:0">Two clients at a time.</p></div>
+      </sc-if>
+      <sc-if value="{{ phoneTail }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:{{L.feeHeadGap}}">
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ feeRest }}" as="f" hint-placeholder-count="3">
+              <p style="font-size:{{L.fee}};line-height:1.45;margin:0;padding:{{L.feePad}};border-top:1px solid #DCDAD2;overflow-wrap:anywhere;text-wrap:pretty">{{ f.t }}</p>
+            </sc-for>
+          </div>
+          <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch">I build the tools myself — calculators, counters, progress bars — the kind of thing that normally waits in an IT queue.</p>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="grid-area:form;min-width:0;display:{{ midFormDisplay }};flex-direction:column;gap:{{L.feeRailGap}}">
+      <sc-if value="{{ railFee }}" hint-placeholder-val="{{ true }}">
+        <section data-fee-band="1" style="min-width:0;display:flex;flex-direction:column;gap:{{L.feeHeadGap}};margin-top:{{L.feeLift}}">
+          <span data-fee-rule="1" aria-hidden="true" style="display:block;height:1px;background:#14161A;transform-origin:left center"></span>
+          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;line-height:1">Fee</p>
+          <p style="font-size:{{L.feeLead}};font-weight:600;line-height:1.15;margin:0;color:#14161A">{{ feeLead }}</p>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ feeRest }}" as="f" hint-placeholder-count="3">
+              <p style="font-size:{{L.fee}};line-height:1.45;margin:0;padding:{{L.feePad}};border-top:1px solid #DCDAD2;overflow-wrap:anywhere;text-wrap:pretty">{{ f.t }}</p>
+            </sc-for>
+          </div>
+        </section>
+      </sc-if>
+      <sc-if value="{{ live.hero }}" hint-placeholder-val="{{ true }}">
+      <form id="enquiry" ref="{{ heroFormRef }}" sc-camel-on-submit="{{ submit.hero }}" style="min-width:0;display:{{ midFormDisplay }};flex-direction:column;gap:{{L.formGap}};border:1px solid #14161A;padding:{{L.formPad}}">
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;border-bottom:1px solid #14161A;padding-bottom:10px">Enquiry form</p>
+        <label style="display:flex;flex-direction:column;gap:5px">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your store URL</span>
+          <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" required="required" name="url" placeholder="yourstore.com" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.field}};width:100%;min-height:44px;box-sizing:border-box">
+        </label>
+        <label style="display:flex;flex-direction:column;gap:5px">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your email</span>
+          <input type="email" required="required" name="email" placeholder="you@yourstore.com" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.field}};width:100%;min-height:44px;box-sizing:border-box">
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
+          <input type="checkbox" required="required" name="consent" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+          <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry</span>
+        </label>
+        <p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about <span data-echo="hero" style="position:relative;display:inline-block;max-width:min(100%,13em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span> — not a calendar link.</p>
+        <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;padding:11px 16px;font-size:{{L.body}};font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;width:100%;text-align:center;min-height:44px" style-hover="background:#3A3C40">Send</button>
+      </form>
+      </sc-if>
+      <sc-if value="{{ done.hero }}" hint-placeholder-val="{{ false }}">
+        <div style="min-width:0;display:{{ midFormDisplay }};flex-direction:column;gap:{{L.formGap}};border:1px solid #14161A;padding:{{L.formPad}};min-height:{{ sentH.hero }}"><p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;border-bottom:1px solid #14161A;padding-bottom:10px">Enquiry received</p><div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your store URL</span><span style="font-size:{{L.field}};font-weight:600;overflow-wrap:anywhere;border-bottom:1px solid #14161A;padding:7px 0">{{ sentHost.hero }}</span></div><p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about your store — not a calendar link.</p><p style="font-size:{{L.body}};line-height:1.45;margin:0">Two clients at a time.</p></div>
+      </sc-if>
+    </div>
+
+    <section style="grid-area:recog;min-width:0;display:flex;flex-direction:column;gap:{{L.svcHead}}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid #14161A;padding-bottom:8px">
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">If this is your store</p>
+        <p data-recog-code="1" style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">01–03</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:{{L.recogGap}};max-width:{{L.recogMeasure}}">
+        <p data-recog-line="1" style="font-size:{{L.recog}};line-height:1.6;margin:0;color:#14161A;text-wrap:pretty;position:relative"><span data-recog-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>The campaign with the best reported return is the one bringing people who buy once and never come back.</p>
+        <p data-recog-line="1" style="font-size:{{L.recog}};line-height:1.6;margin:0;color:#14161A;text-wrap:pretty;position:relative"><span data-recog-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>You know your category has a reorder date. Nobody in the business can say what it is, so the reminder goes out on the tool’s default day.</p>
+        <p data-recog-line="1" style="font-size:{{L.recog}};line-height:1.6;margin:0;color:#14161A;text-wrap:pretty;position:relative"><span data-recog-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>The subscription converts and then cancels after the first delivery, and you cannot tell whether you sold loyalty or a discount.</p>
+        <p data-recog-verdict="1" style="font-size:{{L.recogClose}};line-height:1.4;font-weight:600;letter-spacing:-.01em;margin:{{L.recogCloseMargin}};color:#14161A;text-wrap:pretty;position:relative"><span data-recog-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>If two of these are yours, the problem is not your ad rates. It is that the second purchase is nobody’s job.</p>
+      </div>
+    </section>
+    <section style="grid-area:svc;display:flex;flex-direction:column;gap:{{L.svcHead}}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid #14161A;padding-bottom:8px">
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Composition — five parts, in order</p>
+        <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0;white-space:nowrap">Hover a part · 01–05</p>
+      </div>
+
+      <div ref="{{ rowRef }}" style="display:grid;grid-template-columns:{{L.svcCols}};align-items:start">
+        <sc-for list="{{ svcs }}" as="s" hint-placeholder-count="5">
+          <div data-card="1" tabindex="0" role="group" aria-controls="directions" sc-camel-on-mouse-enter="{{ s.enter }}" sc-camel-on-mouse-leave="{{ s.leave }}" sc-camel-on-focus="{{ s.enter }}" sc-camel-on-blur="{{ s.leave }}" sc-camel-on-click="{{ s.enter }}" style="position:relative;min-width:0;cursor:pointer;border-left:1px solid {{ s.rule }};border-top:2px solid {{ s.ruleTop }};padding:{{L.itemPad}};display:flex;flex-direction:column;gap:{{L.itemGap}};background-color:{{ s.bg }}">
+            <span data-div="1" aria-hidden="true" style="position:absolute;left:-1px;top:0;bottom:0;width:1px;transform-origin:top;background-color:{{ s.rule }}"></span>
+            <span style="display:flex;align-items:center;gap:7px">
+              <span style="display:flex;position:relative;width:{{L.segW}};height:{{L.segH}};flex:none;border:1px solid #14161A;overflow:hidden">
+                <sc-for list="{{ s.segs }}" as="sg" hint-placeholder-count="5">
+                  <span data-seg="1" style="flex:1;min-width:0;display:block;border-left:1px solid {{ sg.tick }};background-color:{{ sg.bg }}"></span>
+                </sc-for>
+                <span data-fillveil="1" aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:{{ s.fillPct }};background:#F7F5F0;opacity:0;transform-origin:right center;pointer-events:none"></span>
+                <span data-meniscus="1" aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:1px;background:#14161A;opacity:0;pointer-events:none"></span>
+              </span>
+              <span data-mllabel="1" style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:{{ s.labelColor }}">{{ s.ml }}</span>
+            </span>
+            <span data-settle="1" style="display:flex;flex-direction:column;gap:{{L.itemGap}};min-width:0">
+              <span style="font-size:{{L.small}};font-weight:700;letter-spacing:.14em;color:{{ s.sub }};font-variant-numeric:tabular-nums">{{ s.num }}</span>
+              <span style="font-size:{{L.svc}};font-weight:600;line-height:1.2;letter-spacing:-.015em;display:block">{{ s.title }}</span>
+              <p style="font-size:{{L.evidMain}};line-height:1.45;margin:0;color:#14161A;text-wrap:pretty">{{ s.evidence }}</p>
+              <p style="font-size:12.5px;line-height:1.5;margin:0;color:{{ s.sub }}">{{ s.short }}</p>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div id="directions" style="display:flex;flex-direction:column;gap:{{L.dirGap}};border-top:1px solid #14161A;padding-top:{{L.dirPad}};min-height:{{L.dirH}}">
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 16px">
+          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Directions for use — {{ dirTitle }}</p>
+          <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">Dose {{ dirDose }}</p>
+        </div>
+        <div style="display:grid;grid-template-columns:{{L.dirCols}};gap:{{L.dirColGap}}">
+          <sc-for list="{{ directions }}" as="l" hint-placeholder-count="3">
+            <p style="min-width:0;font-size:{{L.body}};line-height:1.5;margin:0;border-top:1px solid #C9C7C0;padding-top:10px">{{ l.text }}</p>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:{{L.panelGap}};border-top:1px solid #14161A;padding-top:{{L.panelPad}}">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px">
+          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Interval — 69 days</p>
+          <p style="font-size:{{L.body}};margin:0;font-weight:600;letter-spacing:-.01em;min-height:{{L.panelTextH}}">{{ panelText }}</p>
+        </div>
+        <div data-interval-axis="1" style="position:relative;min-width:0">
+          <div style="display:flex;align-items:flex-end;gap:{{L.tickGap}};height:{{L.rulerH}}">
+            <sc-for list="{{ ruler }}" as="r" hint-placeholder-count="70">
+              <span data-rbar="{{ r.m }}" style="flex:1;min-width:0;display:block;height:{{ r.h }};background-color:{{ r.bg }};transform-origin:bottom center"></span>
+            </sc-for>
+          </div>
+          <span data-interval-span="1" aria-hidden="true" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 89 / 140 + 44 * {{L.tickGap}});width:calc(calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}}) - calc((100% - 69 * {{L.tickGap}}) * 89 / 140 + 44 * {{L.tickGap}}));bottom:-4px;height:2px;background:#C97B1F;transform-origin:left center"></span>
+          <span data-interval-69="1" aria-hidden="true" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:0;bottom:-4px;width:1px;margin-left:-0.5px;background:#C97B1F"></span>
+        </div>
+        <div style="position:relative;height:26px;font-size:12px;font-weight:600;letter-spacing:.14em;color:#6E6D68;font-variant-numeric:tabular-nums;white-space:nowrap">
+          <span data-tick-label="1" style="position:absolute;left:0;top:0">1</span>
+          <span data-tick-label="45" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 89 / 140 + 44 * {{L.tickGap}});top:0;transform:translateX(-50%)">45 — label</span>
+          <span data-tick-label="70" style="position:absolute;right:0;top:0">70</span>
+          <span data-tick-label="69" data-interval-69="1" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:14px;transform:translateX(-100%);color:#A25C11">69 — actual</span>
+        </div>
+        <p style="font-size:{{L.body}};line-height:1.55;margin:0;max-width:62ch">The label date is not the reorder date.</p>
+        <p style="font-size:{{L.body}};line-height:1.55;margin:0;max-width:62ch">Those two numbers are one shop’s. Paste your own order export and your own label, and the tool reads the same two numbers off your data.</p>
+        <a href="/tool" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#A25C11;text-decoration:underline;text-underline-offset:4px">Count your own interval</a>
+      </div>
+    </section>
+
+    <section style="grid-column:1 / -1;min-width:0;display:flex;flex-direction:column;gap:{{L.svcHead}};border-top:1px solid #14161A;padding-top:{{L.tailPad}}">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid #14161A;padding-bottom:8px">
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Prior batches</p>
+        <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">Record of work</p>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <sc-for list="{{ proof }}" as="p" hint-placeholder-count="5">
+          <div data-batch="1" style="position:relative;display:grid;grid-template-columns:{{L.batchCols}};grid-template-areas:{{L.batchAreas}};column-gap:{{L.batchGap}};row-gap:4px;align-items:baseline;padding:{{L.batchPad}}">
+            <span data-batch-rule="1" aria-hidden="true" style="position:absolute;top:0;left:0;width:100%;height:1px;background:#DCDAD2;transform-origin:left center"></span>
+            <span data-batch-name="1" style="grid-area:n;position:relative;font-size:{{L.proofSize}};font-weight:600;letter-spacing:-.015em;min-width:0"><span data-batch-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>{{ p.name }}</span>
+            <span data-batch-status="1" style="grid-area:s;justify-self:{{L.batchStatusAlign}};position:relative;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;color:{{ p.statusColor }}"><span data-batch-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>{{ p.status }}</span>
+            <p data-batch-line="1" style="grid-area:l;position:relative;font-size:{{L.body}};line-height:1.55;margin:0;color:#14161A;min-width:0;text-wrap:pretty"><span data-batch-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>{{ p.line }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+  </main>
+
+  <sc-if value="{{ showPin }}" hint-placeholder-val="{{ true }}">
+  <section ref="{{ pinRef }}" style="height:{{L.pinOuter}};position:relative;border-top:1px solid #14161A">
+    <div style="position:sticky;top:0;height:100vh;max-height:100vh;display:flex;flex-direction:column;gap:{{L.frameGap}};padding:{{L.pinPad}};overflow:hidden">
+
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px">
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">One brand, one mark per customer</p>
+        <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">Batch record</p>
+      </div>
+
+      <div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:{{L.frameGap}}">
+        <div style="display:flex;flex-direction:{{L.fieldDir}};gap:{{L.halfGap}};align-items:stretch">
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:{{L.capGap}}">
+            <div style="display:grid;grid-template-columns:{{L.fieldCols}};gap:{{L.rowGap2}} {{L.colGap2}};align-content:center">
+              <sc-for list="{{ fieldLeft }}" as="c" hint-placeholder-count="60">
+                <span style="display:flex;align-items:center;gap:{{L.markGap}};min-width:0;opacity:{{ c.o }}">
+                  <span style="display:block;width:{{L.dotS}};height:{{L.dotS}};border:1px solid #14161A;flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w1 }};background-color:{{ c.b1 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w2 }};background-color:{{ c.b2 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w3 }};background-color:{{ c.b3 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w4 }};background-color:{{ c.b4 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w5 }};background-color:{{ c.b5 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w6 }};background-color:{{ c.b6 }};flex:none"></span>
+                </span>
+              </sc-for>
+            </div>
+            <p style="font-size:{{L.capSize}};line-height:1.4;margin:0;font-weight:600;opacity:{{ capOpacity }};min-height:{{L.capH}}">Bought again, and paid for again</p>
+          </div>
+          <span style="flex:none;width:{{L.divW}};height:{{L.divH}};background-color:#14161A;align-self:center;transform:{{ divTransform }};opacity:{{ divOpacity }}"></span>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:{{L.capGap}}">
+            <div style="display:grid;grid-template-columns:{{L.fieldCols}};gap:{{L.rowGap2}} {{L.colGap2}};align-content:center">
+              <sc-for list="{{ fieldRight }}" as="c" hint-placeholder-count="60">
+                <span style="display:flex;align-items:center;gap:{{L.markGap}};min-width:0;opacity:{{ c.o }}">
+                  <span style="display:block;width:{{L.dotS}};height:{{L.dotS}};border:1px solid #14161A;flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w1 }};background-color:{{ c.b1 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w2 }};background-color:{{ c.b2 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w3 }};background-color:{{ c.b3 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w4 }};background-color:{{ c.b4 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w5 }};background-color:{{ c.b5 }};flex:none"></span>
+                  <span style="display:block;height:{{L.costS}};width:{{ c.w6 }};background-color:{{ c.b6 }};flex:none"></span>
+                </span>
+              </sc-for>
+            </div>
+            <p style="font-size:{{L.capSize}};line-height:1.4;margin:0;color:#6E6D68;opacity:{{ capOpacity }};min-height:{{L.capH}}">Came back on their own day</p>
+          </div>
+        </div>
+
+        <p style="margin:0;font-size:{{L.payoff}};font-weight:600;line-height:1.02;letter-spacing:-.03em;max-width:24ch;text-wrap:balance;opacity:{{ payoffOpacity }};min-height:{{L.payoffH}}">You don't pay twice for the same customer.</p>
+      </div>
+
+      <div ref="{{ pinFormRef }}" style="flex:none;display:flex;flex-direction:{{L.msgDir}};gap:{{L.msgGap}};border-top:1px solid #14161A;padding-top:{{L.msgPad}}">
+        <div style="flex:none;width:{{L.msgIdW}};display:flex;align-items:{{L.msgIdAlign}};gap:12px">
+          
+          <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+            <span style="font-size:{{L.body}};font-weight:600">Rafał Oleksiak</span>
+            <span style="font-size:{{L.small}};color:#6E6D68">rafal@oleksiakconsulting.com</span>
+          </span>
+        </div>
+
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:{{L.msgInnerGap}}">
+          <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;opacity:{{ chromeOpacity }};min-height:{{L.chromeH}}">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Rafał Oleksiak wrote:</span>
+            <span style="font-size:{{L.body}};font-weight:600">Your pack runs out today.</span>
+            <span style="font-size:{{L.small}};color:#6E6D68;font-variant-numeric:tabular-nums">{{ stamp }}</span>
+            <span style="font-size:{{L.small}};color:#6E6D68">A demonstration — sent with one dose left, not after the pack ran dry.</span>
+          </div>
+          <sc-if value="{{ unsent.close }}" hint-placeholder-val="{{ true }}">
+          <form id="enquiry-2" sc-camel-on-submit="{{ submit.close }}" style="display:flex;flex-direction:column;gap:{{L.msgFieldGap}}">
+            <div style="display:flex;flex-direction:{{L.msgFieldDir}};gap:12px;align-items:{{L.msgFieldAlign}}">
+              <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" required="required" name="url3" placeholder="Your store URL" aria-label="Your store URL" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.body}};flex:1;min-width:0;min-height:44px;box-sizing:border-box">
+              <input type="email" required="required" name="email3" placeholder="Your email" aria-label="Your email" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.body}};flex:1;min-width:0;min-height:44px;box-sizing:border-box">
+              <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;padding:9px 20px;font-size:{{L.body}};font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;flex:none;width:{{L.msgBtnW}};min-height:44px" style-hover="background:#3A3C40">Send</button>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;flex-direction:{{L.msgMetaDir}};align-items:{{L.msgMetaAlign}};justify-content:space-between;gap:10px 16px">
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
+                <input type="checkbox" required="required" name="consent3" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+                <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry</span>
+              </label>
+              <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#14161A;opacity:{{ dryOpacity }};min-height:17px">One more dose — nothing dispensed</span>
+            </div>
+          </form>
+          </sc-if>
+          <sc-if value="{{ sent.close }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:{{L.msgFieldGap}}"><p style="font-size:{{L.body}};line-height:1.5;margin:0;overflow-wrap:anywhere">Got it — {{ sentHost.close }}. I’ll write to you from rafal@oleksiakconsulting.com within 24 hours.</p></div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <main style="padding:0 {{L.mpadR}} 0 {{L.mpadL}};display:flex;flex-direction:column;gap:{{L.rowGap}}">
+
+    <sc-if value="{{ noPin }}" hint-placeholder-val="{{ false }}">
+    <section ref="{{ closeFormRef }}" style="border-top:1px solid #14161A;padding-top:{{L.panelPad}}">
+      <div style="max-width:{{L.closeW}};display:flex;flex-direction:column;gap:{{L.closeGap}};border:1px solid #14161A;padding:{{L.closePad}}">
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;border-bottom:1px solid #14161A;padding-bottom:8px">{{ closeEyebrow }}</p>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ closeFee }}" as="f" hint-placeholder-count="4">
+            <p style="font-size:{{L.body}};line-height:1.45;margin:0;padding:{{L.closeFeePad}};border-top:1px solid #DCDAD2;text-wrap:pretty">{{ f.t }}</p>
+          </sc-for>
+        </div>
+        <sc-if value="{{ unsent.close }}" hint-placeholder-val="{{ true }}">
+        <form id="enquiry-2" sc-camel-on-submit="{{ submit.close }}" style="display:flex;flex-direction:column;gap:{{L.closeGap}}">
+          <label style="display:flex;flex-direction:column;gap:5px;width:100%">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your store URL</span>
+            <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" required="required" name="url3" placeholder="yourstore.com" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.field}};width:100%;min-height:44px;box-sizing:border-box">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:5px;width:100%">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your email</span>
+            <input type="email" required="required" name="email3" placeholder="you@yourstore.com" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.field}};width:100%;min-height:44px;box-sizing:border-box">
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;width:100%;min-height:44px">
+            <input type="checkbox" required="required" name="consent3" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+            <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry</span>
+          </label>
+          <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;padding:12px 16px;font-size:{{L.body}};font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;width:100%;text-align:center;min-height:44px" style-hover="background:#3A3C40">Send</button>
+          <p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about <span data-echo="close" style="position:relative;display:inline-block;max-width:min(100%,13em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span> — not a calendar link.</p>
+        </form>
+        </sc-if>
+        <sc-if value="{{ sent.close }}" hint-placeholder-val="{{ false }}">
+          <div id="enquiry-2-sent" style="display:flex;flex-direction:column;gap:{{L.formGap}};min-height:{{ sentH.close }}"><div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your store URL</span><span style="font-size:{{L.field}};font-weight:600;overflow-wrap:anywhere;border-bottom:1px solid #14161A;padding:7px 0">{{ sentHost.close }}</span></div><p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about your store — not a calendar link.</p><p style="font-size:{{L.body}};line-height:1.45;margin:0">Two clients at a time.</p></div>
+        </sc-if>
+      </div>
+    </section>
+    </sc-if>
+
+    <div aria-hidden="true" style="display:flex;align-items:flex-end;gap:1px;height:10px"><sc-for list="{{ sig }}" as="g" hint-placeholder-count="70"><span style="display:block;width:1px;height:{{ g.h }};background-color:{{ g.bg }}"></span></sc-for></div>
+    <footer style="padding-top:14px;display:flex;flex-direction:{{L.dir}};justify-content:space-between;gap:10px;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">
+      <span style="display:flex;flex-direction:column;gap:4px"><span>Rafał Oleksiak · Warsaw</span><span style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;font-weight:400;letter-spacing:.18em;color:#6E6D68">LOT 45/69 · REV 2026-09 · WARSAW</span></span>
+      <span style="display:flex;flex-wrap:wrap;align-items:center;gap:0 18px"><a href="mailto:rafal@oleksiakconsulting.com" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;min-height:44px">rafal@oleksiakconsulting.com</a><a href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/" style="color:#6E6D68;letter-spacing:.18em;display:inline-flex;align-items:center;min-height:44px">Rafał Oleksiak on LinkedIn</a></span>
+    </footer>
+  </main>
+
+  <div data-bar="1" aria-hidden="{{ barHidden }}" style="position:fixed;left:0;right:0;bottom:0;z-index:20;background:#F7F5F0;border-top:1px solid #14161A;min-height:{{ barMinH }};box-sizing:border-box;transition:{{ barTrans }};padding:{{L.barPad}};display:flex;flex-direction:{{L.barDir}};align-items:{{L.barAlign}};justify-content:space-between;gap:{{L.barGap}};transform:{{ barTransform }};opacity:{{ barOpacity }};pointer-events:{{ barPointer }}">
+    <sc-if value="{{ barShort }}" hint-placeholder-val="{{ true }}">
+    <p style="font-size:{{L.small}};line-height:1.4;margin:0;color:#14161A;max-width:44ch">Reply in 24 hours, with a first observation about <span data-echo="bar" style="position:relative;display:inline-block;max-width:min(100%,6.5em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span>.</p>
+    <form sc-camel-on-submit="{{ submit.bar }}" style="display:flex;gap:10px;width:{{L.barFormW}};align-items:flex-end">
+      <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" required="required" name="url2" placeholder="Your store URL" aria-label="Your store URL" style="background:none;border:0;border-bottom:1px solid #14161A;padding:7px 0;font-size:{{L.field}};flex:1;min-width:0;min-height:44px;box-sizing:border-box">
+      <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;font-weight:600;font-size:{{L.body}};letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;cursor:pointer;flex:none;min-height:44px" style-hover="background:#3A3C40">Send</button>
+    </form>
+    </sc-if>
+    <sc-if value="{{ barFull }}" hint-placeholder-val="{{ false }}">
+    <form data-bar-form="1" sc-camel-on-submit="{{ submit.bar }}" sc-camel-on-focus="{{ openBar }}" style="display:flex;flex-direction:column;gap:0;width:100%">
+      <div style="display:flex;align-items:flex-end;gap:12px">
+        <label style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#6E6D68">Your store URL</span>
+          <input type="text" inputmode="url" autocapitalize="none" spellcheck="false" required="required" name="url2" placeholder="yourstore.com" style="background:none;border:0;border-bottom:1px solid #14161A;padding:5px 0;font-size:{{L.field}};font-family:inherit;color:#14161A;width:100%;min-width:0;border-radius:0;min-height:44px;box-sizing:border-box">
+        </label>
+        <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;font-weight:600;font-size:{{L.body}};letter-spacing:.06em;text-transform:uppercase;padding:9px 18px;cursor:pointer;flex:none;min-height:44px" style-hover="background:#3A3C40">Send</button>
+      </div>
+      <div style="display:grid;grid-template-rows:{{ barRows }};transition:grid-template-rows 220ms cubic-bezier(.2,.7,.2,1)">
+        <div style="min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:9px">
+          <label style="display:flex;flex-direction:column;gap:2px;padding-top:9px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#6E6D68">Your email</span>
+            <input type="email" required="required" name="email2" placeholder="you@yourstore.com" style="background:none;border:0;border-bottom:1px solid #14161A;padding:5px 0;font-size:{{L.field}};font-family:inherit;color:#14161A;width:100%;min-width:0;border-radius:0;min-height:44px;box-sizing:border-box">
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
+            <input type="checkbox" required="required" name="consent2" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+            <span style="font-size:{{L.small}};line-height:1.35">I agree to be contacted about this enquiry</span>
+          </label>
+          <p style="font-size:12px;line-height:1.3;margin:0;color:#14161A">Reply in 24 hours, with a first observation about <span data-echo="bar">your store</span>.</p>
+        </div>
+      </div>
+    </form>
+    </sc-if>
+    <sc-if value="{{ sent.bar }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;gap:10px;width:{{L.barFormW}};align-items:flex-end"><p style="font-size:{{L.body}};line-height:1.5;margin:0;overflow-wrap:anywhere">Got it — {{ sentHost.bar }}. I’ll write to you from rafal@oleksiakconsulting.com within 24 hours, with a first observation about your store.</p></div>
+    </sc-if>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;device&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;desktop&quot;,&quot;phone&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'desktop'|'phone'&quot;},&quot;pinScroll&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:200,&quot;max&quot;:480,&quot;step&quot;:20,&quot;unit&quot;:&quot;vh&quot;,&quot;default&quot;:320,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.rowRef = React.createRef();
+    this.heroFormRef = React.createRef();
+    this.phoneFormRef = React.createRef();
+    this.closeFormRef = React.createRef();
+    this.pinRef = React.createRef();
+    this.pinFormRef = React.createRef();
+    this.state = { step: 40, wide900: (typeof window !== 'undefined' && window.innerWidth > 900), hover: null, phone: false, bar: false, live: false, inPin: false, spent: 5, maxSpent: 0, stamp: '', scrolled: false , stacked: (typeof window !== 'undefined' && window.innerWidth < 1200) , narrow: (typeof window !== 'undefined' && window.innerWidth < 1024) };
+    this.tick = this.tick.bind(this);
+  }
+
+  componentDidMount() {
+    this.bindEcho();
+    this.arm = () => { this.armed = true; };
+    ['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach((e) => window.addEventListener(e, this.arm, { passive: true }));
+    this.mql = window.matchMedia('(max-width:759px)');
+    this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.timer = setInterval(this.tick, 100);
+    if (!this.reduced) this.collapseTimer = setTimeout(() => { if (!this.state.barOpen) this.setState({ barCollapsed: true }); }, 250);
+    window.addEventListener('scroll', this.tick, { passive: true });
+    window.addEventListener('resize', this.tick, { passive: true });
+    this.tick();
+    setTimeout(() => { this.timersWork = true; }, 0);
+    if (!this.reduced && document.timeline) {
+      const t0 = document.timeline.currentTime;
+      this.motionTimer = setTimeout(() => { const t1 = document.timeline.currentTime; if (t0 != null && t1 != null && t1 - t0 > 150) this.setState({ motionOK: true }); }, 300);
+    }
+
+    ['observeDose', 'observeRecog', 'observeBatches', 'observeFeeRule'].forEach((m) => {
+      try { this[m](); } catch (err) { console.warn(m + ' skipped:', err && err.message); }
+    });
+  }
+
+  observeFeeRule() {
+    if (this.reduced || !('IntersectionObserver' in window) || typeof Element.prototype.animate !== 'function') return;
+    requestAnimationFrame(() => {
+      if (!this.clockLive()) return;
+      const rule = document.querySelector('[data-fee-rule]');
+      if (!rule) return;
+      if (rule.getBoundingClientRect().top < window.innerHeight * 0.9) return;
+      this.feeIO = new IntersectionObserver((entries) => {
+        if (!entries.some((en) => en.isIntersecting)) return;
+        this.feeIO.disconnect();
+        rule.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 320, easing: 'linear', fill: 'none' });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
+      this.feeIO.observe(rule);
+    });
+  }
+
+  clockLive() {
+    try {
+      if (typeof Element.prototype.animate !== 'function') return false;
+      const root = document.body;
+      if (!root) return false;
+      const a = root.animate([{ opacity: 1 }, { opacity: 1 }], { duration: 600, fill: 'none' });
+      const t = a.currentTime;
+      a.cancel();
+      return t != null;
+    } catch (err) { return false; }
+  }
+
+  observeBatches() {
+    const root = document.body;
+    if (!root || this.reduced) return;
+    if (typeof Element.prototype.animate !== 'function') return;
+    requestAnimationFrame(() => { if (this.clockLive()) this.armBatches(root); });
+  }
+
+  armBatches(root) {
+    const rows = Array.prototype.slice.call(root.querySelectorAll('[data-batch]'));
+    if (rows.length !== 5) return;
+    this.batchTimers = [];
+    const hide = (row) => {
+      row.querySelectorAll('[data-batch-veil]').forEach((v) => { v.style.opacity = '1'; });
+      const r = row.querySelector('[data-batch-rule]');
+      if (r) r.style.transform = 'scaleX(0)';
+    };
+    const show = (row) => {
+      row.querySelectorAll('[data-batch-veil]').forEach((v) => { v.style.opacity = '0'; });
+      const r = row.querySelector('[data-batch-rule]');
+      if (r) r.style.transform = 'none';
+    };
+    const fadeVeil = (el, ms) => {
+      if (!el) return;
+      const veil = el.querySelector('[data-batch-veil]');
+      if (!veil) return;
+      const done = () => { veil.style.opacity = '0'; };
+      const a = veil.animate([{ opacity: 1 }, { opacity: 0 }], { duration: ms, easing: 'linear', fill: 'none' });
+      a.addEventListener('finish', done);
+      a.addEventListener('cancel', done);
+      this.batchTimers.push(setTimeout(done, ms + 240));
+    };
+    const play = () => {
+      rows.forEach((row, i) => {
+        const base = i * 510;
+        this.batchTimers.push(setTimeout(() => {
+          const rule = row.querySelector('[data-batch-rule]');
+          if (rule) {
+            const a = rule.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 420, easing: 'linear', fill: 'none' });
+            const done = () => { rule.style.transform = 'none'; };
+            a.addEventListener('finish', done);
+            a.addEventListener('cancel', done);
+            this.batchTimers.push(setTimeout(done, 660));
+          }
+          fadeVeil(row.querySelector('[data-batch-name]'), 180);
+          fadeVeil(row.querySelector('[data-batch-status]'), 180);
+        }, base));
+        this.batchTimers.push(setTimeout(() => fadeVeil(row.querySelector('[data-batch-line]'), 200), base + 420));
+      });
+    };
+    const force = () => {
+      if (this.batchesRun) return;
+      this.batchesRun = true;
+      window.removeEventListener('scroll', this.batchCheck);
+      rows.forEach(show);
+    };
+    this.batchCheck = () => {
+      if (this.batchesRun) return;
+      const top = rows[0].getBoundingClientRect().top;
+      const vh = window.innerHeight;
+      if (!this.batchesHidden && top < vh * 1.25) {
+        this.batchesHidden = true;
+        rows.forEach(hide);
+        this.batchTimers.push(setTimeout(force, 3400));
+      }
+      if (this.batchesHidden && top < vh * 0.82) {
+        this.batchesRun = true;
+        window.removeEventListener('scroll', this.batchCheck);
+        play();
+      }
+    };
+    window.addEventListener('scroll', this.batchCheck, { passive: true });
+    this.batchCheck();
+  }
+
+  observeRecog() {
+    const root = document.body;
+    if (!root || this.reduced) return;
+    if (!('IntersectionObserver' in window) || typeof Element.prototype.animate !== 'function') return;
+    requestAnimationFrame(() => { if (this.clockLive()) this.armRecog(root); });
+  }
+
+  armRecog(root) {
+    const items = Array.prototype.slice.call(root.querySelectorAll('[data-recog-line]'));
+    const verdict = root.querySelector('[data-recog-verdict]');
+    if (items.length !== 3 || !verdict) return;
+    const line = window.innerHeight * 0.82;
+    const pending = items.filter((el) => el.getBoundingClientRect().top >= line);
+    if (!pending.length) return;
+    this.recogTimers = [];
+    this.recogLanded = items.length - pending.length;
+    if (this.recogLanded) this.setRecogCode(root, this.recogLanded);
+    this.recogIO = new IntersectionObserver((entries) => {
+      if (!entries.some((en) => en.isIntersecting)) return;
+      this.recogIO.disconnect();
+      pending.forEach((el, i) => {
+        this.recogTimers.push(setTimeout(() => {
+          this.revealRecog(el);
+          this.recogLanded += 1;
+          this.setRecogCode(root, this.recogLanded);
+        }, i * 180));
+      });
+      this.recogTimers.push(setTimeout(() => this.revealRecog(verdict), (pending.length - 1) * 180 + 420 + 400));
+    }, { rootMargin: '0px 0px -18% 0px', threshold: 0 });
+    pending.forEach((el) => this.recogIO.observe(el));
+    this.hideRecog(verdict);
+    pending.forEach((el) => this.hideRecog(el));
+  }
+
+  hideRecog(el) {
+    const veil = el.querySelector('[data-recog-veil]');
+    if (veil) veil.style.opacity = '1';
+    el.style.transform = 'translateY(8px)';
+  }
+
+  revealRecog(el) {
+    const veil = el.querySelector('[data-recog-veil]');
+    const done = () => { if (veil) veil.style.opacity = '0'; el.style.transform = 'none'; };
+    if (!veil) { done(); return; }
+    const a = veil.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'none' });
+    el.animate([{ transform: 'translateY(8px)' }, { transform: 'translateY(0)' }], { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'none' });
+    a.addEventListener('finish', done);
+    a.addEventListener('cancel', done);
+    (this.recogTimers = this.recogTimers || []).push(setTimeout(done, 700));
+  }
+
+  setRecogCode(root, n) {
+    const code = root.querySelector('[data-recog-code]');
+    if (code) code.textContent = '01\u201304'.slice(0, 3) + String(Math.max(1, Math.min(3, n))).padStart(2, '0');
+  }
+
+  observeDose() {
+    if (this.io || this.doseDone) return;
+    if (this.reduced || !('IntersectionObserver' in window) || typeof Element.prototype.animate !== 'function') return;
+    const row = this.rowRef.current;
+    if (!row || !row.children.length) return;
+    this.io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      this.io.disconnect();
+      this.playFill(row);
+    }, { threshold: 0.3 });
+    this.io.observe(row);
+    this.doseDone = true;
+  }
+
+  playFill(row) {
+    const cards = Array.prototype.slice.call(row.querySelectorAll('[data-card]'));
+    if (!cards.length) return;
+    this.doseTimers = this.doseTimers || [];
+    const parts = cards.map((card, i) => {
+      const veil = card.querySelector('[data-fillveil]');
+      const men = card.querySelector('[data-meniscus]');
+      const label = card.querySelector('[data-mllabel]');
+      const ml = (5 - i) * 20;
+      return { veil: veil, men: men, label: label, dur: ml * 10, w: veil ? veil.getBoundingClientRect().width : 0 };
+    });
+    const clearAll = () => {
+      parts.forEach((p) => {
+        if (p.veil) { p.veil.style.opacity = '0'; p.veil.style.transform = 'none'; }
+        if (p.men) { p.men.style.opacity = '0'; p.men.style.transform = 'none'; }
+        if (p.label) p.label.style.opacity = '';
+      });
+    };
+    parts.forEach((p) => {
+      if (p.veil) { p.veil.style.opacity = '1'; p.veil.style.transform = 'scaleX(1)'; }
+      if (p.label) p.label.style.opacity = '0';
+    });
+    let at = 0;
+    let total = 0;
+    parts.forEach((p) => {
+      const base = at;
+      at += p.dur + 80;
+      total = base + p.dur + 200;
+      this.doseTimers.push(setTimeout(() => {
+        if (p.veil) {
+          const a = p.veil.animate([{ transform: 'scaleX(1)' }, { transform: 'scaleX(0)' }], { duration: p.dur, easing: 'linear', fill: 'none' });
+          const done = () => { p.veil.style.opacity = '0'; p.veil.style.transform = 'none'; };
+          a.addEventListener('finish', done);
+          a.addEventListener('cancel', done);
+        }
+        if (p.men && p.w > 1) {
+          p.men.style.opacity = '1';
+          const m = p.men.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(' + (p.w - 1) + 'px)' }], { duration: p.dur, easing: 'linear', fill: 'none' });
+          const gone = () => { p.men.style.opacity = '0'; p.men.style.transform = 'none'; };
+          m.addEventListener('finish', gone);
+          m.addEventListener('cancel', gone);
+        }
+        if (p.label) {
+          this.doseTimers.push(setTimeout(() => {
+            p.label.style.opacity = '';
+            p.label.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 120, easing: 'linear', fill: 'none' });
+          }, p.dur));
+        }
+      }, base));
+    });
+    this.doseTimers.push(setTimeout(clearAll, total + 800));
+  }
+  bindEcho() {
+    this.echoTimers = {};
+    this.echoVal = {};
+    const keyOf = (el) => el.closest('#enquiry-phone') ? 'phone' : el.closest('#enquiry-2') ? 'close' : el.closest('#enquiry') ? 'hero' : el.closest('[data-bar]') ? 'bar' : null;
+    this.onEcho = (e) => {
+      const t = e.target;
+      if (!t || t.tagName !== 'INPUT' || t.getAttribute('inputmode') !== 'url') return;
+      const key = keyOf(t);
+      if (!key) return;
+      clearTimeout(this.echoTimers[key]);
+      const raw = (t.value || '').trim();
+      this.echoTimers[key] = setTimeout(() => this.paintEcho(key, raw), 250);
+    };
+    document.addEventListener('input', this.onEcho);
+  }
+
+  paintEcho(key, raw) {
+    const host = raw.replace(/^[a-z][a-z0-9+.-]*:\/\//i, '').replace(/^www\./i, '').split(/[\/?#]/)[0] || raw;
+    const ok = /[^.]\.[^.]/.test(host);
+    const text = ok ? (host.length > 28 ? host.slice(0, 27) + '\u2026' : host) : 'your store';
+    if (this.echoVal[key] === text) return;
+    this.echoVal[key] = text;
+    document.querySelectorAll('[data-echo="' + key + '"]').forEach((el) => {
+      el.textContent = text;
+      el.style.fontWeight = ok ? '600' : '';
+      if (this.reduced || typeof el.animate !== 'function') return;
+      el.animate([{ opacity: 0, top: '2px' }, { opacity: 1, top: '0px' }], { duration: 160, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'none' });
+    });
+  }
+
+  playInterval() {
+    const ease = 'cubic-bezier(.2,.7,.2,1)';
+    const anims = [];
+    const bar = document.querySelector('[data-interval-span]');
+    if (bar) anims.push(bar.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 700, easing: ease, fill: 'none' }));
+    document.querySelectorAll('[data-interval-69]').forEach((el) => {
+      const base = el.style.transform || 'none';
+      anims.push(el.animate([{ opacity: 0, transform: base }, { opacity: 0, transform: base, offset: 0.85 }, { opacity: 1, transform: base }], { duration: 700, easing: 'linear', fill: 'none' }));
+    });
+    if (!anims.length) return;
+    const cancelAll = () => anims.forEach((a) => { try { a.cancel(); } catch (e) {} });
+    this.intervalGuard = setTimeout(() => {
+      const t = anims[0].currentTime;
+      if (t == null || t < 40) cancelAll();
+    }, 160);
+    this.intervalStop = setTimeout(cancelAll, 1200);
+  }
+
+  componentDidUpdate() {
+    const now = this.state.hover == null ? 0 : this.state.hover;
+    if (this._lastSel === undefined) { this._lastSel = now; return; }
+    if (this._lastSel === now) return;
+    this._lastSel = now;
+    if (this.reduced || navigator.webdriver || typeof Element.prototype.animate !== 'function') return;
+    (this.selAnims || []).forEach((a) => { try { a.cancel(); } catch (e) {} });
+    clearTimeout(this.selGuard); clearTimeout(this.selStop);
+    const anims = [];
+    const dir = document.getElementById('directions');
+    if (dir) anims.push(dir.animate([{ opacity: 0.25 }, { opacity: 1 }], { duration: 160, easing: 'ease-out', fill: 'none' }));
+    document.querySelectorAll('[data-rbar="1"]').forEach((b, k) => {
+      const hold = (k * 6) / (220 + k * 6);
+      anims.push(b.animate([{ transform: 'scaleY(0.34)', offset: 0 }, { transform: 'scaleY(0.34)', offset: hold }, { transform: 'scaleY(1)', offset: 1 }], { duration: 220 + k * 6, easing: 'linear', fill: 'none' }));
+    });
+    this.selAnims = anims;
+    if (!anims.length) return;
+    const cancelAll = () => anims.forEach((a) => { try { a.cancel(); } catch (e) {} });
+    this.selGuard = setTimeout(() => { const t = anims[0].currentTime; if (t == null || t < 40) cancelAll(); }, 160);
+    this.selStop = setTimeout(cancelAll, 600);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.selGuard); clearTimeout(this.selStop);
+    (this.selAnims || []).forEach((a) => { try { a.cancel(); } catch (e) {} });
+    if (this.intervalIO) this.intervalIO.disconnect();
+    clearTimeout(this.intervalGuard);
+    clearTimeout(this.intervalStop);
+    if (this.onEcho) document.removeEventListener('input', this.onEcho);
+    Object.values(this.echoTimers || {}).forEach(clearTimeout);
+    clearInterval(this.timer);
+    if (this.io) this.io.disconnect();
+    if (this.feeIO) this.feeIO.disconnect();
+    if (this.recogIO) this.recogIO.disconnect();
+    (this.recogTimers || []).forEach(clearTimeout);
+    (this.batchTimers || []).forEach(clearTimeout);
+    if (this.batchCheck) window.removeEventListener('scroll', this.batchCheck);
+    (this.doseTimers || []).forEach(clearTimeout);
+    window.removeEventListener('scroll', this.tick);
+    window.removeEventListener('resize', this.tick);
+    ['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach((e) => window.removeEventListener(e, this.arm));
+  }
+
+  tick() {
+    if (!this.intervalPlayed && window.scrollY > 0) {
+      const ax = document.querySelector('[data-interval-axis]');
+      if (ax && ax.isConnected) {
+        const r = ax.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.7 && r.bottom > 0) {
+          this.intervalPlayed = true;
+          if (typeof Element.prototype.animate === 'function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            requestAnimationFrame(() => this.playInterval());
+          }
+        }
+      }
+    }
+    const next = {};
+    const dev = this.props.device ?? 'auto';
+    const mq = this.mql ? this.mql.matches : window.innerWidth < 760;
+    const phone = dev === 'phone' || (dev === 'auto' && mq);
+    if (phone !== this.state.phone) next.phone = phone;
+    const stacked = dev === 'phone' || (dev !== 'desktop' && window.innerWidth < 1200);
+    if (stacked !== this.state.stacked) next.stacked = stacked;
+    const narrow = dev === 'phone' || (dev !== 'desktop' && window.innerWidth < 1024);
+    const wide900 = dev === 'desktop' || (dev !== 'phone' && window.innerWidth > 900);
+    if (wide900 !== this.state.wide900) next.wide900 = wide900;
+    if (narrow !== this.state.narrow) next.narrow = narrow;
+
+    const vh = document.documentElement.clientHeight || window.innerHeight;
+    const w768 = dev === 'desktop' || (dev !== 'phone' && window.innerWidth >= 768);
+    if (w768 !== this.state.w768) next.w768 = w768;
+    const byId = (id) => { const el = document.getElementById(id); return el && el.offsetParent !== null ? el : null; };
+    const pf = byId('enquiry-phone') || byId('enquiry-phone-sent');
+    const hf = pf || byId('enquiry') || byId('enquiry-sent');
+    const cf = byId('enquiry-2') || byId('enquiry-2-sent') || this.closeFormRef.current;
+    if (hf && cf) {
+      const cr = cf.getBoundingClientRect();
+      const bar = hf.getBoundingClientRect().bottom < 0 && !(cr.top < vh && cr.bottom > 0);
+      if (bar !== this.state.bar) next.bar = bar;
+    }
+
+    const pinEl = this.pinRef.current;
+    if (pinEl) {
+      const r = pinEl.getBoundingClientRect();
+      const span = Math.max(1, r.height - vh);
+      const pp = Math.max(0, Math.min(1, -r.top / span));
+      const step = Math.round(pp * 40);
+      if (step !== this.state.step) next.step = step;
+    }
+    const el = (pinEl && this.pinFormRef.current) || this.closeFormRef.current;
+
+    if (this.timersWork) {
+      if (!this.state.live) {
+        next.live = true;
+        next.spent = 0;
+        next.maxSpent = 0;
+        next.stamp = '';
+        return this.setState(next);
+      }
+      const scrolled = window.scrollY > 60;
+      if (scrolled !== this.state.scrolled) next.scrolled = scrolled;
+
+      if (el) {
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
+        const formAt = el.getBoundingClientRect().top + window.scrollY - vh * 0.5;
+        const end = Math.max(1, Math.min(maxScroll, formAt));
+        const q = window.scrollY / end;
+        const spent = q >= 1 ? 5 : Math.max(0, Math.min(4, Math.floor(q * 5)));
+        if (spent !== this.state.spent) next.spent = spent;
+
+        if (!this.armed) {
+          if (spent !== this.state.maxSpent) next.maxSpent = spent;
+        } else if (spent === this.state.maxSpent + 1) {
+          next.maxSpent = spent;
+          if (spent === 4 && !this.state.stamp) {
+            next.stamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          }
+        } else if (spent < this.state.maxSpent && spent < 4) {
+          next.maxSpent = spent;
+          if (this.state.stamp) next.stamp = '';
+        }
+      }
+    }
+
+    if (!this.doseDone) this.observeDose();
+
+    if (Object.keys(next).length) this.setState(next);
+  }
+
+  renderVals() {
+    const INK = '#14161A', HAIR = '#C9C7C0', MID = '#6E6D68';
+    const phone = this.props.device === 'phone' ? true : (this.props.device === 'desktop' ? false : this.state.phone);
+    const stacked = phone || (this.props.device === 'desktop' ? false : this.state.stacked);
+    const narrow = phone || (this.props.device === 'desktop' ? false : this.state.narrow);
+    const hv = this.state.hover;
+    const spent = this.state.spent;
+
+    const D = [
+      { title: 'Paid that buys returning customers, not clicks',
+        short: 'Budget set around the customers who come back, not the first basket.',
+        evidence: 'The usual mistake is reporting return on ad spend against the first order, so the campaigns that bring people who never reorder look like the best ones and get more budget every month. Change the reporting window before you change the budget.',
+        note: 'Days 46\u201369 \u2014 bid against a full cupboard',
+        mark: (d) => d >= 46 && d <= 69,
+        lines: [
+          'Campaign structure split by the role of the purchase, new customer versus returning.',
+          'Audiences and exclusions built from CRM cycle data instead of platform lookalikes.',
+          'The measurement window set to the category\u2019s own cycle rather than a default seven or thirty days.'
+        ] },
+      { title: 'More carts from the same traffic',
+        short: 'The paths that decide whether a first pack becomes a habit.',
+        evidence: 'Most stores tune the product page and leave the pack size ambiguous. If a shopper cannot tell how long a pack lasts, they take the smallest one, and the smallest pack is the weakest possible start for a second order.',
+        note: 'Days 1\u20132 \u2014 the visit that picks the pack size',
+        mark: (d) => d <= 2,
+        lines: [
+          'Pack size and duration stated plainly on the product page so the shopper can see how long each variant lasts.',
+          'A clean one-off versus subscription choice instead of a hidden toggle.',
+          'Cart thresholds set against the real basket, and the second pack offered after purchase rather than discounted before it.'
+        ] },
+      { title: 'The second purchase without paying for a click',
+        short: 'Owned channels take the next pack before the ad auction does.',
+        evidence: 'The second order is usually lost to timing, not to price. The flow fires on the template’s default day while the pack still has weeks left in it, and by the time it actually runs out the reminder is old mail.',
+        note: 'Days 40\u201348 \u2014 owned channels take the order',
+        mark: (d) => d >= 40 && d <= 48,
+        lines: [
+          'Winback and replenishment flows timed to each customer\u2019s own cycle; lapsed segments separated from never-returned.',
+          'Email, push and SMS split by what the moment deserves.',
+          'Anyone already inside an owned-channel flow suppressed from paid so the same person is not bought twice.'
+        ] },
+      { title: 'Subscription instead of a discount',
+        short: 'The return designed into the product rather than bought with a code.',
+        evidence: 'A subscription price that undercuts the one-off price teaches the whole base to subscribe and cancel after the first delivery. Keep the price and pay for loyalty with control instead — skip, postpone, change the pack — because what people cancel is the loss of control, not the cost.',
+        note: 'Days 45 and 69 \u2014 shipment set by consumption',
+        mark: (d) => d === 45 || d === 69,
+        lines: [
+          'Plans designed around pack size and real consumption; skip, postpone and change-size instead of a discount to stay.',
+          'Loyalty earned by cadence rather than by spend.',
+          'Save offers placed at the moment of the decision, not a month later.'
+        ] },
+      { title: 'The day the pack runs out',
+        short: 'One reorder date per customer, read from their own orders.',
+        evidence: 'The interval on the label is a marketing number. The real one sits in the order history and runs longer, because people miss doses, travel and keep a spare. Build the calendar from each customer’s own gap between orders.',
+        note: 'Seven customers, seven different days',
+        mark: (d) => [8, 19, 27, 38, 44, 55, 66].indexOf(d) >= 0,
+        lines: [
+          'A model calculating the cycle per individual user from order history and pack size.',
+          'A cohort fallback for customers who have bought only once.',
+          'That date feeding both the CRM calendar and the paid exclusions, recalculated after every order.'
+        ] }
+    ];
+
+    const sel = hv == null ? 0 : hv;
+    const svcs = D.map((d, i) => {
+      const on = sel === i;
+      return {
+        num: '0' + (i + 1), title: d.title, short: d.short, evidence: d.evidence,
+        ml: String((5 - i) * 20) + ' ml',
+        fillPct: String((5 - i) * 20) + '%',
+        segs: [0, 1, 2, 3, 4].map((j) => ({ bg: j < 5 - i ? INK : 'transparent', tick: j === 0 ? 'transparent' : INK })),
+        labelColor: on ? INK : MID,
+        sub: on ? '#3A3C40' : MID,
+        rule: i === 0 ? 'transparent' : (on ? INK : HAIR),
+        ruleTop: on ? INK : 'transparent',
+        bg: on ? '#EDEAE1' : 'transparent',
+        enter: () => { if (this.state.hover !== i) this.setState({ hover: i }); },
+        leave: () => { if (this.state.hover === i) this.setState({ hover: null }); }
+      };
+    });
+
+    const shown = hv == null ? 0 : hv;
+    const directions = D[shown].lines.map((t) => ({ text: t }));
+    const dirTitle = 'part 0' + (shown + 1);
+    const dirDose = String((5 - shown) * 20) + ' ml';
+
+    const ruler = [];
+    for (let day = 1; day <= 70; day++) {
+      const marked = D[sel].mark(day);
+      ruler.push({
+        m: marked ? '1' : '0',
+        h: marked ? '100%' : (day % 5 === 0 ? '58%' : '34%'),
+        bg: marked ? '#C97B1F' : (day <= 45 ? MID : HAIR)
+      });
+    }
+
+    const meter = [];
+    for (let i = 0; i < 5; i++) {
+      const gone = i < spent;
+      meter.push({ bg: gone ? 'transparent' : INK, label: phone ? '' : '100 ml' });
+    }
+
+    const live = this.state.live;
+    const hw = this.state.maxSpent;
+
+    const p = this.reduced ? 1 : this.state.step / 40;
+    const seg = (a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+    const pA = seg(0, 0.20), pB = seg(0.18, 0.52), pC = seg(0.48, 0.74), pD = seg(0.72, 0.90);
+
+    const fired = (live ? hw >= 4 : true) || pD >= 0.6;
+    const dried = (live ? hw >= 5 : true) || pD >= 1;
+    const wide900 = this.props.device === 'desktop' ? true : (this.props.device === 'phone' ? false : this.state.wide900);
+    const showPin = !phone && wide900;
+    const fcostS = phone ? '4px' : '5px';
+    const fcount = phone ? 30 : 60;
+    const fieldLeft = [], fieldRight = [];
+    for (let i = 0; i < fcount; i++) {
+      const j = ((i * 37) % 11) / 11;
+      const o = (0.25 + 0.75 * Math.max(0, Math.min(1, pA * 1.7 - j * 0.6))).toFixed(2);
+      const base = Math.max(0, Math.min(1, pB * 1.3 - j * 0.3)) * 3;
+      const extra = pC * (2 + (j > 0.62 ? 1 : 0));
+      const nL = Math.max(0, Math.min(6, Math.round(base + extra)));
+      const nR = Math.max(0, Math.round(base * (1 - pC)));
+      const mk = (n) => {
+        const c = { o };
+        for (let k = 1; k <= 6; k++) { const lit = k <= n; c['b' + k] = lit ? INK : 'transparent'; c['w' + k] = lit ? fcostS : '0px'; }
+        return c;
+      };
+      fieldLeft.push(mk(nL));
+      fieldRight.push(mk(nR));
+    }
+
+
+    const L = phone ? {
+      meterReserve: '0px', barSpace: '0px', closeW: '100%', closeFeePad: '3px 0 4px', closeGap: '8px', closePad: '12px 14px',
+      hpad: '14px 18px', mpad: '20px 18px 30px', mpadX: '18px', leadTail: 'none', mpadL: '18px', mpadR: '18px',
+      h1: 'clamp(33px,10vw,40px)', lead: '16px', lead2: '16px', svc: '16px', body: '14px', field: '16px', evidMain: '14.5px', evid: '12.5px', small: '12px',
+      headGap: '10px', leadPad: '10px', areas: '"head" "recog" "svc" "form"', gridCols: 'minmax(0,1fr)',
+      batchCols: 'minmax(0,1fr)', batchGap: '0px', batchPad: '4px 0 6px', tailPad: '4px', instGap: '6px',
+      fee: '12px', feePad: '0', feeHeadGap: '2px', feeRailGap: '0px', feeLift: '0px', feeLead: '18px', batchAreas: '"n" "s" "l"', batchStatusAlign: 'start',
+      recogGap: '15px', recogMeasure: '100%', recog: '16px', recogClose: '18px', recogCloseMargin: '7px 0 0',
+      colGap: '18px', rowGap: '30px', formGap: '12px', formPad: '12px', photo: '48px',
+      svcHead: '14px', svcCols: 'minmax(0,1fr)', itemPad: '12px 0 14px 0', itemGap: '9px',
+      segW: '58px', segH: '9px', markW: '11px', markH: '11px',
+      meterPos: 'left:0;right:0;top:0', meterDir: 'row', meterJustify: 'space-between', meterAlign: 'center', meterBorder: '1px solid #14161A', meterPad: '8px 18px', meterGap: '8px',
+      dirGap: '12px', dirPad: '14px', dirH: '160px', dirCols: 'minmax(0,1fr)', dirColGap: '10px',
+      panelGap: '12px', panelPad: '16px', panelTextH: '34px', rulerH: '34px', tickGap: '2px',
+      pinOuter: (this.props.pinScroll ?? 320) + 'vh', pinPad: 'clamp(16px,3vh,24px) 18px', frameGap: 'clamp(14px,3vh,22px)',
+      fieldDir: 'column', halfGap: 'clamp(12px,2.4vh,20px)', fieldCols: 'repeat(6,minmax(0,1fr))',
+      rowGap2: 'clamp(5px,1.1vh,9px)', colGap2: '6px', markGap: '2px', dotS: '6px', costS: '4px',
+      capGap: '10px', capSize: '13px', capH: '18px', divW: '100%', divH: '1px',
+      payoff: 'clamp(24px,6.8vw,30px)', payoffH: '76px',
+      msgDir: 'column', msgGap: '14px', msgPad: '14px', msgIdW: '100%', msgPhoto: '48px',
+      msgInnerGap: '12px', msgFieldGap: '12px', msgFieldDir: 'column', chromeH: '58px',
+      msgFieldAlign: 'stretch', msgBtnW: '100%', msgMetaDir: 'column', msgMetaAlign: 'flex-start', msgIdAlign: 'center',
+      proofCols: 'repeat(2,minmax(0,1fr))', proofGap: '10px 14px', proofSize: '17px',
+      twoCols: 'minmax(0,1fr)', dir: 'column',
+      barPad: '9px 18px', barDir: 'column', barAlign: 'stretch', barGap: '0px', barFormW: '100%'
+    } : {
+      meterReserve: '0px', barSpace: '104px', closeW: '560px', closeFeePad: '7px 0 8px', closeGap: '15px', closePad: '20px',
+      hpad: narrow ? '14px 40px' : '18px 112px 18px 176px', mpad: narrow ? '28px 40px 40px' : '34px 112px 44px 176px', mpadX: narrow ? '40px' : '176px', leadTail: 'inline', mpadL: narrow ? '40px' : '176px', mpadR: narrow ? '40px' : '112px',
+      h1: narrow ? 'clamp(40px,7vw,72px)' : 'clamp(44px,5.2vw,78px)', lead: '20px', lead2: '18px', svc: '17px', body: '15px', field: '15px', evidMain: '15px', evid: '13px', small: '13px',
+      headGap: '20px', leadPad: '16px', areas: narrow ? '"head" "form" "recog" "svc"' : '"head form" "recog recog" "svc svc"',
+      fee: '13px', feePad: '7px 0 8px', feeHeadGap: '10px', feeRailGap: '22px', feeLift: '0px', feeLead: '28px',
+      batchCols: 'minmax(120px,168px) minmax(0,62ch) minmax(max-content,1fr)', batchGap: 'clamp(24px,3vw,48px)', batchPad: '14px 0 16px', tailPad: '20px', instGap: '12px', batchAreas: '"n l s"', batchStatusAlign: 'end',
+      recogGap: '18px', recogMeasure: '62ch', recog: '18px', recogClose: '21px', recogCloseMargin: '10px 0 0',
+      gridCols: narrow ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(300px,380px)',
+      colGap: 'clamp(28px,3.4vw,56px)', rowGap: '48px', formGap: '15px', formPad: '20px', photo: '56px',
+      svcHead: '18px', svcCols: stacked ? 'minmax(0,1fr)' : 'repeat(5,minmax(0,1fr))', itemPad: stacked ? '14px 0 18px' : '14px 16px 18px', itemGap: '12px',
+      segW: '68px', segH: '10px', markW: '13px', markH: '13px',
+      meterPos: 'left:22px;top:50%;transform:translateY(-50%)', meterDir: 'column', meterJustify: 'center', meterAlign: 'flex-start', meterBorder: '0', meterPad: '0', meterGap: '20px',
+      dirGap: '16px', dirPad: '18px', dirH: '116px', dirCols: 'repeat(3,minmax(0,1fr))', dirColGap: '32px',
+      panelGap: '14px', panelPad: '20px', panelTextH: '22px', rulerH: '48px', tickGap: '3px',
+      pinOuter: (this.props.pinScroll ?? 320) + 'vh', pinPad: narrow ? 'clamp(24px,5vh,56px) 40px' : 'clamp(24px,5vh,56px) 112px clamp(24px,5vh,56px) 176px', frameGap: 'clamp(18px,3.6vh,36px)',
+      fieldDir: 'row', halfGap: 'clamp(24px,3.4vw,64px)', fieldCols: 'repeat(10,minmax(0,1fr))',
+      rowGap2: 'clamp(7px,1.7vh,14px)', colGap2: '8px', markGap: '3px', dotS: '7px', costS: '5px',
+      capGap: '20px', capSize: '15px', capH: '22px', divW: '1px', divH: '76%',
+      payoff: 'clamp(34px,3.8vw,58px)', payoffH: '128px',
+      msgDir: 'row', msgGap: '40px', msgPad: '18px', msgIdW: '240px', msgPhoto: '64px',
+      msgInnerGap: '14px', msgFieldGap: '14px', msgFieldDir: 'row', chromeH: '24px',
+      msgFieldAlign: 'flex-end', msgBtnW: 'auto', msgMetaDir: 'row', msgMetaAlign: 'center', msgIdAlign: 'flex-start',
+      proofCols: 'repeat(5,minmax(0,1fr))', proofGap: '18px', proofSize: '21px',
+      twoCols: 'minmax(0,1fr) minmax(0,1fr)', dir: 'row',
+      barPad: '12px 112px', barDir: 'row', barAlign: 'flex-end', barGap: '32px', barFormW: '420px'
+    };
+
+    return {
+      L, svcs, ruler, meter, directions, dirTitle, dirDose,
+      sig: Array.from({ length: 70 }, (_, k) => ({ h: (k === 44 || k === 68) ? '100%' : '40%', bg: k === 44 ? INK : (k === 68 ? '#C97B1F' : HAIR) })),
+      closeFee: [{ t: 'EUR 2,500 net per month.' }, { t: 'No setup fee.' }, { t: 'No minimum term.' }, { t: 'Two clients at a time.' }],
+      closeMinH: this.state.closeH ? this.state.closeH + 'px' : '0px',
+      rowRef: this.rowRef,
+      heroFormRef: this.heroFormRef,
+      phoneFormRef: this.phoneFormRef,
+      heroFormDisplay: phone ? 'flex' : 'none',
+      midFormDisplay: phone ? 'none' : 'flex',
+      showIndication: !phone,
+      phoneTail: phone,
+      phoneFee: phone, railFee: !phone,
+      closeFormRef: this.closeFormRef,
+      showPin, noPin: !showPin, pinRef: this.pinRef, pinFormRef: this.pinFormRef, fieldLeft, fieldRight,
+      chromeOpacity: fired ? '1' : '0',
+      dryOpacity: dried ? '1' : '0',
+      payoffOpacity: pD.toFixed(2),
+      stamp: this.state.stamp || (pD >= 0.6 ? this.pinStamp || (this.pinStamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : ''),
+      divTransform: 'scale' + (phone ? 'X' : 'Y') + '(' + (0.05 + 0.95 * pC).toFixed(3) + ')',
+      divOpacity: (0.12 + 0.88 * pC).toFixed(2),
+      capOpacity: (0.06 + 0.94 * seg(0.54, 0.80)).toFixed(2),
+      panelText: hv != null ? D[hv].note : '45 on the label, 69 in the data',
+      meterDisplay: this.state.scrolled ? 'flex' : 'none',
+      meterHidden: this.state.scrolled ? 'false' : 'true',
+      meterReadout: String((5 - spent) * 100) + ' ml left',
+      barTransform: this.state.bar ? 'translateY(0)' : 'translateY(110%)',
+      barOpacity: this.state.bar ? '1' : '0',
+      barTrans: this.state.motionOK ? 'opacity 220ms cubic-bezier(.2,.7,.2,1),transform 220ms cubic-bezier(.2,.7,.2,1)' : 'none',
+      barPointer: this.state.bar ? 'auto' : 'none',
+      barHidden: this.state.bar ? 'false' : 'true',
+      meterOn: !phone && this.state.w768 !== false,
+      barShort: !phone && !(this.state.sent && this.state.sent.bar),
+      barFull: phone && !(this.state.sent && this.state.sent.bar),
+      barRows: this.state.barCollapsed && !this.state.barOpen ? '0fr' : '1fr',
+      barMinH: this.state.barH ? this.state.barH + 'px' : '0px',
+      openBar: this.openBar || (this.openBar = () => { if (!this.state.barOpen) this.setState({ barOpen: true }); }),
+      noSubmit: (e) => e.preventDefault(),
+      submit: this.submitters || (this.submitters = ['phone', 'hero', 'close', 'bar'].reduce((o, k) => {
+        o[k] = (e) => {
+          e.preventDefault();
+          const f = e.currentTarget;
+          const raw = ((f.querySelector('input[inputmode="url"]') || {}).value || '').trim();
+          if (k === 'bar') { const b = f.closest('[data-bar]'); if (b) this.setState({ barH: b.offsetHeight }); }
+          const host = raw.replace(/^[a-z][a-z0-9+.-]*:\/\//i, '').replace(/^www\./i, '').split(/[\/?#]/)[0] || raw;
+          const h = Math.round(f.getBoundingClientRect().height);
+          this.setState((st) => ({ sent: Object.assign({}, st.sent, { [k]: host }), closeH: k === 'close' ? h : st.closeH, sentHt: Object.assign({}, st.sentHt, { [k]: h }) }));
+        };
+        return o;
+      }, {})),
+      sent: ['phone', 'hero', 'close', 'bar'].reduce((o, k) => { o[k] = !!(this.state.sent && this.state.sent[k]); return o; }, {}),
+      unsent: ['phone', 'hero', 'close', 'bar'].reduce((o, k) => { o[k] = !(this.state.sent && this.state.sent[k]); return o; }, {}),
+      live: { phone: (phone ? 'flex' : 'none') !== 'none' && !(this.state.sent && this.state.sent.phone), hero: (phone ? 'none' : 'flex') !== 'none' && !(this.state.sent && this.state.sent.hero) },
+      done: { phone: (phone ? 'flex' : 'none') !== 'none' && !!(this.state.sent && this.state.sent.phone), hero: (phone ? 'none' : 'flex') !== 'none' && !!(this.state.sent && this.state.sent.hero) },
+      closeEyebrow: this.state.sent && this.state.sent.close ? 'Enquiry received' : 'Enquiry form',
+      sentH: ['phone', 'hero', 'close', 'bar'].reduce((o, k) => { const v = this.state.sentHt && this.state.sentHt[k]; o[k] = v ? v + 'px' : 'auto'; return o; }, {}),
+      sentHost: Object.assign({ phone: '', hero: '', close: '', bar: '' }, this.state.sent || {}),
+      feeLead: 'EUR 2,500 net per month.',
+      feeRest: [{ t: 'No setup fee. No minimum term.' }, { t: 'Two clients at a time.' }, { t: 'The first month is an as-is audit and the quick wins that come out of it.' }],
+      proof: [
+        { name: 'Allegro', status: 'Closed', statusColor: '#6E6D68', line: 'Worked with a data science team on predicting a customer\u2019s next purchase.' },
+        { name: 'Accenture', status: 'Closed', statusColor: '#6E6D68', line: 'Lifecycle marketing for cosmetics and drugstore brands: the same repeat-purchase problem at retail scale.' },
+        { name: 'mBank', status: 'Closed', statusColor: '#6E6D68', line: 'Built a retention programme around consumables: coffee, detergents, lenses.' },
+        { name: 'Booksy', status: 'Closed', statusColor: '#6E6D68', line: 'The same recurring problem on the service side, where the cycle is an appointment rather than a pack.' },
+        { name: 'GenActiv', status: 'In production', statusColor: '#14161A', line: 'Current client. Colostrum, Shopify: strategy and build. One of the two.' }
+      ]
+    };
+  }
+}
+
+</script>

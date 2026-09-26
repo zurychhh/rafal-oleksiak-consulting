@@ -114,15 +114,26 @@ export const analytics = {
   },
 
   /**
-   * Zgloszenie formularza leadowego.
+   * Zgloszenie formularza leadowego — wolane przez app/design/LeadBridge.tsx
+   * dopiero po odpowiedzi 2xx z /api/lead, nigdy na samo klikniecie.
    *
-   * UWAGA: nic tego jeszcze nie wola. Formularz siedzi w app/audit-runtime.js,
-   * ktory jest przenoszony 1:1 ze zrodla przez `npm run ship`, i strzela
-   * bezposrednio do /api/lead bez zadnego zdarzenia analitycznego. Dopoki
-   * wywolanie nie trafi do zrodla, GA4 nie widzi ani jednej konwersji.
+   * Dwa zdarzenia: `generate_lead` (rekomendowane GA4) i `form_submission_lead`
+   * (nazwa, pod ktora konwersja byla importowana do Google Ads). Oba ida przez
+   * bufor zgody: przed decyzja czekaja w pamieci, po odmowie przepadaja.
+   *
+   * Enhanced conversions: adres idzie do `user_data` WYLACZNIE, gdy gtag.js jest
+   * juz zaladowany, a laduje sie on tylko po zgodzie. Przed zgoda e-mail nie
+   * trafia nigdzie — takze nie do bufora.
    */
-  trackLeadSubmitted: (intent: string) => {
+  trackLeadSubmitted: (intent: string, email?: string) => {
+    if (email && isAnalyticsEnabled() && gtagReady()) {
+      win().gtag('set', 'user_data', { email: email.trim().toLowerCase() })
+    }
     pushEvent('generate_lead', {
+      event_category: 'conversion',
+      event_label: intent,
+    })
+    pushEvent('form_submission_lead', {
       event_category: 'conversion',
       event_label: intent,
     })
