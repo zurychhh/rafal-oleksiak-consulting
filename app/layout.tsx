@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Poppins, DM_Sans } from "next/font/google";
 import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold only)
 import "./globals.css"; // Remaining below-the-fold styles
-import "./fonts.css"; // IBM Plex hostowany lokalnie — zero zadan do Google
+import "./fonts.css"; // IBM Plex, Archivo, Poppins, DM Sans — lokalnie, zero zadan do Google
 import FontAwesomeLoader from "./components/FontAwesomeLoader";
 import ConsentMode from "./components/ConsentMode";
 import CookieConsent from "./components/ui/CookieConsent";
@@ -11,25 +10,9 @@ import GoogleAnalytics from "./components/GoogleAnalytics";
 import { WebVitals } from "./components/WebVitals";
 import { ScrollTracker } from "./components/ScrollTracker";
 
-// Configure Poppins for headlines - Optimized for LCP
-const poppins = Poppins({
-  subsets: ["latin"], // Latin subset includes Polish special characters
-  weight: ["400", "600", "700", "900"],
-  variable: "--font-poppins",
-  display: "swap", // Swap ensures font loads visibly
-  adjustFontFallback: true, // Better CLS prevention
-  preload: true, // Prioritizes font in network waterfall
-});
-
-// Configure DM Sans for body text - Optimized for LCP
-const dmSans = DM_Sans({
-  subsets: ["latin"], // Latin subset includes Polish special characters
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
-  display: "swap", // Swap ensures font loads visibly
-  adjustFontFallback: true, // Better CLS prevention
-  preload: true, // Prioritizes font in network waterfall
-});
+// Poppins i DM Sans sa hostowane lokalnie w app/fonts.css (zmienne --font-poppins
+// i --font-dm-sans na :root). Nie next/font/google: pobieral pliki z Google
+// w czasie buildu i build padal wszedzie, gdzie fonts.googleapis.com jest zablokowany.
 
 export const metadata: Metadata = {
   title: "Rafał Oleksiak — FMCG ecommerce, end to end",
@@ -108,9 +91,7 @@ export default function RootLayout({
         {/* Schema.org JSON-LD structured data for rich snippets */}
         <SchemaOrg />
       </head>
-      <body
-        className={`${poppins.variable} ${dmSans.variable} antialiased`}
-      >
+      <body className="antialiased">
         {/* Performance: Async load Font Awesome to prevent render blocking */}
         <FontAwesomeLoader />
         {children}

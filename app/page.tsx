@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: 'https://oleksiakconsulting.com/',
-    title: 'Every pack runs out on a different day',
+    title: "You don't pay twice for the same customer.",
     description:
       'FMCG ecommerce, end to end — paid, search, storefront, CRM and loyalty for brands whose products run out.',
     images: ['https://oleksiakconsulting.com/og.png'],
@@ -40,7 +40,7 @@ const PERSON_LD = {
   name: 'Rafał Oleksiak',
   url: 'https://oleksiakconsulting.com/',
   jobTitle: 'FMCG ecommerce consultant — paid, search, storefront, CRM and loyalty',
-  sameAs: ['https://www.linkedin.com/in/rafal-oleksiak/'],
+  sameAs: ['https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/'],
   description:
     "Fifteen years of FMCG ecommerce end to end — paid media, search including AI answers, storefront conversion on Shopify, WooCommerce and bespoke platforms, CRM lifecycle and loyalty. Led Allegro's FMCG and recurring team building per-user next-pack prediction; built the mBank/mOkazje retention strategy on consumables; Booksy; currently Genactiv.",
   knowsAbout: [
