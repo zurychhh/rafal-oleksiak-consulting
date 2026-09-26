@@ -40,3 +40,9 @@ body:has(#dc-page) { overflow-x: visible; max-width: none; }
 #dc-page input:focus-visible {
   outline: 1px solid #14161A; outline-offset: 2px; box-shadow: none;
 }
+
+/* 6. Link do /tool dokladany przez ship-design do naglowka. Na telefonie nie
+      miesci sie obok nazwiska bez lamania go na trzy linie — schodzi pod spod. */
+@media (max-width: 759px) {
+  #dc-page header:has([data-ship-added="tool-link"]) { flex-wrap: wrap; row-gap: 0; }
+}

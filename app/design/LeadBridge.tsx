@@ -184,6 +184,9 @@ export default function LeadBridge() {
     const onSubmit = (ev: Event) => {
       const f = ev.target
       if (!(f instanceof HTMLFormElement) || !f.closest('#dc-page')) return
+      // Formularz z prerenderu (sekunda przed startem runtime'u): nie wysylamy —
+      // runtime zaraz go zastapi, a wpisane wartosci przeniesie DcBoot.
+      if (f.closest('.dc-pre')) { ev.preventDefault(); ev.stopPropagation(); return }
       if (approved.has(f)) { approved.delete(f); return } // przepuszczony po 2xx
       const url = q<HTMLInputElement>(f, 'input[inputmode="url"]')
       if (!url) return // nie ten ksztalt — nie nasz formularz

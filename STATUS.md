@@ -125,7 +125,10 @@ Edycja idzie przez `design/production/index.html`, potem `npm run ship`.
 Bilans slow musi wyjsc zero; jesli nowa tresc potrzebuje miejsca, tnij
 w opisach dowodow, nie w mechanizmach.
 
-### 2. Stare JSON-LD na produkcji — ZNALEZIONE 9 wrzesnia, NIENAPRAWIONE
+### 2. Stare JSON-LD na produkcji — ZNALEZIONE 9 wrzesnia, NAPRAWIONE 26 wrzesnia
+
+Oferta LAMA byla juz usunieta wczesniej; 26.09: knowsAbout wg system/USP.md, WebSite.description
+z naglowkiem strony, LinkedIn w sameAs = adres ze stopki. Opis ponizej jest historyczny.
 
 Strona wizualnie jest nowa, ale **trzy z czterech encji danych strukturalnych
 opisuja stary biznes**. Google to czyta.

@@ -31,8 +31,66 @@ export default function DcBoot() {
       window.location.reload()
       return
     }
+    // Przejecie prerenderu: zrzut z serwera zostaje na ekranie, dopoki runtime
+    // nie narysuje tej samej tresci w #dc-root. Wtedy — w tym samym zadaniu,
+    // przed malowaniem — przenosimy to, co ktos zdazyl wpisac, i zdejmujemy zrzut.
+    // Tresc jest ta sama, wiec #dc-root wskakuje dokladnie w miejsce zrzutu.
+    const page = document.getElementById('dc-page')
+    const pres = () => Array.from(document.querySelectorAll<HTMLElement>('#dc-page .dc-pre'))
+    const shown = pres().find((el) => el.getClientRects().length > 0)
+    const need = shown ? shown.textContent?.length ?? 0 : 0
+    let mo: MutationObserver | null = null
+    let waitingFonts = false
+    const takeover = (): boolean => {
+      if (!pres().length) return true
+      const root = document.getElementById('dc-root')
+      if (!root || (root.textContent?.length ?? 0) < need * 0.9) return false
+      // Runtime pisze krojem bez prefiksu zrzutu. Jesli ten jeszcze sie laduje,
+      // przejecie narysowaloby tekst fontem zapasowym i przelamalo uklad —
+      // czekamy na font i probujemy jeszcze raz.
+      const specs = (DC.prerender?.fonts ?? []).map((x) => x.replace('"dcpre ', '"'))
+      const missing = specs.filter((x) => !document.fonts.check(x, 'Aa\u0142'))
+      if (missing.length) {
+        if (!waitingFonts) {
+          waitingFonts = true
+          Promise.all(missing.map((x) => document.fonts.load(x, 'Aa\u0142')))
+            .catch(() => undefined)
+            .then(() => { waitingFonts = false; if (takeover()) mo?.disconnect() })
+        }
+        return false
+      }
+      if (shown) {
+        shown.querySelectorAll<HTMLInputElement>('input[name]').forEach((src) => {
+          const typed = src.type === 'checkbox' ? src.checked : src.value
+          if (!typed) return
+          const dst = Array.from(root.querySelectorAll<HTMLInputElement>(`input[name="${src.name}"]`))
+            .find((el) => el.getClientRects().length > 0)
+          if (!dst) return
+          if (src.type === 'checkbox') dst.checked = src.checked
+          else {
+            dst.value = src.value
+            dst.dispatchEvent(new Event('input', { bubbles: true }))
+          }
+        })
+      }
+      pres().forEach((el) => el.remove())
+      return true
+    }
+    if (page && !takeover()) {
+      mo = new MutationObserver(() => { if (takeover()) mo?.disconnect() })
+      mo.observe(page, { childList: true, subtree: true })
+    }
+
     // StrictMode w dev odpala efekt dwa razy; skrypt dokladamy raz.
     if (!document.querySelector('script[data-dc-runtime]')) {
+      // Szablon przychodzi w bezwladnym <template>; runtime szuka <x-dc> w dokumencie
+      // i czyta jego innerHTML, wiec skladamy go tu w tym samym miejscu.
+      const src = document.getElementById('dc-src') as HTMLTemplateElement | null
+      if (src && !document.querySelector('#dc-page x-dc')) {
+        const x = document.createElement('x-dc')
+        x.innerHTML = src.innerHTML
+        src.after(x)
+      }
       w.__resources = { ...DC.resources }
       const s = document.createElement('script')
       s.src = DC.runtime

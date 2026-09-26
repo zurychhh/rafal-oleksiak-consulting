@@ -42,6 +42,10 @@ async function grab(browser, url, vp) {
   await page.waitForTimeout(1500)
   const out = await page.evaluate((props) => {
     const root = document.getElementById('dc-root')
+    // Elementy dolozone przez ship-design (link do /tool, brakujace pozycje stopki)
+    // nie istnieja w zrodle. Zdejmujemy je (reguly :has w design-reset gasna same), zeby
+    // reszta strony porownywala sie 1:1; ich obecnosc pilnuje content-rules.
+    root.querySelectorAll('[data-ship-added]').forEach((el) => el.remove())
     const rows = []
     for (const el of root.querySelectorAll('*')) {
       if (el.closest('[data-lead-error]')) continue

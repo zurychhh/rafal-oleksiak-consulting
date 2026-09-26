@@ -44,6 +44,7 @@ import { gunzipSync } from 'node:zlib'
 import { createHash } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { checkStatic, formatFailures } from './content-rules.test.mjs'
+import { prerender } from './design-prerender.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const P = {
@@ -189,7 +190,7 @@ if (!footerM) die('W szablonie nie ma <footer>. Nie wymyslam stopki — dodaj ja
 let footer = footerM[0]
 const LINK_STYLE = 'color:inherit;display:inline-flex;align-items:center;min-height:44px'
 const addToFooter = (html, label) => {
-  footer = footer.replace(/<\/footer>$/, `<span style="display:flex;flex-wrap:wrap;gap:0 18px">${html}</span></footer>`)
+  footer = footer.replace(/<\/footer>$/, `<span data-ship-added="footer" style="display:flex;flex-wrap:wrap;gap:0 18px">${html}</span></footer>`)
   bump(label)
 }
 if (!footer.includes('mailto:' + EMAIL)) addToFooter(`<a href="mailto:${EMAIL}" style="${LINK_STYLE}">${EMAIL}</a>`, 'stopka: dolozony e-mail')
@@ -198,6 +199,20 @@ if (!/href="\/tool"/.test(dcTemplate) && !footer.includes('href="/tool"')) {
   addToFooter(`<a href="/tool" style="${LINK_STYLE}">Count your own interval</a>`, 'dolozony link do /tool')
 }
 dcTemplate = dcTemplate.replace(footerM[0], footer)
+
+// Link do /tool w naglowku, jesli go tam nie ma. Narzedzie jest dowodem oferty,
+// a na stronie bywa dopiero kilka ekranow nizej (v66: ~2 ekrany na desktopie,
+// ~4 na telefonie). Tekst bierzemy z istniejacego linku do /tool — zero nowego copy.
+// data-ship-added: ship-compare zdejmuje takie elementy przed porownaniem ze zrodlem.
+const headerM = dcTemplate.match(/<header\b[^>]*>[\s\S]*?<\/header>/)
+if (headerM && !/href="\/tool"/.test(headerM[0])) {
+  const label = ((dcTemplate.match(/<a\b[^>]*href="\/tool"[^>]*>([^<]{3,60})<\/a>/) || [])[1] || 'Count your own interval').trim()
+  const link = `<a href="/tool" data-ship-added="tool-link" style="flex:none;white-space:nowrap;font-size:12px;font-weight:700;` +
+    `letter-spacing:.18em;text-transform:uppercase;color:#A25C11;text-decoration:underline;text-underline-offset:4px;` +
+    `padding:14px 0;margin:-14px 0">${label}</a>`
+  dcTemplate = dcTemplate.replace(headerM[0], headerM[0].replace(/<\/header>$/, link + '</header>'))
+  bump('link do /tool w naglowku')
+}
 
 // Nic poza naszym originem nie moze byc ladowane przez szablon.
 const external = dcTemplate.match(/(?:src=|url\(|@import\s)["']?(https?:)?\/\/[^"')\s]+/i)
@@ -228,7 +243,35 @@ const DC = {
   },
   template: dcTemplate,
   script: dcScript,
+  prerender: null,
 }
+
+// ───────────────────────────────────────────── 5b. prerender pierwszego ekranu
+// Renderujemy tym samym runtime'em i tymi samymi plikami, ktore pojada. Tylko gdy
+// tresc przeszla test — nie ma sensu renderowac czegos, co i tak nie pojedzie.
+if (!failures.length) {
+  say('\n  Prerender (headless, zamrozony zegar, siatka szerokosci + bisekcja progow)…')
+  const pre = await prerender({ template: dcTemplate, script: dcScript, runtime: runtimeUrl, resources, assets })
+  for (const b of pre.buckets) {
+    if (!/<h1\b/.test(b.html)) die('Prerender bez <h1> dla ' + JSON.stringify(b.ranges) + ' — runtime nie wyrenderowal strony.')
+  }
+  const ext = pre.css.match(/url\(["']?(https?:)?\/\/[^)]+\)/)
+  if (ext) die('Arkusz prerenderu siega na zewnatrz: ' + ext[0])
+  // Kroje, na ktore zrzut czeka przed pokazaniem sie (patrz app/page.tsx): kazda
+  // para rodzina + grubosc z @font-face w arkuszu runtime'u. Bez czekania tekst
+  // lamal sie najpierw krojem zapasowym (jednostki ch, szerokosci glifow) i po
+  // dociagnieciu fontu przeskakiwal — zmierzone przesuniecie ukladu ~0,05.
+  const faces = [...new Set([...pre.css.matchAll(/@font-face\s*\{([^}]*)\}/g)].map((m) => {
+    const fam = (m[1].match(/font-family:\s*"?([^";]+)"?/) || [])[1]
+    const w = (m[1].match(/font-weight:\s*(\d+)/) || [])[1] || '400'
+    return fam ? `${w} 16px "${fam}"` : null
+  }).filter(Boolean))].sort()
+  DC.prerender = { css: pre.css, fonts: faces, buckets: pre.buckets }
+  const fmt = (r) => `${r.min}–${r.max ?? '∞'} px`
+  say(`  Progi szerokosci znalezione w logice komponentu: ${pre.edges.join(', ') || 'brak'}`)
+  pre.buckets.forEach((b, i) => say(`    wariant ${i + 1}: ${b.ranges.map(fmt).join(', ')}  (${kb(Buffer.byteLength(b.html))})`))
+}
+
 const generated =
   '// GENEROWANE przez scripts/ship-design.mjs — nie edytuj recznie.\n' +
   '// Zrodlo: design/production/claude-design-bundle.html\n' +

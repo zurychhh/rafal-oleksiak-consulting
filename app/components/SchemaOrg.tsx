@@ -9,8 +9,7 @@
  * Person NIE jest tu renderowany. Encję Person dostarcza strona główna
  * (app/page.tsx) — jest specyficzna dla niszy FMCG i ma być jedyna na tym
  * URL-u; dwie encje Person to sygnał sprzeczny dla Google.
- * Uwaga: usunięty blok trzymał jedyny w repo adres LinkedIna
- * (sameAs), którego brakuje w JSON-LD strony.
+ * LinkedIn w sameAs = ten sam adres co w stopce strony i w Person z app/page.tsx.
  *
  * Impact on Google Ads:
  * - Improves Quality Score (landing page relevance)
@@ -39,7 +38,7 @@ export default function SchemaOrg() {
       availableLanguage: ['Polish', 'English'],
     },
     sameAs: [
-      'https://www.linkedin.com/in/rafal-oleksiak/',
+      'https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/',
     ],
     areaServed: {
       '@type': 'GeoCircle',
@@ -50,15 +49,15 @@ export default function SchemaOrg() {
       },
       geoRadius: '2000',
     },
+    // Zakres jak w system/USP.md: rynek FMCG / zakupy powtarzalne, caly lejek.
     knowsAbout: [
-      'FMCG Ecommerce',
-      'Replenishment and Recurring Purchase',
-      'Paid Traffic Quality',
-      'Ecommerce SEO and AI Answers',
-      'Onsite Conversion Optimization',
-      'Subscription and Loyalty Programmes',
-      'CRM and Marketing Automation',
-      'Shopify and WooCommerce',
+      'FMCG and repeat-purchase ecommerce',
+      'Paid traffic quality',
+      'SEO including AI answers',
+      'Onsite conversion',
+      'CRM and marketing automation',
+      'Subscriptions',
+      'Loyalty programmes',
     ],
   };
 
@@ -90,7 +89,7 @@ export default function SchemaOrg() {
     name: 'Oleksiak Consulting',
     url: 'https://oleksiakconsulting.com',
     description:
-      'One market — FMCG and anything bought again. Inside it the whole funnel: paid, search including AI answers, the storefront, CRM, subscription, loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.',
+      "You don't pay twice for the same customer. FMCG and repeat-purchase ecommerce, end to end — paid traffic quality, SEO including AI answers, onsite conversion, CRM and marketing automation, subscriptions and loyalty.",
     publisher: {
       '@type': 'Organization',
       name: 'Oleksiak Consulting',

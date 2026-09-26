@@ -152,7 +152,30 @@ zgoda domyślnie zaznaczona.
 Przekształcenia w `ship-design` (raportowane liczbowo): uuid → `/dc/…`; usunięcie
 odznaki „Made with Claude Design"; „Rafal" → „Rafał" (tylko wielka litera — adresy
 `rafal@…` i URL-e zostają); e-mail, LinkedIn i link do `/tool` dokładane minimalnie
-do stopki, **jeśli ich brak**.
+do stopki, **jeśli ich brak**; link do `/tool` w nagłówku (tekst z istniejącego linku),
+jeśli nagłówek go nie ma — w v66 był ~2 ekrany niżej na desktopie i ~4 na telefonie.
+
+**Prerender pierwszego ekranu (`scripts/design-prerender.mjs`, część `ship-design`).**
+Runtime rysuje stronę dopiero po hydratacji — bez tego ekran był pusty ~0,5 s lokalnie
+i ~3,4 s na wolnym 4G, a bez JS pusty na zawsze. `ship-design` renderuje więc stronę
+headless (Chromium z `/opt/pw-browsers`, serwer w pamięci z tymi samymi plikami `/dc/*`,
+zamrożony zegar → deterministycznie), **sam znajduje progi szerokości** z logiki
+komponentu (siatka + bisekcja do 1 px; v66: 760, 768, 901, 1024, 1200) i zapisuje
+zrzut DOM dla każdego przedziału do `generated.ts`. Serwer podaje zrzut od razu;
+media query wybiera właściwy. Zrzut jest w stanie `prefers-reduced-motion`, więc bez
+JS cała treść jest czytelna. Formularze zrzutu nie wysyłają (bez JS: notka z adresem
+e-mail). `DcBoot` zdejmuje zrzut w tej samej klatce, w której runtime narysował tę samą
+treść, i przenosi wpisane wartości. Rodziny fontów w zrzucie mają prefiks `dcpre `, a mały
+skrypt trzyma zrzut niewidoczny do załadowania fontów (max 1,5 s) — bez tego tekst łamał
+się krojem zapasowym i przeskakiwał (CLS ~0,05). Szablon `<x-dc>` jedzie w bezwładnym
+`<template id="dc-src">`, a `DcBoot` składa z niego `<x-dc>` przed startem runtime'u.
+Pomiar 26.09: CLS 0 na pięciu szerokościach; nagłówek widoczny po ~1,2 s na wolnym 4G
+(było ~3,4 s). Jedyna różnica pikseli przed/po przejęciu to zamierzona animacja
+projektu (linie tuż nad dolną krawędzią ekranu chowają się i wjeżdżają przy przewijaniu).
+
+**Elementy dokładane przez `ship-design` mają `data-ship-added`** (link do `/tool`
+w nagłówku, brakujące pozycje stopki); `ship-compare` zdejmuje je przed porównaniem
+ze źródłem, a ich obecność pilnuje `content-rules`.
 
 **Pisane ręcznie, `ship-design` ich nie dotyka:**
 
