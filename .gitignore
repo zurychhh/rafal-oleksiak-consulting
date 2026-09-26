@@ -70,3 +70,6 @@ test-screenshots/
 
 # LinkedIn OAuth tokens
 .linkedin-token.json
+
+# Prywatna lista nazw zakazanych w tresci strony (scripts/content-rules.test.mjs)
+.content-deny.local

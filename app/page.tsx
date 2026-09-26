@@ -1,9 +1,15 @@
 import type { Metadata, Viewport } from 'next'
-import AuditClient from './AuditClient'
-import './audit.css'
+import { preload } from 'react-dom'
+import { DC } from './design/generated'
+import DcBoot from './design/DcBoot'
+import LeadBridge from './design/LeadBridge'
+import './design/design-reset.css'
 
-// Przeniesione z <head> design/production/index.html. Nadpisuje metadata
-// z layoutu tylko dla tej trasy.
+// Strona glowna = eksport Claude Design hostowany lokalnie (scripts/ship-design.mjs).
+// Ten plik jest PISANY RECZNIE: metadata, JSON-LD i osadzenie szablonu. Tresc
+// strony siedzi w ./design/generated.ts i zmienia sie tylko przez ship-design.
+//
+// Metadata nadpisuje layout tylko dla tej trasy.
 export const metadata: Metadata = {
   title: 'FMCG ecommerce, end to end · Oleksiak Consulting',
   description:
@@ -20,14 +26,12 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image' },
 }
 
-// Ta strona ma własny viewport: `viewport-fit=cover` i `interactive-widget`
-// są częścią tego, co przeszło QA na dziewięciu szerokościach.
+// Viewport jak w szablonie Claude Design (width=device-width, initial-scale=1);
+// kolor paska przegladarki = tlo projektu.
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  viewportFit: 'cover',
-  interactiveWidget: 'resizes-content',
-  themeColor: '#0D0F14',
+  themeColor: '#F7F5F0',
 }
 
 const PERSON_LD = {
@@ -59,13 +63,33 @@ const PERSON_LD = {
 }
 
 export default function Home() {
+  // Runtime, React 18 UMD i fonty zaczynaja sie pobierac z <head>, zanim
+  // hydratacja odpali DcBoot — runtime dostaje je potem z cache.
+  for (const src of DC.preload.scripts) preload(src, { as: 'script' })
+  for (const href of DC.preload.fonts) preload(href, { as: 'font', type: 'font/woff2', crossOrigin: '' })
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_LD) }}
       />
-      <AuditClient />
+      {/* Szablon <x-dc> i logika text/x-dc dokladnie tak, jak w eksporcie.
+          Runtime podmienia <x-dc> na #dc-root; do tego czasu szablon jest ukryty
+          (design-reset.css). React nie zaglada do srodka dangerouslySetInnerHTML. */}
+      <div
+        id="dc-page"
+        dangerouslySetInnerHTML={{ __html: '<x-dc>' + DC.template + '</x-dc>' + DC.script }}
+      />
+      <noscript>
+        <p style={{ padding: '24px 18px', font: '16px/1.5 system-ui,sans-serif', color: '#14161A' }}>
+          This page needs JavaScript. Write to{' '}
+          <a href="mailto:rafal@oleksiakconsulting.com">rafal@oleksiakconsulting.com</a>{' '}
+          — EUR 2,500 net per month, two clients at a time.
+        </p>
+      </noscript>
+      <DcBoot />
+      <LeadBridge />
     </>
   )
 }

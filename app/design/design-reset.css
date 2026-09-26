@@ -1,0 +1,42 @@
+/* Reset po starej stronie dla trasy `/` (strona z Claude Design).
+
+   PISANE RECZNIE — scripts/ship-design.mjs tego nie dotyka. Wszystko jest
+   zawezone do #dc-page albo do html/body, ktore go zawieraja (:has), bo arkusz
+   trasy potrafi przezyc nawigacje kliencka i nie moze przeciekac na /blog.
+
+   Kazda regula tutaj odpowiada jednej rzeczy z critical.css / globals.css,
+   ktora psula projekt — nie ma tu nic „na wszelki wypadek". */
+
+/* 1. Szablon przed bootem runtime'u: surowe {{…}} nie moga mignac na ekranie.
+      Runtime dodaje te sama regule, ale dopiero po zaladowaniu. */
+#dc-page x-dc { display: none !important; }
+
+/* 2. critical.css: html{overflow-x:hidden;max-width:100vw} i to samo na body.
+      Z runtime'owym html,body{height:100%} body stawal sie kontenerem przewijania,
+      window.scrollY stal na zerze i WSZYSTKIE animacje zalezne od scrolla
+      (miarka dawki, sekcja przypieta, pasek na dole) byly martwe. To samo
+      lekarstwo co w tool-reset.css, stop.css i privacy.css. */
+html:has(#dc-page) { overflow-x: visible; max-width: none; scroll-behavior: auto; scroll-padding-top: 0; }
+body:has(#dc-page) { overflow-x: visible; max-width: none; }
+
+/* 3. globals.css daje KAZDEMU <section> padding clamp(48px,8vw+1rem,120px),
+      overflow-x:hidden (zabija position:sticky w sekcji przypietej)
+      i transform (blok zawierajacy dla position:fixed). Projekt ustawia
+      paddingi inline tam, gdzie ich chce — style inline i tak wygrywaja. */
+#dc-page section {
+  padding: 0; overflow-x: visible; max-width: none; width: auto;
+  transform: none; backface-visibility: visible; scroll-margin-top: 0;
+}
+
+/* 4. critical.css: h1..h6 { font-family: Poppins }. Naglowek dziedziczy krój
+      z korzenia projektu (Instrument Sans) — dokladnie ten blad zlapal kiedys
+      ship-compare przy IBM Plex. */
+#dc-page h1, #dc-page h2, #dc-page h3 { font-family: inherit; }
+
+/* 5. critical.css: niebieski obrys 3px + poswiata na focus. Projekt ma wlasny:
+      1px w kolorze tuszu. */
+#dc-page a:focus-visible,
+#dc-page button:focus-visible,
+#dc-page input:focus-visible {
+  outline: 1px solid #14161A; outline-offset: 2px; box-shadow: none;
+}

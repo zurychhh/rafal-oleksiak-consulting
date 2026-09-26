@@ -30,8 +30,11 @@ npm run dev          # Dev server (Next 16 → Turbopack)
 npm run build        # Produkcyjny build
 npm run lint         # ESLint 9 flat config — musi dawać ZERO błędów
 npm run typecheck    # tsc --noEmit; NIE jest częścią build, uruchamiaj osobno
-npm run ship         # przeniesienie strony głównej ze źródła (patrz niżej)
 npm start
+
+# strona główna — eksport Claude Design (patrz „Strona główna" niżej)
+node scripts/ship-design.mjs <bundle.html>          # podgląd
+node scripts/ship-design.mjs <bundle.html> --yes    # przenosi na `/`
 
 # narzędzie /tool — osobne źródło, osobny skrypt; MUSI pójść przed buildem
 node scripts/ship-tool.mjs tool-index.html          # podgląd
@@ -43,15 +46,18 @@ node scripts/ship-tool.mjs tool-index.html --yes    # zapisuje trzy pliki
 ```bash
 node design/qa.js http://localhost:3000 --scroll   # 9 szerokości: przycięcia,
                                                    # nakładanie, przewijanie, kontrast
-node scripts/ship-compare.mjs                      # style OBLICZONE vs źródło
+node scripts/ship-compare.mjs                      # style OBLICZONE `/` vs bundle Claude Design
+node scripts/content-rules.test.mjs --url http://localhost:3000   # twarde zasady treści
 node scripts/hubspot-setup.mjs [--apply]           # właściwości kontaktu (idempotentny)
 ```
 
 `design/qa.js` przyjmuje ścieżkę pliku albo URL. Chromium bierze z przypiętej ścieżki
 (`PW_CHROMIUM` albo `/opt/pw-browsers/...`), a gdy jej nie ma — z lokalnego playwrighta.
 
-**`qa.js` WYSYŁA formularz — na każdym z dziewięciu viewportów.** Linie 169–175:
-wpisuje `test@company.com` i klika przycisk wysyłki, żeby obejrzeć stan końcowy.
+**`qa.js` WYSYŁA formularz — na każdym z dziewięciu viewportów** — jeśli na stronie
+jest `#mail` (stara „The Audit", `/tool` nie ma). Wpisuje `test@company.com` i klika
+przycisk wysyłki, żeby obejrzeć stan końcowy. Strona z Claude Design nie ma `#mail`,
+więc na `/` dziś nic nie wysyła — ale zasada niżej obowiązuje dalej.
 Puszczona na `http://localhost:3000` jest nieszkodliwa, bo limiter poza produkcją
 jest wyłączony, a `/api/lead` nie ma dokąd wysłać maila bez klucza Resenda.
 
@@ -65,7 +71,8 @@ zapisuje zawsze te same wartości domyślne, więc niczego w CRM nie dowodzi.
 ### Bramka po każdym etapie
 
 Build, `tsc --noEmit`, lint z **zerem błędów**, `qa.js` na `/`, `/stop` i `/tool`,
-oraz `ship-compare.mjs`. Obowiązuje **zasada zapadki**: liczba błędów lintu po etapie
+`ship-compare.mjs`, `content-rules.test.mjs --url http://localhost:3000`
+i `tool-rules.test.mjs`. Obowiązuje **zasada zapadki**: liczba błędów lintu po etapie
 nie może być wyższa niż przed nim. `qa.js` na `/tool` biegnie przy **ustawionym**
 `ANTHROPIC_API_KEY` (jest w `.env.local`) — bez niego panele AI chowają się i bramka
 sprawdza mniejszą stronę niż produkcja. To wariant z widocznymi panelami wywraca
@@ -74,7 +81,16 @@ kontrast i układ, nie pusty.
 `ship-compare.mjs` nie jest ozdobą. Build, tsc, lint i `qa.js` przechodziły również
 wtedy, gdy nagłówek renderował się Poppinsem zamiast IBM Plex, a separator tysięcy
 zmienił się z cienkiej spacji U+2009 na zwykłą. Oba błędy złapało dopiero porównanie
-stylów obliczonych.
+stylów obliczonych. Od v66 porównuje `/` z bundlem Claude Design otwartym z dysku,
+element po elemencie (1440 i 390); stara wersja dla „The Audit" to
+`scripts/ship-compare-audit.mjs`.
+
+**Build w sandboxie bez dostępu do Google Fonts:** `next/font/google` (Poppins, DM Sans
+w `layout.tsx`) pobiera fonty przy buildzie. Gdy `fonts.googleapis.com` jest zablokowany,
+build pada na `Failed to fetch`. Lokalnie da się go puścić z
+`NEXT_FONT_GOOGLE_MOCKED_RESPONSES=<plik.cjs>` (mapa dokładnych URL-i css2 → CSS
+z `src:` na lokalnym serwerze HTTP) — to wyłącznie obejście bramki, nic z tego nie idzie
+do repo; Vercel pobiera prawdziwe fonty.
 
 ## Architektura
 
@@ -86,7 +102,7 @@ Next.js 16 (App Router, React 19, Turbopack) · TypeScript 5.9 strict · CSS Mod
 
 | Trasa | Co to |
 |---|---|
-| `/` | strona główna — wizytówka, link do `/tool`, pod spodem „The Audit" (dwa ekrany) |
+| `/` | strona główna — eksport Claude Design (v66), formularz → `/api/lead`, link do `/tool` |
 | `/tool` | narzędzie: dni zapasu z etykiety kontra odstęp między zamówieniami |
 | `/stop` | wypis, `noindex`; linkuje do niej stopka każdego maila |
 | `/privacy` | polityka prywatności |
@@ -95,54 +111,89 @@ Next.js 16 (App Router, React 19, Turbopack) · TypeScript 5.9 strict · CSS Mod
 | `/api/label` | dwa panele AI w `/tool` → Claude; klucz nie wychodzi do przeglądarki |
 | `/api/stop` | wypis → mail do właściciela |
 
-### Strona główna — trzy pliki i jedna zasada
+### Strona główna — eksport Claude Design, hostowany, nie przepisywany
 
-Strona jest **przenoszona ze źródła**, nie pisana ręcznie:
+**Od v66 (wrzesień 2026) `/` to strona z Claude Design i przenosi ją
+`scripts/ship-design.mjs`.** `npm run ship` / `scripts/ship.mjs` („The Audit" z
+`design/production/index.html`) zostaje w repo jako archiwum i droga powrotu, ale
+`app/page.tsx` nie importuje już `AuditClient`, więc jego przebieg nie zmienia `/`.
 
 ```
-design/production/index.html      ← ŹRÓDŁO. Ktoś inny je podmienia.
-        │  npm run ship
-        ├─→ app/audit.css          reguły, przeniesione dosłownie
-        ├─→ app/globals.css        blok :root ze zmiennymi
-        ├─→ app/audit-runtime.js   skrypt, kopia BAJT W BAJT
-        └─→ app/AuditClient.tsx    znaczniki przekonwertowane na JSX
+design/production/claude-design-bundle.html   ← ŹRÓDŁO: plik z Claude Design
+        │                                        („Publish as artifact", samorozpakowujący bundle)
+        │  node scripts/ship-design.mjs <bundle.html> --yes
+        ├─→ app/design/generated.ts           szablon <x-dc>, logika text/x-dc, mapa zasobów
+        ├─→ app/design-source.snapshot.html   czytelna migawka — z niej diff treści
+        └─→ public/dc/<hash>.js|woff2         runtime Claude Design, React 18 UMD, fonty
 ```
 
-**Regiony między znacznikami `>>> ZE ZRODLA — GENEROWANE <<<` są nadpisywane przy
-każdym `ship`.** Ręczna zmiana w nich zniknie. Wszystko poza znacznikami jest pisane
-ręcznie i `ship` tego nie dotyka — tam siedzą bloki resetu i rezerwacja miejsca
-na pasek zgody.
+**Dlaczego hostowanie, a nie przepisanie na JSX.** Strona jest szablonem reaktywnym
+(`<x-dc>`, `<sc-for>`, `<sc-if>`, `{{…}}`) renderowanym przez runtime Claude Design
++ React 18, a jej sensem są animacje zależne od scrolla, liczone w logice komponentu.
+Każda ręczna konwersja to nowy kod do QA przy każdej wersji. Tu przenosimy **te same
+bajty, które chodzą w Claude Design**: `ship-design` rozpakowuje bundle bez przeglądarki
+(base64 + gzip), zapisuje assety pod nazwą z hasha treści i przemapowuje URL-e unpkg na
+lokalne pliki przez `window.__resources` — ten sam mechanizm, którego używa sam bundle.
+Zero żądań do unpkg i Google Fonts; `/dc/*` ma `Cache-Control: immutable`.
 
-Dlaczego `audit-runtime.js` jest plikiem `.js`, a nie `.tsx`: `tsconfig` obejmuje
-wyłącznie `.ts` i `.tsx`, a `checkJs` jest wyłączony, więc ten plik omija typecheck.
-Dzięki temu skrypt może być kopiowany dosłownie, bez ani jednej adnotacji dopisanej
-po to, żeby zadowolić kompilator. Wersja z adnotacjami wymagałaby od `ship` łatania
-kilkunastoma regexami po każdym przeniesieniu.
-
-**Skrypt jest celowo imperatywny i ma taki zostać.** Przeszedł QA wizualne na dziewięciu
-szerokościach; każde „ładniejsze" przepisanie na stan Reacta unieważnia ten wynik.
-Wywołanie idzie do `useEffect` z pustą tablicą zależności, za blokadą `useRef` — bez
-niej `reactStrictMode` odpala bootstrap dwukrotnie i w dev widać czternaście kafli
-kategorii zamiast siedmiu.
-
-Arkusz **nie jest modułem CSS**: skrypt generuje markup z literalnymi nazwami klas
-(`.tick`, `.rank`, `.sname`, `.swhy`), więc zahaszowanie ich rozsypałoby listę kroków.
-
-### `npm run ship`
+**Kolejna wersja z Claude Design — jedno polecenie:**
 
 ```bash
-npm run ship            # podgląd: co się zmieni w treści, nic nie rusza
-npm run ship -- --yes   # przenosi, przepuszcza przez bramkę, commituje
+node scripts/ship-design.mjs ~/Downloads/<eksport>.html          # podgląd + diff treści + test treści
+node scripts/ship-design.mjs ~/Downloads/<eksport>.html --yes    # kopiuje do design/production, zapisuje
+# potem bramka: build, tsc, lint, npm start, qa.js ×3, ship-compare, content-rules --url
 ```
 
-Kolejno: czyste drzewo (poza samym źródłem) → czytelny diff treści, nie znaczników →
-brama potwierdzenia → przeniesienie → build, tsc, lint, `qa.js` ×2, `ship-compare` →
-commit z datą. **Którykolwiek punkt czerwony cofa pliki generowane bez pytania,
-nie ruszając źródła.** Push nigdy nie dzieje się automatycznie. Uruchomiony dwa razy
-pod rząd bez zmian mówi „nic do przeniesienia" i wychodzi zerem.
+Podgląd nic nie zapisuje. Test treści idzie **przed** zapisem — czerwony zatrzymuje
+przebieg i nic nie jest zapisywane. Drugi przebieg bez zmian: „Nic do przeniesienia", kod 0.
+Skrypt nie commituje i nie pushuje. Zatrzymuje się głośno na wszystkim, czego nie zna:
+nieznany typ assetu, cokolwiek w `<head>` poza meta i runtime'em, treść poza `<x-dc>`,
+zasoby z zewnętrznych hostów, brak `<footer>`, brak formularza URL + e-mail + zgoda,
+zgoda domyślnie zaznaczona.
 
-`app/audit-source.snapshot.html` to migawka ostatnio przeniesionego źródła — z niej
-liczony jest diff treści.
+Przekształcenia w `ship-design` (raportowane liczbowo): uuid → `/dc/…`; usunięcie
+odznaki „Made with Claude Design"; „Rafal" → „Rafał" (tylko wielka litera — adresy
+`rafal@…` i URL-e zostają); e-mail, LinkedIn i link do `/tool` dokładane minimalnie
+do stopki, **jeśli ich brak**.
+
+**Pisane ręcznie, `ship-design` ich nie dotyka:**
+
+- `app/page.tsx` — metadata, OG, Person JSON-LD, `preload` runtime'u i fontów,
+  osadzenie szablonu w `<div id="dc-page">` przez `dangerouslySetInnerHTML`.
+- `app/design/DcBoot.tsx` — ustawia `window.__resources` i dokłada `<script>` runtime'u
+  po hydratacji. Runtime nie umie się odmontować (React 18 root, listenery, style
+  z `<helmet>` w `<head>`), więc wyjście z `/` przez nawigację kliencką i powrót na `/`
+  w tym samym dokumencie kończą się pełnym przeładowaniem.
+- `app/design/LeadBridge.tsx` — formularze → `/api/lead`. Nasłuch `submit` na
+  `document` w fazie capture (przed Reactem 18 runtime'u, który słucha na `#dc-root`):
+  zatrzymuje zdarzenie, wysyła `{email, message: "Store: …", source: {utm…, referrer,
+  store_url, consent, form, page}}` w kształcie `LeadSchema`, i **dopiero po 2xx**
+  wypuszcza do komponentu syntetyczny `submit` — jego własny handler pokazuje stan
+  „Enquiry received". Błąd → czytelny komunikat w formularzu z adresem e-mail,
+  stan się nie zmienia. Po 2xx `generate_lead` + `form_submission_lead` przez bufor
+  zgody (`analytics.trackLeadSubmitted`); `user_data.email` tylko gdy gtag.js jest
+  załadowany, czyli po zgodzie. Formularz z samym polem URL (wąski pasek na desktopie)
+  przekazuje adres do najbliższego pełnego formularza i stawia kursor w polu e-mail.
+  Działa dla każdej wersji o tym kształcie formularza — bez łatania logiki komponentu.
+- `app/design/design-reset.css` — reset po starej stronie, zawężony do `#dc-page`
+  (i `html/body:has(#dc-page)`): ukrycie surowego `<x-dc>` przed bootem;
+  `overflow-x:hidden` z `critical.css` na html/body (z runtime'owym `height:100%`
+  body stawał się kontenerem przewijania, `window.scrollY` stał na zerze i **wszystkie
+  animacje scrolla były martwe**); padding/transform/overflow na `<section>`
+  z `globals.css`; Poppins na `h1` z `critical.css`; niebieski focus.
+
+**Twarde zasady treści** pilnuje `scripts/content-rules.test.mjs` (samotest, warstwa
+statyczna na `generated.ts`, warstwa wyrenderowana z `--url`): zero „one client at a time";
+jedyna kwota EUR 2,500 net per month; zero procentów; każda liczba z listy
+`ALLOWED_NUMBERS` (nowa liczba = świadomy wpis z uzasadnieniem); żadnej liczby obok
+nazwy klienta; żadnej nazwy sieci/marki przy Accenture (lista publiczna + prywatna
+z `CONTENT_PRIVATE_DENY` albo gitignorowanego `.content-deny.local` — prawdziwej nazwy
+nie wpisujemy do publicznego repo); stopka z `rafal@oleksiakconsulting.com` i LinkedInem;
+„Rafał"; widoczny link do `/tool`; brak odznaki i zasobów z unpkg/Google Fonts.
+
+`qa.js` pomija dziecko siatki z `grid-template-rows: 0fr` — to zwinięta szuflada paska
+formularza na telefonie (e-mail i zgoda rozwijają się po fokusie), nie przycięcie.
+Źródło z Claude Design dawało ten sam wynik.
 
 ### `/tool` — druga strona przenoszona ze źródła
 
@@ -272,7 +323,8 @@ Node API deklarują `runtime = 'nodejs'` i `dynamic = 'force-dynamic'`.
 
 ## `design/` — przechowalnia
 
-`design/production/index.html` to źródło strony głównej. `design/tools/` to trzy
+`design/production/claude-design-bundle.html` to źródło strony głównej
+(`design/production/index.html` — archiwum „The Audit"). `design/tools/` to trzy
 narzędzia FMCG. `design/qa.js` to checker Playwright.
 
 ## Wdrażanie na produkcję — CZYTAJ, ZANIM POWIESZ, ŻE COŚ JEST NA ŻYWO

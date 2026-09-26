@@ -9,6 +9,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "ship": "node scripts/ship.mjs",
+    "ship:design": "node scripts/ship-design.mjs",
+    "test:content": "node scripts/content-rules.test.mjs",
     "og": "node scripts/make-og.mjs"
   },
   "dependencies": {

@@ -67,6 +67,18 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // Runtime Claude Design, React 18 UMD i fonty strony glownej. Nazwy sa
+        // hashem tresci (scripts/ship-design.mjs), wiec plik pod dana nazwa
+        // nigdy sie nie zmienia.
+        source: '/dc/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
         source: '/_next/static/:path*',
         headers: [
           {

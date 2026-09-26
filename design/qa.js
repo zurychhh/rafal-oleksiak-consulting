@@ -68,6 +68,12 @@ function lum(c) {
         if (el.tagName === 'INPUT') return;             // pole tekstowe legalnie przewija własną wartość
         if (el.classList.contains('rail')) return;      // marquee clips by design
         if (cs.webkitLineClamp && cs.webkitLineClamp !== 'none') return; // clamp is deliberate
+        // Zwinieta szuflada: dziecko siatki z grid-template-rows 0fr → 1fr (pasek
+        // formularza na telefonie w stronie z Claude Design rozwija e-mail i zgode
+        // dopiero po fokusie). Zamknieta ma zerowa wysokosc z definicji — to stan,
+        // nie przyciecie. Otwarta jest mierzona normalnie.
+        const pcs = el.parentElement && getComputedStyle(el.parentElement);
+        if (pcs && pcs.display === 'grid' && pcs.gridTemplateRows === '0px') return;
         const dy = el.scrollHeight - el.clientHeight;
         const dx = el.scrollWidth - el.clientWidth;
         if (dy > 2 || dx > 2) {
