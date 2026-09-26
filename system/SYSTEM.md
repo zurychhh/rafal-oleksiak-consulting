@@ -20,15 +20,19 @@ jest gałęzią PRODUKCYJNĄ Vercela — każdy push wdraża domenę. Push samyc
 `system/` jest bezpieczny (kod się nie zmienia), ale nigdy nie pushuj kodu poza
 promotorem.
 
-## Cykl (UTC, co 3 godziny) i role
+## Cykl (co GODZINĘ, minuty UTC) i role
 
-| kiedy (UTC)        | rola                     | co robi |
-|--------------------|--------------------------|---------|
-| codziennie 02:55   | Strateg USP              | atakuje USP, nowa wersja tylko gdy wygrywa, brief |
-| co 3 h, :21        | Budujący — narzędzie     | pętla /tool w chmurze, łatka w loop-spec |
-| co 3 h, :51        | Budujący — Claude Design | jedna mierzona zmiana strony głównej / Tool page |
-| co 3 h +2h, :11    | Recenzent całości        | ocenia wszystko wobec USP, wskazuje KANDYDATA |
-| co 3 h +2h, :41    | Promotor                 | bramka + push na produkcję tego, co recenzent zatwierdził |
+| minuta | rola                     | co robi |
+|--------|--------------------------|---------|
+| :05    | Strateg USP              | iteruje rundami (pretendent vs obowiązująca wersja, sędzia parowy), aż nowa wersja WYGRA; brief |
+| :15    | Budujący — narzędzie     | pętla /tool w chmurze, łatka w loop-spec |
+| :15    | Budujący — Claude Design | jedna mierzona zmiana strony głównej / Tool page |
+| :40    | Recenzent całości        | ocenia wszystko wobec USP, wskazuje KANDYDATA |
+| :55    | Promotor                 | bramka + push na produkcję tego, co recenzent zatwierdził |
+
+Każdy przebieg każdej roli ma kończyć się postępem. Strateg nie kończy przebiegu bez
+zwycięskiej wersji USP (limit bezpieczeństwa 8 rund, potem „blocker” i start od
+najmocniejszego pretendenta w następnej godzinie).
 
 ## Zasady wspólne
 
