@@ -145,6 +145,9 @@ export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = 
     const m = s.match(/\b(\w+) clients? at a time\b/i)
     if (m && !/^two$/i.test(m[1])) fail.push(['1 dwoch klientow', `„${m[0]}" — ma byc „Two clients at a time"`])
   }
+  // 1b. Tylko JEDEN biezacy klient (GenActiv) — stan 26.09.2026. „One of the two"
+  //     sugerowalo drugiego biezacego klienta, a Rafal drugiego dopiero szuka.
+  if (/\bone of the two\b/i.test(all)) fail.push(['1 dwoch klientow', '„One of the two" — jest tylko jeden biezacy klient (stan 26.09.2026)'])
   // 2
   if (!/EUR 2,500 net per month/.test(all)) fail.push(['2 cena', 'brak „EUR 2,500 net per month"'])
   for (const s of segments) {
@@ -277,6 +280,7 @@ async function main() {
   const base = ['EUR 2,500 net per month.', 'Two clients at a time.']
   const probes = [
     ['1 dwoch klientow', ['One client at a time.']],
+    ['1 dwoch klientow', ['Current client. One of the two.']],
     ['2 cena', ['EUR 3,000 net per month.']],
     ['3 liczby', ['Revenue up 37% in a quarter.']],
     ['3 liczby', ['We shipped 1,197 orders.']],
