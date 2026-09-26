@@ -85,12 +85,10 @@ stylów obliczonych. Od v66 porównuje `/` z bundlem Claude Design otwartym z dy
 element po elemencie (1440 i 390); stara wersja dla „The Audit" to
 `scripts/ship-compare-audit.mjs`.
 
-**Build w sandboxie bez dostępu do Google Fonts:** `next/font/google` (Poppins, DM Sans
-w `layout.tsx`) pobiera fonty przy buildzie. Gdy `fonts.googleapis.com` jest zablokowany,
-build pada na `Failed to fetch`. Lokalnie da się go puścić z
-`NEXT_FONT_GOOGLE_MOCKED_RESPONSES=<plik.cjs>` (mapa dokładnych URL-i css2 → CSS
-z `src:` na lokalnym serwerze HTTP) — to wyłącznie obejście bramki, nic z tego nie idzie
-do repo; Vercel pobiera prawdziwe fonty.
+**Build nie potrzebuje Google Fonts.** Wszystkie fonty (IBM Plex, Archivo, Poppins,
+DM Sans) są w `app/fonts.css` + `public/fonts/`; `next/font/google` usunięty z layoutu,
+bo pobierał pliki w czasie buildu i build padał tam, gdzie `fonts.googleapis.com` jest
+zablokowany (chmura, zadania cykliczne). Nie wracaj do `next/font/google`.
 
 ## Architektura
 
