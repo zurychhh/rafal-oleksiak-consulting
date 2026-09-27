@@ -6,45 +6,40 @@ uwagi zostawiają w `system/REVIEW.md`, skąd strateg je bierze.
 
 ## Obowiązująca wersja
 
-**v32 — 2026-09-27 11:12 UTC (baza = punkt wyjścia Rafała → v30 3:0 → v31 3:0 → v32 3:0; pozycja kontrolowana w każdej rundzie)**
+**v33 — 2026-09-27 12:12 UTC (v32 → v33 3:0 w R2 [pretendent B,A,B; wybory B,A,B — pozycja kontrolowana])**
 
 PL: **„E-commerce dla marek, których klienci wracają. Sam buduję narzędzia na Twoich danych
-zamówień i ustawiam według nich reklamy, maile i subskrypcje — w jednym sklepie
-z suplementami opakowanie na 45 dni wracało po 69 dniach.”** (35 słów)
+zamówień i ustawiam według nich reklamy, maile i subskrypcje. W sklepie z suplementami
+kupujący 45-dniowego opakowania wracali po 69 dniach — Twoje policzę gratis.”** (35 słów)
 
-EN: ***“E-commerce for brands whose customers come back. I build tools myself, on your order
-data, and set your ads, emails and subscriptions by them — in one supplement shop, a 45-day
-pack came back at 69 days.”*** (35 słów)
+EN: ***“E-commerce for brands whose customers come back. I build tools on your order data and set
+ads, emails and subscriptions by them. One supplement shop's 45-day-pack buyers returned at
+69 days; I'll count yours free.”*** (35 słów)
 
-Zgodność z DECYZJĄ RAFAŁA 12:32: rdzeń ogólny („E-commerce dla marek, których klienci
-wracają” — dosłownie jego słowa) + „sam buduję narzędzia” (jego słowa); cały lejek niesiony
-przez „reklamy, maile i subskrypcje”, nie wyliczankę; 45/69 to JEDEN dowód — przykład, co
-narzędzie pokazało — nie oś USP; zero rozbioru Klaviyo, holdoutu, CPM.
-**Świadome odejście od słów Rafała (do jego decyzji):** z punktu wyjścia wypadły
-„kalkulatory, liczniki, paski postępu” i „rzeczy, które normalnie czekają w kolejce do IT”.
-Powód z pomiaru, nie gustu: 3/3 recenzje i 6/6 sędziów R1 („pasek do darmowej dostawy mam
-z aplikacji za 10 dolarów”, „nie mam IT, więc kolejka do IT mnie nie dotyczy”, „freelancer od
-widżetów”); sceptyk ze źródłami — pasek, licznik i kalkulator to gotowe aplikacje Shopify
-(np. https://apps.shopify.com/free-shipping-bar-dynamic, https://apps.shopify.com/event-promotion-bar,
-https://apps.shopify.com/custom-price-calculator), więc „kolejka do IT” u marki na Shopify
-DO USUNIĘCIA; broni się tylko przy narzędziach na danych klienta — i to niesie „na Twoich
-danych zamówień”.
+Zgodność z DECYZJĄ RAFAŁA 12:32: rdzeń ogólny dosłownie jego słowami + „sam buduję narzędzia”
+(w EN „myself” wypadło dla limitu 35 słów — „sam” niesie PL); cały lejek przez „reklamy, maile
+i subskrypcje”; 45/69 to JEDEN dowód-przykład, nie oś; zero Klaviyo/holdoutu/CPM.
+Świadome odejście od słów Rafała bez zmian względem v32 (bez widżetów i „kolejki do IT” —
+uzasadnienie w „Odrzucone kierunki”, punkt wyjścia Rafała 0:3).
 
 Co niesie wersję (uzasadnienia sędziów):
-(1) **45 → 69 jako przykład** (R1 3/3) — „to dokładnie mój problem, flow replenishment mam
-ustawiony na oko”, „pokazuje, że siedział w danych zamówień z mojej branży”.
-(2) **„ustawiam według nich reklamy, maile i subskrypcje”** (R2 3/3) — „od razu widzę, co byś
-u mnie zrobił”, „łączy narzędzie z pieniędzmi, które wydaję co miesiąc”; zastąpiło „od reklam
-po lojalność” (3/3: „to samo piszą wszystkie agencje partnerskie Klaviyo — lista usług, nie
-mechanizm”).
-(3) **„po 69 dniach” / „at 69 days”** (R3 3/3) — „po 69 czym? dniach, złotych?”; bez jednostki
-liczba ginie w feedzie.
-Znane słabe punkty: sędziowie SAMI dopowiadają „tracę 24 dni / trzy tygodnie” — copy tego NIE
-twierdzi i nie może (69 to mediana powrotów, nie strata; LUKA b); nie dopisywać „za późno”,
-„tracisz”. Founder 11:10: „z 45/69 wyciągnę odstępy z Shopify sam z ChatGPT — najlepszy
-argument daje powód, żeby go nie zatrudniać” i „chcę usłyszeć, ile złotych, nie dni” (LUKA b);
-konkurent 11:10: „co będzie, kiedy on zachoruje” (LUKA f), „cały lejek w pojedynkę to sygnał
-freelancera”; Allegro nie mieści się w 35 słowach — niesie je profil i strona.
+(1) **„Twoje policzę gratis” / „I'll count yours free”** (R2 3/3) — „mam konkretny powód, żeby
+napisać: policz moje”, „wysyłam eksport z Shopify i dostaję swoją liczbę, nic nie ryzykuję”;
+v32 „czytam jako ciekawostkę — kiwnę głową i przewinę”. Odpowiada na founder 12:07 („policzę
+sam w godzinę z ChatGPT”) — zamiast sporu daje próg wejścia.
+(2) **„kupujący 45-dniowego opakowania wracali” / „45-day-pack buyers returned”** (R2 3/3) —
+v32 „opakowanie wracało” czytane jako ZWROTY („przy suplementach złe skojarzenie”); sceptyk
+12:07: „opakowanie nie wraca, wraca klient”. Nowa forma jest prawdziwa niezależnie od LUKI e
+(czy wrócili po to samo opakowanie, czy po dowolne zamówienie).
+(3) utrzymane z v30–v32: 45 → 69 z jednostką; „ustawiam według nich reklamy, maile
+i subskrypcje”; „na Twoich danych zamówień”.
+Znane słabe punkty: „gratis trąci lead magnetem agencji” (2/3 sędziów R2) — „odpiszę i sprawdzę,
+czy dostanę liczbę, czy zaproszenie na krótki call”: to zobowiązanie ZACHOWANIA Rafała (LUKA g);
+sędziowie znów SAMI dopowiadają „odpalam za wcześnie, tracę pieniądze” — copy tego NIE twierdzi;
+founder i konkurent 12:07 (najmocniejszy zarzut, czwarty przebieg z rzędu): „znalazł dziurę, nie
+powiedział, ile klient zarobił” (LUKA b); konkurent 12:07: „on powie, kiedy klient wraca — my
+sprawimy, że wróci; mamy kreacje, copy, media buying” (LUKA i), „sam = urlop, choroba” (LUKA f);
+Allegro nadal poza zdaniem — R1 12:10 pokazała, że NIE może zastąpić 45/69 (niżej).
 
 ## Wiadomość (opcjonalnie) — v29, materiał do rozmowy/podstrony, NIE USP
 
@@ -239,6 +234,15 @@ ginie w środku akapitu”; „dwie marki naraz” — founder pyta, czy jest wo
   kupującego… jaki interwał ustawić w subskrypcji… kiedy wysłać maila” + zakres Rafała (paid,
   CRM/e-mail, subskrypcje); zapis „przedział, nie data” — nie pisać „data dla klienta”. NIE
   pisać „nikt inny tego nie buduje”, „w dni, nie kwartały” (odrzucone w v0).
+- **„Twoje policzę gratis” / „I'll count yours free” (od v33):** darmowe przeliczenie przed
+  startem stoi w wiadomościach od v2 („v1 bez darmowego sprawdzenia — 0:3”) i w v29 („Najpierw
+  za darmo policzę Twój katalog”); na żywym /tool CTA „Send me your store” (sprawdzone 12:08).
+  To zobowiązanie zachowania Rafała, nie fakt z projektu — DECYZJA RAFAŁA (LUKA g): co dokładnie
+  dostaje kupujący (liczbę 45-vs-rzeczywistość dla swoich produktów?), w jakim czasie, czy bez
+  rozmowy. NIE obiecywać wyniku w złotówkach, „audytu gratis” ani terminu.
+- **„kupujący … wracali po 69 dniach” (od v33)** zamiast „opakowanie wracało”: wraca klient
+  (sceptyk 12:07); forma prawdziwa zarówno przy odkupie tego samego produktu, jak i dowolnego
+  kolejnego zamówienia (LUKA e nadal otwarta — nie pisać „odkupili to samo”, „zużyli”).
 - Gotowe widżety (sceptyk 11:10): pasek darmowej dostawy, licznik, kalkulator to aplikacje
   Shopify za kilka dolarów (https://apps.shopify.com/free-shipping-bar-dynamic,
   https://apps.shopify.com/progressify, https://apps.shopify.com/event-promotion-bar,
@@ -354,43 +358,43 @@ Kontekst rynku (nie dowód o Rafale; do ostrożności w copy):
 
 ## Brief dla budujących (max 3 punkty, nadpisywany przez stratega)
 
-Stan (2026-09-27 11:10, WebFetch na żywo): `/` — H1 „Count your own interval”, pod nim „You
-don't pay twice for the same customer. E-commerce for brands whose customers come back.” i
+Stan (2026-09-27 12:08, WebFetch na żywo): `/` — H1 „Count your own interval”, pod nim „You
+don't pay twice for the same customer. E-commerce for brands whose customers come back.” i nadal
 „I build the tools myself — calculators, counters, progress bars — the kind of thing that
-normally waits in an IT queue.”; sekcja „Composition — five parts” (Paid, Onsite, CRM/Owned,
-Retention, Timing); Allegro jako „Worked with a data science team…”; cena „EUR 2,500 net per
-month. No setup fee. No minimum term. Two clients at a time.” /tool — H1 „The pack says 45
-days. Customers came back at 69.”, CTA „Check your own gap”. REVIEW.md bez wpisów po cyklu 0.
-**Brief v29 (rozbiór Klaviyo, 70/141, holdout, CPM vs faktura na `/`) jest UNIEWAŻNIONY
-decyzją Rafała 12:32 — nie budować go na `/`.**
-**UWAGA dla meta-agenta: sync Projekt → claude/system zadziałał o 10:32 UTC (commit z decyzją
-Rafała); budujący czytają teraz v32 dopiero po następnym przeniesieniu.**
+normally waits in an IT queue.”; brak linku do /tool; części „Composition”: „Paid (that buys
+returning customers, not clicks)”, „More carts from the same traffic”, „The second purchase
+without paying for a click”, „Subscription instead of a discount”, „The day the pack runs out”;
+Allegro „Worked with a data science team on predicting a customer's next purchase”. /tool — H1
+„The pack says 45 days. Customers came back at 69.”, CTA „Send me your store”; tekst mówi
+„re-times … to the day your customers actually come back” (DATA, sprzeczne z „przedział, nie
+data” z definicji eee304eb). REVIEW.md (repo i Projekt) bez wpisów po cyklu 0 — punkty 1–3
+briefu v32 NIEZREALIZOWANE; pkt 1 zaktualizowany do v33, pkt 2 rozszerzony o CTA, pkt 3 bez zmian.
 
-1. **Zdanie pod nagłówkiem `/` = USP v32 EN (DECYZJA RAFAŁA — zastępuje jego zdanie o
-   kalkulatorach).** Bez ruszania nagłówka „You don't pay twice for the same customer.” i bez
-   ruszania „E-commerce for brands whose customers come back.”: zdanie „I build the tools
-   myself — calculators, counters, progress bars — the kind of thing that normally waits in an
-   IT queue.” zastąpione dosłownie przez „I build tools myself, on your order data, and set
-   your ads, emails and subscriptions by them — in one supplement shop, a 45-day pack came back
-   at 69 days.” Recenzent: zdanie obecne dosłownie w pierwszym ekranie (390 px i 1440 px); „69
-   days” z jednostką; 45 i 69 w ALLOWED_NUMBERS; nigdzie na `/` „IT queue”; „calculators,
-   counters, progress bars” nie w pierwszym ekranie; brak „late”, „lose”, „24 days”, „weeks too
-   early”, „nobody else builds”. Jeśli Rafał odrzuci — zostaje jego zdanie, a budujący
-   dopisują tylko „on your order data” (bez tego R1 przegrywa 0:3).
-   Do czasu decyzji Rafała (LUKA k) — tylko jako wariant w Claude Design; promotor NIE
-   wypycha tej zmiany zdania Rafała na produkcję bez jego zgody.
-2. **„a 45-day pack came back at 69 days” prowadzi do /tool, a /tool domyka zdanie o trzech
-   ustawieniach.** Na `/` ten fragment jest linkiem do /tool (działa klawiaturą, widoczny
-   fokus). Na /tool, bezpośrednio pod wynikiem porównania, dosłownie: „I set your ads, emails
-   and subscriptions by this gap — a range, not a date.” Recenzent: link działa; zdanie
-   obecne na /tool; „a range, not a date” obecne; H1 /tool bez zmian; nigdzie „you're losing”,
-   „too late”.
-3. **Sekcja „Composition — five parts” nazywa w każdej części, co ustawia narzędzie, zamiast
-   ogólnej obietnicy — bez nowych liczb.** Paid: „when a returning customer leaves your ads and
-   when they come back”; CRM/Owned: „when the email goes”; Retention: „the subscription
-   interval”; Onsite: „which pack the product page shows” (to są decyzje z definicji narzędzia
-   eee304eb). Recenzent: cztery frazy obecne dosłownie w odpowiednich częściach; zero liczb
-   spoza ALLOWED_NUMBERS; bez „Klaviyo gets it wrong”, „holdout”, „CPM”, „ad set” na `/`.
+1. **Zdanie pod nagłówkiem `/` = USP v33 EN (DECYZJA RAFAŁA — zastępuje jego zdanie
+   o kalkulatorach).** Bez ruszania „You don't pay twice for the same customer.” i „E-commerce for
+   brands whose customers come back.”: zdanie „I build the tools myself — calculators, counters,
+   progress bars — the kind of thing that normally waits in an IT queue.” zastąpione dosłownie przez
+   „I build tools on your order data and set ads, emails and subscriptions by them. One supplement
+   shop's 45-day-pack buyers returned at 69 days; I'll count yours free.” Recenzent: tekst obecny
+   dosłownie w pierwszym ekranie (390 px i 1440 px); „69 days” z jednostką; 45 i 69
+   w ALLOWED_NUMBERS; nigdzie na `/` „IT queue”, „pack came back”, „late”, „lose”, „24 days”,
+   „free audit”. Do decyzji Rafała (LUKA k) — tylko wariant w Claude Design; promotor NIE wypycha
+   tej zmiany na produkcję bez jego zgody. Jeśli Rafał odrzuci — zostaje jego zdanie, a budujący
+   dopisują „on your order data” i „I'll count yours free” jako CTA (pkt 2).
+2. **„I'll count yours free” prowadzi do formularza /tool („Send me your store”), a /tool mówi
+   „a range, not a date”.** Na `/` fraza „I'll count yours free” jest linkiem/przyciskiem do
+   formularza na /tool (działa klawiaturą, widoczny fokus, cel ≥44 px na 390 px). Na /tool
+   „to the day your customers actually come back” zastąpione przez „to the range in which your
+   customers actually come back — a range, not a date”, a bezpośrednio pod wynikiem porównania
+   dosłownie: „I set your ads, emails and subscriptions by this gap — a range, not a date.”
+   Recenzent: link z `/` ląduje na formularzu; „the day your customers” nie występuje na /tool;
+   oba zdania obecne; H1 /tool bez zmian; brak „you're losing”, „too late”.
+3. **Sekcja „Composition — five parts” nazywa w każdej części, co ustawia narzędzie — bez nowych
+   liczb.** Paid: „when a returning customer leaves your ads and when they come back”; CRM/Owned:
+   „when the email goes”; Retention/Subscription: „the subscription interval”; Onsite: „which pack
+   the product page shows” (decyzje z definicji eee304eb). Recenzent: cztery frazy obecne dosłownie
+   w odpowiednich częściach; zero liczb spoza ALLOWED_NUMBERS; bez „Klaviyo gets it wrong”,
+   „holdout”, „CPM”, „ad set” na `/`.
 
 LUKA W DOWODACH: (a) paid — **DECYZJA RAFAŁA**: potwierdzić, że w pierwszym miesiącu
 (1) ustawia osobny zestaw reklam dla powracających (pokazuje wydatek) i (2) przy dość
@@ -405,7 +409,9 @@ maili i reklam; próbka to tylko powracający; **czy 69 = to samo opakowanie, cz
 kolejne zamówienie (sceptyk 10:07: najmocniejszy zarzut — „wytyka Klaviyo »dowolne«,
 a sam może liczyć tak samo”)**. (f) ciągłość jednoosobowej firmy (konkurent 07:10–09:07:
 „kiedy zachoruje, wszystko staje”) — decyzja Rafała. (g) **zakres darmowego przeliczenia —
-DECYZJA RAFAŁA (najpilniejsza; wiadomość obiecuje wprost „porównamy… z moją fakturą,
+DECYZJA RAFAŁA (najpilniejsza; od v33 USP obiecuje wprost „Twoje policzę gratis” / „I'll count
+yours free” — co kupujący dostaje, w jakim czasie i czy bez rozmowy; sędziowie R2 12:10: „sprawdzę,
+czy dostanę liczbę, czy zaproszenie na krótki call”; wiadomość obiecuje wprost „porównamy… z moją fakturą,
 10 500 zł — a wcale nie musi. Jeśli nie — mówię to od razu i na tym kończymy”)**:
 potwierdzić, że darmowy krok obejmuje to porównanie i że Rafał sam rekomenduje stop, gdy
 szacunek jest poniżej faktury; jakie dane klienta potrzebne (eksport zamówień + CPM
@@ -503,6 +509,14 @@ której nie skopiuje).
   wyliczanki etapów.
 - v31 z „po 69” bez jednostki — 0:3 z v32 (R3) [pretendent A,B,A; wybory A,B,A]: „69
   czego, złotych?”.
+- **Pretendent R1 12:10** (Allegro ZAMIAST 45/69: „W Allegro prowadziłem zespół FMCG przewidujący
+  każdemu kupującemu następne opakowanie; dziś sam buduję takie narzędzia…”) — 0:3 z v32
+  [pretendent A,B,B; wybory B,A,A]: „Allegro mówi o Allegro, nie o mnie — miliony kupujących to
+  inna skala niż 900 zamówień”, „korporacja, brzmi jak CV, a nie rozwiązanie”, „przewidywanie
+  następnego opakowania brzmi abstrakcyjnie / jak ChatGPT”; 2/3: „Allegro w drugim zdaniu albo
+  w profilu, nie zamiast liczby”. Nie wracać do Allegro jako zamiennika 45/69 w USP.
+- v32 z „opakowanie na 45 dni wracało” i bez wezwania — 0:3 z v33 (R2 12:10) [pretendent B,A,B;
+  wybory B,A,B]: „ciekawostka, po której nie ma co zrobić”, „opakowanie wracało = zwroty”.
 - v29 i wcześniejsze długie wiadomości jako USP — wycofane DECYZJĄ RAFAŁA 12:32 (nie
   przegrane w rundzie); tekst v29 zostaje w „Wiadomość (opcjonalnie)”.
 
@@ -512,6 +526,18 @@ Najnowszy na górze. Format: data · wersja · co zaatakowano · wynik porównan
 parami (która wygrała, ile razy na ile, z odwróconą kolejnością) · co zmieniono
 w briefie · co odrzucono i dlaczego.
 
+- 2026-09-27 12:12 UTC · v32 → v33 · Zarzuty: founder — „jedyny dowód to wgląd, który policzę
+  sam w godzinę albo który Klaviyo pokazuje out of the box, a nie zarobione pieniądze”; konkurent —
+  „pokazał dziurę (69 zamiast 45), nie powiedział, ile klient zarobił na jej załataniu” (+ „on powie,
+  kiedy wraca — my sprawimy, że wróci”, „sam = choroba/urlop”, „jeden sklep = jeden dowód”);
+  sceptyk — brak jawnego „jedyny”, ale ukryta sugestia unikalności (Klaviyo EDNO, agencje, aplikacje
+  reorder: https://reorder.online/blog/how-to-time-reorder-reminders-shopify/); najmocniejsze:
+  „opakowanie nie wraca, wraca klient; 69 podane jak cykl zużycia”. Rundy: R1 (Allegro zamiast
+  45/69) 0:3 [A,B,B; wybory B,A,A] — przegrało: „CV i korporacja zamiast mojego problemu”; R2
+  („kupujący 45-dniowego opakowania wracali po 69 dniach — Twoje policzę gratis”) 3:0 [B,A,B;
+  wybory B,A,B] → v33. Brief: pkt 1 → zdanie v33; pkt 2 → „I'll count yours free” linkiem do
+  formularza /tool + usunięcie „the day your customers” z /tool; pkt 3 bez zmian (niezrealizowany).
+  LUKA g rozszerzona o zakres „policzę gratis”. REVIEW.md bez nowych wpisów.
 - 2026-09-27 11:12 UTC · v29 (wycofana decyzją Rafała) / punkt wyjścia Rafała → v32 · Nowa
   rama: USP ogólne, PL+EN ≤35 słów; bronioną wersją był punkt wyjścia Rafała (już na `/`).
   Zarzuty: founder — „USP sprzedaje paski postępu i rozwiązuje problem korporacji (kolejka do
