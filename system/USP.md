@@ -6,44 +6,48 @@ uwagi zostawiają w `system/REVIEW.md`, skąd strateg je bierze.
 
 ## Obowiązująca wersja
 
-**v35 — 2026-09-27 13:18 UTC (v33 → v34 3:0 w R1 [pretendent A,B,A; wybory A,B,A]; v34 → v35 3:0 w R2 [pretendent B,A,B; wybory B,A,B] — pozycja kontrolowana w obu)**
+**v36 — 2026-09-27 14:20 UTC (v35 → v36 3:0 w R1 [pretendent A,B,A; wybory A,B,A] — pozycja kontrolowana)**
 
-PL: **„E-commerce dla marek, których klienci wracają. Sam buduję narzędzia na Twoich zamówieniach,
-by ustawiać naraz reklamy w Meta, maile w Klaviyo, subskrypcje. U jednego klienta kupujący
+PL: **„E-commerce dla marek, których klienci wracają. Buduję narzędzia na Twoich zamówieniach
+i sam ustawiam naraz reklamy w Meta, maile w Klaviyo, subskrypcje. U jednego klienta kupujący
 45-dniowego suplementu wracali po 69 dniach — Twoje policzę gratis.”** (35 słów)
 
-EN: ***“E-commerce for brands whose customers come back. I build tools on your orders to set Meta
-ads, Klaviyo emails and subscriptions at once. One client's 45-day-supplement buyers returned at
-69 days; I'll count yours free.”*** (35 słów)
+EN: ***“E-commerce for brands whose customers come back. I build tools on your orders, then
+personally set Meta ads, Klaviyo emails and subscriptions together. One client's
+45-day-supplement buyers returned at 69 days; I'll count yours free.”*** (35 słów)
 
-Zgodność z DECYZJĄ RAFAŁA 12:32: rdzeń ogólny dosłownie jego słowami + „sam buduję narzędzia”
-(w EN „myself” poza limitem 35 słów — „sam” niesie PL); cały lejek przez reklamy, maile
-i subskrypcje; 45/69 to JEDEN dowód-przykład, nie oś; zero holdoutu/CPM/rozbioru Klaviyo
-(„Klaviyo” pada wyłącznie jako nazwa kanału klienta, nie jako krytyka). Świadome odejście od
+Zgodność z DECYZJĄ RAFAŁA 12:32: rdzeń ogólny dosłownie jego słowami; „buduję narzędzia” zostaje,
+a „sam” przeszło z budowania narzędzi na WYKONANIE („sam ustawiam” / “personally set”) — w EN
+pierwszy raz „sam” jest obecne (v35 go nie miało); cały lejek przez reklamy, maile i subskrypcje;
+45/69 to JEDEN dowód-przykład, nie oś; zero holdoutu/CPM/rozbioru Klaviyo. Świadome odejście od
 słów Rafała bez zmian względem v32 (bez widżetów i „kolejki do IT” — „Odrzucone kierunki”).
 
 Co niesie wersję (uzasadnienia sędziów):
-(1) **„naraz reklamy w Meta, maile w Klaviyo, subskrypcje” / “Meta ads, Klaviyo emails and
-subscriptions at once”** (R1 3/3) — „widzę w niej swój stack”, „agencja od Klaviyo robi mi maile,
-freelancer reklamy, i nikt tego nie łączy — »naraz« to jest to, za co płacę 10 500 zł”; v33
-„reklamy, maile i subskrypcje to ogólnik, który może napisać każdy”. Odpowiada na founder 13:07
-(„jedyna przewaga to połączenie, na razie muszę uwierzyć na słowo”) i konkurenta 13:07 („kto
-wprowadzi zmiany w Klaviyo, Meta i Shopify naraz”). UWAGA: to, że „nikt tego nie łączy”, mówią
-SĘDZIOWIE o swojej sytuacji — copy tego NIE twierdzi i nie może (Klaviyo synchronizuje segmenty
-do Meta; agencje full-funnel istnieją).
-(2) **„U jednego klienta” / “One client's”** (R2 3/3) — „mówi, że ktoś już za to zapłacił, a to
-jest dowód”, „w wersji bez tego 69 brzmi jak statystyka branżowa, jakich widzę dziesiątki
-tygodniowo”; R1 wszyscy trzej sędziowie wskazali brak źródła liczby jako słabość v34.
-(3) **„buduję narzędzia …, by ustawiać” / “to set”** (R2 2/3) — „pokazuje, po co są narzędzia”;
-„według nich ustawiam” / “by them at once” — „jak tłumaczenie z angielskiego”.
-(4) utrzymane z v33: 45 → 69 z jednostką; „kupujący … wracali”; „Twoje policzę gratis”.
-Znane słabe punkty: „jednego klienta sugeruje, że klientów jest mało” (1/3 R2, „przy jednoosobowej
-i tak to zakładam”) — prawda (Twarde ramy: jeden bieżący klient), nie ukrywać; founder i konkurent
-13:07 (najmocniejszy zarzut, piąty przebieg z rzędu): „nigdzie nie pada, ile ktoś na tym zarobił”
-(LUKA b); founder 13:07: „69 zamiast 45 wyciągnę sam z Shopify w godzinę”; „10 500 zł to ~8%
-mojego obrotu” (szacunek persony); konkurent: „sam = choroba, trzech klientów” (LUKA f); sceptyk
-13:07: „sam buduję narzędzia” jako ukryta unikalność NIEPEWNE (Peel, Airboxr, aplikacje reorder —
-niżej); „policzę gratis” = standard rynkowy darmowych audytów (oferta, nie wyróżnik).
+(1) **„i sam ustawiam naraz” / “then personally set … together”** (R1 14:15, 3/3) — „za 10 500 zł
+płacę za to, że jedna osoba odpowiada naraz za Meta, Klaviyo i subskrypcje, a nie za kogoś, kto
+przekaże robotę juniorowi”; „te same ręce robią reklamy, maile i subskrypcje”; „odpisałbym tylko do
+człowieka, który po tym liczeniu sam weźmie się do roboty”. W v35 „Sam buduję narzędzia…, by
+ustawiać” / “tools … to set” wszyscy trzej czytali jako „narzędzia ustawiają”, czyli „ofertę softu /
+automatyzacji / SaaS, który złożę sobie z AI w weekend”. Odpowiada na founder 14:07 („AI da mi
+liczbę, ale nie przestawi mi reklam i maili — tego argumentu brakuje”; „ustawiać naraz brzmi jak
+lista funkcji”) i konkurenta 14:07 („obietnica diagnozy, nie wyniku”; “set … at once” brzmi
+nienaturalnie).
+(2) utrzymane z v35: „naraz” + nazwy kanałów (Meta, Klaviyo); „U jednego klienta” / “One client's”;
+„narzędzia na Twoich zamówieniach”; 45 → 69 z jednostką; „Twoje policzę gratis” (3/3 R1 14:15:
+„to haczyk, przez który w ogóle odpisuję”).
+UWAGA: sędziowie mówią „agencja od Meta i partner Klaviyo nigdy ze sobą nie gadali”, „zastępuje dwie
+faktury, a nie dokłada trzeciej” — to ICH sytuacja i ICH wniosek; copy NIE twierdzi, że agencje tego
+nie łączą, ani że Rafał zastępuje agencję (LUKA i). „Personally” = Rafał wykonuje ustawienia sam
+(fakt: jednoosobowa firma, buduje sam, „szybkie wygrane wdrożone”), NIE „robię Twoje kreacje”.
+Znane słabe punkty: founder i konkurent 14:07 (najmocniejszy zarzut, szósty przebieg z rzędu):
+„za 10 500 zł chcę zobaczyć nie to, kiedy klienci wracają, tylko ile więcej zarobiłem” (LUKA b —
+copy tego nie naprawi bez liczby od Rafała); founder 14:07: „czy zastępuje agencję, czy dochodzi do
+jej kosztów”, „co w drugim i trzecim miesiącu”, „czyje są narzędzia po zakończeniu” (LUKA c, i, n);
+„E-commerce dla marek, których klienci wracają — czy moi muszą już wracać, żebym się kwalifikował?”
+(słowa Rafała, nie ruszane); konkurent 14:07: „Klaviyo liczy datę następnego zamówienia samo”,
+„sam = choroba” (LUKA f); sceptyk 14:07: każdy element osobno jest standardem (Klaviyo EDNO, Audience
+Sync do Meta, Appstle doradza interwał z odstępu) — „naraz” broni się jako wykonanie, nie mechanizm;
+„wracali” przy „45-dniowego” może sugerować odkup tego samego produktu (LUKA e).
 
 ## Wiadomość (opcjonalnie) — v29, materiał do rozmowy/podstrony, NIE USP
 
@@ -389,38 +393,38 @@ Kontekst rynku (nie dowód o Rafale; do ostrożności w copy):
 
 ## Brief dla budujących (max 3 punkty, nadpisywany przez stratega)
 
-Stan (2026-09-27 13:08, WebFetch na żywo): `/` — H1 „Count your own interval”, pod nim „You
-don't pay twice for the same customer. E-commerce for brands whose customers come back.” i nadal
-„I build the tools myself — calculators, counters, progress bars — the kind of thing that
-normally waits in an IT queue.”; brak linku do /tool; brak „I'll count yours free”; części
-„Composition” bez zmian („Paid that buys returning customers, not clicks”, „More carts from the
-same traffic”, „The second purchase without paying for a click”, „Subscription instead of
-a discount”, „The day the pack runs out”); Allegro „Worked with a data science team on predicting
+Stan (2026-09-27 14:07, WebFetch na żywo — bez zmian od 13:08): `/` — H1 „Count your own
+interval”, pod nim „You don't pay twice for the same customer. E-commerce for brands whose customers
+come back.” i nadal „I build the tools myself — calculators, counters, progress bars — the kind of
+thing that normally waits in an IT queue.”; brak linku do /tool; brak „I'll count yours free”;
+części „Composition” bez nazwanych ustawień; Allegro „Worked with a data science team on predicting
 a customer's next purchase”. /tool — H1 „The pack says 45 days. Customers came back at 69.”, CTA
-zmienione na „Check your own gap”; nadal „re-time … to the day your customers actually come
-back” (DATA, sprzeczne z „przedział, nie data” z eee304eb); „a range, not a date” nie występuje.
-REVIEW.md (repo i Projekt) bez wpisów po cyklu 0 — punkty 1–3 NIEZREALIZOWANE; pkt 1 zaktualizowany
-do v35, pkt 2 zaktualizowany do nowego CTA /tool, pkt 3 bez zmian.
+„Check your own gap”; nadal „re-time … to the day your customers actually come back” (DATA,
+sprzeczne z „przedział, nie data” z eee304eb); „a range, not a date” nie występuje; brak zdania
+z „Meta”. REVIEW.md (repo i Projekt) bez wpisów po cyklu 0 — punkty 1–3 NIEZREALIZOWANE; pkt 1
+i 2 zaktualizowane do v36 („personally set … together”), pkt 3 bez zmian.
 
-1. **Zdanie pod nagłówkiem `/` = USP v35 EN (DECYZJA RAFAŁA — zastępuje jego zdanie
+1. **Zdanie pod nagłówkiem `/` = USP v36 EN (DECYZJA RAFAŁA — zastępuje jego zdanie
    o kalkulatorach).** Bez ruszania „You don't pay twice for the same customer.” i „E-commerce for
    brands whose customers come back.”: zdanie „I build the tools myself — calculators, counters,
    progress bars — the kind of thing that normally waits in an IT queue.” zastąpione dosłownie przez
-   „I build tools on your orders to set Meta ads, Klaviyo emails and subscriptions at once. One
-   client's 45-day-supplement buyers returned at 69 days; I'll count yours free.” Recenzent: tekst
-   obecny dosłownie w pierwszym ekranie (390 px i 1440 px); „69 days” z jednostką; 45 i 69
-   w ALLOWED_NUMBERS; nigdzie na `/` „IT queue”, „pack came back”, „late”, „lose”, „24 days”,
-   „free audit”, nazwa klienta. Do decyzji Rafała (LUKA k) — tylko wariant w Claude Design;
-   promotor NIE wypycha tej zmiany na produkcję bez jego zgody. Jeśli Rafał odrzuci — zostaje jego
-   zdanie, a budujący dopisują „on your orders” i „I'll count yours free” jako CTA (pkt 2).
+   „I build tools on your orders, then personally set Meta ads, Klaviyo emails and subscriptions
+   together. One client's 45-day-supplement buyers returned at 69 days; I'll count yours free.”
+   Recenzent: tekst obecny dosłownie w pierwszym ekranie (390 px i 1440 px); „personally set”
+   obecne; „69 days” z jednostką; 45 i 69 w ALLOWED_NUMBERS; nigdzie na `/` „IT queue”, „pack came
+   back”, „late”, „lose”, „24 days”, „free audit”, nazwa klienta. Do decyzji Rafała (LUKA k) —
+   tylko wariant w Claude Design; promotor NIE wypycha tej zmiany na produkcję bez jego zgody. Jeśli
+   Rafał odrzuci — zostaje jego zdanie, a budujący dopisują „on your orders” i „I'll count yours
+   free” jako CTA (pkt 2).
 2. **„I'll count yours free” prowadzi do formularza /tool („Check your own gap”), a /tool mówi
    „a range, not a date”.** Na `/` fraza „I'll count yours free” jest linkiem/przyciskiem do
    formularza na /tool (działa klawiaturą, widoczny fokus, cel ≥44 px na 390 px). Na /tool
    „to the day your customers actually come back” zastąpione przez „to the range in which your
    customers actually come back — a range, not a date”, a bezpośrednio pod wynikiem porównania
-   dosłownie: „I set your Meta ads, Klaviyo emails and subscriptions by this gap — a range, not
-   a date.” Recenzent: link z `/` ląduje na formularzu; „the day your customers” nie występuje na
-   /tool; oba zdania obecne; H1 /tool bez zmian; brak „you're losing”, „too late”.
+   dosłownie: „I then personally set your Meta ads, Klaviyo emails and subscriptions together, by
+   this gap — a range, not a date.” Recenzent: link z `/` ląduje na formularzu; „the day your
+   customers” nie występuje na /tool; oba zdania obecne; H1 /tool bez zmian; brak „you're losing”,
+   „too late”.
 3. **Sekcja „Composition — five parts” nazywa w każdej części, co ustawia narzędzie — bez nowych
    liczb.** Paid: „when a returning customer leaves your ads and when they come back”; CRM/Owned:
    „when the email goes”; Retention/Subscription: „the subscription interval”; Onsite: „which pack
@@ -459,7 +463,12 @@ co dokładnie dostaje klient w gałęzi „za mało” (dziś: osobny zestaw + u
 wskazać, które słowa muszą zostać. (l) Allegro nie mieści się w USP ≤35 słów — decyzja
 Rafała, czy nagłówek profilu LinkedIn niesie „Allegro” (konkurent 11:10: to jedyna rzecz,
 której nie skopiuje). (m) **„U jednego klienta” (v35)** — dane pochodzą od bieżącego klienta;
-potwierdzić, że Rafał może publicznie mówić „one client's”, bez nazwy (zgoda na NAZWĘ osobno, LUKA b).
+potwierdzić, że Rafał może publicznie mówić „one client's”, bez nazwy (zgoda na NAZWĘ osobno, LUKA b). (n) **Własność narzędzi po zakończeniu
+współpracy (founder 14:07: „czyje są te narzędzia po zakończeniu”) — DECYZJA RAFAŁA**: czy klient
+zostaje z narzędziem/regułą (definicja eee304eb mówi o regule dla kolejnego SKU), czy tylko
+z ustawieniami. Do e: sceptyk 14:07 — „wracali” przy „45-dniowego suplementu” czytane jako odkup tego
+samego produktu; jeśli 69 = dowolne kolejne zamówienie, bezpieczniej „kolejne zamówienie po 69
+dniach”; NIE pisać „średnio” (to mediana).
 
 ## Odrzucone kierunki (nie wracać bez nowego dowodu)
 
@@ -558,6 +567,11 @@ potwierdzić, że Rafał może publicznie mówić „one client's”, bez nazwy 
   i z „według nich ustawiam” / “by them at once” — 0:3 z v35 (R2 13:15) [pretendent B,A,B; wybory
   B,A,B]: „liczba bez źródła brzmi jak statystyka branżowa, jakich widzę dziesiątki”, „według nich
   brzmi jak tłumaczenie z angielskiego”. Nie podawać 45/69 bez wskazania, czyje to dane.
+- v35 z „Sam buduję narzędzia …, by ustawiać naraz” / “I build tools on your orders to set … at
+  once” — 0:3 z v36 (R1 14:15) [pretendent A,B,A; wybory A,B,A]: „»by ustawiać« brzmi, jakby to
+  narzędzia ustawiały reklamy — czytam to jako soft/automatyzację, którą złożę sobie z AI w weekend”,
+  „»sam« przy narzędziach, a nie przy robocie”. Nie wracać do „sam” przy budowie narzędzi zamiast
+  przy wykonaniu ani do narzędzi jako podmiotu ustawiania.
 - v29 i wcześniejsze długie wiadomości jako USP — wycofane DECYZJĄ RAFAŁA 12:32 (nie
   przegrane w rundzie); tekst v29 zostaje w „Wiadomość (opcjonalnie)”.
 
@@ -567,6 +581,19 @@ Najnowszy na górze. Format: data · wersja · co zaatakowano · wynik porównan
 parami (która wygrała, ile razy na ile, z odwróconą kolejnością) · co zmieniono
 w briefie · co odrzucono i dlaczego.
 
+- 2026-09-27 14:20 UTC · v35 → v36 · Zarzuty: founder — „odstęp policzę w ChatGPT w godzinę —
+  za 10 500 zł chcę zobaczyć, ile więcej zarobiłem, odkąd to ustawiłeś” (+ „»Sam buduję narzędzia…,
+  by ustawiać naraz« toporne, lista funkcji”; „AI nie przestawi mi reklam i maili — tego argumentu
+  brakuje”; „zastępuje agencję czy dochodzi?”; „czyje narzędzia po końcu?”); konkurent — „obietnica
+  diagnozy, nie wyniku; postawię przeciętne +18% i wygram” (+ „naraz” = jego „omnichannel”, „policzę
+  gratis” = darmowy audyt; nie skopiuje 45→69 ani „jedna osoba liczy i sama ustawia”; “set … at once”
+  nienaturalne); sceptyk — każdy element osobno standardem (Klaviyo EDNO, Audience Sync
+  https://www.klaviyo.com/features/audience-sync, Appstle
+  https://appstle.com/blog/shopify-subscription-cadence-mismatch/), „naraz” NIEPEWNE jako
+  unikalność, „wracali” może sugerować odkup tego samego (LUKA e). Rundy: R1 („Buduję narzędzia …
+  i sam ustawiam naraz” / “then personally set … together”) 3:0 [A,B,A; wybory A,B,A] → v36.
+  Brief: pkt 1 i 2 → zdania v36 („personally set … together”); pkt 3 bez zmian (niezrealizowany).
+  Nowa LUKA n (własność narzędzi). Żywa strona i /tool bez zmian od 13:08; REVIEW.md bez nowych wpisów.
 - 2026-09-27 13:18 UTC · v33 → v35 · Zarzuty: founder — „69 zamiast 45 wyciągnę sam z Shopify
   w godzinę, a nigdzie nie pada, ile ktoś na tym zarobił” (+ „jedyna przewaga to połączenie maili,
   reklam i subskrypcji wokół jednej liczby — muszę uwierzyć na słowo”; „10 500 zł ≈ 8% obrotu”);
