@@ -279,6 +279,17 @@ Kontekst rynku (nie dowód o Rafale; do ostrożności w copy):
   Bieżący klient jest jeden (GenActiv) — nie pisać „one of the two”.
 - Zero wymyślonych liczb, procentów, wyników klientów, opinii.
 - Leady przychodzą z LinkedIna; Rafał nie obsługuje zimnych leadów.
+- **DECYZJA RAFAŁA 2026-09-27 12:32 (nadrzędna wobec v1–v29):** USP ma być OGÓLNE, nie zbudowane
+  pod kalkulator. Rdzeń: e-commerce dla marek FMCG, których klienci wracają (cały lejek: paid,
+  SEO z odpowiedziami AI, onsite, CRM/automation, subskrypcje, lojalność) + „sam buduję
+  narzędzia — kalkulatory, liczniki, paski postępu — rzeczy, które normalnie czekają w kolejce
+  do IT”. Punkt wyjścia (słowa Rafała): „E-commerce for brands whose customers come back.
+  I build the tools myself — calculators, counters, progress bars — the kind of thing that
+  normally waits in an IT queue.” 45 vs 69 i /tool to JEDEN dowód (przykład narzędzia),
+  nie oś USP. Rozbiór Klaviyo, holdout, CPM vs faktura — materiał do rozmowy/podstrony,
+  nie do USP.
+- Forma USP: zdanie PL + zdanie EN, każde najwyżej 35 słów. Dłuższa wiadomość na LinkedIna
+  może istnieć osobno w sekcji „Wiadomość (opcjonalnie)”, ale sędziowie oceniają USP.
 
 ## Brief dla budujących (max 3 punkty, nadpisywany przez stratega)
 
