@@ -6,49 +6,49 @@ uwagi zostawiają w `system/REVIEW.md`, skąd strateg je bierze.
 
 ## Obowiązująca wersja
 
-**v37 — 2026-09-27 15:15 UTC (v36 → v37 3:0 w R3 [pretendent A,B,A; wybory A,B,A] — pozycja kontrolowana)**
+**v38 — 2026-09-27 16:20 UTC (v37 → v38 3:0 w R1 [pretendent A,B,A; wybory A,B,A] — pozycja kontrolowana)**
 
-PL: **„E-commerce dla marek, których klienci wracają. Buduję narzędzia na Twoich zamówieniach,
-sam ustawiam naraz reklamy w Meta, maile w Klaviyo, subskrypcje. U jednego klienta kupujący
-45-dniowego suplementu wracali po 69 dniach — Twój odstęp policzę gratis.”** (35 słów)
+PL: **„E-commerce dla marek, których klienci wracają. Buduję narzędzia na Twoich zamówieniach, sam
+ustawiam reklamy w Meta, maile w Klaviyo, subskrypcje. U jednego klienta kupujący 45-dniowego
+suplementu wracali po 69 dniach — odstępy Twoich produktów policzę gratis.”** (35 słów)
 
 EN: ***“E-commerce for brands whose customers come back. I build tools on your orders, then
-personally set Meta ads, Klaviyo emails, subscriptions together. One client's
-45-day-supplement buyers returned at 69 days; I'll count your gap free.”*** (35 słów)
+personally set Meta ads, Klaviyo emails, subscriptions. One client's 45-day-supplement buyers
+returned at 69 days; I'll count each product's gap free.”*** (35 słów)
 
 Zgodność z DECYZJĄ RAFAŁA 12:32: rdzeń ogólny dosłownie jego słowami; „buduję narzędzia” zostaje;
 „sam” przy WYKONANIU (od v36); cały lejek przez reklamy, maile i subskrypcje; 45/69 to JEDEN
 dowód-przykład, nie oś; zero holdoutu/CPM/rozbioru Klaviyo. Świadome odejście od słów Rafała bez
 zmian względem v32 (bez widżetów i „kolejki do IT” — „Odrzucone kierunki”).
 
-Co niesie wersję (uzasadnienia sędziów):
-(1) **„Twój odstęp policzę gratis” / “I'll count your gap free”** (R3 15:12, 3/3) — „»Twoje policzę
-gratis« zostawia niedopowiedziane »twoje co?« — u kogoś, kogo cała oferta to precyzja w liczbach,
-to psuje wiarygodność”; „»Twój odstęp« jednoznacznie łączy się z 69 dniami, więc od razu wiem, co
-dostanę za darmo — wyliczenie własnego interwału odkupu”; „w v36 CTA brzmi jak ogólnikowa oferta
-audytu”. Odpowiada na sceptyka 15:07 („w »Twoje policzę« nie wiadomo, co zostanie policzone”;
-„»count yours free« bez dopełnienia”). EN “gap” = słowo z CTA na /tool („Check your own gap”) —
-spójność strona ↔ narzędzie.
-(2) **Przecinek zamiast „i”** („…zamówieniach, sam ustawiam…”) i lista bez „and” w EN — koszt
-miejsca na „odstęp”/“gap”; sędzia R3: „krótsze zdania zamiast zdania-zlepka, czyta się szybciej”;
-pozostali: „kosmetyczne, nie przeważa”.
-(3) utrzymane z v36: „sam ustawiam naraz” / “personally set … together”; nazwy kanałów z przyimkami
-„w Meta”, „w Klaviyo” (R1 15:10: bez „w” = „błąd gramatyczny, psuje wiarygodność”); „U jednego
-klienta” (R2 15:11: „»jednego« jest uczciwsze — jeden konkretny wynik, nie naciągana statystyka”);
-pełne zdanie „kupujący … wracali po 69 dniach” (R1: dwukropki = „cięty ad copy”).
-UWAGA: „odstęp” = mediana odstępu między zamówieniami per rodzina produktów (definicja eee304eb,
-„Mierzy”), wynik to przedział, NIE data dla klienta. Nie pisać „Twoją datę”, „dzień powrotu”.
-Znane słabe punkty: founder i konkurent 15:07 (najmocniejszy zarzut): **„sam” = brak zastępstwa —
-„jak zniknie na dwa tygodnie, Twoje kampanie i CRM stoją”** (LUKA f — copy tego nie naprawi bez
-decyzji Rafała); founder 15:07: „CV z korporacji nie dowodzi działania w chaosie małego D2C” (w USP
-nie ma CV — dotyczy strony/profilu; 45→69 pochodzi ze sklepu z suplementami); „chcę 2–3 case study
-przed/po” (LUKA b); sceptyk 15:07: „Klaviyo sam liczy przewidywaną datę kolejnego zamówienia, więc
-»policzę gratis« sprzedaje coś, co klient ma w panelu” — odpowiedź w rozmowie: EDNO jest jedna na
-klienta i nie patrzy na produkt (help.klaviyo.com/hc/en-us/articles/360020919731), odstęp Rafała
-per rodzina produktów; NIE wpisywać tego do USP jako „Klaviyo tego nie umie”; sceptyk: łączenie
-Meta+Klaviyo+subskrypcji sprzedają agencje (yocto.agency/industry-supplements-wellness,
-goshdigital.co/blog/klaviyo-paid-ads-playbook) — „naraz” broni się tylko jako „jedna osoba”, nie
-mechanizm; „wracali po 69” może sugerować odkup tego samego (LUKA e).
+Co niesie wersję (uzasadnienia sędziów R1 16:15, 3/3):
+(1) **„odstępy Twoich produktów policzę gratis” / “I'll count each product's gap free”** — „mam
+kilkanaście SKU, magnez, kolagen i omega-3 kupuje się w innym rytmie — wiem, co dostanę: liczbę na
+każdy produkt, którą wstawię do flow w Klaviyo”; „»Twój odstęp« brzmi jak jedna uśredniona liczba dla
+całego sklepu, a taką zrobię sam z AI w godzinę / dałaby mi każda agencja albo ChatGPT”; „liczba mnoga
+mówi, że on to rozumie”. Odpowiada na founder i konkurent 16:07 („diagnozę każdy analityk zrobi
+z eksportu w Excelu”, „policzyć umiem sam”) i na sceptyka 16:07 („»Twój odstęp« w liczbie pojedynczej
+przeczy narzędziu, które liczy per rodzina produktów”).
+(2) **bez „naraz” / “together”** — koszt miejsca; sędziowie: „»sam ustawiam« już to mówi, »naraz«
+zbędne”, „»ustawiam naraz« brzmi niezręcznie”, „»together« na końcu brzmi jak doklejone” (founder
+16:07: „brzmi jak przepuszczone przez translator”). Uwaga: 2/3 sędziów lubi SAMĄ IDEĘ spięcia kanałów
+(„agencja od Klaviyo i freelancer od Meta u mnie się nie dogadują”) — wraca, jeśli da się ją powiedzieć
+naturalnie i w limicie słów.
+(3) utrzymane z v36–v37: „sam ustawiam” / “personally set”; nazwy kanałów z przyimkami „w Meta”,
+„w Klaviyo”; „U jednego klienta”; pełne zdanie „kupujący … wracali po 69 dniach”; słowo „odstęp” /
+“gap” (spójne z CTA /tool „Check your own gap”).
+UWAGA: „odstęp produktu” = mediana odstępu między zamówieniami per rodzina produktów (definicja
+eee304eb, „Mierzy”; warianty/rozmiary jednego produktu liczone razem), wynik to przedział, NIE data dla
+klienta. Nie pisać „Twoją datę”, „dzień powrotu”, „dla każdego SKU” (małe SKU → szum; narzędzie grupuje
+w rodziny).
+Znane słabe punkty: founder i konkurent 16:07 (najmocniejszy zarzut, siódmy przebieg z rzędu):
+**„69 zamiast 45 to diagnoza, nie wynik — nie wiem, ile ten klient zarobił po naprawie”** (LUKA b — copy
+tego nie naprawi bez liczby od Rafała); konkurent: „pokażemy, ile tracisz na tych 24 dniach, i weźmiemy
+odpowiedzialność za wynik” + „mamy zespół” (LUKA f); founder: „»Buduję narzędzia« — jakie? chcę
+przychodu, nie narzędzia”; „przy 900 zamówieniach 10 500 zł ≈ 12 zł na zamówienie”; sceptyk 16:07:
+„wracali po 69” = mediana tylko wśród wracających, może sugerować odkup tego samego (LUKA e);
+„narzędzia” w liczbie mnogiej, a publicznie jest jedno (/tool) — fakt od Rafała („buduje narzędzia”),
+nie zmieniać bez jego decyzji; „U jednego klienta” = jedyny bieżący klient (prawda, LUKA m).
 
 ## Wiadomość (opcjonalnie) — v29, materiał do rozmowy/podstrony, NIE USP
 
@@ -262,6 +262,14 @@ ginie w środku akapitu”; „dwie marki naraz” — founder pyta, czy jest wo
   (https://www.bythenumbersapp.com/cohort-repurchase-rate-report/); agencje Klaviyo budują flow
   na przewidywanym zamówieniu (https://devaland.com/klaviyo-predicted-next-order) → „sam buduję
   narzędzia” jako sugestia unikalności NIEPEWNE; nigdy „tego nie dostaniesz gdzie indziej”.
+- **„odstępy Twoich produktów policzę gratis” / „I'll count each product's gap free” (od v38):**
+  ta sama obietnica co v33–v37, z liczbą mnogą i „per produkt”: /tool liczy medianę odstępu per
+  RODZINA produktów i zapisuje przedział (definicja eee304eb, „Mierzy”, „Zakres”) → „produkt” = rodzina
+  (warianty/rozmiary razem), NIE każde SKU osobno; nie pisać „dla każdego SKU”, „co do dnia”. Sceptyk
+  16:07: sama kalkulacja odstępu jest w narzędziach (Klaviyo EDNO, Airboxr, Little Stream —
+  https://www.littlestreamsoftware.com/articles/calculating-customer-repeat-purchase-timing-single-customer/)
+  → „per produkt” NIE jest unikalne; nigdy „tylko ja liczę per produkt” (Repeat też liczy — niżej).
+  Zakres darmowego kroku — LUKA g.
 - **„Twój odstęp policzę gratis” / „I'll count your gap free” (od v37):** ta sama obietnica co
   „Twoje policzę gratis” (v33–v36), z nazwanym przedmiotem: odstęp = mediana odstępu między
   zamówieniami per rodzina produktów (definicja eee304eb, „Mierzy”); na /tool CTA „Check your own
@@ -398,38 +406,40 @@ Kontekst rynku (nie dowód o Rafale; do ostrożności w copy):
 
 ## Brief dla budujących (max 3 punkty, nadpisywany przez stratega)
 
-Stan (2026-09-27 15:07, WebFetch na żywo — bez zmian od 13:08): `/` — H1 „Count your own
+Stan (2026-09-27 16:07, WebFetch na żywo — bez zmian od 13:08): `/` — H1 „Count your own
 interval”, pod nim „You don't pay twice for the same customer. E-commerce for brands whose customers
 come back.” i nadal „I build the tools myself — calculators, counters, progress bars — the kind of
-thing that normally waits in an IT queue.”; brak linku do /tool; brak „I'll count … free”; części
-„Composition” bez nazwanych ustawień („Paid that buys returning customers, not clicks” itd.); Allegro
-„Worked with a data science team on predicting a customer's next purchase”. /tool — H1 „The pack says
-45 days. Customers came back at 69.”, CTA „Check your own gap” i „Send me your store”; nadal „…to the
-day your customers actually come back” (DATA, sprzeczne z „przedział, nie data”); brak „a range, not
-a date”. REVIEW.md (repo i Projekt) bez wpisów po cyklu 0 — punkty 1–3 NIEZREALIZOWANE; pkt 1 i 2
-zaktualizowane do v37 („I'll count your gap free”), pkt 3 bez zmian.
+thing that normally waits in an IT queue.”; brak linku do /tool; brak „free”; części „Composition” bez
+nazwanych ustawień („Paid that buys returning customers, not clicks”, „More carts from the same
+traffic”, „The second purchase without paying for a click”, „Subscription instead of a discount”, „The
+day the pack runs out”); Allegro „Worked with a data science team on predicting a customer's next
+purchase”. /tool — H1 „The pack says 45 days. Customers came back at 69.”, CTA „Check your own gap”
+i „Send me your store”; nadal „…to the day your customers actually come back” (DATA, sprzeczne
+z „przedział, nie data”); brak „a range, not a date”. REVIEW.md (repo i Projekt) bez wpisów po cyklu
+0 — punkty 1–3 NIEZREALIZOWANE; pkt 1 i 2 zaktualizowane do v38 („each product's gap”), pkt 3 bez zmian.
 
-1. **Zdanie pod nagłówkiem `/` = USP v37 EN (DECYZJA RAFAŁA — zastępuje jego zdanie
+1. **Zdanie pod nagłówkiem `/` = USP v38 EN (DECYZJA RAFAŁA — zastępuje jego zdanie
    o kalkulatorach).** Bez ruszania „You don't pay twice for the same customer.” i „E-commerce for
    brands whose customers come back.”: zdanie „I build the tools myself — calculators, counters,
    progress bars — the kind of thing that normally waits in an IT queue.” zastąpione dosłownie przez
-   „I build tools on your orders, then personally set Meta ads, Klaviyo emails, subscriptions
-   together. One client's 45-day-supplement buyers returned at 69 days; I'll count your gap free.”
+   „I build tools on your orders, then personally set Meta ads, Klaviyo emails, subscriptions. One
+   client's 45-day-supplement buyers returned at 69 days; I'll count each product's gap free.”
    Recenzent: tekst obecny dosłownie w pierwszym ekranie (390 px i 1440 px); „personally set”
-   i „your gap” obecne; „69 days” z jednostką; 45 i 69 w ALLOWED_NUMBERS; nigdzie na `/` „IT queue”,
-   „pack came back”, „late”, „lose”, „24 days”, „free audit”, „your date”, nazwa klienta. Do decyzji
-   Rafała (LUKA k) — tylko wariant w Claude Design; promotor NIE wypycha tej zmiany na produkcję bez
-   jego zgody. Jeśli Rafał odrzuci — zostaje jego zdanie, a budujący dopisują „on your orders”
-   i „I'll count your gap free” jako CTA (pkt 2).
-2. **„I'll count your gap free” prowadzi do formularza /tool („Check your own gap”), a /tool mówi
-   „a range, not a date”.** Na `/` fraza „I'll count your gap free” jest linkiem/przyciskiem do
-   formularza na /tool (działa klawiaturą, widoczny fokus, cel ≥44 px na 390 px). Na /tool
-   „to the day your customers actually come back” zastąpione przez „to the range in which your
-   customers actually come back — a range, not a date”, a bezpośrednio pod wynikiem porównania
-   dosłownie: „I then personally set your Meta ads, Klaviyo emails and subscriptions together, by
-   this gap — a range, not a date.” Recenzent: link z `/` ląduje na formularzu; „the day your
-   customers” nie występuje na /tool; oba zdania obecne; H1 /tool bez zmian; brak „you're losing”,
-   „too late”.
+   i „each product's gap” obecne; „69 days” z jednostką; 45 i 69 w ALLOWED_NUMBERS; nigdzie na `/`
+   „IT queue”, „pack came back”, „late”, „lose”, „24 days”, „free audit”, „your date”, „every SKU”,
+   nazwa klienta. Do decyzji Rafała (LUKA k) — tylko wariant w Claude Design; promotor NIE wypycha tej
+   zmiany na produkcję bez jego zgody. Jeśli Rafał odrzuci — zostaje jego zdanie, a budujący dopisują
+   „on your orders” i „I'll count each product's gap free” jako CTA (pkt 2).
+2. **„I'll count each product's gap free” prowadzi do formularza /tool („Check your own gap”), a /tool
+   mówi „a range, not a date” i pokazuje wynik per produkt.** Na `/` fraza „I'll count each product's
+   gap free” jest linkiem/przyciskiem do formularza na /tool (działa klawiaturą, widoczny fokus, cel
+   ≥44 px na 390 px). Na /tool „to the day your customers actually come back” zastąpione przez „to the
+   range in which your customers actually come back — a range, not a date”, a bezpośrednio pod wynikiem
+   porównania dosłownie: „I then personally set your Meta ads, Klaviyo emails and subscriptions by each
+   product's gap — a range, not a date.” Recenzent: link z `/` ląduje na formularzu; „the day your
+   customers” nie występuje na /tool; oba zdania obecne; wynik/wzór wyniku pokazuje co najmniej dwa
+   produkty (rodziny) z osobnym przedziałem, nie jedną liczbę dla sklepu; H1 /tool bez zmian; brak
+   „you're losing”, „too late”.
 3. **Sekcja „Composition — five parts” nazywa w każdej części, co ustawia narzędzie — bez nowych
    liczb.** Paid: „when a returning customer leaves your ads and when they come back”; CRM/Owned:
    „when the email goes”; Retention/Subscription: „the subscription interval”; Onsite: „which pack
@@ -442,7 +452,7 @@ LUKA W DOWODACH: (a) paid — **DECYZJA RAFAŁA**: potwierdzić, że w pierwszym
 dużej bazie zostawia część tej grupy bez reklam (holdout), a przy za małej mówi to przed
 startem; jeśli ma zwykłą proporcję grupy albo próg bazy — podać; nie wymyślać. (b) wynik
 w złotówkach — brak wyniku GenActiv; decyzja Rafała, czy może podać wynik za zgodą
-(**founder i konkurent 13:07 — najmocniejszy zarzut piąty przebieg z rzędu: „nigdzie nie pada,
+(**founder i konkurent 13:07 i 16:07 — najmocniejszy zarzut siódmy przebieg z rzędu („diagnoza, nie wynik”): „nigdzie nie pada,
 ile ktoś na tym zarobił”; copy nie da się tego naprawić bez liczby od Rafała**). (c) „szybkie
 wygrane” bez przykładu — decyzja Rafała: nazwać 2–3 typowe szybkie wygrane i co typowo jest na
 liście drugiego miesiąca. (d) reguła dla kolejnego produktu pochodzi z definicji narzędzia
@@ -591,6 +601,10 @@ dniach”; NIE pisać „średnio” (to mediana).
   usuwać „jednego”; nie nazywać przedmiotu darmowego kroku „produktami”.
 - v36 z „Twoje policzę gratis” / “I'll count yours free” bez przedmiotu — 0:3 z v37 (R3 15:12)
   [pretendent A,B,A; wybory A,B,A]: „twoje co?”, „CTA jak ogólnikowa oferta audytu”.
+- v37 z „Twój odstęp policzę gratis” / “I'll count your gap free” (liczba pojedyncza) i „naraz” /
+  “together” — 0:3 z v38 (R1 16:15) [pretendent A,B,A; wybory A,B,A]: „»Twój odstęp« = jedna średnia
+  dla sklepu, którą zrobię sam z AI”, „»ustawiam naraz« niezręczne, »together« doklejone”. Nie wracać do
+  jednej liczby dla sklepu w obietnicy darmowego kroku; „naraz” wraca tylko w naturalnej formie.
 - v29 i wcześniejsze długie wiadomości jako USP — wycofane DECYZJĄ RAFAŁA 12:32 (nie
   przegrane w rundzie); tekst v29 zostaje w „Wiadomość (opcjonalnie)”.
 
@@ -600,6 +614,19 @@ Najnowszy na górze. Format: data · wersja · co zaatakowano · wynik porównan
 parami (która wygrała, ile razy na ile, z odwróconą kolejnością) · co zmieniono
 w briefie · co odrzucono i dlaczego.
 
+- 2026-09-27 16:20 UTC · v37 → v38 · Zarzuty: founder — „69 dni zamiast 45 to diagnoza, a nie wynik;
+  nie wiem, ile ten klient zarobił po naprawie” (+ „odstęp policzę sam z AI w godzinę”; „»Buduję
+  narzędzia« — jakie? chcę przychodu”; „»sam ustawiam naraz« jak z translatora”; najlepiej działa
+  „policzę gratis”; „jak zachoruje, retencja stoi”); konkurent — „jedyny przypadek pokazuje problem, nie
+  wynik; płacę 10 500 zł za diagnozę, którą analityk zrobi w Excelu” (kopiuje: rdzeń, „naraz”, „gratis”,
+  „narzędzia”; nie skopiuje: 45→69, słowa „odstęp”, CV + „sam”); sceptyk — brak jawnego „jedyny”;
+  „sam ustawiam” jako wyróżnik DO USUNIĘCIA (Upwork/Toptal — w USP nie ma takiego twierdzenia), „policzę
+  gratis” i „narzędzia” NIEPEWNE (Airboxr, Little Stream, Klaviyo EDNO); najmocniejsze: „jeden sklep,
+  jedno SKU, niejasna definicja powrotu, a »policzenie odstępu« Klaviyo robi w standardzie”; „Twój
+  odstęp” w liczbie pojedynczej przeczy narzędziu per rodzina. Rundy: R1 („odstępy Twoich produktów
+  policzę gratis” / “each product's gap”, bez „naraz”/“together”) 3:0 [A,B,A; wybory A,B,A] → v38.
+  Brief: pkt 1 i 2 → zdania v38; pkt 2 + wynik per produkt (co najmniej dwie rodziny); pkt 3 bez zmian
+  (niezrealizowany). Żywa strona i /tool bez zmian od 13:08; REVIEW.md bez nowych wpisów.
 - 2026-09-27 15:15 UTC · v36 → v37 · Zarzuty: founder — „CV z korporacji nie dowodzi, że umie
   działać w chaosie małego D2C; najbardziej przeszkadza »sam« — zero backupu przy 10,5k/mies.” (+ „nie
   zapłacę na start, ale wezmę darmowe przeliczenie jako test”; „chcę 2–3 case study przed/po”);
