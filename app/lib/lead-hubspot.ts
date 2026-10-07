@@ -3,8 +3,11 @@
 // Ten sam kształt co istniejące app/lib/hubspot.ts — ta sama zmienna
 // środowiskowa, ten sam typ zwracany, żeby nie wprowadzać drugiej konwencji.
 //
-// W HubSpocie trzeba raz założyć własne właściwości kontaktu wymienione
-// w PROPERTIES poniżej. Bez nich API po cichu je zignoruje.
+// W HubSpocie trzeba raz założyć własne właściwości kontaktu, które wysyła
+// propertiesFrom() poniżej — robi to `node scripts/hubspot-setup.mjs --apply`.
+// Uwaga: nieistniejąca właściwość NIE jest ignorowana. HubSpot odrzuca wtedy
+// CAŁY zapis kontaktu (400, PROPERTY_DOESNT_EXIST), więc nowe pole najpierw
+// zakłada się w portalu, a dopiero potem wdraża kod, który je wysyła.
 
 import type { Lead, ConsentRecord } from '@/app/api/lead/route';
 
@@ -51,6 +54,17 @@ function propertiesFrom(lead: Lead, consent: ConsentRecord): Record<string, stri
   if (consent.text) p.consent_text = consent.text;
   if (consent.ip && consent.ip !== 'unknown') p.consent_ip = consent.ip;
   return p;
+}
+
+/* Sam kod statusu nie mowi, ktore pole HubSpot odrzucil, a ten tekst trafia
+   do maila wlasciciela. Bierzemy `message` z odpowiedzi, przyciete. */
+async function reason(res: Response): Promise<string> {
+  try {
+    const j = await res.json();
+    return String(j?.message ?? '').slice(0, 300);
+  } catch {
+    return '';
+  }
 }
 
 export async function createLeadContact(
@@ -109,10 +123,10 @@ export async function createLeadContact(
       });
       return patch.ok
         ? { success: true, contactId: id }
-        : { success: false, error: `patch failed: ${patch.status}` };
+        : { success: false, error: `patch failed: ${patch.status} ${await reason(patch)}` };
     }
 
-    return { success: false, error: `create failed: ${res.status}` };
+    return { success: false, error: `create failed: ${res.status} ${await reason(res)}` };
   } catch (e) {
     return { success: false, error: e instanceof Error ? e.message : 'unknown' };
   }

@@ -176,23 +176,31 @@ export async function POST(request: NextRequest) {
   }
 
   // 2 · Wszystko dalej to księgowość i nigdy nie może zablokować dostawy.
+  //     CRM idzie PRZED powiadomieniem właściciela, bo jego wynik ląduje w tym
+  //     mailu: console.error czyta nikt, a mail czyta Rafał. Bez tego awaria
+  //     zapisu kontaktu jest niewidoczna, dopóki ktoś nie zajrzy do HubSpota.
+  let crmError: string | null = null;
+  try {
+    const hs = await createLeadContact(lead, consent);
+    if (!hs.success) {
+      crmError = hs.error ?? 'unknown';
+      console.error('[lead] hubspot failed', hs.error);
+    }
+  } catch (e) {
+    crmError = e instanceof Error ? e.message : 'threw';
+    console.error('[lead] hubspot threw', e);
+  }
+
   try {
     await resend.emails.send({
       from,
       to: [process.env.TO_EMAIL!],
       subject:
         '[lead] ' + lead.email + (store ? ` · ${store.slice(0, 60)}` : ''),
-      html: ownerEmail(lead, consent),
+      html: ownerEmail(lead, consent, crmError),
     });
   } catch (e) {
     console.error('[lead] owner notification failed', e);
-  }
-
-  try {
-    const hs = await createLeadContact(lead, consent);
-    if (!hs.success) console.error('[lead] hubspot failed', hs.error);
-  } catch (e) {
-    console.error('[lead] hubspot threw', e);
   }
 
   return NextResponse.json({ ok: true });
