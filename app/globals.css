@@ -790,11 +790,16 @@ section[id] {
    ============================================ */
 /* >>> ZMIENNE ZE ZRODLA — GENEROWANE <<< */
 :root{
-    --bg:#0C0D0C; --fg:#F2F0EA; --dim:#A8A49B; --panel:#101210; --line:#1E201B;
-    --hair:#45473F; --cellc:#2A2C26; --acc:#E0A72B; --origin:#7E8177; --rule:#24261F;
-    --ok:#4DD0A7;
-    --sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
-    --mono:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
-    --disp:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+    --paper:#F7F5F0; --ink:#14161A; --onink:#FFFFFF; --inkhover:#3A3C40;
+    --mid:#6E6D68; --hair:#C9C7C0; --divider:#DCDAD2; --tint:#EDEAE1;
+    --amber:#C97B1F; --amberink:#A25C11; --ph:#9B9A95;
+    --sans:"Instrument Sans",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --gutL:18px; --gutR:18px;
+    --h1:clamp(33px,10vw,40px); --gap45:24px; --lead:16px; --recog:16px;
+    --verdict:18px; --svc:16px; --evid:14.5px; --body:14px; --field:16px;
+    --small:12px; --fee:12px; --feelead:18px; --batch:17px;
+    --cap:13px; --payoff:clamp(24px,6.8vw,30px);
+    --tick:2px; --rulerh:34px; --rowgap:30px; --colgap:18px;
   }
 /* >>> KONIEC ZMIENNYCH ZE ZRODLA <<< */

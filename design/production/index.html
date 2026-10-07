@@ -188,11 +188,11 @@
   .card[aria-selected="true"]{background:var(--tint);border-top:2px solid var(--ink);padding-top:11px;}
   @media (min-width:1200px){ .card[aria-selected="true"]{padding-top:13px;} }
   .card .dose{display:flex;align-items:center;gap:7px;}
-  .card .bar{display:flex;position:relative;width:58px;height:9px;flex:none;border:1px solid var(--ink);overflow:hidden;}
-  @media (min-width:760px){ .card .bar{width:68px;height:10px;} }
-  .card .bar i{flex:1;min-width:0;display:block;border-left:1px solid var(--ink);background:var(--ink);}
-  .card .bar i:first-child{border-left-color:transparent;}
-  .card .bar i.off{background:transparent;}
+  .card .gauge{display:flex;position:relative;width:58px;height:9px;flex:none;border:1px solid var(--ink);overflow:hidden;}
+  @media (min-width:760px){ .card .gauge{width:68px;height:10px;} }
+  .card .gauge i{flex:1;min-width:0;display:block;border-left:1px solid var(--ink);background:var(--ink);}
+  .card .gauge i:first-child{border-left-color:transparent;}
+  .card .gauge i.off{background:transparent;}
   .card .mll{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);}
   .card[aria-selected="true"] .mll{color:var(--ink);}
   .card .num{font-size:var(--small);font-weight:700;letter-spacing:.14em;color:var(--mid);font-variant-numeric:tabular-nums;}
@@ -478,35 +478,35 @@
 
     <div class="cards" role="tablist" aria-label="Composition">
       <button class="card" type="button" role="tab" data-part="0" aria-selected="true" aria-controls="directions">
-        <span class="dose"><span class="bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span class="mll">100 ml</span></span>
+        <span class="dose"><span class="gauge" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span class="mll">100 ml</span></span>
         <span class="num">01</span>
         <span class="title">Paid that buys returning customers, not clicks</span>
         <span class="ev">The usual mistake is reporting return on ad spend against the first order, so the campaigns that bring people who never reorder look like the best ones and get more budget every month. Change the reporting window before you change the budget.</span>
         <span class="short">Budget set around the customers who come back, not the first basket.</span>
       </button>
       <button class="card" type="button" role="tab" data-part="1" aria-selected="false" aria-controls="directions">
-        <span class="dose"><span class="bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="off"></i></span><span class="mll">80 ml</span></span>
+        <span class="dose"><span class="gauge" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="off"></i></span><span class="mll">80 ml</span></span>
         <span class="num">02</span>
         <span class="title">More carts from the same traffic</span>
         <span class="ev">Most stores tune the product page and leave the pack size ambiguous. If a shopper cannot tell how long a pack lasts, they take the smallest one, and the smallest pack is the weakest possible start for a second order.</span>
         <span class="short">The paths that decide whether a first pack becomes a habit.</span>
       </button>
       <button class="card" type="button" role="tab" data-part="2" aria-selected="false" aria-controls="directions">
-        <span class="dose"><span class="bar" aria-hidden="true"><i></i><i></i><i></i><i class="off"></i><i class="off"></i></span><span class="mll">60 ml</span></span>
+        <span class="dose"><span class="gauge" aria-hidden="true"><i></i><i></i><i></i><i class="off"></i><i class="off"></i></span><span class="mll">60 ml</span></span>
         <span class="num">03</span>
         <span class="title">The second purchase without paying for a click</span>
         <span class="ev">The second order is usually lost to timing, not to price. The flow fires on the template&rsquo;s default day while the pack still has weeks left in it, and by the time it actually runs out the reminder is old mail.</span>
         <span class="short">Owned channels take the next pack before the ad auction does.</span>
       </button>
       <button class="card" type="button" role="tab" data-part="3" aria-selected="false" aria-controls="directions">
-        <span class="dose"><span class="bar" aria-hidden="true"><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i></span><span class="mll">40 ml</span></span>
+        <span class="dose"><span class="gauge" aria-hidden="true"><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i></span><span class="mll">40 ml</span></span>
         <span class="num">04</span>
         <span class="title">Subscription instead of a discount</span>
         <span class="ev">A subscription price that undercuts the one-off price teaches the whole base to subscribe and cancel after the first delivery. Keep the price and pay for loyalty with control instead &mdash; skip, postpone, change the pack &mdash; because what people cancel is the loss of control, not the cost.</span>
         <span class="short">The return designed into the product rather than bought with a code.</span>
       </button>
       <button class="card" type="button" role="tab" data-part="4" aria-selected="false" aria-controls="directions">
-        <span class="dose"><span class="bar" aria-hidden="true"><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i></span><span class="mll">20 ml</span></span>
+        <span class="dose"><span class="gauge" aria-hidden="true"><i></i><i class="off"></i><i class="off"></i><i class="off"></i><i class="off"></i></span><span class="mll">20 ml</span></span>
         <span class="num">05</span>
         <span class="title">The day the pack runs out</span>
         <span class="ev">The interval on the label is a marketing number. The real one sits in the order history and runs longer, because people miss doses, travel and keep a spare. Build the calendar from each customer&rsquo;s own gap between orders.</span>
@@ -956,7 +956,7 @@
   /* ── formularze ───────────────────────────────────────────────── */
   function hostOf(raw){
     var v = (raw || '').trim();
-    return v.replace(/^[a-z][a-z0-9+.-]*:\/\//i, '').replace(/^www\./i, '').split(/[\/?#]/)[0] || v;
+    return v.replace(/^[a-z][a-z0-9+.-]*:\/\//i, '').replace(/^www\./i, '').split(/[/?#]/)[0] || v;
   }
   function sourceMap(){
     var out = {}, qs;
