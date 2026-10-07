@@ -2,6 +2,17 @@
    Reguły trzymane globalnie z tego samego powodu co w audit.css: nazwy klas
    są dzielone z resztą tej trasy i nic ich nie hashuje. */
 
+/* Ta trasa pisze sie na wlasnych nazwach (--bg, --fg, --dim…), a blok :root ze
+   zrodla strony glownej od przejscia na DOSAGE ich nie definiuje. Mapujemy je tu,
+   na tokeny tamtej palety, zamiast dopisywac je do zrodla: zrodlo opisuje strone
+   glowna i podmienia je ktos inny. Zakres zawezony do dokumentu z /stop, zeby
+   po nawigacji klienckiej nie wyciekly na inne trasy. */
+:root:has(.stopwrap){
+  --bg:var(--paper); --fg:var(--ink); --dim:var(--mid); --panel:#FFFFFF;
+  --line:var(--ink); --acc:var(--ink); --ok:#1F7A4D;
+  --disp:var(--sans); --mono:var(--sans);
+}
+
 /* Reset scenografii po starej stronie, identyczny jak w audit.css.
    critical.css narzuca białe tło i Poppinsa na nagłówkach. */
 html{overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;}
@@ -27,20 +38,20 @@ h1,h2,h3,h4,h5,h6{font-family:var(--disp);}
 .stopbox{display:flex;border:1px solid var(--line);background:var(--panel);}
 .stopbox input{flex:1;min-width:0;border:0;outline:none;background:none;color:var(--fg);
   font-family:var(--mono);font-size:14px;padding:15px 15px;}
-.stopbox input::placeholder{color:#8A90A0;}
+.stopbox input::placeholder{color:var(--ph);}
 .stopbox button{border:0;background:var(--acc);color:var(--bg);cursor:pointer;padding:0 22px;
   font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.14em;
   text-transform:uppercase;}
-.stopbox button:hover{background:var(--fg);}
+.stopbox button:hover{background:var(--inkhover);}
 .stopbox button:disabled{opacity:.6;cursor:default;}
-.stoperr{display:none;margin:12px 0 0;font-family:var(--mono);font-size:11.5px;color:#FF8A6B;}
+.stoperr{display:none;margin:12px 0 0;font-family:var(--mono);font-size:11.5px;color:#B23B2E;}
 .stoperr.on{display:block;}
 .stopdone{display:none;margin-top:28px;border-left:2px solid var(--ok);padding-left:20px;}
 .stopdone.on{display:block;}
 .stopdone h2{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--ok);font-weight:600;}
 .stopdone p{margin:10px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--dim);}
-.stopfoot{margin:40px 0 0;font-family:var(--mono);font-size:10.5px;line-height:1.7;color:#8A90A0;}
+.stopfoot{margin:40px 0 0;font-family:var(--mono);font-size:10.5px;line-height:1.7;color:var(--mid);}
 .stopfoot a{color:var(--dim);}
 
 @media (max-width:560px){
