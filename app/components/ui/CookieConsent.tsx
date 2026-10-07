@@ -117,6 +117,24 @@ export default function CookieConsent() {
     setHidden(true)
   }
 
+  /* Swiat DOSAGE: papier, atrament, kreska 1 px u gory. ZERO bursztynu — na tej
+     stronie bursztyn znaczy wylacznie luke miedzy dniem z etykiety a dniem
+     realnym, a pomaranczowy przycisk zgody byl ostatnim sladem starej ciemnej
+     strony, ktory widzial kazdy nowy odwiedzajacy. Akceptacja = atramentowy
+     prostokat jak reszta przyciskow; odmowa = zwykly link tekstowy.
+     Jeden rzad tez na telefonie: kazda dodatkowa linia to wyzszy pasek, a on
+     lezy na dole pierwszego ekranu, tam gdzie przycisk Send. */
+  const INK = '#14161A'
+  const caps = {
+    fontFamily: 'inherit',
+    fontSize: '12px',
+    fontWeight: 600,
+    letterSpacing: '.08em',
+    textTransform: 'uppercase' as const,
+    cursor: 'pointer',
+    borderRadius: 0,
+  }
+
   return (
     <div
       ref={box}
@@ -129,57 +147,38 @@ export default function CookieConsent() {
         left: 0,
         right: 0,
         zIndex: 9999,
-        background: '#0D0F14',
-        borderTop: '1px solid #242938',
-        padding: '10px 20px',
+        background: '#F7F5F0',
+        color: INK,
+        borderTop: `1px solid ${INK}`,
+        padding: '6px 16px',
         display: hidden ? 'none' : 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '14px',
-        flexWrap: 'wrap' as const,
-        // Paleta strony. Bez zaokrągleń, bez gradientu, bez rozmycia tła —
-        // banner ma wyglądać jak część tej strony, a nie jak wtyczka.
-        fontFamily: '"IBM Plex Mono", ui-monospace, Menlo, monospace',
+        gap: '8px 12px',
+        fontFamily: '"Instrument Sans", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif',
       }}
     >
-      {/* Krótko celowo: każda zawinięta linia to wyższy pasek, a na telefonie
-          wysoki pasek zaczyna zasłaniać pole „days". */}
-      <p style={{ color: '#9BA0AD', fontSize: '11.5px', lineHeight: 1.5, margin: 0, maxWidth: '52ch' }}>
+      <p style={{ fontSize: '12px', lineHeight: 1.35, margin: 0, maxWidth: '60ch', flex: '0 1 auto', minWidth: 0 }}>
         Analytics cookies, so I can tell whether this page worked. Decline and nothing is set.{' '}
-        <a href="/privacy" style={{ color: '#FF6A1F', textDecoration: 'underline', textUnderlineOffset: '3px' }}>Privacy</a>.
+        <a href="/privacy" style={{ color: INK, textDecoration: 'underline', textUnderlineOffset: '3px' }}>Privacy</a>.
       </p>
-      <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
         <button
           onClick={accept}
-          style={{
-            background: '#FF6A1F',
-            color: '#0D0F14',
-            border: 0,
-            borderRadius: 0,
-            padding: '9px 18px',
-            fontFamily: 'inherit',
-            fontSize: '11px',
-            fontWeight: 600,
-            letterSpacing: '.14em',
-            textTransform: 'uppercase',
-            cursor: 'pointer',
-          }}
+          style={{ ...caps, background: INK, color: '#FFFFFF', border: 0, padding: '8px 12px' }}
         >
           Accept
         </button>
         <button
           onClick={decline}
           style={{
+            ...caps,
             background: 'none',
-            color: '#9BA0AD',
-            border: '1px solid #242938',
-            borderRadius: 0,
-            padding: '9px 18px',
-            fontFamily: 'inherit',
-            fontSize: '11px',
-            letterSpacing: '.14em',
-            textTransform: 'uppercase',
-            cursor: 'pointer',
+            color: INK,
+            border: 0,
+            padding: '9px 0',
+            textDecoration: 'underline',
+            textUnderlineOffset: '3px',
           }}
         >
           Decline
