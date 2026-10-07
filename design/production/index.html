@@ -120,9 +120,6 @@
   .leadp{font-size:var(--lead);line-height:1.35;margin:0;max-width:46ch;}
   .tail{display:none;}
   @media (min-width:760px){ .tail{display:inline;} }
-  .phone-only{display:block;}
-  .desk-only{display:none;}
-  @media (min-width:760px){ .phone-only{display:none;} .desk-only{display:block;} }
 
   /* ── formularz ────────────────────────────────────────────────── */
   .form{display:flex;flex-direction:column;gap:12px;border:1px solid var(--ink);padding:12px;}
@@ -144,6 +141,8 @@
   .feelead{font-size:var(--feelead);font-weight:600;line-height:1.15;letter-spacing:-.01em;margin:0;}
   .feerow{font-size:var(--fee);line-height:1.45;margin:0;padding:7px 0 8px;border-top:1px solid var(--divider);}
   .fee{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+  .form .live{display:flex;flex-direction:column;gap:12px;}
+  @media (min-width:760px){ .form .live{gap:15px;} }
   .sent{display:none;flex-direction:column;gap:10px;}
   .form.is-sent .live{display:none;}
   .form.is-sent .sent{display:flex;}
@@ -179,9 +178,9 @@
   .cards{display:grid;grid-template-columns:minmax(0,1fr);align-items:start;}
   @media (min-width:1200px){ .cards{grid-template-columns:repeat(5,minmax(0,1fr));} }
   .card{position:relative;min-width:0;display:flex;flex-direction:column;gap:9px;
-        padding:12px 0 14px;border-left:1px solid transparent;border-top:1px solid transparent;
+        padding:12px 0 14px;border:0;border-left:1px solid transparent;border-top:1px solid transparent;
         background:transparent;cursor:pointer;text-align:left;font:inherit;color:inherit;
-        -webkit-appearance:none;appearance:none;}
+        border-radius:0;-webkit-appearance:none;appearance:none;align-self:stretch;}
   @media (min-width:1200px){
     .card{padding:14px 16px 18px;gap:12px;border-left:1px solid var(--hair);}
     .card:first-child{border-left-color:transparent;}
@@ -344,6 +343,23 @@
   @media (min-width:760px){ .dirs{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:32px;} }
   .dirline{min-width:0;font-size:var(--body);line-height:1.5;
            border-top:1px solid var(--hair);padding-top:10px;text-wrap:pretty;}
+
+  /* ── widocznosc per urzadzenie ────────────────────────────────────
+     Na koncu arkusza celowo: .form ustawia display:flex i wygrywalo
+     z .phone-only{display:none} z media query zdefiniowanego wyzej,
+     przez co formularz telefonowy pokazywal sie takze na desktopie. */
+  .phone-only{display:block;}
+  .desk-only{display:none;}
+  @media (min-width:760px){
+    .phone-only{display:none !important;}
+    .desk-only{display:block;}
+    .a-form.desk-only{display:block;}
+  }
+  @media (max-width:759px){
+    .desk-only{display:none !important;}
+    .form.phone-only{display:flex;}
+    .fee.phone-only{display:flex;}
+  }
 </style>
 </head>
 <body>
