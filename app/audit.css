@@ -21,6 +21,15 @@ body{overflow-x:visible;max-width:none;}
    dziedziczenie, wiec trzeba ja jawnie cofnac. Wlasne rodziny z arkusza
    ponizej (np. .sent h4 na --mono) i tak wygrywaja specyficznoscia. */
 h1,h2,h3,h4,h5,h6{font-family:inherit;}
+/* globals.css daje KAZDEMU <section> padding clamp(48px,8vw+1rem,120px) w pionie,
+   overflow-x:hidden i transform:translateZ(0) — ten sam problem co w
+   app/tool/tool-reset.css. Sekcje z paddingiem na wlasnej klasie (.recog,
+   .batches, .finale) wygrywaja specyficznoscia; .svc go nie ma i dostawala 120 px
+   powietrza, ktore zlapal dopiero ship-compare. :where() trzyma specyficznosc
+   na (0,0,1) — rowno z regula w globals.css, wiec o wyniku decyduje kolejnosc,
+   a klasy ze zrodla dalej wygrywaja. :has() zaweza reset do tej strony. */
+:where(body:has([data-finale])) section{padding:0;overflow-x:visible;max-width:none;
+  transform:none;backface-visibility:visible;}
 
 /* >>> ZE ZRODLA — GENEROWANE, NIE EDYTUJ RECZNIE <<< */
   *{box-sizing:border-box;}
