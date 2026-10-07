@@ -6,7 +6,7 @@
 // mail prosi o jedna rzecz, ktorej naprawde potrzeba do rozmowy — eksport
 // zamowien. Drugi jest dla Rafala i ma dac decyzje w pare sekund.
 
-import type { Lead } from '@/app/api/lead/route'
+import type { Lead, ConsentRecord } from '@/app/api/lead/route'
 
 const esc = (s: string) =>
   s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
@@ -61,8 +61,9 @@ export function confirmEmail() {
 }
 
 /** Powiadomienie dla wlasciciela. Ma wystarczyc do decyzji, czy odpisac. */
-export function ownerEmail(lead: Lead) {
+export function ownerEmail(lead: Lead, consent?: ConsentRecord) {
   const src = lead.source ?? {}
+  const store = lead.storeUrl ?? lead.message ?? ''
   const rows = Object.keys(src)
     .sort()
     .map(
@@ -72,12 +73,33 @@ export function ownerEmail(lead: Lead) {
     )
     .join('')
 
+  /* Pasek zgod stoi wysoko i jest jednoznaczny, bo od niego zalezy, co wolno
+     zrobic z tym adresem. Zielone/czerwone, nie "brak danych": jesli pole nie
+     przyszlo, to znaczy, ze zgody nie odnotowano, i tak to jest napisane. */
+  const flag = (ok: boolean, yes: string, no: string) =>
+    `<span style="display:inline-block;padding:2px 8px;margin:0 8px 6px 0;font-size:12px;
+       font-weight:600;border:1px solid ${ok ? '#1F7A4D' : '#B23B2E'};
+       color:${ok ? '#1F7A4D' : '#B23B2E'};">${ok ? yes : no}</span>`
+
+  const consentBlock = consent
+    ? `<p style="margin:0 0 16px;">` +
+      flag(consent.contact, 'Contact consent', 'NO contact consent') +
+      flag(consent.marketing, 'Marketing consent', 'No marketing consent') +
+      `<br><span style="font-size:12px;color:#83879A;">${esc(consent.at)} &middot; ` +
+      `${esc(consent.ip)} &middot; form: ${esc(consent.form)}</span>` +
+      (consent.text
+        ? `<br><span style="font-size:12px;color:#83879A;">&ldquo;${esc(consent.text)}&rdquo;</span>`
+        : '') +
+      `</p>`
+    : ''
+
   return SHELL(
     H(esc(lead.email)) +
-      (lead.message
+      consentBlock +
+      (store
         ? `<p style="margin:0 0 16px;padding:12px 14px;background:#F4F4F1;border-left:3px solid #C2410C;
-             font-size:15px;line-height:1.6;">${esc(lead.message)}</p>`
-        : P('<span style="color:#83879A;">No message — address only.</span>')) +
+             font-size:15px;line-height:1.6;">${esc(store)}</p>`
+        : P('<span style="color:#83879A;">No store URL — address only.</span>')) +
       (rows
         ? `<table role="presentation" cellpadding="0" cellspacing="0"
              style="font-size:13px;line-height:1.6;margin-top:4px;">${rows}</table>`
