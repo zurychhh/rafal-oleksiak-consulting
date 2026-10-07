@@ -72,6 +72,38 @@ const PROPS = [
     description: 'utm_source albo referrer z pierwszego wejścia.' },
   { name: 'first_touch_campaign', label: 'First touch campaign', type: 'string', fieldType: 'text',
     description: 'utm_campaign z pierwszego wejścia.' },
+
+  /* Ślad zgody i pochodzenie leada — app/lib/lead-hubspot.ts wysyła je przy KAŻDYM
+     zgłoszeniu. Brak którejkolwiek w portalu odrzuca cały zapis kontaktu (400),
+     więc ten skrypt musi przejść przed wdrożeniem kodu, który je wysyła.
+     consent_at jako string, nie datetime: zapisujemy ISO z serwera bez konwersji,
+     a dowód ma być dokładnie tym, co zapisano. */
+  {
+    name: 'consent_contact', label: 'Contact consent', type: 'bool', fieldType: 'booleancheckbox',
+    description: 'Zgoda na kontakt w sprawie zgłoszenia. false to odnotowany brak zgody, nie brak danych.',
+    options: [
+      { label: 'Yes', value: 'true', displayOrder: 0 },
+      { label: 'No', value: 'false', displayOrder: 1 },
+    ],
+  },
+  {
+    name: 'consent_marketing', label: 'Marketing consent', type: 'bool', fieldType: 'booleancheckbox',
+    description: 'Zgoda na okazjonalne maile. Bez niej adres nie trafia na żadną listę.',
+    options: [
+      { label: 'Yes', value: 'true', displayOrder: 0 },
+      { label: 'No', value: 'false', displayOrder: 1 },
+    ],
+  },
+  { name: 'consent_text', label: 'Consent wording shown', type: 'string', fieldType: 'textarea',
+    description: 'Brzmienie zgody, które odwiedzający faktycznie widział.' },
+  { name: 'consent_at', label: 'Consent timestamp', type: 'string', fieldType: 'text',
+    description: 'Znacznik czasu ISO 8601, nadany po stronie serwera.' },
+  { name: 'consent_ip', label: 'Consent IP', type: 'string', fieldType: 'text',
+    description: 'Adres IP zgłoszenia, odczytany po stronie serwera.' },
+  { name: 'store_url', label: 'Store URL', type: 'string', fieldType: 'text',
+    description: 'Adres sklepu podany w formularzu.' },
+  { name: 'lead_form', label: 'Form', type: 'string', fieldType: 'text',
+    description: 'Z którego formularza przyszło zgłoszenie (hero, phone, close, bar, tool…).' },
 ];
 
 const H = { Authorization: `Bearer ${KEY}`, 'Content-Type': 'application/json' };

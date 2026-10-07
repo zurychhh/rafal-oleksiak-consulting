@@ -61,7 +61,7 @@ export function confirmEmail() {
 }
 
 /** Powiadomienie dla wlasciciela. Ma wystarczyc do decyzji, czy odpisac. */
-export function ownerEmail(lead: Lead, consent?: ConsentRecord) {
+export function ownerEmail(lead: Lead, consent?: ConsentRecord, crmError?: string | null) {
   const src = lead.source ?? {}
   const store = lead.storeUrl ?? lead.message ?? ''
   const rows = Object.keys(src)
@@ -93,8 +93,16 @@ export function ownerEmail(lead: Lead, consent?: ConsentRecord) {
       `</p>`
     : ''
 
+  /* Jedyny kanal, ktory Rafal naprawde czyta. Jesli kontakt nie zapisal sie
+     w CRM, ma to wiedziec z tego maila, a nie z logow Vercela. */
+  const crmBlock = crmError
+    ? `<p style="margin:0 0 12px;font-size:13px;font-weight:600;color:#B23B2E;">` +
+      `CRM write failed: ${esc(crmError)}</p>`
+    : ''
+
   return SHELL(
     H(esc(lead.email)) +
+      crmBlock +
       consentBlock +
       (store
         ? `<p style="margin:0 0 16px;padding:12px 14px;background:#F4F4F1;border-left:3px solid #C2410C;
