@@ -14,7 +14,9 @@ import { analytics } from '@/app/lib/analytics'
  *   1. Nasluch `submit` na document w fazie CAPTURE — odpala sie przed React 18
  *      z runtime'u Claude Design (ten slucha na #dc-root). Zatrzymujemy zdarzenie,
  *      wiec komponent jeszcze nie przechodzi w stan „wyslane".
- *   2. POST do /api/lead w ksztalcie schematu zod z app/api/lead/route.ts.
+ *   2. POST do /api/lead w ksztalcie schematu zod z app/api/lead/route.ts —
+ *      z obiema zgodami (kontakt = checkbox `required`, marketing = drugi)
+ *      i ich brzmieniem odczytanym z etykiet.
  *   3. Dopiero po 2xx wypuszczamy do komponentu syntetyczny `submit` na tym samym
  *      formularzu — jego wlasny handler robi to, co robil w projekcie (stan
  *      „Enquiry received", echo adresu sklepu). Wszystko inne → czytelny blad
@@ -113,10 +115,31 @@ function handOver(from: HTMLFormElement, store: string) {
   email?.focus({ preventScroll: true })
 }
 
+/* Dwie zgody, rozpoznawane po atrybucie, nie po kolejnosci: kontakt jest
+   `required`, marketing nie. Wczesniej brany byl pierwszy checkbox, wiec przy
+   dwoch zgoda marketingowa nigdy nie wychodzila z przegladarki. */
+function consents(f: HTMLFormElement) {
+  const boxes = [...f.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')]
+  const contact = boxes.find((b) => b.required) ?? boxes[0] ?? null
+  const marketing = boxes.find((b) => b !== contact) ?? null
+  return { contact, marketing }
+}
+
+/** Brzmienie zgody, ktore odwiedzajacy faktycznie widzial — z etykiety, nie z kodu.
+    Sama flaga nie mowi, na co ktos sie zgodzil. */
+function wording(box: HTMLInputElement | null, tag: string): string {
+  const label = box?.closest('label') ?? (box?.id ? document.querySelector(`label[for="${box.id}"]`) : null)
+  const t = (label?.textContent ?? '').replace(/\s+/g, ' ').trim()
+  return t ? `${tag}: ${t}` : ''
+}
+
+/** LeadSchema przyjmuje w `form` tylko [a-z]+; id formularzy maja myslniki. */
+const formSlug = (key: string) => key.toLowerCase().replace(/[^a-z]/g, '').slice(0, 40) || 'form'
+
 async function send(f: HTMLFormElement) {
   const url = q<HTMLInputElement>(f, 'input[inputmode="url"]')!
   const emailEl = q<HTMLInputElement>(f, 'input[type="email"]')!
-  const consent = q<HTMLInputElement>(f, 'input[type="checkbox"]')
+  const { contact: consent, marketing } = consents(f)
   const store = (url.value || '').trim().slice(0, 300)
   const email = (emailEl.value || '').trim()
 
@@ -141,15 +164,21 @@ async function send(f: HTMLFormElement) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: ctrl?.signal,
-      // Ksztalt LeadSchema: email, message ≤140 bez konca linii, source: record ≤300.
+      // Ksztalt LeadSchema. Zgody ida wlasnymi polami — znacznik czasu i IP
+      // dopisuje serwer, bo zapis, ktory ma cokolwiek dowodzic, nie moze
+      // pochodzic od strony, ktorej dotyczy. `source` niesie juz tylko atrybucje.
       body: JSON.stringify({
         email,
-        message: ('Store: ' + store).replace(/[\r\n]+/g, ' ').slice(0, 140),
+        storeUrl: store.replace(/[\r\n]+/g, ' '),
+        consentContact: !!consent?.checked,
+        consentMarketing: !!marketing?.checked,
+        consentText: [wording(consent, 'contact'), wording(marketing, 'marketing')]
+          .filter(Boolean)
+          .join(' · ')
+          .slice(0, 400),
+        form: formSlug(key),
         source: {
           ...arrived(),
-          store_url: store,
-          consent: 'agreed to be contacted about this enquiry · ' + new Date().toISOString(),
-          form: key,
           page: location.pathname,
         },
       }),

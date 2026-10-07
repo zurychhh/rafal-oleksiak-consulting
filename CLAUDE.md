@@ -7,6 +7,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Produkcja = gałąź `claude/production` (od 26.09.2026), pamięć agentów = `claude/system`; nigdy `main`. `feature/new-site` to historia.** Odpowiadaj po polsku;
 kod i treść strony po angielsku.
 
+**Najpierw `git fetch`, potem praca.** Agenci w chmurze pushują na `claude/production`
+co godzinę, a ten Mac tego nie widzi. 07.10.2026 lokalna kopia była 13 commitów za
+produkcją i miała CLAUDE.md sprzed 26.09 — brief napisany na jej podstawie kazał
+pracować w `design/production/index.html` i `npm run ship`, czyli w mechanizmie, którego
+`/` już nie używa, a `npx vercel --prod` z tego katalogu nadpisałby v66, prerender
+i nowy `/tool`. Przed `ship`, pushem i wdrożeniem: `git log HEAD..origin/claude/production`
+musi być puste.
+
 **Repozytorium jest publiczne i ma sekrety w historii.** Zweryfikowane: klonuje się
 anonimowo. **Push jest ODBLOKOWANY** — Rafał podjął tę decyzję 13.09.2026 świadomie:
 te sekrety są w historii publicznego repo od dawna, więc kolejny push nie zwiększa
@@ -187,8 +195,10 @@ ze źródłem, a ich obecność pilnuje `content-rules`.
   w tym samym dokumencie kończą się pełnym przeładowaniem.
 - `app/design/LeadBridge.tsx` — formularze → `/api/lead`. Nasłuch `submit` na
   `document` w fazie capture (przed Reactem 18 runtime'u, który słucha na `#dc-root`):
-  zatrzymuje zdarzenie, wysyła `{email, message: "Store: …", source: {utm…, referrer,
-  store_url, consent, form, page}}` w kształcie `LeadSchema`, i **dopiero po 2xx**
+  zatrzymuje zdarzenie, wysyła `{email, storeUrl, consentContact, consentMarketing,
+  consentText, form, source: {utm…, referrer, page}}` w kształcie `LeadSchema`
+  (kontakt = checkbox `required`, marketing = drugi; brzmienie z etykiet; `form`
+  oczyszczony do `[a-z]+`, bo tylko to przepuszcza zod), i **dopiero po 2xx**
   wypuszcza do komponentu syntetyczny `submit` — jego własny handler pokazuje stan
   „Enquiry received". Błąd → czytelny komunikat w formularzu z adresem e-mail,
   stan się nie zmienia. Po 2xx `generate_lead` + `form_submission_lead` przez bufor
