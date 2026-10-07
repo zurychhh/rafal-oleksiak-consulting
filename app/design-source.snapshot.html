@@ -9,7 +9,7 @@
   font-stretch: 100%;
   font-display: swap;
   src: url("/dc/21fac8da552a915e.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
@@ -29,7 +29,7 @@
   font-stretch: 100%;
   font-display: swap;
   src: url("/dc/21fac8da552a915e.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
@@ -49,7 +49,7 @@
   font-stretch: 100%;
   font-display: swap;
   src: url("/dc/21fac8da552a915e.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
@@ -69,7 +69,7 @@
   font-stretch: 100%;
   font-display: swap;
   src: url("/dc/21fac8da552a915e.woff2") format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
@@ -93,14 +93,14 @@
   [data-seg],[data-settle],[data-div]{will-change:auto}
 </style>
 </helmet>
-<div style="padding-top:{{L.meterReserve}};background:#F7F5F0;color:#14161A;font-family:'Instrument Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:{{L.barSpace}}">
+<div style="padding-top:{{L.meterReserve}};background:#F7F5F0;color:#14161A;font-family:'Instrument Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:{{ rootPadB }}">
 
   <header style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:{{L.hpad}};border-bottom:1px solid #14161A">
     <span style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px">
       <span style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase">Rafał Oleksiak · Consultant</span>
       <span aria-hidden="true" style="display:flex;align-items:flex-end;gap:1px;height:10px;flex:none"><sc-for list="{{ sig }}" as="g" hint-placeholder-count="70"><span style="display:block;width:1px;height:{{ g.h }};background-color:{{ g.bg }}"></span></sc-for></span>
     </span>
-  <a href="/tool" data-ship-added="tool-link" style="flex:none;white-space:nowrap;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#A25C11;text-decoration:underline;text-underline-offset:4px;padding:14px 0;margin:-14px 0">Count your own interval</a></header>
+  <a href="/tool" data-ship-added="tool-link" style="flex:none;white-space:nowrap;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#A25C11;text-decoration:underline;text-underline-offset:4px;padding:14px 0;margin:-14px 0">Check your own gap — free</a></header>
 
   <sc-if value="{{ meterOn }}" hint-placeholder-val="{{ false }}">
   <div aria-hidden="{{ meterHidden }}" style="position:fixed;{{L.meterPos}};z-index:25;display:{{ meterDisplay }};flex-direction:{{L.meterDir}};gap:{{L.meterGap}};align-items:{{L.meterAlign}};justify-content:{{L.meterJustify}};background:#F7F5F0;border-bottom:{{L.meterBorder}};padding:{{L.meterPad}}">
@@ -119,19 +119,13 @@
     <div style="grid-area:head;min-width:0;display:flex;flex-direction:column;gap:{{L.headGap}}">
       <sc-if value="{{ showIndication }}" hint-placeholder-val="{{ true }}"><p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#6E6D68;margin:0">Indication</p></sc-if>
       <h1 style="font-size:{{L.h1}};font-weight:600;line-height:.94;letter-spacing:-.035em;margin:0;max-width:17ch;text-wrap:balance">You don't pay twice for the same customer.</h1>
-      <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch;border-top:1px solid #14161A;padding-top:{{L.leadPad}}">E-commerce for brands whose customers come back.<span style="display:{{L.leadTail}}"> I build the tools myself — calculators, counters, progress bars — the kind of thing that normally waits in an IT queue.</span></p>
-      <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch">You bought the same customer twice this quarter, and you only found out because you recognised the name.</p>
-      <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch;color:#6E6D68">The label says 45 days. The order data says 69.</p>
+      <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#6E6D68;margin:0;border-top:1px solid #14161A;padding-top:{{L.leadPad}}">Source — a real supplement shop, anonymised</p>
+      <p style="font-size:{{L.gap45}};font-weight:600;line-height:1.15;letter-spacing:-.015em;margin:0;max-width:24ch;color:#14161A;text-wrap:balance">The label says 45 days. The order data says 69.</p>
+      <a href="/tool" style="align-self:flex-start;display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 16px;border:1px solid #14161A;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#14161A;text-decoration:none">Check your own gap — free</a>
+      <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch">E-commerce for brands whose customers come back.<span style="display:{{L.leadTail}}"> I build the tools myself — calculators, counters, progress bars — the kind of thing that normally waits in an IT queue.</span></p>
 
-      <sc-if value="{{ phoneFee }}" hint-placeholder-val="{{ false }}">
-        <section data-fee-band="1" style="min-width:0;display:flex;flex-direction:column;gap:{{L.feeHeadGap}};margin-top:{{L.feeLift}}">
-          <span data-fee-rule="1" aria-hidden="true" style="display:block;height:1px;background:#14161A;transform-origin:left center"></span>
-          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;line-height:1">Fee</p>
-          <p style="font-size:{{L.feeLead}};font-weight:600;line-height:1.15;margin:0;color:#14161A">{{ feeLead }}</p>
-        </section>
-      </sc-if>
       <sc-if value="{{ live.phone }}" hint-placeholder-val="{{ true }}">
-      <form id="enquiry-phone" ref="{{ phoneFormRef }}" sc-camel-on-submit="{{ submit.phone }}" style="display:{{ heroFormDisplay }};flex-direction:column;gap:{{L.formGap}};border:1px solid #14161A;padding:{{L.formPad}}">
+      <form id="enquiry-phone" ref="{{ phoneFormRef }}" sc-camel-on-submit="{{ submit.phone }}" style="display:{{ heroFormDisplay }};flex-direction:column;gap:{{L.heroGap}};border:1px solid #14161A;padding:{{L.formPad}}">
         <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;border-bottom:1px solid #14161A;padding-bottom:10px">Enquiry form</p>
         <label style="display:flex;flex-direction:column;gap:5px;width:100%">
           <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your store URL</span>
@@ -143,10 +137,15 @@
         </label>
         <label style="display:flex;align-items:center;gap:10px;cursor:pointer;width:100%;min-height:44px">
           <input type="checkbox" required="required" name="consent0" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
-          <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry</span>
+          <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry<span style="color:#6E6D68"> (required)</span></span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;width:100%;min-height:44px">
+          <input type="checkbox" name="marketing0" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+          <span style="font-size:{{L.small}};line-height:1.45">Occasional email from me — notes on reorder timing, new tools I build, and what I learn working on FMCG stores. Unsubscribe in one click.<span style="color:#6E6D68"> (optional)</span></span>
         </label>
         <p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about <span data-echo="phone" style="position:relative;display:inline-block;max-width:min(100%,13em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span> — not a calendar link.</p>
         <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;padding:12px 16px;font-size:{{L.body}};font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;width:100%;text-align:center;min-height:44px" style-hover="background:#3A3C40">Send</button>
+        <p style="font-size:{{L.feeLead}};font-weight:600;line-height:1.15;margin:0;color:#14161A">{{ feeLead }}</p>
       </form>
       </sc-if>
       <sc-if value="{{ done.phone }}" hint-placeholder-val="{{ false }}">
@@ -168,8 +167,6 @@
       <sc-if value="{{ railFee }}" hint-placeholder-val="{{ true }}">
         <section data-fee-band="1" style="min-width:0;display:flex;flex-direction:column;gap:{{L.feeHeadGap}};margin-top:{{L.feeLift}}">
           <span data-fee-rule="1" aria-hidden="true" style="display:block;height:1px;background:#14161A;transform-origin:left center"></span>
-          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;line-height:1">Fee</p>
-          <p style="font-size:{{L.feeLead}};font-weight:600;line-height:1.15;margin:0;color:#14161A">{{ feeLead }}</p>
           <div style="display:flex;flex-direction:column">
             <sc-for list="{{ feeRest }}" as="f" hint-placeholder-count="3">
               <p style="font-size:{{L.fee}};line-height:1.45;margin:0;padding:{{L.feePad}};border-top:1px solid #DCDAD2;overflow-wrap:anywhere;text-wrap:pretty">{{ f.t }}</p>
@@ -190,10 +187,15 @@
         </label>
         <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
           <input type="checkbox" required="required" name="consent" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
-          <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry</span>
+          <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry<span style="color:#6E6D68"> (required)</span></span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
+          <input type="checkbox" name="marketing" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+          <span style="font-size:{{L.small}};line-height:1.45">Occasional email from me — notes on reorder timing, new tools I build, and what I learn working on FMCG stores. Unsubscribe in one click.<span style="color:#6E6D68"> (optional)</span></span>
         </label>
         <p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about <span data-echo="hero" style="position:relative;display:inline-block;max-width:min(100%,13em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span> — not a calendar link.</p>
         <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;padding:11px 16px;font-size:{{L.body}};font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;width:100%;text-align:center;min-height:44px" style-hover="background:#3A3C40">Send</button>
+        <p style="font-size:{{L.feeLead}};font-weight:600;line-height:1.15;margin:0;color:#14161A">{{ feeLead }}</p>
       </form>
       </sc-if>
       <sc-if value="{{ done.hero }}" hint-placeholder-val="{{ false }}">
@@ -207,6 +209,7 @@
         <p data-recog-code="1" style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">01–03</p>
       </div>
       <div style="display:flex;flex-direction:column;gap:{{L.recogGap}};max-width:{{L.recogMeasure}}">
+        <p style="font-size:{{L.recog}};line-height:1.6;margin:0;color:#14161A;text-wrap:pretty">You bought the same customer twice this quarter, and you only found out because you recognised the name.</p>
         <p data-recog-line="1" style="font-size:{{L.recog}};line-height:1.6;margin:0;color:#14161A;text-wrap:pretty;position:relative"><span data-recog-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>The campaign with the best reported return is the one bringing people who buy once and never come back.</p>
         <p data-recog-line="1" style="font-size:{{L.recog}};line-height:1.6;margin:0;color:#14161A;text-wrap:pretty;position:relative"><span data-recog-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>You know your category has a reorder date. Nobody in the business can say what it is, so the reminder goes out on the tool’s default day.</p>
         <p data-recog-line="1" style="font-size:{{L.recog}};line-height:1.6;margin:0;color:#14161A;text-wrap:pretty;position:relative"><span data-recog-veil="1" aria-hidden="true" style="position:absolute;inset:-2px;background:#F7F5F0;opacity:0;pointer-events:none"></span>The subscription converts and then cancels after the first delivery, and you cannot tell whether you sold loyalty or a discount.</p>
@@ -216,12 +219,11 @@
     <section style="grid-area:svc;display:flex;flex-direction:column;gap:{{L.svcHead}}">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid #14161A;padding-bottom:8px">
         <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Composition — five parts, in order</p>
-        <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0;white-space:nowrap">Hover a part · 01–05</p>
       </div>
 
       <div ref="{{ rowRef }}" style="display:grid;grid-template-columns:{{L.svcCols}};align-items:start">
         <sc-for list="{{ svcs }}" as="s" hint-placeholder-count="5">
-          <div data-card="1" tabindex="0" role="group" aria-controls="directions" sc-camel-on-mouse-enter="{{ s.enter }}" sc-camel-on-mouse-leave="{{ s.leave }}" sc-camel-on-focus="{{ s.enter }}" sc-camel-on-blur="{{ s.leave }}" sc-camel-on-click="{{ s.enter }}" style="position:relative;min-width:0;cursor:pointer;border-left:1px solid {{ s.rule }};border-top:2px solid {{ s.ruleTop }};padding:{{L.itemPad}};display:flex;flex-direction:column;gap:{{L.itemGap}};background-color:{{ s.bg }}">
+          <div data-card="1" style="position:relative;min-width:0;border-left:1px solid {{ s.rule }};border-top:2px solid {{ s.ruleTop }};padding:{{L.itemPad}};display:flex;flex-direction:column;gap:{{L.itemGap}};background-color:{{ s.bg }}">
             <span data-div="1" aria-hidden="true" style="position:absolute;left:-1px;top:0;bottom:0;width:1px;transform-origin:top;background-color:{{ s.rule }}"></span>
             <span style="display:flex;align-items:center;gap:7px">
               <span style="display:flex;position:relative;width:{{L.segW}};height:{{L.segH}};flex:none;border:1px solid #14161A;overflow:hidden">
@@ -243,37 +245,46 @@
         </sc-for>
       </div>
 
-      <div id="directions" style="display:flex;flex-direction:column;gap:{{L.dirGap}};border-top:1px solid #14161A;padding-top:{{L.dirPad}};min-height:{{L.dirH}}">
+      <div id="one-date" style="display:flex;flex-direction:column;gap:{{L.panelGap}};border-top:1px solid #14161A;padding-top:{{L.panelPad}}">
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 16px">
-          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Directions for use — {{ dirTitle }}</p>
+          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">One date, four channels</p>
           <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">Dose {{ dirDose }}</p>
         </div>
-        <div style="display:grid;grid-template-columns:{{L.dirCols}};gap:{{L.dirColGap}}">
-          <sc-for list="{{ directions }}" as="l" hint-placeholder-count="3">
-            <p style="min-width:0;font-size:{{L.body}};line-height:1.5;margin:0;border-top:1px solid #C9C7C0;padding-top:10px">{{ l.text }}</p>
-          </sc-for>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:{{L.panelGap}};border-top:1px solid #14161A;padding-top:{{L.panelPad}}">
-        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px">
-          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Interval — 69 days</p>
-          <p style="font-size:{{L.body}};margin:0;font-weight:600;letter-spacing:-.01em;min-height:{{L.panelTextH}}">{{ panelText }}</p>
-        </div>
-        <div data-interval-axis="1" style="position:relative;min-width:0">
-          <div style="display:flex;align-items:flex-end;gap:{{L.tickGap}};height:{{L.rulerH}}">
-            <sc-for list="{{ ruler }}" as="r" hint-placeholder-count="70">
-              <span data-rbar="{{ r.m }}" style="flex:1;min-width:0;display:block;height:{{ r.h }};background-color:{{ r.bg }};transform-origin:bottom center"></span>
-            </sc-for>
+        <div style="display:grid;grid-template-columns:{{L.chanCols}};column-gap:{{L.chanColGap}};align-items:end">
+          <span aria-hidden="true" style="display:{{L.chanSpacer}}"></span>
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+            <div style="position:relative;min-width:0">
+              <div style="display:flex;align-items:flex-end;gap:{{L.tickGap}};height:{{L.rulerH}}">
+                <sc-for list="{{ oneRuler }}" as="r" hint-placeholder-count="70">
+                  <span style="flex:1;min-width:0;display:block;height:{{ r.h }};background-color:{{ r.bg }}"></span>
+                </sc-for>
+              </div>
+              <span aria-hidden="true" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:0;bottom:-4px;width:1px;margin-left:-0.5px;background:#C97B1F"></span>
+            </div>
+            <div style="position:relative;height:30px;font-size:12px;font-weight:600;letter-spacing:.14em;color:#6E6D68;font-variant-numeric:tabular-nums;white-space:nowrap">
+              <span style="position:absolute;left:0;top:0">1</span>
+              <span style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 89 / 140 + 44 * {{L.tickGap}});top:0;transform:translateX(-50%)">45 — label</span>
+              <span style="position:absolute;right:0;top:0">70</span>
+              <span style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:15px;transform:translateX(-100%);color:#A25C11">69 — actual</span>
+            </div>
           </div>
-          <span data-interval-span="1" aria-hidden="true" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 89 / 140 + 44 * {{L.tickGap}});width:calc(calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}}) - calc((100% - 69 * {{L.tickGap}}) * 89 / 140 + 44 * {{L.tickGap}}));bottom:-4px;height:2px;background:#C97B1F;transform-origin:left center"></span>
-          <span data-interval-69="1" aria-hidden="true" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:0;bottom:-4px;width:1px;margin-left:-0.5px;background:#C97B1F"></span>
         </div>
-        <div style="position:relative;height:26px;font-size:12px;font-weight:600;letter-spacing:.14em;color:#6E6D68;font-variant-numeric:tabular-nums;white-space:nowrap">
-          <span data-tick-label="1" style="position:absolute;left:0;top:0">1</span>
-          <span data-tick-label="45" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 89 / 140 + 44 * {{L.tickGap}});top:0;transform:translateX(-50%)">45 — label</span>
-          <span data-tick-label="70" style="position:absolute;right:0;top:0">70</span>
-          <span data-tick-label="69" data-interval-69="1" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:14px;transform:translateX(-100%);color:#A25C11">69 — actual</span>
-        </div>
+        <sc-for list="{{ channels }}" as="c" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:{{L.chanCols}};column-gap:{{L.chanColGap}};row-gap:6px;align-items:start;border-top:1px solid #C9C7C0;padding-top:10px">
+            <p style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#14161A;margin:0">{{ c.label }}</p>
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+              <div aria-hidden="true" style="position:relative;height:10px;min-width:0">
+                <span style="position:absolute;left:0;right:0;top:4px;height:1px;background:#C9C7C0"></span>
+                <span style="position:absolute;left:0;width:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:2px;height:5px;background:#C9C7C0"></span>
+                <span style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:-2px;bottom:-2px;width:1px;margin-left:-0.5px;background:#C97B1F"></span>
+              </div>
+              <p style="font-size:{{L.body}};line-height:1.45;margin:0;color:#14161A;text-wrap:pretty">{{ c.text }}</p>
+            </div>
+          </div>
+        </sc-for>
+        <p style="font-size:{{L.body}};line-height:1.55;margin:0;font-weight:600">They move together, not flow by flow.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:{{L.panelGap}}">
         <p style="font-size:{{L.body}};line-height:1.55;margin:0;max-width:62ch">The label date is not the reorder date.</p>
         <p style="font-size:{{L.body}};line-height:1.55;margin:0;max-width:62ch">Those two numbers are one shop’s. Paste your own order export and your own label, and the tool reads the same two numbers off your data.</p>
         <a href="/tool" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#A25C11;text-decoration:underline;text-underline-offset:4px">Count your own interval</a>
@@ -298,6 +309,14 @@
     </section>
 
   </main>
+
+  <div style="padding:0 {{L.mpadR}} {{L.rowGap}} {{L.mpadL}};display:flex;flex-direction:column">
+    <div aria-hidden="true" style="display:flex;align-items:flex-end;gap:1px;height:10px"><sc-for list="{{ sig }}" as="g" hint-placeholder-count="70"><span style="display:block;width:1px;height:{{ g.h }};background-color:{{ g.bg }}"></span></sc-for></div>
+    <footer style="padding-top:14px;display:flex;flex-direction:{{L.dir}};justify-content:space-between;gap:10px;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">
+      <span style="display:flex;flex-direction:column;gap:4px"><span>Rafał Oleksiak · Warsaw</span><span style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;font-weight:400;letter-spacing:.18em;color:#6E6D68">LOT 45/69 · REV 2026-09 · WARSAW</span></span>
+      <span style="display:flex;flex-wrap:wrap;align-items:center;gap:0 18px"><a href="mailto:rafal@oleksiakconsulting.com" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;min-height:44px">rafal@oleksiakconsulting.com</a><a href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/" style="color:#6E6D68;letter-spacing:.18em;display:inline-flex;align-items:center;min-height:44px">Rafał Oleksiak on LinkedIn</a></span>
+    </footer>
+  </div>
 
   <sc-if value="{{ showPin }}" hint-placeholder-val="{{ true }}">
   <section ref="{{ pinRef }}" style="height:{{L.pinOuter}};position:relative;border-top:1px solid #14161A">
@@ -374,7 +393,11 @@
             <div style="display:flex;flex-wrap:wrap;flex-direction:{{L.msgMetaDir}};align-items:{{L.msgMetaAlign}};justify-content:space-between;gap:10px 16px">
               <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
                 <input type="checkbox" required="required" name="consent3" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
-                <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry</span>
+                <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry<span style="color:#6E6D68"> (required)</span></span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
+                <input type="checkbox" name="marketing3" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+                <span style="font-size:{{L.small}};line-height:1.45">Occasional email from me — notes on reorder timing, new tools I build, and what I learn working on FMCG stores. Unsubscribe in one click.<span style="color:#6E6D68"> (optional)</span></span>
               </label>
               <span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#14161A;opacity:{{ dryOpacity }};min-height:17px">One more dose — nothing dispensed</span>
             </div>
@@ -396,7 +419,7 @@
       <div style="max-width:{{L.closeW}};display:flex;flex-direction:column;gap:{{L.closeGap}};border:1px solid #14161A;padding:{{L.closePad}}">
         <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;border-bottom:1px solid #14161A;padding-bottom:8px">{{ closeEyebrow }}</p>
         <div style="display:flex;flex-direction:column">
-          <sc-for list="{{ closeFee }}" as="f" hint-placeholder-count="4">
+          <sc-for list="{{ closeFee }}" as="f" hint-placeholder-count="3">
             <p style="font-size:{{L.body}};line-height:1.45;margin:0;padding:{{L.closeFeePad}};border-top:1px solid #DCDAD2;text-wrap:pretty">{{ f.t }}</p>
           </sc-for>
         </div>
@@ -412,9 +435,14 @@
           </label>
           <label style="display:flex;align-items:center;gap:10px;cursor:pointer;width:100%;min-height:44px">
             <input type="checkbox" required="required" name="consent3" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
-            <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry</span>
+            <span style="font-size:{{L.small}};line-height:1.45">I agree to be contacted about this enquiry<span style="color:#6E6D68"> (required)</span></span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;width:100%;min-height:44px">
+            <input type="checkbox" name="marketing3" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+            <span style="font-size:{{L.small}};line-height:1.45">Occasional email from me — notes on reorder timing, new tools I build, and what I learn working on FMCG stores. Unsubscribe in one click.<span style="color:#6E6D68"> (optional)</span></span>
           </label>
           <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;padding:12px 16px;font-size:{{L.body}};font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;width:100%;text-align:center;min-height:44px" style-hover="background:#3A3C40">Send</button>
+          <p style="font-size:{{L.feeLead}};font-weight:600;line-height:1.15;margin:0;color:#14161A">{{ feeLead }}</p>
           <p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about <span data-echo="close" style="position:relative;display:inline-block;max-width:min(100%,13em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span> — not a calendar link.</p>
         </form>
         </sc-if>
@@ -425,11 +453,6 @@
     </section>
     </sc-if>
 
-    <div aria-hidden="true" style="display:flex;align-items:flex-end;gap:1px;height:10px"><sc-for list="{{ sig }}" as="g" hint-placeholder-count="70"><span style="display:block;width:1px;height:{{ g.h }};background-color:{{ g.bg }}"></span></sc-for></div>
-    <footer style="padding-top:14px;display:flex;flex-direction:{{L.dir}};justify-content:space-between;gap:10px;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">
-      <span style="display:flex;flex-direction:column;gap:4px"><span>Rafał Oleksiak · Warsaw</span><span style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;font-weight:400;letter-spacing:.18em;color:#6E6D68">LOT 45/69 · REV 2026-09 · WARSAW</span></span>
-      <span style="display:flex;flex-wrap:wrap;align-items:center;gap:0 18px"><a href="mailto:rafal@oleksiakconsulting.com" style="color:inherit;text-decoration:none;display:inline-flex;align-items:center;min-height:44px">rafal@oleksiakconsulting.com</a><a href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/" style="color:#6E6D68;letter-spacing:.18em;display:inline-flex;align-items:center;min-height:44px">Rafał Oleksiak on LinkedIn</a></span>
-    </footer>
   </main>
 
   <div data-bar="1" aria-hidden="{{ barHidden }}" style="position:fixed;left:0;right:0;bottom:0;z-index:20;background:#F7F5F0;border-top:1px solid #14161A;min-height:{{ barMinH }};box-sizing:border-box;transition:{{ barTrans }};padding:{{L.barPad}};display:flex;flex-direction:{{L.barDir}};align-items:{{L.barAlign}};justify-content:space-between;gap:{{L.barGap}};transform:{{ barTransform }};opacity:{{ barOpacity }};pointer-events:{{ barPointer }}">
@@ -457,7 +480,11 @@
           </label>
           <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
             <input type="checkbox" required="required" name="consent2" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
-            <span style="font-size:{{L.small}};line-height:1.35">I agree to be contacted about this enquiry</span>
+            <span style="font-size:{{L.small}};line-height:1.35">I agree to be contacted about this enquiry<span style="color:#6E6D68"> (required)</span></span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px">
+            <input type="checkbox" name="marketing2" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
+            <span style="font-size:{{L.small}};line-height:1.35">Occasional email from me — notes on reorder timing, new tools I build, and what I learn working on FMCG stores. Unsubscribe in one click.<span style="color:#6E6D68"> (optional)</span></span>
           </label>
           <p style="font-size:12px;line-height:1.3;margin:0;color:#14161A">Reply in 24 hours, with a first observation about <span data-echo="bar">your store</span>.</p>
         </div>
@@ -856,7 +883,9 @@ class Component extends DCLogic {
     const cf = byId('enquiry-2') || byId('enquiry-2-sent') || this.closeFormRef.current;
     if (hf && cf) {
       const cr = cf.getBoundingClientRect();
-      const bar = hf.getBoundingClientRect().bottom < 0 && !(cr.top < vh && cr.bottom > 0);
+      const pinEl0 = this.pinRef.current;
+      const inFinal = !!(pinEl0 && pinEl0.getBoundingClientRect().top < vh);
+      const bar = hf.getBoundingClientRect().bottom < 0 && !(cr.top < vh && cr.bottom > 0) && !inFinal;
       if (bar !== this.state.bar) next.bar = bar;
     }
 
@@ -1042,16 +1071,16 @@ class Component extends DCLogic {
     const L = phone ? {
       meterReserve: '0px', barSpace: '0px', closeW: '100%', closeFeePad: '3px 0 4px', closeGap: '8px', closePad: '12px 14px',
       hpad: '14px 18px', mpad: '20px 18px 30px', mpadX: '18px', leadTail: 'none', mpadL: '18px', mpadR: '18px',
-      h1: 'clamp(33px,10vw,40px)', lead: '16px', lead2: '16px', svc: '16px', body: '14px', field: '16px', evidMain: '14.5px', evid: '12.5px', small: '12px',
+      h1: 'clamp(33px,10vw,40px)', gap45: '24px', lead: '16px', lead2: '16px', svc: '16px', body: '14px', field: '16px', evidMain: '14.5px', evid: '12.5px', small: '12px',
       headGap: '10px', leadPad: '10px', areas: '"head" "recog" "svc" "form"', gridCols: 'minmax(0,1fr)',
       batchCols: 'minmax(0,1fr)', batchGap: '0px', batchPad: '4px 0 6px', tailPad: '4px', instGap: '6px',
       fee: '12px', feePad: '0', feeHeadGap: '2px', feeRailGap: '0px', feeLift: '0px', feeLead: '18px', batchAreas: '"n" "s" "l"', batchStatusAlign: 'start',
       recogGap: '15px', recogMeasure: '100%', recog: '16px', recogClose: '18px', recogCloseMargin: '7px 0 0',
-      colGap: '18px', rowGap: '30px', formGap: '12px', formPad: '12px', photo: '48px',
+      colGap: '18px', rowGap: '30px', formGap: '12px', heroGap: '6px', formPad: '12px', photo: '48px',
       svcHead: '14px', svcCols: 'minmax(0,1fr)', itemPad: '12px 0 14px 0', itemGap: '9px',
       segW: '58px', segH: '9px', markW: '11px', markH: '11px',
       meterPos: 'left:0;right:0;top:0', meterDir: 'row', meterJustify: 'space-between', meterAlign: 'center', meterBorder: '1px solid #14161A', meterPad: '8px 18px', meterGap: '8px',
-      dirGap: '12px', dirPad: '14px', dirH: '160px', dirCols: 'minmax(0,1fr)', dirColGap: '10px',
+      dirGap: '12px', dirPad: '14px', dirH: '160px', chanCols: 'minmax(0,1fr)', chanColGap: '0px', chanSpacer: 'none', dirCols: 'minmax(0,1fr)', dirColGap: '10px',
       panelGap: '12px', panelPad: '16px', panelTextH: '34px', rulerH: '34px', tickGap: '2px',
       pinOuter: (this.props.pinScroll ?? 320) + 'vh', pinPad: 'clamp(16px,3vh,24px) 18px', frameGap: 'clamp(14px,3vh,22px)',
       fieldDir: 'column', halfGap: 'clamp(12px,2.4vh,20px)', fieldCols: 'repeat(6,minmax(0,1fr))',
@@ -1067,17 +1096,17 @@ class Component extends DCLogic {
     } : {
       meterReserve: '0px', barSpace: '104px', closeW: '560px', closeFeePad: '7px 0 8px', closeGap: '15px', closePad: '20px',
       hpad: narrow ? '14px 40px' : '18px 112px 18px 176px', mpad: narrow ? '28px 40px 40px' : '34px 112px 44px 176px', mpadX: narrow ? '40px' : '176px', leadTail: 'inline', mpadL: narrow ? '40px' : '176px', mpadR: narrow ? '40px' : '112px',
-      h1: narrow ? 'clamp(40px,7vw,72px)' : 'clamp(44px,5.2vw,78px)', lead: '20px', lead2: '18px', svc: '17px', body: '15px', field: '15px', evidMain: '15px', evid: '13px', small: '13px',
+      h1: narrow ? 'clamp(40px,7vw,72px)' : 'clamp(44px,5.2vw,78px)', gap45: narrow ? '30px' : 'clamp(28px,2.4vw,34px)', lead: '20px', lead2: '18px', svc: '17px', body: '15px', field: '15px', evidMain: '15px', evid: '13px', small: '13px',
       headGap: '20px', leadPad: '16px', areas: narrow ? '"head" "form" "recog" "svc"' : '"head form" "recog recog" "svc svc"',
       fee: '13px', feePad: '7px 0 8px', feeHeadGap: '10px', feeRailGap: '22px', feeLift: '0px', feeLead: '28px',
       batchCols: 'minmax(120px,168px) minmax(0,62ch) minmax(max-content,1fr)', batchGap: 'clamp(24px,3vw,48px)', batchPad: '14px 0 16px', tailPad: '20px', instGap: '12px', batchAreas: '"n l s"', batchStatusAlign: 'end',
       recogGap: '18px', recogMeasure: '62ch', recog: '18px', recogClose: '21px', recogCloseMargin: '10px 0 0',
       gridCols: narrow ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(300px,380px)',
-      colGap: 'clamp(28px,3.4vw,56px)', rowGap: '48px', formGap: '15px', formPad: '20px', photo: '56px',
+      colGap: 'clamp(28px,3.4vw,56px)', rowGap: '48px', formGap: '15px', heroGap: '15px', formPad: '20px', photo: '56px',
       svcHead: '18px', svcCols: stacked ? 'minmax(0,1fr)' : 'repeat(5,minmax(0,1fr))', itemPad: stacked ? '14px 0 18px' : '14px 16px 18px', itemGap: '12px',
       segW: '68px', segH: '10px', markW: '13px', markH: '13px',
       meterPos: 'left:22px;top:50%;transform:translateY(-50%)', meterDir: 'column', meterJustify: 'center', meterAlign: 'flex-start', meterBorder: '0', meterPad: '0', meterGap: '20px',
-      dirGap: '16px', dirPad: '18px', dirH: '116px', dirCols: 'repeat(3,minmax(0,1fr))', dirColGap: '32px',
+      dirGap: '16px', dirPad: '18px', dirH: '116px', chanCols: '176px minmax(0,1fr)', chanColGap: '24px', chanSpacer: 'block', dirCols: 'repeat(3,minmax(0,1fr))', dirColGap: '32px',
       panelGap: '14px', panelPad: '20px', panelTextH: '22px', rulerH: '48px', tickGap: '3px',
       pinOuter: (this.props.pinScroll ?? 320) + 'vh', pinPad: narrow ? 'clamp(24px,5vh,56px) 40px' : 'clamp(24px,5vh,56px) 112px clamp(24px,5vh,56px) 176px', frameGap: 'clamp(18px,3.6vh,36px)',
       fieldDir: 'row', halfGap: 'clamp(24px,3.4vw,64px)', fieldCols: 'repeat(10,minmax(0,1fr))',
@@ -1094,8 +1123,15 @@ class Component extends DCLogic {
 
     return {
       L, svcs, ruler, meter, directions, dirTitle, dirDose,
+      oneRuler: Array.from({ length: 70 }, (_, k) => ({ h: (k === 44 || k === 68) ? '100%' : '40%', bg: k === 44 ? INK : (k === 68 ? '#C97B1F' : HAIR) })),
+      channels: [
+        { label: 'Paid', text: 'the exclusion window closes on day 69' },
+        { label: 'CRM email', text: 'the reminder leaves on day 69' },
+        { label: 'Subscription', text: 'the interval is set to 69 days' },
+        { label: 'Product page', text: 'the pack offered is the one that lasts to day 69' }
+      ],
       sig: Array.from({ length: 70 }, (_, k) => ({ h: (k === 44 || k === 68) ? '100%' : '40%', bg: k === 44 ? INK : (k === 68 ? '#C97B1F' : HAIR) })),
-      closeFee: [{ t: 'EUR 2,500 net per month.' }, { t: 'No setup fee.' }, { t: 'No minimum term.' }, { t: 'Two clients at a time.' }],
+      closeFee: [{ t: 'No setup fee.' }, { t: 'No minimum term.' }, { t: 'Two clients at a time.' }],
       closeMinH: this.state.closeH ? this.state.closeH + 'px' : '0px',
       rowRef: this.rowRef,
       heroFormRef: this.heroFormRef,
@@ -1106,7 +1142,7 @@ class Component extends DCLogic {
       phoneTail: phone,
       phoneFee: phone, railFee: !phone,
       closeFormRef: this.closeFormRef,
-      showPin, noPin: !showPin, pinRef: this.pinRef, pinFormRef: this.pinFormRef, fieldLeft, fieldRight,
+      showPin, noPin: !showPin, rootPadB: showPin ? '0px' : L.barSpace, pinRef: this.pinRef, pinFormRef: this.pinFormRef, fieldLeft, fieldRight,
       chromeOpacity: fired ? '1' : '0',
       dryOpacity: dried ? '1' : '0',
       payoffOpacity: pD.toFixed(2),
