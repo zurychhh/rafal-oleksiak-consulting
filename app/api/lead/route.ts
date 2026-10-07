@@ -30,7 +30,35 @@ const LeadSchema = z.object({
   // Trafia do naglowka Subject, wiec zadnych znakow konca linii.
   message: z.string().max(140).regex(/^[^\r\n]*$/).optional(),
   source: z.record(z.string(), z.string().max(300)).optional(),
+
+  // Adres sklepu ma wlasne pole, zamiast jechac na gape w `message`.
+  storeUrl: z.string().max(300).regex(/^[^\r\n]*$/).optional(),
+
+  // Zgody. Pola sa OPCJONALNE celowo: jedynym klientem tego endpointu jest
+  // nasza wlasna strona, ale strona z cache'u sprzed wdrozenia ich nie wysyla,
+  // a lead to lead — wolimy go przyjac i oznaczyc jako "zgoda nieodnotowana"
+  // niz po cichu zgubic. Czego NIE robimy: nie domyslamy sie zgody. Brak pola
+  // znaczy brak zgody i tak jest zapisywany.
+  consentContact: z.boolean().optional(),
+  consentMarketing: z.boolean().optional(),
+  // Tresc zgody w brzmieniu, ktore odwiedzajacy faktycznie widzial. Bez niej
+  // zgoda jest niedowodliwa: sama flaga nie mowi, na co ktos sie zgodzil.
+  consentText: z.string().max(400).regex(/^[^\r\n]*$/).optional(),
+  // Z ktorego formularza przyszlo — hero, phone, close, closephone, bar.
+  form: z.string().max(40).regex(/^[a-z]+$/).optional(),
 });
+
+/** Slad zgody skladany po stronie serwera. Znacznik czasu i adres IP biora sie
+ *  stad, nie z przegladarki: zegar klienta jest nieweryfikowalny, a zapis, ktory
+ *  ma cokolwiek dowodzic, nie moze pochodzic od strony, ktorej dotyczy. */
+export interface ConsentRecord {
+  contact: boolean;
+  marketing: boolean;
+  text: string;
+  at: string;
+  ip: string;
+  form: string;
+}
 
 export type Lead = z.infer<typeof LeadSchema>;
 
@@ -111,6 +139,18 @@ export async function POST(request: NextRequest) {
   }
   const lead = parsed.data;
 
+  // Adres sklepu: nowe pole, a dla strony z cache'u fallback na `message`.
+  const store = lead.storeUrl ?? lead.message ?? '';
+
+  const consent: ConsentRecord = {
+    contact: lead.consentContact === true,
+    marketing: lead.consentMarketing === true,
+    text: lead.consentText ?? '',
+    at: new Date().toISOString(),
+    ip,
+    form: lead.form ?? 'unknown',
+  };
+
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     console.error('[lead] RESEND_API_KEY missing');
@@ -141,15 +181,15 @@ export async function POST(request: NextRequest) {
       from,
       to: [process.env.TO_EMAIL!],
       subject:
-        '[lead] ' + lead.email + (lead.message ? ` · ${lead.message.slice(0, 60)}` : ''),
-      html: ownerEmail(lead),
+        '[lead] ' + lead.email + (store ? ` · ${store.slice(0, 60)}` : ''),
+      html: ownerEmail(lead, consent),
     });
   } catch (e) {
     console.error('[lead] owner notification failed', e);
   }
 
   try {
-    const hs = await createLeadContact(lead);
+    const hs = await createLeadContact(lead, consent);
     if (!hs.success) console.error('[lead] hubspot failed', hs.error);
   } catch (e) {
     console.error('[lead] hubspot threw', e);

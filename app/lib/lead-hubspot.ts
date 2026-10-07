@@ -6,7 +6,7 @@
 // W HubSpocie trzeba raz założyć własne właściwości kontaktu wymienione
 // w PROPERTIES poniżej. Bez nich API po cichu je zignoruje.
 
-import type { Lead } from '@/app/api/lead/route';
+import type { Lead, ConsentRecord } from '@/app/api/lead/route';
 
 export interface HubSpotResponse {
   success: boolean;
@@ -28,17 +28,35 @@ const API = 'https://api.hubapi.com/crm/v3/objects/contacts';
 
    first_touch_campaign tez tylko wtedy, gdy jest: wczesniej szlo tu '' przy
    kazdym wejsciu bez kampanii i kasowalo atrybucje z pierwszej wizyty. */
-function propertiesFrom(lead: Lead): Record<string, string> {
+function propertiesFrom(lead: Lead, consent: ConsentRecord): Record<string, string> {
   const p: Record<string, string> = {
     email: lead.email,
     first_touch_source: lead.source?.utm_source ?? lead.source?.referrer ?? 'direct',
   };
   const campaign = lead.source?.utm_campaign;
   if (campaign) p.first_touch_campaign = campaign;
+
+  const store = lead.storeUrl ?? lead.message;
+  if (store) p.store_url = store;
+  if (lead.form) p.lead_form = lead.form;
+
+  /* Zgody sa jedynym wyjatkiem od reguly "nie wysylamy pustych wlasciwosci".
+     Tam regula chroni przed skasowaniem tego, co juz wiemy; tutaj dziala
+     odwrotnie: "false" to nie brak danych, tylko odnotowany brak zgody, i to
+     jest dokladnie ta informacja, ktorej potrzebujemy, zeby kogos NIE wrzucic
+     na liste marketingowa. Zapisujemy wiec zawsze, takze gdy jest falszem. */
+  p.consent_contact = consent.contact ? 'true' : 'false';
+  p.consent_marketing = consent.marketing ? 'true' : 'false';
+  p.consent_at = consent.at;
+  if (consent.text) p.consent_text = consent.text;
+  if (consent.ip && consent.ip !== 'unknown') p.consent_ip = consent.ip;
   return p;
 }
 
-export async function createLeadContact(lead: Lead): Promise<HubSpotResponse> {
+export async function createLeadContact(
+  lead: Lead,
+  consent: ConsentRecord,
+): Promise<HubSpotResponse> {
   const apiKey = process.env.HUBSPOT_API_KEY;
   if (!apiKey) {
     console.error('HubSpot API key not configured');
@@ -49,7 +67,7 @@ export async function createLeadContact(lead: Lead): Promise<HubSpotResponse> {
     Authorization: `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
   };
-  const properties = propertiesFrom(lead);
+  const properties = propertiesFrom(lead, consent);
 
   try {
     const res = await fetch(API, {
