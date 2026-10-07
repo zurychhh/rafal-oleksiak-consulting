@@ -70,3 +70,7 @@ test-screenshots/
 
 # LinkedIn OAuth tokens
 .linkedin-token.json
+
+# lokalne ustawienia i wyjscia asystenta
+.claude/settings.local.json
+Claude outputs/

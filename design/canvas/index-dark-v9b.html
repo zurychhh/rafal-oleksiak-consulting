@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="description" content="I find the day each pack really runs out, then move ads, emails and subscriptions onto it. FMCG ecommerce, end to end.">
+<link rel="canonical" href="https://oleksiakconsulting.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://oleksiakconsulting.com/">
+<meta property="og:title" content="Your second order, on time.">
+<meta property="og:description" content="I find the day each pack really runs out, then move ads, emails and subscriptions onto it.">
+<meta property="og:image" content="https://oleksiakconsulting.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0C0D0C">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Your second order, on time. &middot; Oleksiak Consulting</title>
+<!-- Arkusz ponizej istnieje WYLACZNIE po to, zeby ten plik renderowal sie prawdziwym
+     krojem po otwarciu z dysku, i zeby scripts/ship-compare.mjs porownywal to samo
+     po obu stronach. Bez niego zrodlo spada na Helvetice, a aplikacja ma Instrument
+     Sans z public/fonts — i porownanie zglasza roznice szerokosci, ktorej nikt nie zrobil.
+
+     Na produkcje NIE trafia: ship przenosi tylko arkusz, blok zmiennych, skrypt
+     i znaczniki tresci; naglowek dokumentu zostaje tutaj. Serwis hostuje fonty
+     lokalnie w app/fonts.css i ma zero zadan do Google — sprawdzane pomiarem.
+
+     UWAGA dla piszacych ten plik: nie wymieniaj tu nazw znacznikow w nawiasach
+     ostrych. Ekstraktor w ship.mjs szuka ich zwyklym dopasowaniem tekstu, nie
+     parserem, wiec taka wzmianka w komentarzu przecina markup w zlym miejscu. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..600&display=swap">
+<style>
+  :root{
+    --bg:#0C0D0C; --fg:#F2F0EA; --dim:#A8A49B; --panel:#101210; --line:#1E201B;
+    --hair:#45473F; --cellc:#2A2C26; --acc:#E0A72B; --origin:#7E8177; --rule:#24261F;
+    --ok:#4DD0A7;
+    --sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+    --mono:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+    --disp:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
+    font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  input,button{font-family:inherit;}
+  a{color:inherit;text-decoration:none;}
+
+  /* Strona jest plynna. Artboard ma stala wysokosc 980 px i pusta czern pod
+     trescia — to ograniczenie makiety, nie projekt. Listwa wyjsc siada na dole
+     pierwszego ekranu, a kolumny nad nia rozkladaja sie na tym, co zostanie.
+
+     KOLEJNOSC W DOM JEST KOLEJNOSCIA TELEFONU, bo tak stoi w artboardzie 390:
+     naglowek, claim, kalendarz, listwa wyjsc, zdanie o AI, dopiero uslugi.
+     Artboard zaznacza tam fold — bursztynowe CTA ma byc NAD nim. Desktop sklada
+     z tej samej kolejnosci dwie kolumny siatka z nazwanymi obszarami, zamiast
+     wymuszac na telefonie kolejnosc desktopowa i spychac CTA pod cztery uslugi. */
+  .wrap{min-height:100dvh;display:flex;flex-direction:column;}
+  @media (min-width:1081px){
+    .wrap{display:grid;grid-template-columns:470px minmax(0,1fr);
+      grid-template-rows:auto auto 1fr auto auto;
+      grid-template-areas:"top top" "band say" "band svcs" "exit exit" "ai ai";}
+    .top{grid-area:top;} .band{grid-area:band;} .say{grid-area:say;}
+    .svcs{grid-area:svcs;} .exit{grid-area:exit;} .ai{grid-area:ai;}
+  }
+
+  /* ---- pasek gorny ---- */
+  .top{padding:34px 88px 24px;display:flex;justify-content:space-between;
+    align-items:flex-end;gap:40px;border-bottom:1px solid var(--line);}
+  .brand{font-size:13px;letter-spacing:.18em;text-transform:uppercase;}
+  .clients{display:flex;gap:44px;}
+  .cl{display:flex;flex-direction:column;gap:3px;}
+  .cl b{font-size:16px;font-weight:400;}
+  .cl i{font-style:normal;font-size:12px;color:var(--dim);}
+  .clm{display:none;font-size:13px;line-height:1.4;}
+
+  /* ---- kalendarz i mowa ---- */
+  .band{background:var(--panel);padding:32px 40px;
+    display:flex;flex-direction:column;gap:16px;justify-content:center;}
+  .grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;width:330px;}
+  .grid i{display:block;aspect-ratio:1;font-style:normal;}
+  .c1{background:var(--fg);} .c2{background:var(--acc);} .c3{background:var(--cellc);}
+  .legend{display:flex;flex-direction:column;gap:8px;font-size:16px;}
+  .legend .amb{color:var(--acc);}
+  .legend .soft{color:var(--dim);}
+  .origin{margin:0;font-size:13px;line-height:1.5;color:var(--origin);
+    border-top:1px solid var(--rule);padding-top:12px;}
+
+  .say{min-width:0;padding:32px 88px 0 56px;display:flex;
+    flex-direction:column;gap:16px;justify-content:flex-end;}
+  .claim{margin:0;font-weight:500;font-size:clamp(38px,5vw,72px);line-height:1.04;
+    letter-spacing:-.03em;}
+  .lead{margin:0;font-size:clamp(17px,1.5vw,21px);line-height:1.4;}
+  .svcs{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 32px;
+    padding:22px 88px 24px 56px;align-content:start;}
+  .svc{display:flex;flex-direction:column;gap:9px;}
+  .hair{display:block;height:1px;background:var(--hair);}
+  .dots{display:flex;align-items:center;gap:6px;height:8px;}
+  .dots i{display:block;width:8px;height:8px;border-radius:50%;background:var(--fg);}
+  .sname{font-size:17px;}
+  .sdesc{font-size:14px;line-height:1.45;color:var(--dim);}
+
+  /* ---- listwa wyjsc ----
+     Caly pas jest klikalny: link lezy na nim absolutnie i wypelnia go w calosci,
+     a formularz stoi nad nim z wyzszym z-index, wiec klikniecie w pole trafia
+     w pole, a nie w link. Formularza nie da sie zagniezdzic w linku — to nie
+     jest poprawny HTML — i stad ta konstrukcja, ta sama co w makiecie.     */
+  .exit{position:relative;min-height:124px;background:var(--acc);color:var(--bg);}
+  .go{position:absolute;inset:0;display:flex;align-items:center;gap:18px;
+    padding:0 88px;color:var(--bg);transition:gap .18s ease-out;}
+  .go:hover{gap:34px;}
+  .gotxt{font-size:clamp(24px,2.9vw,40px);font-weight:700;letter-spacing:-.02em;}
+  .goarr{font-size:clamp(21px,2.4vw,34px);font-weight:700;line-height:1;}
+  .exit form{position:absolute;right:88px;top:50%;
+    transform:translateY(calc(-50% + 12px));z-index:1;
+    display:flex;flex-direction:column;gap:8px;align-items:flex-end;}
+  .fbox{display:flex;}
+  .fbox input{width:280px;height:54px;border:1px solid var(--bg);border-right:0;
+    background:var(--bg);color:var(--fg);font-size:17px;padding:0 16px;outline:none;}
+  .fbox input::placeholder{color:var(--dim);opacity:1;}
+  .fbox input:focus-visible{outline:2px solid var(--bg);outline-offset:2px;}
+  .fbox button{height:54px;border:1px solid var(--bg);background:var(--bg);
+    color:var(--fg);font-size:17px;font-weight:600;padding:0 24px;cursor:pointer;}
+  .fbox button:hover{background:#1A1C19;}
+  .fbox button:disabled{opacity:.6;cursor:default;}
+  .fbox button:focus-visible{outline:2px solid var(--bg);outline-offset:2px;}
+  .fine{font-size:14px;color:var(--bg);}
+  .err{margin:0;font-size:14px;color:var(--bg);font-weight:600;display:none;}
+  .err.on{display:block;}
+  .sent{display:none;position:absolute;right:88px;top:50%;transform:translateY(-50%);
+    z-index:2;text-align:right;max-width:420px;}
+  .sent.on{display:block;}
+  .sent b{display:block;font-size:17px;font-weight:600;color:var(--bg);}
+  .sent span{display:block;margin-top:4px;font-size:14px;line-height:1.45;color:var(--bg);}
+
+  .ai{margin:0;padding:12px 88px 24px;font-size:15px;line-height:1.5;color:var(--dim);}
+
+  /* ---- animacja kalendarza ----
+     Stan koncowy jest stanem domyslnym DOM-u: bez skryptu, przy reduced motion
+     i w kazdym zrzucie po zakonczeniu siatka jest kompletna. Skrypt dopiero
+     UZBRAJA ja (klasa `arm` gasi pola), a potem odpala. Odwrotna kolejnosc —
+     animowanie od stanu koncowego do pustego — dawalaby podglad linku z pusta
+     siatka i falszywy wynik kazdego zrzutu zrobionego przed czasem.        */
+  .grid.arm i{opacity:0;}
+  .grid.run i{animation:cellIn .35s ease-out both;}
+  .grid.run i.c2{animation-name:cellPop;animation-duration:.5s;}
+  @keyframes cellIn{from{opacity:0;transform:scale(.35);}to{opacity:1;transform:none;}}
+  @keyframes cellPop{0%{opacity:0;transform:scale(.4);}
+    55%{opacity:1;transform:scale(1.55);}100%{opacity:1;transform:none;}}
+  .amb.arm{opacity:0;}
+  .amb.run{animation:fadeUp .45s ease-out 4.35s both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  @keyframes dotFill{from{background:var(--fg);}to{background:var(--acc);}}
+  .svc.lit .dots i{animation:dotFill .16s ease-out both;}
+  .svc.lit .dots i:nth-child(1){animation-delay:0s;}
+  .svc.lit .dots i:nth-child(2){animation-delay:.07s;}
+  .svc.lit .dots i:nth-child(3){animation-delay:.14s;}
+  .svc.lit .dots i:nth-child(4){animation-delay:.21s;}
+  .svc.lit .dots i:nth-child(5){animation-delay:.28s;}
+  @media (prefers-reduced-motion:reduce){
+    .grid.arm i,.amb.arm{opacity:1;}
+    .grid.run i,.amb.run,.svc.lit .dots i{animation:none;}
+  }
+
+  @media (max-width:1080px){
+    .top{padding:26px 40px 18px;}
+    .clients{gap:28px;}
+    .band{padding:26px 40px;}
+    .say{padding:26px 40px 0;justify-content:flex-start;}
+    .svcs{padding:20px 40px 24px;}
+    .go{padding:0 40px;}
+    .exit form{right:40px;}
+    .sent{right:40px;}
+    .ai{padding:12px 40px 24px;}
+  }
+  @media (max-width:820px){
+    /* Listwa wyjsc przestaje byc pasem z naklejonym formularzem i staje sie
+       blokiem: link u gory, formularz pod nim. Link traci pozycjonowanie
+       absolutne, wiec nie przykrywa juz pola.                              */
+    .exit{min-height:0;padding:18px 24px 20px;}
+    .go{position:static;padding:0;gap:12px;}
+    .go:hover{gap:22px;}
+    .exit form{position:static;transform:none;margin-top:14px;align-items:stretch;}
+    .sent{position:static;transform:none;margin-top:14px;text-align:left;max-width:none;}
+    .fbox input{width:auto;flex:1;min-width:0;height:50px;font-size:16px;padding:0 14px;}
+    .fbox button{height:50px;font-size:16px;padding:0 20px;}
+  }
+  @media (max-width:640px){
+    .top{padding:22px 24px 12px;flex-direction:column;align-items:flex-start;gap:8px;}
+    .brand{font-size:12px;}
+    .clients{display:none;}
+    .clm{display:block;}
+    .band{padding:14px 24px 16px;gap:9px;justify-content:flex-start;}
+    .grid{width:200px;gap:4px;}
+    .legend{gap:5px;font-size:14px;}
+    .origin{font-size:12px;line-height:1.45;border-top:0;padding-top:0;}
+    .say{padding:12px 24px 0;gap:9px;}
+    .svcs{grid-template-columns:1fr;gap:18px;padding:20px 24px 24px;}
+    .ai{padding:10px 24px 24px;font-size:14px;line-height:1.45;}
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Rafał Oleksiak",
+  "url": "https://oleksiakconsulting.com/",
+  "jobTitle": "FMCG ecommerce consultant — paid, search, storefront, CRM and loyalty",
+  "description": "I find the day each pack really runs out, then move ads, emails and subscriptions onto it. Fifteen years of FMCG ecommerce end to end — paid media, search including AI answers, storefront conversion, CRM lifecycle, subscription and loyalty. Allegro, mBank mOkazje, Booksy, currently Genactiv.",
+  "knowsAbout": ["FMCG ecommerce", "replenishment and repeat purchase", "loyalty programmes", "subscription commerce", "CRM lifecycle", "paid media", "SEO and AI answers", "conversion rate optimisation"],
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Oleksiak Consulting",
+    "url": "https://oleksiakconsulting.com/"
+  }
+}
+</script>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="top">
+    <span class="brand">Oleksiak Consulting</span>
+    <div class="clients">
+      <span class="cl"><b>Allegro</b><i>CRM 0.5% &rarr; 12% of revenue</i></span>
+      <span class="cl"><b>mBank mOkazje</b><i>Retention on consumables</i></span>
+      <span class="cl"><b>Genactiv</b><i>Colostrum, category leader</i></span>
+      <span class="cl"><b>Booksy</b><i>The pack is an appointment</i></span>
+    </div>
+    <span class="clm">Allegro &middot; mBank mOkazje &middot; Genactiv &middot; Booksy</span>
+  </div>
+
+  <div class="say">
+    <h1 class="claim">Your second order, on time.</h1>
+    <p class="lead">I find the day each pack really runs out, then move ads, emails and
+      subscriptions onto it.</p>
+  </div>
+
+  <div class="band">
+    <div class="grid" id="grid"><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c3"></i></div>
+    <div class="legend">
+      <span>45 days the label sells for</span>
+      <span class="amb" id="leg">24 days of ads to a full cupboard</span>
+      <span class="soft">Day 69: the reorder lands</span>
+    </div>
+    <p class="origin">Real orders: an anonymous supplements store, 1,197 first-to-second gaps,
+      4.8 years. Your numbers differ &mdash; that is what the calculator is for.</p>
+  </div>
+
+  <div class="exit">
+    <a class="go" href="/tool" aria-label="Calculate your reorder day">
+      <span class="gotxt">Calculate your reorder day</span>
+      <span class="goarr" aria-hidden="true">&rarr;</span>
+    </a>
+    <form id="form" novalidate>
+      <p class="err" id="err"></p>
+      <div class="fbox">
+        <input id="mail" type="email" inputmode="email" autocomplete="email" spellcheck="false"
+               autocapitalize="off" aria-label="Your email" placeholder="Leave your email">
+        <button type="submit">Send</button>
+      </div>
+      <span class="fine">One reply, written by me. No sequence, no call.</span>
+    </form>
+    <div class="sent" id="sent"><b>Sent</b><span id="rcpt"></span></div>
+  </div>
+
+  <p class="ai">AI reads your pack labels and catalogue, works out days of supply per SKU, and
+    compares it with your real gap between orders.</p>
+
+  <div class="svcs" id="svcs">
+    <div class="svc">
+      <span class="hair"></span>
+      <span class="dots"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="sname">Loyalty programmes for FMCG</span>
+      <span class="sdesc">built on what people actually finish and rebuy, not on points.</span>
+    </div>
+    <div class="svc">
+      <span class="hair"></span>
+      <span class="dots"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="sname">Replenishment cycles, calculated with AI</span>
+      <span class="sdesc">our tool reads your pack labels and works out days of supply per SKU.</span>
+    </div>
+    <div class="svc">
+      <span class="hair"></span>
+      <span class="dots"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="sname">Shorter time between orders</span>
+      <span class="sdesc">the same customers, one more order a year. That is LTV.</span>
+    </div>
+    <div class="svc">
+      <span class="hair"></span>
+      <span class="dots"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="sname">Subscription models that fit the pack</span>
+      <span class="sdesc">intervals set by the pack, not by a number someone typed once.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function $(id){return document.getElementById(id);}
+
+  var reduce=false;
+  try{reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;}catch{}
+  /* Automat ma widziec stan koncowy. design/qa.js robi zrzuty po krotkim
+     odczekaniu, wiec zlapalby siatke w polowie zapelniania i policzyl kontrast
+     pol, ktore akurat maja opacity 0. To warunek natychmiastowego dokonczenia,
+     nie wylaczenie animacji: zwykly odwiedzajacy dostaje ja bez zmian.      */
+  var automat=false;
+  try{automat=navigator.webdriver===true;}catch{}
+  var still=reduce||automat||typeof IntersectionObserver!=="function";
+
+  /* ---- kalendarz: 45 jasnych, 24 bursztynowe, ostatnie wygaszone ----
+     Opoznienia z makiety: jasne co 0,05 s przez pierwsze 2,3 s, potem
+     bursztynowe co 0,075 s, kazde z podbiciem do 155%, ostatnie o 4,2 s.  */
+  var grid=$("grid"), leg=$("leg");
+  if(grid && !still){
+    grid.classList.add("arm");
+    if(leg) leg.classList.add("arm");
+    var cells=grid.children;
+    var ruszylo=false;
+
+    /* Trzecia sciezka dokonczenia, obok warunku webdriver i reduced motion.
+       Renderer podgladu linku (LinkedIn, Slack, iMessage) nie ustawia
+       navigator.webdriver i robi zrzut chwile po zaladowaniu — dostawal wiec
+       prawie pusta kratke, czyli karte posta bez tresci, na jedynym kanale,
+       z ktorego idzie ruch. Jezeli obserwator nie ruszyl w ciagu sekundy,
+       siatka dopelnia sie sama, BEZ animacji: zdejmujemy tylko `arm`, wiec
+       wraca stan domyslny DOM-u. Zwykly odwiedzajacy tego nie zobaczy —
+       obserwator odpala sie w pierwszych klatkach, na dlugo przed sekunda. */
+    function dopelnij(){
+      if(ruszylo) return;
+      ruszylo=true;
+      /* Obserwator moze byc podstawiona atrapa bez `disconnect` — wtedy rzucenie
+         wyjatku tutaj zostawiloby siatke zgaszona, czyli dokladnie w stanie,
+         przed ktorym ten bezpiecznik ma chronic. */
+      try{io.disconnect();}catch{}
+      grid.classList.remove("arm");
+      if(leg) leg.classList.remove("arm");
+    }
+
+    var io=new IntersectionObserver(function(entries){
+      for(var k=0;k<entries.length;k++){
+        if(!entries[k].isIntersecting) continue;
+        if(ruszylo) return;
+        ruszylo=true;
+        for(var i=0;i<cells.length;i++){
+          var d = i<45 ? (i*0.05) : (i<69 ? (2.3+(i-45)*0.075) : 4.2);
+          cells[i].style.animationDelay=d.toFixed(2)+"s";
+        }
+        grid.classList.remove("arm");
+        grid.classList.add("run");
+        if(leg){leg.classList.remove("arm");leg.classList.add("run");}
+        io.disconnect();
+        return;
+      }
+    },{threshold:0.2});
+    io.observe(grid);
+    setTimeout(dopelnij,1000);
+  }
+
+  /* ---- kropki przy uslugach ----
+     Na wskazniku precyzyjnym: po najechaniu na usluge. Bez hovera (telefon):
+     raz, gdy blok wjezdza w kadr.                                          */
+  var svcs=$("svcs");
+  if(svcs && !reduce){
+    var list=svcs.querySelectorAll(".svc");
+    var canHover=false;
+    try{canHover=matchMedia("(hover: hover)").matches;}catch{}
+    if(canHover){
+      Array.prototype.forEach.call(list,function(el){
+        el.addEventListener("mouseenter",function(){el.classList.add("lit");});
+        el.addEventListener("mouseleave",function(){el.classList.remove("lit");});
+      });
+    }else if(typeof IntersectionObserver==="function"){
+      var io2=new IntersectionObserver(function(entries){
+        for(var k=0;k<entries.length;k++){
+          if(!entries[k].isIntersecting) continue;
+          Array.prototype.forEach.call(list,function(el){el.classList.add("lit");});
+          io2.disconnect();
+          return;
+        }
+      },{threshold:0.2});
+      io2.observe(svcs);
+    }
+  }
+
+  /* ---- formularz: kontrakt /api/lead bez zmian ---- */
+  var ARRIVED=(function(){
+    var out={},q;
+    try{q=new URLSearchParams(location.search);}catch{return out;}
+    ["utm_source","utm_medium","utm_campaign","utm_term","utm_content"].forEach(function(k){
+      var v=q.get(k); if(v) out[k]=String(v).slice(0,300);
+    });
+    if(document.referrer && document.referrer.indexOf(location.origin)!==0){
+      out.referrer=String(document.referrer).slice(0,300);
+    }
+    return out;
+  })();
+
+  var form=$("form"), mail=$("mail"), err=$("err"), sent=$("sent");
+  if(!form) return;
+  function bad(t){err.textContent=t;err.classList.add("on");}
+
+  form.addEventListener("submit",function(ev){
+    ev.preventDefault();
+    err.classList.remove("on");
+    var v=(mail.value||"").trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
+      bad("That address does not look right.");
+      mail.focus();
+      return;
+    }
+    var btn=form.querySelector("button[type=submit]");
+    btn.disabled=true;btn.textContent="Sending";
+
+    var ctrl=null;
+    try{ctrl=new AbortController();}catch{}
+    var killer=setTimeout(function(){if(ctrl)ctrl.abort();},12000);
+
+    fetch("/api/lead",{
+      method:"POST",
+      signal:ctrl?ctrl.signal:undefined,
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email:v,source:ARRIVED})
+    }).then(function(r){
+      clearTimeout(killer);
+      if(!r.ok)throw new Error("bad status "+r.status);
+      form.style.display="none";
+      $("rcpt").textContent="One reply, written by me, usually the same day. "
+        +"Send your order export when you are ready.";
+      sent.classList.add("on");
+    }).catch(function(){
+      clearTimeout(killer);
+      bad("That did not go through. Write to hello@oleksiakconsulting.com instead.");
+    }).then(function(){
+      btn.disabled=false;btn.textContent="Send";
+    });
+  });
+})();
+</script>
+</body>
+</html>
