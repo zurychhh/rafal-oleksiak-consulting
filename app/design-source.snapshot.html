@@ -143,7 +143,7 @@
           <input type="checkbox" name="marketing0" style="margin:0;width:20px;height:20px;accent-color:#14161A;flex:none">
           <span style="font-size:{{L.small}};line-height:1.45">Occasional email from me — notes on reorder timing, new tools I build, and what I learn working on FMCG stores. Unsubscribe in one click.<span style="color:#6E6D68"> (optional)</span></span>
         </label>
-        <p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about <span data-echo="phone" style="position:relative;display:inline-block;max-width:min(100%,13em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span> — not a calendar link.</p>
+        <p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">Reply in 24 hours, with a first observation about <span data-echo="phone" style="position:relative;display:inline-block;max-width:min(100%,13em);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom">your store</span>.</p>
         <button type="submit" style="background:#14161A;color:#FFFFFF;border:0;font-family:inherit;padding:12px 16px;font-size:{{L.body}};font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;width:100%;text-align:center;min-height:44px" style-hover="background:#3A3C40">Send</button>
         <p style="font-size:{{L.feeLead}};font-weight:600;line-height:1.15;margin:0;color:#14161A">{{ feeLead }}</p>
       </form>
@@ -154,7 +154,7 @@
       <sc-if value="{{ phoneTail }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;flex-direction:column;gap:{{L.feeHeadGap}}">
           <div style="display:flex;flex-direction:column">
-            <sc-for list="{{ feeRest }}" as="f" hint-placeholder-count="3">
+            <sc-for list="{{ feeRest }}" as="f" hint-placeholder-count="4">
               <p style="font-size:{{L.fee}};line-height:1.45;margin:0;padding:{{L.feePad}};border-top:1px solid #DCDAD2;overflow-wrap:anywhere;text-wrap:pretty">{{ f.t }}</p>
             </sc-for>
           </div>
@@ -168,7 +168,7 @@
         <section data-fee-band="1" style="min-width:0;display:flex;flex-direction:column;gap:{{L.feeHeadGap}};margin-top:{{L.feeLift}}">
           <span data-fee-rule="1" aria-hidden="true" style="display:block;height:1px;background:#14161A;transform-origin:left center"></span>
           <div style="display:flex;flex-direction:column">
-            <sc-for list="{{ feeRest }}" as="f" hint-placeholder-count="3">
+            <sc-for list="{{ feeRest }}" as="f" hint-placeholder-count="4">
               <p style="font-size:{{L.fee}};line-height:1.45;margin:0;padding:{{L.feePad}};border-top:1px solid #DCDAD2;overflow-wrap:anywhere;text-wrap:pretty">{{ f.t }}</p>
             </sc-for>
           </div>
@@ -223,7 +223,7 @@
 
       <div ref="{{ rowRef }}" style="display:grid;grid-template-columns:{{L.svcCols}};align-items:start">
         <sc-for list="{{ svcs }}" as="s" hint-placeholder-count="5">
-          <div data-card="1" style="position:relative;min-width:0;border-left:1px solid {{ s.rule }};border-top:2px solid {{ s.ruleTop }};padding:{{L.itemPad}};display:flex;flex-direction:column;gap:{{L.itemGap}};background-color:{{ s.bg }}">
+          <button type="button" data-card="1" aria-pressed="{{ s.pressed }}" aria-label="{{ s.aria }}" sc-camel-on-click="{{ s.pick }}" sc-camel-on-focus="{{ s.pick }}" sc-camel-on-mouse-enter="{{ s.pick }}" style="position:relative;min-width:0;border:0;border-radius:0;border-left:1px solid {{ s.rule }};border-top:2px solid {{ s.ruleTop }};padding:{{L.itemPad}};display:flex;flex-direction:column;gap:{{L.itemGap}};background-color:{{ s.bg }};text-align:left;align-self:stretch;font:inherit;color:inherit;cursor:pointer;min-height:44px">
             <span data-div="1" aria-hidden="true" style="position:absolute;left:-1px;top:0;bottom:0;width:1px;transform-origin:top;background-color:{{ s.rule }}"></span>
             <span style="display:flex;align-items:center;gap:7px">
               <span style="display:flex;position:relative;width:{{L.segW}};height:{{L.segH}};flex:none;border:1px solid #14161A;overflow:hidden">
@@ -241,14 +241,30 @@
               <p style="font-size:{{L.evidMain}};line-height:1.45;margin:0;color:#14161A;text-wrap:pretty">{{ s.evidence }}</p>
               <p style="font-size:12.5px;line-height:1.5;margin:0;color:{{ s.sub }}">{{ s.short }}</p>
             </span>
-          </div>
+          </button>
         </sc-for>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div aria-hidden="true" style="display:flex;align-items:flex-end;gap:{{L.tickGap}};height:{{L.rulerH}}">
+          <sc-for list="{{ ruler }}" as="r" hint-placeholder-count="70">
+            <span style="flex:1;min-width:0;display:block;height:{{ r.h }};background-color:{{ r.bg }}"></span>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase">
+          <p style="margin:0;color:#14161A">{{ dirTitle }} - {{ dirDose }}</p>
+          <p style="margin:0;color:#6E6D68">{{ note }}</p>
+        </div>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+          <sc-for list="{{ directions }}" as="d" hint-placeholder-count="3">
+            <li style="font-size:12.5px;line-height:1.5;color:#3A3C40;padding:6px 0;border-top:{{ d.rule }}">{{ d.text }}</li>
+          </sc-for>
+        </ul>
       </div>
 
       <div id="one-date" style="display:flex;flex-direction:column;gap:{{L.panelGap}};border-top:1px solid #14161A;padding-top:{{L.panelPad}}">
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 16px">
           <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">One date, four channels</p>
-          <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">Dose {{ dirDose }}</p>
         </div>
         <div style="display:grid;grid-template-columns:{{L.chanCols}};column-gap:{{L.chanColGap}};align-items:end">
           <span aria-hidden="true" style="display:{{L.chanSpacer}}"></span>
@@ -1011,13 +1027,17 @@ class Component extends DCLogic {
         rule: i === 0 ? 'transparent' : (on ? INK : HAIR),
         ruleTop: on ? INK : 'transparent',
         bg: on ? '#EDEAE1' : 'transparent',
+        pressed: on ? 'true' : 'false',
+        aria: 'Part 0' + (i + 1) + ' - ' + d.title,
+        pick: () => { if (this.state.hover !== i) this.setState({ hover: i }); },
         enter: () => { if (this.state.hover !== i) this.setState({ hover: i }); },
         leave: () => { if (this.state.hover === i) this.setState({ hover: null }); }
       };
     });
 
     const shown = hv == null ? 0 : hv;
-    const directions = D[shown].lines.map((t) => ({ text: t }));
+    const directions = D[shown].lines.map((t, k) => ({ text: t, rule: k === 0 ? '0' : '1px solid #DCDAD2' }));
+    const note = D[shown].note;
     const dirTitle = 'part 0' + (shown + 1);
     const dirDose = String((5 - shown) * 20) + ' ml';
 
@@ -1122,7 +1142,7 @@ class Component extends DCLogic {
     };
 
     return {
-      L, svcs, ruler, meter, directions, dirTitle, dirDose,
+      L, svcs, ruler, meter, directions, dirTitle, dirDose, note,
       oneRuler: Array.from({ length: 70 }, (_, k) => ({ h: (k === 44 || k === 68) ? '100%' : '40%', bg: k === 44 ? INK : (k === 68 ? '#C97B1F' : HAIR) })),
       channels: [
         { label: 'Paid', text: 'the exclusion window closes on day 69' },
@@ -1186,7 +1206,7 @@ class Component extends DCLogic {
       sentH: ['phone', 'hero', 'close', 'bar'].reduce((o, k) => { const v = this.state.sentHt && this.state.sentHt[k]; o[k] = v ? v + 'px' : 'auto'; return o; }, {}),
       sentHost: Object.assign({ phone: '', hero: '', close: '', bar: '' }, this.state.sent || {}),
       feeLead: 'EUR 2,500 net per month.',
-      feeRest: [{ t: 'No setup fee. No minimum term.' }, { t: 'Two clients at a time.' }, { t: 'The first month is an as-is audit and the quick wins that come out of it.' }],
+      feeRest: [{ t: 'No setup fee. No minimum term.' }, { t: 'Two clients at a time.' }, { t: 'Not a calendar link.' }, { t: 'The first month is an as-is audit and the quick wins that come out of it.' }],
       proof: [
         { name: 'Allegro', status: 'Closed', statusColor: '#6E6D68', line: 'Worked with a data science team on predicting a customer\u2019s next purchase.' },
         { name: 'Accenture', status: 'Closed', statusColor: '#6E6D68', line: 'Lifecycle marketing for cosmetics and drugstore brands: the same repeat-purchase problem at retail scale.' },
