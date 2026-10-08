@@ -63,9 +63,46 @@ export default function CookieConsent() {
       return
     }
 
-    // New visitor - show banner after delay
-    const timer = setTimeout(() => setHidden(false), 1500)
-    return () => clearTimeout(timer)
+    // Nowy odwiedzajacy: pasek dopiero po pierwszym przewinieciu, nie przy
+    // wejsciu. Stojac na dole pierwszego ekranu konkurowal z jedynym CTA —
+    // na 390 px przykrywal Send i cene. Opoznienie jest zgodne z RODO tylko
+    // dlatego, ze przed zgoda nie laduje sie zaden skrypt ani cookie
+    // analityczne (GoogleAnalytics renderuje sie dopiero po "Accept";
+    // zweryfikowane 08.10.2026 na produkcji: zero zadan do Google, zero cookies).
+    const THRESHOLD = 200
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const show = () => {
+      setHidden(false)
+      window.removeEventListener('scroll', onScroll)
+      if (timer) clearTimeout(timer)
+    }
+    const onScroll = () => { if (window.scrollY > THRESHOLD) show() }
+    if (window.scrollY > THRESHOLD) {
+      show() // wejscie w srodek strony (kotwica, przywrocone przewiniecie)
+      return
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    // Strona za krotka, zeby przewinac o prog (np. /stop): bez tego zgody nie
+    // daloby sie udzielic wcale, wiec wracamy do starego opoznienia.
+    if (document.documentElement.scrollHeight - window.innerHeight < THRESHOLD) {
+      timer = setTimeout(show, 1500)
+    }
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (timer) clearTimeout(timer)
+    }
+  }, [])
+
+  // Wjazd od dolu, jedna klatka po pokazaniu; bez ruchu przy prefers-reduced-motion.
+  const [entered, setEntered] = useState(false)
+  useEffect(() => {
+    if (hidden) { setEntered(false); return }
+    const id = requestAnimationFrame(() => setEntered(true))
+    return () => cancelAnimationFrame(id)
+  }, [hidden])
+  const [still, setStill] = useState(false)
+  useEffect(() => {
+    try { setStill(matchMedia('(prefers-reduced-motion: reduce)').matches) } catch { /* stary silnik */ }
   }, [])
 
   function updateConsentState(granted: boolean) {
@@ -133,6 +170,11 @@ export default function CookieConsent() {
     textTransform: 'uppercase' as const,
     cursor: 'pointer',
     borderRadius: 0,
+    // 44 px — minimalny cel dotyku. 31 px z poprzedniej wersji lamalo
+    // nasza wlasna zasade i nie poszlo na produkcje.
+    minHeight: '44px',
+    display: 'inline-flex',
+    alignItems: 'center',
   }
 
   return (
@@ -152,6 +194,8 @@ export default function CookieConsent() {
         borderTop: `1px solid ${INK}`,
         padding: '6px 16px',
         display: hidden ? 'none' : 'flex',
+        transform: entered || still ? 'translateY(0)' : 'translateY(100%)',
+        transition: still ? 'none' : 'transform .22s ease-out',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px 12px',
@@ -165,7 +209,7 @@ export default function CookieConsent() {
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
         <button
           onClick={accept}
-          style={{ ...caps, background: INK, color: '#FFFFFF', border: 0, padding: '8px 12px' }}
+          style={{ ...caps, background: INK, color: '#FFFFFF', border: 0, padding: '0 14px' }}
         >
           Accept
         </button>
@@ -176,7 +220,7 @@ export default function CookieConsent() {
             background: 'none',
             color: INK,
             border: 0,
-            padding: '9px 0',
+            padding: '0 2px',
             textDecoration: 'underline',
             textUnderlineOffset: '3px',
           }}
