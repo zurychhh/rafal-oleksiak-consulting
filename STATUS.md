@@ -26,9 +26,9 @@ panel admina i Auto-Publish sa **wyciete** — 203 pliki, ~65 900 linii. Zostaje
 strona glowna "The Audit", blog, `/privacy` i `/stop`.
 
 **PILNE — repozytorium jest publiczne** i klonuje sie anonimowo. Do uniewaznienia:
-Google Ads Developer Token (jawny w historii i w `STATUS.md` w HEAD) oraz klucz API
-w `generate-all-notion-assets.sh` i `generate-notion-assets-v2.sh`, linia 9 w obu.
-Push jest wstrzymany do czasu rotacji.
+Google Ads Developer Token i klucz Stability AI — oba usuniete z HEAD (5.09 i 08.10.2026),
+oba nadal jawne w historii publicznego repo, wiec unieważnic trzeba po stronie dostawcy.
+Push odblokowany decyzja Rafala 13.09.2026.
 
 ### Zrobione (zadania 1-3, 5, 6, 8 z HANDOFF-CC.md)
 

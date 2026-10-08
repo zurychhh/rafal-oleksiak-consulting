@@ -6,7 +6,7 @@
 
 set -e
 
-API_KEY="sk-1VvmmPXVywYuk2V9rwSwwUUlCYpPjppOBKDBUfCI5Vh32oAQ"
+API_KEY="${STABILITY_API_KEY:?Ustaw STABILITY_API_KEY (Stability AI) w srodowisku — klucz nie moze lezec w repo}"
 OUTPUT_DIR="/Users/user/projects/rafal-oleksiak-consulting/notion-branding-assets"
 API_URL="https://api.stability.ai/v2beta/stable-image/generate/sd3"
 

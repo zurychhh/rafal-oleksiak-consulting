@@ -20,8 +20,10 @@ anonimowo. **Push jest ODBLOKOWANY** — Rafał podjął tę decyzję 13.09.2026
 te sekrety są w historii publicznego repo od dawna, więc kolejny push nie zwiększa
 ekspozycji ani o krok, a wstrzymywanie publikacji nic nie chroni. Nigdy nie commituj
 wartości sekretu, nawet do przykładu. Nadal do unieważnienia, niezależnie od pushy:
-Google Ads Developer Token (jawny w `STATUS.md` w HEAD) oraz klucz API
-w `generate-all-notion-assets.sh` i `generate-notion-assets-v2.sh`, linia 9 w obu.
+Google Ads Developer Token (jawny w historii `STATUS.md` 02.02–05.09.2026, z HEAD usunięty
+5.09) oraz klucz Stability AI (jawny w historii `generate-all-notion-assets.sh`
+i `generate-notion-assets-v2.sh`, linia 9; z HEAD usunięty 08.10.2026 — skrypty czytają
+teraz `STABILITY_API_KEY` ze środowiska). Usunięcie z HEAD nie unieważnia klucza.
 
 **Duża część projektu została wycięta** (wrzesień 2026, 203 pliki, ~65 900 linii).
 LAMA, RADAR, MCC, Stripe, panel admina, Auto-Publish, generowanie PDF i stara strona
