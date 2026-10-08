@@ -204,11 +204,12 @@ dcTemplate = dcTemplate.replace(footerM[0], footer)
 // a na stronie bywa dopiero kilka ekranow nizej (v66: ~2 ekrany na desktopie,
 // ~4 na telefonie). Tekst bierzemy z istniejacego linku do /tool — zero nowego copy.
 // data-ship-added: ship-compare zdejmuje takie elementy przed porownaniem ze zrodlem.
+// Kolor: atrament, NIE bursztyn — bursztyn na tej stronie znaczy wylacznie luke 45→69.
 const headerM = dcTemplate.match(/<header\b[^>]*>[\s\S]*?<\/header>/)
 if (headerM && !/href="\/tool"/.test(headerM[0])) {
   const label = ((dcTemplate.match(/<a\b[^>]*href="\/tool"[^>]*>([^<]{3,60})<\/a>/) || [])[1] || 'Count your own interval').trim()
   const link = `<a href="/tool" data-ship-added="tool-link" style="flex:none;white-space:nowrap;font-size:12px;font-weight:700;` +
-    `letter-spacing:.18em;text-transform:uppercase;color:#A25C11;text-decoration:underline;text-underline-offset:4px;` +
+    `letter-spacing:.18em;text-transform:uppercase;color:#14161A;text-decoration:underline;text-underline-offset:4px;` +
     `padding:14px 0;margin:-14px 0">${label}</a>`
   dcTemplate = dcTemplate.replace(headerM[0], headerM[0].replace(/<\/header>$/, link + '</header>'))
   bump('link do /tool w naglowku')
