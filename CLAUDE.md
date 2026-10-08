@@ -362,8 +362,14 @@ narzędzia FMCG. `design/qa.js` to checker Playwright.
 
 ## Wdrażanie na produkcję — CZYTAJ, ZANIM POWIESZ, ŻE COŚ JEST NA ŻYWO
 
-**Od 26.09.2026 `claude/production` jest gałęzią PRODUKCYJNĄ Vercela** (wcześniej `feature/new-site`) (Settings →
-Environments → Production → Branch Tracking). **Każdy push na nią wdraża domenę.**
+**UWAGA — sprawdzone 08.10.2026: push na `claude/production` daje TYLKO Preview.**
+GitHub Deployments dla `3428d8e` (push na `claude/production`): środowisko `Preview`.
+Ostatni Production z gita to `4ea9ced` 26.09, wdrożony z CLI. Wniosek: Branch Tracking
+w Vercelu nie wskazuje na `claude/production`, choć ta sekcja to wcześniej twierdziła.
+Domenę zmienia `npx vercel@latest --prod --yes` z katalogu na właściwym commicie
+(sprawdź `git log HEAD..origin/claude/production` — puste) i dopiero potem weryfikacja
+jednym przejściem. Dopóki Branch Tracking nie zostanie ustawiony, push na
+`claude/production` jest zapisem stanu, nie wdrożeniem.
 Dlatego kod na `claude/production` pushuje wyłącznie promotor po zielonej bramce;
 praca ręczna idzie na osobną gałąź (np. `promote/…`), która daje tylko Preview.
 Push samych plików `system/` jest bezpieczny — przebuduje tę samą stronę.

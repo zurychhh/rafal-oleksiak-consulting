@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./critical.css"; // Critical CSS inlined for fastest FCP (above-the-fold only)
 import "./globals.css"; // Remaining below-the-fold styles
 import "./fonts.css"; // IBM Plex, Archivo, Poppins, DM Sans — lokalnie, zero zadan do Google
-import FontAwesomeLoader from "./components/FontAwesomeLoader";
 import ConsentMode from "./components/ConsentMode";
 import CookieConsent from "./components/ui/CookieConsent";
 import SchemaOrg from "./components/SchemaOrg";
@@ -93,7 +92,6 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {/* Performance: Async load Font Awesome to prevent render blocking */}
-        <FontAwesomeLoader />
         {children}
 
         {/* GA4 bezposrednio, wylacznie po zgodzie. GTM usuniety: gtm.js wazyl
