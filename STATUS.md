@@ -7,6 +7,22 @@
 
 ---
 
+## 7–11 pazdziernika 2026 — v74 → v76, zgody, wynik z /tool w mailu
+
+- Produkcja: v76 z Claude Design (wermilion `#D6202B`/`#9E161F` zamiast bursztynu),
+  dzialajacy instrument skladu, pasek cookies w papierze po pierwszym przewinieciu,
+  zero zadan zewnetrznych i cookies przed zgoda (Font Awesome usuniety).
+- `claude/production` jest galezia produkcyjna Vercela (potwierdzone 11.10 w API) —
+  push wdraza domene.
+- `/api/lead`: obie zgody + slad zgody, `LeadBridge` wysyla je wlasnymi polami;
+  `CRM write failed` w mailu wlasciciela; wynik z `/tool` w mailu do odwiedzajacego
+  i w HubSpocie (czeka na formularz w tool v12); stopka zgodna ze zgoda marketingowa.
+- HubSpot: 11 nowych wlasciwosci (zgody, `store_url`, `lead_form`, 4 liczby z `/tool`).
+- Znane, swiadomie niezaliczone (naprawia v77): na 390x735 cena wystaje 5 px;
+  na 390 px blok pod kartami skacze o 15 px.
+- Do uniewaznienia po stronie dostawcy: klucz Stability AI i Google Ads Developer
+  Token (oba w historii publicznego repo, z HEAD usuniete).
+
 ## 26 wrzesnia 2026 — v66 („Dosage EFEKT") z Claude Design na galezi `promote/v66`
 
 Strona glowna przeniesiona z eksportu Claude Design nowym mechanizmem

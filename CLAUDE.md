@@ -287,6 +287,20 @@ użyciu rodziny, a używa jej tylko `/tool`.
 5. Mail do odwiedzającego blokuje żądanie; powiadomienie właściciela i HubSpot to
    księgowość i nigdy nie mogą przerwać dostawy.
 
+6. **Wynik z `/tool`** (`interval`, `labelDay`, `sampleN`, `windowDays`, `bimodal`,
+   `intervalLow`, `intervalHigh`) — opcjonalny, liczby całkowite, spójność zakresu w `refine`.
+   Logika w `app/lib/lead-analysis.ts`: mediana jako jedna liczba i temat „pewny” tylko
+   przy `sampleN >= 30` bez dwóch szczytów; inaczej zakres albo „za mało na jedną liczbę”.
+   **Mail nie może być pewniejszy niż ekran.** Liczby idą też do HubSpota
+   (`reorder_interval_days`, `label_day`, `sample_n`, `data_window_days`).
+7. **Stopka maila zależy od zgody marketingowej** (`FOOT` w `lead-email.ts`): „no list,
+   no sequence” tylko bez zgody. Link wypisu → `/stop?email=…` z wpisanym adresem;
+   wypis to przycisk na stronie, **nigdy samo wejście (GET)** — skanery poczty
+   otwierają linki same.
+8. **Nowa właściwość HubSpota = najpierw `hubspot-setup.mjs --apply`, potem kod.**
+   Nieznana właściwość odrzuca CAŁY zapis kontaktu (400), a błąd CRM nie przerywa
+   dostawy — widać go tylko w linii `CRM write failed` w mailu właściciela.
+
 W `/api/stop` jest odwrotnie: mail do właściciela **jest** zapisem wypisu, więc jego
 błąd przerywa żądanie.
 
