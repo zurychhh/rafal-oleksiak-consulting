@@ -224,7 +224,9 @@ export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = 
     const text = all + '\n' + raw
     // Przykladowe adresy w placeholderach pol („you@yourstore.com") to nie dane osobowe.
     const ILLUSTRATIVE = /@(?:example\.(?:com|org|net)|yourstore\.com|yourbrand\.com|yourcompany\.com)$/i
-    for (const m of text.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)) {
+    // TLD tylko z malych liter: w wyrenderowanym tekscie adres i nastepne slowo
+    // stoja w osobnych elementach i innerText skleja je („…consulting.comRafał").
+    for (const m of text.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}/g)) {
       if (ILLUSTRATIVE.test(m[0])) continue
       if (m[0].toLowerCase() !== EMAIL) fail.push(['10 dane osobowe', `adres e-mail inny niz ${EMAIL}: „${m[0]}"`])
     }
