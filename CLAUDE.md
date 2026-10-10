@@ -362,21 +362,13 @@ narzędzia FMCG. `design/qa.js` to checker Playwright.
 
 ## Wdrażanie na produkcję — CZYTAJ, ZANIM POWIESZ, ŻE COŚ JEST NA ŻYWO
 
-**UWAGA — sprawdzone 08.10.2026: push na `claude/production` daje TYLKO Preview.**
-GitHub Deployments dla `3428d8e` (push na `claude/production`): środowisko `Preview`.
-Ostatni Production z gita to `4ea9ced` 26.09, wdrożony z CLI. Wniosek: Branch Tracking
-w Vercelu nie wskazuje na `claude/production`, choć ta sekcja to wcześniej twierdziła.
-**Potwierdzone w API Vercela 10.10.2026: `link.productionBranch` = `feature/new-site`.**
-Czyli push na `feature/new-site` WDRAŻA DOMENĘ — nie pushuj tam niczego, dopóki Rafał
-nie przestawi Branch Tracking na `claude/production` (Settings → Environments →
-Production → Branch Tracking). CLI nie ma polecenia do zmiany tej gałęzi.
-Domenę zmienia `npx vercel@latest --prod --yes` z katalogu na właściwym commicie
-(sprawdź `git log HEAD..origin/claude/production` — puste) i dopiero potem weryfikacja
-jednym przejściem. Dopóki Branch Tracking nie zostanie ustawiony, push na
-`claude/production` jest zapisem stanu, nie wdrożeniem.
-Dlatego kod na `claude/production` pushuje wyłącznie promotor po zielonej bramce;
-praca ręczna idzie na osobną gałąź (np. `promote/…`), która daje tylko Preview.
-Push samych plików `system/` jest bezpieczny — przebuduje tę samą stronę.
+**`claude/production` jest gałęzią PRODUKCYJNĄ Vercela — potwierdzone 11.10.2026.**
+API: `link.productionBranch` = `claude/production`; pusty commit `dbd9247` dał wdrożenie
+`target=production`, a alias `oleksiakconsulting.com` wskazał na nie. **Każdy push na
+`claude/production` wdraża domenę.** (Do 10.10 Branch Tracking wskazywał `feature/new-site`,
+a push na `claude/production` dawał tylko Preview — stąd ręczne `vercel --prod` 08–10.10.)
+Praca ręczna idzie na osobną gałąź (`promote/…`, tylko Preview). Przed pushem:
+`git log HEAD..origin/claude/production` musi być puste.
 
 Weryfikacja wdrożenia bez CLI: `https://api.github.com/repos/zurychhh/rafal-oleksiak-consulting/commits/<sha>/status`
 (kontekst „Vercel", `success`). **Nie odpytuj domeny w pętli co kilkanaście sekund** —

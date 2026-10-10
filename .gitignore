@@ -73,3 +73,7 @@ test-screenshots/
 
 # Prywatna lista nazw zakazanych w tresci strony (scripts/content-rules.test.mjs)
 .content-deny.local
+
+# Kopie eksportow z Claude Design (vNN-bundle.html) — zrodlem jest
+# design/production/claude-design-bundle.html, kopie nie leza w repo.
+design/production/v*-bundle.html
