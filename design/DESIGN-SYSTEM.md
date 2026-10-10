@@ -6,7 +6,8 @@ Kolory, typografia, ruch, siatka i komponenty są opisane tam i tylko tam — te
 powtarza, żeby nie było dwóch źródeł prawdy.
 
 Tutaj zostaje wyłącznie to, czego karta projektowa nie może powiedzieć: jak ten system wdrażać
-w tym repo.
+w tym repo. Wyjątkiem jest norma czerwieni niżej — to reguła sprawdzana w bramce po każdym
+przeniesieniu, więc musi stać tam, gdzie bramka.
 
 ## Fonty
 
@@ -18,15 +19,41 @@ Google Fonts, bo są podglądem wewnątrz Claude Design — to nie jest wzór dl
 
 ## Gdzie ląduje kod
 
-Strona główna jest przenoszona ze źródła: zmieniasz `design/production/index.html`, potem
-`npm run ship -- --yes`. Regiony między znacznikami `>>> ZE ZRODLA — GENEROWANE <<<` są
-nadpisywane przy każdym shipie — plików w `app/` nie edytuje się ręcznie. Narzędzie ma własne
-źródło `tool-index.html` i własny skrypt `node scripts/ship-tool.mjs tool-index.html --yes`,
-który musi pójść **przed** buildem.
+Strony z Claude Design (`/`, a z `--route` kolejne, np. `/cv`) przenosi
+`node scripts/ship-design.mjs <bundle.html> [--route <nazwa>] --yes` — hostujemy eksport,
+nie przepisujemy go; `app/design/generated.ts` i `app/<nazwa>/generated.ts` się nie edytuje.
+Narzędzie ma własne źródło `tool-index.html` i własny skrypt
+`node scripts/ship-tool.mjs tool-index.html --yes`, który musi pójść **przed** buildem.
+`design/production/index.html` + `npm run ship` to archiwum starej „The Audit".
 
-Zmienne koloru idą do bloku `:root` w `app/globals.css` przez ship. Skrypt strony to
-`app/audit-runtime.js` — plik `.js`, kopiowany bajt w bajt, celowo imperatywny, poza
-typecheckiem. Animacji nie przepisujemy na stan Reacta.
+## Czerwień — norma projektu (od v76, 11.10.2026)
+
+Wermilion zastąpił bursztyn. To jest norma, nie jednorazowa decyzja — każda nowa wersja
+płótna i każda nowa trasa jej podlega.
+
+**Czerwień znaczy wyłącznie zmierzoną wartość.**
+
+| Token | Użycie | Kontrast |
+|---|---|---|
+| `#D6202B` | grafika i tekst **od 24 px** | 4,70:1 na papierze `#F7F5F0` |
+| `#9E161F` | tekst mniejszy niż 24 px | 7,45:1 na papierze, 6,74:1 na tincie |
+
+`#D6202B` **nigdy jako mały tekst i nigdy na tincie `#EDEAE1`** (4,26:1 — poniżej 4,5).
+
+Zasady:
+
+1. Czerwona jest **wartość, nie zdanie** — „69", nie „The order data says 69".
+2. **Jednostka idzie z liczbą** — jeśli jednostka stoi przy wartości, ma ten sam kolor.
+3. **Daty nigdy nie są czerwone.**
+4. **Dwa pomiary tej samej akcji zostają w jednej linii i tylko rozstrzygający jest
+   czerwony** — 45 z etykiety atramentem, 69 z danych czerwienią.
+5. **Czerwień nie dotyka** pól formularza, etykiet pól, zgód, checkboxów, przycisków,
+   ceny ani paska (przyklejonego paska formularza i paska cookies).
+6. **Jedna czerwona płaszczyzna na stronę.**
+
+Sprawdzane po każdym przeniesieniu: skan stylów obliczonych na 1440 i 390 px po przewinięciu
+całej strony, z zaznaczonymi checkboksami — zero czerwieni w strefach z punktu 5; kontrast
+każdego czerwonego tekstu liczony względem realnie namalowanego tła.
 
 ## Animacja — trzy warunki dokończenia
 
@@ -48,24 +75,26 @@ namalowanego tła, nie oceniane na oko. Żaden pojemnik z tekstem nie ma sztywne
 razem z `overflow:hidden`. Wszystko działa z klawiatury i z czytnikiem ekranu.
 
 ```
-npm run ship -- --yes
+node scripts/ship-design.mjs <bundle.html> --yes      # albo --route <nazwa>
 npm run build
 npx tsc --noEmit
 npm run lint                      # zero bledow, zasada zapadki
-node scripts/ship-compare.mjs
-node design/qa.js http://localhost:3000 --scroll
-node design/qa.js http://localhost:3000/stop --scroll
-node design/qa.js http://localhost:3000/tool --scroll
+node design/qa.js http://localhost:3000 --scroll       # oraz /stop, /tool, /<nazwa>
+node scripts/content-rules.test.mjs --url http://localhost:3000   # --route <nazwa>
+node scripts/ship-compare.mjs                          # --route <nazwa>
 ```
 
 `qa.js` puszczamy **lokalnie** — na produkcji wysyła formularz na każdym z dziewięciu
 viewportów. `qa.js` na `/tool` z ustawionym `ANTHROPIC_API_KEY`, inaczej panele AI chowają się
-i bramka sprawdza mniejszą stronę niż produkcja. Push nie wdraża; wdrożenie to
-`npx vercel@latest --prod`, a domenę sprawdzamy jednym przebiegiem, nie pętlą.
+i bramka sprawdza mniejszą stronę niż produkcja. **Push na `claude/production` wdraża
+domenę** (Branch Tracking potwierdzony 11.10.2026) — pushujemy dopiero po zielonej bramce,
+a domenę sprawdzamy jednym przebiegiem, nie pętlą.
 
 ## Kontrakty, które muszą działać
 
-Formularz w listwie wyjść idzie do `/api/lead` — adres plus opcjonalna jedna linia
-wiadomości, mail do właściciela i zapis w HubSpocie. Bursztynowe CTA linkuje do `/tool`.
-Narzędzie kończy się formularzem z osobnym checkboxem zgody na kontakt, domyślnie
-odznaczonym — to wymaga dołożenia pola zgody i źródła do kontraktu `/api/lead`.
+Formularze stron z Claude Design idą do `/api/lead` przez `LeadBridge`: adres sklepu,
+e-mail, zgoda na kontakt (`required`) i marketingowa (opcjonalna), obie domyślnie
+odznaczone. `/cv`: `form#cv-enquiry`, pole sklepu opcjonalne. `/tool`: `form#tool-enquiry`
+z wynikiem w `data-interval`, `data-label-day`, `data-sample-n`, `data-window-days`,
+`data-bimodal`, `data-interval-low`, `data-interval-high`; obie zgody opcjonalne, bo wysłanie
+analizy to wykonanie prośby, nie kontakt handlowy. CTA do `/tool` jest atramentowe.
