@@ -14,7 +14,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
 import { createLeadContact } from '@/app/lib/lead-hubspot';
-import { confirmEmail, ownerEmail, analysisEmail, analysisText } from '@/app/lib/lead-email';
+import { confirmEmail, confirmText, ownerEmail, analysisEmail, analysisText } from '@/app/lib/lead-email';
 import { analysisOf, subjectFor, ownerTag } from '@/app/lib/lead-analysis';
 
 // Klient Resend powstaje dopiero w POST, po walidacji. W zakresie modułu
@@ -186,13 +186,15 @@ export async function POST(request: NextRequest) {
   //     "Send me the analysis". Temat i tresc nie sa pewniejsze niz ekran
   //     (app/lib/lead-analysis.ts). Bez wyniku: dotychczasowe potwierdzenie.
   const analysis = analysisOf(lead);
+  // Stopka zalezy od zgody marketingowej — patrz FOOT w lead-email.ts.
+  const to = { email: lead.email, marketing: consent.marketing };
   const { error } = await resend.emails.send({
     from,
     to: [lead.email],
     replyTo: process.env.TO_EMAIL,
     ...(analysis
-      ? { subject: subjectFor(analysis), html: analysisEmail(analysis), text: analysisText(analysis) }
-      : { subject: 'Got it — I reply by hand', html: confirmEmail() }),
+      ? { subject: subjectFor(analysis), html: analysisEmail(analysis, to), text: analysisText(analysis, to) }
+      : { subject: 'Got it — I reply by hand', html: confirmEmail(to), text: confirmText(to) }),
   });
 
   if (error) {

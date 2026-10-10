@@ -1,12 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function StopClient() {
   const [email, setEmail] = useState('');
   const [err, setErr] = useState('');
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
+
+  // Link ze stopki maila niesie ?email= — strona otwiera sie z wpisanym adresem
+  // i wypis to jeden przycisk. Celowo NIE wypisujemy samym wejsciem (GET):
+  // skanery linkow w poczcie otwieraja odnosniki same i wypisywalyby ludzi
+  // bez ich wiedzy. Czytane z location w efekcie, nie przez useSearchParams,
+  // bo /stop jest statyczna i nie potrzebuje do tego granicy Suspense.
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search).get('email');
+      if (q && q.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(q)) setEmail(q);
+    } catch { /* stary silnik bez URLSearchParams */ }
+  }, []);
 
   async function submit(ev: React.FormEvent) {
     ev.preventDefault();

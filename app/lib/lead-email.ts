@@ -12,7 +12,47 @@ import { analysisOf, ownerTag, WORDING, type Analysis } from '@/app/lib/lead-ana
 const esc = (s: string) =>
   s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
-const SHELL = (inner: string) => `<!doctype html>
+/** Odbiorca maila do odwiedzajacego — od niego zalezy stopka. */
+export interface Recipient {
+  email: string
+  marketing: boolean
+}
+
+const stopUrl = (email: string) =>
+  `https://oleksiakconsulting.com/stop?email=${encodeURIComponent(email)}`
+
+/* Stopka mowi prawde o tym, na co ktos sie zgodzil. "No list, no sequence"
+   tylko dla osob BEZ zgody marketingowej — kto ja zaznaczyl, zapisal sie na
+   okazjonalne maile i stopka nie moze temu przeczyc. Link wypisu otwiera /stop
+   z wpisanym adresem; wypis to jeden przycisk (nie GET — skanery linkow). */
+const FOOT = {
+  marketing:
+    'You signed up for occasional emails from me — notes on reorder timing, new tools I build, ' +
+    'and what I learn working on FMCG stores.',
+  marketingStop: "the page opens with your address filled in; one button and you're off the list.",
+  reply:
+    'You are getting this because you wrote to me on oleksiakconsulting.com. I keep your address to ' +
+    'reply — no list, no sequence, no third party.',
+  replyStop: 'and I never write again.',
+}
+
+function footerHtml(r: Recipient | null): string {
+  if (!r) return ''
+  const a = (t: string) => `<a href="${esc(stopUrl(r.email))}" style="color:#83879A;">${t}</a>`
+  const body = r.marketing
+    ? `${esc(FOOT.marketing)} ${a('Unsubscribe')} &mdash; ${esc(FOOT.marketingStop)}`
+    : `${esc(FOOT.reply)} ${a('Tell me to stop')} ${esc(FOOT.replyStop)}`
+  return `<p style="max-width:600px;margin:16px auto 0;font-size:11px;line-height:1.7;color:#83879A;
+  text-align:left;">${body}</p>`
+}
+
+function footerText(r: Recipient): string {
+  return r.marketing
+    ? `${FOOT.marketing}\nUnsubscribe: ${stopUrl(r.email)} — ${FOOT.marketingStop}`
+    : `${FOOT.reply}\nTell me to stop ${FOOT.replyStop} ${stopUrl(r.email)}`
+}
+
+const SHELL = (inner: string, r: Recipient | null) => `<!doctype html>
 <html><body style="margin:0;background:#F4F4F1;padding:28px 16px;
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
   color:#171A24;line-height:1.6;">
@@ -21,13 +61,7 @@ const SHELL = (inner: string) => `<!doctype html>
   style="max-width:600px;background:#FFFFFF;border:1px solid #E3E1DB;">
 <tr><td style="padding:32px 32px 36px;">${inner}</td></tr>
 </table>
-<p style="max-width:600px;margin:16px auto 0;font-size:11px;line-height:1.7;color:#83879A;
-  text-align:left;">
-You are getting this because you wrote to me on oleksiakconsulting.com. I keep your address to
-reply — no list, no sequence, no third party.
-<a href="https://oleksiakconsulting.com/stop" style="color:#83879A;">Tell me to stop</a> and I never
-write again.
-</p>
+${footerHtml(r)}
 </td></tr></table>
 </body></html>`
 
@@ -37,28 +71,44 @@ const P = (t: string) =>
   `<p style="margin:0 0 14px;font-size:15px;line-height:1.65;">${t}</p>`
 
 /** Potwierdzenie dla odwiedzajacego. Krotkie, z jedna prosba.
-    Nie bierze leada: nie personalizujemy tresci, a adres i tak jest w polu To. */
-export function confirmEmail() {
+    Tresc nie jest personalizowana; od odbiorcy zalezy tylko stopka. */
+const CONFIRM = {
+  head: 'Got it — I reply by hand.',
+  paras: [
+    'I read every message myself, so there is no sequence behind this one. You will hear ' +
+      'back from me, usually the same day.',
+    'If you want that reply to be worth reading, send me an order export: date, customer, ' +
+      'product title, quantity, price. A CSV straight out of Shopify, WooCommerce or ' +
+      'BaseLinker is fine — no cleaning up.',
+  ],
+  tool:
+    'From that I can see the real gap between the day a pack runs out and the day your ' +
+    'customer comes back. You can see the same thing yourself first, in your browser, ' +
+    'without sending me anything:',
+}
+
+export function confirmEmail(r: Recipient) {
   return SHELL(
-    H('Got it — I reply by hand.') +
+    H(esc(CONFIRM.head)) +
+      CONFIRM.paras.map((t) => P(esc(t))).join('') +
       P(
-        'I read every message myself, so there is no sequence behind this one. You will hear ' +
-          'back from me, usually the same day.',
-      ) +
-      P(
-        'If you want that reply to be worth reading, send me an order export: date, customer, ' +
-          'product title, quantity, price. A CSV straight out of Shopify, WooCommerce or ' +
-          'BaseLinker is fine — no cleaning up.',
-      ) +
-      P(
-        'From that I can see the real gap between the day a pack runs out and the day your ' +
-          'customer comes back. You can see the same thing yourself first, in your browser, ' +
-          'without sending me anything: ' +
+        esc(CONFIRM.tool) + ' ' +
           '<a href="https://oleksiakconsulting.com/tool" style="color:#C2410C;">' +
           'oleksiakconsulting.com/tool</a>.',
       ) +
       P('— Rafał'),
+    r,
   )
+}
+
+export function confirmText(r: Recipient) {
+  return [
+    CONFIRM.head, '',
+    ...CONFIRM.paras.flatMap((t) => [t, '']),
+    `${CONFIRM.tool} https://oleksiakconsulting.com/tool`, '',
+    '— Rafał', '', '--',
+    footerText(r),
+  ].join('\n')
 }
 
 /* ── Wynik z /tool ──────────────────────────────────────────────────────────
@@ -111,7 +161,7 @@ function analysisLines(a: Analysis): { head: string; lines: string[] } {
 }
 
 /** Mail z wynikiem dla odwiedzajacego — HTML. */
-export function analysisEmail(a: Analysis, now = new Date()) {
+export function analysisEmail(a: Analysis, r: Recipient, now = new Date()) {
   const { head, lines } = analysisLines(a)
   const table =
     `<table role="presentation" cellpadding="0" cellspacing="0" width="100%"
@@ -130,11 +180,12 @@ export function analysisEmail(a: Analysis, now = new Date()) {
       P('If you want me to look at what this means for your store, reply to this email — ' +
         'I read every message myself.') +
       P('— Rafał'),
+    r,
   )
 }
 
 /** Ten sam mail jako plain text — dla klientow bez HTML i dla filtrow spamu. */
-export function analysisText(a: Analysis, now = new Date()) {
+export function analysisText(a: Analysis, r: Recipient, now = new Date()) {
   const { head, lines } = analysisLines(a)
   const rows = analysisRows(a, now)
   const w = Math.max(...rows.map(([k]) => k.length))
@@ -149,8 +200,7 @@ export function analysisText(a: Analysis, now = new Date()) {
     '— Rafał',
     '',
     '--',
-    'You are getting this because you asked for this analysis on oleksiakconsulting.com.',
-    'Tell me to stop and I never write again: https://oleksiakconsulting.com/stop',
+    footerText(r),
   ].join('\n')
 }
 
@@ -217,5 +267,6 @@ export function ownerEmail(lead: Lead, consent?: ConsentRecord, crmError?: strin
         ? `<table role="presentation" cellpadding="0" cellspacing="0"
              style="font-size:13px;line-height:1.6;margin-top:4px;">${rows}</table>`
         : P('<span style="color:#83879A;">No campaign or referrer recorded.</span>')),
+    null, // mail do wlasciciela — bez stopki dla odbiorcy
   )
 }
