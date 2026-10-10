@@ -48,6 +48,14 @@ function propertiesFrom(lead: Lead, consent: ConsentRecord): Record<string, stri
      odwrotnie: "false" to nie brak danych, tylko odnotowany brak zgody, i to
      jest dokladnie ta informacja, ktorej potrzebujemy, zeby kogos NIE wrzucic
      na liste marketingowa. Zapisujemy wiec zawsze, takze gdy jest falszem. */
+  /* Wynik z /tool — tylko gdy zgloszenie go niesie (regula "nie wysylamy
+     pustych"). Wlasciwosci zalozone 11.10.2026 przez hubspot-setup.mjs;
+     nowa nazwa tutaj BEZ wpisu tam = 400 i caly kontakt przepada. */
+  if (lead.interval != null) p.reorder_interval_days = String(lead.interval);
+  if (lead.labelDay != null) p.label_day = String(lead.labelDay);
+  if (lead.sampleN != null) p.sample_n = String(lead.sampleN);
+  if (lead.windowDays != null) p.data_window_days = String(lead.windowDays);
+
   p.consent_contact = consent.contact ? 'true' : 'false';
   p.consent_marketing = consent.marketing ? 'true' : 'false';
   p.consent_at = consent.at;

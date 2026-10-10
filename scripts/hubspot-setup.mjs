@@ -104,6 +104,17 @@ const PROPS = [
     description: 'Adres sklepu podany w formularzu.' },
   { name: 'lead_form', label: 'Form', type: 'string', fieldType: 'text',
     description: 'Z którego formularza przyszło zgłoszenie (hero, phone, close, bar, tool…).' },
+
+  /* Wynik z /tool, policzony w przeglądarce odwiedzającego. Zapisywane tylko,
+     gdy zgłoszenie je niesie — puste pole w CRM znaczyłoby "zmierzyliśmy zero". */
+  { name: 'reorder_interval_days', label: 'Reorder interval (days)', type: 'number', fieldType: 'number',
+    description: 'Mediana odstępu między zamówieniami z /tool. Przy sample_n < 30 to poszlaka, nie liczba.' },
+  { name: 'label_day', label: 'Label day', type: 'number', fieldType: 'number',
+    description: 'Dzień, na który starcza opakowanie według etykiety (z /tool).' },
+  { name: 'sample_n', label: 'Repeat customers in sample', type: 'number', fieldType: 'number',
+    description: 'Liczba klientów z co najmniej dwoma zamówieniami, z których policzono odstęp.' },
+  { name: 'data_window_days', label: 'Data window (days)', type: 'number', fieldType: 'number',
+    description: 'Długość okresu objętego plikiem zamówień w /tool.' },
 ];
 
 const H = { Authorization: `Bearer ${KEY}`, 'Content-Type': 'application/json' };
