@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import { DC } from './generated'
 
 /**
  * Uruchamia runtime Claude Design na szablonie <x-dc> wyrenderowanym przez serwer.
@@ -21,7 +20,14 @@ import { DC } from './generated'
  * na `/` konczy sie pelnym przeladowaniem — nastepna trasa dostaje czysty dokument,
  * a `/` zawsze bootuje na swiezym.
  */
-export default function DcBoot() {
+/** Dane z eksportu trasy (generated.ts) i jej wlasna sciezka — ta sama logika
+    sluzy `/` i kazdej innej trasie z ship-design --route. */
+export default function DcBoot({ runtime, resources, fonts, path }: {
+  runtime: string
+  resources: Readonly<Record<string, string>>
+  fonts: readonly string[]
+  path: string
+}) {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const w = window as any
@@ -48,7 +54,7 @@ export default function DcBoot() {
       // Runtime pisze krojem bez prefiksu zrzutu. Jesli ten jeszcze sie laduje,
       // przejecie narysowaloby tekst fontem zapasowym i przelamalo uklad —
       // czekamy na font i probujemy jeszcze raz.
-      const specs = (DC.prerender?.fonts ?? []).map((x) => x.replace('"dcpre ', '"'))
+      const specs = fonts.map((x) => x.replace('"dcpre ', '"'))
       const missing = specs.filter((x) => !document.fonts.check(x, 'Aa\u0142'))
       if (missing.length) {
         if (!waitingFonts) {
@@ -91,9 +97,9 @@ export default function DcBoot() {
         x.innerHTML = src.innerHTML
         src.after(x)
       }
-      w.__resources = { ...DC.resources }
+      w.__resources = { ...resources }
       const s = document.createElement('script')
-      s.src = DC.runtime
+      s.src = runtime
       s.async = false
       s.dataset.dcRuntime = '1'
       document.body.appendChild(s)
@@ -106,12 +112,13 @@ export default function DcBoot() {
       let done = false
       for (const ms of [0, 60, 250]) {
         setTimeout(() => {
-          if (done || window.location.pathname === '/') return
+          if (done || window.location.pathname === path) return
           done = true
           window.location.reload()
         }, ms)
       }
     }
+    // Dane trasy sa stale w czasie zycia dokumentu — efekt ma sie wykonac raz.
   }, [])
 
   return null

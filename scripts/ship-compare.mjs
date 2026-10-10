@@ -16,6 +16,7 @@
  *
  *   node scripts/ship-compare.mjs            # wymaga dzialajacego serwera
  *   SHIP_URL=http://localhost:3001 node scripts/ship-compare.mjs
+ *   node scripts/ship-compare.mjs --route cv   # trasa z ship-design --route
  *
  * Stara wersja dla „The Audit" zyje w scripts/ship-compare-audit.mjs.
  */
@@ -24,9 +25,13 @@ import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
-const URL_APP = process.env.SHIP_URL || 'http://localhost:3000/'
+// --route <nazwa>: ta sama trasa co w ship-design (app/<nazwa>, design/production/<nazwa>-bundle.html).
+const ri = process.argv.indexOf('--route')
+const ROUTE = ri > 0 ? process.argv[ri + 1] : ''
+const BASE = (process.env.SHIP_URL || 'http://localhost:3000/').replace(/\/?$/, '/')
+const URL_APP = ROUTE ? BASE + ROUTE : BASE
 if (/oleksiakconsulting\.com/.test(URL_APP)) { console.error('Porownanie idzie lokalnie, nie na produkcji.'); process.exit(1) }
-const SRC = resolve('design/production/claude-design-bundle.html')
+const SRC = resolve(ROUTE ? `design/production/${ROUTE}-bundle.html` : 'design/production/claude-design-bundle.html')
 if (!existsSync(SRC)) { console.error('Brak zrodla: ' + SRC); process.exit(1) }
 
 const PROPS = ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'textTransform',

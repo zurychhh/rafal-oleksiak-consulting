@@ -7,6 +7,11 @@
  *   node scripts/ship-design.mjs <bundle.html> --yes    przenosi
  *   node scripts/ship-design.mjs --yes                  przenosi to, co juz lezy w
  *                                                       design/production/claude-design-bundle.html
+ *   node scripts/ship-design.mjs <bundle.html> --route <nazwa> [--yes]
+ *       to samo dla innej trasy (np. /cv): app/<nazwa>/generated.ts,
+ *       app/<nazwa>-source.snapshot.html, design/production/<nazwa>-bundle.html.
+ *       Bez --route — dokladnie jak dotad (strona glowna). Zasoby /dc sa wspolne:
+ *       sprzatanie nie usuwa plikow, ktorych uzywa generated.ts innej trasy.
  *
  * PODEJSCIE: nie przepisujemy strony, tylko HOSTUJEMY ja tak, jak dziala w Claude
  * Design — szablon <x-dc> + logika text/x-dc + runtime Claude Design + React 18 UMD.
@@ -43,23 +48,37 @@ import { resolve, dirname, relative } from 'node:path'
 import { gunzipSync } from 'node:zlib'
 import { createHash } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
-import { checkStatic, formatFailures } from './content-rules.test.mjs'
+import { checkStatic, formatFailures, PROFILES } from './content-rules.test.mjs'
 import { prerender } from './design-prerender.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const P = {
-  source: resolve(ROOT, 'design/production/claude-design-bundle.html'),
-  generated: resolve(ROOT, 'app/design/generated.ts'),
-  snapshot: resolve(ROOT, 'app/design-source.snapshot.html'),
-  assets: resolve(ROOT, 'public/dc'),
-}
-const PUBLIC_PREFIX = '/dc/'
+const die = (msg) => { console.error('\n  ✗ ' + msg + '\n'); process.exit(1) }
 
 const args = process.argv.slice(2)
 const YES = args.includes('--yes')
-const input = args.find((a) => !a.startsWith('--'))
+const ri = args.indexOf('--route')
+const ROUTE = ri >= 0 ? args[ri + 1] : ''
+if (ri >= 0 && !/^[a-z][a-z0-9-]{0,30}$/.test(ROUTE || '')) die('--route wymaga nazwy trasy z malych liter, np. --route cv')
+// Trasy z wlasnym mechanizmem albo bez szablonu — ship-design nie moze ich nadpisac.
+if (['api', 'blog', 'stop', 'privacy', 'tool', 'design', 'components', 'lib'].includes(ROUTE)) die(`Trasa „${ROUTE}" nie idzie przez ship-design.`)
+const input = args.find((a, i) => !a.startsWith('--') && !(ri >= 0 && i === ri + 1))
+const PROFILE = ROUTE ? PROFILES[ROUTE] : 'home'
+if (!PROFILE) die(`Brak profilu tresci dla trasy „${ROUTE}" w scripts/content-rules.test.mjs (PROFILES). Dopisz go swiadomie.`)
 
-const die = (msg) => { console.error('\n  ✗ ' + msg + '\n'); process.exit(1) }
+const P = ROUTE
+  ? {
+      source: resolve(ROOT, `design/production/${ROUTE}-bundle.html`),
+      generated: resolve(ROOT, `app/${ROUTE}/generated.ts`),
+      snapshot: resolve(ROOT, `app/${ROUTE}-source.snapshot.html`),
+      assets: resolve(ROOT, 'public/dc'),
+    }
+  : {
+      source: resolve(ROOT, 'design/production/claude-design-bundle.html'),
+      generated: resolve(ROOT, 'app/design/generated.ts'),
+      snapshot: resolve(ROOT, 'app/design-source.snapshot.html'),
+      assets: resolve(ROOT, 'public/dc'),
+    }
+const PUBLIC_PREFIX = '/dc/'
 const say = (msg) => console.log(msg)
 const sha = (buf) => createHash('sha256').update(buf).digest('hex').slice(0, 16)
 const kb = (n) => (n / 1024).toFixed(1) + ' kB'
@@ -230,7 +249,7 @@ const urlOnly = forms.filter((f) => /inputmode="url"/.test(f) && !/type="email"/
 
 // ───────────────────────────────────────────── 5. test tresci (przed zapisem)
 
-const failures = checkStatic({ template: dcTemplate, script: dcScript })
+const failures = checkStatic({ template: dcTemplate, script: dcScript }, PROFILE)
 
 // ───────────────────────────────────────────── 6. wyjscie
 
@@ -275,7 +294,7 @@ if (!failures.length) {
 
 const generated =
   '// GENEROWANE przez scripts/ship-design.mjs — nie edytuj recznie.\n' +
-  '// Zrodlo: design/production/claude-design-bundle.html\n' +
+  '// Zrodlo: ' + relative(ROOT, P.source) + '\n' +
   'export const DC = ' + JSON.stringify(DC, null, 2) + ' as const\n'
 
 // Migawka: czytelny, diffowalny odpowiednik bundla (bez base64). Z niej liczony
@@ -287,7 +306,21 @@ const snapshot =
 const wanted = Object.fromEntries(Object.values(assets).map((a) => [a.file, a.bytes]))
 const current = existsSync(P.assets) ? readdirSync(P.assets) : []
 const toWrite = Object.keys(wanted).filter((f) => !current.includes(f))
-const toRemove = current.filter((f) => !(f in wanted))
+// Zasoby uzywane przez generated.ts INNYCH tras zostaja — inaczej przeniesienie
+// /cv skasowaloby runtime i fonty strony glownej (i odwrotnie).
+function generatedFiles(dir) {
+  const out = []
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    if (e.name === 'node_modules' || e.name.startsWith('.')) continue
+    const f = resolve(dir, e.name)
+    if (e.isDirectory()) out.push(...generatedFiles(f))
+    else if (e.name === 'generated.ts' && f !== P.generated) out.push(f)
+  }
+  return out
+}
+const usedElsewhere = new Set(generatedFiles(resolve(ROOT, 'app'))
+  .flatMap((f) => [...readFileSync(f, 'utf8').matchAll(/\/dc\/([0-9a-f]{16}\.[a-z0-9]+)/g)].map((m) => m[1])))
+const toRemove = current.filter((f) => !(f in wanted) && !usedElsewhere.has(f))
 
 // ─── raport
 const visible = (html) => html
@@ -351,4 +384,6 @@ for (const f of toRemove) unlinkSync(resolve(P.assets, f))
 writeFileSync(P.generated, generated)
 writeFileSync(P.snapshot, snapshot)
 say('\n  ✓ Zapisane. Teraz bramka (CLAUDE.md → „Strona glowna"): build, tsc, lint,')
-say('    qa.js na / /stop /tool, content-rules --url, ship-compare.\n')
+say(ROUTE
+  ? `    qa.js na / /${ROUTE} /stop /tool, content-rules --route ${ROUTE} --url, ship-compare --route ${ROUTE}.\n`
+  : '    qa.js na / /stop /tool, content-rules --url, ship-compare.\n')

@@ -80,7 +80,8 @@ zapisuje zawsze te same wartości domyślne, więc niczego w CRM nie dowodzi.
 
 ### Bramka po każdym etapie
 
-Build, `tsc --noEmit`, lint z **zerem błędów**, `qa.js` na `/`, `/stop` i `/tool`,
+Build, `tsc --noEmit`, lint z **zerem błędów**, `qa.js` na `/`, `/stop` i `/tool`
+(oraz `/cv`, gdy przestanie być zaślepką),
 `ship-compare.mjs`, `content-rules.test.mjs --url http://localhost:3000`
 i `tool-rules.test.mjs`. Obowiązuje **zasada zapadki**: liczba błędów lintu po etapie
 nie może być wyższa niż przed nim. `qa.js` na `/tool` biegnie przy **ustawionym**
@@ -182,6 +183,23 @@ się krojem zapasowym i przeskakiwał (CLS ~0,05). Szablon `<x-dc>` jedzie w bez
 Pomiar 26.09: CLS 0 na pięciu szerokościach; nagłówek widoczny po ~1,2 s na wolnym 4G
 (było ~3,4 s). Jedyna różnica pikseli przed/po przejęciu to zamierzona animacja
 projektu (linie tuż nad dolną krawędzią ekranu chowają się i wjeżdżają przy przewijaniu).
+
+**Inne trasy z Claude Design — `--route <nazwa>`** (pierwsza: `/cv`). Ten sam mechanizm,
+inne pliki: `design/production/<nazwa>-bundle.html` → `app/<nazwa>/generated.ts` +
+`app/<nazwa>-source.snapshot.html`; zasoby `/dc` wspólne (sprzątanie nie usuwa plików,
+których używa `generated.ts` innej trasy). Bez `--route` — dokładnie jak dotąd.
+Renderuje `app/design/DcPage.tsx` (prerender + szablon + `DcBoot` + `LeadBridge`),
+wspólny dla `/` i każdej trasy; `page.tsx` trasy ma tylko metadata i JSON-LD.
+Trasa wymaga profilu treści w `PROFILES` (`content-rules.test.mjs`) — bez niego
+`ship-design` odmawia. Dopóki bundla nie ma, `app/<nazwa>/generated.ts` to zaślepka
+`DC = null`: trasa daje 404 i nie ma jej w `sitemap.xml`.
+Bramka trasy: `qa.js` na `/<nazwa>`, `content-rules --route <nazwa> --url …`,
+`ship-compare --route <nazwa>`.
+**`/cv`:** profil `cv` — bez ceny, bez procentów i mnożników, bez liczb przy kliencie
+poza latami/datami, link do `/tool`, stopka; **zero telefonu, daty urodzenia i adresu
+innego niż `rafal@oleksiakconsulting.com`** (twarda reguła, repo publiczne). Formularz
+`#cv-enquiry` → `form: "cv"` (mapa `KEYED` w `LeadBridge`), pole sklepu opcjonalne.
+Person na `/cv` ma to samo `@id` co kanoniczny na `/`.
 
 **Elementy dokładane przez `ship-design` mają `data-ship-added`** (link do `/tool`
 w nagłówku, brakujące pozycje stopki); `ship-compare` zdejmuje je przed porównaniem

@@ -19,6 +19,17 @@
      8. widoczny link do /tool
      9. zadnej odznaki Claude Design i zadnych zasobow z unpkg / Google Fonts
 
+   Profil /cv (--route cv): lata i daty sa trescia CV, wiec lista ALLOWED_NUMBERS
+   NIE obowiazuje. W zamian:
+     2cv. zadnej kwoty — cena mieszka na stronie glownej, CV nie jest oferta
+     3.   zadnych procentow ani mnoznikow (bez zmian)
+     4cv. zadnej liczby obok nazwy klienta poza latami/datami — wynik klienta
+          w liczbach to wymysl
+     10.  dane osobowe: zadnego telefonu, daty urodzenia ani adresu e-mail innego
+          niz rafal@oleksiakconsulting.com — repo jest publiczne, to twarda regula
+   Zasady 1, 5, 6, 7, 8 (link do /tool), 9 — bez zmian.
+   „Zadnych wymyslonych danych" nie da sie sprawdzic mechanicznie — to robi czlowiek.
+
    Dwie warstwy:
      A. statyczna, zawsze — czyta app/design/generated.ts (to, co pojedzie)
      B. wyrenderowana, z --url — otwiera strone w Chromium i sprawdza tekst,
@@ -27,6 +38,7 @@
    Uruchomienie:
      node scripts/content-rules.test.mjs
      node scripts/content-rules.test.mjs --url http://localhost:3000
+     node scripts/content-rules.test.mjs --route cv --url http://localhost:3000
    NIGDY --url na produkcje nie jest potrzebne: test nie wysyla formularza, ale
    bramke puszczamy lokalnie.
    --------------------------------------------------------------------------- */
@@ -132,8 +144,15 @@ const numberTokens = (s) => (s.match(/\d+(?:[.,]\d+)*/g) || [])
  * @param segments  tablica napisow (kazdy = jeden blok tresci)
  * @param extra     { hrefs: string[], footer: string, raw: string }
  */
-export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = {}) {
+/** Profile tresci per trasa. Nowa trasa = swiadomie dopisany profil. */
+export const PROFILES = { home: 'home', cv: 'cv' }
+
+// Lata i daty w CV („2019–2021", „03/2019", „2019-03") — tresc, nie wynik.
+const DATES = /\b(?:\d{1,2}[./-])?(?:19|20)\d{2}(?:[./-]\d{1,2})?\b/g
+
+export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = {}, profile = 'home') {
   const fail = []
+  const cv = profile === 'cv'
   const all = segments.join('\n')
   const deny = [...PUBLIC_DENY, ...privateDeny()]
 
@@ -149,17 +168,18 @@ export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = 
   //     sugerowalo drugiego biezacego klienta, a Rafal drugiego dopiero szuka.
   if (/\bone of the two\b/i.test(all)) fail.push(['1 dwoch klientow', '„One of the two" — jest tylko jeden biezacy klient (stan 26.09.2026)'])
   // 2
-  if (!/EUR 2,500 net per month/.test(all)) fail.push(['2 cena', 'brak „EUR 2,500 net per month"'])
+  if (!cv && !/EUR 2,500 net per month/.test(all)) fail.push(['2 cena', 'brak „EUR 2,500 net per month"'])
   for (const s of segments) {
     const re = /(?:€|EUR|PLN|zł|USD|\$|£)\s?\d[\d,.\s]*|\d[\d,.\s]*\s?(?:€|EUR|PLN|zł|USD|\$|£|tys)/gi
     for (const m of s.matchAll(re)) {
-      if (!/^EUR 2,500$/.test(m[0].trim())) fail.push(['2 cena', `kwota inna niz EUR 2,500: „${m[0].trim()}" w „${s.slice(0, 90)}"`])
+      if (cv) fail.push(['2 cena', `kwota na /cv — CV nie jest oferta: „${m[0].trim()}" w „${s.slice(0, 90)}"`])
+      else if (!/^EUR 2,500$/.test(m[0].trim())) fail.push(['2 cena', `kwota inna niz EUR 2,500: „${m[0].trim()}" w „${s.slice(0, 90)}"`])
     }
   }
   // 3
   for (const s of segments) {
     if (/\d\s?%|\bper ?cent\b/i.test(s)) fail.push(['3 liczby', `procent w tresci: „${s.slice(0, 100)}"`])
-    for (const n of numberTokens(s)) {
+    if (!cv) for (const n of numberTokens(s)) {
       if (!ALLOWED_NUMBERS.has(n)) fail.push(['3 liczby', `liczba ${n} spoza listy ALLOWED_NUMBERS: „${s.slice(0, 100)}"`])
     }
     if (/\d\s?(x|×)\b|\b\d+\s?(k|m)\b(?!l)/i.test(s)) fail.push(['3 liczby', `mnoznik/skrot liczby: „${s.slice(0, 100)}"`])
@@ -167,7 +187,8 @@ export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = 
   // 4
   for (const s of segments) {
     for (const c of CLIENTS) {
-      if (s.includes(c) && /\d/.test(s.replace(/#[0-9a-f]{3,8}/gi, ''))) {
+      const rest = s.replace(/#[0-9a-f]{3,8}/gi, '').replace(cv ? DATES : /$^/, '')
+      if (s.includes(c) && /\d/.test(rest)) {
         fail.push(['4 klient + liczba', `${c} stoi przy liczbie: „${s.slice(0, 110)}"`])
       }
     }
@@ -189,14 +210,33 @@ export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = 
   if (/unpkg\.com\/|fonts\.googleapis\.com|fonts\.gstatic\.com/.test(raw.replace(/"https:\/\/unpkg\.com[^"]*":/g, ''))) {
     fail.push(['9 zrodlo', 'odwolanie do unpkg albo Google Fonts poza mapa zasobow'])
   }
+  // 10 (cv) — dane osobowe. Repo jest publiczne: co wejdzie do bundla, zostaje w historii.
+  if (cv) {
+    const text = all + '\n' + raw
+    // Przykladowe adresy w placeholderach pol („you@yourstore.com") to nie dane osobowe.
+    const ILLUSTRATIVE = /@(?:example\.(?:com|org|net)|yourstore\.com|yourbrand\.com|yourcompany\.com)$/i
+    for (const m of text.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)) {
+      if (ILLUSTRATIVE.test(m[0])) continue
+      if (m[0].toLowerCase() !== EMAIL) fail.push(['10 dane osobowe', `adres e-mail inny niz ${EMAIL}: „${m[0]}"`])
+    }
+    for (const s of segments) {
+      const noDates = s.replace(DATES, '')
+      if (/(?:\+\d{1,3}[\s.-]?)?(?:\d[\s.-]?){9,}/.test(noDates) || /\b(tel\.?|phone|mobile|telefon)\s*[:.]?\s*\+?\d/i.test(s)) {
+        fail.push(['10 dane osobowe', `numer telefonu: „${s.slice(0, 90)}"`])
+      }
+      if (/\b(born|date of birth|DOB|birthday|urodz|data urodzenia)\b/i.test(s)) {
+        fail.push(['10 dane osobowe', `data urodzenia: „${s.slice(0, 90)}"`])
+      }
+    }
+  }
   return fail
 }
 
-export function checkStatic({ template, script }) {
+export function checkStatic({ template, script }, profile = 'home') {
   const footer = (template.match(/<footer\b[\s\S]*?<\/footer>/) || [''])[0]
   const hrefs = [...template.matchAll(/\bhref="([^"]*)"/g)].map((m) => m[1])
   const segments = [...templateTexts(template), ...scriptTexts(script)]
-  return checkSegments(segments, { hrefs, footer: decode(footer), raw: template + script })
+  return checkSegments(segments, { hrefs, footer: decode(footer), raw: template + script }, profile)
 }
 
 export function formatFailures(fail) {
@@ -205,7 +245,7 @@ export function formatFailures(fail) {
 
 /* ---------- warstwa B: wyrenderowana strona ---------- */
 
-async function checkRendered(url) {
+async function checkRendered(url, profile = 'home') {
   const { chromium } = await import('playwright')
   const pinned = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
   const browser = await chromium.launch(fs.existsSync(pinned) ? { executablePath: pinned } : {})
@@ -255,7 +295,7 @@ async function checkRendered(url) {
       const tool = [...root.querySelectorAll('a[href="/tool"]')].some((a) => a.offsetParent !== null)
       return { segs, footer, tool, hrefs: [...root.querySelectorAll('a[href]')].map((a) => a.getAttribute('href')), raw: document.body.innerText }
     })
-    const f = checkSegments(got.segs, { hrefs: got.tool ? got.hrefs : got.hrefs.filter((h) => h !== '/tool'), footer: got.footer.replace(/&amp;/g, '&'), raw: got.raw })
+    const f = checkSegments(got.segs, { hrefs: got.tool ? got.hrefs : got.hrefs.filter((h) => h !== '/tool'), footer: got.footer.replace(/&amp;/g, '&'), raw: got.raw }, profile)
     for (const x of f) fail.push([x[0], `${vp.width}px: ${x[1]}`])
     await page.close()
   }
@@ -267,9 +307,15 @@ async function checkRendered(url) {
 /* ---------- CLI ---------- */
 
 async function main() {
-  const genPath = path.join(ROOT, 'app/design/generated.ts')
-  if (!fs.existsSync(genPath)) { console.log('FAIL  brak app/design/generated.ts — najpierw scripts/ship-design.mjs --yes'); process.exit(1) }
+  const r = process.argv.indexOf('--route')
+  const route = r > 0 ? process.argv[r + 1] : ''
+  const profile = route ? PROFILES[route] : 'home'
+  if (!profile) { console.log(`FAIL  brak profilu tresci dla trasy „${route}" — dopisz go w PROFILES`); process.exit(1) }
+  const genRel = route ? `app/${route}/generated.ts` : 'app/design/generated.ts'
+  const genPath = path.join(ROOT, genRel)
+  if (!fs.existsSync(genPath)) { console.log(`FAIL  brak ${genRel} — najpierw scripts/ship-design.mjs${route ? ' --route ' + route : ''} --yes`); process.exit(1) }
   const src = fs.readFileSync(genPath, 'utf8')
+  if (/export const DC(: [^=]+)? = null/.test(src)) { console.log(`POMINIETE — ${genRel} to zaslepka (trasa czeka na bundle).`); process.exit(0) }
   const json = src.slice(src.indexOf('export const DC = ') + 'export const DC = '.length, src.lastIndexOf(' as const'))
   const DC = JSON.parse(json)
 
@@ -297,10 +343,26 @@ async function main() {
   if (!checkSegments(base, { ...good, footer: '' }).some(([r]) => r === '6 stopka')) { selfFail++; console.log('  FAIL  [6 stopka] nie wykryla braku') }
   if (!checkSegments(base, { ...good, hrefs: [] }).some(([r]) => r === '8 /tool')) { selfFail++; console.log('  FAIL  [8 /tool] nie wykryla braku') }
   if (checkSegments(base, good).length) { selfFail++; console.log('  FAIL  czysta tresc zglasza naruszenia') }
+  // profil cv: wlasne sondy i czysta tresc z latami
+  const cvBase = ['Allegro, 2019–2021. Led the FMCG and recurring team.', 'Warsaw.', 'you@yourstore.com']
+  const cvProbes = [
+    ['2 cena', ['EUR 2,500 net per month.']],
+    ['3 liczby', ['Grew retention by 12%.']],
+    ['4 klient + liczba', ['Allegro, 2019–2021: 3 times more repeat orders.']],
+    ['10 dane osobowe', ['Phone: +48 600 123 456']],
+    ['10 dane osobowe', ['Date of birth: 1985']],
+    ['10 dane osobowe', ['rafal.oleksiak@gmail.com']],
+  ]
+  for (const [rule, segs] of cvProbes) {
+    if (!checkSegments([...cvBase, ...segs], good, 'cv').some(([x]) => x === rule)) {
+      selfFail++; console.log(`  FAIL  [cv] zasada [${rule}] nie wykryla: ${segs[0]}`)
+    }
+  }
+  if (checkSegments(cvBase, good, 'cv').length) { selfFail++; console.log('  FAIL  [cv] czysta tresc z latami zglasza naruszenia: ' + JSON.stringify(checkSegments(cvBase, good, 'cv'))) }
   console.log(selfFail ? '' : '  PASS')
 
-  console.log('A. tresc zrodla (app/design/generated.ts)')
-  const a = checkStatic({ template: DC.template, script: DC.script })
+  console.log(`A. tresc zrodla (${genRel}, profil ${profile})`)
+  const a = checkStatic({ template: DC.template, script: DC.script }, profile)
   if (a.length) console.log(formatFailures(a)); else console.log('  PASS')
 
   let b = []
@@ -309,7 +371,9 @@ async function main() {
     const url = process.argv[i + 1]
     if (/oleksiakconsulting\.com/.test(url)) { console.log('Nie na produkcji. Bramka idzie lokalnie.'); process.exit(1) }
     console.log(`B. tresc wyrenderowana (${url}, 1440 i 390)`)
-    b = await checkRendered(url)
+    const target = route ? url.replace(/\/$/, '') + '/' + route : url
+    console.log(`   strona: ${target}`)
+    b = await checkRendered(target, profile)
     if (b.length) console.log(formatFailures(b)); else console.log('  PASS')
   } else {
     console.log('B. pominieta — dopisz --url http://localhost:3000')

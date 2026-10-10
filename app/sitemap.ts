@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getPosts } from '@/lib/blog/blog-api'
+import { DC as CV } from './cv/generated'
 
 const SITE = 'https://oleksiakconsulting.com'
 
@@ -11,6 +12,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${SITE}/privacy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
   ]
+  // /cv dopiero, gdy ma tresc (generated.ts przestal byc zaslepka).
+  if (CV) base.push({ url: `${SITE}/cv`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 })
 
   // Wpisy bloga siedzą za zewnętrznym API. Jeśli nie odpowie, sitemapa
   // nadal się zbuduje — lepiej mniej adresów niż wywrócony build.

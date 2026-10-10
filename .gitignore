@@ -77,3 +77,4 @@ test-screenshots/
 # Kopie eksportow z Claude Design (vNN-bundle.html) — zrodlem jest
 # design/production/claude-design-bundle.html, kopie nie leza w repo.
 design/production/v*-bundle.html
+design/production/*-v[0-9]*-bundle.html

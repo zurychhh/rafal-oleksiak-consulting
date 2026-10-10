@@ -56,7 +56,12 @@ const isFull = (f: HTMLFormElement) =>
   !!q(f, 'input[inputmode="url"]') && !!q(f, 'input[type="email"]') && !!q(f, 'input[type="checkbox"]')
 const visible = (el: Element) => (el as HTMLElement).getClientRects().length > 0
 
+/* Formularze z wlasnym kluczem w CRM — kontrakt z plotnem, nie zgadywanie z id.
+   /cv: form#cv-enquiry, pole sklepu opcjonalne, te same dwie zgody. */
+const KEYED: Record<string, string> = { 'cv-enquiry': 'cv' }
+
 function formKey(f: HTMLFormElement): string {
+  if (KEYED[f.id]) return KEYED[f.id]
   if (f.id) return f.id
   return f.closest('[data-bar]') || f.dataset.barForm ? 'bar' : 'form'
 }
@@ -137,10 +142,10 @@ export function wording(box: HTMLInputElement | null, tag: string): string {
 const formSlug = (key: string) => key.toLowerCase().replace(/[^a-z]/g, '').slice(0, 40) || 'form'
 
 async function send(f: HTMLFormElement) {
-  const url = q<HTMLInputElement>(f, 'input[inputmode="url"]')!
+  const url = q<HTMLInputElement>(f, 'input[inputmode="url"]')
   const emailEl = q<HTMLInputElement>(f, 'input[type="email"]')!
   const { contact: consent, marketing } = consents(f)
-  const store = (url.value || '').trim().slice(0, 300)
+  const store = (url?.value || '').trim().slice(0, 300)
   const email = (emailEl.value || '').trim()
 
   clearError(f)
@@ -169,7 +174,8 @@ async function send(f: HTMLFormElement) {
       // pochodzic od strony, ktorej dotyczy. `source` niesie juz tylko atrybucje.
       body: JSON.stringify({
         email,
-        storeUrl: store.replace(/[\r\n]+/g, ' '),
+        // Pusty adres nie leci wcale (na /cv pole jest opcjonalne).
+        ...(store ? { storeUrl: store.replace(/[\r\n]+/g, ' ') } : {}),
         consentContact: !!consent?.checked,
         consentMarketing: !!marketing?.checked,
         consentText: [wording(consent, 'contact'), wording(marketing, 'marketing')]
@@ -199,7 +205,7 @@ async function send(f: HTMLFormElement) {
     // Teraz komponent moze przejsc w stan „wyslane" wlasnym handlerem.
     approved.add(f)
     f.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
-    analytics.trackLeadSubmitted('home-' + key, email)
+    analytics.trackLeadSubmitted(KEYED[f.id] ?? 'home-' + key, email)
   } catch {
     clearTimeout(killer)
     showError(f, 'That did not go through.')
@@ -218,11 +224,11 @@ export default function LeadBridge() {
       if (f.closest('.dc-pre')) { ev.preventDefault(); ev.stopPropagation(); return }
       if (approved.has(f)) { approved.delete(f); return } // przepuszczony po 2xx
       const url = q<HTMLInputElement>(f, 'input[inputmode="url"]')
-      if (!url) return // nie ten ksztalt — nie nasz formularz
+      if (!url && !KEYED[f.id]) return // nie ten ksztalt — nie nasz formularz
       ev.preventDefault()
       ev.stopPropagation()
       if (f.dataset.leadBusy) return
-      if (!q(f, 'input[type="email"]')) { handOver(f, url.value.trim()); return }
+      if (!q(f, 'input[type="email"]')) { if (url) handOver(f, url.value.trim()); return }
       void send(f)
     }
     document.addEventListener('submit', onSubmit, true)
