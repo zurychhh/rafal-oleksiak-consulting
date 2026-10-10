@@ -19,15 +19,16 @@
      8. widoczny link do /tool
      9. zadnej odznaki Claude Design i zadnych zasobow z unpkg / Google Fonts
 
-   Profil /cv (--route cv): lata i daty sa trescia CV, wiec lista ALLOWED_NUMBERS
-   NIE obowiazuje. W zamian:
-     2cv. zadnej kwoty — cena mieszka na stronie glownej, CV nie jest oferta
-     3.   zadnych procentow ani mnoznikow (bez zmian)
-     4cv. zadnej liczby obok nazwy klienta poza latami/datami — wynik klienta
-          w liczbach to wymysl
+   Profil /cv (--route cv) — zmieniony 11.10.2026 decyzja Rafala. CV jest
+   zyciorysem, nie oferta: procenty, punkty procentowe, lata, liczebnosci zespolow,
+   kwoty budzetow i wyniki r/r SA trescia i sa dozwolone (bez listy ALLOWED_NUMBERS,
+   bez zakazu procentow, bez zakazu liczby przy kliencie). Nadal twarde:
+     2cv. zadnej ceny uslugi w jakiejkolwiek formie — kwota przy „per month",
+          „day rate", „fee", „retainer", „net" itp., albo kwota 2,500 z cennika
+     5.   zadnej nazwy sieci/marki przy Accenture (bez zmian)
      10.  dane osobowe: zadnego telefonu, daty urodzenia ani adresu e-mail innego
-          niz rafal@oleksiakconsulting.com — repo jest publiczne, to twarda regula
-   Zasady 1, 5, 6, 7, 8 (link do /tool), 9 — bez zmian.
+          niz rafal@oleksiakconsulting.com — repo jest publiczne
+   Zasady 1, 6, 7, 8 (link do /tool), 9 — bez zmian.
    „Zadnych wymyslonych danych" nie da sie sprawdzic mechanicznie — to robi czlowiek.
 
    Dwie warstwy:
@@ -147,6 +148,9 @@ const numberTokens = (s) => (s.match(/\d+(?:[.,]\d+)*/g) || [])
 /** Profile tresci per trasa. Nowa trasa = swiadomie dopisany profil. */
 export const PROFILES = { home: 'home', cv: 'cv' }
 
+// Slowa, przy ktorych kwota jest cena uslugi, a nie budzetem.
+const PRICE_WORDS = /\b(per (month|day|hour|week|project)|a month|monthly fee|\/\s?(month|mo|day|h|hour)\b|day rate|daily rate|hourly|retainer|fee|fees|net per|pricing|price|rate card|invoice|VAT)\b/i
+
 // Lata i daty w CV („2019–2021", „03/2019", „2019-03") — tresc, nie wynik.
 const DATES = /\b(?:\d{1,2}[./-])?(?:19|20)\d{2}(?:[./-]\d{1,2})?\b/g
 
@@ -172,12 +176,17 @@ export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = 
   for (const s of segments) {
     const re = /(?:€|EUR|PLN|zł|USD|\$|£)\s?\d[\d,.\s]*|\d[\d,.\s]*\s?(?:€|EUR|PLN|zł|USD|\$|£|tys)/gi
     for (const m of s.matchAll(re)) {
-      if (cv) fail.push(['2 cena', `kwota na /cv — CV nie jest oferta: „${m[0].trim()}" w „${s.slice(0, 90)}"`])
-      else if (!/^EUR 2,500$/.test(m[0].trim())) fail.push(['2 cena', `kwota inna niz EUR 2,500: „${m[0].trim()}" w „${s.slice(0, 90)}"`])
+      if (cv) {
+        // Kwota budzetu jest trescia CV; cena uslugi nie. Cena = kwota przy slowach
+        // rozliczeniowych albo kwota z cennika (2,500).
+        if (/2[,.\s]?500/.test(m[0]) || PRICE_WORDS.test(s)) {
+          fail.push(['2 cena', `cena uslugi na /cv — CV nie jest oferta: „${m[0].trim()}" w „${s.slice(0, 90)}"`])
+        }
+      } else if (!/^EUR 2,500$/.test(m[0].trim())) fail.push(['2 cena', `kwota inna niz EUR 2,500: „${m[0].trim()}" w „${s.slice(0, 90)}"`])
     }
   }
   // 3
-  for (const s of segments) {
+  if (!cv) for (const s of segments) {
     if (/\d\s?%|\bper ?cent\b/i.test(s)) fail.push(['3 liczby', `procent w tresci: „${s.slice(0, 100)}"`])
     if (!cv) for (const n of numberTokens(s)) {
       if (!ALLOWED_NUMBERS.has(n)) fail.push(['3 liczby', `liczba ${n} spoza listy ALLOWED_NUMBERS: „${s.slice(0, 100)}"`])
@@ -185,9 +194,9 @@ export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = 
     if (/\d\s?(x|×)\b|\b\d+\s?(k|m)\b(?!l)/i.test(s)) fail.push(['3 liczby', `mnoznik/skrot liczby: „${s.slice(0, 100)}"`])
   }
   // 4
-  for (const s of segments) {
+  if (!cv) for (const s of segments) {
     for (const c of CLIENTS) {
-      const rest = s.replace(/#[0-9a-f]{3,8}/gi, '').replace(cv ? DATES : /$^/, '')
+      const rest = s.replace(/#[0-9a-f]{3,8}/gi, '')
       if (s.includes(c) && /\d/.test(rest)) {
         fail.push(['4 klient + liczba', `${c} stoi przy liczbie: „${s.slice(0, 110)}"`])
       }
@@ -344,11 +353,16 @@ async function main() {
   if (!checkSegments(base, { ...good, hrefs: [] }).some(([r]) => r === '8 /tool')) { selfFail++; console.log('  FAIL  [8 /tool] nie wykryla braku') }
   if (checkSegments(base, good).length) { selfFail++; console.log('  FAIL  czysta tresc zglasza naruszenia') }
   // profil cv: wlasne sondy i czysta tresc z latami
-  const cvBase = ['Allegro, 2019–2021. Led the FMCG and recurring team.', 'Warsaw.', 'you@yourstore.com']
+  const cvBase = [
+    'Allegro, 2019–2021. Led the FMCG and recurring team of 14.',
+    'Repeat orders up 18% y/y, +3 pp conversion, managed a PLN 40m annual paid budget.',
+    'Warsaw.', 'you@yourstore.com',
+  ]
   const cvProbes = [
     ['2 cena', ['EUR 2,500 net per month.']],
-    ['3 liczby', ['Grew retention by 12%.']],
-    ['4 klient + liczba', ['Allegro, 2019–2021: 3 times more repeat orders.']],
+    ['2 cena', ['Day rate: EUR 900.']],
+    ['2 cena', ['Retainer from PLN 9,000 per month.']],
+    ['5 Accenture', ['Accenture: e-commerce for Rossmann, 2017.']],
     ['10 dane osobowe', ['Phone: +48 600 123 456']],
     ['10 dane osobowe', ['Date of birth: 1985']],
     ['10 dane osobowe', ['rafal.oleksiak@gmail.com']],

@@ -195,9 +195,11 @@ Trasa wymaga profilu treści w `PROFILES` (`content-rules.test.mjs`) — bez nie
 `DC = null`: trasa daje 404 i nie ma jej w `sitemap.xml`.
 Bramka trasy: `qa.js` na `/<nazwa>`, `content-rules --route <nazwa> --url …`,
 `ship-compare --route <nazwa>`.
-**`/cv`:** profil `cv` — bez ceny, bez procentów i mnożników, bez liczb przy kliencie
-poza latami/datami, link do `/tool`, stopka; **zero telefonu, daty urodzenia i adresu
-innego niż `rafal@oleksiakconsulting.com`** (twarda reguła, repo publiczne). Formularz
+**`/cv`:** profil `cv` (decyzja 11.10.2026) — procenty, p.p., lata, zespoły, kwoty
+budżetów i wyniki r/r są treścią i są dozwolone. Twarde: **żadnej ceny usługi** (kwota
+przy „per month/day rate/fee/retainer/net…” albo 2,500), zakaz sieci przy Accenture,
+link do `/tool`, stopka, **zero telefonu, daty urodzenia i adresu innego niż
+`rafal@oleksiakconsulting.com`** (repo publiczne). Formularz
 `#cv-enquiry` → `form: "cv"` (mapa `KEYED` w `LeadBridge`), pole sklepu opcjonalne.
 Person na `/cv` ma to samo `@id` co kanoniczny na `/`.
 
