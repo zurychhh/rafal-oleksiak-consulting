@@ -366,6 +366,10 @@ narzędzia FMCG. `design/qa.js` to checker Playwright.
 GitHub Deployments dla `3428d8e` (push na `claude/production`): środowisko `Preview`.
 Ostatni Production z gita to `4ea9ced` 26.09, wdrożony z CLI. Wniosek: Branch Tracking
 w Vercelu nie wskazuje na `claude/production`, choć ta sekcja to wcześniej twierdziła.
+**Potwierdzone w API Vercela 10.10.2026: `link.productionBranch` = `feature/new-site`.**
+Czyli push na `feature/new-site` WDRAŻA DOMENĘ — nie pushuj tam niczego, dopóki Rafał
+nie przestawi Branch Tracking na `claude/production` (Settings → Environments →
+Production → Branch Tracking). CLI nie ma polecenia do zmiany tej gałęzi.
 Domenę zmienia `npx vercel@latest --prod --yes` z katalogu na właściwym commicie
 (sprawdź `git log HEAD..origin/claude/production` — puste) i dopiero potem weryfikacja
 jednym przejściem. Dopóki Branch Tracking nie zostanie ustawiony, push na
