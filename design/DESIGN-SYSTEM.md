@@ -55,6 +55,19 @@ Sprawdzane po każdym przeniesieniu: skan stylów obliczonych na 1440 i 390 px p
 całej strony, z zaznaczonymi checkboksami — zero czerwieni w strefach z punktu 5; kontrast
 każdego czerwonego tekstu liczony względem realnie namalowanego tła.
 
+## Zdania o prywatności — weryfikowane w kodzie, nigdy przepisywane
+
+Każde zdanie o tym, co opuszcza przeglądarkę na `/tool` (i na każdej trasie z formularzem),
+jest **sprawdzane w kodzie w dniu wdrożenia** — co dokładnie wysyła każde żądanie, kiedy
+i w jakiej liczbie — a nie przepisywane z poprzedniej wersji, z briefu ani z płótna.
+Dwa razy pod rząd okazało się nieaktualne: „klienci zamieniani na anonimowe numery"
+(silnik tego nie robi) i „z mailem jadą tytuły produktów" (most ich nie wysyła).
+
+Sprawdzenie: `grep` na `fetch(` w `tool-index.html`, `public/tool-runtime.js` i mostach,
+potem odczyt treści każdego `body` — co trafia do `/api/label` i `/api/lead`. Zdanie stoi
+**w miejscu, gdzie dane wychodzą** (np. nad panelami AI, przed pierwszym kliknięciem),
+nie na dole strony. Przy zdaniu w kodzie komentarz z datą i tym, co sprawdzono.
+
 ## Animacja — trzy warunki dokończenia
 
 Każda animacja w tym systemie musi kończyć się poprawnie na trzy sposoby, bo każdy z nich
