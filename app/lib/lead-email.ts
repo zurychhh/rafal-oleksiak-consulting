@@ -7,6 +7,7 @@
 // zamowien. Drugi jest dla Rafala i ma dac decyzje w pare sekund.
 
 import type { Lead, ConsentRecord } from '@/app/api/lead/route'
+import { analysisOf, ownerTag, WORDING, type Analysis } from '@/app/lib/lead-analysis'
 
 const esc = (s: string) =>
   s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
@@ -60,6 +61,99 @@ export function confirmEmail() {
   )
 }
 
+/* ── Wynik z /tool ──────────────────────────────────────────────────────────
+   Mail, ktory "SEND ME THE ANALYSIS" obiecuje. Wszystkie liczby pochodza
+   z przegladarki odwiedzajacego i przeszly przez zoda jako liczby calkowite,
+   wiec trafiaja tu bez escape'owania tekstu — ale i tak przez String(). */
+
+/** Wiersze tabeli wyniku: [etykieta, wartosc]. Wspolne dla HTML i plain text. */
+function analysisRows(a: Analysis, now: Date): [string, string][] {
+  const rows: [string, string][] = [['Analysis run', now.toISOString().slice(0, 10)]]
+  if (a.labelDay != null) rows.push(['Day on the label', `day ${a.labelDay}`])
+  if (a.verdict === 'confident') {
+    rows.push(['Median gap between orders', `${a.interval} days`])
+    if (a.gap != null) rows.push(['Difference', WORDING.gap(a.gap)])
+  } else if (a.low != null && a.high != null) {
+    rows.push(['Gap between orders', `day ${a.low} to day ${a.high} (middle half)`])
+  }
+  if (a.sampleN != null) rows.push(['Customers with 2+ orders', String(a.sampleN)])
+  if (a.windowDays != null) rows.push(['Data window', `${a.windowDays} days`])
+  return rows
+}
+
+/** Akapity pod naglowkiem — te same zdania co na ekranie (WORDING). */
+function analysisLines(a: Analysis): { head: string; lines: string[] } {
+  const lines: string[] = []
+  let head: string
+  if (a.verdict === 'confident') {
+    head = a.labelDay != null
+      ? `The label says ${a.labelDay}. Your data says ${a.interval}.`
+      : `Your customers reorder after ${a.interval} days.`
+    if (a.gap != null) {
+      lines.push(`Your customers reorder ${WORDING.gap(a.gap)} — that is the window every reminder, ` +
+        'exclusion and subscription interval should be timed to.')
+    }
+  } else if (a.verdict === 'small') {
+    head = 'Too few repeat customers for one number yet.'
+    lines.push(WORDING.small(a.sampleN ?? 0))
+    lines.push(a.low != null && a.high != null ? WORDING.range(a.low, a.high) : WORDING.noRange)
+  } else if (a.verdict === 'bimodal') {
+    head = 'Two different return rhythms.'
+    lines.push(WORDING.bimodal(a.sampleN))
+    if (a.low != null && a.high != null) lines.push(WORDING.range(a.low, a.high))
+  } else {
+    head = a.labelDay != null ? `The label says ${a.labelDay}.` : 'Your result.'
+    lines.push(WORDING.partial)
+  }
+  if (a.shortWindow && a.windowDays != null) lines.push(WORDING.shortWindow(a.windowDays))
+  lines.push(WORDING.source)
+  return { head, lines }
+}
+
+/** Mail z wynikiem dla odwiedzajacego — HTML. */
+export function analysisEmail(a: Analysis, now = new Date()) {
+  const { head, lines } = analysisLines(a)
+  const table =
+    `<table role="presentation" cellpadding="0" cellspacing="0" width="100%"
+       style="font-size:14px;line-height:1.5;margin:4px 0 18px;border-top:1px solid #14161A;">` +
+    analysisRows(a, now)
+      .map(([k, v]) =>
+        `<tr><td style="padding:8px 12px 8px 0;border-bottom:1px solid #DCDAD2;color:#6E6D68;` +
+        `white-space:nowrap;vertical-align:top;">${esc(k)}</td>` +
+        `<td style="padding:8px 0;border-bottom:1px solid #DCDAD2;font-weight:600;">${esc(v)}</td></tr>`)
+      .join('') +
+    `</table>`
+  return SHELL(
+    H(esc(head)) +
+      table +
+      lines.map((l) => P(esc(l))).join('') +
+      P('If you want me to look at what this means for your store, reply to this email — ' +
+        'I read every message myself.') +
+      P('— Rafał'),
+  )
+}
+
+/** Ten sam mail jako plain text — dla klientow bez HTML i dla filtrow spamu. */
+export function analysisText(a: Analysis, now = new Date()) {
+  const { head, lines } = analysisLines(a)
+  const rows = analysisRows(a, now)
+  const w = Math.max(...rows.map(([k]) => k.length))
+  return [
+    head,
+    '',
+    ...rows.map(([k, v]) => `${k.padEnd(w)}  ${v}`),
+    '',
+    ...lines.flatMap((l) => [l, '']),
+    'If you want me to look at what this means for your store, reply to this email — I read every message myself.',
+    '',
+    '— Rafał',
+    '',
+    '--',
+    'You are getting this because you asked for this analysis on oleksiakconsulting.com.',
+    'Tell me to stop and I never write again: https://oleksiakconsulting.com/stop',
+  ].join('\n')
+}
+
 /** Powiadomienie dla wlasciciela. Ma wystarczyc do decyzji, czy odpisac. */
 export function ownerEmail(lead: Lead, consent?: ConsentRecord, crmError?: string | null) {
   const src = lead.source ?? {}
@@ -100,9 +194,20 @@ export function ownerEmail(lead: Lead, consent?: ConsentRecord, crmError?: strin
       `CRM write failed: ${esc(crmError)}</p>`
     : ''
 
+  /* Wynik z /tool na samej gorze — z czym przychodzi lead, zanim otworzysz CRM.
+     Ta sama metka co w temacie, te same zastrzezenia co u odwiedzajacego. */
+  const a = analysisOf(lead)
+  const analysisBlock = a
+    ? `<p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.14em;
+         text-transform:uppercase;color:#6E6D68;">From /tool &middot; ${esc(a.verdict)}</p>` +
+      `<p style="margin:0 0 16px;padding:10px 14px;border:1px solid #14161A;font-size:15px;
+         font-weight:600;line-height:1.5;">${esc(ownerTag(a))}</p>`
+    : ''
+
   return SHELL(
     H(esc(lead.email)) +
       crmBlock +
+      analysisBlock +
       consentBlock +
       (store
         ? `<p style="margin:0 0 16px;padding:12px 14px;background:#F4F4F1;border-left:3px solid #C2410C;

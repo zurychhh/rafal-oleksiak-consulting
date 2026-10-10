@@ -14,7 +14,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
 import { createLeadContact } from '@/app/lib/lead-hubspot';
-import { confirmEmail, ownerEmail } from '@/app/lib/lead-email';
+import { confirmEmail, ownerEmail, analysisEmail, analysisText } from '@/app/lib/lead-email';
+import { analysisOf, subjectFor, ownerTag } from '@/app/lib/lead-analysis';
 
 // Klient Resend powstaje dopiero w POST, po walidacji. W zakresie modułu
 // `new Resend(undefined)` rzuca przy ładowaniu trasy i cała obsługa kodów
@@ -44,9 +45,28 @@ const LeadSchema = z.object({
   // Tresc zgody w brzmieniu, ktore odwiedzajacy faktycznie widzial. Bez niej
   // zgoda jest niedowodliwa: sama flaga nie mowi, na co ktos sie zgodzil.
   consentText: z.string().max(400).regex(/^[^\r\n]*$/).optional(),
-  // Z ktorego formularza przyszlo — hero, phone, close, closephone, bar.
+  // Z ktorego formularza przyszlo — hero, phone, close, closephone, bar, tool.
   form: z.string().max(40).regex(/^[a-z]+$/).optional(),
-});
+
+  // Wynik z /tool, policzony w przegladarce odwiedzajacego. Wszystko opcjonalne
+  // (strona glowna tego nie wysyla) i wszystko twardo jako liczby calkowite
+  // w rozsadnych granicach: te wartosci trafiaja do tematu maila, wiec zadnego
+  // tekstu od klienta. Plik z zamowieniami nigdy tu nie przychodzi — tylko liczby.
+  interval: z.number().int().min(1).max(730).optional(),      // mediana odstepu, dni
+  labelDay: z.number().int().min(1).max(730).optional(),      // dzien z etykiety
+  sampleN: z.number().int().min(0).max(10_000_000).optional(), // klienci z 2+ zamowieniami
+  windowDays: z.number().int().min(1).max(3650).optional(),   // dlugosc okna danych
+  bimodal: z.boolean().optional(),                            // dwa szczyty w rozkladzie
+  // Zakres (kwartyle) — bez niego przy malej probie mail nie ma czego podac
+  // zamiast mediany, a mediany jako pewnej podac nie wolno.
+  intervalLow: z.number().int().min(1).max(730).optional(),
+  intervalHigh: z.number().int().min(1).max(730).optional(),
+}).refine(
+  (l) => (l.intervalLow == null || l.intervalHigh == null || l.intervalLow <= l.intervalHigh)
+    && (l.interval == null || l.intervalLow == null || l.intervalLow <= l.interval)
+    && (l.interval == null || l.intervalHigh == null || l.interval <= l.intervalHigh),
+  { message: 'interval range out of order' },
+);
 
 /** Slad zgody skladany po stronie serwera. Znacznik czasu i adres IP biora sie
  *  stad, nie z przegladarki: zegar klienta jest nieweryfikowalny, a zapis, ktory
@@ -162,12 +182,17 @@ export async function POST(request: NextRequest) {
 
   // 1 · Potwierdzenie dla odwiedzajacego. Jesli to padnie, request pada —
   //     odwiedzajacy dostaje na stronie adres i wie, ze ma napisac wprost.
+  //     Zgloszenie z /tool z wynikiem dostaje SWOJ wynik — to obiecuje przycisk
+  //     "Send me the analysis". Temat i tresc nie sa pewniejsze niz ekran
+  //     (app/lib/lead-analysis.ts). Bez wyniku: dotychczasowe potwierdzenie.
+  const analysis = analysisOf(lead);
   const { error } = await resend.emails.send({
     from,
     to: [lead.email],
     replyTo: process.env.TO_EMAIL,
-    subject: 'Got it — I reply by hand',
-    html: confirmEmail(),
+    ...(analysis
+      ? { subject: subjectFor(analysis), html: analysisEmail(analysis), text: analysisText(analysis) }
+      : { subject: 'Got it — I reply by hand', html: confirmEmail() }),
   });
 
   if (error) {
@@ -196,7 +221,8 @@ export async function POST(request: NextRequest) {
       from,
       to: [process.env.TO_EMAIL!],
       subject:
-        '[lead] ' + lead.email + (store ? ` · ${store.slice(0, 60)}` : ''),
+        '[lead] ' + lead.email + (store ? ` · ${store.slice(0, 60)}` : '') +
+        (analysis ? ` · ${ownerTag(analysis)}` : ''),
       html: ownerEmail(lead, consent, crmError),
     });
   } catch (e) {
