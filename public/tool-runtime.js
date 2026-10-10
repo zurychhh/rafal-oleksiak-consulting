@@ -800,7 +800,9 @@
      Wynik idzie TYLKO z wlasnego eksportu (mine): przykladowy sklep nie moze
      wyjsc mailem jako czyjas analiza, wiec formularz jest wtedy schowany.
      sampleN = F._n, czyli „settled gaps" z ekranu — tak silnik mierzy probe.
-     windowDays zostaje puste: silnik nie liczy dlugosci okna danych.          */
+     windowDays = rozpietosc dat zamowien w pliku: odczyt wyniku parseExport()
+     na tym samym tekscie, ktory silnik wlasnie przeczytal — nie nowa regula.
+     Bez niego mail nie ostrzeze, ze pewna liczba stoi na trzech miesiacach.   */
   (function(){
     var form=$("tool-enquiry"), box=$("send-analysis");
     if(!form||!box) return;
@@ -818,12 +820,20 @@
       Object.keys(OBS).forEach(function(k){var C=CAT[k];if(C&&shortName(C)===name) hit=C;});
       return hit;
     }
+    /* Rozpietosc w dniach miedzy najwczesniejsza a najpozniejsza data zamowienia. */
+    function windowDays(){
+      var lo=Infinity, hi=-Infinity;
+      parseExport($("orders").value).forEach(function(r){
+        if(r.d<lo) lo=r.d; if(r.d>hi) hi=r.d;});
+      var w=Math.round(hi-lo);
+      return isFinite(w)&&w>=1?w:null;
+    }
     var engineVerdict=verdict;
     verdict=function(F){
       engineVerdict(F);
       var C=mine?shown(F):null;
       put(C&&C._m&&!C._thin?{interval:C._m,labelDay:F?C._pd:null,sampleN:C._n,
-        bimodal:C._bi,intervalLow:C._lo,intervalHigh:C._hi}:null);
+        windowDays:windowDays(),bimodal:C._bi,intervalLow:C._lo,intervalHigh:C._hi}:null);
     };
     put(null);
   })();

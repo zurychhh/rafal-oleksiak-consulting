@@ -76,6 +76,12 @@ export const BODY = `<div class="top"><div class="in">
 
   <section class="sec aisec" aria-labelledby="h-ai">
     <div class="sh"><p class="lab" id="h-ai">04 &mdash; Read the labels for me</p><span class="n">AI, quoted only</span></div>
+    <!-- Prywatnosc: zweryfikowane w kodzie przy wdrozeniu (g1: titles.slice(0,12) z cena;
+         g2: linie pola #doses; kolumna klienta w zadnym zadaniu). Nie przepisywac. -->
+    <p class="leaves">Your export is read in this browser. Two things can leave it, and only
+      when you press the button: &ldquo;Read pack sizes&rdquo; sends up to 12 product titles
+      with the price paid to an AI model; &ldquo;Read the doses&rdquo; sends the label text you
+      paste here. Customer names, emails and addresses never leave.</p>
     <div class="seams">
       <div class="ai" id="ai1">
         <div class="hd"><b>Your catalogue</b><span>titles in, pack size out</span></div>

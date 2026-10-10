@@ -268,6 +268,11 @@
   #tool-enquiry[data-lead-sent] .live{display:none;}
   #tool-enquiry[data-lead-sent] .sent{display:block;}
   #tool-enquiry .live{display:flex;flex-direction:column;gap:16px;}
+
+  /* zdanie o tym, co wychodzi do modelu — przed pierwszym kliknieciem, nad panelami */
+  .leaves{margin:0 0 34px;font-size:16px;line-height:1.55;color:var(--ink);max-width:68ch;}
+  /* bez AI panele chowaja sie same (style="display: none") — zdanie idzie z nimi */
+  .aisec:has(#ai1[style*="none"]):has(#ai2[style*="none"]) .leaves{display:none;}
 </style>
 
 </head>
@@ -349,6 +354,12 @@
 
   <section class="sec aisec" aria-labelledby="h-ai">
     <div class="sh"><p class="lab" id="h-ai">04 &mdash; Read the labels for me</p><span class="n">AI, quoted only</span></div>
+    <!-- Prywatnosc: zweryfikowane w kodzie przy wdrozeniu (g1: titles.slice(0,12) z cena;
+         g2: linie pola #doses; kolumna klienta w zadnym zadaniu). Nie przepisywac. -->
+    <p class="leaves">Your export is read in this browser. Two things can leave it, and only
+      when you press the button: &ldquo;Read pack sizes&rdquo; sends up to 12 product titles
+      with the price paid to an AI model; &ldquo;Read the doses&rdquo; sends the label text you
+      paste here. Customer names, emails and addresses never leave.</p>
     <div class="seams">
       <div class="ai" id="ai1">
         <div class="hd"><b>Your catalogue</b><span>titles in, pack size out</span></div>
@@ -1232,7 +1243,9 @@
      Wynik idzie TYLKO z wlasnego eksportu (mine): przykladowy sklep nie moze
      wyjsc mailem jako czyjas analiza, wiec formularz jest wtedy schowany.
      sampleN = F._n, czyli „settled gaps" z ekranu — tak silnik mierzy probe.
-     windowDays zostaje puste: silnik nie liczy dlugosci okna danych.          */
+     windowDays = rozpietosc dat zamowien w pliku: odczyt wyniku parseExport()
+     na tym samym tekscie, ktory silnik wlasnie przeczytal — nie nowa regula.
+     Bez niego mail nie ostrzeze, ze pewna liczba stoi na trzech miesiacach.   */
   (function(){
     var form=$("tool-enquiry"), box=$("send-analysis");
     if(!form||!box) return;
@@ -1250,12 +1263,20 @@
       Object.keys(OBS).forEach(function(k){var C=CAT[k];if(C&&shortName(C)===name) hit=C;});
       return hit;
     }
+    /* Rozpietosc w dniach miedzy najwczesniejsza a najpozniejsza data zamowienia. */
+    function windowDays(){
+      var lo=Infinity, hi=-Infinity;
+      parseExport($("orders").value).forEach(function(r){
+        if(r.d<lo) lo=r.d; if(r.d>hi) hi=r.d;});
+      var w=Math.round(hi-lo);
+      return isFinite(w)&&w>=1?w:null;
+    }
     var engineVerdict=verdict;
     verdict=function(F){
       engineVerdict(F);
       var C=mine?shown(F):null;
       put(C&&C._m&&!C._thin?{interval:C._m,labelDay:F?C._pd:null,sampleN:C._n,
-        bimodal:C._bi,intervalLow:C._lo,intervalHigh:C._hi}:null);
+        windowDays:windowDays(),bimodal:C._bi,intervalLow:C._lo,intervalHigh:C._hi}:null);
     };
     put(null);
   })();

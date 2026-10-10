@@ -258,3 +258,8 @@
   #tool-enquiry[data-lead-sent] .live{display:none;}
   #tool-enquiry[data-lead-sent] .sent{display:block;}
   #tool-enquiry .live{display:flex;flex-direction:column;gap:16px;}
+
+  /* zdanie o tym, co wychodzi do modelu — przed pierwszym kliknieciem, nad panelami */
+  .leaves{margin:0 0 34px;font-size:16px;line-height:1.55;color:var(--ink);max-width:68ch;}
+  /* bez AI panele chowaja sie same (style="display: none") — zdanie idzie z nimi */
+  .aisec:has(#ai1[style*="none"]):has(#ai2[style*="none"]) .leaves{display:none;}
