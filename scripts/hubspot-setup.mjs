@@ -111,8 +111,8 @@ const PROPS = [
     description: 'Mediana odstępu między zamówieniami z /tool. Przy sample_n < 30 to poszlaka, nie liczba.' },
   { name: 'label_day', label: 'Label day', type: 'number', fieldType: 'number',
     description: 'Dzień, na który starcza opakowanie według etykiety (z /tool).' },
-  { name: 'sample_n', label: 'Repeat customers in sample', type: 'number', fieldType: 'number',
-    description: 'Liczba klientów z co najmniej dwoma zamówieniami, z których policzono odstęp.' },
+  { name: 'sample_n', label: 'Settled gaps in sample', type: 'number', fieldType: 'number',
+    description: 'Liczba ustalonych odstępów (2->3+) z /tool, z których silnik liczy medianę.' },
   { name: 'data_window_days', label: 'Data window (days)', type: 'number', fieldType: 'number',
     description: 'Długość okresu objętego plikiem zamówień w /tool.' },
 ];

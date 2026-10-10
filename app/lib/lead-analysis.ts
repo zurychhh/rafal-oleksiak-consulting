@@ -17,6 +17,7 @@ export type Verdict = 'confident' | 'small' | 'bimodal' | 'partial'
 export interface Analysis {
   interval?: number
   labelDay?: number
+  /** liczba "settled gaps" (odstepow 2->3+), z ktorych silnik /tool liczy mediane */
   sampleN?: number
   windowDays?: number
   bimodal: boolean
@@ -82,14 +83,15 @@ export function ownerTag(a: Analysis): string {
 
 /** Zdania wspolne dla ekranu i maila. Jedno miejsce, jedno brzmienie. */
 export const WORDING = {
+  // n = "settled gaps" z ekranu /tool — tak silnik mierzy probe dla mediany.
   small: (n: number) =>
-    `Your file has ${n} ${n === 1 ? 'customer' : 'customers'} with two or more orders. ` +
-    `Below ${MIN_SAMPLE}, a single median would look more certain than it is.`,
+    `The median rests on ${n} settled ${n === 1 ? 'gap' : 'gaps'} between orders. ` +
+    `Below ${MIN_SAMPLE}, a single number would look more certain than it is.`,
   bimodal: (n?: number) =>
-    `${n != null ? `${n} customers with two or more orders, but their` : 'The'} gaps between orders ` +
+    `${n != null ? `Across ${n} settled gaps, the` : 'The'} gaps between orders ` +
     'cluster around two different points, so a single median would describe neither group.',
   partial: 'The tool did not get far enough to measure the gap between orders, so there is no number for it here.',
-  range: (lo: number, hi: number) => `The middle half of them came back between day ${lo} and day ${hi}.`,
+  range: (lo: number, hi: number) => `The middle half of the gaps fall between day ${lo} and day ${hi}.`,
   noRange: 'So I am not giving you one number.',
   shortWindow: (d: number) => `Your file covers ${d} days — gaps longer than that can't show up yet.`,
   gap: (g: number) =>

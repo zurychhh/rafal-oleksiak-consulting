@@ -126,7 +126,7 @@ function analysisRows(a: Analysis, now: Date): [string, string][] {
   } else if (a.low != null && a.high != null) {
     rows.push(['Gap between orders', `day ${a.low} to day ${a.high} (middle half)`])
   }
-  if (a.sampleN != null) rows.push(['Customers with 2+ orders', String(a.sampleN)])
+  if (a.sampleN != null) rows.push(['Settled gaps measured', String(a.sampleN)])
   if (a.windowDays != null) rows.push(['Data window', `${a.windowDays} days`])
   return rows
 }

@@ -54,7 +54,7 @@ const LeadSchema = z.object({
   // tekstu od klienta. Plik z zamowieniami nigdy tu nie przychodzi — tylko liczby.
   interval: z.number().int().min(1).max(730).optional(),      // mediana odstepu, dni
   labelDay: z.number().int().min(1).max(730).optional(),      // dzien z etykiety
-  sampleN: z.number().int().min(0).max(10_000_000).optional(), // klienci z 2+ zamowieniami
+  sampleN: z.number().int().min(0).max(10_000_000).optional(), // "settled gaps" z silnika /tool
   windowDays: z.number().int().min(1).max(3650).optional(),   // dlugosc okna danych
   bimodal: z.boolean().optional(),                            // dwa szczyty w rozkladzie
   // Zakres (kwartyle) — bez niego przy malej probie mail nie ma czego podac
