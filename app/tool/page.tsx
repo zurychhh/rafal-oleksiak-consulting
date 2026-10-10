@@ -10,6 +10,7 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import { BODY } from './body'
+import ToolLeadBridge from './ToolLeadBridge'
 import './tool.css'
 // Po tool.css, nie przed: reset zdejmuje przycinanie narzucone przez
 // critical.css i przy rownej specyficznosci decyduje kolejnosc.
@@ -35,6 +36,8 @@ export default function ToolPage() {
     <>
       <div dangerouslySetInnerHTML={{ __html: BODY }} />
       <Script src="/tool-runtime.js" strategy="afterInteractive" />
+      {/* Formularz #tool-enquiry → /api/lead. Bez formularza w markupie nic nie robi. */}
+      <ToolLeadBridge />
     </>
   )
 }

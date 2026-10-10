@@ -32,11 +32,11 @@ import { analytics } from '@/app/lib/analytics'
  * `submit` przychodzi dopiero po jej przejsciu.
  */
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const CONTACT = 'rafal@oleksiakconsulting.com'
 const approved = new WeakSet<HTMLFormElement>()
 
-function arrived(): Record<string, string> {
+export function arrived(): Record<string, string> {
   const out: Record<string, string> = {}
   try {
     const q = new URLSearchParams(location.search)
@@ -61,11 +61,11 @@ function formKey(f: HTMLFormElement): string {
   return f.closest('[data-bar]') || f.dataset.barForm ? 'bar' : 'form'
 }
 
-function clearError(f: HTMLFormElement) {
+export function clearError(f: HTMLFormElement) {
   q(f, '[data-lead-error]')?.remove()
 }
 
-function showError(f: HTMLFormElement, text: string) {
+export function showError(f: HTMLFormElement, text: string) {
   clearError(f)
   const p = document.createElement('p')
   p.dataset.leadError = '1'
@@ -80,7 +80,7 @@ function showError(f: HTMLFormElement, text: string) {
   f.appendChild(p)
 }
 
-function busy(f: HTMLFormElement, on: boolean) {
+export function busy(f: HTMLFormElement, on: boolean) {
   const btn = q<HTMLButtonElement>(f, 'button[type="submit"]')
   if (on) f.dataset.leadBusy = '1'
   else delete f.dataset.leadBusy
@@ -127,7 +127,7 @@ function consents(f: HTMLFormElement) {
 
 /** Brzmienie zgody, ktore odwiedzajacy faktycznie widzial — z etykiety, nie z kodu.
     Sama flaga nie mowi, na co ktos sie zgodzil. */
-function wording(box: HTMLInputElement | null, tag: string): string {
+export function wording(box: HTMLInputElement | null, tag: string): string {
   const label = box?.closest('label') ?? (box?.id ? document.querySelector(`label[for="${box.id}"]`) : null)
   const t = (label?.textContent ?? '').replace(/\s+/g, ' ').trim()
   return t ? `${tag}: ${t}` : ''
