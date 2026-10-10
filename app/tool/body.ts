@@ -76,12 +76,16 @@ export const BODY = `<div class="top"><div class="in">
 
   <section class="sec aisec" aria-labelledby="h-ai">
     <div class="sh"><p class="lab" id="h-ai">04 &mdash; Read the labels for me</p><span class="n">AI, quoted only</span></div>
-    <!-- Prywatnosc: zweryfikowane w kodzie przy wdrozeniu (g1: titles.slice(0,12) z cena;
-         g2: linie pola #doses; kolumna klienta w zadnym zadaniu). Nie przepisywac. -->
+    <!-- Prywatnosc: zweryfikowane w kodzie przy wdrozeniu 2026-10-11. Nie przepisywac.
+         1. g1: titles.slice(0,12), kazdy z cena zaplacona — tylko po kliknieciu.
+         2. kolumna klienta nie trafia do zadnego zadania (/api/label, /api/lead).
+         3. g2: wysyla linie pola #doses, a pole jest WSTEPNIE wypelnione nazwami
+            rodzin produktow (doseSkeleton) — wiec przycisk wysyla tez je. -->
     <p class="leaves">Your export is read in this browser. Two things can leave it, and only
       when you press the button: &ldquo;Read pack sizes&rdquo; sends up to 12 product titles
-      with the price paid to an AI model; &ldquo;Read the doses&rdquo; sends the label text you
-      paste here. Customer names, emails and addresses never leave.</p>
+      with the price paid to an AI model; &ldquo;Read the doses&rdquo; sends whatever is in
+      the field below &mdash; your product family names and any label text you paste.
+      Customer names, emails and addresses never leave.</p>
     <div class="seams">
       <div class="ai" id="ai1">
         <div class="hd"><b>Your catalogue</b><span>titles in, pack size out</span></div>
