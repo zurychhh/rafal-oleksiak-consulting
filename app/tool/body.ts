@@ -10,7 +10,7 @@ export const BODY = `<div class="top"><div class="in">
   <header class="hero">
     <div>
       <p class="lab soft">Instrument &mdash; reorder interval</p>
-      <h1>The pack says 45 days. <span>Customers came back at 69.</span></h1>
+      <h1>The pack says 45 days. Customers came back at <span>69</span>.</h1>
       <p class="lede">What the label promises, against the gap between orders in your own export.
         <small>Anonymous supplement shop, the real order history with the names removed. Paste
         your own below &mdash; it is counted in this browser, free.</small></p>
@@ -117,6 +117,32 @@ export const BODY = `<div class="top"><div class="in">
       <a class="btn" href="/#enquiry">Send me your store</a>
       <p class="note">Store URL and email. I reply personally within 24 hours, with a first
         observation about your store &mdash; not a calendar link.</p>
+    </div>
+    <div class="send" id="send-analysis" hidden>
+      <p class="lab">Send me this analysis</p>
+      <p class="b">I&rsquo;ll email you the numbers above &mdash; the label day, the real interval and
+        the gap &mdash; so you can forward them to whoever owns the calendar.</p>
+      <form id="tool-enquiry" novalidate data-interval="" data-label-day="" data-sample-n=""
+        data-window-days="" data-bimodal="" data-interval-low="" data-interval-high="">
+        <div class="live">
+          <label class="fld" for="url-tool"><span>Your store URL (optional)</span>
+            <input id="url-tool" name="url-tool" type="text" inputmode="url" autocapitalize="none"
+              spellcheck="false" placeholder="yourstore.com"></label>
+          <label class="fld" for="email-tool"><span>Your email</span>
+            <input id="email-tool" name="email-tool" type="email" required
+              placeholder="you@yourstore.com"></label>
+          <label class="cons" for="consent-contact-tool"><input id="consent-contact-tool"
+              name="consent-contact-tool" type="checkbox"><span>I&rsquo;d like Rafa&#322; to look at
+              my store and write back about it.<span class="opt"> (optional)</span></span></label>
+          <label class="cons" for="consent-marketing-tool"><input id="consent-marketing-tool"
+              name="consent-marketing-tool" type="checkbox"><span>Occasional email from me &mdash;
+              notes on reorder timing, new tools I build, and what I learn working on FMCG stores.
+              Unsubscribe any time.<span class="opt"> (optional)</span></span></label>
+          <p class="pv">Only the numbers above go with this email &mdash; not your file.</p>
+          <button type="submit">Send me the analysis</button>
+        </div>
+        <p class="sent">Sent. The numbers above are on their way to your inbox.</p>
+      </form>
     </div>
   </section>
 

@@ -790,4 +790,41 @@
       });
     });
   };
+
+  /* ==== WYNIK DO FORMULARZA — port Tool v12, NIE silnik ======================
+     Tylko CZYTA to, co silnik policzyl w paint() i pokazal w verdict(): zadnej
+     wlasnej mediany, kwartyli ani wyboru rodziny. verdict() zostaje bajt w bajt;
+     ten blok owija go i po kazdym przeliczeniu przepisuje wynik do data-*
+     formularza #tool-enquiry. Zmieni sie liczenie w silniku — formularz pojedzie
+     za nim sam.
+     Wynik idzie TYLKO z wlasnego eksportu (mine): przykladowy sklep nie moze
+     wyjsc mailem jako czyjas analiza, wiec formularz jest wtedy schowany.
+     sampleN = F._n, czyli „settled gaps" z ekranu — tak silnik mierzy probe.
+     windowDays zostaje puste: silnik nie liczy dlugosci okna danych.          */
+  (function(){
+    var form=$("tool-enquiry"), box=$("send-analysis");
+    if(!form||!box) return;
+    var KEYS=["interval","labelDay","sampleN","windowDays","bimodal","intervalLow","intervalHigh"];
+    function put(r){
+      KEYS.forEach(function(k){form.dataset[k]=(r&&r[k]!=null)?String(r[k]):"";});
+      box.hidden=!r;
+    }
+    /* Ktora rodzina: przy etykiecie ta, ktora verdict() dostal; bez etykiety ta,
+       ktorej nazwe verdict() wlasnie wypisal w <b> — odczyt z ekranu, nie wybor. */
+    function shown(F){
+      if(F) return F;
+      var b=$("verdict").querySelector("b"), name=b?b.textContent:null, hit=null;
+      if(!name) return null;
+      Object.keys(OBS).forEach(function(k){var C=CAT[k];if(C&&shortName(C)===name) hit=C;});
+      return hit;
+    }
+    var engineVerdict=verdict;
+    verdict=function(F){
+      engineVerdict(F);
+      var C=mine?shown(F):null;
+      put(C&&C._m&&!C._thin?{interval:C._m,labelDay:F?C._pd:null,sampleN:C._n,
+        bimodal:C._bi,intervalLow:C._lo,intervalHigh:C._hi}:null);
+    };
+    put(null);
+  })();
 })();

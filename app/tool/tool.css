@@ -4,7 +4,10 @@
   :root{
     --paper:#F7F5F0; --card:#FFFFFF; --sunk:#EDEAE1;
     --ink:#14161A; --body:#3A3C40; --soft:#6E6D68; --rule:#DCDAD2;
-    --acc:#C97B1F; --acc-t:#A25C11; --good:#2F6B4F;
+    /* Wermilion zamiast bursztynu (norma czerwieni, design/DESIGN-SYSTEM.md).
+       --acc i --acc-t to TEKST — takze maly tekst, ktory silnik wstawia sam
+       (style="color:var(--acc)") — wiec #9E161F; --red to wylacznie grafika. */
+    --acc:#9E161F; --acc-t:#9E161F; --red:#D6202B; --good:#2F6B4F;
     --disp:"Instrument Sans",system-ui,"Helvetica Neue",Arial,sans-serif;
     --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   }
@@ -19,9 +22,12 @@
   .lab{font-family:var(--disp);font-size:12px;font-weight:700;letter-spacing:.18em;
     text-transform:uppercase;color:var(--ink);margin:0;}
   .lab.soft{color:var(--soft);}
+  /* kwadrat przed etykieta sekcji — jak na stronie glownej i w /cv */
+  .sh .lab::before{content:"";display:inline-block;width:7px;height:7px;background:var(--red);
+    margin-right:9px;vertical-align:middle;position:relative;top:-1px;}
 
   /* ---------- pasek gorny, jak na stronie glownej ---------------------- */
-  .top{border-bottom:1px solid var(--ink);}
+  .top{border-bottom:3px solid var(--red);}
   .top .in{max-width:1152px;margin:0 auto;padding:0 24px;min-height:52px;display:flex;
     flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 18px;}
   .wm{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
@@ -36,7 +42,7 @@
     padding:40px 0 56px;align-items:start;}
   h1{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6.2vw,80px);line-height:.96;
     letter-spacing:-.045em;color:var(--ink);margin:18px 0 0;max-width:12ch;text-wrap:balance;}
-  h1 span{color:var(--acc-t);}
+  h1 span{color:var(--red);} /* tylko liczba; od 24 px #D6202B */
   .lede{margin:26px 0 0;padding-top:22px;border-top:1px solid var(--ink);font-size:20px;
     line-height:1.4;color:var(--ink);max-width:36ch;}
   .lede small{display:block;margin-top:10px;font-size:15px;line-height:1.5;color:var(--soft);}
@@ -87,7 +93,7 @@
     margin-bottom:18px;}
   .legend span{display:inline-flex;align-items:center;gap:8px;}
   .legend i{width:22px;height:10px;display:block;}
-  .legend i.a{background:var(--ink);} .legend i.b{background:var(--acc);}
+  .legend i.a{background:var(--ink);} .legend i.b{background:var(--red);}
   .legend i.c{background:#B9B7AF;}
   #chk{color:var(--soft);}
   .axis{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 96px;gap:0 22px;
@@ -109,19 +115,20 @@
   .pt{position:relative;min-height:40px;min-width:0;display:grid;gap:3px;align-content:center;}
   .pt i{display:block;height:10px;}
   .pt .b1{background:var(--ink);}
-  .pt .b2{background:var(--acc);}
+  .pt .b2{background:var(--red);}
   .pt .b3{background:#B9B7AF;}
   .pt .b0{background:var(--sunk);}
   .pd{font-size:28px;font-weight:600;text-align:right;letter-spacing:-.02em;
     font-variant-numeric:tabular-nums;color:var(--soft);white-space:nowrap;line-height:1;}
-  .pd.late{color:var(--acc-t);} .pd.early{color:var(--good);}
+  /* 28 px → #D6202B; na telefonie 22 px → #9E161F (norma: od 24 px jasny wermilion) */
+  .pd.late{color:var(--red);} .pd.early{color:var(--good);}
   .pd s{display:block;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0;
     white-space:normal;line-height:1.35;margin-top:6px;color:var(--soft);}
 
   /* ---------- 03 · wskazanie ------------------------------------------- */
   .say{margin:0 0 30px;font-size:clamp(22px,2.4vw,30px);line-height:1.3;color:var(--ink);
     font-weight:500;letter-spacing:-.015em;max-width:40ch;text-wrap:pretty;}
-  .say b{color:var(--acc-t);font-weight:600;}
+  .say b{color:var(--ink);font-weight:600;}
   .say em{font-style:normal;color:var(--good);font-weight:600;}
   .four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);}
   .four:empty{display:none;}
@@ -164,14 +171,14 @@
   .orow .k{font-size:14px;line-height:1.4;color:var(--body);min-width:0;overflow-wrap:anywhere;}
   .orow .v{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;
     font-variant-numeric:tabular-nums;}
-  .orow .v.no{color:var(--acc-t);}
+  .orow .v.no{color:var(--ink);text-decoration:underline;text-underline-offset:3px;}
   .msg{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--rule);}
-  .msg .w{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-t);}
+  .msg .w{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);}
   .msg .s{font-weight:600;font-size:15px;color:var(--ink);line-height:1.35;}
   .msg .t{font-size:14px;line-height:1.5;color:var(--body);}
   .stat{font-size:13px;color:var(--soft);min-height:18px;margin:0;}
   /* Odpowiedz AI przepisuje przyrzad nad soba. Bez tego zmiana dzieje sie poza wzrokiem. */
-  .wrote{outline:2px solid var(--acc);outline-offset:4px;}
+  .wrote{outline:2px solid var(--ink);outline-offset:4px;}
 
   /* ---------- zamkniecie: nastepny krok i cena ------------------------- */
   .close{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:32px 72px;
@@ -210,6 +217,7 @@
     .pr{grid-template-columns:minmax(0,1fr) 64px;gap:10px 14px;}
     .pn{grid-column:1/-1;}
     .pd{font-size:22px;}
+    .pd.late{color:var(--acc-t);}
     .lede{font-size:18px;}
     .chip{padding:0 14px;font-size:12px;}
   }
@@ -220,3 +228,33 @@
     .four > div + div{border-top:1px solid var(--rule);}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+
+  /* ---------- formularz „Send me this analysis" (port z Tool v12) --------
+     Widoczny tylko przy wyniku na WLASNYM eksporcie (blok wyniku na koncu
+     skryptu). Wysylka: app/tool/ToolLeadBridge.tsx. Zadnej czerwieni.      */
+  .send{grid-column:1/-1;display:flex;flex-direction:column;gap:14px;margin-top:8px;}
+  .send[hidden]{display:none;}
+  .send .b{margin:0;max-width:62ch;}
+  #tool-enquiry{display:flex;flex-direction:column;gap:16px;border:1px solid var(--ink);
+    padding:20px;background:var(--paper);max-width:640px;}
+  #tool-enquiry .fh{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    margin:0;border-bottom:1px solid var(--ink);padding-bottom:10px;color:var(--ink);}
+  #tool-enquiry .fld{display:flex;flex-direction:column;gap:5px;width:100%;}
+  #tool-enquiry .fld span{font-size:12px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--soft);}
+  #tool-enquiry input[type=text],#tool-enquiry input[type=email]{background:none;border:0;
+    border-bottom:1px solid var(--ink);border-radius:0;padding:7px 0;font:inherit;font-size:16px;
+    color:var(--ink);width:100%;min-height:44px;}
+  #tool-enquiry .cons{display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px;}
+  #tool-enquiry .cons input{margin:0;width:20px;height:20px;accent-color:var(--ink);flex:none;}
+  #tool-enquiry .cons span{font-size:14px;line-height:1.45;color:var(--ink);}
+  #tool-enquiry .opt{color:var(--soft);}
+  #tool-enquiry .pv{font-size:14px;line-height:1.45;margin:0;color:var(--ink);}
+  #tool-enquiry button{background:var(--ink);color:#fff;border:0;border-radius:0;font:inherit;
+    padding:12px 16px;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    cursor:pointer;width:100%;min-height:44px;}
+  #tool-enquiry button:hover{background:var(--body);}
+  #tool-enquiry .sent{display:none;margin:0;font-size:15px;line-height:1.5;color:var(--ink);}
+  #tool-enquiry[data-lead-sent] .live{display:none;}
+  #tool-enquiry[data-lead-sent] .sent{display:block;}
+  #tool-enquiry .live{display:flex;flex-direction:column;gap:16px;}

@@ -14,7 +14,10 @@
   :root{
     --paper:#F7F5F0; --card:#FFFFFF; --sunk:#EDEAE1;
     --ink:#14161A; --body:#3A3C40; --soft:#6E6D68; --rule:#DCDAD2;
-    --acc:#C97B1F; --acc-t:#A25C11; --good:#2F6B4F;
+    /* Wermilion zamiast bursztynu (norma czerwieni, design/DESIGN-SYSTEM.md).
+       --acc i --acc-t to TEKST — takze maly tekst, ktory silnik wstawia sam
+       (style="color:var(--acc)") — wiec #9E161F; --red to wylacznie grafika. */
+    --acc:#9E161F; --acc-t:#9E161F; --red:#D6202B; --good:#2F6B4F;
     --disp:"Instrument Sans",system-ui,"Helvetica Neue",Arial,sans-serif;
     --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   }
@@ -29,9 +32,12 @@
   .lab{font-family:var(--disp);font-size:12px;font-weight:700;letter-spacing:.18em;
     text-transform:uppercase;color:var(--ink);margin:0;}
   .lab.soft{color:var(--soft);}
+  /* kwadrat przed etykieta sekcji — jak na stronie glownej i w /cv */
+  .sh .lab::before{content:"";display:inline-block;width:7px;height:7px;background:var(--red);
+    margin-right:9px;vertical-align:middle;position:relative;top:-1px;}
 
   /* ---------- pasek gorny, jak na stronie glownej ---------------------- */
-  .top{border-bottom:1px solid var(--ink);}
+  .top{border-bottom:3px solid var(--red);}
   .top .in{max-width:1152px;margin:0 auto;padding:0 24px;min-height:52px;display:flex;
     flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 18px;}
   .wm{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
@@ -46,7 +52,7 @@
     padding:40px 0 56px;align-items:start;}
   h1{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6.2vw,80px);line-height:.96;
     letter-spacing:-.045em;color:var(--ink);margin:18px 0 0;max-width:12ch;text-wrap:balance;}
-  h1 span{color:var(--acc-t);}
+  h1 span{color:var(--red);} /* tylko liczba; od 24 px #D6202B */
   .lede{margin:26px 0 0;padding-top:22px;border-top:1px solid var(--ink);font-size:20px;
     line-height:1.4;color:var(--ink);max-width:36ch;}
   .lede small{display:block;margin-top:10px;font-size:15px;line-height:1.5;color:var(--soft);}
@@ -97,7 +103,7 @@
     margin-bottom:18px;}
   .legend span{display:inline-flex;align-items:center;gap:8px;}
   .legend i{width:22px;height:10px;display:block;}
-  .legend i.a{background:var(--ink);} .legend i.b{background:var(--acc);}
+  .legend i.a{background:var(--ink);} .legend i.b{background:var(--red);}
   .legend i.c{background:#B9B7AF;}
   #chk{color:var(--soft);}
   .axis{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 96px;gap:0 22px;
@@ -119,19 +125,20 @@
   .pt{position:relative;min-height:40px;min-width:0;display:grid;gap:3px;align-content:center;}
   .pt i{display:block;height:10px;}
   .pt .b1{background:var(--ink);}
-  .pt .b2{background:var(--acc);}
+  .pt .b2{background:var(--red);}
   .pt .b3{background:#B9B7AF;}
   .pt .b0{background:var(--sunk);}
   .pd{font-size:28px;font-weight:600;text-align:right;letter-spacing:-.02em;
     font-variant-numeric:tabular-nums;color:var(--soft);white-space:nowrap;line-height:1;}
-  .pd.late{color:var(--acc-t);} .pd.early{color:var(--good);}
+  /* 28 px → #D6202B; na telefonie 22 px → #9E161F (norma: od 24 px jasny wermilion) */
+  .pd.late{color:var(--red);} .pd.early{color:var(--good);}
   .pd s{display:block;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0;
     white-space:normal;line-height:1.35;margin-top:6px;color:var(--soft);}
 
   /* ---------- 03 · wskazanie ------------------------------------------- */
   .say{margin:0 0 30px;font-size:clamp(22px,2.4vw,30px);line-height:1.3;color:var(--ink);
     font-weight:500;letter-spacing:-.015em;max-width:40ch;text-wrap:pretty;}
-  .say b{color:var(--acc-t);font-weight:600;}
+  .say b{color:var(--ink);font-weight:600;}
   .say em{font-style:normal;color:var(--good);font-weight:600;}
   .four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);}
   .four:empty{display:none;}
@@ -174,14 +181,14 @@
   .orow .k{font-size:14px;line-height:1.4;color:var(--body);min-width:0;overflow-wrap:anywhere;}
   .orow .v{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;
     font-variant-numeric:tabular-nums;}
-  .orow .v.no{color:var(--acc-t);}
+  .orow .v.no{color:var(--ink);text-decoration:underline;text-underline-offset:3px;}
   .msg{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--rule);}
-  .msg .w{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-t);}
+  .msg .w{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);}
   .msg .s{font-weight:600;font-size:15px;color:var(--ink);line-height:1.35;}
   .msg .t{font-size:14px;line-height:1.5;color:var(--body);}
   .stat{font-size:13px;color:var(--soft);min-height:18px;margin:0;}
   /* Odpowiedz AI przepisuje przyrzad nad soba. Bez tego zmiana dzieje sie poza wzrokiem. */
-  .wrote{outline:2px solid var(--acc);outline-offset:4px;}
+  .wrote{outline:2px solid var(--ink);outline-offset:4px;}
 
   /* ---------- zamkniecie: nastepny krok i cena ------------------------- */
   .close{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:32px 72px;
@@ -220,6 +227,7 @@
     .pr{grid-template-columns:minmax(0,1fr) 64px;gap:10px 14px;}
     .pn{grid-column:1/-1;}
     .pd{font-size:22px;}
+    .pd.late{color:var(--acc-t);}
     .lede{font-size:18px;}
     .chip{padding:0 14px;font-size:12px;}
   }
@@ -230,6 +238,36 @@
     .four > div + div{border-top:1px solid var(--rule);}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+
+  /* ---------- formularz „Send me this analysis" (port z Tool v12) --------
+     Widoczny tylko przy wyniku na WLASNYM eksporcie (blok wyniku na koncu
+     skryptu). Wysylka: app/tool/ToolLeadBridge.tsx. Zadnej czerwieni.      */
+  .send{grid-column:1/-1;display:flex;flex-direction:column;gap:14px;margin-top:8px;}
+  .send[hidden]{display:none;}
+  .send .b{margin:0;max-width:62ch;}
+  #tool-enquiry{display:flex;flex-direction:column;gap:16px;border:1px solid var(--ink);
+    padding:20px;background:var(--paper);max-width:640px;}
+  #tool-enquiry .fh{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    margin:0;border-bottom:1px solid var(--ink);padding-bottom:10px;color:var(--ink);}
+  #tool-enquiry .fld{display:flex;flex-direction:column;gap:5px;width:100%;}
+  #tool-enquiry .fld span{font-size:12px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--soft);}
+  #tool-enquiry input[type=text],#tool-enquiry input[type=email]{background:none;border:0;
+    border-bottom:1px solid var(--ink);border-radius:0;padding:7px 0;font:inherit;font-size:16px;
+    color:var(--ink);width:100%;min-height:44px;}
+  #tool-enquiry .cons{display:flex;align-items:center;gap:10px;cursor:pointer;min-height:44px;}
+  #tool-enquiry .cons input{margin:0;width:20px;height:20px;accent-color:var(--ink);flex:none;}
+  #tool-enquiry .cons span{font-size:14px;line-height:1.45;color:var(--ink);}
+  #tool-enquiry .opt{color:var(--soft);}
+  #tool-enquiry .pv{font-size:14px;line-height:1.45;margin:0;color:var(--ink);}
+  #tool-enquiry button{background:var(--ink);color:#fff;border:0;border-radius:0;font:inherit;
+    padding:12px 16px;font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    cursor:pointer;width:100%;min-height:44px;}
+  #tool-enquiry button:hover{background:var(--body);}
+  #tool-enquiry .sent{display:none;margin:0;font-size:15px;line-height:1.5;color:var(--ink);}
+  #tool-enquiry[data-lead-sent] .live{display:none;}
+  #tool-enquiry[data-lead-sent] .sent{display:block;}
+  #tool-enquiry .live{display:flex;flex-direction:column;gap:16px;}
 </style>
 
 </head>
@@ -245,7 +283,7 @@
   <header class="hero">
     <div>
       <p class="lab soft">Instrument &mdash; reorder interval</p>
-      <h1>The pack says 45 days. <span>Customers came back at 69.</span></h1>
+      <h1>The pack says 45 days. Customers came back at <span>69</span>.</h1>
       <p class="lede">What the label promises, against the gap between orders in your own export.
         <small>Anonymous supplement shop, the real order history with the names removed. Paste
         your own below &mdash; it is counted in this browser, free.</small></p>
@@ -352,6 +390,32 @@
       <a class="btn" href="/#enquiry">Send me your store</a>
       <p class="note">Store URL and email. I reply personally within 24 hours, with a first
         observation about your store &mdash; not a calendar link.</p>
+    </div>
+    <div class="send" id="send-analysis" hidden>
+      <p class="lab">Send me this analysis</p>
+      <p class="b">I&rsquo;ll email you the numbers above &mdash; the label day, the real interval and
+        the gap &mdash; so you can forward them to whoever owns the calendar.</p>
+      <form id="tool-enquiry" novalidate data-interval="" data-label-day="" data-sample-n=""
+        data-window-days="" data-bimodal="" data-interval-low="" data-interval-high="">
+        <div class="live">
+          <label class="fld" for="url-tool"><span>Your store URL (optional)</span>
+            <input id="url-tool" name="url-tool" type="text" inputmode="url" autocapitalize="none"
+              spellcheck="false" placeholder="yourstore.com"></label>
+          <label class="fld" for="email-tool"><span>Your email</span>
+            <input id="email-tool" name="email-tool" type="email" required
+              placeholder="you@yourstore.com"></label>
+          <label class="cons" for="consent-contact-tool"><input id="consent-contact-tool"
+              name="consent-contact-tool" type="checkbox"><span>I&rsquo;d like Rafa&#322; to look at
+              my store and write back about it.<span class="opt"> (optional)</span></span></label>
+          <label class="cons" for="consent-marketing-tool"><input id="consent-marketing-tool"
+              name="consent-marketing-tool" type="checkbox"><span>Occasional email from me &mdash;
+              notes on reorder timing, new tools I build, and what I learn working on FMCG stores.
+              Unsubscribe any time.<span class="opt"> (optional)</span></span></label>
+          <p class="pv">Only the numbers above go with this email &mdash; not your file.</p>
+          <button type="submit">Send me the analysis</button>
+        </div>
+        <p class="sent">Sent. The numbers above are on their way to your inbox.</p>
+      </form>
     </div>
   </section>
 
@@ -1158,6 +1222,43 @@
       });
     });
   };
+
+  /* ==== WYNIK DO FORMULARZA — port Tool v12, NIE silnik ======================
+     Tylko CZYTA to, co silnik policzyl w paint() i pokazal w verdict(): zadnej
+     wlasnej mediany, kwartyli ani wyboru rodziny. verdict() zostaje bajt w bajt;
+     ten blok owija go i po kazdym przeliczeniu przepisuje wynik do data-*
+     formularza #tool-enquiry. Zmieni sie liczenie w silniku — formularz pojedzie
+     za nim sam.
+     Wynik idzie TYLKO z wlasnego eksportu (mine): przykladowy sklep nie moze
+     wyjsc mailem jako czyjas analiza, wiec formularz jest wtedy schowany.
+     sampleN = F._n, czyli „settled gaps" z ekranu — tak silnik mierzy probe.
+     windowDays zostaje puste: silnik nie liczy dlugosci okna danych.          */
+  (function(){
+    var form=$("tool-enquiry"), box=$("send-analysis");
+    if(!form||!box) return;
+    var KEYS=["interval","labelDay","sampleN","windowDays","bimodal","intervalLow","intervalHigh"];
+    function put(r){
+      KEYS.forEach(function(k){form.dataset[k]=(r&&r[k]!=null)?String(r[k]):"";});
+      box.hidden=!r;
+    }
+    /* Ktora rodzina: przy etykiecie ta, ktora verdict() dostal; bez etykiety ta,
+       ktorej nazwe verdict() wlasnie wypisal w <b> — odczyt z ekranu, nie wybor. */
+    function shown(F){
+      if(F) return F;
+      var b=$("verdict").querySelector("b"), name=b?b.textContent:null, hit=null;
+      if(!name) return null;
+      Object.keys(OBS).forEach(function(k){var C=CAT[k];if(C&&shortName(C)===name) hit=C;});
+      return hit;
+    }
+    var engineVerdict=verdict;
+    verdict=function(F){
+      engineVerdict(F);
+      var C=mine?shown(F):null;
+      put(C&&C._m&&!C._thin?{interval:C._m,labelDay:F?C._pd:null,sampleN:C._n,
+        bimodal:C._bi,intervalLow:C._lo,intervalHigh:C._hi}:null);
+    };
+    put(null);
+  })();
 })();
 </script>
 
