@@ -101,6 +101,7 @@
       <span aria-hidden="true" style="display:flex;align-items:flex-end;gap:1px;height:10px;flex:none"><sc-for list="{{ sig }}" as="g" hint-placeholder-count="70"><span style="display:block;width:1px;height:{{ g.h }};background-color:{{ g.bg }}"></span></sc-for></span>
     </span>
   <a href="/tool" data-ship-added="tool-link" style="flex:none;white-space:nowrap;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#14161A;text-decoration:underline;text-underline-offset:4px;padding:14px 0;margin:-14px 0">Check your own gap — free</a></header>
+  <div aria-hidden="true" style="height:3px;background:#D6202B;margin:0;width:100%"></div>
 
   <sc-if value="{{ meterOn }}" hint-placeholder-val="{{ false }}">
   <div aria-hidden="{{ meterHidden }}" style="position:fixed;{{L.meterPos}};z-index:25;display:{{ meterDisplay }};flex-direction:{{L.meterDir}};gap:{{L.meterGap}};align-items:{{L.meterAlign}};justify-content:{{L.meterJustify}};background:#F7F5F0;border-bottom:{{L.meterBorder}};padding:{{L.meterPad}}">
@@ -117,12 +118,14 @@
   <main style="padding:{{L.mpad}};display:grid;grid-template-areas:{{L.areas}};grid-template-columns:{{L.gridCols}};column-gap:{{L.colGap}};row-gap:{{L.rowGap}}">
 
     <div style="grid-area:head;min-width:0;display:flex;flex-direction:column;gap:{{L.headGap}}">
-      <sc-if value="{{ showIndication }}" hint-placeholder-val="{{ true }}"><p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#6E6D68;margin:0">Indication</p></sc-if>
+      <sc-if value="{{ showIndication }}" hint-placeholder-val="{{ true }}"><p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#6E6D68;margin:0"><span aria-hidden="true" style="display:inline-block;width:7px;height:7px;background:#D6202B;margin-right:9px;vertical-align:middle;position:relative;top:-1px"></span>Indication</p></sc-if>
       <h1 style="font-size:{{L.h1}};font-weight:600;line-height:.94;letter-spacing:-.035em;margin:0;max-width:17ch;text-wrap:balance">You don't pay twice for the same customer.</h1>
       <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#6E6D68;margin:0;border-top:1px solid #14161A;padding-top:{{L.leadPad}}">Source — a real supplement shop, anonymised</p>
-      <p style="font-size:{{L.gap45}};font-weight:600;line-height:1.15;letter-spacing:-.015em;margin:0;max-width:24ch;color:#14161A;text-wrap:balance">The label says 45 days. The order data says 69.</p>
+      <p style="font-size:{{L.gap45}};font-weight:600;line-height:1.15;letter-spacing:-.015em;margin:0;max-width:24ch;color:#14161A;text-wrap:balance">The label says 45 days. The order data says <span style="color:#9E161F">69</span>.</p>
+      <sc-if value="{{ deskLead }}" hint-placeholder-val="{{ true }}">
       <a href="/tool" style="align-self:flex-start;display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 16px;border:1px solid #14161A;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#14161A;text-decoration:none">Check your own gap — free</a>
       <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch">E-commerce for brands whose customers come back.<span style="display:{{L.leadTail}}"> I build the tools myself — calculators, counters, progress bars — the kind of thing that normally waits in an IT queue.</span></p>
+      </sc-if>
 
       <sc-if value="{{ live.phone }}" hint-placeholder-val="{{ true }}">
       <form id="enquiry-phone" ref="{{ phoneFormRef }}" sc-camel-on-submit="{{ submit.phone }}" style="display:{{ heroFormDisplay }};flex-direction:column;gap:{{L.heroGap}};border:1px solid #14161A;padding:{{L.formPad}}">
@@ -150,6 +153,10 @@
       </sc-if>
       <sc-if value="{{ done.phone }}" hint-placeholder-val="{{ false }}">
         <div style="display:{{ heroFormDisplay }};flex-direction:column;gap:{{L.formGap}};border:1px solid #14161A;padding:{{L.formPad}};min-height:{{ sentH.phone }}"><p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0;border-bottom:1px solid #14161A;padding-bottom:10px">Enquiry received</p><div style="display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68">Your store URL</span><span style="font-size:{{L.field}};font-weight:600;overflow-wrap:anywhere;border-bottom:1px solid #14161A;padding:7px 0">{{ sentHost.phone }}</span></div><p style="font-size:{{L.small}};line-height:1.45;margin:0;color:#14161A">I reply personally within 24 hours, with a first observation about your store — not a calendar link.</p><p style="font-size:{{L.body}};line-height:1.45;margin:0">Two clients at a time.</p></div>
+      </sc-if>
+      <sc-if value="{{ phoneTail }}" hint-placeholder-val="{{ false }}">
+      <a href="/tool" style="align-self:flex-start;display:flex;align-items:center;min-height:44px;box-sizing:border-box;padding:0 16px;border:1px solid #14161A;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#14161A;text-decoration:none">Check your own gap — free</a>
+      <p style="font-size:{{L.lead}};line-height:1.35;margin:0;max-width:46ch">E-commerce for brands whose customers come back.<span style="display:{{L.leadTail}}"> I build the tools myself — calculators, counters, progress bars — the kind of thing that normally waits in an IT queue.</span></p>
       </sc-if>
       <sc-if value="{{ phoneTail }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;flex-direction:column;gap:{{L.feeHeadGap}}">
@@ -205,8 +212,8 @@
 
     <section style="grid-area:recog;min-width:0;display:flex;flex-direction:column;gap:{{L.svcHead}}">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid #14161A;padding-bottom:8px">
-        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">If this is your store</p>
-        <p data-recog-code="1" style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">01–03</p>
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0"><span aria-hidden="true" style="display:inline-block;width:7px;height:7px;background:#D6202B;margin-right:9px;vertical-align:middle;position:relative;top:-1px"></span>If this is your store</p>
+        <p data-recog-code="1" style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#9E161F;margin:0">01–03</p>
       </div>
       <div style="display:flex;flex-direction:column;gap:{{L.recogGap}};max-width:{{L.recogMeasure}}">
         <p style="font-size:{{L.recog}};line-height:1.6;margin:0;color:#14161A;text-wrap:pretty">You bought the same customer twice this quarter, and you only found out because you recognised the name.</p>
@@ -218,7 +225,7 @@
     </section>
     <section style="grid-area:svc;display:flex;flex-direction:column;gap:{{L.svcHead}}">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid #14161A;padding-bottom:8px">
-        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Composition — five parts, in order</p>
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0"><span aria-hidden="true" style="display:inline-block;width:7px;height:7px;background:#D6202B;margin-right:9px;vertical-align:middle;position:relative;top:-1px"></span>Composition — five parts, in order</p>
       </div>
 
       <div ref="{{ rowRef }}" style="display:grid;grid-template-columns:{{L.svcCols}};align-items:start">
@@ -255,7 +262,7 @@
           <p style="margin:0;color:#14161A">{{ dirTitle }} - {{ dirDose }}</p>
           <p style="margin:0;color:#6E6D68">{{ note }}</p>
         </div>
-        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;min-height:{{L.dirMin}}">
           <sc-for list="{{ directions }}" as="d" hint-placeholder-count="3">
             <li style="font-size:12.5px;line-height:1.5;color:#3A3C40;padding:6px 0;border-top:{{ d.rule }}">{{ d.text }}</li>
           </sc-for>
@@ -264,7 +271,7 @@
 
       <div id="one-date" style="display:flex;flex-direction:column;gap:{{L.panelGap}};border-top:1px solid #14161A;padding-top:{{L.panelPad}}">
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 16px">
-          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">One date, four channels</p>
+          <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0"><span aria-hidden="true" style="display:inline-block;width:7px;height:7px;background:#D6202B;margin-right:9px;vertical-align:middle;position:relative;top:-1px"></span>One date, four channels</p>
         </div>
         <div style="display:grid;grid-template-columns:{{L.chanCols}};column-gap:{{L.chanColGap}};align-items:end">
           <span aria-hidden="true" style="display:{{L.chanSpacer}}"></span>
@@ -275,13 +282,13 @@
                   <span style="flex:1;min-width:0;display:block;height:{{ r.h }};background-color:{{ r.bg }}"></span>
                 </sc-for>
               </div>
-              <span aria-hidden="true" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:0;bottom:-4px;width:1px;margin-left:-0.5px;background:#C97B1F"></span>
+              <span aria-hidden="true" style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:0;bottom:-4px;width:1px;margin-left:-0.5px;background:#D6202B"></span>
             </div>
             <div style="position:relative;height:30px;font-size:12px;font-weight:600;letter-spacing:.14em;color:#6E6D68;font-variant-numeric:tabular-nums;white-space:nowrap">
               <span style="position:absolute;left:0;top:0">1</span>
               <span style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 89 / 140 + 44 * {{L.tickGap}});top:0;transform:translateX(-50%)">45 — label</span>
               <span style="position:absolute;right:0;top:0">70</span>
-              <span style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:15px;transform:translateX(-100%);color:#A25C11">69 — actual</span>
+              <span style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:15px;transform:translateX(-100%);color:#9E161F">69 — actual</span>
             </div>
           </div>
         </div>
@@ -292,7 +299,7 @@
               <div aria-hidden="true" style="position:relative;height:10px;min-width:0">
                 <span style="position:absolute;left:0;right:0;top:4px;height:1px;background:#C9C7C0"></span>
                 <span style="position:absolute;left:0;width:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:2px;height:5px;background:#C9C7C0"></span>
-                <span style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:-2px;bottom:-2px;width:1px;margin-left:-0.5px;background:#C97B1F"></span>
+                <span style="position:absolute;left:calc((100% - 69 * {{L.tickGap}}) * 137 / 140 + 68 * {{L.tickGap}});top:-2px;bottom:-2px;width:1px;margin-left:-0.5px;background:#D6202B"></span>
               </div>
               <p style="font-size:{{L.body}};line-height:1.45;margin:0;color:#14161A;text-wrap:pretty">{{ c.text }}</p>
             </div>
@@ -303,13 +310,13 @@
       <div style="display:flex;flex-direction:column;gap:{{L.panelGap}}">
         <p style="font-size:{{L.body}};line-height:1.55;margin:0;max-width:62ch">The label date is not the reorder date.</p>
         <p style="font-size:{{L.body}};line-height:1.55;margin:0;max-width:62ch">Those two numbers are one shop’s. Paste your own order export and your own label, and the tool reads the same two numbers off your data.</p>
-        <a href="/tool" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#A25C11;text-decoration:underline;text-underline-offset:4px">Count your own interval</a>
+        <a href="/tool" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#14161A;text-decoration:underline;text-underline-offset:4px">Count your own interval</a>
       </div>
     </section>
 
     <section style="grid-column:1 / -1;min-width:0;display:flex;flex-direction:column;gap:{{L.svcHead}};border-top:1px solid #14161A;padding-top:{{L.tailPad}}">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid #14161A;padding-bottom:8px">
-        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">Prior batches</p>
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0"><span aria-hidden="true" style="display:inline-block;width:7px;height:7px;background:#D6202B;margin-right:9px;vertical-align:middle;position:relative;top:-1px"></span>Prior batches</p>
         <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">Record of work</p>
       </div>
       <div style="display:flex;flex-direction:column">
@@ -339,7 +346,7 @@
     <div style="position:sticky;top:0;height:100vh;max-height:100vh;display:flex;flex-direction:column;gap:{{L.frameGap}};padding:{{L.pinPad}};overflow:hidden">
 
       <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px">
-        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0">One brand, one mark per customer</p>
+        <p style="font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin:0"><span aria-hidden="true" style="display:inline-block;width:7px;height:7px;background:#D6202B;margin-right:9px;vertical-align:middle;position:relative;top:-1px"></span>One brand, one mark per customer</p>
         <p style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E6D68;margin:0">Batch record</p>
       </div>
 
@@ -380,7 +387,7 @@
           </div>
         </div>
 
-        <p style="margin:0;font-size:{{L.payoff}};font-weight:600;line-height:1.02;letter-spacing:-.03em;max-width:24ch;text-wrap:balance;opacity:{{ payoffOpacity }};min-height:{{L.payoffH}}">You don't pay twice for the same customer.</p>
+        <p style="margin:0;font-size:{{L.payoff}};font-weight:600;line-height:1.02;letter-spacing:-.03em;max-width:24ch;text-wrap:balance;color:#D6202B;opacity:{{ payoffOpacity }};min-height:{{L.payoffH}}">You don't pay twice for the same customer.</p>
       </div>
 
       <div ref="{{ pinFormRef }}" style="flex:none;display:flex;flex-direction:{{L.msgDir}};gap:{{L.msgGap}};border-top:1px solid #14161A;padding-top:{{L.msgPad}}">
@@ -1025,7 +1032,7 @@ class Component extends DCLogic {
         labelColor: on ? INK : MID,
         sub: on ? '#3A3C40' : MID,
         rule: i === 0 ? 'transparent' : (on ? INK : HAIR),
-        ruleTop: on ? INK : 'transparent',
+        ruleTop: on ? '#D6202B' : 'transparent',
         bg: on ? '#EDEAE1' : 'transparent',
         pressed: on ? 'true' : 'false',
         aria: 'Part 0' + (i + 1) + ' - ' + d.title,
@@ -1047,7 +1054,7 @@ class Component extends DCLogic {
       ruler.push({
         m: marked ? '1' : '0',
         h: marked ? '100%' : (day % 5 === 0 ? '58%' : '34%'),
-        bg: marked ? '#C97B1F' : (day <= 45 ? MID : HAIR)
+        bg: marked ? '#D6202B' : (day <= 45 ? MID : HAIR)
       });
     }
 
@@ -1106,7 +1113,7 @@ class Component extends DCLogic {
       fieldDir: 'column', halfGap: 'clamp(12px,2.4vh,20px)', fieldCols: 'repeat(6,minmax(0,1fr))',
       rowGap2: 'clamp(5px,1.1vh,9px)', colGap2: '6px', markGap: '2px', dotS: '6px', costS: '4px',
       capGap: '10px', capSize: '13px', capH: '18px', divW: '100%', divH: '1px',
-      payoff: 'clamp(24px,6.8vw,30px)', payoffH: '76px',
+      payoff: 'clamp(24px,6.8vw,30px)', dirMin: '300px', payoffH: '76px',
       msgDir: 'column', msgGap: '14px', msgPad: '14px', msgIdW: '100%', msgPhoto: '48px',
       msgInnerGap: '12px', msgFieldGap: '12px', msgFieldDir: 'column', chromeH: '58px',
       msgFieldAlign: 'stretch', msgBtnW: '100%', msgMetaDir: 'column', msgMetaAlign: 'flex-start', msgIdAlign: 'center',
@@ -1132,7 +1139,7 @@ class Component extends DCLogic {
       fieldDir: 'row', halfGap: 'clamp(24px,3.4vw,64px)', fieldCols: 'repeat(10,minmax(0,1fr))',
       rowGap2: 'clamp(7px,1.7vh,14px)', colGap2: '8px', markGap: '3px', dotS: '7px', costS: '5px',
       capGap: '20px', capSize: '15px', capH: '22px', divW: '1px', divH: '76%',
-      payoff: 'clamp(34px,3.8vw,58px)', payoffH: '128px',
+      payoff: 'clamp(34px,3.8vw,58px)', dirMin: '190px', payoffH: '128px',
       msgDir: 'row', msgGap: '40px', msgPad: '18px', msgIdW: '240px', msgPhoto: '64px',
       msgInnerGap: '14px', msgFieldGap: '14px', msgFieldDir: 'row', chromeH: '24px',
       msgFieldAlign: 'flex-end', msgBtnW: 'auto', msgMetaDir: 'row', msgMetaAlign: 'center', msgIdAlign: 'flex-start',
@@ -1143,14 +1150,14 @@ class Component extends DCLogic {
 
     return {
       L, svcs, ruler, meter, directions, dirTitle, dirDose, note,
-      oneRuler: Array.from({ length: 70 }, (_, k) => ({ h: (k === 44 || k === 68) ? '100%' : '40%', bg: k === 44 ? INK : (k === 68 ? '#C97B1F' : HAIR) })),
+      oneRuler: Array.from({ length: 70 }, (_, k) => ({ h: (k === 44 || k === 68) ? '100%' : '40%', bg: k === 44 ? INK : (k === 68 ? '#D6202B' : HAIR) })),
       channels: [
         { label: 'Paid', text: 'the exclusion window closes on day 69' },
         { label: 'CRM email', text: 'the reminder leaves on day 69' },
         { label: 'Subscription', text: 'the interval is set to 69 days' },
         { label: 'Product page', text: 'the pack offered is the one that lasts to day 69' }
       ],
-      sig: Array.from({ length: 70 }, (_, k) => ({ h: (k === 44 || k === 68) ? '100%' : '40%', bg: k === 44 ? INK : (k === 68 ? '#C97B1F' : HAIR) })),
+      sig: Array.from({ length: 70 }, (_, k) => ({ h: (k === 44 || k === 68) ? '100%' : '40%', bg: k === 44 ? INK : (k === 68 ? '#D6202B' : HAIR) })),
       closeFee: [{ t: 'No setup fee.' }, { t: 'No minimum term.' }, { t: 'Two clients at a time.' }],
       closeMinH: this.state.closeH ? this.state.closeH + 'px' : '0px',
       rowRef: this.rowRef,
@@ -1159,7 +1166,7 @@ class Component extends DCLogic {
       heroFormDisplay: phone ? 'flex' : 'none',
       midFormDisplay: phone ? 'none' : 'flex',
       showIndication: !phone,
-      phoneTail: phone,
+      phoneTail: phone, deskLead: !phone,
       phoneFee: phone, railFee: !phone,
       closeFormRef: this.closeFormRef,
       showPin, noPin: !showPin, rootPadB: showPin ? '0px' : L.barSpace, pinRef: this.pinRef, pinFormRef: this.pinFormRef, fieldLeft, fieldRight,
