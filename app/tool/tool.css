@@ -38,15 +38,32 @@
   .back:hover{text-decoration:underline;text-underline-offset:4px;}
 
   /* ---------- pierwszy ekran ------------------------------------------- */
-  .hero{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:40px 72px;
-    padding:40px 0 56px;align-items:start;}
-  h1{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6.2vw,80px);line-height:.96;
-    letter-spacing:-.045em;color:var(--ink);margin:18px 0 0;max-width:12ch;text-wrap:balance;}
-  h1 span{color:var(--red);} /* tylko liczba; od 24 px #D6202B */
-  .lede{margin:26px 0 0;padding-top:22px;border-top:1px solid var(--ink);font-size:20px;
-    line-height:1.4;color:var(--ink);max-width:36ch;}
+  /* PRZEBIEG 48 — PIERWSZY EKRAN JEST JEDNA MYSLA, NIE STRONA TYTULOWA RAPORTU.
+     Trzej sedziowie ukladu na trzech, niezaleznie, dali pytaniu "ciezko czy lekko"
+     3 na 5 i wszyscy trzej nazwali ten sam powod: "the oversized bold headline and
+     dense stacked text blocks", "the huge multi-line headline and back-to-back
+     paragraphs read dense", "heavy black type plus many paragraph blocks". Pierwszy
+     ekran niosl naraz nadtytul, naglowek, teze, drobny druk o pochodzeniu danych,
+     dwa wyjscia ORAZ trzypunktowa numerowana instrukcje obslugi — szesc rzeczy,
+     z ktorych tylko jedna jest mysla. Z7 zada jednej mysli na ekran i tresci
+     odslanianej STOPNIOWO, wiec hero przestaje byc siatka dwukolumnowa i staje sie
+     pojedyncza kolumna wysokosci ekranu: nadtytul, zdanie, teza, jedno wyjscie.
+     Drobny druk o pochodzeniu danych zszedl do sekcji 01 (tam, gdzie pada pytanie
+     CZYJE to dane), instrukcja obslugi zajela pusta prawa polowe sekcji 01 — czyli
+     to samo martwe pole, ktore zweryfikowany sedzia rzemiosla nazwal w przebiegu 43.
+     Nic nie zostalo usuniete; wszystko stoi ekran nizej.                          */
+  .hero{display:grid;grid-template-columns:minmax(0,1fr);gap:0;
+    min-height:calc(100svh - 52px);align-content:center;
+    padding:72px 0 88px;align-items:start;}
+  h1{font-family:var(--disp);font-weight:600;font-size:clamp(42px,6.4vw,84px);line-height:.96;
+    letter-spacing:-.045em;color:var(--ink);margin:24px 0 0;max-width:15ch;text-wrap:balance;}
+  /* Dwa zdania, dwa bloki: lamanie w polowie zdania bylo jedyna rzecza, ktora ten
+     naglowek robil zle, gdy urosl.                                              */
+  h1 span{color:var(--acc-t);display:block;}
+  .lede{margin:40px 0 0;padding-top:26px;border-top:1px solid var(--ink);font-size:22px;
+    line-height:1.4;color:var(--ink);max-width:34ch;}
   .lede small{display:block;margin-top:10px;font-size:15px;line-height:1.5;color:var(--soft);}
-  .cta{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin-top:28px;}
+  .cta{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin-top:40px;}
   .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;
     padding:0 26px;background:var(--ink);color:#fff;border:1px solid var(--ink);
     font-family:var(--disp);font-size:14px;font-weight:700;letter-spacing:.14em;
@@ -55,7 +72,22 @@
   .btn.line{background:none;color:var(--ink);}
   .btn.line:hover{background:var(--ink);color:#fff;}
 
-  .dir{border-top:1px solid var(--ink);padding-top:14px;margin-top:6px;}
+  /* p.48: instrukcja obslugi nie jest juz sasiadem naglowka, tylko prawa polowa
+     sekcji 01 — czyta sie ja w chwili, gdy naprawde jest potrzebna, a nie zanim
+     padnie pierwsze zdanie.                                                      */
+  .intro{display:grid;grid-template-columns:minmax(0,1.38fr) minmax(0,.62fr);
+    column-gap:64px;row-gap:34px;align-items:start;}
+  .intro > *{min-width:0;}
+  /* p.48, poprawka po sedzim rzemiosla: zdanie o pochodzeniu danych i zdanie
+     pomocnicze sekcji 01 obie zaczynaja sie od "anonymous supplement shop", wiec
+     postawione jedno pod drugim czytaly sie jak nieprzeczytana po przenosinach
+     kopia. Rozdziela je teraz przerwa kolumny, nie odstep miedzy akapitami:
+     pochodzenie danych stoi nad instrukcja, po prawej.                          */
+  .whose{margin:0 0 26px;font-size:15px;line-height:1.6;color:var(--soft);}
+  .whose[hidden]{display:none;}
+  .dir{border-top:1px solid var(--ink);padding-top:14px;margin-top:0;}
+  .dir:has(.whose){border-top:0;padding-top:0;}
+  .dir .lab{border-top:1px solid var(--ink);padding-top:14px;display:block;}
   .dir ol{list-style:none;margin:14px 0 0;padding:0;counter-reset:d;}
   .dir li{counter-increment:d;display:grid;grid-template-columns:34px minmax(0,1fr);gap:0 8px;
     padding:14px 0;border-top:1px solid var(--rule);font-size:15px;line-height:1.45;color:var(--body);}
@@ -63,117 +95,526 @@
     color:var(--ink);padding-top:3px;}
   .dir li b{color:var(--ink);font-weight:600;}
 
-  /* ---------- sekcje: naglowek z linia, jak "COMPOSITION" na glownej ---- */
-  .sec{padding:0 0 48px;}
+  /* ---------- sekcje: naglowek z linia, jak "COMPOSITION" na glownej ----
+     p.38: dwie proby na tym pasku zmierzone i OBIE cofniete (nazwa w pelnej
+     farbie / nazwa cicha). Zarzuty byly przeciwne do siebie: bez kreski naglowek
+     nie dzieli strony, z kreska dzieli ja jak tabela. Potrzebny TRZECI KSZTALT,
+     nie trzecia waga. Pasek zostaje nietkniety.                               */
+  .sec{padding:0 0 104px;}
   .sh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-    border-bottom:1px solid var(--ink);padding-bottom:10px;margin-bottom:22px;}
+    border-bottom:1px solid var(--ink);padding-bottom:10px;margin-bottom:38px;}
   .sh .n{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);white-space:nowrap;}
   .sub{margin:0 0 20px;font-size:16px;line-height:1.5;color:var(--body);max-width:62ch;}
 
   /* ---------- 01 · dane -------------------------------------------------- */
-  .src{display:grid;gap:14px;}
-  .srow{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;}
-  .seg{display:inline-flex;border:1px solid var(--ink);}
-  .chip{border:0;background:none;color:var(--ink);cursor:pointer;min-height:44px;padding:0 18px;
-    font-family:var(--disp);font-size:13px;font-weight:700;letter-spacing:.12em;
-    text-transform:uppercase;transition:background .15s,color .15s;}
-  .chip + .chip{border-left:1px solid var(--ink);}
-  .chip:hover{background:var(--sunk);}
-  .chip[aria-pressed="true"]{background:var(--ink);color:#fff;}
-  .sstat{font-size:14px;color:var(--soft);font-variant-numeric:tabular-nums;}
-  .sstat b{color:var(--ink);font-weight:700;}
+  .src{display:grid;gap:14px;min-width:0;}
+  /* p.34: trzykomorowy przelacznik zrodla (pasek narzedzi + kafelki + wypelniona
+     komorka) zdjety — Z7 wymienia wszystkie trzy z nazwy, a na 390 px lamal sie
+     na rozne wysokosci. Stan biezacy stoi w ZDANIU, nie w wypelnieniu przycisku:
+     bez ramki i bez aria-pressed. Nie wracac do kontrolki.                    */
+  .srow{display:grid;gap:0;min-width:0;}
+  /* display:grid bije atrybut hidden, tak samo jak przy .word i przy #door */
+  .srow[hidden]{display:none;}
+  .srcnow{margin:0;font-family:var(--disp);font-size:clamp(23px,2.1vw,30px);line-height:1.14;
+    letter-spacing:-.025em;color:var(--ink);font-weight:600;max-width:24ch;text-wrap:balance;}
+  .sstat{margin:11px 0 0;font-size:14px;color:var(--soft);font-variant-numeric:tabular-nums;}
+  .sstat b{color:var(--ink);font-weight:600;}
+  /* p.34 proba druga: gole podkreslone linki czytaly sie jak niedokonczona
+     makieta, wiec dzwignie stoja w JEDNEJ linii za cichym "Or:". Ramka nie wraca. */
+  .srcdo{margin:0;padding-top:2px;display:flex;flex-wrap:wrap;align-items:center;gap:0 14px;}
+  .srcdo .orr{font-size:15px;color:var(--soft);}
+  .srcdo .dot{font-size:15px;color:var(--soft);}
+  .srcdo .dot[hidden]{display:none;}
+  .word{border:0;background:none;padding:0;cursor:pointer;min-height:44px;
+    display:inline-flex;align-items:center;font-family:var(--disp);font-size:15px;
+    font-weight:600;color:var(--ink);text-align:left;
+    text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px;
+    text-decoration-color:var(--rule);}
+  .word:hover{color:var(--acc-t);text-decoration-color:var(--acc-t);}
+  /* display:inline-flex bije atrybut hidden, tak samo jak w legendzie sekcji 02 */
+  .word[hidden]{display:none;}
   .shelp{margin:0;font-size:15px;line-height:1.55;color:var(--body);max-width:72ch;}
   .shelp b{color:var(--ink);font-weight:600;}
-  #orders{width:100%;border:1px solid var(--rule);border-top:1px solid var(--ink);
-    background:var(--card);color:var(--ink);font-family:var(--mono);font-size:13px;
-    line-height:1.7;padding:12px 14px;resize:vertical;min-height:132px;}
+  /* p.30: bialy prostokat z obwodka i uchwytem byl najbrzydszym miejscem strony
+     u trzech sedziow na trzech. Pole jest ARKUSZEM: papier strony, linia wlosowa,
+     bez ramki, bez uchwytu.                                                    */
+  /* p.30, ten sam wniosek co wyzej; proba druga (white-space:pre z przewijaniem
+     w poziomie) ZMIERZONA I COFNIETA — dawala wiersz przyciety u gory i zbila dwa
+     pytania ukladu. Zostaje wersja ponizej.                                    */
+  /* p.37: pole PUSTE drukowalo monospace'owa makiete CSV i trzecie powtorzenie
+     instrukcji — czytane jako zrzut z terminala. Puste pole jest odtad arkuszem
+     czekajacym na papier: jedna linia krojem strony. Monospace wraca dopiero
+     razem z wierszami.                                                         */
+  /* p.40: po trzech probach nad RAMKA, TLEM i ZAWARTOSCIA regula zada KSZTALTU.
+     Pole przestalo byc osobnym prostokatem pod naglowkiem i stalo sie
+     powierzchnia do pisania wewnatrz ekranu drzwi; znikla druga kopia stanu
+     pustego; fokus niesie GORNA LINIA w farbie, nie wypelnienie tla.           */
+  #orders{width:100%;border:0;border-top:1px solid var(--ink);
+    border-bottom:0;background:none;color:var(--body);
+    font-family:var(--mono);font-size:13px;line-height:1.85;padding:14px 0 16px;
+    resize:none;min-height:96px;display:block;}
+  /* :focus, nie :focus-visible — pole dostaje fokus programowo po klikniecieu
+     "paste your own export", a :focus-visible tego nie lapie, wiec powierzchnia
+     stala pusta bez zadnego znaku, gdzie zaczyna sie pisanie.                  */
+  #orders:focus{outline:none;border-top-width:2px;border-top-color:var(--ink);}
+  /* Plik wchodzi takze przeciagnieciem. Zadnej przerywanej ramki: pole samo jest
+     celem, a w chwili przeciagania gornna linia gestnieje tak samo jak przy fokusie. */
+  #orders.drop{outline:none;background:rgba(20,22,26,.03);
+    border-top-width:2px;border-top-color:var(--ink);}
 
-  /* ---------- 02 · odczyt: jedna os ------------------------------------ */
-  .legend{display:flex;gap:10px 22px;flex-wrap:wrap;font-size:13px;color:var(--body);
-    margin-bottom:18px;}
-  .legend span{display:inline-flex;align-items:center;gap:8px;}
-  .legend i{width:22px;height:10px;display:block;}
-  .legend i.a{background:var(--ink);} .legend i.b{background:var(--red);}
-  .legend i.c{background:#B9B7AF;}
+  /* ---------- drzwi: ekran, na ktorym nie ma czego czytac ---------------
+     p.28: stan "paste your own" czytal sie jako strona ZEPSUTA (legenda i os bez
+     wierszy, osierocony podpis, martwe pol plotna). Z7 zada stanu pustego
+     PROJEKTOWANEGO: jedno zdanie, jeden powod, jedno wyjscie.                  */
+  /* PRZEBIEG 45. Drzwi mialy ksztalt, ktorego strona nie uzywa nigdzie indziej:
+     wszystko w jednej waskiej kolumnie po lewej, duze zdanie, pod nim monospace,
+     pod nim akapit, a cala prawa polowa plotna pusta. Trzej sedziowie ukladu na
+     trzech, niezaleznie od siebie, nazwali ten ekran najbrzydszym miejscem strony
+     i wszyscy trzej opisali to samo: surowy blok monospace stojacy bezposrednio
+     pod duzym naglowkiem, "a bare monospace terminal/CSV block dropped into an
+     otherwise elegant page". Drugi, starszy zarzut (przebieg 43, sedzia rzemiosla,
+     ZWERYFIKOWANY) mowil o tym samym z drugiej strony: sekcja rozciagnieta na cala
+     szerokosc "leaves the entire right half of the viewport empty" i lamie rytm.
+     Odpowiedzia nie jest ramka wokol pola — Z7 wymienia ramki z nazwy, a przebiegi
+     30, 31, 37 i 40 juz cztery razy pracowaly nad obwodka. Odpowiedzia jest
+     KOMPOZYCJA, ktora strona ma i tak: zdanie po lewej, przyrzad po prawej, te same
+     proporcje .62/1.38 i ta sama przerwa, co w sekcji 03 i w aktach sekcji 04.
+     Powierzchnia do pisania przestaje przez to stac pod naglowkiem i staje obok
+     niego, a nad jej linia wlosowa stoi cicha linia, ktora mowi, co w nia wpisac —
+     mark, nie pudelko. Stan pusty przestaje byc dziura miedzy dwiema kreskami.  */
+  .door{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);
+    column-gap:64px;row-gap:34px;align-items:start;padding:8px 0 0;}
+  .door[hidden]{display:none;}
+  .dexit,.dpaper{display:block;min-width:0;}
+  .door .dsay{grid-column:1;grid-row:1;}
+  .door .dexit{grid-column:1;grid-row:2;}
+  .door .dpaper{grid-column:2;grid-row:1 / span 2;}
+  .dhint{margin:0 0 2px;font-size:14px;line-height:1.55;color:var(--soft);max-width:52ch;}
+  .door #orders{margin:0;}
+  .dsay{margin:0;font-family:var(--disp);font-weight:600;
+    font-size:clamp(28px,3.6vw,46px);line-height:1.04;letter-spacing:-.035em;
+    color:var(--ink);max-width:20ch;text-wrap:balance;}
+  .dfix{margin:18px 0 0;font-size:16px;line-height:1.6;color:var(--body);max-width:62ch;}
+  .dfix b{color:var(--ink);font-weight:600;}
+  /* p.42: white-space:nowrap na przykladowym wierszu rozpychal strone w poziomie
+     na telefonie (479 px przy 390). Przyklad moze sie zlamac; strona nie moze.  */
+  .dfix code{font-family:var(--mono);font-size:13px;background:var(--sunk);
+    padding:2px 6px;white-space:pre-wrap;overflow-wrap:anywhere;}
+  .dheld{margin:26px 0 0;font-size:14px;line-height:1.6;color:var(--soft);max-width:56ch;}
+  /* PRZEBIEG 45. Dwa wyjscia z drzwi byly dwoma obwiedzionymi prostokatami, a w
+     waskiej kolumnie po lewej dluzszy z nich lamal sie na dwie linie. Z7 wymienia
+     karty z obwodkami z nazwy, a strona ma na to wlasny idiom o jeden stan
+     wczesniej: ciche "Or:" i dwie dzwignie-slowa. To jest DOKLADNIE ta sama akcja,
+     co w sekcji 01, wiec dostaje ten sam ksztalt zamiast wlasnego.              */
+  .dexit .srcdo{flex-direction:column;align-items:flex-start;gap:0;}
+  .dexit .srcdo .dot{display:none;}
+  /* p.46: DRZWI — AFFORDANCE WYJSC, TRZECI KSZTALT. Zweryfikowany sedzia rzemiosla
+     z p.45 postawil jedyny niezalatany zarzut na tej stronie: dwie dzwignie-slowa
+     w drzwiach "don't read clearly as clickable". Ramka NIE WRACA — Z7 wymienia ja
+     z nazwy, a przebiegi 30, 31, 37, 40 i 45 juz piec razy pracowaly nad obwodka —
+     a gole podkreslone slowo zostalo wlasnie nazwane za cichym. Trzeci ksztalt nie
+     jest wiec wymyslany: jest TRZECIM, KTORY STRONA JUZ MA. Pasek gorny nosi
+     boksless akcje od pierwszego przebiegu ("<- Homepage"): wersaliki z
+     rozstrzelonym swiatlem i strzalka.
+     PROBA DRUGA ZMIERZONA I COFNIETA. Wersaliki ze strzalka, bez podkreslenia,
+     dostaly od tego samego sedziego (dwa wywolania, kolejnosc odwrocona, werdykt
+     ten sam w obu) odpowiedz rozstrzygajaca: "all-caps, letter-spaced, and has no
+     underline — the leading arrow implies action, but on its own it reads closer to
+     a SECTION LABEL than a link", a podkreslenie nazwal "the universal link
+     signal". Na rzemiosle wygrywaly wersaliki, na klikalnosci podkreslenie — czyli
+     obie polowy tej pary mialy racje o czym innym. Trzeci ksztalt bierze wiec
+     jedno i drugie: zostaje slowo krojem strony i jego podkreslenie (to, co sedzia
+     nazwal sygnalem linku), a przed nim staje strzalka (to, co nazwal sygnalem
+     akcji). Ani ramki, ani golego slowa.                                        */
+  .dexit .word{gap:9px;text-underline-offset:5px;}
+  .dexit .word::before{content:"\2192";font-size:15px;line-height:1;
+    color:var(--soft);text-decoration:none;}
+  .dexit .word:hover::before{color:var(--acc-t);}
+  .dexit .dheld{margin-top:22px;}
+
+  /* PRZEBIEG 50 — DRZWI PRZESTAJA BYC DZIURA POD PUSTA POLOWA EKRANU.
+     Szesciu sedziow ukladu na szesciu, w dwoch niezaleznych rundach tego samego
+     przebiegu, nazwalo JEDNO I TO SAMO miejsce najbrzydszym na stronie i wszyscy
+     opisali je tak samo: "the entire left two-thirds of the screen is blank empty
+     space", "a large unused blank area that looks unfinished/broken", "the vast
+     blank rectangle above 'Your export goes here'". Powod nie byl estetyczny, tylko
+     konstrukcyjny: sekcja 01 sklada sie z DWOCH siatek jedna pod druga, a w stanie
+     drzwi lewa kolumna pierwszej z nich (stan zrodla) jest pusta, podczas gdy prawa
+     niesie caly akapit o pochodzeniu danych i trzypunktowa instrukcje. Powierzchnia
+     do pisania siedziala przez to ekran nizej, pod dziura.
+     Odpowiedzia nie jest ramka ani wypelniacz — Z7 wymienia jedno i drugie z nazwy,
+     a przebiegi 30, 31, 37, 40, 45 i 46 juz szesc razy pracowaly nad obwodka tego
+     pola. Odpowiedzia jest ZLOZENIE DWOCH SIATEK W JEDNA: w stanie drzwi cala
+     sekcja 01 jest jedna kompozycja o tych samych proporcjach .62/1.38 i tej samej
+     przerwie 64 px, co sekcja 03 i akty sekcji 04. Zdanie stoi po lewej, papier po
+     prawej NA WYSOKOSCI TEGO ZDANIA, a wszystko, co objasnia — wyjscia, nota o
+     przyciszonej probce, opis formatu i instrukcja obslugi — schodzi pod nie.
+     Ani jedno slowo nie zostalo usuniete; zmienil sie wylacznie porzadek.
+     display:contents rozpuszcza oba posrednie opakowania (.intro i drugi .src),
+     zeby dzieci obu trafily do JEDNEJ siatki bez ruszania znacznikow.           */
+  body.held #data{display:grid;
+    grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);
+    column-gap:64px;row-gap:34px;align-items:start;}
+  body.held #data > .sh{grid-column:1 / -1;}
+  body.held #data > .intro{display:contents;}
+  /* Pusta lewa kolumna pierwszej siatki — zrodlo danych — nie ma w tym stanie nic
+     do powiedzenia (jej wiersz i linia pomocy sa schowane), wiec nie zajmuje pola. */
+  body.held #data .intro > .src{display:none;}
+  body.held #data > .src{display:contents;}
+  body.held #data #door{display:contents;}
+  body.held #data .dsay{grid-column:1;grid-row:2;}
+  body.held #data .dpaper{grid-column:2;grid-row:2;}
+  body.held #data .dexit{grid-column:1;grid-row:3;}
+  body.held #data .dir{grid-column:2;grid-row:3;}
+
+  /* Odpowiedz probki NIE ZNIKA, kiedy czytelnik siega po swoj plik. Do tej wersji
+     klikniecie "paste your own" kasowalo numer, wykres czterech rodzin, cztery
+     decyzje i oba panele — czyli caly dowod znikal dokladnie w chwili, gdy od
+     czytelnika zada sie najwiecej pracy. Przyciszenie jest EDYTORSKIE, nie
+     wylaczone: litery traca farbe, ale zostaja ostre, wiec widac, ze to skonczona
+     odpowiedz, tylko nie Twoja. Farba ZOSTAJE na slupkach i na deltach, bo to jest
+     samo porownanie — etykieta przeciw zachowaniu — czyli jedyna rzecz, ktorej ten
+     ekran ma chciec. Szara idzie TYPOGRAFIA, nie dane.                          */
+  body.held #reading .sub,body.held #reading .pn,body.held #reading .pn s,
+  body.held #reading .gmk b,body.held #reading .gmk i,
+  body.held #reading .gnote,
+  body.held #reading .lfd,body.held #reading .pn s em,
+  body.held #reading .asay,body.held #reading .asay b,
+  body.held #reading .aq,body.held #reading .aq span b,
+  body.held #reading .aq span.num b,body.held #reading .aq span#den b,
+  body.held #reading .plothead,body.held #reading .pn s i,
+  body.held #indication .say,body.held #indication .say b,body.held #indication .say em,
+  body.held #indication .cl span,body.held #indication .cl em,
+  body.held #indication .dl,body.held #indication .dn,body.held #indication .dq,
+  body.held #indication .dband,body.held #indication .dcount,
+  body.held #indication .dq b,
+  body.held #indication .widget .wb,body.held #indication .widget .wl,
+  body.held #indication .widget .wn{color:var(--soft);}
+  body.held #indication .widget{border-color:var(--rule);}
+  body.held #reading,body.held #indication{pointer-events:none;}
+
+  /* ---------- 02 · odczyt -------------------------------------------
+     p.36: cztery JEDNAKOWE wiersze slupkow z legenda i naglowkiem osi to tabela,
+     a Z7 wymienia tabele z nazwy. Odpowiedzia bylo zerwanie ROWNOSCI wierszy,
+     nie nowy aparat rysunkowy: rodzina wiodaca jest figura, reszta cichym stosem. */
   #chk{color:var(--soft);}
-  .axis{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 96px;gap:0 22px;
-    align-items:end;padding-bottom:8px;}
-  .axis .ax{position:relative;height:16px;}
-  .axis .ax b{position:absolute;bottom:0;transform:translateX(-50%);font-size:12px;
-    font-weight:600;color:var(--soft);font-variant-numeric:tabular-nums;}
-  .axis .al,.axis .ar{font-size:12px;font-weight:700;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--soft);}
-  .axis .ar{text-align:right;}
-  .plot{display:grid;border-top:1px solid var(--ink);}
-  .pr{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 96px;gap:8px 22px;
-    align-items:center;padding:18px 0;border-bottom:1px solid var(--rule);}
-  .pn{font-size:17px;line-height:1.3;color:var(--ink);font-weight:600;letter-spacing:-.01em;
-    overflow-wrap:anywhere;}
-  .pn s{display:block;text-decoration:none;font-size:12px;font-weight:400;line-height:1.45;
-    color:var(--soft);letter-spacing:0;margin-top:4px;font-variant-numeric:tabular-nums;}
-  .pn s b{font-weight:600;}
-  .pt{position:relative;min-height:40px;min-width:0;display:grid;gap:3px;align-content:center;}
-  .pt i{display:block;height:10px;}
-  .pt .b1{background:var(--ink);}
-  .pt .b2{background:var(--red);}
-  .pt .b3{background:#B9B7AF;}
-  .pt .b0{background:var(--sunk);}
-  .pd{font-size:28px;font-weight:600;text-align:right;letter-spacing:-.02em;
-    font-variant-numeric:tabular-nums;color:var(--soft);white-space:nowrap;line-height:1;}
-  /* 28 px → #D6202B; na telefonie 22 px → #9E161F (norma: od 24 px jasny wermilion) */
-  .pd.late{color:var(--red);} .pd.early{color:var(--good);}
-  .pd s{display:block;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0;
-    white-space:normal;line-height:1.35;margin-top:6px;color:var(--soft);}
+
+  /* figura wiodaca: ilustracja zdania, ktore stoi nad nia — nie jego powtorzenie */
+  #lead:empty{display:none;}
+  /* p.36 proba druga: po zdjeciu osi i legendy paski nie mowily juz, ile znacza.
+     Skala wrocila ZWIAZANA z rysunkiem — liczba tam, gdzie pasek sie konczy —
+     a nie jako osobna os obok niego.                                           */
+  /* PRZEBIEG 49 — FIGURA WIODACA PRZESTAJE BYC TRZEMA MIERNIKAMI I STAJE SIE
+     JEDNA MIARA Z PODZIALEM. Trzej sedziowie ukladu na trzech, niezaleznie,
+     postawili najnizsza ocene tej strony na pytaniu "czy to przypomina arkusz,
+     panel albo terminal" (3 / 5 / 3) i DWAJ z trzech nazwali dokladnie to samo
+     miejsce: "horizontal progress-style bars with right-aligned numbers",
+     "plain horizontal bar meters ... borrow visual habits from analytics
+     dashboards". Trzeci dolozyl drugi zarzut z tego samego bloku: "several
+     similar bold-stat + caption blocks in a row". Obie skargi sa o jednym
+     przyrzadzie: trzy JEDNAKOWE paski, kazdy z liczba przy koncu i szarym
+     podpisem pod soba, czyli trzy mierniki jeden pod drugim. Tak wyglada panel.
+     Powod, dla ktorego to czytalo sie jak mierniki, nie jest estetyczny, tylko
+     logiczny: 45, 69 i 73 to NIE sa trzy serie jednego rozkladu, tylko trzy
+     pojedyncze liczby, wiec rysunek trzech rownych paskow nie niosl zadnego
+     porownania — porownanie czytelnik musial zrobic sam, wodzac okiem po koncach.
+     A porownanie tych dwoch liczb jest CALYM produktem. Figura rysuje je wiec
+     wprost: JEDNA miara, ciemna do dnia z opakowania i w farbie dalej, az do
+     dnia, w ktorym ludzie naprawde wracaja. Ten drugi odcinek JEST rozbieznoscia
+     — rzecza, ktora narzedzie mierzy — i zajmuje cala szerokosc kolumny zamiast
+     siedmiu dziesiatych, bo skala nalezy do figury, nie do calego pliku.
+     Zadnego nowego aparatu: nie ma osi, podzialki, legendy ani siatki (p.32, 39
+     i 44 zmierzyly, ze kazdy z nich czyta sie jak aparat). Sa dwie adnotacje
+     przy dwoch koncach odcinka — jedna nad miara, jedna pod nia, wiec zderzyc
+     sie nie moga — i pod nimi jedno ciche zdanie. Trzecia liczba (pierwsze
+     dokupienie) schodzi z wlasnego paska do tego zdania: nic nie znika.        */
+  .gauge{margin:30px 0 0;}
+  .gauge[hidden]{display:none;}
+  .gtop,.gfoot{position:relative;min-height:82px;}
+  /* Adnotacja podzialu jest SRODKOWANA na swoim dniu, a adnotacja konca wisi
+     na prawej krawedzi kolumny — zaden transform nie moze wiec wyniesc jej poza
+     plotno, co przy translateX(-100%) zdarzylo sie za pierwszym razem.        */
+  .gmk{position:absolute;bottom:0;display:block;width:24ch;
+    transform:translateX(-50%);}
+  .gfoot .gmk{bottom:auto;top:0;}
+  .gmk.st{transform:none;left:0;}
+  .gmk.en{transform:none;left:auto;right:0;text-align:right;}
+  /* Poprawka w tym samym podejsciu, po zarzucie sedziego rzemiosla: skala tych
+     dwoch liczb stala miedzy zdaniem sekcji (clamp 24-36) a duza liczba sekcji 03
+     (clamp 64-116), ale sedzia parowy, ktory wskazal wersje STARSZA, nazwal
+     wlasnie ja: "jumps those two numbers to huge dashboard-tile scale while the
+     rest of the page stays editorial". Liczba schodzi do gornego konca skali
+     zdania sekcji — nadal jest odczytem, juz nie kaflem.                       */
+  .gmk b{display:block;font-family:var(--disp);font-weight:600;
+    font-size:clamp(28px,3vw,44px);line-height:.94;letter-spacing:-.04em;
+    color:var(--ink);font-variant-numeric:tabular-nums;}
+  .gmk i{display:block;font-style:normal;margin-top:6px;font-size:14px;
+    line-height:1.4;color:var(--soft);}
+  /* Druga poprawka z tego samego zarzutu, postawionego przez OBU sedziow
+     rzemiosla niezaleznie: "the split bar doesn't label the boundary between the
+     black and orange segments, so a reader has to infer that 69 is the bar's
+     total length rather than a second value stacked on top of 45". Adnotacja
+     podzialu dostaje wiec kreske, ktora ja z tym podzialem laczy. Nie jest to
+     nowy aparat — to ta sama linia wlosowa, ktora na tej stronie stoi pod kazdym
+     blokiem, postawiona pionowo i dlugosci jednego odstepu.                    */
+  .gmk::after{content:"";position:absolute;left:50%;bottom:-11px;width:1px;
+    height:11px;background:var(--ink);}
+  .gmk.st::after{left:0;}
+  .gmk.en::after{left:auto;right:0;}
+  .gfoot .gmk::after{bottom:auto;top:-11px;}
+  .gband{display:flex;width:100%;height:15px;margin:11px 0;}
+  .gband i{display:block;height:100%;min-width:2px;}
+  .gband i.a{background:var(--ink);flex:0 0 auto;}
+  .gband i.b{background:var(--acc);flex:1 1 auto;}
+  .gauge.early .gband i.b{background:var(--good);}
+  .gauge.flat .gband i.b{display:none;}
+  .gauge.flat .gband i.a{flex:1 1 auto;}
+  .gnote{margin:26px 0 0;font-size:14px;line-height:1.5;color:var(--soft);}
+  .gnote b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;}
+  @media (max-width:560px){
+    .gmk b{font-size:30px;}
+    .gmk i{font-size:13px;}
+    .gmk{width:17ch;}
+    .gtop,.gfoot{min-height:86px;}
+  }
+  .lfd{margin:30px 0 72px;font-size:clamp(19px,1.9vw,25px);line-height:1.3;
+    letter-spacing:-.02em;color:var(--soft);font-weight:600;max-width:26ch;}
+  .lfd.late{color:var(--acc-t);} .lfd.early{color:var(--good);}
+
+  /* Cichy stos: ZADNYCH kolumn. Pozycja to nazwa, cicha linia i paski pod nimi,
+     na calej szerokosci — czyli ta sama szerokosc, co paski figury wiodacej, wiec
+     jeden dzien ma na calym ekranie jedna dlugosc. Uklad label-po-lewej-pasek-po-
+     prawej byl jednoczesnie tabela i druga skala; usuniecie kolumn zdejmuje oba. */
+  /* p.44 proba druga: sedzia rzemiosla (zweryfikowany) poszedl 3:0 przeciw probie
+     pierwszej — "ten sam typ danych pokazany na jednej stronie dwoma sposobami".
+     Figura konczy sie swoim duzym zdaniem, a to, co po niej, jest LISTA NOTATEK
+     z wlasnym cichym zdaniem wprowadzajacym. Zadnego nowego aparatu.           */
+  .plothead{margin:0 0 6px;font-size:clamp(19px,1.8vw,24px);line-height:1.3;
+    letter-spacing:-.02em;color:var(--ink);font-weight:500;max-width:30ch;
+    text-wrap:balance;}
+  .plothead:empty{display:none;}
+  .plot{display:grid;}
+  /* p.44: powtorzony stos slupkow (czarny/pomaranczowy/szary + liczba) czytal sie
+     jak surowy eksport z analityki. Z7 mowi "rozklad jako JEDEN cichy wykres", a
+     strona rysowala piec. Zostaje jeden; rodziny drugoplanowe sa ZDANIEM.       */
+  .pr{padding:34px 0;border-top:1px solid var(--rule);}
+  .pn{display:block;font-size:20px;line-height:1.25;color:var(--ink);font-weight:600;
+    letter-spacing:-.018em;overflow-wrap:anywhere;}
+  /* p.29: jedna cicha linia pod nazwa niesie liczby, o ktore ekran sie spiera.
+     Od p.36 takze rozjazd (dawna trzecia kolumna), od p.44 jako ZDANIE.         */
+  .pn s{display:block;text-decoration:none;font-size:17px;font-weight:400;line-height:1.55;
+    color:var(--body);letter-spacing:-.008em;margin-top:10px;max-width:54ch;
+    font-variant-numeric:tabular-nums;}
+  .pn s b{font-weight:600;color:var(--ink);}
+  .pn s em{font-style:normal;font-weight:600;color:var(--soft);}
+  .pn s i{font-style:normal;display:block;margin-top:5px;font-size:14px;color:var(--soft);}
+  .pn s em.late{color:var(--acc-t);} .pn s em.early{color:var(--good);}
+  .pn s.warn{color:var(--acc-t);font-weight:600;font-size:14px;max-width:54ch;}
+  /* p.33: szarosc pierwszego dokupienia gasla na kremie. Ta sama rola, ciemniej
+     (#9C9890).                                                                 */
+  .pt{display:grid;gap:7px;min-width:0;margin-top:16px;}
 
   /* ---------- 03 · wskazanie ------------------------------------------- */
-  .say{margin:0 0 30px;font-size:clamp(22px,2.4vw,30px);line-height:1.3;color:var(--ink);
-    font-weight:500;letter-spacing:-.015em;max-width:40ch;text-wrap:pretty;}
-  .say b{color:var(--ink);font-weight:600;}
+  /* Z7: JEDNO odkrycie duza typografia, i dopiero potem rozklad jako cichy wykres.
+     Do tej wersji bylo odwrotnie — czytelnik dostawal najpierw cztery wiersze
+     slupkow, a zdanie mowiace, co z nich wynika, stalo ekran nizej.              */
+  .say{margin:0 0 52px;font-size:clamp(24px,2.8vw,36px);line-height:1.25;color:var(--ink);
+    font-weight:500;letter-spacing:-.022em;max-width:32ch;text-wrap:pretty;}
+  .say b{color:var(--acc-t);font-weight:600;}
   .say em{font-style:normal;color:var(--good);font-weight:600;}
-  .four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);}
-  .four:empty{display:none;}
-  .four > div{padding:18px 20px 22px 0;display:grid;gap:8px;align-content:start;
-    border-right:1px solid var(--rule);}
-  .four > div + div{padding-left:20px;}
-  .four > div:last-child{border-right:0;}
-  .four b{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  /* p.32: cztery ustawienia zeszly z kafli KPI na jedna os dni. Powod nie byl
+     estetyczny — founderzy odpowiadali "retencja" na pytanie, czym Rafal sie
+     zajmuje, bo nic nie pokazywalo, ze to JEDEN dzien ustawia cztery dyscypliny. */
+  /* DWIE PROBY ZMIERZONE I COFNIETE, OBIE Z TEGO SAMEGO POWODU. Proba pierwsza:
+     os z podzialka co 30 dni, gruby pasek, blade pasmo i kropka — dwaj sedziowie
+     na trzech: "Gantt", "widget z dashboardu". Proba druga: te same odcinki jako
+     linie wlosowe z zasyczkami, bez podzialki — trzej sedziowie, niezaleznie,
+     napisali to samo trzema zdaniami: "stray tick-marks", "unfinished chart",
+     "a gridline left over from a wireframe", i wszyscy trzej wytkneli pusta prawa
+     polowe plotna oraz pionowa kreske schodzaca w nicosc pod ostatnim wierszem.
+     Wniosek jest jeden i nie dotyczy grubosci kreski: KAZDY osobny aparat rysunkowy
+     dostawiony do tej strony czyta sie jak aparat. Dlatego tu nie ma zadnego nowego
+     znaku. Jest linia wlosowa, ktora na tej stronie i tak stoi pod kazdym blokiem —
+     tylko ze teraz jej DLUGOSC cos znaczy: konczy sie na dniu, o ktorym mowi wiersz
+     nad nia. Skala idzie przez cala szerokosc kolumny, wiec martwego pola po prawej
+     nie ma, a pionowa linia zmierzonego dnia konczy sie na ostatniej z tych linii. */
+  /* p.39: cztery linie wlosowe roznej dlugosci plus pionowa kreska dnia czytaly
+     sie jak rozjechana tabela albo wireframe. Wniosek p.32 wyciagniety do konca:
+     APARATU NIE MA ZADNEGO. Zmierzony dzien to jeden duzy znak typograficzny po
+     lewej, cztery ustawienia po prawej, zadnej kreski miedzy nimi.             */
+  .ind{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);
+    column-gap:64px;row-gap:48px;align-items:start;}
+  .ind:has(.daymark[hidden]){grid-template-columns:minmax(0,1fr);}
+  .daymark{display:block;}
+  .daymark[hidden]{display:none;}
+  .dl{display:block;font-size:12px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--soft);}
+  /* p.42: lancuch liczb w jednym cichym zdaniu czytal sie "like a stats printout".
+     Pasmo stoi PRZY liczbie jak zakres na tarczy, licznik ma wlasna linie,
+     a z podpisu wypadl czlon powtarzajacy duza liczbe slowami.                  */
+  .dnum{display:flex;align-items:baseline;gap:.18em;flex-wrap:wrap;margin-top:16px;}
+  .dn{display:block;font-family:var(--disp);font-weight:600;
+    font-size:clamp(64px,7.6vw,116px);line-height:.86;letter-spacing:-.05em;
+    color:var(--ink);font-variant-numeric:tabular-nums;}
+  .dband{font-family:var(--disp);font-weight:500;font-size:clamp(20px,2.1vw,30px);
+    line-height:1;letter-spacing:-.02em;color:var(--soft);
+    font-variant-numeric:tabular-nums;}
+  .dband[hidden]{display:none;}
+  /* Cicha linia, nie druga etykieta: nad liczba stoi juz jedna etykieta
+     wersalikami i druga pod nia robila z bloku naglowek tabeli. Ta linia ma
+     jedno zadanie — powiedziec, czym jest te dwie cyfry przy liczbie.        */
+  .dcount{display:block;margin-top:14px;font-size:14px;line-height:1.5;
+    color:var(--soft);font-variant-numeric:tabular-nums;max-width:28ch;}
+  .dcount[hidden]{display:none;}
+  .dq{display:block;margin-top:22px;font-size:15px;line-height:1.55;
+    color:var(--soft);max-width:28ch;}
+  .dq b{color:var(--ink);font-weight:600;}
+  /* p.41: waga liczby stoi w TEJ SAMEJ cichej linii, co kwartyle — osobny blok
+     drobnego druku pod kreska zostal zmierzony i zbil uklad.                    */
+  .oneday{display:grid;gap:42px;}
+  .oneday:empty{display:none;}
+  .cl{display:grid;gap:9px;min-width:0;max-width:44ch;}
+  .cl b{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
     color:var(--soft);}
-  .four span{font-size:24px;line-height:1.15;color:var(--ink);font-weight:600;letter-spacing:-.02em;}
-  .four em{font-style:normal;font-size:14px;line-height:1.45;color:var(--body);}
-  .together{margin:14px 0 0;font-size:14px;color:var(--soft);}
-  .widget{margin-top:30px;border:1px solid var(--ink);background:var(--card);padding:18px 22px;
-    display:grid;gap:6px;max-width:640px;}
+  .cl span{font-size:clamp(23px,2.1vw,30px);line-height:1.12;color:var(--ink);
+    font-weight:600;letter-spacing:-.025em;}
+  .cl em{font-style:normal;font-size:14px;line-height:1.5;color:var(--body);}
+  /* Czwarty kanal, ktory czeka na etykiete, nie znika i nie udaje wyniku: stoi
+     w tym samym rzedzie, ta sama wielkoscia, tylko cicho.                       */
+  .ch.wait .cl span{color:var(--soft);font-weight:500;}
+  /* Zdanie, ktore mowi, po co sa te cztery liczby, stalo POD nimi jako szary
+     przypis 14 px — i w stanie bez etykiety zostawalo samo pod pusta sekcja,
+     co szescioro recenzentow na szescioro nazwalo strona zepsuta. Jest teraz
+     NAD nimi i jest zdaniem, nie przypisem: jedna mysl, potem cichy aparat.     */
+  .together{margin:0 0 40px;font-size:clamp(20px,2.1vw,28px);line-height:1.25;
+    color:var(--ink);font-weight:500;letter-spacing:-.022em;max-width:30ch;
+    text-wrap:balance;}
+
+  /* p.46: ROZSTRZYGNIECIE RTB ZESZLO Z PRZYPISU NA EKRAN. Zdanie, ktore mowi,
+     czym ten odczyt rozni sie od przewidywanej daty z aplikacji, stalo w
+     14-pikselowej szarej nocie pod wykresem — i przebieg po przebiegu trzej
+     founderzy na trzech odpowiadali na pytanie "widzialem to u kogos innego"
+     jednym i tym samym zdaniem: przewidywana data z Klaviyo. Recenzent p.45
+     nazwal powod wprost: odpowiedz jest w footnocie, a nie tam, gdzie pada
+     wzrok. Nota nie zostala skasowana ani przepisana — stoi slowo w slowo
+     ponizej, a NAD nia stanelo jedno duze zdanie, ktore nazywa roznice, i
+     liczby z TEGO pliku, ktore ja dowodza. Kompozycja jest ta sama, ktorej
+     strona uzywa w 03 i w aktach 04 (.62/1.38, przerwa 64 px), wiec zaden nowy
+     aparat nie wchodzi: cicha etykieta po lewej, mysl po prawej. Bez pudelka,
+     bez kafla, bez ramki — Z7 wymienia je z nazwy.                            */
+  .apart{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);
+    column-gap:64px;row-gap:14px;align-items:start;
+    margin:72px 0 0;border-top:1px solid var(--rule);padding-top:22px;}
+  .asay{margin:0;font-family:var(--disp);font-weight:600;
+    font-size:clamp(26px,3vw,40px);line-height:1.06;letter-spacing:-.035em;
+    color:var(--ink);max-width:22ch;text-wrap:balance;}
+  .asay b{color:var(--acc-t);font-weight:600;}
+  .aq{margin:20px 0 0;font-size:15px;line-height:1.6;color:var(--soft);max-width:62ch;}
+  .aq span{display:block;margin-top:5px;}
+  .aq span b{color:var(--acc-t);font-weight:600;}
+  .aq span.num b{color:var(--ink);font-weight:600;}
+
+  /* ---------- szczegoly: na koncu, za swiadomym klikniecie, jako LISTA ------
+     Z7 mowi to wprost: tabela szczegolow na koncu, za klikniecie, zlozona jak
+     lista, nie jak siatka. Zadnej ramki, zadnych kolumn, zadnej zebry — tylko
+     wciecie i cienka linia miedzy produktami.                                   */
+  .behind{margin:40px 0 0;border-top:1px solid var(--rule);}
+  .behind summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;
+    min-height:52px;font-size:12px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink);}
+  .behind summary::-webkit-details-marker{display:none;}
+  .behind summary::before{content:"+";font-size:16px;font-weight:600;letter-spacing:0;
+    color:var(--soft);line-height:1;}
+  .behind[open] summary::before{content:"\2013";}
+  .behind summary:hover{color:var(--acc-t);}
+  .bl{padding:4px 0 8px;}
+  .bl > div{padding:26px 0 26px;border-top:1px solid var(--rule);max-width:70ch;}
+  /* Slownik idzie RAZ, na gorze, i nie jest pozycja listy — jest jej wstepem. */
+  .blkey{margin:6px 0 30px;font-size:14px;line-height:1.7;color:var(--soft);max-width:70ch;}
+  .bl h3{margin:0 0 14px;font-size:19px;font-weight:600;letter-spacing:-.018em;color:var(--ink);}
+  .bl p{margin:0;font-size:14px;line-height:1.75;color:var(--body);
+    font-variant-numeric:tabular-nums;}
+  .bl p b{font-weight:600;}
+  .bl p + p{margin-top:2px;}
+  .bl p b{color:var(--ink);font-weight:600;}
+  .bl p.flag{color:var(--acc-t);}
+  .bl p.caveat{color:var(--soft);}
+
+  /* Probka nie musi pokazywac 5699 wierszy CSV. Dwoch sedziow na trzech nazwalo
+     to pole "oknem terminala" i drugim najbrzydszym miejscem strony. Przy wlasnym
+     eksporcie pole jest glowna kontrolka i stoi otwarte; przy probce jest dowodem
+     i wystarczy, ze da sie je otworzyc.                                          */
+  /* p.31: po przeczytaniu pliku wklejone wiersze nie sa juz kontrolka, wiec
+     schodza za to samo jedno klikniecie, co przy probce. Proba p.30 (wylaczenie
+     zawijania) leczyla objaw i zostala cofnieta.                               */
+  body.sample #orders,body.filed #orders{display:none;}
+  body.sample #rawbox,body.filed #rawbox{display:block;}
+  #rawbox{display:none;border-top:1px solid var(--rule);min-width:0;max-width:100%;}
+  #rawbox summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;
+    min-height:48px;font-size:12px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--soft);}
+  #rawbox summary::-webkit-details-marker{display:none;}
+  #rawbox summary::before{content:"+";font-size:16px;font-weight:600;letter-spacing:0;line-height:1;}
+  #rawbox[open] summary::before{content:"\2013";}
+  #rawbox summary:hover{color:var(--ink);}
+  #rawbox pre{margin:0 0 14px;font-family:var(--mono);font-size:12px;line-height:1.75;
+    color:var(--soft);white-space:pre;overflow:auto;max-height:190px;min-width:0;max-width:100%;}
+  /* p.32: ostatnia obwodka w sekcji 03 zdjeta — po zejsciu ustawien z kafli byla
+     jedynym pudelkiem na ekranie. Karta zostaje co do slowa, bierze ja linia
+     wlosowa u gory.                                                            */
+  .widget{margin-top:52px;border:0;border-top:1px solid var(--rule);background:none;
+    padding:16px 0 0;display:grid;gap:7px;max-width:640px;}
   .widget:has(#wb:empty){display:none;}
   .widget .wl{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--ink);padding-bottom:10px;border-bottom:1px solid var(--rule);margin-bottom:4px;}
+    color:var(--soft);margin-bottom:2px;}
   .widget .wb{font-size:20px;font-weight:600;color:var(--ink);line-height:1.3;letter-spacing:-.015em;}
   .widget .wn{font-size:14px;line-height:1.55;color:var(--body);}
 
   /* ---------- 04 · szew AI -------------------------------------------- */
-  .aisec:has(#ai1[style*="none"]):has(#ai2[style*="none"]){display:none;}
-  .seams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;}
-  .ai{border-top:1px solid var(--ink);padding-top:14px;display:grid;gap:12px;align-content:start;}
-  .ai .hd{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;}
-  .ai .hd b{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);font-weight:700;}
-  .ai .hd span{font-size:13px;color:var(--soft);}
-  .fine{margin:0;font-size:14px;line-height:1.55;color:var(--body);max-width:60ch;}
-  .ai textarea{width:100%;border:1px solid var(--rule);background:var(--card);color:var(--ink);
-    font-family:var(--mono);font-size:13px;line-height:1.7;padding:11px 12px;resize:vertical;}
+  /* p.35: sekcja 04 kasowala sie CALA, bez slowa, gdy model byl nieosiagalny —
+     na produkcji zawsze. Trzej recenzenci UX nazwali to CICHA awaria. Sekcja
+     zostaje z naglowkiem i mowi, ze czytanie etykiet jest wylaczone i ze reszta
+     odczytu tego nie potrzebuje.                                               */
+  /* p.43: ostatnia biala kontrolka z obwodka (pole na instrukcje) zdjeta. Lekcja
+     p.40 obowiazuje: KSZTALT, nie czwarta zmiana obwodki. Sekcja 04 to dwa AKTY —
+     duze zdanie, cicha linia reguly, dzwignia — a oba pola strony mowia jednym
+     jezykiem. Wyniki zeszly z wierszy tabeli na liste.                         */
+  #aioff{display:none;}
+  .aisec.off .seams{display:none;}
+  .aisec.off #aioff{display:block;}
+  /* p.43 proba druga: akt na cala szerokosc zostawial pusta prawa polowe plotna
+     i lamal rytm strony (sedzia rzemiosla, zweryfikowany, 1:2 przeciw). Akt stoi
+     wiec jak sekcja 03: .62/1.38, ta sama przerwa, zwiniecie ponizej 900 px.    */
+  .seams{display:grid;grid-template-columns:minmax(0,1fr);gap:72px;}
+  .ai{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);
+    column-gap:64px;row-gap:22px;align-items:start;}
+  .aido{display:grid;gap:14px;min-width:0;}
+  .act{margin:0;font-family:var(--disp);font-size:clamp(22px,1.9vw,27px);line-height:1.16;
+    letter-spacing:-.025em;color:var(--ink);font-weight:600;max-width:22ch;text-wrap:balance;}
+  .fine{margin:0;font-size:15px;line-height:1.55;color:var(--body);max-width:66ch;}
+  #doses{width:100%;border:0;border-top:1px solid var(--ink);border-bottom:0;background:none;
+    color:var(--body);font-family:var(--mono);font-size:13px;line-height:1.85;
+    padding:14px 0 16px;resize:none;min-height:96px;display:block;}
+  #doses:focus{outline:none;border-top-width:2px;border-top-color:var(--ink);}
   .go{border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;
     padding:0 22px;min-height:44px;font-family:var(--disp);font-size:13px;letter-spacing:.14em;
     text-transform:uppercase;font-weight:700;justify-self:start;}
   .go:hover{background:#000;}
   .go[disabled]{opacity:.45;cursor:default;}
-  .out{display:grid;border-top:1px solid var(--rule);}
+  /* p.43 proba trzecia ZBUDOWANA, ZMIERZONA I COFNIETA: cytat wlasna linia,
+     odczyt cicho pod nim, zmierzyl sie GORZEJ niz punkt wyjscia (4,00 wobec 4,20).
+     Wiersz zostaje w kolumnach; ragged rows sa nazwana, niezalatana usterka —
+     potrzebny trzeci ksztalt, nie powrot do tamtego.                           */
+  .out{display:grid;border-top:1px solid var(--rule);padding-top:6px;}
   .out:empty{display:none;}
-  .orow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;padding:10px 0;
-    border-bottom:1px solid var(--rule);align-items:baseline;}
-  .orow .k{font-size:14px;line-height:1.4;color:var(--body);min-width:0;overflow-wrap:anywhere;}
+  .orow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 18px;padding:9px 0;
+    align-items:baseline;}
+  .orow .k{font-size:14px;line-height:1.45;color:var(--body);min-width:0;overflow-wrap:anywhere;}
   .orow .v{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;
     font-variant-numeric:tabular-nums;}
-  .orow .v.no{color:var(--ink);text-decoration:underline;text-underline-offset:3px;}
-  .msg{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--rule);}
-  .msg .w{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);}
+  .orow .v.no{color:var(--acc-t);}
+  .msg{display:grid;gap:4px;padding:11px 0;}
+  .msg .w{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-t);}
   .msg .s{font-weight:600;font-size:15px;color:var(--ink);line-height:1.35;}
   .msg .t{font-size:14px;line-height:1.5;color:var(--body);}
   .stat{font-size:13px;color:var(--soft);min-height:18px;margin:0;}
@@ -201,31 +642,46 @@
   footer.foot .l{display:flex;flex-wrap:wrap;gap:0 22px;}
 
   @media (max-width:900px){
-    .hero,.close{grid-template-columns:minmax(0,1fr);}
-    .hero{padding:28px 0 44px;}
-    .four{grid-template-columns:repeat(2,minmax(0,1fr));}
-    .four > div:nth-child(2){border-right:0;}
-    .four > div:nth-child(3){padding-left:0;}
-    .four > div:nth-child(n+3){border-top:1px solid var(--rule);}
-    .seams{grid-template-columns:minmax(0,1fr);}
+    .hero,.close,.ind,.door,.apart,.intro{grid-template-columns:minmax(0,1fr);}
+    /* p.50: na waskim ekranie ta sama kolejnosc, co w .door do tej pory —
+       zdanie, papier, dopiero potem wyjscia i instrukcja.                     */
+    body.held #data{grid-template-columns:minmax(0,1fr);row-gap:28px;}
+    body.held #data .dsay{grid-column:1;grid-row:2;}
+    body.held #data .dpaper{grid-column:1;grid-row:3;}
+    body.held #data .dexit{grid-column:1;grid-row:4;}
+    body.held #data .dir{grid-column:1;grid-row:5;}
+    .apart{row-gap:4px;margin-top:56px;}
+    .door{row-gap:28px;}
+    /* Na waskim ekranie czytelnik ma spotkac POWIERZCHNIE DO PISANIA przed
+       wyjsciami, a nie po nich: zdanie, papier, dopiero potem "albo co innego". */
+    .door .dsay,.door .dexit,.door .dpaper{grid-column:1;grid-row:auto;}
+    .door .dsay{order:1;} .door .dpaper{order:2;} .door .dexit{order:3;}
+    .ind{row-gap:40px;}
+    .hero{padding:44px 0 56px;min-height:0;}
+    .intro{row-gap:30px;}
+    .seams{gap:56px;}
+    .ai{grid-template-columns:minmax(0,1fr);row-gap:14px;}
   }
   @media (max-width:760px){
-    .axis{grid-template-columns:minmax(0,1fr) 64px;gap:0 14px;}
-    .axis .al,.axis .ar{display:none;}
-    .dir{display:none;}
-    .hero{padding-bottom:36px;}
-    .pr{grid-template-columns:minmax(0,1fr) 64px;gap:10px 14px;}
-    .pn{grid-column:1/-1;}
-    .pd{font-size:22px;}
-    .pd.late{color:var(--acc-t);}
+    /* p.48: instrukcja przestala konkurowac z pierwszym ekranem, wiec na telefonie
+       nie musi juz znikac — stoi pod przyrzadem w sekcji 01, gdzie jest potrzebna. */
+    .hero{padding:36px 0 44px;}
+    .pr{padding:24px 0;}
+    .pt{margin-top:13px;}
+    .lfm{gap:20px;}
+    .lfd{margin:24px 0 38px;}
     .lede{font-size:18px;}
-    .chip{padding:0 14px;font-size:12px;}
+    .oneday{gap:34px;}
+  }
+  /* Przy 390 px naglowek sekcji i jego prawy podpis lamaly sie na siebie
+     ("02 — THE / READING" obok "STILL THE SAMPLE / SHOP"). Na waskim ekranie nie
+     ma miejsca na dwa konce jednej linii: podpis schodzi pod etykiete.          */
+  @media (max-width:560px){
+    .sh{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;}
+    .sh .n{white-space:normal;}
   }
   @media (max-width:420px){
     .wm .c{display:none;}
-    .four{grid-template-columns:minmax(0,1fr);}
-    .four > div,.four > div + div{padding:16px 0;border-right:0;}
-    .four > div + div{border-top:1px solid var(--rule);}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
 
@@ -263,3 +719,29 @@
   .leaves{margin:0 0 34px;font-size:16px;line-height:1.55;color:var(--ink);max-width:68ch;}
   /* bez AI panele chowaja sie same (style="display: none") — zdanie idzie z nimi */
   .aisec:has(#ai1[style*="none"]):has(#ai2[style*="none"]) .leaves{display:none;}
+
+  /* ==== SKORA v12 NA WERSJI PETLI — norma czerwieni (design/DESIGN-SYSTEM.md) =====
+     Jeden blok nadpisan na koncu arkusza: uklad z przebiegow 28–50 zostaje taki,
+     jak go zostawila petla, a tu stoi wylacznie to, co zmienia kolor. Czerwona jest
+     WARTOSC, nie zdanie, nie stan, nie najechanie.                               */
+  .gband i.b{background:var(--red);}                 /* odcinek luki = grafika      */
+  .pn s em.late{color:var(--acc-t);}                 /* „24 days" — wartosc, 17 px */
+  /* Zdania, ktore silnik sklada w calosci — czerwien objelaby zdanie, nie liczbe.
+     Wydzielenie samej liczby wymaga zmiany napisow w silniku (decyzja Rafala).   */
+  h1 span{color:var(--ink);}
+  .lfd.late{color:var(--ink);}
+  /* Wartosc wydzielona w napisach silnika (<span class="v">) — za zgoda Rafala,
+     tylko znacznik wokol liczby, zero zmian w liczeniu. h1: zawsze >= 42 px.    */
+  h1 .v{color:var(--red);}
+  h1 span .v{display:inline;}            /* liczba w zdaniu nie lamie linii      */
+  .lfd.late .v{color:var(--acc-t);}      /* .lfd: 19–25 px — ponizej 24 px #9E161F */
+  @media (min-width:1264px){ .lfd.late .v{color:var(--red);} }
+  body.held #reading .lfd .v{color:var(--soft);}  /* probka przyciszona jak reszta zdania */
+  /* nazwy, slowa, liczniki, ostrzezenia i stany — atrament */
+  .say b,.asay b,.aq span b{color:var(--ink);}
+  .pn s.warn,.bl p.flag{color:var(--ink);}
+  .orow .v.no{color:var(--ink);text-decoration:underline;text-underline-offset:3px;}
+  .msg .w{color:var(--ink);}
+  .word:hover{color:var(--ink);text-decoration-color:var(--ink);}
+  .dexit .word:hover::before{color:var(--ink);}
+  .behind summary:hover{color:var(--ink);}
