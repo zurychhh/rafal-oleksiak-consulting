@@ -1,77 +1,101 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 21.11.2026, ok. 18:35–19:15 (przebieg 1). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 21.11.2026, 19:38–20:10 (przebieg 2). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 ## Dla Rafała
 
-**Co.** Jest pierwsza wersja podstrony **`/nawyko`**: strona produktowa aplikacji z telefonem, który żyje podczas
-przewijania. Cztery kroki w przypiętej scenie: potwierdzenie zakupu (skan kodu) → zdrapka dnia, którą naprawdę da się
-zdrapać myszą albo palcem (seria rośnie wtedy z 8 na 9) → siatka 30 dni wypełniająca się do 24 → pieczątka 24/30
-i kod na kolejne opakowanie. Niżej: nagrody znane z góry, co dostaje marka, przełącznik motywu (white label),
-czego aplikacja nie robi, formularz zapytania spięty z istniejącym `/api/lead` (`form: "nawyko"`).
-Pokaz jest na zmyślonej marce **Tovemi** — żadnego klienta. Do tego audyt produkcji i źródła pod kalkulator.
+**Co.** Jest nowa podstrona **`/calculator`** — kalkulator „ile jest wart jeden dzień między zamówieniami”.
+Odwiedzający wpisuje cztery liczby ze swojego sklepu (klienci kupujący ponownie, średnia wartość zamówienia, dni między
+zamówieniami, na ile dni starcza opakowanie) i przesuwa suwak docelowego odstępu. Na rysunku „jeden klient, jeden rok”
+widzi kreski zamówień, czarne paski dni z produktem i czerwono kreskowane dni, w których produkt się skończył, a zamówienia
+jeszcze nie ma — przy przesuwaniu suwaka czerwień się kurczy, zamówień w roku przybywa, a wielka liczba pod spodem rośnie.
+Do tego: ile jest wart jeden dzień, jaki rabat na ponowne zamówienie jeszcze się opłaca, górna granica. Drugi, mniejszy
+kalkulator: ilu więcej nowych klientów na stu wraca po drugi zakup (siatka 100 kratek). Niżej założenia, trzy sprawdzone
+punkty odniesienia ze źródłem i zdaniem „czego ta liczba nie mówi”, przejścia do `/tool` i `/nawyko`, formularz.
+Liczby startowe są wyraźnie oznaczone jako przykład; nic z kalkulatora nie jest nigdzie wysyłane.
 
-**Dlaczego biznesowo.** Do dziś strona nie mówiła o aplikacjach ani słowa (potwierdzone w audycie). Teraz marka FMCG
-w pierwszym ekranie widzi, czym jest Nawyko i dla kogo, a po jednym przewinięciu bawi się zdrapką — to jest moment,
-który zostaje w pamięci i prowadzi do formularza na tej samej stronie.
+Na `/nawyko`: drugie podejście recenzenta (9 z 10 punktów), zdrapka sprawdzona dotykiem w emulacji iPhone’a (seria rośnie
+z 8 na 9, strona się przy tym nie przewija), scena przestała podskakiwać po pojawieniu się paska cookies, usunięte
+„within 24 hours” z potwierdzenia formularza (nie umiem tego potwierdzić — patrz decyzja 8).
+
+Na całej stronie: z każdej trasy zniknęło pobieranie nieużywanego zdjęcia 186 kB (z audytu) — każda podstrona jest
+lżejsza o ok. 180 kB.
+
+**Dlaczego biznesowo.** Kalkulator to pierwszy na stronie powód, żeby marka FMCG zostawiła zapytanie, zanim cokolwiek
+kupi: sama wylicza sobie stawkę (ile kosztuje ją każdy pusty dzień), a pod wynikiem ma przycisk do rozmowy. Jednocześnie
+uczy języka, którym sprzedajesz — odstęp, dni zapasu, drugi zakup — i naturalnie prowadzi do narzędzia i do Nawyko.
 
 **Dowód.**
-- Zrzuty: `agencja/podglad/nawyko-1440-przeglad.png` i `nawyko-390-przeglad.png` (cała strona w kadrach),
-  `nawyko-1440-zdrapka.png`, `nawyko-1440-seria.png`, `nawyko-1440-nagroda.png`, `nawyko-390-zdrapka.png`,
-  `nawyko-390-nagroda.png`, `nawyko-360x640-scena.png`, `nawyko-1440-reduced-motion.png`.
-- Bramki (lokalnie, 21.11): build OK · `tsc --noEmit` OK · lint 0 błędów, 1 ostrzeżenie (tyle samo co przed) ·
-  `qa.js` PASS na `/nawyko`, `/`, `/tool` (bez klucza AI — panele schowane), `/stop` · `content-rules` PASS ·
-  `tool-rules` OK · `ship-compare` PASS. Formularz lokalnie: 503 (brak kluczy — oczekiwane), komunikat z adresem
-  e-mail widoczny, zgody domyślnie odznaczone. CLS: 0,024 na 1440, 0,000 na 390. Zero żądań zewnętrznych, zero nowych bibliotek.
-- Niezależna recenzja: `agencja/recenzje/01-nawyko.md` (5/10 punktów zaliczonych w pierwszym podejściu;
-  poprawione po niej: tekst pod paskiem cookies na małych ekranach, lista nagród na zakładkach, zdrapka ze skutkiem,
-  kontrast, fokus, notka o zmyślonej marce na telefonie, drobne treści). **Recenzent nie oglądał wersji po poprawkach** —
-  drugie podejście jest pierwszym krokiem następnego przebiegu.
-- **Podglądu Vercel NIE MA.** Commit 97db8d3 dostał od Vercela status `failure` z adresem
-  `…?upgradeToPro=build-rate-limit` — czyli limit buildów planu, nie błąd kodu (lokalny build przechodzi).
-  Stronę da się dziś obejrzeć tylko lokalnie: `git checkout agencja/strona && npm ci && npm run build && npm start` → `/nawyko`.
+- Zrzuty kalkulatora: `agencja/podglad/kalkulator-1440-pierwszy-ekran.png`, `kalkulator-1440-odstep.png`,
+  `kalkulator-1440-drugi-zakup.png`, `kalkulator-1440-wlasne-liczby.png`, `kalkulator-1440-cala.png` i te same dla `390`
+  (plus `kalkulator-360-wlasne-liczby.png`, `kalkulator-390-wielkie.png` — skrajnie duże liczby).
+- Zrzuty `/nawyko` po poprawce sceny: `nawyko-1440-zdrapka.png`, `nawyko-1440-nagroda.png`, `nawyko-1024-nagroda.png`.
+- Bramki (lokalnie, 21.11, po ostatniej zmianie): build OK · `tsc --noEmit` OK · lint 0 błędów, 1 ostrzeżenie (tyle samo
+  co przed) · `qa.js` PASS na `/calculator`, `/nawyko`, `/`, `/tool` (bez klucza AI — panele schowane), `/stop` ·
+  `content-rules` PASS · `tool-rules` OK · `ship-compare` PASS · test wzorów `scripts/calculator-model.test.mjs` OK.
+  Formularz lokalnie: 503 (brak kluczy — oczekiwane). Przesunięcie układu (CLS): kalkulator 0,002 (pomiar recenzenta);
+  `/nawyko` 0,016 na 1024 (było 0,059) i 0,010 na 1440 (było 0,033). JS trasy `/calculator` o ok. 3% większy niż `/nawyko`
+  i mniejszy niż `/tool` (pomiar transferu, nie Lighthouse — Lighthouse w tym przebiegu nie uruchamiałem).
+- Niezależne recenzje: `agencja/recenzje/02-kalkulator.md` — pierwsze podejście 10/11 (brak kroku pod wynikiem),
+  po poprawkach **11/11**, 13 z 14 usterek naprawionych; z siedmiu nowych uwag drugiego podejścia poprawione wszystkie
+  poza jedną kosmetyczną (ułamek dnia w polu odstępu zaokrągla się do pełnych dni — jest to napisane przy polu).
+  **Tej ostatniej rundy poprawek recenzent już nie oglądał**; przeszły bramki i mój przegląd zrzutów.
+  `agencja/recenzje/01-nawyko-podejscie-2.md` — 9/10.
+- Źródła trzech liczb na stronie otwarte ponownie 21.11 (`agencja/research/kalkulator-weryfikacja.md`): Recharge
+  i Ipsos potwierdzone; badanie o aplikacjach (Marketing Science 2019) potwierdzone częściowo, więc z tekstu wypadło
+  „w USA” i opis branży. Narzędzie odczytu zwraca tylko fragmenty stron — przed produkcją kliknij trzy linki sam (5 minut).
+- Podgląd Vercel: status buildu da się odczytać dopiero po pushu, a pushuję raz na przebieg (limit buildów), więc
+  wynik tego pusha jest w wiadomości końcowej przebiegu i trafi tu na początku następnego. Poprzedni push (97db8d3)
+  dostał od Vercela `failure` z powodu limitu buildów planu.
 
 ## Czeka na Rafała
 
-1. **Limit buildów na Vercelu blokuje podgląd.** Vercel odrzucił build gałęzi z powodu limitu planu (odczytane ze
-   statusu commita; najnowszy wpis wdrożenia widoczny w API GitHuba ma datę 12.10). Nie wiem, czy limit dotyka też
-   produkcji — nie sprawdzałem domeny. Warianty: (a) poczekać na reset limitu i wypchnąć ponownie, (b) wyłączyć
-   buildy podglądu dla gałęzi zadań cyklicznych, które pushują co godzinę, (c) plan Pro (wydatek — Twoja decyzja).
-   Rekomendacja: (b), bo godzinne pushe innych zadań zjadają limit; do tego czasu pushuję raz na przebieg.
-   Bez decyzji: nie obejrzysz `/nawyko` na telefonie bez lokalnego uruchomienia.
-2. **Treść `/nawyko` do zatwierdzenia przed produkcją.** Nagłówek: „A habit app with your logo on it.”; CTA „Ask about
-   Nawyko”. Zdania, których nie umiem sam potwierdzić w produkcie: „Colors, type, wording and the reward list are
-   settings, not a rebuild”, „The customer installs your app”, „Across your customers you see which day a pack is
-   actually finished”, opisy czterech nagród (kiedy naliczana darmowa dostawa i cashback). Rekomendacja: przeczytaj
-   sekcje „Rewards” i „For the brand” i skreśl, co nie jest prawdą dziś. Bez decyzji strona zostaje na gałęzi.
-3. **Status Nawyko w ofercie.** Strona nie mówi, czy to pilotaż, czy gotowy produkt, ani ile kosztuje. Warianty:
-   „pilot — szukam dwóch marek”, „dostępne od …”, albo bez statusu jak teraz. Rekomendacja: jedno uczciwe zdanie
-   o pilotażu przy formularzu — zmniejsza ryzyko rozczarowania i podnosi jakość zapytań.
-4. **Nazwa marki pokazowej „Tovemi”.** W wyszukiwarce nie znaleziono firmy ani marki o tej nazwie (16 kandydatów,
-   14 odrzuconych — `agencja/research/marka-pokazowa.md`), ale rejestry znaków (EUIPO/UPRP) i domeny nie były
-   sprawdzane. Zapas: „Talmivo”. Rekomendacja: zostawić Tovemi; sprawdzenie w TMview zajmie Ci 2 minuty.
-5. **Mail potwierdzający po zapytaniu z `/nawyko`** jest ten sam co ze strony głównej („Got it — I reply by hand”).
-   Rekomendacja: osobna wersja z jednym zdaniem o Nawyko — zrobię w kawałku (c), jeśli nie masz nic przeciw.
-6. **Link do `/nawyko` ze strony głównej** wymaga zmiany w Claude Design albo dokładki w `ship-design` (jak link do
-   `/tool`). Rekomendacja: dokładka `data-ship-added` w nagłówku i stopce — nie rusza Twojego nagłówka. Dziś do
-   `/nawyko` nie prowadzi żaden link (jest tylko w sitemapie).
-7. **Z audytu, decyzje treściowe** (`agencja/audyt.md`): pierwszy ekran `/` nie mówi wprost „co i komu” (propozycja
-   jednej linii pod hasłem — hasła nie ruszam); `/privacy` opisuje formularz, którego już nie ma (dokument prawny —
-   Twoja zgoda); `/blog` ma stary wygląd i nic do niego nie linkuje — zostawić, przebudować czy zdjąć z sitemapy.
+1. **Limit buildów na Vercelu blokuje podgląd** (bez zmian od przebiegu 1). Warianty: (a) poczekać na reset limitu,
+   (b) wyłączyć buildy podglądu dla gałęzi zadań, które pushują co godzinę, (c) plan Pro (wydatek). Rekomendacja: (b).
+   Bez decyzji oglądasz stronę tylko lokalnie: `git checkout agencja/strona && npm ci && npm run build && npm start`.
+2. **Kalkulator — treść do zatwierdzenia przed produkcją.** Nagłówek „What is one day between orders worth?”, przycisk
+   „Talk these numbers through”. Liczby startowe (4 000 klientów, zamówienie 120, odstęp 58 dni, opakowanie 30 dni,
+   6 000 nowych klientów, 22% wraca) są zmyślone i podpisane „example”. Warianty: zostawić przykład (strona żyje od
+   pierwszej sekundy) albo puste pola (zero ryzyka, że ktoś weźmie przykład za normę rynkową). Rekomendacja: zostawić
+   przykład z podpisem. Bez decyzji kalkulator zostaje na gałęzi.
+3. **Czy zapytanie z kalkulatora ma nieść wpisane liczby?** Dziś nie niesie nic — strona obiecuje „nothing is sent”
+   i to jest prawda w kodzie. Warianty: (a) tak zostaje — mocny argument zaufania, ale dostajesz zapytanie bez kontekstu;
+   (b) pole wyboru „dołącz moje liczby do zapytania”, domyślnie odznaczone. Rekomendacja: (b) w następnym kroku —
+   lepsza jakość rozmowy bez łamania obietnicy. Wymaga dopisania pól do `/api/lead` i maila.
+4. **Nazwa i adres: `/calculator`.** Propozycja ode mnie, do wyrzucenia: alternatywy `/reorder-calculator` (lepsze dla
+   wyszukiwarki) albo `/gap`. Rekomendacja: `/reorder-calculator` przed pierwszym wypuszczeniem, bo adresu potem się nie zmienia.
+5. **Linki do `/nawyko` i `/calculator` ze strony głównej i z `/tool`** wymagają zmiany w Claude Design albo dokładki
+   w `ship-design` (jak link do `/tool`). Rekomendacja: dokładka `data-ship-added` w nagłówku i stopce — nie rusza
+   Twojego nagłówka. Dziś obie podstrony linkują do siebie nawzajem, ale z `/` nie prowadzi do nich nic poza sitemapą.
+6. **Treść `/nawyko` do zatwierdzenia przed produkcją** (bez zmian): „Colors, type, wording and the reward list are
+   settings, not a rebuild”, „The customer installs your app”, opis cashbacku i darmowej dostawy. Recenzent drugi raz
+   wskazał cashback i „installs your app” jako niepotwierdzone. Rekomendacja: przeczytaj sekcje „Rewards”
+   i „For the brand” i skreśl, co nie jest prawdą dziś.
+7. **Słowo „dose” na `/nawyko`.** Strona mówi „after their dose”, a jednocześnie wymienia kawę, karmę i kosmetyki.
+   Warianty: zostawić (suplementy są głównym adresatem) albo „after using the product”. Rekomendacja: „after their
+   daily use” w ledzie, „dose” tylko na ekranie telefonu z suplementem. Bez decyzji zostaje „dose”.
+8. **„I reply personally within 24 hours.”** Usunąłem „within 24 hours” z potwierdzenia formularza na `/nawyko`
+   i `/calculator`, bo to obietnica, której nie umiem potwierdzić. Jeśli jej dotrzymujesz — jedno słowo i przywracam.
+9. **Status Nawyko w ofercie** (pilotaż / gotowy produkt / cena) — bez zmian; rekomendacja: jedno uczciwe zdanie
+   o pilotażu przy formularzu.
+10. **Nazwa marki pokazowej „Tovemi”** — bez zmian; rejestry znaków (EUIPO/UPRP) niesprawdzone, zapas „Talmivo”.
+11. **Mail potwierdzający po zapytaniu z `/nawyko` i `/calculator`** jest ten sam co ze strony głównej. Rekomendacja:
+    osobne zdanie dla każdego formularza — zrobię przy nawigacji, jeśli nie masz nic przeciw.
+12. **Z audytu, decyzje treściowe** (`agencja/audyt.md`): pierwszy ekran `/` nie mówi wprost „co i komu” (hasła nie
+    ruszam); `/privacy` opisuje formularz, którego już nie ma; `/blog` ma stary wygląd i nic do niego nie linkuje.
 
 ## Następne (kolejka)
 
-1. `/nawyko` — drugie podejście recenzenta na wersji po poprawkach; test dotyku zdrapki w emulacji telefonu;
-   CLS 0,05 na 1024 px (opis kroków zwija się po starcie sceny) sprowadzić do ~0; własna karta OG dla `/nawyko`.
-2. (b) Kalkulator FMCG — model i źródła gotowe w `agencja/research/kalkulator-zrodla.md`: dwa osobne scenariusze
-   liczone tylko z pól odwiedzającego (skrócenie odstępu: ΔP = N × AOV × 365 × (1/T1 − 1/T0); drugi zakup),
-   benchmarki wyłącznie jako podpisane podpowiedzi (Recharge 2024/2026, Decile 2024, Narang i Shankar 2019).
-   Cytaty przed publikacją trzeba otworzyć ponownie — część źródeł widziana tylko przez narzędzie odczytu.
-3. (c) Nawigacja: link do `/nawyko` z `/` i `/tool` (po decyzji 6), mail dla `form=nawyko`.
-4. (d) Poprawki techniczne z audytu, które nie są decyzją treściową: usunąć nieużywany `preload` obrazu 186 kB
-   z `layout.tsx` (29–51% transferu każdej trasy), `try/catch` + `error.tsx`/`not-found.tsx` dla `/blog` (dziś 500
-   przy niedostępnym API), `metadataBase`, wspólna kotwica `#enquiry` na telefonie.
+1. (c) Nawigacja i oferta aplikacji w strukturze strony — po decyzji 5: dokładka w `ship-design`, wspólny nagłówek
+   `/nawyko` ↔ `/calculator` ↔ `/tool`, maile dla `form=nawyko` i `form=calculator`.
+2. Kalkulator, druga iteracja: pole wyboru „dołącz liczby” (po decyzji 3), własna karta OG dla `/calculator` i `/nawyko`,
+   wydzielenie formularza `Enquiry` do osobnego pliku (dziś `/calculator` ładuje też kod sceny Nawyko), Lighthouse.
+3. `/nawyko`, reszta z recenzji 2: lista nagród w kroku 4 na 360×640 (dziś ukryta), kolejność Tab na telefonie
+   (widoczny tylko aktywny krok), drobne pływanie bloku kroków (3–4 px przy zmianie kroku).
+4. (d) Z audytu: `try/catch` + `error.tsx`/`not-found.tsx` dla `/blog` (dziś 500 przy niedostępnym API), `metadataBase`,
+   usunięcie `preconnect`/`dns-prefetch` do hostów, do których nic nie idzie (najpierw potwierdzić pomiarem).
+5. Potem pętla: ocena (AI/SEO, użyteczność biznesowa, UX, wow bez kiczu) → najwyżej dwie poprawki → ponowne sprawdzenie.
 
 ## Lekcje
 
@@ -90,6 +114,13 @@ który zostaje w pamięci i prowadzi do formularza na tej samej stronie.
   lint wymaga przy nich `eslint-disable-next-line @next/next/no-html-link-for-pages`.
 - Subagenci uruchomieni w jednym kroku blokują do końca najdłuższego (~10 min) — budowę zaczynać przed nimi albo
   zlecać im krótsze zadania.
+- `.nk p{margin:0}` ma wyższą specyficzność niż pojedyncza klasa: margines na `<p>` wymaga `.nk .klasa` albo `!important`.
+- `qa.js` zgłasza jako „CLIPPED” klasyczny ukryty tekst dla czytników (1 px + overflow). Opis dla `aria-describedby`
+  dawać w elemencie `hidden`, a region `aria-live` bez przycinania (opacity 0, pozycja absolutna).
+- Strona pod `navigator.webdriver` zostaje statyczna — w testach sceny trzeba nadpisać tę flagę, inaczej scena się nie przypina.
+- Recenzent i weryfikator źródeł w jednym kroku z budową gotową wcześniej: ~4 min blokady; drugie podejście recenzenta
+  po poprawkach to kolejne ~3,5 min i znajduje rzeczy, których pierwsze nie widziało (przecinek tysięcy czytany jako ułamek).
+- Pola liczbowe: „4,000” to cztery tysiące, nie cztery — separator przed dokładnie trzema cyframi traktować jako tysiące.
 
 ## Decyzje podjęte samodzielnie (odwracalne)
 
@@ -98,3 +129,8 @@ który zostaje w pamięci i prowadzi do formularza na tej samej stronie.
   animations: zdrapka i licznik i tak wymagają stanu w JS, a zachowanie jest identyczne we wszystkich przeglądarkach.
 - Czerwień tylko na liczniku serii w scenie (zmierzona wartość); drugi telefon (white label) jej nie używa.
 - `/nawyko` dopisane do `sitemap.ts`.
+- `/calculator` pisany ręcznie na stylach `/nawyko`; zero nowych bibliotek; wynik liczony tylko w przeglądarce.
+- Wartości startowe kalkulatora to oznaczony przykład, nie puste pola (decyzja 2 czeka na potwierdzenie).
+- Suwak odstępu jest odwrócony (w prawo = krótszy odstęp = więcej przychodu), z opisem kierunku dla czytnika.
+- Usunięty `preload` nieużywanego zdjęcia 186 kB z `app/layout.tsx` (poprawka techniczna z audytu, P1-3).
+- Scena `/nawyko` na desktopie przypięta od góry zamiast wyśrodkowana (mniej przesunięć układu).

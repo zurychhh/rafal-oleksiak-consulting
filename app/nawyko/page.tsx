@@ -205,6 +205,7 @@ export default function Nawyko() {
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/">Home</a>
           <a href="/tool">Reorder gap tool</a>
+          <a href="/calculator">Gap calculator</a>
           <a href="mailto:rafal@oleksiakconsulting.com">rafal@oleksiakconsulting.com</a>
           <a href="https://www.linkedin.com/in/rafa%C5%82-oleksiak-3b322981/" rel="noopener">
             LinkedIn

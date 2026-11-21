@@ -84,7 +84,7 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
 .is-still .nk-d > span{padding-top:8px;}
 .nk-bar{height:2px;background:var(--mid);margin-top:20px;}
 .nk-bar i{display:block;height:100%;background:var(--ink);transform-origin:0 50%;transform:scaleX(var(--p,1));}
-.nk-alt{margin-top:16px;min-height:22px;font-size:14px;color:var(--dim);}
+.nk .nk-alt{margin-top:20px;min-height:22px;line-height:22px;font-size:14px;color:var(--dim);}
 .nk-alt[hidden]{display:block;visibility:hidden;}
 .nk-link{background:none;border:0;border-bottom:1px solid var(--ink);padding:0 0 1px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer;}
 .nk-demo-after{display:none;}
@@ -200,12 +200,12 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
 .nk-form label.nk-f{display:block;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:18px;}
 .nk-form input[type=text],.nk-form input[type=email]{display:block;width:100%;margin-top:6px;padding:12px 0;border:0;border-bottom:1px solid var(--ink);
   background:transparent;font:inherit;font-size:17px;color:var(--ink);border-radius:0;letter-spacing:0;text-transform:none;}
-.nk-form input::placeholder{color:#8B8A85;}
+.nk-form input::placeholder{color:#5C5B56;opacity:1;}
 .nk-form input[type=text]:focus-visible,.nk-form input[type=email]:focus-visible{outline:2px solid var(--ink);outline-offset:4px;}
 .nk-ck{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;margin-top:18px;font-size:14px;line-height:1.4;color:var(--ink);}
 .nk-ck input{width:20px;height:20px;margin:1px 0 0;accent-color:#14161A;}
 .nk-ck em{font-style:normal;color:var(--dim);}
-.nk-form .nk-cta{width:100%;margin-top:22px;}
+.nk-form .nk-cta{width:100%;margin-top:22px;scroll-margin-bottom:calc(var(--consent-h,0px) + 16px);}
 .nk-form .nk-cta[disabled]{opacity:.6;cursor:default;}
 .nk-note{font-size:14px;color:var(--ink2);margin-top:16px!important;}
 .nk-err{margin-top:14px!important;font-size:15px;font-weight:600;color:var(--ink);border-left:2px solid var(--ink);padding-left:12px;}
@@ -252,4 +252,10 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
 }
 @media (prefers-reduced-motion:reduce){
   .nk *{transition:none!important;animation:none!important;}
+}
+/* Scena przypieta od gory, nie wysrodkowana: pasek cookies zmienia --consent-h po zaladowaniu,
+   a opisy krokow maja rozna liczbe linii — przy wysrodkowaniu caly blok skakal (CLS 0,06 na 1024). */
+@media (min-width:861px) and (min-height:601px){
+  .is-scroll .nk-stage{align-items:start;padding-top:clamp(40px,9vh,110px);}
+  .is-scroll .nk-phonecol{align-self:start;}
 }

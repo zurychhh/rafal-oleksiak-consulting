@@ -485,7 +485,7 @@ const CONSENT_CONTACT = 'I agree to be contacted about this enquiry'
 const CONSENT_MARKETING =
   'Occasional email from me — notes on reorder timing, new tools I build, and what I learn working on FMCG stores. Unsubscribe any time.'
 
-export function Enquiry() {
+export function Enquiry({ form = 'nawyko', page = '/nawyko', title = 'Ask about Nawyko' }: { form?: string; page?: string; title?: string } = {}) {
   const [state, setState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle')
   const errRef = useRef<HTMLParagraphElement>(null)
 
@@ -496,7 +496,7 @@ export function Enquiry() {
     const email = String(f.get('email') || '').trim()
     const marketing = f.get('marketing') === 'on'
     const q = new URLSearchParams(window.location.search)
-    const source: Record<string, string> = { page: '/nawyko' }
+    const source: Record<string, string> = { page }
     if (document.referrer) source.referrer = document.referrer.slice(0, 300)
     for (const k of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
       const v = q.get(k)
@@ -513,13 +513,13 @@ export function Enquiry() {
           consentContact: f.get('contact') === 'on',
           consentMarketing: marketing,
           consentText: (CONSENT_CONTACT + (marketing ? ' | ' + CONSENT_MARKETING : '')).slice(0, 400),
-          form: 'nawyko',
+          form,
           source,
         }),
       })
       if (!res.ok) throw new Error(String(res.status))
       setState('done')
-      analytics.trackLeadSubmitted('nawyko', email)
+      analytics.trackLeadSubmitted(form, email)
     } catch {
       setState('error')
       requestAnimationFrame(() => errRef.current?.focus())
@@ -530,14 +530,14 @@ export function Enquiry() {
     return (
       <div className="nk-form nk-done" role="status">
         <h3>Enquiry received.</h3>
-        <p>I reply personally within 24 hours.</p>
+        <p>I reply personally.</p>
       </div>
     )
   }
 
   return (
     <form className="nk-form" id="nawyko-enquiry" onSubmit={submit}>
-      <div className="nk-caps">Ask about Nawyko</div>
+      <div className="nk-caps">{title}</div>
       <label className="nk-f" htmlFor="nk-store">
         Your store URL
       </label>

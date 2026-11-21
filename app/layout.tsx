@@ -79,14 +79,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.googleadservices.com" />
 
-        {/* Performance: Preload critical image for LCP optimization */}
-        <link
-          rel="preload"
-          href="/images/rafal-oleksiak.png"
-          as="image"
-          fetchPriority="high"
-        />
-
         {/* Schema.org JSON-LD structured data for rich snippets */}
         <SchemaOrg />
       </head>
