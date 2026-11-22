@@ -52,6 +52,12 @@ następny jest punkt 3 (przegląd układu całej strony, `/lab/a` i `/lab/b`), p
    zero nowych ciężkich bibliotek bez sprawdzenia. **Vercel:** limit wdrożeń konta do ok. 19:10 22.11 — jeden push na przebieg,
    na końcu; adres podglądu wpisz na górze „Dla Rafała”, gdy się zbuduje. W „Dla Rafała” pisz krótko: co obejrzeć i gdzie.
 
+## Uwaga Rafała 22.11 10:42 (doradca poprawił od ręki)
+Nagłówek sceny white label „Your name on it, not mine.” Rafał ocenił jako „super głupie i egocentryczne”. Zmienione na
+„Your brand. Your colours. Your app.” (`app/nawyko/NawykoClient.tsx`). **Zasada dla wszystkich tekstów strony:** bohaterem
+jest marka klienta i jej klient, nigdy autor strony — żadnych „mine / my / I” w nagłówkach scen produktu. Przejrzyj pod tym
+kątem całe `/nawyko` i `/calculator` w następnym przebiegu i uruchom bramki (ta zmiana poszła bez builda).
+
 ## Dla Rafała
 
 **Co obejrzeć (lokalnie: `git checkout agencja/strona && npm ci && npm run build && npm start`).**

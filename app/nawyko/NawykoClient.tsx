@@ -526,7 +526,7 @@ function SkinPanel({
     <div className="nk-panel nk-in">
       <div className="nk-caps nk-lab">White label</div>
       <h2 className="nk-h2" id={id}>
-        Your name on it, not mine.
+        Your brand. Your colours. Your app.
       </h2>
       <p className="nk-one">Type a brand name and pick a skin. The phone and this whole page follow.</p>
       <label className="nk-name">
