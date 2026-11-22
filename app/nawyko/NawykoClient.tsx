@@ -33,7 +33,7 @@ const PACK_DAYS = 30
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v))
 const ease = (t: number) => 1 - Math.pow(1 - t, 3)
 
-type Theme = 'paper' | 'plain' | 'night' | 'clay'
+type Theme = 'paper' | 'night' | 'clay'
 
 /* ── zdrapka ─────────────────────────────────────────────────────────────── */
 function Scratch({ gone, onDone }: { gone: boolean; onDone: () => void }) {
@@ -149,6 +149,18 @@ function Scratch({ gone, onDone }: { gone: boolean; onDone: () => void }) {
 }
 
 /* ── telefon ─────────────────────────────────────────────────────────────── */
+/* Przykladowy harmonogram nagrod marki pokazowej; dni ustawia marka. */
+const REWARD_ROWS = [
+  { day: 7, name: 'Free shipping', note: 'on the next order' },
+  { day: 24, name: `Stamp · ${GOAL_DAY} of ${PACK_DAYS} days`, note: 'six days of slack built in' },
+  { day: 24, name: 'Next-pack discount', note: 'a code that only works on a reorder' },
+  { day: 99, name: 'Cashback', note: 'counted toward the order after that' },
+] as const
+
+const FINISH_DAYS = 34
+const SKIPPED = [6, 13, 21, 27]
+const TAB_OF = [0, 0, 1, 2, 2, 0, 2]
+
 function Phone({
   step,
   t,
@@ -157,6 +169,8 @@ function Phone({
   onScratched,
   interactive,
   fixedDays,
+  day = PACK_DAYS,
+  brand = DEMO_BRAND,
 }: {
   step: number
   t: number
@@ -165,19 +179,31 @@ function Phone({
   onScratched?: () => void
   interactive?: boolean
   fixedDays?: number
+  day?: number
+  brand?: string
 }) {
+  const view = step === 6 ? 3 : step
   const confirmed = step > 0 || t > 0.55
   const scan = step > 0 ? 1 : clamp(t / 0.5)
   const revealed = scratched || step > 1 || (step === 1 && t > 0.8)
   const days =
-    fixedDays ?? (step < 2 ? START_DAY : step === 2 ? Math.round(START_DAY + (GOAL_DAY - START_DAY) * ease(clamp(t / 0.8))) : GOAL_DAY)
-  const on = (i: number) => 'nk-view' + (step === i ? ' is-on' : '')
+    fixedDays ??
+    (step === 6
+      ? 17
+      : step < 2
+        ? START_DAY
+        : step === 2
+          ? Math.round(START_DAY + (GOAL_DAY - START_DAY) * ease(clamp(t / 0.8)))
+          : GOAL_DAY)
+  const took = step === 5 ? Math.round(PACK_DAYS + (FINISH_DAYS - PACK_DAYS) * ease(clamp(t / 0.45))) : FINISH_DAYS
+  const on = (i: number) => `nk-view nk-v${i}` + (view === i ? ' is-on' : '')
+  const tab = TAB_OF[step] ?? 0
 
   return (
     <div className="nk-phone" data-theme={theme} aria-hidden="true">
       <div className="nk-screen">
         <div className="nk-pbar">
-          <span>{DEMO_BRAND}</span>
+          <span>{brand}</span>
           <span>Demo</span>
         </div>
 
@@ -244,7 +270,7 @@ function Phone({
             <div className="nk-pt">Stamp earned.</div>
           </div>
           <div className="nk-coupon">
-            <code>TOVEMI-NEXT-K7Q4</code>
+            <code>{brand.toUpperCase()}-NEXT-K7Q4</code>
             <small>Code for your next pack</small>
           </div>
           <ul className="nk-rw">
@@ -267,10 +293,52 @@ function Phone({
           </ul>
         </div>
 
+        <div className={on(4)}>
+          <div className="nk-pk">Rewards · listed from day 1</div>
+          <div className="nk-big">
+            <b>{day}</b>
+            <span>day</span>
+            <em>of {PACK_DAYS}</em>
+          </div>
+          <ul className="nk-rw nk-rwd">
+            {REWARD_ROWS.map((r) => (
+              <li key={r.name} className={day >= r.day ? 'is-got' : ''}>
+                <span>{r.name}</span>
+                <span>{r.day > PACK_DAYS ? 'on reorder' : day >= r.day ? '✓ earned' : `day ${r.day}`}</span>
+              </li>
+            ))}
+          </ul>
+          <div className={'nk-coupon nk-late' + (day >= GOAL_DAY ? ' is-on' : '')}>
+            <code>{brand.toUpperCase()}-NEXT-K7Q4</code>
+            <small>Code for your next pack</small>
+          </div>
+        </div>
+
+        <div className={on(5)}>
+          <div className="nk-pk">Pack finished</div>
+          <div className="nk-big">
+            <b>{took}</b>
+            <span>days</span>
+          </div>
+          <div className="nk-pt nk-pt2">{PACK_DAYS} doses ticked.</div>
+          <div className="nk-ps">
+            The label says {PACK_DAYS} days. This pack took {FINISH_DAYS}.
+          </div>
+          <div className="nk-grid nk-g34">
+            {Array.from({ length: FINISH_DAYS }, (_, i) => (
+              <i key={i} className={SKIPPED.includes(i) ? '' : 'is-in'} />
+            ))}
+          </div>
+          <div className="nk-goal">
+            <span>{PACK_DAYS} ticked</span>
+            <span>{FINISH_DAYS - PACK_DAYS} skipped</span>
+          </div>
+        </div>
+
         <div className="nk-tabs">
-          <span className={step < 2 ? 'is-on' : ''}>Today</span>
-          <span className={step === 2 ? 'is-on' : ''}>Streak</span>
-          <span className={step === 3 ? 'is-on' : ''}>Rewards</span>
+          <span className={tab === 0 ? 'is-on' : ''}>Today</span>
+          <span className={tab === 1 ? 'is-on' : ''}>Streak</span>
+          <span className={tab === 2 ? 'is-on' : ''}>Rewards</span>
         </div>
       </div>
     </div>
@@ -305,16 +373,212 @@ export function DayStrip() {
   )
 }
 
+/* ── akt 5: nagrody na osi 30 dni ────────────────────────────────────────── */
+function RewardsPanel({ day, onDay, id }: { day: number; onDay: (d: number) => void; id: string }) {
+  return (
+    <div className="nk-panel nk-in">
+      <div className="nk-caps nk-lab">Rewards</div>
+      <h2 className="nk-h2" id={id}>
+        Known in advance. Never random.
+      </h2>
+      <p className="nk-one">Drag the day. Every reward sits on a date the customer saw on day one.</p>
+      <div className="nk-axis">
+        <div className="nk-flags" aria-hidden="true">
+          <span style={{ ['--d' as string]: 7 }} className={day >= 7 ? 'is-got' : ''}>
+            7
+          </span>
+          <span style={{ ['--d' as string]: 24 }} className={day >= 24 ? 'is-got' : ''}>
+            24
+          </span>
+          <em>Example</em>
+        </div>
+        <div className="nk-track">
+          <div className="nk-cells" aria-hidden="true">
+            {Array.from({ length: PACK_DAYS }, (_, i) => (
+              <span
+                key={i}
+                className={'nk-cell' + (i >= day ? ' is-open' : '') + (i === 6 || i === GOAL_DAY - 1 ? ' is-stamp' : '')}
+              />
+            ))}
+          </div>
+          <i className="nk-knob" aria-hidden="true" style={{ ['--d' as string]: day }} />
+          <input
+            className="nk-range"
+            type="range"
+            min={1}
+            max={PACK_DAYS}
+            step={1}
+            value={day}
+            aria-label="Day of the pack"
+            aria-valuetext={`Day ${day} of ${PACK_DAYS}`}
+            onChange={(e) => onDay(Number(e.currentTarget.value))}
+          />
+        </div>
+      </div>
+      <ul className="nk-earn">
+        {REWARD_ROWS.map((r) => (
+          <li key={r.name} className={day >= r.day ? 'is-got' : ''}>
+            <span className="nk-when">{r.day > PACK_DAYS ? 'Reorder' : `Day ${r.day}`}</span>
+            <span className="nk-what">
+              {r.name.replace(/ · .*/, '')} <em>{r.note}</em>
+            </span>
+            <span className="nk-st">{r.day > PACK_DAYS ? '→' : day >= r.day ? '✓' : ''}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="nk-fine">Example schedule on a made-up brand. The brand sets the rewards and the days.</p>
+    </div>
+  )
+}
+
+/* ── akt 6: widok marki — z wielu telefonow sklada sie rozklad ───────────── */
+/* ZMYSLONE dane ilustracyjne: ile opakowan konczy sie w dniach 28–42. */
+const DIST_FROM = 28
+const DIST = [1, 2, 4, 7, 10, 13, 11, 8, 6, 4, 3, 2, 1, 1, 1]
+const DIST_TOTAL = DIST.reduce((a, b) => a + b, 0)
+const DIST_PEAK = DIST_FROM + DIST.indexOf(Math.max(...DIST))
+const ME_COL = FINISH_DAYS - DIST_FROM
+const DOT_ORDER: number[][] = (() => {
+  let n = 0
+  const rank = DIST.map((c) => Array.from({ length: c }, () => (n++ * 37) % DIST_TOTAL))
+  // kropka z telefonu pojawia sie pierwsza
+  rank[ME_COL][0] = -1
+  return rank
+})()
+
+function BrandPanel({ t, id }: { t: number; id: string }) {
+  const shown = t >= 1 ? DIST_TOTAL : Math.round((DIST_TOTAL - 1) * clamp((t - 0.12) / 0.55))
+  const marks = t > 0.72
+  return (
+    <div className="nk-panel nk-in">
+      <div className="nk-caps nk-lab">For the brand</div>
+      <h2 className="nk-h2" id={id}>
+        One phone is a habit. All of them are your reorder date.
+      </h2>
+      <p className="nk-one">
+        Each finished pack is a dot. Together they show the day a pack really ends — not the day the label assumes.
+      </p>
+      <div
+        className={'nk-chart' + (marks ? ' is-marked' : '')}
+        role="img"
+        aria-label={`Illustration with invented data: finished packs by day. The label assumes day ${PACK_DAYS}; most packs in this illustration end on day ${DIST_PEAK}.`}
+      >
+        <div className="nk-tag" aria-hidden="true">
+          Illustration · invented data
+        </div>
+        <div className="nk-cols">
+          {DIST.map((c, ci) => {
+            const d = DIST_FROM + ci
+            return (
+              <div
+                key={d}
+                className={'nk-col' + (d === PACK_DAYS ? ' is-label' : '') + (d === DIST_PEAK ? ' is-peak' : '')}
+              >
+                {Array.from({ length: c }, (_, ri) => (
+                  <i
+                    key={ri}
+                    className={
+                      (DOT_ORDER[ci][ri] < shown ? 'is-in' : '') + (ci === ME_COL && ri === 0 ? ' is-me' : '')
+                    }
+                  />
+                ))}
+                <b>{d === DIST_FROM || d === PACK_DAYS || d === DIST_PEAK || d === FINISH_DAYS || d === 42 ? d : ''}</b>
+              </div>
+            )
+          })}
+        </div>
+        <div className="nk-legend" aria-hidden="true">
+          <span className="nk-lg-label">Day {PACK_DAYS} · what the label assumes</span>
+          <span className="nk-lg-peak">Day {DIST_PEAK} · where most packs end here</span>
+          <span className="nk-lg-me">Day {FINISH_DAYS} · the phone on this page</span>
+        </div>
+      </div>
+      <p className="nk-fine">
+        Illustration, invented data. Your curve comes from your customers.{' '}
+        <a href="/tool">Check your own gap today — free</a>.
+      </p>
+    </div>
+  )
+}
+
+/* ── akt 7: white label — skora przemalowuje cala strone ─────────────────── */
+type Skin = 'paper' | 'night' | 'clay'
+const SKINS: { id: Skin; name: string; sw: string }[] = [
+  { id: 'paper', name: 'Paper', sw: '#F7F5F0' },
+  { id: 'night', name: 'Night', sw: '#14161A' },
+  { id: 'clay', name: 'Clay', sw: '#EFE6DA' },
+]
+
+function SkinPanel({
+  skin,
+  onSkin,
+  id,
+  name,
+  onName,
+}: {
+  skin: Skin
+  onSkin: (s: Skin) => void
+  id: string
+  name: string
+  onName: (v: string) => void
+}) {
+  return (
+    <div className="nk-panel nk-in">
+      <div className="nk-caps nk-lab">White label</div>
+      <h2 className="nk-h2" id={id}>
+        Your name on it, not mine.
+      </h2>
+      <p className="nk-one">Type a brand name and pick a skin. The phone and this whole page follow.</p>
+      <label className="nk-name">
+        <span className="nk-caps">Brand name</span>
+        <input
+          type="text"
+          value={name}
+          maxLength={14}
+          placeholder={DEMO_BRAND}
+          autoComplete="off"
+          spellCheck={false}
+          onChange={(e) => onName(e.currentTarget.value)}
+        />
+      </label>
+      <div className="nk-swatches" role="group" aria-label="Repaint this page">
+        {SKINS.map((s) => (
+          <button key={s.id} type="button" className="nk-sw" aria-pressed={skin === s.id} onClick={() => onSkin(s.id)}>
+            <i style={{ background: s.sw }} />
+            {s.name}
+          </button>
+        ))}
+      </div>
+      <p className="nk-fine">The name stays in this page. Nothing is sent.</p>
+    </div>
+  )
+}
+
 /* ── scena przypieta do przewijania ──────────────────────────────────────── */
-export function Scene() {
+const ACTS = 7
+const ACT_NAMES = ['Confirm', 'Scratch', 'Streak', 'Reward', 'Rewards by day', 'Brand view', 'Your name'] as const
+
+function Scene({
+  skin,
+  onSkin,
+  name,
+  onName,
+}: {
+  skin: Skin
+  onSkin: (s: Skin) => void
+  name: string
+  onName: (v: string) => void
+}) {
+  const brand = name.trim().slice(0, 14) || DEMO_BRAND
   const wrap = useRef<HTMLDivElement>(null)
-  // Stan domyslny DOM = stan koncowy (krok 4, bez przypiecia): tak wyglada strona
+  // Stan domyslny DOM = uklad statyczny ze stanami koncowymi: tak wyglada strona
   // bez JS, w prefers-reduced-motion i pod navigator.webdriver (bramka qa.js).
   const [mode, setMode] = useState<'still' | 'scroll'>('still')
   const [p, setP] = useState(1)
   const [manual, setManual] = useState(3)
   const [scratched, setScratched] = useState(false)
   const [enter, setEnter] = useState(1)
+  const [dayPick, setDayPick] = useState<{ d: number; p: number } | null>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -334,7 +598,7 @@ export function Scene() {
       const total = Math.max(1, r.height - vh)
       const np = clamp(-r.top / total)
       const ne = clamp((vh - r.top) / vh)
-      if (Math.abs(np - lastP) > 0.002) {
+      if (Math.abs(np - lastP) > 0.0012) {
         lastP = np
         setP(np)
       }
@@ -357,9 +621,15 @@ export function Scene() {
   }, [])
 
   const scroll = mode === 'scroll'
-  const x = p * STEPS.length
-  const step = scroll ? Math.min(STEPS.length - 1, Math.floor(x)) : manual
+  const x = p * ACTS
+  const step = scroll ? Math.min(ACTS - 1, Math.floor(x)) : manual
   const t = scroll ? clamp(x - step) : 1
+
+  // Dzien na osi: z przewijania, chyba ze odwiedzajacy sam go przeciagnal (do nastepnego ruchu strony).
+  const picked = dayPick && (!scroll || Math.abs(dayPick.p - p) < 0.012) ? dayPick.d : null
+  const scrollDay = step < 4 ? 1 : step > 4 ? PACK_DAYS : Math.round(1 + (PACK_DAYS - 1) * clamp((t - 0.08) / 0.8))
+  const day = picked ?? (scroll ? scrollDay : PACK_DAYS)
+  const pickDay = (d: number) => setDayPick({ d, p })
 
   const go = (i: number) => {
     if (!scroll) {
@@ -370,49 +640,68 @@ export function Scene() {
     if (!el) return
     const top = el.getBoundingClientRect().top + window.scrollY
     const total = el.offsetHeight - window.innerHeight
-    window.scrollTo({ top: top + (total * (i + 0.6)) / STEPS.length, behavior: 'smooth' })
+    window.scrollTo({ top: top + (total * (i + 0.6)) / ACTS, behavior: 'smooth' })
+    // Akty 5–7: po dojechaniu fokus trafia do kontrolki aktu (os dni, nazwa marki), zeby byla osiagalna z klawiatury.
+    if (i >= 4)
+      window.setTimeout(() => {
+        el.querySelector<HTMLElement>('.nk-panel input, .nk-panel a')?.focus({ preventScroll: true })
+      }, 900)
   }
+
+  const steps = (
+    <div className="nk-in">
+      <div className="nk-caps nk-lab">How it works · shown on a made-up brand</div>
+      <h2 className="nk-h2">Four moves, one pack.</h2>
+      <ol className="nk-steps">
+        {STEPS.map((s, i) => (
+          <li key={s.t} className={'nk-step' + (i === step ? ' is-on' : '')}>
+            <button type="button" className="nk-stepbtn" aria-current={i === step ? 'step' : undefined} onClick={() => go(i)}>
+              <span className="nk-n">0{i + 1}</span>
+              <span className="nk-t">{s.t}</span>
+              <span className="nk-d">
+                <span>{s.d}</span>
+              </span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p className="nk-alt" hidden={!(step === 1 && !scratched)}>
+        No pointer?{' '}
+        <button type="button" className="nk-link" onClick={() => setScratched(true)}>
+          Scratch today&rsquo;s card
+        </button>
+      </p>
+    </div>
+  )
 
   return (
     <div
       ref={wrap}
       className={'nk-scene ' + (scroll ? 'is-scroll' : 'is-still')}
       id="how"
+      data-act={scroll ? step : undefined}
       style={{ ['--p' as string]: scroll ? p : 1 }}
     >
       <div className="nk-stage">
         <div className="nk-scenehead">
-          <div className="nk-caps nk-lab">How it works · shown on a made-up brand</div>
-          <h2 className="nk-h2">Four moves, one pack.</h2>
-          <ol className="nk-steps">
-            {STEPS.map((s, i) => (
-              <li key={s.t} className={'nk-step' + (i === step ? ' is-on' : '')}>
-                <button
-                  type="button"
-                  className="nk-stepbtn"
-                  aria-current={i === step ? 'step' : undefined}
-                  onClick={() => go(i)}
-                >
-                  <span className="nk-n">0{i + 1}</span>
-                  <span className="nk-t">{s.t}</span>
-                  <span className="nk-d">
-                    <span>{s.d}</span>
-                  </span>
+          {!scroll || step < 4 ? steps : null}
+          {scroll && step === 4 ? <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" /> : null}
+          {scroll && step === 5 ? <BrandPanel t={t} id="nk-brand" /> : null}
+          {scroll && step === 6 ? <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" name={name} onName={onName} /> : null}
+          {scroll ? (
+            <nav className="nk-acts" aria-label="Scenes">
+              {ACT_NAMES.map((n, i) => (
+                <button key={n} type="button" aria-current={step === i ? 'step' : undefined} onClick={() => go(i)}>
+                  {n}
                 </button>
-              </li>
-            ))}
-          </ol>
+              ))}
+            </nav>
+          ) : null}
           {scroll ? (
             <div className="nk-bar" aria-hidden="true">
               <i />
             </div>
           ) : null}
-          <p className="nk-alt" hidden={!(step === 1 && !scratched)}>
-            No pointer?{' '}
-            <button type="button" className="nk-link" onClick={() => setScratched(true)}>
-              Scratch today&rsquo;s card
-            </button>
-          </p>
           <p className="nk-demo">
             {DEMO_BRAND} is a fictional brand invented for this demo. The screens show the mechanics, not a client.
           </p>
@@ -428,54 +717,134 @@ export function Scene() {
             <Phone
               step={step}
               t={t}
-              theme="paper"
+              theme={skin}
               scratched={scratched}
               onScratched={() => setScratched(true)}
               interactive
+              day={day}
+              brand={brand}
             />
           </div>
         </div>
       </div>
+      {scroll ? null : (
+        <>
+          <section className="nk-still" aria-labelledby="nk-rewards">
+            <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" />
+            <div className="nk-phonecol">
+              <Phone step={4} t={1} theme={skin} scratched day={day} brand={brand} />
+            </div>
+          </section>
+          <section className="nk-still" aria-labelledby="nk-brand">
+            <BrandPanel t={1} id="nk-brand" />
+            <div className="nk-phonecol">
+              <Phone step={5} t={1} theme={skin} scratched brand={brand} />
+            </div>
+          </section>
+          <section className="nk-still" aria-labelledby="nk-wl">
+            <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" name={name} onName={onName} />
+            <div className="nk-phonecol">
+              <Phone step={6} t={1} theme={skin} scratched brand={brand} />
+            </div>
+          </section>
+        </>
+      )}
     </div>
   )
 }
 
-/* ── white label: ten sam ekran, inna skora ──────────────────────────────── */
-const THEMES: { id: Theme; name: string; sw: string }[] = [
-  { id: 'night', name: 'Night', sw: '#14161A' },
-  { id: 'clay', name: 'Clay', sw: '#EFE6DA' },
-  { id: 'plain', name: 'Paper', sw: '#F7F5F0' },
-]
+/* ── calosc pod pierwszym ekranem: scena, „czego nie robi”, final z formularzem ── */
+const NEVER = ['No random rewards.', 'No health claims.', 'No hidden rules.'] as const
 
-export function WhiteLabel() {
-  const [theme, setTheme] = useState<Theme>('night')
+function brandFrom(raw: string) {
+  const m = raw
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, '')
+    .split(/[/?#:\s]/)[0]
+    .split('.')
+    .filter((l, i, all) => !(i < all.length - 1 && /^(www|shop|store|sklep|m)$/.test(l)))[0]
+    ?.replace(/[^a-z0-9-]/g, '')
+    .slice(0, 12)
+  return m ? m[0].toUpperCase() + m.slice(1) : ''
+}
+
+export function Story() {
+  const root = useRef<HTMLDivElement>(null)
+  const never = useRef<HTMLElement>(null)
+  const [skin, setSkin] = useState<Skin>('paper')
+  const [store, setStore] = useState('')
+  const [name, setName] = useState('')
+  const [seen, setSeen] = useState(true)
+
+  useEffect(() => {
+    const host = root.current?.closest<HTMLElement>('.nk')
+    if (!host) return
+    if (skin === 'paper') delete host.dataset.skin
+    else host.dataset.skin = skin
+  }, [skin])
+
+  useEffect(() => {
+    const el = never.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.webdriver) return
+    if (el.getBoundingClientRect().top < window.innerHeight) return
+    setSeen(false)
+    const io = new IntersectionObserver(
+      (es) => {
+        if (es.some((e) => e.isIntersecting)) {
+          setSeen(true)
+          io.disconnect()
+        }
+      },
+      { threshold: 0.35 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  const typed = brandFrom(store)
+
   return (
-    <div className="nk-wl">
-      <div>
-        <div className="nk-caps nk-lab">White label</div>
-        <h2 className="nk-h2">Your name on it, not mine.</h2>
-        <p className="nk-body">
-          Colors, type, wording and the reward list are settings, not a rebuild. The customer installs your
-          app; Nawyko is the engine underneath.
-        </p>
-        <div className="nk-swatches" role="group" aria-label="Preview a theme">
-          {THEMES.map((th) => (
-            <button
-              key={th.id}
-              type="button"
-              className="nk-sw"
-              aria-pressed={theme === th.id}
-              onClick={() => setTheme(th.id)}
-            >
-              <i style={{ background: th.sw }} />
-              {th.name}
-            </button>
+    <div ref={root}>
+      <Scene skin={skin} onSkin={setSkin} name={name} onName={setName} />
+      <p className="nk-demo nk-demo-after">
+        {DEMO_BRAND} is a fictional brand invented for this demo. The screens show the mechanics, not a client.
+      </p>
+
+      <section ref={never} className={'nk-never' + (seen ? ' is-in' : '')} aria-labelledby="nk-never">
+        <div className="nk-caps nk-lab">What it never does</div>
+        <h2 className="nk-never-h" id="nk-never">
+          {NEVER.map((line, i) => (
+            <span key={line} style={{ ['--i' as string]: i }}>
+              {line}
+            </span>
           ))}
+        </h2>
+        <p className="nk-one">Every reward is fixed before the customer starts. The app counts days and nothing else.</p>
+      </section>
+
+      <section className="nk-final" id="enquiry" aria-labelledby="nk-ask">
+        <div className="nk-final-copy">
+          <div className="nk-caps nk-lab">Enquiry</div>
+          <h2 className="nk-h2" id="nk-ask">
+            Would this fit your product?
+          </h2>
+          <p className="nk-one">
+            Supplements, skincare, pet food, coffee — anything bought again on a rhythm.{' '}
+            <span className="nk-desk">Type your store and watch the phone.</span>
+          </p>
+          <Enquiry onStore={setStore} />
         </div>
-      </div>
-      <div className="nk-phonecol">
-        <Phone step={2} t={1} theme={theme} scratched fixedDays={17} />
-      </div>
+        <div className="nk-phonecol nk-final-phone">
+          <Phone step={3} t={1} theme={skin} scratched brand={typed || name.trim().slice(0, 14) || 'Your brand'} />
+          <p className="nk-fine">
+            {typed
+              ? 'That name comes from the field you just typed in. Nothing is sent until you press Send.'
+              : 'The name on the phone is a placeholder until you type your store.'}
+          </p>
+        </div>
+      </section>
     </div>
   )
 }
@@ -485,7 +854,12 @@ const CONSENT_CONTACT = 'I agree to be contacted about this enquiry'
 const CONSENT_MARKETING =
   'Occasional email from me — notes on reorder timing, new tools I build, and what I learn working on FMCG stores. Unsubscribe any time.'
 
-export function Enquiry({ form = 'nawyko', page = '/nawyko', title = 'Ask about Nawyko' }: { form?: string; page?: string; title?: string } = {}) {
+export function Enquiry({
+  form = 'nawyko',
+  page = '/nawyko',
+  title = 'Ask about Nawyko',
+  onStore,
+}: { form?: string; page?: string; title?: string; onStore?: (v: string) => void } = {}) {
   const [state, setState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle')
   const errRef = useRef<HTMLParagraphElement>(null)
 
@@ -541,7 +915,7 @@ export function Enquiry({ form = 'nawyko', page = '/nawyko', title = 'Ask about 
       <label className="nk-f" htmlFor="nk-store">
         Your store URL
       </label>
-      <input id="nk-store" name="store" type="text" inputMode="url" autoComplete="url" placeholder="yourstore.com" required maxLength={300} />
+      <input id="nk-store" name="store" type="text" inputMode="url" autoComplete="url" placeholder="yourstore.com" required maxLength={300} onChange={onStore ? (e) => onStore(e.currentTarget.value) : undefined} />
       <label className="nk-f" htmlFor="nk-email">
         Your email
       </label>

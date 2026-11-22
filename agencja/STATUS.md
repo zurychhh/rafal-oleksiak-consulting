@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 21.11.2026, 19:38–20:10 (przebieg 2). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 22.11.2026, 09:38–10:25 (przebieg 3). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 ## PRIORYTET od Rafała (22.11.2026 09:07, po obejrzeniu strony lokalnie; przekazuje doradca) — przeczytaj przed kolejką
@@ -15,6 +15,9 @@ obecnym układzie strony** i prosi o bardzo krytyczne podejście do całości or
   nie styl:** wszystko poniżej sceny z telefonem to „nagłówek po lewej + numerowana lista po prawej” — dokument, nie pokaz.
 - Zasada dla całej strony od teraz: **jedna myśl = jedna scena, w której produkt coś robi.** Najwyżej ok. 12 słów na scenę
   plus jedno zdanie pod spodem. Każdy akapit, którego nie da się pokazać, wylatuje albo idzie do zwijanego „szczegóły”.
+
+**Stan po przebiegu 3 (22.11):** punkt 1 i punkt 2 zbudowane w pierwszej wersji i po recenzjach (szczegóły w „Dla Rafała”);
+następny jest punkt 3 (przegląd układu całej strony, `/lab/a` i `/lab/b`), potem punkt 4.
 
 ### Kolejka (zastępuje poprzednią; w tej kolejności)
 1. **`/nawyko` od „Known in advance” w dół — przebudowa na sceny, nie poprawki.** Telefon zostaje nicią całej strony
@@ -51,51 +54,69 @@ obecnym układzie strony** i prosi o bardzo krytyczne podejście do całości or
 
 ## Dla Rafała
 
-**Co.** Jest nowa podstrona **`/calculator`** — kalkulator „ile jest wart jeden dzień między zamówieniami”.
-Odwiedzający wpisuje cztery liczby ze swojego sklepu (klienci kupujący ponownie, średnia wartość zamówienia, dni między
-zamówieniami, na ile dni starcza opakowanie) i przesuwa suwak docelowego odstępu. Na rysunku „jeden klient, jeden rok”
-widzi kreski zamówień, czarne paski dni z produktem i czerwono kreskowane dni, w których produkt się skończył, a zamówienia
-jeszcze nie ma — przy przesuwaniu suwaka czerwień się kurczy, zamówień w roku przybywa, a wielka liczba pod spodem rośnie.
-Do tego: ile jest wart jeden dzień, jaki rabat na ponowne zamówienie jeszcze się opłaca, górna granica. Drugi, mniejszy
-kalkulator: ilu więcej nowych klientów na stu wraca po drugi zakup (siatka 100 kratek). Niżej założenia, trzy sprawdzone
-punkty odniesienia ze źródłem i zdaniem „czego ta liczba nie mówi”, przejścia do `/tool` i `/nawyko`, formularz.
-Liczby startowe są wyraźnie oznaczone jako przykład; nic z kalkulatora nie jest nigdzie wysyłane.
+**Co obejrzeć (lokalnie: `git checkout agencja/strona && npm ci && npm run build && npm start`).**
 
-Na `/nawyko`: drugie podejście recenzenta (9 z 10 punktów), zdrapka sprawdzona dotykiem w emulacji iPhone’a (seria rośnie
-z 8 na 9, strona się przy tym nie przewija), scena przestała podskakiwać po pojawieniu się paska cookies, usunięte
-„within 24 hours” z potwierdzenia formularza (nie umiem tego potwierdzić — patrz decyzja 8).
+1. **`/nawyko` — od „Known in advance” w dół to teraz sceny, nie listy.** Telefon nie znika po czwartym kroku: przypięta
+   scena ma siedem aktów. Akt 5: oś 30 dni — znacznik jedzie z przewijaniem, można go przeciągnąć palcem albo strzałkami,
+   nagrody odpalają się w swoich dniach, telefon pokazuje ten sam dzień i kod na kolejne opakowanie. Akt 6: telefon kończy
+   opakowanie („30 doses, 34 days”, cztery pominięte dni) i staje się jedną czerwoną kropką, a reszta kropek składa się
+   w rozkład „którego dnia opakowanie naprawdę się kończy” obok dnia z etykiety (podpis: ilustracja, zmyślone dane).
+   Akt 7: wpisujesz nazwę marki i wybierasz skórę — telefon dostaje tę nazwę (także w kodzie rabatowym), a cała strona
+   zmienia kolory. Niżej: „No random rewards. No health claims. No hidden rules.” dużym krojem w jednej scenie i finał —
+   formularz obok telefonu, który bierze nazwę z wpisywanego adresu sklepu. Zniknęły obie numerowane listy i trzy kolumny.
+2. **`/calculator` — zbudowany od nowa.** Jedno pytanie, jeden ekran, trzy pola, jeden suwak, jedna duża czerwona liczba,
+   pod nią skąd się bierze („+1.01 orders × 120 × 4,000 customers”) i ile jest wart jeden dzień. Pasek roku jednego
+   klienta: kreski zamówień zsuwają się przy skracaniu odstępu, nowe dochodzą na czerwono. Jeden przycisk odsłania
+   formularz, jeden link prowadzi do `/tool`. Cała strona ma ok. 150 słów (było kilka ekranów). Drugi scenariusz, sekcja
+   założeń, źródła i punkty odniesienia usunięte; założenia to jedna zwijana linia.
 
-Na całej stronie: z każdej trasy zniknęło pobieranie nieużywanego zdjęcia 186 kB (z audytu) — każda podstrona jest
-lżejsza o ok. 180 kB.
-
-**Dlaczego biznesowo.** Kalkulator to pierwszy na stronie powód, żeby marka FMCG zostawiła zapytanie, zanim cokolwiek
-kupi: sama wylicza sobie stawkę (ile kosztuje ją każdy pusty dzień), a pod wynikiem ma przycisk do rozmowy. Jednocześnie
-uczy języka, którym sprzedajesz — odstęp, dni zapasu, drugi zakup — i naturalnie prowadzi do narzędzia i do Nawyko.
+**Dlaczego biznesowo.** Na `/nawyko` moment sprzedażowy („dostajesz prawdziwą datę ponownego zamówienia”) jest teraz
+pokazany, a nie opisany, a „Twoja nazwa, nie moja” dzieje się na oczach odwiedzającego. Kalkulator w 30 sekund daje
+marce jej własną stawkę i jeden krok do rozmowy; dokładny pomiar zostaje w `/tool`.
 
 **Dowód.**
-- Zrzuty kalkulatora: `agencja/podglad/kalkulator-1440-pierwszy-ekran.png`, `kalkulator-1440-odstep.png`,
-  `kalkulator-1440-drugi-zakup.png`, `kalkulator-1440-wlasne-liczby.png`, `kalkulator-1440-cala.png` i te same dla `390`
-  (plus `kalkulator-360-wlasne-liczby.png`, `kalkulator-390-wielkie.png` — skrajnie duże liczby).
-- Zrzuty `/nawyko` po poprawce sceny: `nawyko-1440-zdrapka.png`, `nawyko-1440-nagroda.png`, `nawyko-1024-nagroda.png`.
-- Bramki (lokalnie, 21.11, po ostatniej zmianie): build OK · `tsc --noEmit` OK · lint 0 błędów, 1 ostrzeżenie (tyle samo
-  co przed) · `qa.js` PASS na `/calculator`, `/nawyko`, `/`, `/tool` (bez klucza AI — panele schowane), `/stop` ·
-  `content-rules` PASS · `tool-rules` OK · `ship-compare` PASS · test wzorów `scripts/calculator-model.test.mjs` OK.
-  Formularz lokalnie: 503 (brak kluczy — oczekiwane). Przesunięcie układu (CLS): kalkulator 0,002 (pomiar recenzenta);
-  `/nawyko` 0,016 na 1024 (było 0,059) i 0,010 na 1440 (było 0,033). JS trasy `/calculator` o ok. 3% większy niż `/nawyko`
-  i mniejszy niż `/tool` (pomiar transferu, nie Lighthouse — Lighthouse w tym przebiegu nie uruchamiałem).
-- Niezależne recenzje: `agencja/recenzje/02-kalkulator.md` — pierwsze podejście 10/11 (brak kroku pod wynikiem),
-  po poprawkach **11/11**, 13 z 14 usterek naprawionych; z siedmiu nowych uwag drugiego podejścia poprawione wszystkie
-  poza jedną kosmetyczną (ułamek dnia w polu odstępu zaokrągla się do pełnych dni — jest to napisane przy polu).
-  **Tej ostatniej rundy poprawek recenzent już nie oglądał**; przeszły bramki i mój przegląd zrzutów.
-  `agencja/recenzje/01-nawyko-podejscie-2.md` — 9/10.
-- Źródła trzech liczb na stronie otwarte ponownie 21.11 (`agencja/research/kalkulator-weryfikacja.md`): Recharge
-  i Ipsos potwierdzone; badanie o aplikacjach (Marketing Science 2019) potwierdzone częściowo, więc z tekstu wypadło
-  „w USA” i opis branży. Narzędzie odczytu zwraca tylko fragmenty stron — przed produkcją kliknij trzy linki sam (5 minut).
-- Podgląd Vercel: status buildu da się odczytać dopiero po pushu, a pushuję raz na przebieg (limit buildów), więc
-  wynik tego pusha jest w wiadomości końcowej przebiegu i trafi tu na początku następnego. Poprzedni push (97db8d3)
-  dostał od Vercela `failure` z powodu limitu buildów planu.
+- Zrzuty `/nawyko`: `agencja/podglad/nawyko3-1440-a5-mid.png`, `-a6-end.png`, `-a7.png`, `-a7-night.png`,
+  `-never-night.png` i te same z `nawyko3-390x844-…` (finał z wpisaną nazwą obejrzałem, zrzutu nie zapisuję w repo).
+  **Nagrania przewijania nie zrobiłem** (zabrakło czasu); recenzent oceniał serię zrzutów i pomiary, nie film.
+- Zrzuty kalkulatora: `agencja/podglad/kalkulator2-1440-a.png`, `kalkulator2-390-a.png` (stan końcowy),
+  `kalkulator2-1440-b.png`, `kalkulator2-390-b.png` (sprzed ostatniej poprawki podpisów).
+- Bramki lokalnie 22.11 po ostatniej zmianie: build OK · `tsc --noEmit` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) ·
+  `qa.js` PASS na `/nawyko` i `/calculator` (po ostatniej zmianie) oraz na `/`, `/tool` (bez klucza AI), `/stop`
+  (uruchomione przed dwiema ostatnimi poprawkami, które tych tras nie dotykają) · `content-rules` PASS ·
+  `tool-rules` OK · `ship-compare` PASS · `calculator-model.test.mjs` OK. Lighthouse nieuruchamiany.
+- Niezależne recenzje: `agencja/recenzje/03-nawyko-sceny.md` — pierwsze podejście: 10 z 12 punktów, niezaliczone
+  płynność (skok paska postępu między aktami) i klawiatura (niewidoczny „Skip to content”, akty 5–7 nieosiągalne).
+  Poprawione; drugie podejście (`agencja/recenzje/04-kalkulator-v2.md`, część B): pasek stoi w miejscu, link widoczny,
+  przesunięcie układu całej strony 0,0098, wpisana nazwa trafia na telefon; klawiatura „częściowo” — po tej uwadze
+  dopisałem przeniesienie fokusu do kontrolki aktu (sprawdzone jednym testem dla aktu 7, **bez trzeciej recenzji**).
+  Kalkulator: 10 z 11 punktów; niezaliczone „liczba wynika z paska” (pasek liczył pełne zamówienia, liczba ułamki) —
+  poprawione (pasek pokazuje „6.3 → 7.3 orders”), dopisane zdanie „A ceiling, not a forecast” i wartość jednego dnia.
+  **Tych trzech poprawek kalkulatora recenzent już nie oglądał.**
+- Waga: skrypty `/nawyko` 148 kB wobec 152 kB `/calculator` i 177 kB `/tool` (pomiar recenzenta, transfer).
+- Podgląd Vercel: wynik tego pusha podaję w wiadomości końcowej; limit wdrożeń konta trwa do ok. 19:10 22.11.
 
 ## Czeka na Rafała
+
+**Nowe z przebiegu 3:**
+
+A. **Dni nagród na osi (`/nawyko`, akt 5).** Wpisałem przykład: darmowa dostawa w dniu 7, pieczątka i kod na kolejne
+   opakowanie w dniu 24, cashback przy następnym zamówieniu — z podpisem „Example” i zdaniem, że dni ustawia marka.
+   Dzień 7 jest ode mnie (propozycja, do wyrzucenia). Warianty: zostawić / podać prawdziwe dni z pilotażu / oś bez dni
+   poza 24. Rekomendacja: podaj prawdziwe progi, jeśli wolno je pokazać. Bez decyzji zostaje przykład.
+B. **„Pack finished — 30 doses, 34 days” na telefonie (akt 6).** To ekran, którego aplikacja może dziś nie mieć;
+   pokazuje, skąd marka bierze rytm zużycia. Warianty: zostawić jako ilustrację / zastąpić ekranem, który istnieje.
+   Rekomendacja: potwierdź jednym słowem, czy aplikacja liczy dni do końca opakowania; jeśli nie — zmienię ekran.
+C. **Wpisywana nazwa marki (akt 7 i finał).** Odwiedzający wpisuje dowolną nazwę i widzi ją na telefonie; nic nie jest
+   wysyłane ani zapisywane. Ryzyko: ktoś wpisze cudzą markę i zrobi zrzut. Rekomendacja: zostawić — to najmocniejszy
+   moment strony, a nazwa pochodzi od odwiedzającego, nie od nas.
+D. **Kalkulator pokazuje górną granicę.** Wynik zakłada, że każdy powracający klient skróci odstęp; pod liczbą stoi
+   „A ceiling, not a forecast”. Warianty: zostawić / dodać drugie pole „jaka część klientów się przesunie”.
+   Rekomendacja: zostawić trzy pola (prostota), bo zdanie jest widoczne. Punkty 2–4 poniżej (stara wersja
+   kalkulatora) są nieaktualne poza nazwą adresu i pytaniem, czy zapytanie ma nieść liczby.
+E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The customer installs your app” też — nowy akt 7
+   mówi tylko „Type a brand name and pick a skin”. Punkt 6 poniżej dotyczy już tylko cashbacku i darmowej dostawy.
+
+**Wcześniejsze (nadal otwarte):**
 
 1. **Limit buildów na Vercelu blokuje podgląd** (bez zmian od przebiegu 1). Warianty: (a) poczekać na reset limitu,
    (b) wyłączyć buildy podglądu dla gałęzi zadań, które pushują co godzinę, (c) plan Pro (wydatek). Rekomendacja: (b).
@@ -133,15 +154,16 @@ uczy języka, którym sprzedajesz — odstęp, dni zapasu, drugi zakup — i nat
 
 ## Następne (kolejka)
 
-1. (c) Nawigacja i oferta aplikacji w strukturze strony — po decyzji 5: dokładka w `ship-design`, wspólny nagłówek
-   `/nawyko` ↔ `/calculator` ↔ `/tool`, maile dla `form=nawyko` i `form=calculator`.
-2. Kalkulator, druga iteracja: pole wyboru „dołącz liczby” (po decyzji 3), własna karta OG dla `/calculator` i `/nawyko`,
-   wydzielenie formularza `Enquiry` do osobnego pliku (dziś `/calculator` ładuje też kod sceny Nawyko), Lighthouse.
-3. `/nawyko`, reszta z recenzji 2: lista nagród w kroku 4 na 360×640 (dziś ukryta), kolejność Tab na telefonie
-   (widoczny tylko aktywny krok), drobne pływanie bloku kroków (3–4 px przy zmianie kroku).
-4. (d) Z audytu: `try/catch` + `error.tsx`/`not-found.tsx` dla `/blog` (dziś 500 przy niedostępnym API), `metadataBase`,
-   usunięcie `preconnect`/`dns-prefetch` do hostów, do których nic nie idzie (najpierw potwierdzić pomiarem).
-5. Potem pętla: ocena (AI/SEO, użyteczność biznesowa, UX, wow bez kiczu) → najwyżej dwie poprawki → ponowne sprawdzenie.
+1. Punkt 3 priorytetu: krytyczny przegląd układu całej strony + dwa warianty pierwszego ekranu i nawigacji (`/lab/a`,
+   `/lab/b`, `noindex`).
+2. `/nawyko`, reszta z recenzji 03: nagranie przewijania 390 i 1440 do `agencja/podglad/`; telefon z nazwą także
+   w finale na telefonie (dziś ukryty poniżej 860 px); akt 6 większy, z odczytem dnia po najechaniu; lista pod osią
+   w akcie 5 dubluje telefon (zostawić oś + jedno zdanie); pasek cookies poza skórą; górna część (wejście telefonu
+   z głębi, paralaksa warstw) — nietknięta w tym przebiegu; pomiar kl./s na telefonie.
+3. Kalkulator: trzecie spojrzenie recenzenta na ostatnie poprawki; pierwszy ekran 390×844 z paskiem cookies; „1 orders”;
+   obrys fokusu suwaka nachodzi na podpisy; komunikat przy odstępie 7 dni; Safari/Firefox.
+4. Punkt 4 priorytetu: `agencja/narzedzia.md` i pierwsze nowe narzędzie.
+5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
 
@@ -168,15 +190,32 @@ uczy języka, którym sprzedajesz — odstęp, dni zapasu, drugi zakup — i nat
   po poprawkach to kolejne ~3,5 min i znajduje rzeczy, których pierwsze nie widziało (przecinek tysięcy czytany jako ułamek).
 - Pola liczbowe: „4,000” to cztery tysiące, nie cztery — separator przed dokładnie trzema cyframi traktować jako tysiące.
 
+- `cmd && export X && (...) &` wysyła w tło CAŁĄ listę razem z `export` — zmienna nie trafia do dalszych poleceń.
+  `PW_CHROMIUM` ustawiać w osobnej linii przed bramkami.
+- Równoległy budujący w osobnym worktree (`git worktree add`, własny `npm ci`, własny port, zabijanie serwera po porcie,
+  nie `pkill -f next-server`) działa: ~7 min na kalkulator, w tym czasie recenzent oglądał `/nawyko` na porcie 3000.
+  Przeniesienie: `git checkout <gałąź> -- <ścieżki>`.
+- Recenzent z limitem „8 minut” potrzebował 15 (zawieszony skrypt). Dawać twardy limit czasu na skrypt (60 s) i liczbę
+  wywołań — drugi recenzent z takim limitem zmieścił się w 5 minutach.
+- Elementy wstawiane na czas aktu (panel) nie mogą wypychać paska postępu: wszystko, co stałe, przypinać absolutnie
+  do sceny. Kontrolki aktu istnieją w DOM tylko w swoim akcie — po skoku z nawigacji scen trzeba przenieść fokus.
+- Reguła `.nk a{color:inherit}` bije pojedynczą klasę linku — kolor linku ustawiać przez `.nk a.klasa`.
+- Podpis „to przykład” musi być przy samym rysunku (etykieta w rogu), nie w przypisie pod nim: przypis na telefonie
+  chowa się pod paskiem cookies.
+
 ## Decyzje podjęte samodzielnie (odwracalne)
 
 - `/nawyko` jest trasą pisaną ręcznie (React + CSS), nie eksportem Claude Design — żeby dało się ją rozwijać z chmury.
 - Scena sterowana postępem przewijania w JS (jeden nasłuch, `requestAnimationFrame`), nie natywnymi CSS scroll-driven
   animations: zdrapka i licznik i tak wymagają stanu w JS, a zachowanie jest identyczne we wszystkich przeglądarkach.
-- Czerwień tylko na liczniku serii w scenie (zmierzona wartość); drugi telefon (white label) jej nie używa.
+- Czerwień tylko jako zmierzona wartość: licznik na telefonie, znacznik dnia na osi, kropka „ten telefon” na wykresie.
 - `/nawyko` dopisane do `sitemap.ts`.
 - `/calculator` pisany ręcznie na stylach `/nawyko`; zero nowych bibliotek; wynik liczony tylko w przeglądarce.
 - Wartości startowe kalkulatora to oznaczony przykład, nie puste pola (decyzja 2 czeka na potwierdzenie).
 - Suwak odstępu jest odwrócony (w prawo = krótszy odstęp = więcej przychodu), z opisem kierunku dla czytnika.
 - Usunięty `preload` nieużywanego zdjęcia 186 kB z `app/layout.tsx` (poprawka techniczna z audytu, P1-3).
 - Scena `/nawyko` na desktopie przypięta od góry zamiast wyśrodkowana (mniej przesunięć układu).
+- Przebieg 3: scena `/nawyko` ma 7 aktów (780vh); akt 7 pokazuje ekran nagrody z nazwą marki zamiast siatki serii;
+  skóry to zmienne CSS na `.nk[data-skin]`; nota o zmyślonej marce stoi pod sceną na każdej szerokości.
+- Przebieg 3: kalkulator ograniczony do odstępu 7–365 dni, suwak od połowy obecnego odstępu; przycisk rozmowy to
+  `<details>` (działa bez JS). Stary model (`gapScenario`, `secondScenario`) usunięty razem z drugim scenariuszem.
