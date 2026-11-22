@@ -30,14 +30,18 @@ const START_DAY = 9
 const GOAL_DAY = 24
 const PACK_DAYS = 30
 
+const NOOP = () => {}
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v))
 const ease = (t: number) => 1 - Math.pow(1 - t, 3)
 
 type Theme = 'paper' | 'night' | 'clay'
 
 /* ── zdrapka ─────────────────────────────────────────────────────────────── */
-function Scratch({ gone, onDone }: { gone: boolean; onDone: () => void }) {
+function Scratch({ gone, onDone, auto }: { gone: boolean; onDone: () => void; auto?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null)
+  const crumbs = useRef<HTMLCanvasElement>(null)
+  const finger = useRef<HTMLDivElement>(null)
+  const userTook = useRef(false)
   const last = useRef<{ x: number; y: number } | null>(null)
   const moves = useRef(0)
 
@@ -85,6 +89,104 @@ function Scratch({ gone, onDone }: { gone: boolean; onDone: () => void }) {
     return () => ro.disconnect()
   }, [paint])
 
+  /* Zdrapuje sie sama, jesli odwiedzajacy nie zrobi tego pierwszy: slad palca zygzakiem,
+     opadajace drobiny, potem licznik serii. Wlasne zdrapanie przerywa animacje. */
+  useEffect(() => {
+    if (!auto || gone || userTook.current) return
+    const c = ref.current
+    const k = crumbs.current
+    const g = c?.getContext('2d')
+    const kg = k?.getContext('2d')
+    if (!c || !g || !k || !kg) return
+    const r = c.getBoundingClientRect()
+    const sx = c.width / Math.max(1, r.width)
+    k.width = c.width
+    k.height = Math.round(c.height * 1.7)
+    const W = c.width
+    const H = c.height
+    const pts: { x: number; y: number }[] = []
+    const rows = 5
+    for (let i = 0; i <= rows; i++) {
+      const y = H * (0.14 + (0.72 * i) / rows)
+      pts.push({ x: W * (i % 2 ? 0.9 : 0.1), y })
+    }
+    const seg = pts.slice(1).map((q, i) => Math.hypot(q.x - pts[i].x, q.y - pts[i].y))
+    const len = seg.reduce((a, b) => a + b, 0)
+    const at = (u: number) => {
+      let d = u * len
+      for (let i = 0; i < seg.length; i++) {
+        if (d <= seg[i] || i === seg.length - 1) {
+          const f = seg[i] ? Math.min(1, d / seg[i]) : 0
+          return { x: pts[i].x + (pts[i + 1].x - pts[i].x) * f, y: pts[i].y + (pts[i + 1].y - pts[i].y) * f }
+        }
+        d -= seg[i]
+      }
+      return pts[pts.length - 1]
+    }
+    type Crumb = { x: number; y: number; vx: number; vy: number; s: number; a: number }
+    const bits: Crumb[] = []
+    const DUR = 1250
+    const t0 = performance.now()
+    let prev = at(0)
+    let raf = 0
+    let done = false
+    let doneAt = 0
+    const fg = finger.current
+    const frame = (now: number) => {
+      if (userTook.current) {
+        if (fg) fg.style.opacity = '0'
+        return
+      }
+      const u = Math.min(1, (now - t0) / DUR)
+      const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2
+      const pos = at(e)
+      g.globalCompositeOperation = 'destination-out'
+      g.lineCap = 'round'
+      g.lineJoin = 'round'
+      g.lineWidth = W * 0.22
+      g.beginPath()
+      g.moveTo(prev.x, prev.y)
+      g.lineTo(pos.x + 0.01, pos.y + 0.01)
+      g.stroke()
+      g.globalCompositeOperation = 'source-over'
+      if (u < 1)
+        for (let j = 0; j < 3; j++)
+          bits.push({ x: pos.x, y: pos.y, vx: (Math.random() - 0.5) * 3 * sx, vy: -Math.random() * 2 * sx, s: (1.5 + Math.random() * 2.5) * sx, a: 1 })
+      prev = pos
+      kg.clearRect(0, 0, k.width, k.height)
+      for (const b of bits) {
+        b.vy += 0.35 * sx
+        b.x += b.vx
+        b.y += b.vy
+        b.a -= 0.012
+        if (b.a <= 0) continue
+        kg.globalAlpha = b.a
+        kg.fillStyle = '#A9A79F'
+        kg.fillRect(b.x, b.y, b.s, b.s)
+      }
+      kg.globalAlpha = 1
+      if (fg) {
+        fg.style.opacity = u < 1 ? '1' : '0'
+        fg.style.transform = `translate(${pos.x / sx}px, ${pos.y / sx}px)`
+      }
+      if (u >= 1 && !done) {
+        done = true
+        doneAt = now
+      }
+      if (done && now - doneAt > 380) {
+        onDone()
+        return
+      }
+      raf = requestAnimationFrame(frame)
+    }
+    raf = requestAnimationFrame(frame)
+    return () => {
+      cancelAnimationFrame(raf)
+      kg.clearRect(0, 0, k.width, k.height)
+      if (fg) fg.style.opacity = '0'
+    }
+  }, [auto, gone, onDone])
+
   const cleared = () => {
     const c = ref.current
     const g = c?.getContext('2d')
@@ -126,10 +228,12 @@ function Scratch({ gone, onDone }: { gone: boolean; onDone: () => void }) {
   }
 
   return (
+    <>
     <canvas
       ref={ref}
       className={'nk-canvas' + (gone ? ' is-gone' : '')}
       onPointerDown={(e) => {
+        userTook.current = true
         e.currentTarget.setPointerCapture(e.pointerId)
         last.current = null
         draw(e)
@@ -145,6 +249,9 @@ function Scratch({ gone, onDone }: { gone: boolean; onDone: () => void }) {
         last.current = null
       }}
     />
+    <canvas ref={crumbs} className="nk-crumbs" aria-hidden="true" />
+    <div ref={finger} className="nk-finger" aria-hidden="true" />
+    </>
   )
 }
 
@@ -168,6 +275,7 @@ function Phone({
   scratched,
   onScratched,
   interactive,
+  autoScratch,
   fixedDays,
   day = PACK_DAYS,
   brand = DEMO_BRAND,
@@ -178,6 +286,7 @@ function Phone({
   scratched: boolean
   onScratched?: () => void
   interactive?: boolean
+  autoScratch?: boolean
   fixedDays?: number
   day?: number
   brand?: string
@@ -185,7 +294,7 @@ function Phone({
   const view = step === 6 ? 3 : step
   const confirmed = step > 0 || t > 0.55
   const scan = step > 0 ? 1 : clamp(t / 0.5)
-  const revealed = scratched || step > 1 || (step === 1 && t > 0.8)
+  const revealed = scratched || step > 1 || (step === 1 && t > 0.94)
   const days =
     fixedDays ??
     (step === 6
@@ -230,13 +339,14 @@ function Phone({
               <b>Day {START_DAY}</b>
               <small>Done</small>
             </div>
-            {interactive ? <Scratch gone={revealed} onDone={onScratched ?? (() => {})} /> : null}
+            {interactive ? <Scratch gone={revealed} auto={autoScratch} onDone={onScratched ?? NOOP} /> : null}
           </div>
           <div className="nk-hint">{revealed ? 'Ticked. See you tomorrow.' : 'One card a day. Drag across it.'}</div>
           <div className={'nk-mini' + (revealed ? ' is-up' : '')}>
             <span>Streak</span>
             <span>
-              <b>{revealed ? START_DAY : START_DAY - 1}</b> days
+              <b key={revealed ? 'y' : 'n'}>{revealed ? START_DAY : START_DAY - 1}</b> days
+              {revealed ? <i className="nk-plus">+1</i> : null}
             </span>
           </div>
         </div>
@@ -377,9 +487,12 @@ export function DayStrip() {
 function RewardsPanel({ day, onDay, id }: { day: number; onDay: (d: number) => void; id: string }) {
   return (
     <div className="nk-panel nk-in">
-      <div className="nk-caps nk-lab">Rewards</div>
+      <div className="nk-caps nk-lab">
+        <span className="nk-who">For your customer</span>
+        <span className="nk-labrest">Rewards</span>
+      </div>
       <h2 className="nk-h2" id={id}>
-        Known in advance. Never random.
+        Every reward is listed from day one.
       </h2>
       <p className="nk-one">Drag the day. Every reward sits on a date the customer saw on day one.</p>
       <div className="nk-axis">
@@ -451,9 +564,12 @@ function BrandPanel({ t, id }: { t: number; id: string }) {
   const marks = t > 0.72
   return (
     <div className="nk-panel nk-in">
-      <div className="nk-caps nk-lab">For the brand</div>
+      <div className="nk-caps nk-lab">
+        <span className="nk-who">For you</span>
+        <span className="nk-labrest">What the brand sees</span>
+      </div>
       <h2 className="nk-h2" id={id}>
-        One phone is a habit. All of them are your reorder date.
+        See the day each pack really runs out.
       </h2>
       <p className="nk-one">
         Each finished pack is a dot. Together they show the day a pack really ends — not the day the label assumes.
@@ -524,7 +640,10 @@ function SkinPanel({
 }) {
   return (
     <div className="nk-panel nk-in">
-      <div className="nk-caps nk-lab">White label</div>
+      <div className="nk-caps nk-lab">
+        <span className="nk-who">Under your brand</span>
+        <span className="nk-labrest">White label</span>
+      </div>
       <h2 className="nk-h2" id={id}>
         Your brand. Your colours. Your app.
       </h2>
@@ -556,6 +675,12 @@ function SkinPanel({
 
 /* ── scena przypieta do przewijania ──────────────────────────────────────── */
 const ACTS = 7
+/* Akt zdrapki trwa dluzej niz inne: to najwazniejszy moment strony. */
+const ACT_W = [1, 1.9, 1, 1, 1, 1, 1.1]
+const ACT_AT = ACT_W.map((_, i) => ACT_W.slice(0, i).reduce((a, b) => a + b, 0))
+const ACT_TOT = ACT_W.reduce((a, b) => a + b, 0)
+/* Rozdzialy: jak to dziala (klient) → dla marki → pod Twoja marka. Telefon zmienia strone miedzy rozdzialami. */
+const CH_OF = [0, 0, 0, 0, 0, 1, 2]
 const ACT_NAMES = ['Confirm', 'Scratch', 'Streak', 'Reward', 'Rewards by day', 'Brand view', 'Your name'] as const
 
 function Scene({
@@ -579,6 +704,7 @@ function Scene({
   const [scratched, setScratched] = useState(false)
   const [enter, setEnter] = useState(1)
   const [dayPick, setDayPick] = useState<{ d: number; p: number } | null>(null)
+  const onScratched = useCallback(() => setScratched(true), [])
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -621,9 +747,35 @@ function Scene({
   }, [])
 
   const scroll = mode === 'scroll'
-  const x = p * ACTS
-  const step = scroll ? Math.min(ACTS - 1, Math.floor(x)) : manual
-  const t = scroll ? clamp(x - step) : 1
+  const x = p * ACT_TOT
+  let found = 0
+  for (let i = 0; i < ACTS; i++) if (x >= ACT_AT[i]) found = i
+  const step = scroll ? found : manual
+  const t = scroll ? clamp((x - ACT_AT[found]) / ACT_W[found]) : 1
+  const ch = CH_OF[step] ?? 0
+  const [swung, setSwung] = useState(false)
+  const lastCh = useRef(0)
+  useEffect(() => {
+    if (ch !== lastCh.current) {
+      lastCh.current = ch
+      setSwung(true)
+    }
+  }, [ch])
+
+  // Zdrapka: jesli odwiedzajacy nie zdrapie sam w ok. 1,5 s od wejscia w akt, karta zdrapuje sie sama.
+  // Kto przewija szybko (polowa aktu), dostaje animacje od razu.
+  const [autoS, setAutoS] = useState(false)
+  useEffect(() => {
+    if (!scroll || step !== 1 || scratched || autoS) return
+    const id = window.setTimeout(() => {
+      // Kto przechodzi scene klawiatura, sam decyduje: przycisk zastepczy nie znika mu spod fokusu.
+      const a = document.activeElement
+      if (a && a !== document.body && wrap.current?.contains(a) && a.matches(':focus-visible')) return
+      setAutoS(true)
+    }, 1500)
+    return () => window.clearTimeout(id)
+  }, [scroll, step, scratched, autoS])
+  const autoNow = autoS || (scroll && step === 1 && t > 0.45)
 
   // Dzien na osi: z przewijania, chyba ze odwiedzajacy sam go przeciagnal (do nastepnego ruchu strony).
   const picked = dayPick && (!scroll || Math.abs(dayPick.p - p) < 0.012) ? dayPick.d : null
@@ -640,8 +792,12 @@ function Scene({
     if (!el) return
     const top = el.getBoundingClientRect().top + window.scrollY
     const total = el.offsetHeight - window.innerHeight
-    window.scrollTo({ top: top + (total * (i + 0.6)) / ACTS, behavior: 'smooth' })
+    window.scrollTo({ top: top + (total * (ACT_AT[i] + 0.6 * ACT_W[i])) / ACT_TOT, behavior: 'smooth' })
     // Akty 5–7: po dojechaniu fokus trafia do kontrolki aktu (os dni, nazwa marki), zeby byla osiagalna z klawiatury.
+    if (i === 1 && !scratched)
+      window.setTimeout(() => {
+        el.querySelector<HTMLElement>('.nk-alt .nk-link')?.focus({ preventScroll: true })
+      }, 900)
     if (i >= 4)
       window.setTimeout(() => {
         el.querySelector<HTMLElement>('.nk-panel input, .nk-panel a')?.focus({ preventScroll: true })
@@ -650,8 +806,11 @@ function Scene({
 
   const steps = (
     <div className="nk-in">
-      <div className="nk-caps nk-lab">How it works · shown on a made-up brand</div>
-      <h2 className="nk-h2">Four moves, one pack.</h2>
+      <div className="nk-caps nk-lab">
+        <span className="nk-who">For your customer</span>
+        <span className="nk-labrest">How it works · made-up brand</span>
+      </div>
+      <h2 className="nk-h2">Four steps from purchase to next order.</h2>
       <ol className="nk-steps">
         {STEPS.map((s, i) => (
           <li key={s.t} className={'nk-step' + (i === step ? ' is-on' : '')}>
@@ -680,6 +839,8 @@ function Scene({
       className={'nk-scene ' + (scroll ? 'is-scroll' : 'is-still')}
       id="how"
       data-act={scroll ? step : undefined}
+      data-ch={scroll ? ch : undefined}
+      data-swung={scroll && swung ? '' : undefined}
       style={{ ['--p' as string]: scroll ? p : 1 }}
     >
       <div className="nk-stage">
@@ -688,20 +849,6 @@ function Scene({
           {scroll && step === 4 ? <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" /> : null}
           {scroll && step === 5 ? <BrandPanel t={t} id="nk-brand" /> : null}
           {scroll && step === 6 ? <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" name={name} onName={onName} /> : null}
-          {scroll ? (
-            <nav className="nk-acts" aria-label="Scenes">
-              {ACT_NAMES.map((n, i) => (
-                <button key={n} type="button" aria-current={step === i ? 'step' : undefined} onClick={() => go(i)}>
-                  {n}
-                </button>
-              ))}
-            </nav>
-          ) : null}
-          {scroll ? (
-            <div className="nk-bar" aria-hidden="true">
-              <i />
-            </div>
-          ) : null}
           <p className="nk-demo">
             {DEMO_BRAND} is a fictional brand invented for this demo. The screens show the mechanics, not a client.
           </p>
@@ -710,22 +857,40 @@ function Scene({
           <div
             style={{
               display: 'contents',
-              ['--ty' as string]: scroll ? `${(1 - ease(enter)) * 56}px` : '0px',
-              ['--sc' as string]: scroll ? 0.94 + 0.06 * ease(enter) : 1,
+              ['--ty' as string]: scroll ? `${(1 - ease(enter)) * 140}px` : '0px',
+              ['--sc' as string]: scroll ? 0.8 + 0.2 * ease(enter) : 1,
+              ['--rx' as string]: scroll ? `${(1 - ease(enter)) * 18}deg` : '0deg',
             }}
           >
+            <div className="nk-swing">
             <Phone
               step={step}
               t={t}
               theme={skin}
               scratched={scratched}
-              onScratched={() => setScratched(true)}
+              onScratched={onScratched}
               interactive
+              autoScratch={autoNow}
               day={day}
               brand={brand}
             />
+            </div>
           </div>
         </div>
+          {scroll ? (
+          <nav className="nk-acts" aria-label="Scenes">
+            {ACT_NAMES.map((n, i) => (
+              <button key={n} type="button" aria-current={step === i ? 'step' : undefined} onClick={() => go(i)}>
+                {n}
+              </button>
+            ))}
+          </nav>
+        ) : null}
+        {scroll ? (
+          <div className="nk-bar" aria-hidden="true">
+            <i />
+          </div>
+        ) : null}
       </div>
       {scroll ? null : (
         <>
@@ -831,7 +996,8 @@ export function Story() {
             Would this fit your product?
           </h2>
           <p className="nk-one">
-            Supplements, skincare, pet food, coffee — anything bought again on a rhythm.{' '}
+            An app under your brand, built and run for you. For supplements, skincare, pet food, coffee — anything
+            bought again on a rhythm.{' '}
             <span className="nk-desk">Type your store and watch the phone.</span>
           </p>
           <Enquiry onStore={setStore} />

@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 22.11.2026, 09:38–10:25 (przebieg 3). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 22.11.2026, 14:55–15:30 (przebieg 4). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 ## PRIORYTET od Rafała (22.11.2026 09:07, po obejrzeniu strony lokalnie; przekazuje doradca) — przeczytaj przed kolejką
@@ -113,50 +113,64 @@ kątem całe `/nawyko` i `/calculator` w następnym przebiegu i uruchom bramki (
 
 ## Dla Rafała
 
-**Co obejrzeć (lokalnie: `git checkout agencja/strona && npm ci && npm run build && npm start`).**
+**Przebieg 4 (22.11, po Twoich uwagach z 10:55): zrobione 1a–1d na `/nawyko` i pierwsza wersja nowej strony głównej
+`/lab/home`. Kalkulator v3 — następny przebieg.** Lokalnie: `git checkout agencja/strona && npm ci && npm run build && npm start`.
 
-1. **`/nawyko` — od „Known in advance” w dół to teraz sceny, nie listy.** Telefon nie znika po czwartym kroku: przypięta
-   scena ma siedem aktów. Akt 5: oś 30 dni — znacznik jedzie z przewijaniem, można go przeciągnąć palcem albo strzałkami,
-   nagrody odpalają się w swoich dniach, telefon pokazuje ten sam dzień i kod na kolejne opakowanie. Akt 6: telefon kończy
-   opakowanie („30 doses, 34 days”, cztery pominięte dni) i staje się jedną czerwoną kropką, a reszta kropek składa się
-   w rozkład „którego dnia opakowanie naprawdę się kończy” obok dnia z etykiety (podpis: ilustracja, zmyślone dane).
-   Akt 7: wpisujesz nazwę marki i wybierasz skórę — telefon dostaje tę nazwę (także w kodzie rabatowym), a cała strona
-   zmienia kolory. Niżej: „No random rewards. No health claims. No hidden rules.” dużym krojem w jednej scenie i finał —
-   formularz obok telefonu, który bierze nazwę z wpisywanego adresu sklepu. Zniknęły obie numerowane listy i trzy kolumny.
-2. **`/calculator` — zbudowany od nowa.** Jedno pytanie, jeden ekran, trzy pola, jeden suwak, jedna duża czerwona liczba,
-   pod nią skąd się bierze („+1.01 orders × 120 × 4,000 customers”) i ile jest wart jeden dzień. Pasek roku jednego
-   klienta: kreski zamówień zsuwają się przy skracaniu odstępu, nowe dochodzą na czerwono. Jeden przycisk odsłania
-   formularz, jeden link prowadzi do `/tool`. Cała strona ma ok. 150 słów (było kilka ekranów). Drugi scenariusz, sekcja
-   założeń, źródła i punkty odniesienia usunięte; założenia to jedna zwijana linia.
+1. **`/nawyko` — zdrapki nie da się przegapić.** Akt zdrapki jest przypięty prawie dwa razy dłużej niż inne. Jeśli
+   nie zdrapiesz sam w ok. 1,5 s, karta zdrapuje się sama: kółko palca jedzie zygzakiem, sypią się drobiny, wychodzi
+   „Day 9 · DONE”, a licznik skacze 8 → 9 z czerwonym „+1”. Twoje własne zdrapanie zawsze wygrywa. Przewijania nic
+   nie blokuje — kto leci szybko, i tak widzi odsłoniętą kartę i skok licznika.
+2. **Co proponujesz — w pierwszym zdaniu:** „An app under your brand that gives customers a reason to reorder — built
+   and run for you.” To samo przy formularzu. Każdy rozdział ma czarną etykietę: **For your customer / For you / Under
+   your brand**.
+3. **Telefon zmienia stronę między rozdziałami:** w „For you” (widok marki, wykres) przejeżdża na lewo z lekkim
+   wychyleniem, a tło rozdziału ciemnieje o ton; w „Under your brand” wraca na prawo. Tekst nowego rozdziału
+   pojawia się dopiero, gdy telefon dojedzie. Na telefonie (390): przesunięcie w bok i zmniejszenie.
+4. **Większy telefon, wejście z głębi** (wychylony w tył, mniejszy, prostuje się przy wejściu sceny).
+5. **Teksty po czytelniku-kupującym:** trzy nagłówki przepisane, bo był „pusty” albo „żenujący” — m.in. „One phone
+   is a habit. All of them are your reorder date.” → „See the day each pack really runs out.” Wszystkie nowe
+   i zmienione teksty: `agencja/teksty-do-akceptacji.md` (**20 pozycji czeka na Twoje „tak/nie”**).
+6. **`/lab/home` — propozycja nowej strony głównej (noindex, `/` nietknięte).** Twój nagłówek bez zmian, pod nim trzy
+   karty, w których coś się dzieje: Nawyko (najszersza, telefon Tovemi liczy serię do 24 i wypełnia siatkę),
+   konsulting (pasek „label 45” i czerwony „orders 69” — liczby z obecnej strony), narzędzia (puste dni między
+   etykietą a zamówieniem znikają). Na 390×844 wszystkie trzy mieszczą się w pierwszym widoku. Niżej: przypięta scena
+   Nawyko (dzień 1 → 24, kroki i nagrody zapalają się w swoich dniach), konsulting z ceną i historią współpracy słowo
+   w słowo z `/`, narzędzia, zapytanie (bez nowego formularza — linki do `/nawyko#enquiry` i `/#enquiry`).
 
-**Dlaczego biznesowo.** Na `/nawyko` moment sprzedażowy („dostajesz prawdziwą datę ponownego zamówienia”) jest teraz
-pokazany, a nie opisany, a „Twoja nazwa, nie moja” dzieje się na oczach odwiedzającego. Kalkulator w 30 sekund daje
-marce jej własną stawkę i jeden krok do rozmowy; dokładny pomiar zostaje w `/tool`.
+**Dlaczego biznesowo.** Zdrapka to moment, w którym marka rozumie produkt — teraz zobaczy go każdy, nie tylko ten,
+kto się zatrzyma. Etykiety i zdanie oferty odpowiadają na „co ja proponuję” zanim padnie pytanie. `/lab/home` pokazuje,
+jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 
 **Dowód.**
-- Zrzuty `/nawyko`: `agencja/podglad/nawyko3-1440-a5-mid.png`, `-a6-end.png`, `-a7.png`, `-a7-night.png`,
-  `-never-night.png` i te same z `nawyko3-390x844-…` (finał z wpisaną nazwą obejrzałem, zrzutu nie zapisuję w repo).
-  **Nagrania przewijania nie zrobiłem** (zabrakło czasu); recenzent oceniał serię zrzutów i pomiary, nie film.
-- Zrzuty kalkulatora: `agencja/podglad/kalkulator2-1440-a.png`, `kalkulator2-390-a.png` (stan końcowy),
-  `kalkulator2-1440-b.png`, `kalkulator2-390-b.png` (sprzed ostatniej poprawki podpisów).
-- Bramki lokalnie 22.11 po ostatniej zmianie: build OK · `tsc --noEmit` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) ·
-  `qa.js` PASS na `/nawyko` i `/calculator` (po ostatniej zmianie) oraz na `/`, `/tool` (bez klucza AI), `/stop`
-  (uruchomione przed dwiema ostatnimi poprawkami, które tych tras nie dotykają) · `content-rules` PASS ·
-  `tool-rules` OK · `ship-compare` PASS · `calculator-model.test.mjs` OK. Lighthouse nieuruchamiany.
-- Niezależne recenzje: `agencja/recenzje/03-nawyko-sceny.md` — pierwsze podejście: 10 z 12 punktów, niezaliczone
-  płynność (skok paska postępu między aktami) i klawiatura (niewidoczny „Skip to content”, akty 5–7 nieosiągalne).
-  Poprawione; drugie podejście (`agencja/recenzje/04-kalkulator-v2.md`, część B): pasek stoi w miejscu, link widoczny,
-  przesunięcie układu całej strony 0,0098, wpisana nazwa trafia na telefon; klawiatura „częściowo” — po tej uwadze
-  dopisałem przeniesienie fokusu do kontrolki aktu (sprawdzone jednym testem dla aktu 7, **bez trzeciej recenzji**).
-  Kalkulator: 10 z 11 punktów; niezaliczone „liczba wynika z paska” (pasek liczył pełne zamówienia, liczba ułamki) —
-  poprawione (pasek pokazuje „6.3 → 7.3 orders”), dopisane zdanie „A ceiling, not a forecast” i wartość jednego dnia.
-  **Tych trzech poprawek kalkulatora recenzent już nie oglądał.**
-- Waga: skrypty `/nawyko` 148 kB wobec 152 kB `/calculator` i 177 kB `/tool` (pomiar recenzenta, transfer).
-- Podgląd Vercel: wynik tego pusha podaję w wiadomości końcowej; limit wdrożeń konta trwa do ok. 19:10 22.11.
+- Nagrania przewijania: `agencja/podglad/nawyko4-1440-przewijanie.mp4`, `agencja/podglad/nawyko4-390-przewijanie.mp4`.
+- Zrzuty: `agencja/podglad/nawyko4-1440-scratch-b.png` (karta zdrapana, „+1”), `-scratch-c.png`, `-act4.png`, `-act5.png`
+  (telefon po lewej, rozdział „For you”), `-final.png`, `nawyko4-390-scratch-b.png`;
+  `agencja/podglad/labhome-1440-pierwszy-ekran.png`, `labhome-390-pierwszy-ekran.png`, `labhome-1440-nawyko.png`, `labhome-390-nawyko.png`.
+- Bramki lokalnie po ostatniej zmianie: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) · `copy-voice` OK ·
+  `qa.js` PASS na `/nawyko`, `/lab/home`, `/`, `/tool`, `/stop`, `/calculator` · `content-rules` PASS · `ship-compare` PASS ·
+  `tool-rules` OK. Lighthouse nieuruchamiany.
+- Recenzje niezależne: `agencja/recenzje/05-nawyko-zdrapka-rozdzialy.md` (8/10; niezaliczone: telefon wracający na prawo
+  na chwilę zasłaniał tekst, przycisk zastępczy zdrapki nieosiągalny z klawiatury — oba poprawione, **bez drugiego
+  podejścia recenzenta**); `agencja/recenzje/06-lab-home.md` (8/9; niezaliczone: na 390 narzędzia pod linią zgięcia —
+  poprawione i sprawdzone zrzutem); teksty: `05-teksty-czytelnik.md`, `06-teksty-lab-home.md` (poprawki wprowadzone,
+  bez drugiego czytania).
+- Podgląd Vercel: adres w wiadomości końcowej przebiegu, jeśli wdrożenie się zbuduje.
 
 ## Czeka na Rafała
 
-**Nowe z przebiegu 3:**
+**Nowe z przebiegu 4:**
+
+F. **Zamiana `/` na `/lab/home`.** `/` to dziś eksport Claude Design (mechanizm `ship-design`, prerender, `ship-compare`).
+   Zamiana oznacza: `/` staje się trasą pisaną ręcznie, pętla Claude Design przestaje przenosić stronę główną, a
+   `content-rules` trzeba rozszerzyć o liczby 24, 30 i 70 (dziś dozwolone tylko na podstronach). Warianty: (a) zamiana po
+   Twojej akceptacji, (b) `/lab/home` zostaje szkicem dla Claude Design, (c) dopracować i wrócić. Rekomendacja: obejrzyj
+   `/lab/home` i powiedz, czy kierunek jest dobry; do zamiany potrzebny jeszcze drugi wariant pierwszego ekranu.
+G. **„Built and run for you”** w pierwszym zdaniu `/nawyko` obiecuje, że aplikację prowadzisz Ty, nie marka. Wziąłem to
+   z Twojego opisu oferty. Rekomendacja: potwierdź jednym słowem albo zmień na „built for you”.
+H. **Karta zdrapuje się sama po 1,5 s.** To decyzja kompromisowa (bez obowiązku zdrapania, ale z animacją). Jeśli wolisz
+   dłużej czekać na palec odwiedzającego — 2,5 s; krócej — 1 s.
+
+**Z przebiegu 3:**
 
 A. **Dni nagród na osi (`/nawyko`, akt 5).** Wpisałem przykład: darmowa dostawa w dniu 7, pieczątka i kod na kolejne
    opakowanie w dniu 24, cashback przy następnym zamówieniu — z podpisem „Example” i zdaniem, że dni ustawia marka.
@@ -213,8 +227,13 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 
 ## Następne (kolejka)
 
-1. Punkt 3 priorytetu: krytyczny przegląd układu całej strony + dwa warianty pierwszego ekranu i nawigacji (`/lab/a`,
-   `/lab/b`, `noindex`).
+0. **Kalkulator v3** (priorytet NAJNOWSZY, pkt 2): makieta jednego ekranu → czytelnik-kupujący na makiecie → budowa.
+   Bohater = wartość jednego dnia z walutą; suwak ograniczony do dnia końca opakowania; rok klienta jako główna scena.
+0b. `/nawyko`: drugie podejście recenzenta do poprawek z recenzji 05 (powrót telefonu, klawiatura); na 390 zmiana
+   rozdziału nadal słaba (recenzent: prawie niewidoczna) — wzmocnić; pasek cookies zakrywa dół sceny w akcie zdrapki.
+0c. `/lab/home`: drugi wariant pierwszego ekranu (odważniejszy, aplikacja na pierwszym planie); w dużym telefonie
+   „8” i „days” daleko od siebie; karta narzędzi na desktopie pusta pod paskiem; „69” pojawia się dopiero po ~3 s.
+1. Punkt 3 priorytetu (starszy): przegląd układu całej strony — częściowo zrobiony przez `/lab/home`.
 2. `/nawyko`, reszta z recenzji 03: nagranie przewijania 390 i 1440 do `agencja/podglad/`; telefon z nazwą także
    w finale na telefonie (dziś ukryty poniżej 860 px); akt 6 większy, z odczytem dnia po najechaniu; lista pod osią
    w akcie 5 dubluje telefon (zostawić oś + jedno zdanie); pasek cookies poza skórą; górna część (wejście telefonu
@@ -262,7 +281,17 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 - Podpis „to przykład” musi być przy samym rysunku (etykieta w rogu), nie w przypisie pod nim: przypis na telefonie
   chowa się pod paskiem cookies.
 
+- Przebieg 4: Agent bez parametru „w tle” blokuje do końca — kolejność, która zadziałała: najpierw własna budowa
+  i nagrania, potem jednym krokiem budujący w worktree + recenzent + czytelnik (blokada ~8 min), potem poprawki.
+- Nagranie Playwright przy kroku 6% wysokości ekranu na stronie ~10 000 px nie mieści się w 5 min; krok 9–16% + ffmpeg
+  do mp4 (1440 przeskalowane do 960) daje 0,5–1 MB na nagranie. Konwertować dopiero po zamknięciu kontekstu.
+- Element z `transform` staje się blokiem zawierającym dla `position:absolute` dzieci — paski sceny przeniesione
+  ze `.nk-scenehead` do `.nk-stage`, zanim kolumny zaczęły jeździć.
+
 ## Decyzje podjęte samodzielnie (odwracalne)
+
+- Przebieg 4: akty sceny mają wagi (zdrapka 1,9, white label 1,1), scena 900vh; samozdrapka po 1,5 s albo od razu
+  po połowie aktu; `/lab/home` dopisany do zakresu `copy-voice` już wcześniej (`app/lab`), nie ma go w sitemapie.
 
 - `/nawyko` jest trasą pisaną ręcznie (React + CSS), nie eksportem Claude Design — żeby dało się ją rozwijać z chmury.
 - Scena sterowana postępem przewijania w JS (jeden nasłuch, `requestAnimationFrame`), nie natywnymi CSS scroll-driven

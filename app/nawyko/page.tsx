@@ -68,10 +68,12 @@ export default function Nawyko() {
           </div>
           <div>
             <p className="nk-lede">
-              Your customer confirms a purchase, scratches one card a day after their dose, and earns rewards they
-              can see in advance.
+              An app under your brand that gives customers a reason to reorder — built and run for you.
             </p>
-            <p className="nk-lede">You get a reason for the next order — and the real rhythm of use.</p>
+            <p className="nk-lede">
+              Your customer scratches one card a day and earns rewards they can see in advance. You get a reason for
+              the next order and the real rhythm of use.
+            </p>
             <div className="nk-row">
               <a className="nk-cta" href="#enquiry">
                 Ask about Nawyko
