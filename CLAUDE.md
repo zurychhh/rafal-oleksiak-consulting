@@ -33,6 +33,14 @@ ten usunięty kod — są archiwum, nie stanem faktycznym.
 
 Aktualny stan i otwarte punkty: **`STATUS.md`**. Brief wdrożeniowy: **`HANDOFF-CC.md`**.
 
+## Bramka tekstów (obowiązkowa od 22.11.2026)
+
+Każdy tekst, który zobaczy odwiedzający (nagłówek, podtytuł, przycisk, etykieta, komunikat), przechodzi
+`agencja/rubryka-tekstow.md` **przed commitem**: automat `node scripts/copy-voice.test.mjs`, czytelnik-kupujący (osobny
+subagent, sama lista tekstów bez strony) i wpis w `agencja/teksty-do-akceptacji.md` dla Rafała. Przed pisaniem nowych
+tekstów przeczytaj sekcję „Odrzucone i dlaczego” w rubryce. Bohaterem tekstu jest marka klienta, nigdy autor strony.
+Recenzja wyglądu nie zastępuje recenzji tekstu — to dwie osobne bramki.
+
 ## Build & Development Commands
 
 ```bash
