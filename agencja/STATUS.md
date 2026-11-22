@@ -52,6 +52,59 @@ następny jest punkt 3 (przegląd układu całej strony, `/lab/a` i `/lab/b`), p
    zero nowych ciężkich bibliotek bez sprawdzenia. **Vercel:** limit wdrożeń konta do ok. 19:10 22.11 — jeden push na przebieg,
    na końcu; adres podglądu wpisz na górze „Dla Rafała”, gdy się zbuduje. W „Dla Rafała” pisz krótko: co obejrzeć i gdzie.
 
+## PRIORYTET od Rafała (22.11.2026 10:55–10:56, po przeklikaniu nowej wersji lokalnie; przekazuje doradca) — NAJNOWSZY, czytaj pierwszy
+
+**Słowa Rafała:** „Nawyko na teraz jest dobre, ale nie jestem pewien, czy rozumiem, co ja proponuję. Dlaczego nie ma obowiązku
+zdrapania, tylko można to przeskoczyć scrollem? Imo to byłby efekt (jeżeli nie z obowiązkiem, to przynajmniej minimum sama
+animacja bez usera), bo teraz to główny punkt i tego nie widać. Do podkręcenia o jeden poziom czytelności i efekt wow, ale
+kierunek dobry. Myślę, czy telefon nie powinien od rozdziału do rozdziału przechodzić z prawej do lewej strony ekranu, żeby
+czytelniej odróżnić poszczególne kategorie podstrony.” · „I kalkulator niby też jest dla was OK?” (czyli: nie jest) ·
+„Strona główna też ma przejść podobny lifting, ma być z efektem wow.”
+
+### 1. `/nawyko` (kierunek zostaje, trzy poprawki)
+a) **Zdrapka nie może dać się przegapić.** Sprawdzone przez doradcę w przeglądarce: przewinięcie o 1500 px mija zdrapkę bez
+   śladu. Rozwiązanie (bez blokowania przewijania — to psuje dostępność i irytuje): gdy akt zdrapki wchodzi w kadr, scena
+   zatrzymuje się na chwilę przypięcia dłuższego niż inne akty, a karta **zdrapuje się sama** widoczną animacją (ślad palca,
+   opadające drobiny, licznik 8 → 9), jeśli odwiedzający nie zrobi tego sam w ok. 1,5 s; własne zdrapanie zawsze ma pierwszeństwo.
+   Kto przewija szybko, i tak widzi odsłoniętą kartę i skok licznika. To ma być najmocniejszy moment strony.
+b) **„Co ja proponuję” w 5 sekund.** Dziś strona pokazuje mechanikę, ale nie mówi wprost, co marka kupuje. Na pierwszym
+   ekranie i przy formularzu jedno zdanie oferty w stylu: aplikacja pod Twoją marką dla klientów, którzy kupują ponownie —
+   zbudowana i prowadzona dla Ciebie; Ty dostajesz powód do kolejnego zamówienia i prawdziwy rytm zużycia. Czego NIE
+   dopisuj bez Rafała: ceny, statusu „pilot/gotowe”, terminów (to jego decyzje — zostają w „Czeka na Rafała”). Każdy rozdział
+   dostaje wyraźną etykietę „dla Twojego klienta” / „dla Ciebie” / „pod Twoją marką”, żeby było jasne, do kogo mówi scena.
+c) **Telefon zmienia stronę ekranu między ROZDZIAŁAMI** (nie między aktami — co akt byłoby męczące): jak to działa → telefon
+   po prawej; dla marki → przejeżdża na lewo; pod Twoją marką → wraca. Sam przejazd ma być efektem (płynny, z lekką rotacją
+   i cieniem), a tło rozdziału lekko się różni. Na telefonie (390) zamiast stron: zmiana pozycji góra/dół albo skali.
+d) Jeden poziom czytelności i „wow” więcej: większy telefon, mocniejsze wejście, wyraźniejszy stan „teraz dzieje się to”.
+   Nagrania przewijania (Playwright video, 390 i 1440) do `agencja/podglad/` są OBOWIĄZKOWE — w przebiegu 3 ich zabrakło.
+
+### 2. Kalkulator — wersja 2 nadal nie jest dobra (ocena doradcy po przeklikaniu)
+- **Nie odpowiada na własne pytanie.** Nagłówek pyta „ile jest wart jeden dzień między zamówieniami”, a wielka liczba pokazuje
+  coś innego (łączny przyrost przy suwaku). Bohaterem ma być **wartość jednego dnia** — jedna, solidna liczba.
+- **Liczba bez waluty i bez kontekstu** („+1,845,977” czego?). Dodaj wybór waluty albo słowo „w Twojej walucie” przy liczbie.
+- **Suwak pozwala na absurd** (58 → 29 dni daje dwukrotność przychodu) — to podważa wiarygodność. Zakres ogranicz do realnego
+  (np. do dnia, w którym kończy się opakowanie — wróć do pola „na ile dni starcza opakowanie”; to jest sedno: klient ma
+  produkt 30 dni, a zamawia po 58, więc 28 dni półka jest pusta).
+- **Rysunek roku jest mały i nieczytelny** — ma być główną sceną: widać dni z produktem i dni pustej półki; przeciągasz
+  i puste dni znikają. Z tego ma WPROST wynikać liczba.
+- **„Nic z tego nie wynika”:** po wyniku musi paść jedno zdanie „co z tym zrobić” i jeden krok — puste dni zamyka się
+  przypomnieniem we właściwym dniu, subskrypcją albo aplikacją nawyku (link do `/nawyko`), bez obiecywania efektu liczbą.
+- Błędy: tekst dla czytników ekranu pokazuje stare liczby po przesunięciu suwaka; ramka fokusu suwaka nachodzi na podpisy.
+- Zanim zbudujesz v3: makieta jednego ekranu i recenzja czytelnika-kupującego NA MAKIECIE („co zrozumiałeś w 10 sekund?”).
+
+### 3. Strona główna `/` — lifting z efektem wow (nowe, decyzja Rafała)
+Rafał nie upiera się przy obecnym układzie. `/` jest dziś eksportem Claude Design (mechanizm `ship-design`) — NIE ruszaj go
+ani produkcji. Zbuduj nową stronę główną jako trasę podglądową pisaną ręcznie (`/lab/home`, `noindex`), w tym samym języku
+scen co `/nawyko`: w 5 sekund widać trzy rzeczy — konsulting FMCG, aplikacja Nawyko (główny wyróżnik), narzędzia — każda
+jako scena, w której coś się dzieje, z nawigacją do `/nawyko`, `/calculator`, `/tool`. Treść, cena, dowody i nagłówek
+„You don't pay twice for the same customer.” — z obecnej strony (twarde zasady treści z `content-rules` obowiązują; nazwy
+klientów i liczby tylko te dozwolone). Dwa warianty pierwszego ekranu, jeśli starczy czasu. Zamiana `/` na nową wersję to
+osobna decyzja Rafała po obejrzeniu — wpisz ją do „Czeka na Rafała” razem z tym, co oznacza dla mechanizmu Claude Design.
+
+### Kolejność
+1a (zdrapka) → 1b–1d → 3 (strona główna, pierwszy ekran) → 2 (kalkulator v3). Bramka tekstów (`agencja/rubryka-tekstow.md`)
+obowiązuje przy każdym punkcie. Jeden push na przebieg.
+
 ## Uwaga Rafała 22.11 10:42 (doradca poprawił od ręki)
 Nagłówek sceny white label „Your name on it, not mine.” Rafał ocenił jako „super głupie i egocentryczne”. Zmienione na
 „Your brand. Your colours. Your app.” (`app/nawyko/NawykoClient.tsx`). **Zasada dla wszystkich tekstów strony:** bohaterem
