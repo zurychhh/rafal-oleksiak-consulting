@@ -3,6 +3,31 @@
 Ostatni przebieg: 21.11.2026, 19:38–20:10 (przebieg 2). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
+## PRIORYTET od Rafała (22.11.2026 09:01, przekazuje doradca) — przeczytaj przed kolejką
+
+Rafał obejrzał zrzuty `/nawyko` i powtórzył wymaganie: **strona ma mieć efekt wow.** Ocena doradcy po obejrzeniu zrzutów:
+obecna wersja jest czysta, spójna i bez kiczu, ale za grzeczna — to elegancka strona informacyjna, nie pokaz na poziomie
+stron produktowych Apple. Najbliższe przebiegi robią WYŁĄCZNIE to, dopóki niezależny recenzent nie da „wow: tak”:
+
+1. **Scena z telefonem jako spektakl, nie ilustracja.** Telefon większy i bliżej (wejście z głębi / skali przy pierwszym
+   przewinięciu), warstwy z paralaksą (tło, telefon, elementy wylatujące z ekranu: karta, pieczątka, kod nagrody),
+   płynne przejścia między krokami zamiast podmiany treści, światło/cień reagujące na przewijanie. Ruch ma nieść znaczenie
+   (każdy efekt pokazuje mechanikę produktu), nie ozdabiać.
+2. **Moment nagrody.** Dzień 24: siatka dopełnia się, pieczątka „wbija się” z fizyką (sprężystość, krótki akcent),
+   kod nagrody odsłania się jak karta. To ma być chwila, którą odwiedzający zapamięta. Zdrapka: faktura, opór, drobiny
+   znikającej warstwy, natychmiastowa reakcja licznika serii.
+3. **Pierwszy ekran.** Hasło i pasek 30 dni zostają, ale wejście ma żyć: sekwencja pojawiania, pasek wypełniający się
+   w rytmie, telefon zapowiedziany już w pierwszym ekranie.
+4. **White label na żywo.** Przełączenie motywu marki ma być efektowne (przemalowanie całej sceny w ruchu), bo to jest
+   sprzedażowy argument „Twoje logo”.
+5. Granice bez zmian: płynność 60 kl./s na telefonie (zmierz), CLS ~0, `prefers-reduced-motion`, brak nowych ciężkich
+   bibliotek bez sprawdzenia licencji i wagi, paleta i typografia strony, zero prawdziwych marek, zero kiczu.
+   Recenzent ocenia na NAGRANIU przewijania (Playwright video) na 390 i 1440, nie na zrzutach; nagrania zapisuj do
+   `agencja/podglad/` (krótkie, skompresowane), żeby Rafał mógł je obejrzeć bez uruchamiania strony.
+6. **Vercel:** limit wdrożeń konta („retry in 24 hours” od 21.11 19:10). Jeden push na przebieg, na końcu. Gdy podgląd
+   się zbuduje, wpisz jego adres na samej górze bloku „Dla Rafała”.
+7. `/calculator` nie rozwijaj, dopóki punkt 1–4 nie przejdzie recenzji; Rafał go jeszcze nie oglądał.
+
 ## Dla Rafała
 
 **Co.** Jest nowa podstrona **`/calculator`** — kalkulator „ile jest wart jeden dzień między zamówieniami”.
