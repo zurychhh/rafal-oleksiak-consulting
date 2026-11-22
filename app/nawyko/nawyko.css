@@ -463,3 +463,16 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 /* po recenzji 05: tekst nowego rozdzialu pojawia sie dopiero, gdy telefon dojedzie na swoja strone */
 .nk-scene[data-swung][data-act="5"] .nk-panel.nk-in,.nk-scene[data-swung][data-act="6"] .nk-panel.nk-in{animation-delay:.55s;}
 @media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
+
+/* ══ przebieg 5: telefon 390 — czytelnosc rozdzialow ══════════════════════ */
+@media (max-width:860px){
+  /* os dni + jedno zdanie; lista nagrod jest na telefonie obok (dublowala go i wychodzila poza kadr) */
+  .is-scroll .nk-earn{display:none;}
+  /* rozdzial „For you”: bohaterem jest wykres marki — telefon maleje i odjezdza w lewo, tekst podjezdza do gory.
+     Tylko transformacje (zmiana wysokosci telefonu dawala CLS 0,26 — recenzja 07). */
+  .nk-scene.is-scroll{--ph:clamp(300px,50svh,500px);}
+  .nk-scene.is-scroll[data-ch="1"] .nk-phonecol{transform-origin:50% 0;transform:translateX(-26%) scale(.6);}
+  .nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateY(calc(var(--ph) * -.4));}
+}
+@media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
+@media (max-width:860px) and (max-height:720px){.nk-scene.is-scroll{--ph:min(43svh,470px);}}

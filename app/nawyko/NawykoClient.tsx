@@ -765,8 +765,14 @@ function Scene({
   // Zdrapka: jesli odwiedzajacy nie zdrapie sam w ok. 1,5 s od wejscia w akt, karta zdrapuje sie sama.
   // Kto przewija szybko (polowa aktu), dostaje animacje od razu.
   const [autoS, setAutoS] = useState(false)
+  // Kto sam wybral akt zdrapki (nawigacja scen), dostaje karte do zdrapania — bez samozdrapki, dopoki jest w akcie.
+  const [hold, setHold] = useState<false | 'pending' | 'on'>(false)
   useEffect(() => {
-    if (!scroll || step !== 1 || scratched || autoS) return
+    if (step === 1 && hold === 'pending') setHold('on')
+    else if (step !== 1 && hold === 'on') setHold(false)
+  }, [step, hold])
+  useEffect(() => {
+    if (!scroll || step !== 1 || scratched || autoS || hold) return
     const id = window.setTimeout(() => {
       // Kto przechodzi scene klawiatura, sam decyduje: przycisk zastepczy nie znika mu spod fokusu.
       const a = document.activeElement
@@ -774,8 +780,8 @@ function Scene({
       setAutoS(true)
     }, 1500)
     return () => window.clearTimeout(id)
-  }, [scroll, step, scratched, autoS])
-  const autoNow = autoS || (scroll && step === 1 && t > 0.45)
+  }, [scroll, step, scratched, autoS, hold])
+  const autoNow = !hold && (autoS || (scroll && step === 1 && t > 0.45))
 
   // Dzien na osi: z przewijania, chyba ze odwiedzajacy sam go przeciagnal (do nastepnego ruchu strony).
   const picked = dayPick && (!scroll || Math.abs(dayPick.p - p) < 0.012) ? dayPick.d : null
@@ -792,12 +798,15 @@ function Scene({
     if (!el) return
     const top = el.getBoundingClientRect().top + window.scrollY
     const total = el.offsetHeight - window.innerHeight
-    window.scrollTo({ top: top + (total * (ACT_AT[i] + 0.6 * ACT_W[i])) / ACT_TOT, behavior: 'smooth' })
+    window.scrollTo({ top: top + (total * (ACT_AT[i] + (i === 1 ? 0.25 : 0.6) * ACT_W[i])) / ACT_TOT, behavior: 'smooth' })
+    if (i === 1) setHold('pending')
     // Akty 5–7: po dojechaniu fokus trafia do kontrolki aktu (os dni, nazwa marki), zeby byla osiagalna z klawiatury.
     if (i === 1 && !scratched)
-      window.setTimeout(() => {
-        el.querySelector<HTMLElement>('.nk-alt .nk-link')?.focus({ preventScroll: true })
-      }, 900)
+      for (const ms of [700, 1200, 1800])
+        window.setTimeout(() => {
+          const b = el.querySelector<HTMLElement>('.nk-alt:not([hidden]) .nk-link')
+          if (b && document.activeElement !== b) b.focus({ preventScroll: true })
+        }, ms)
     if (i >= 4)
       window.setTimeout(() => {
         el.querySelector<HTMLElement>('.nk-panel input, .nk-panel a')?.focus({ preventScroll: true })

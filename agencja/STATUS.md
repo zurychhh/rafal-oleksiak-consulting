@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 22.11.2026, 14:55–15:30 (przebieg 4). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 22.11.2026, 15:26–15:45 (przebieg 5, jednorazowy na Twoje polecenie: 1a–1d). Przed nim przebieg 4 (14:55–15:30). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 ## PRIORYTET od Rafała (22.11.2026 09:07, po obejrzeniu strony lokalnie; przekazuje doradca) — przeczytaj przed kolejką
@@ -112,6 +112,25 @@ jest marka klienta i jej klient, nigdy autor strony — żadnych „mine / my / 
 kątem całe `/nawyko` i `/calculator` w następnym przebiegu i uruchom bramki (ta zmiana poszła bez builda).
 
 ## Dla Rafała
+
+**Przebieg 5 (22.11, jednorazowy: „jeszcze jeden set poprawek”).** Punkty 1a–1d były już zbudowane w przebiegu 4 (opis
+niżej), więc ten przebieg je domknął po drugiej recenzji, głównie na telefonie (390):
+- **Rozdział „For you” na telefonie:** telefon maleje do ok. 60% i odjeżdża w lewo, a tekst z wykresem marki podjeżdża
+  do góry — wykres mieści się cały (wcześniej był ucięty u dołu ekranu). Pierwsza wersja tej zmiany robiła skoki
+  układu (CLS 0,26); teraz idzie samymi transformacjami, CLS 0,0003 na 390 i 0,012 na 1440.
+- **Oś nagród na telefonie:** zostaje oś dni + jedno zdanie; lista nagród pod osią (dublowała telefon i wychodziła
+  poza kadr) jest na telefonie ukryta. Na desktopie bez zmian.
+- **Klawiatura i zdrapka:** wybór „Scratch” w nawigacji scen przewozi na początek aktu, stawia fokus na przycisku
+  „Scratch today's card” i wyłącza samozdrapkę, dopóki jesteś w tym akcie (sprawdzone testem w świeżej karcie).
+- **Nagrania (oceniaj ruch):** `agencja/podglad/nawyko5-390-scena.mp4` (po poprawkach), `agencja/podglad/nawyko5-1440-scena.mp4`
+  (scena od wejścia do końca, ok. 20 s; postój przy zdrapce, żeby było widać samozdrapanie). Zrzuty:
+  `nawyko5-390-zdrapka.png` (karta w trakcie samozdrapania: ślad palca, drobiny), `nawyko5-390-nagrody.png`, `nawyko5-390-for-you.png`.
+- Bramki po ostatniej zmianie: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) · `copy-voice` OK ·
+  `qa.js` PASS na `/nawyko` · `content-rules` PASS. Recenzja: `agencja/recenzje/07-nawyko-podejscie-2.md` (powrót
+  telefonu na 1440 — PASS; CLS na 390 i klawiatura — FAIL, oba poprawione po recenzji i zmierzone przeze mnie, bez
+  trzeciego podejścia recenzenta). Teksty w tym przebiegu bez zmian (czytelnik niepotrzebny); 20 pozycji z przebiegu 4
+  nadal czeka w `agencja/teksty-do-akceptacji.md`. Strony głównej i kalkulatora nie ruszałem.
+
 
 **Przebieg 4 (22.11, po Twoich uwagach z 10:55): zrobione 1a–1d na `/nawyko` i pierwsza wersja nowej strony głównej
 `/lab/home`. Kalkulator v3 — następny przebieg.** Lokalnie: `git checkout agencja/strona && npm ci && npm run build && npm start`.
@@ -229,8 +248,9 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 
 0. **Kalkulator v3** (priorytet NAJNOWSZY, pkt 2): makieta jednego ekranu → czytelnik-kupujący na makiecie → budowa.
    Bohater = wartość jednego dnia z walutą; suwak ograniczony do dnia końca opakowania; rok klienta jako główna scena.
-0b. `/nawyko`: drugie podejście recenzenta do poprawek z recenzji 05 (powrót telefonu, klawiatura); na 390 zmiana
-   rozdziału nadal słaba (recenzent: prawie niewidoczna) — wzmocnić; pasek cookies zakrywa dół sceny w akcie zdrapki.
+0b. `/nawyko`: zrobione w przebiegu 5 (powrót telefonu, klawiatura, rozdział na 390). Zostało: na 390 nawigacja aktów
+   jest ukryta (Tab prowadzi przez kroki 01–04, ale nie do aktów 5–7 bez przewijania); wersja `prefers-reduced-motion`
+   nie pokazuje zdrapki (pierwszy telefon od razu na nagrodzie).
 0c. `/lab/home`: drugi wariant pierwszego ekranu (odważniejszy, aplikacja na pierwszym planie); w dużym telefonie
    „8” i „days” daleko od siebie; karta narzędzi na desktopie pusta pod paskiem; „69” pojawia się dopiero po ~3 s.
 1. Punkt 3 priorytetu (starszy): przegląd układu całej strony — częściowo zrobiony przez `/lab/home`.
@@ -287,6 +307,12 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
   do mp4 (1440 przeskalowane do 960) daje 0,5–1 MB na nagranie. Konwertować dopiero po zamknięciu kontekstu.
 - Element z `transform` staje się blokiem zawierającym dla `position:absolute` dzieci — paski sceny przeniesione
   ze `.nk-scenehead` do `.nk-stage`, zanim kolumny zaczęły jeździć.
+
+- Przebieg 5: zmiana `height` elementu w przypiętej scenie = CLS (0,26), nawet gdy wygląda płynnie. Zmniejszać przez
+  `transform: scale` i odzyskiwać miejsce `translateY` sąsiada — treść poniżej krawędzi sceny i tak jest w DOM.
+- Przebieg 5: skok z nawigacji do 60% aktu zdrapki od razu przekraczał próg samozdrapki (45%) — przy celach
+  przewijania liczyć się z progami animacji.
+- `content-rules --url` potrzebuje `PW_CHROMIUM` w tym samym poleceniu (inaczej szuka nieistniejącej przeglądarki).
 
 ## Decyzje podjęte samodzielnie (odwracalne)
 
