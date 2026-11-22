@@ -154,7 +154,7 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
   podejścia recenzenta**); `agencja/recenzje/06-lab-home.md` (8/9; niezaliczone: na 390 narzędzia pod linią zgięcia —
   poprawione i sprawdzone zrzutem); teksty: `05-teksty-czytelnik.md`, `06-teksty-lab-home.md` (poprawki wprowadzone,
   bez drugiego czytania).
-- Podgląd Vercel: adres w wiadomości końcowej przebiegu, jeśli wdrożenie się zbuduje.
+- Podgląd Vercel (commit 2195214, wdrożenie „success”): https://rafal-oleksiak-consulting-owws7jxvk-zurychhhs-projects.vercel.app/nawyko i `/lab/home` (może wymagać logowania do Vercela).
 
 ## Czeka na Rafała
 
