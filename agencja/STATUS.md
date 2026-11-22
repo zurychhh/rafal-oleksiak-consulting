@@ -3,30 +3,51 @@
 Ostatni przebieg: 21.11.2026, 19:38–20:10 (przebieg 2). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
-## PRIORYTET od Rafała (22.11.2026 09:01, przekazuje doradca) — przeczytaj przed kolejką
+## PRIORYTET od Rafała (22.11.2026 09:07, po obejrzeniu strony lokalnie; przekazuje doradca) — przeczytaj przed kolejką
 
-Rafał obejrzał zrzuty `/nawyko` i powtórzył wymaganie: **strona ma mieć efekt wow.** Ocena doradcy po obejrzeniu zrzutów:
-obecna wersja jest czysta, spójna i bez kiczu, ale za grzeczna — to elegancka strona informacyjna, nie pokaz na poziomie
-stron produktowych Apple. Najbliższe przebiegi robią WYŁĄCZNIE to, dopóki niezależny recenzent nie da „wow: tak”:
+**Słowa Rafała:** `/nawyko` „jest dobrze, ale tylko do początku części *Known in advance. Never random.* Od tej części jest
+nudno, statycznie i nikt tego nigdy nie przeczyta”. Kalkulator: „nieczytelne, zajebiście przegadane, bez efektów; kierunek
+na samej górze fajny, bo coś się animuje, ale nic z tego nie wynika”, „robiony na kolanie”. Rafał **nie upiera się przy
+obecnym układzie strony** i prosi o bardzo krytyczne podejście do całości oraz o stały rozwój kolejnych narzędzi w ramach USP.
 
-1. **Scena z telefonem jako spektakl, nie ilustracja.** Telefon większy i bliżej (wejście z głębi / skali przy pierwszym
-   przewinięciu), warstwy z paralaksą (tło, telefon, elementy wylatujące z ekranu: karta, pieczątka, kod nagrody),
-   płynne przejścia między krokami zamiast podmiany treści, światło/cień reagujące na przewijanie. Ruch ma nieść znaczenie
-   (każdy efekt pokazuje mechanikę produktu), nie ozdabiać.
-2. **Moment nagrody.** Dzień 24: siatka dopełnia się, pieczątka „wbija się” z fizyką (sprężystość, krótki akcent),
-   kod nagrody odsłania się jak karta. To ma być chwila, którą odwiedzający zapamięta. Zdrapka: faktura, opór, drobiny
-   znikającej warstwy, natychmiastowa reakcja licznika serii.
-3. **Pierwszy ekran.** Hasło i pasek 30 dni zostają, ale wejście ma żyć: sekwencja pojawiania, pasek wypełniający się
-   w rytmie, telefon zapowiedziany już w pierwszym ekranie.
-4. **White label na żywo.** Przełączenie motywu marki ma być efektowne (przemalowanie całej sceny w ruchu), bo to jest
-   sprzedażowy argument „Twoje logo”.
-5. Granice bez zmian: płynność 60 kl./s na telefonie (zmierz), CLS ~0, `prefers-reduced-motion`, brak nowych ciężkich
-   bibliotek bez sprawdzenia licencji i wagi, paleta i typografia strony, zero prawdziwych marek, zero kiczu.
-   Recenzent ocenia na NAGRANIU przewijania (Playwright video) na 390 i 1440, nie na zrzutach; nagrania zapisuj do
-   `agencja/podglad/` (krótkie, skompresowane), żeby Rafał mógł je obejrzeć bez uruchamiania strony.
-6. **Vercel:** limit wdrożeń konta („retry in 24 hours” od 21.11 19:10). Jeden push na przebieg, na końcu. Gdy podgląd
-   się zbuduje, wpisz jego adres na samej górze bloku „Dla Rafała”.
-7. `/calculator` nie rozwijaj, dopóki punkt 1–4 nie przejdzie recenzji; Rafał go jeszcze nie oglądał.
+**Ocena doradcy (obejrzane zrzuty całych stron) — wiążąca jako kierunek, do podważenia dowodem, nie opinią:**
+- Tożsamość (papier, typografia, czerń + jedna czerwień) jest dobra i zostaje: wyróżnia i nie jest kiczem. **Zły jest format,
+  nie styl:** wszystko poniżej sceny z telefonem to „nagłówek po lewej + numerowana lista po prawej” — dokument, nie pokaz.
+- Zasada dla całej strony od teraz: **jedna myśl = jedna scena, w której produkt coś robi.** Najwyżej ok. 12 słów na scenę
+  plus jedno zdanie pod spodem. Każdy akapit, którego nie da się pokazać, wylatuje albo idzie do zwijanego „szczegóły”.
+
+### Kolejka (zastępuje poprzednią; w tej kolejności)
+1. **`/nawyko` od „Known in advance” w dół — przebudowa na sceny, nie poprawki.** Telefon zostaje nicią całej strony
+   (nie znika po czwartym kroku). Propozycja scen: (a) nagrody = oś 30 dni, po której jedzie znacznik; nagrody odpalają się
+   w swoich dniach, odwiedzający może przeciągnąć dzień; (b) „co dostaje marka” = widok marki: z wielu telefonów składa się
+   wykres „którego dnia opakowanie naprawdę się kończy” (to jest sprzedażowy moment — dane o rytmie), bez zmyślonych liczb
+   jako faktów, z podpisem „przykład”; (c) white label = jedno przeciągnięcie przemalowuje całą stronę, nie tylko telefon;
+   (d) „czego nie robi” = trzy krótkie zdania w jednej scenie, nie kolumny; (e) formularz jako finał sceny, nie osobny blok.
+   Do tego wzmocnienie górnej części według punktów „spektakl / moment nagrody” (wejście telefonu z głębi, paralaksa warstw,
+   pieczątka z fizyką, zdrapka z fakturą). Recenzent ocenia na NAGRANIU przewijania 390 i 1440; nagrania do `agencja/podglad/`.
+2. **Kalkulator — zbudować od nowa, obecnego nie poprawiać.** Diagnoza: dwa kalkulatory, dziewięć pól, sekcja założeń,
+   sekcja źródeł, dwa odsyłacze i formularz = raport; animacja u góry nie prowadzi do wniosku; pokrywa się tematem z `/tool`.
+   Nowy kształt: **jedno pytanie, jeden ekran, trzy pola** (klienci, wartość zamówienia, dni między zamówieniami), jeden
+   suwak, jedna duża liczba, która żyje podczas przeciągania, i wizualizacja roku jednego klienta, z której liczba wynika
+   wprost (dni puste znikają → zamówień przybywa). Wynik kończy się jednym krokiem: „wyślij mi ten wynik / porozmawiajmy
+   o tych liczbach”. Założenia i źródła: jedna zwijana linia. Drugi scenariusz (drugi zakup) usuń albo zrób z niego
+   osobne małe narzędzie później. Relacja z `/tool`: kalkulator = 30 sekund bez danych, `/tool` = dokładny pomiar z eksportu;
+   kalkulator na końcu prowadzi do `/tool`. Zanim zbudujesz: krótka specyfikacja + uczciwa odpowiedź, czy to narzędzie w ogóle
+   jest potrzebne obok `/tool` (jeśli nie — zaproponuj w „Czeka na Rafała” lepsze pierwsze narzędzie i zbuduj je zamiast).
+3. **Krytyczny przegląd układu CAŁEJ strony (wynik: propozycja dla Rafała, nie zmiana produkcji).** Dziś: `/` sprzedaje
+   konsulting, a Nawyko, narzędzia i CV wiszą obok bez nawigacji. Zaproponuj strukturę, w której odwiedzający w 5 sekund
+   widzi trzy rzeczy: konsulting FMCG, aplikacja Nawyko (główny wyróżnik), narzędzia. Zbuduj **dwa działające warianty
+   pierwszego ekranu + nawigacji** jako osobne trasy podglądowe (np. `/lab/a`, `/lab/b`, `noindex`): A = ewolucja obecnego
+   stylu, B = odważniejszy, produktowy (aplikacja na pierwszym planie). Rafał wybiera na żywo; nagłówka `/` nie ruszasz.
+4. **Stały rozwój narzędzi (decyzja Rafała: na stałe).** Prowadź `agencja/narzedzia.md`: lista pomysłów narzędzi w ramach USP
+   (FMCG, powtarzalny zakup), każdy z jednym zdaniem „co odwiedzający wie po 30 sekundach” i „do czego prowadzi”.
+   Zasada każdego narzędzia: jeden ekran, jedno pytanie, wynik żywy, zero przegadania, liczby tylko z pól odwiedzającego
+   albo ze źródła. Propozycje doradcy na start (do oceny, nie do ślepego wykonania): ile może kosztować nagroda lojalnościowa,
+   żeby się spinała; kiedy wysłać przypomnienie o kolejnym opakowaniu; subskrypcja czy zakup jednorazowy — próg opłacalności.
+   Po punktach 1–3: jedno nowe narzędzie na cykl kilku przebiegów, w pętli z recenzją.
+5. Granice bez zmian: 60 kl./s na telefonie (zmierz), CLS ~0, `prefers-reduced-motion`, zero prawdziwych marek, zero kiczu,
+   zero nowych ciężkich bibliotek bez sprawdzenia. **Vercel:** limit wdrożeń konta do ok. 19:10 22.11 — jeden push na przebieg,
+   na końcu; adres podglądu wpisz na górze „Dla Rafała”, gdy się zbuduje. W „Dla Rafała” pisz krótko: co obejrzeć i gdzie.
 
 ## Dla Rafała
 
