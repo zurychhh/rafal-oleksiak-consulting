@@ -111,6 +111,26 @@ Nagłówek sceny white label „Your name on it, not mine.” Rafał ocenił jak
 jest marka klienta i jej klient, nigdy autor strony — żadnych „mine / my / I” w nagłówkach scen produktu. Przejrzyj pod tym
 kątem całe `/nawyko` i `/calculator` w następnym przebiegu i uruchom bramki (ta zmiana poszła bez builda).
 
+## KOLEJKA od Rafała (22.11.2026 18:20, po przeklikaniu podglądu) — NAJNOWSZA, czytaj pierwszą. Nie startować bez słowa Rafała (mało limitu).
+
+Słowa Rafała: „dobrze, teraz pracujemy nad tą częścią”. W tej kolejności:
+1. **`/nawyko` — przewijanie za szybkie.** „Scrolle idą za szybko, nie widzę efektów, jak scrolluję w normalnym tempie. Zwolnić.”
+   Wydłuż drogę przewijania każdego aktu (więcej wysokości na akt, dłuższe przypięcie), tak żeby przy zwykłym tempie kółka/gładzika
+   każdy efekt zdążył się rozegrać i wybrzmieć; sprawdź na nagraniu w realnym tempie, nie w zwolnionym skrypcie.
+2. **`/nawyko` — przejazd telefonu.** „Telefon zbyt [gwałtownie] zmienia miejsce, nie ma być takich kątów, bo to inna stylistyka.”
+   Usuń rotację/pochylenie; przejazd ma być płaski, spokojny, prostoliniowy, w rytmie reszty strony (stylistyka: papier, typografia,
+   precyzja — nie 3D).
+3. **Strona główna `/lab/home`.** „Do połowy OK, później znów nudy — tam pracujecie dalej.” Druga połowa na sceny (jak górna).
+   **Zakończenie obowiązkowe:** czerwone zdanie końcowe z obecnej strony produkcyjnej ZOSTAJE; na końcu strony przewijanie ma jeszcze raz
+   odsłonić tekst „You don't pay twice for the same customer.” (efekt odsłonięcia jako finał).
+4. **Kalkulator** — „na teraz niech zostanie”, ale ma być czytelniej, że suwakiem/pokrętłem można kręcić (wyraźna podpowiedź gestu,
+   uchwyt, który wygląda na ruchomy, krótka animacja zachęty przy wejściu). v3 odłożona, nie budować teraz.
+5. **Recenzja „wizjonera designu”** (prośba Rafała): osobny recenzent w roli dyrektora kreatywnego z czołowego studia produktowego —
+   ocenia CAŁOŚĆ (`/nawyko`, `/lab/home`, kalkulator) pod kątem: spójność stylistyki, rytm i tempo ruchu, hierarchia, co jest
+   naprawdę zapamiętywalne, co jest przeciętne; ma wskazać 3 rzeczy do wycięcia i 3 do wzmocnienia, z uzasadnieniem. Wynik w
+   `agencja/recenzje/` i streszczenie w „Dla Rafała”. Najpierw recenzja, potem poprawki 1–4 z jej uwzględnieniem.
+Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + podgląd we własnej marce klienta + deck (3 decyzje).
+
 ## Dla Rafała
 
 **Przebieg 5 (22.11, jednorazowy: „jeszcze jeden set poprawek”).** Punkty 1a–1d były już zbudowane w przebiegu 4 (opis
