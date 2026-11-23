@@ -3,7 +3,7 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const ROUTES = ['app/nawyko', 'app/calculator', 'app/lab'];
+const ROUTES = ['app/nawyko', 'app/calculator', 'app/lab', 'app/work'];
 const FIRST_PERSON = /\b(I|me|my|mine|we|our|ours)\b/;
 const BANNED = /\b(seamless(ly)?|powerful|effortless(ly)?|supercharge|game[- ]chang\w+|revolutionary|unlock your)\b/i;
 // Elements whose text is a headline, a scene lead or a call to action.

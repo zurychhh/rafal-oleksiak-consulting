@@ -50,3 +50,13 @@ Równolegle do sceny R4 `/nawyko`: osobny budujący w osobnym worktree, scalany 
 Przebieg 1: szkielet trasy (`app/work/genactiv/`), tokeny, akty 0–4 z wow (pudełko→telefon, zdrapka, pierścień, pieczątka).
 Przebieg 2: akty 5–8. Przebieg 3: wyniki, finał, nawigacja („Work” we wspólnej nawigacji), szlif ruchu. Każdy przebieg: link podglądu
 i jedno zdanie dla Rafała, co obejrzeć.
+
+## Przebieg 1 — kryteria i stan (23.11.2026)
+Kryteria: trasa `app/work/genactiv/` z `noindex,nofollow`, poza `sitemap.ts`; tokeny ze specu, kontrast ≥ 4,5:1 (qa.js);
+Montserrat lokalnie (`public/fonts/montserrat-latin*.woff2`, OFL 1.1, @fontsource-variable/montserrat 5.3.0); akty 0–4 w jednej
+przypiętej scenie (postęp z przewijania, rAF, bez transition); tryb statyczny (bez JS / reduced motion / webdriver / okno < 600 px)
+z pełną treścią; zdrapka canvas + „Reveal without scratching” + samozdrapka po 1,5 s; każda liczba na ekranie = rysunek
+`aria-hidden` z podpisem „Example screen, not a screenshot of the app.”; tymczasowy link „See it with your brand →” do `/nawyko`.
+Stan: zbudowane; bramki build, tsc, lint (0 błędów, 1 ostrzeżenie jak przed), copy-voice, qa.js 9/9 PASS, noindex, brak w sitemap.
+Otwarte: czytelnik-kupujący nie przeszedł; copy-voice nie widzi tekstów trasy (są w tablicy `COPY`, test czyta tylko JSX);
+`content-rules` nie obejmuje tras pisanych ręcznie; przycisk zdrapki w trybie sceny osiągalny klawiaturą tylko w akcie 3.

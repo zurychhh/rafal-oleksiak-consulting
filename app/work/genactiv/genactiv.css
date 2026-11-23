@@ -1,0 +1,254 @@
+/* /work/genactiv — swiat aplikacji GENACTIV: jeden nocny motyw (wyjatek od Paper/Night), tokeny ze specu, kontrast >= 4,5:1. */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/montserrat-latin-ext.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF,
+    U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/montserrat-latin.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.ga {
+  --bg: #0e0b0c;
+  --surface: #1d1517;
+  --text: #ffffff;
+  --muted: #c9bfc1;
+  --accent: #f5333f;
+  --accent-hi: #ff8a91;
+  --rose-1: #ffa9ad;
+  --rose-2: #f2b8c2;
+  --rose-3: #ffc3c6;
+  --paper: #f4f1ee;
+  --ink: #2a2526;
+  --ground-1: #4a0f16;
+  --ground-2: #1d1012;
+  --stamp-1: #c41a26;
+  --foil: linear-gradient(135deg, #ffd2d5, #f5333f, #9e1520, #ff9aa0, #c41a26, #ff6a72, #7a0f18);
+  --ph: clamp(440px, 74svh, 660px);
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Montserrat', system-ui, sans-serif;
+  overflow-x: clip;
+  min-height: 100vh;
+}
+
+/* Reset po globals.css / critical.css (STATUS, Lekcje): kazdy <section> dostaje padding, overflow i transform (zabija sticky). */
+html:has(.ga) { overflow-x: visible; max-width: none; scroll-behavior: auto; background: #0e0b0c; }
+body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color: #fff; }
+.ga :where(section) { padding: 0; overflow-x: visible; max-width: none; transform: none; backface-visibility: visible; }
+.ga h1, .ga h2 { font-family: 'Montserrat', system-ui, sans-serif; margin: 0; color: inherit; }
+.ga p { margin: 0; }
+.ga *, .ga *::before, .ga *::after { box-sizing: border-box; }
+.ga a { color: inherit; }
+.ga :focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 3px; border-radius: 4px; }
+
+.ga-skip { position: absolute; left: 16px; top: -60px; z-index: 10; background: var(--surface); padding: 10px 14px; }
+.ga-skip:focus { top: 12px; }
+.ga-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.ga-top {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  max-width: 1240px; margin: 0 auto; padding: 22px 48px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.ga-top a { text-decoration: none; }
+.ga-top-tag { color: var(--muted); }
+
+/* ---------- Tekst aktow ---------- */
+.ga-kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-hi); margin-bottom: 18px !important; }
+.ga h1 { font-size: clamp(40px, 4.3vw, 64px); line-height: 1.05; font-weight: 800; letter-spacing: -0.025em; text-wrap: balance; }
+.ga h2 { font-size: clamp(32px, 3.4vw, 50px); line-height: 1.08; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+.ga-sub { margin-top: 20px !important; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: var(--muted); max-width: 34em; font-weight: 500; }
+.ga-btn {
+  margin-top: 26px; align-self: flex-start; min-height: 44px; padding: 0 20px; border-radius: 999px;
+  border: 1.5px solid var(--accent-hi); background: transparent; color: var(--text);
+  font: 600 15px/1 'Montserrat', system-ui, sans-serif; cursor: pointer;
+}
+.ga-btn:hover:not(:disabled) { background: var(--surface); }
+.ga-btn:disabled { border-color: #5a4a4d; color: var(--muted); cursor: default; }
+
+/* ---------- Telefon ---------- */
+.ga-fig { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+.ga-fig figcaption { font-size: 13px; color: var(--muted); font-weight: 500; }
+.ga-phone-slot {
+  position: relative; height: var(--ph); width: calc(var(--ph) * 0.49);
+  clip-path: inset(-100vh -100vw 0 -100vw); /* telefon w pudelku nie wystaje pod scene */
+}
+.ga-glow {
+  position: absolute; left: 50%; top: 58%; width: min(240%, 52vw); aspect-ratio: 1; transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(245, 51, 63, 0.42), rgba(196, 26, 38, 0.14) 55%, transparent);
+  pointer-events: none; z-index: 0;
+}
+.ga-phone {
+  position: absolute; inset: 0; z-index: 1;
+  border-radius: calc(var(--ph) * 0.075);
+  background: var(--bg);
+  border: calc(var(--ph) * 0.013) solid #2a1f21;
+  box-shadow: 0 0 0 1px #4a3a3d, 0 40px 90px rgba(0, 0, 0, 0.7), 0 0 60px rgba(245, 51, 63, 0.16);
+  overflow: hidden;
+  font-size: calc(var(--ph) * 0.026);
+  will-change: transform;
+}
+.ga-notch { position: absolute; top: 2.4%; left: 50%; width: 30%; height: 3.6%; transform: translateX(-50%); border-radius: 999px; background: #000; z-index: 3; }
+.ga-layer { position: absolute; inset: 0; }
+.ga-scr {
+  position: absolute; inset: 0; padding: 16% 9% 9%;
+  display: flex; flex-direction: column; justify-content: center; gap: 1.1em;
+  background: radial-gradient(120% 60% at 50% 0%, #2a1418, var(--bg) 70%);
+}
+.ga-scr-h { font-size: 1.25em; font-weight: 800; letter-spacing: -0.01em; }
+
+.ga-word { font-weight: 800; letter-spacing: 0.26em; font-size: 1.35em; text-align: center; margin: 0.6em 0 0.4em; }
+.ga-home-card { background: var(--surface); border-radius: 1em; padding: 1em; display: flex; flex-direction: column; gap: 0.8em; font-weight: 700; }
+.ga-home-foil { aspect-ratio: 1.55; border-radius: 0.7em; background: var(--foil); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15); }
+.ga-home-row { display: flex; align-items: center; gap: 0.6em; background: var(--surface); border-radius: 1em; padding: 0.9em 1em; font-weight: 700; }
+.ga-home-row span { flex: 1; }
+.ga-home-row i { width: 1.4em; height: 1.4em; border-radius: 50%; border: 2px solid var(--accent-hi); }
+
+.ga-ring-wrap { position: relative; width: 100%; aspect-ratio: 1; }
+.ga-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ga-ring-mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ga-ring-mid b { font-size: 3.4em; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.ga-ring-mid span { color: var(--muted); font-weight: 600; margin-top: 0.3em; }
+.ga-reorder { display: flex; justify-content: space-between; background: var(--surface); border-radius: 1em; padding: 0.9em 1em; font-weight: 700; }
+.ga-reorder b { color: var(--accent-hi); }
+
+.ga-finder {
+  position: relative; aspect-ratio: 1.25; border-radius: 1em; overflow: hidden;
+  background: #170f11; box-shadow: inset 0 0 0 2px #3a2a2d;
+  display: flex; align-items: center; justify-content: center;
+}
+.ga-bars { display: flex; gap: 0.12em; height: 44%; background: var(--paper); padding: 0.6em 0.9em; border-radius: 0.3em; }
+.ga-bars i { display: block; background: var(--ink); }
+.ga-beam { position: absolute; left: 6%; right: 6%; top: 8%; height: 2px; pointer-events: none; }
+.ga-beam::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--accent); box-shadow: 0 0 12px 3px rgba(245, 51, 63, 0.6); }
+.ga-receipt {
+  align-self: center; width: 62%; background: var(--paper); padding: 0.9em 1em; display: flex; flex-direction: column; gap: 0.5em;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 92% 94%, 84% 100%, 76% 94%, 68% 100%, 60% 94%, 52% 100%, 44% 94%, 36% 100%, 28% 94%, 20% 100%, 12% 94%, 4% 100%, 0 94%);
+  padding-bottom: 1.4em;
+}
+.ga-receipt i { display: block; height: 0.45em; background: var(--ink); opacity: 0.75; border-radius: 2px; }
+.ga-receipt i.s { width: 55%; }
+.ga-lock { align-self: center; display: inline-flex; align-items: center; gap: 0.5em; background: var(--surface); color: var(--accent-hi); border-radius: 999px; padding: 0.6em 1em; font-weight: 700; }
+
+.ga-card { position: relative; aspect-ratio: 1.15; border-radius: 1.1em; overflow: hidden; box-shadow: 0 1em 2.4em rgba(0, 0, 0, 0.5); }
+.ga-card-under {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5em;
+  background: var(--surface); text-align: center; padding: 1em;
+}
+.ga-card-under b { font-size: 1.7em; font-weight: 800; color: var(--text); }
+.ga-card-under span { color: var(--muted); font-weight: 600; }
+.ga-foil { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; background: var(--foil); transition: opacity 0.5s ease; }
+.ga-foil.ga-gone { opacity: 0; pointer-events: none; }
+
+.ga-stamp {
+  position: absolute; left: 50%; top: 50%; width: 52%; aspect-ratio: 1; border-radius: 50%;
+  background: var(--stamp-1); border: 0.35em solid var(--accent-hi);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4em;
+  transform: translate(-50%, -50%) scale(1.6) rotate(-14deg); opacity: 0;
+  box-shadow: 0 0.8em 2em rgba(0, 0, 0, 0.55);
+}
+.ga-stamp span { font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; font-size: 1.05em; color: #fff; }
+.ga-stamp i { width: 60%; height: 0.5em; border-radius: 999px; background: linear-gradient(90deg, #c41a26, #f5333f, #ff8a91); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); }
+.ga-stamp.ga-on { animation: ga-drop 0.62s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
+@keyframes ga-drop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(1.6) rotate(-14deg); }
+  55% { opacity: 1; transform: translate(-50%, -50%) scale(0.94) rotate(-8deg); }
+  70% { transform: translate(calc(-50% - 4px), -50%) scale(1) rotate(-9deg); }
+  85% { transform: translate(calc(-50% + 3px), -50%) scale(1) rotate(-7deg); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-8deg); }
+}
+
+/* ---------- Pudelko (geometria CSS, bez zdjecia i bez pliku logo) ---------- */
+.ga-box-wrap { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.ga-box { position: absolute; left: -24%; right: -24%; bottom: 0; height: 36%; }
+.ga-box-front {
+  position: absolute; inset: 0; border-radius: 0.5em 0.5em 0 0;
+  background: linear-gradient(180deg, #c41a26, #7a0f18);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25), inset 0 -40px 60px rgba(0, 0, 0, 0.35);
+  display: flex; align-items: center; justify-content: center;
+  transform: perspective(900px) rotateX(6deg); transform-origin: 50% 100%;
+}
+.ga-box-front::after {
+  content: ''; position: absolute; top: 0; right: -7%; width: 7%; height: 100%;
+  background: linear-gradient(180deg, #7a0f18, #3a070c); clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 100%);
+}
+.ga-box-front span { font-weight: 800; letter-spacing: 0.32em; font-size: calc(var(--ph) * 0.034); color: #fff; padding-left: 0.32em; }
+.ga-box-back { display: none; }
+
+/* ---------- Tryb przewijania: przypieta scena ---------- */
+.ga-track { position: relative; height: 560svh; }
+.ga-stage {
+  position: sticky; top: 0; height: 100svh;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 48px;
+  max-width: 1240px; margin: 0 auto; padding: 0 48px;
+}
+.ga-stage::before {
+  content: ''; position: absolute; left: 50%; bottom: 0; width: 100vw; height: 38%; transform: translateX(-50%);
+  background: radial-gradient(60% 100% at 72% 100%, var(--ground-1), var(--ground-2) 55%, transparent 100%);
+  opacity: 0.8; pointer-events: none; z-index: -1;
+}
+.ga-copy { position: relative; height: 70%; }
+.ga-copy .ga-copy-in { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; will-change: opacity, transform; }
+.ga-stage .ga-fig { height: 100%; }
+
+/* ---------- Uklad statyczny (bez JS, reduced motion, webdriver, niskie okno) ---------- */
+.ga-still { max-width: 1240px; margin: 0 auto; padding: 0 48px; }
+.ga-act { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; padding: 64px 0 !important; }
+.ga-act .ga-copy-in { display: flex; flex-direction: column; }
+.ga-still .ga-phone-slot { --ph: 560px; }
+.ga-still .ga-out .ga-phone { transform: translateY(26%); }
+
+/* ---------- Koniec przebiegu 1 ---------- */
+.ga-end { padding: 120px 16px 96px; display: flex; justify-content: center; }
+.ga-cta {
+  display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 999px;
+  background: var(--stamp-1); color: #fff !important; font-weight: 700; font-size: 17px; text-decoration: none;
+}
+.ga-cta:hover { background: #9e1520; }
+
+.ga-foot { border-top: 1px solid #2a1f21; padding: 28px 48px 40px; }
+.ga-foot nav { max-width: 1240px; margin: 0 auto; display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; }
+.ga-foot a { color: var(--muted); }
+
+@media (max-width: 1023px) {
+  .ga-act { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .ga-glow { width: min(240%, 100vw); }
+}
+
+@media (max-width: 759px) {
+  .ga-top { padding: 16px; font-size: 12px; }
+  .ga h1 { font-size: 27px; line-height: 1.1; }
+  .ga h2 { font-size: 25px; line-height: 1.12; }
+  .ga-kicker { font-size: 12px; margin-bottom: 10px !important; }
+  .ga-sub { font-size: 15px; margin-top: 12px !important; line-height: 1.45; }
+  .ga-btn { margin-top: 14px; }
+
+  .ga { --ph: min(calc(70svh - 64px - var(--consent-h, 0px)), 500px); }
+  .ga-stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: 30svh minmax(0, 1fr); gap: 0; padding: 18px 16px 10px; align-items: stretch; }
+  .ga-stage .ga-fig { justify-content: flex-start; }
+  .ga-copy { height: 100%; }
+  .ga-copy .ga-copy-in { justify-content: flex-start; }
+  .ga-fig { gap: 10px; }
+  .ga-fig figcaption { font-size: 12px; }
+
+  .ga-still { padding: 0 16px; }
+  .ga-act { grid-template-columns: minmax(0, 1fr); gap: 32px; padding: 40px 0 !important; }
+  .ga-still .ga-phone-slot { --ph: 460px; }
+  .ga-foot { padding: 24px 16px 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ga-stamp.ga-on { animation: none; opacity: 1; transform: translate(-50%, -50%) rotate(-8deg); }
+  .ga-foil { transition: none; }
+}

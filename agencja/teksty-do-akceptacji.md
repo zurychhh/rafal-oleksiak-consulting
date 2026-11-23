@@ -120,3 +120,24 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /nawyko | R4 scena (f) przyciski | Without consent · With consent | nowy |
 | /nawyko | R4 scena (f) podpis | Example · Features locked. / Features on. · A tick is stored as a date, never sent to ads, analytics or push messages. | nowy |
 | /nawyko | R4 scena (f) telefon | Health data · off / on · Visible. Locked until you agree. / Everything is on. · Daily card · Streak · Pack rhythm · locked / ✓ on · Turn on and unlock (przycisk, „unlock” z kolejki Rafała; rubryka zasada 4 zabrania „unlock” — do decyzji) · A tick records the date only. | nowy |
+
+## /work/genactiv — przebieg 1 (23.11.2026, wszystkie: nowy)
+| Miejsce | Tekst | Status |
+|---|---|---|
+| nagłówek strony | Rafał Oleksiak · Work · GENACTIV | nowy |
+| akt 0 etykieta | GENACTIV · Polish colostrum brand | nowy |
+| akt 0 H1 | GENACTIV turned its box into a daily ritual. | nowy |
+| akt 0 zdanie | GENACTIV, a Polish colostrum brand, gives its customers an app: confirm the purchase, scratch one card a day, collect rewards known in advance. | nowy |
+| akt 1 etykieta / H2 | The problem / Customers stop halfway through the pack. | nowy |
+| akt 1 zdanie | The daily habit fades mid-month, and the second order does not come. | nowy |
+| akt 2 etykieta / H2 | Step 1 · Proof of purchase / Purchase proof from any shop. | nowy |
+| akt 2 zdanie | The customer scans the code on the box or the shop receipt. The receipt stays on the phone. | nowy |
+| akt 3 etykieta / H2 | Step 2 · Card of the day / One card a day, after the daily dose. | nowy |
+| akt 3 zdanie | The foil is in GENACTIV colours. Scratch it with a finger or a mouse. | nowy |
+| akt 3 przycisk | Reveal without scratching / (po odkryciu) Card revealed | nowy |
+| akt 4 etykieta / H2 | Step 3 · The month / Rewards are set before day one. | nowy |
+| akt 4 zdanie | Every ticked day fills the ring. The stamp lands on a day the customer knew in advance, never by chance. | nowy |
+| podpis telefonu | Example screen, not a screenshot of the app. | nowy |
+| ekrany (rysunek, aria-hidden) | GENACTIV · Today's card · Rewards · This month · 15 / of 30 days · Next order none · Confirm purchase · Stays on this phone · Today · Day ticked · One step closer to the stamp · SCRATCH · Stamp · Day 24 stamp · (pudełko) GENACTIV | nowy |
+| koniec | See it with your brand → | nowy |
+| stopka | Home · Nawyko · Privacy | nowy |
