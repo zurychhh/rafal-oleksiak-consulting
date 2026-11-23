@@ -88,3 +88,15 @@ pressed=true); usunięty wiersz „Order rewards · on”; 6 przepisań z recenz
 „Medal and gift at the finish” bez przyciemnienia (było 3,22:1 przy krycie 0,35, teraz biały na #1d1517), nieaktywne kroki osi
 #c9bfc1 na #0e0b0c = 10,92:1. Bramki: build, tsc, lint 0 błędów (1 ostrzeżenie jak przed), copy-voice OK, qa.js PASS, noindex,
 brak w sitemap, CLS 0,0026 (390) / 0,0006 (1440).
+
+## Przebieg 3 — kryteria (23.11.2026, 23:45)
+Akty 9–10 w tej samej przypiętej scenie (ACTS = 11; tor dalej 120svh na akt; zmiany rozmiaru tylko transformem; tryb statyczny z pełną
+treścią wszystkich aktów). Akt 9 „Wyniki”: **stan zablokowany**, nie pusty i nie zmyślony — kłódka/szary wykres-szkielet bez wartości,
+metoda słowami („Reorder lift is measured against a control group that never gets the app.”), kiedy pierwsze wyniki („First read
+90 days after launch.” — bez daty startu, bo start w sklepach nie jest ogłoszony), zero liczb. Akt 10 „Finał”: „See it with your brand”
+— telefon przemalowuje się z palety GENACTIV na kolor wybrany przez odwiedzającego (próbki + `input type=color`, kontrast tekstu
+liczony), link „See the full product page →” do `/nawyko`, i formularz zapytania przez istniejący `Enquiry` z
+`app/nawyko/NawykoClient.tsx` z `form="work"`, `page="/work/genactiv"` (ten sam kształt `/api/lead`; `[a-z]+` przechodzi zod),
+ostylowany w palecie realizacji (kontrast ≥ 4,5:1). Nawigacja: na `/work/genactiv` nagłówek z linkami Nawyko · Work (bieżąca) · Contact (#enquiry);
+link do `/work/genactiv` z `/nawyko` NIE jest dodawany (publiczny link do prawdziwej marki przed zgodą GENACTIV — decyzja Rafała,
+wpis w „Czeka na Rafała”); `/` bez zmian. Trasa dalej `noindex`, poza sitemap.
