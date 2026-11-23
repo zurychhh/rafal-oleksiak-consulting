@@ -218,3 +218,19 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | finał, podpis pod telefonem (bez nazwy) | A placeholder until you type your store. Nothing is sent until you press Send. | nowy |
 
 Zastąpione: „Enquiry” (etykieta), „Would this fit your product?”, „Supplements, skincare, pet food, coffee — anything reordered on a rhythm. Type your store and watch the phone.”
+
+## R4 przebieg 3 — /work/genactiv (23.11.2026, wszystkie: nowy)
+| Miejsce | Tekst | Status |
+|---|---|---|
+| nagłówek strony (nawigacja) | Nawyko · Work · Contact | nowy |
+| akt 9 etykieta / H2 | Results / Reorder lift stays locked until real data comes in. | nowy |
+| akt 9 zdanie | Reorder lift is measured against a control group that never gets the app, with the first read 90 days after launch. | nowy |
+| akt 9 podpis | Locked screen. No results shown yet. | nowy |
+| akt 9 ekran (rysunek, aria-hidden) | Results · Locked · With the app · Control group · Reorder lift · no data yet | nowy |
+| akt 10 etykieta / H2 | Your brand / See it with your brand: pick a colour. | nowy |
+| akt 10 zdanie | The phone repaints in the picked colour, and the text colour adjusts to stay readable. | nowy |
+| akt 10 próbki (czytane przez czytnik) | Brand colour · GENACTIV red · Green · Blue · Yellow · Violet · Any colour | nowy |
+| akt 10 podpis | Example screen in the picked colour. | nowy |
+| akt 10 ekran (rysunek, aria-hidden) | Your brand · Today's card · Rewards · Scratch today's card | nowy |
+| formularz (tytuł `Enquiry`) | Ask about an app for your brand | nowy |
+| link pod formularzem | See the full product page → | nowy |

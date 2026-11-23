@@ -33,7 +33,13 @@ export default function GenactivWork() {
         {/* Zwykly <a>, nie <Link>: runtime strony glownej nie znosi nawigacji klienckiej (CLAUDE.md, DcBoot). */}
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/">Rafał Oleksiak</a>
-        <span className="ga-top-tag">Work · GENACTIV</span>
+        <nav className="ga-nav" aria-label="Main">
+          <a href="/nawyko">Nawyko</a>
+          <a href="/work/genactiv" aria-current="page">
+            Work
+          </a>
+          <a href="#enquiry">Contact</a>
+        </nav>
       </header>
       <main id="main">
         <GenactivStory />

@@ -1,14 +1,15 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { Enquiry } from '../../nawyko/NawykoClient'
 
-/* /work/genactiv — przebieg 1: akty 0–4, przebieg 2: akty 5–8 (cashback, poziomy, zgoda, jak to powstalo). Jeden telefon jako nic strony.
+/* /work/genactiv — przebieg 1: akty 0–4, przebieg 2: akty 5–8 (cashback, poziomy, zgoda, jak to powstalo), przebieg 3: akty 9–10 (wyniki zablokowane, final z kolorem marki i formularzem). Jeden telefon jako nic strony.
    Stan domyslny DOM (SSR, bez JS, prefers-reduced-motion, navigator.webdriver, okno < 600 px) = uklad statyczny:
    kazdy akt z wlasnym rysunkiem w stanie koncowym. Tryb 'scroll' = przypieta scena, postep z przewijania (rAF),
    bez zegara (R2) i bez transition na elementach sterowanych przewijaniem (R4). Jedyny zegar: samozdrapka po 1,5 s
    (wymog specu) i jednorazowe drgniecie pieczatki. Wszystkie liczby na ekranach sa rysunkiem (aria-hidden) z podpisem „Example”. */
 
-const ACTS = 9
+const ACTS = 11
 const DAYS = 30
 const STAMP_DAY = 24 // rysunek, podpisany „Example”
 const MID_DAY = 15 // rysunek, podpisany „Example”
@@ -73,7 +74,51 @@ const COPY: Copy[] = [
     sub: 'AI agents write the code; a person signs off each check before the next step.',
     cap: 'Build stages in order.',
   },
+  {
+    kicker: 'Results',
+    title: 'Reorder lift stays locked until real data comes in.',
+    sub: 'Reorder lift is measured against a control group that never gets the app, with the first read 90 days after launch.',
+    cap: 'Locked screen. No results shown yet.',
+  },
+  {
+    kicker: 'Your brand',
+    title: 'See it with your brand: pick a colour.',
+    sub: 'The phone repaints in the picked colour, and the text colour adjusts to stay readable.',
+    cap: 'Example screen in the picked colour.',
+  },
 ]
+
+/* ---------- Kolor marki odwiedzajacego (akt 10): kontrast tekstu liczony (WCAG 2.x) ---------- */
+const GA_RED = '#f5333f'
+const SWATCHES: { c: string; n: string }[] = [
+  { c: GA_RED, n: 'GENACTIV red' },
+  { c: '#1f8f5a', n: 'Green' },
+  { c: '#2f6fde', n: 'Blue' },
+  { c: '#f5c400', n: 'Yellow' },
+  { c: '#8b5cf6', n: 'Violet' },
+]
+const DEFAULT_PICK = '#2f6fde'
+const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16))
+const hex = (c: number[]) => '#' + c.map((v) => Math.round(clamp(v, 0, 255)).toString(16).padStart(2, '0')).join('')
+const mix = (a: string, b: string, t: number) => {
+  const x = rgb(a)
+  const y = rgb(b)
+  return hex(x.map((v, i) => v + (y[i] - v) * t))
+}
+const lum = (h: string) => {
+  const [r, g, b] = rgb(h).map((v) => {
+    const s = v / 255
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4)
+  })
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
+const ratio = (a: string, b: string) => {
+  const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m)
+  return (x + 0.05) / (y + 0.05)
+}
+// bialy albo czarny: wyzszy kontrast z dwoch; dla dowolnego koloru minimum to ok. 4,58:1
+const inkOn = (c: string) => (ratio('#ffffff', c) >= ratio('#000000', c) ? '#ffffff' : '#000000')
+const safeHex = (v: string) => (/^#[0-9a-f]{6}$/i.test(v) ? v.toLowerCase() : DEFAULT_PICK)
 
 /* Etapy budowy: same kroki, bez liczb (liczby dolozy doradca z agencja/dane/realizacja-genactiv.json). */
 const GATES: { t: string; gate?: boolean }[] = [
@@ -566,6 +611,97 @@ function ScreenBuild({ p }: { p: number }) {
   )
 }
 
+function ScreenResults() {
+  return (
+    <div className="ga-scr" aria-hidden="true">
+      <div className="ga-scr-top">
+        <div className="ga-scr-h">Results</div>
+        <span className="ga-chip ga-chip-lock">
+          <Lock /> Locked
+        </span>
+      </div>
+      <div className="ga-skel">
+        {['With the app', 'Control group'].map((g) => (
+          <div className="ga-skel-g" key={g}>
+            <div className="ga-skel-bars">
+              <i />
+              <i />
+              <i />
+            </div>
+            <span>{g}</span>
+          </div>
+        ))}
+      </div>
+      <div className="ga-cardrow ga-locked">
+        <span>Reorder lift</span>
+        <b>
+          <Lock /> no data yet
+        </b>
+      </div>
+    </div>
+  )
+}
+
+function ScreenBrand({ c }: { c: string }) {
+  const ink = inkOn(c)
+  return (
+    <div className="ga-scr ga-scr-brand" aria-hidden="true" style={{ ['--b' as string]: c, ['--bi' as string]: ink }}>
+      <div className="ga-brand-bar">Your brand</div>
+      <div className="ga-home-card">
+        <span>Today&apos;s card</span>
+        <div className="ga-brand-foil" />
+      </div>
+      <div className="ga-home-row ga-brand-row">
+        <span>Rewards</span>
+        <i />
+        <i />
+        <i />
+      </div>
+      <div className="ga-brand-btn">Scratch today&apos;s card</div>
+    </div>
+  )
+}
+
+function Picker({ pick, onPick, onFocus }: { pick: string; onPick: (c: string) => void; onFocus?: () => void }) {
+  const known = SWATCHES.some((s) => s.c === pick)
+  return (
+    <fieldset className="ga-pick">
+      <legend>Brand colour</legend>
+      <div className="ga-pick-row">
+        {SWATCHES.map((s) => (
+          <label key={s.c} className="ga-sw" title={s.n}>
+            <input
+              type="radio"
+              name="ga-brand"
+              value={s.c}
+              checked={pick === s.c}
+              onChange={() => onPick(s.c)}
+              onFocus={onFocus}
+              aria-label={s.n}
+            />
+            <span style={{ background: s.c }} />
+          </label>
+        ))}
+        <label className={'ga-any' + (known ? '' : ' ga-on')}>
+          <input type="color" value={pick} onChange={(e) => onPick(safeHex(e.currentTarget.value))} onFocus={onFocus} />
+          <span>Any colour</span>
+        </label>
+      </div>
+    </fieldset>
+  )
+}
+
+function Final({ inScene = false }: { inScene?: boolean }) {
+  return (
+    <div className={'ga-final' + (inScene ? ' ga-final-in' : '')} id="enquiry">
+      <Enquiry form="work" page="/work/genactiv" title="Ask about an app for your brand" />
+      <a className="ga-link" href="/nawyko">
+        See the full product page →
+      </a>
+    </div>
+  )
+}
+
 function Box() {
   return (
     <div className="ga-box" aria-hidden="true">
@@ -585,6 +721,7 @@ export function GenactivStory() {
   const [robot, setRobot] = useState(false)
   const [consent, setConsent] = useState(false)
   const flipConsent = useCallback(() => setConsent((v) => !v), [])
+  const [pick, setPick] = useState(DEFAULT_PICK)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -645,6 +782,15 @@ export function GenactivStory() {
     const y = window.scrollY + r.top + (7.4 / ACTS) * span
     if (Math.abs(window.scrollY - y) > span / ACTS / 3) window.scrollTo({ top: y })
   }
+  // Probki koloru w akcie 10: fokus przewija scene do aktu 10.
+  const toBrand = () => {
+    const el = track.current
+    if (mode !== 'scroll' || !el) return
+    const r = el.getBoundingClientRect()
+    const span = r.height - window.innerHeight
+    const y = window.scrollY + r.top + (10.5 / ACTS) * span
+    if (Math.abs(window.scrollY - y) > span / ACTS / 3) window.scrollTo({ top: y })
+  }
   const reveal = (
     <button type="button" className="ga-btn" onClick={done} onFocus={toScratch} aria-disabled={revealed}>
       {revealed ? 'Card revealed' : 'Reveal without scratching'}
@@ -666,6 +812,8 @@ export function GenactivStory() {
               <p className="ga-sub">{c.sub}</p>
               {i === 0 ? heroLink : null}
               {i === 3 ? reveal : null}
+              {i === 10 ? <Picker pick={pick} onPick={setPick} /> : null}
+              {i === 10 ? <Final inScene /> : null}
             </div>
             <figure className="ga-fig">
               <div className={'ga-phone-slot' + (i === 0 ? ' ga-out' : '')}>
@@ -681,6 +829,8 @@ export function GenactivStory() {
                   {i === 6 ? <ScreenLevels p={1} /> : null}
                   {i === 7 ? <ScreenConsent on={consent} onToggle={flipConsent} /> : null}
                   {i === 8 ? <ScreenBuild p={1} /> : null}
+                  {i === 9 ? <ScreenResults /> : null}
+                  {i === 10 ? <ScreenBrand c={pick} /> : null}
                 </div>
                 {i === 0 ? (
                   <div className="ga-box-wrap">
@@ -692,7 +842,6 @@ export function GenactivStory() {
             </figure>
           </section>
         ))}
-        <End />
       </div>
     )
   }
@@ -722,7 +871,7 @@ export function GenactivStory() {
                 key={i}
                 className="ga-copy-in"
                 aria-labelledby={'ga-t' + i}
-                inert={!on && i !== 3}
+                inert={!on && i !== 3 && i !== 10}
                 style={{
                   opacity: on ? 1 : 0,
                   transform: `translateY(${(enter * 18).toFixed(1)}px)`,
@@ -733,6 +882,7 @@ export function GenactivStory() {
                 <p className="ga-sub">{c.sub}</p>
                 {i === 0 ? heroLink : null}
                 {i === 3 ? reveal : null}
+                {i === 10 ? <Picker pick={pick} onPick={setPick} onFocus={toBrand} /> : null}
               </article>
             )
           })}
@@ -758,6 +908,9 @@ export function GenactivStory() {
                   {i === 6 ? <ScreenLevels p={act === 6 ? local : act > 6 ? 1 : 0} /> : null}
                   {i === 7 ? <ScreenConsent on={consent} onToggle={flipConsent} onFocus={toConsent} /> : null}
                   {i === 8 ? <ScreenBuild p={act === 8 ? local : 0} /> : null}
+                  {i === 9 ? <ScreenResults /> : null}
+                  {/* przemalowanie z palety GENACTIV na wybrany kolor w pierwszych 40% aktu */}
+                  {i === 10 ? <ScreenBrand c={act === 10 ? mix(GA_RED, pick, smooth(local / 0.4)) : GA_RED} /> : null}
                 </div>
               ))}
             </div>
@@ -775,17 +928,7 @@ export function GenactivStory() {
         </figure>
       </div>
     </div>
-    <End />
+    <Final />
     </>
-  )
-}
-
-function End() {
-  return (
-    <div className="ga-end">
-      <a className="ga-cta" href="/nawyko">
-        See it with your brand →
-      </a>
-    </div>
   )
 }
