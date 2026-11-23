@@ -102,3 +102,21 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /nawyko | R4 scena (c) zdanie | Move the rate and the customer's app shows it at once. | nowy |
 | /nawyko | R4 scena (c) panel marki | {Brand} · brand panel · Example · Points for €1 of cashback · 50 · richer for customers / 200 · cheaper for you · A month of daily cards costs you €{3.00} per customer. | nowy |
 | /nawyko | R4 scena (c) telefon | Exchange points · 300 points = €{3.00} cashback · {100} pts = €1 · Rate set by {Brand} · Move to wallet | nowy |
+| /nawyko | R4 scena (d) etykieta | For you · Learning paths | nowy |
+| /nawyko | R4 scena (d) nagłówek | Cross-selling without ads: short lessons end with a gift. | nowy |
+| /nawyko | R4 scena (d) zdanie | When a path is done, a matching product joins the customer's next order. | nowy |
+| /nawyko | R4 scena (d) przycisk | Next lesson / Start again | nowy |
+| /nawyko | R4 scena (d) podpis | Example · Lesson {4} of 5[ · gift added to the next order]. You choose the lessons and the gift. | nowy |
+| /nawyko | R4 scena (d) telefon | Learning path · Lesson {n} of 5 · ✓ done / now / next · Gift at the finish / Gift added to your next order · A matching product from {Brand} | nowy |
+| /nawyko | R4 scena (e) etykieta | For you · Pharmacy purchases | nowy |
+| /nawyko | R4 scena (e) nagłówek | Pharmacy buyers become visible when they scan the box. | nowy |
+| /nawyko | R4 scena (e) zdanie | A pack bought offline starts the daily card like an online order and shows up in your reports. | nowy |
+| /nawyko | R4 scena (e) przycisk | Scan the box | nowy |
+| /nawyko | R4 scena (e) podpis | Example · Purchase confirmed · pharmacy. / Scanning the barcode… · The barcode on the box confirms the purchase. | nowy |
+| /nawyko | R4 scena (e) telefon | Bought in a pharmacy? · Scan the box. · Purchase confirmed · pharmacy · The daily card starts today. | nowy |
+| /nawyko | R4 scena (f) etykieta | For you · Privacy | nowy |
+| /nawyko | R4 scena (f) nagłówek | Health data never reaches your marketing. | nowy |
+| /nawyko | R4 scena (f) zdanie | Without consent, features stay visible and locked, with one button to turn them on. | nowy |
+| /nawyko | R4 scena (f) przyciski | Without consent · With consent | nowy |
+| /nawyko | R4 scena (f) podpis | Example · Features locked. / Features on. · A tick is stored as a date, never sent to ads, analytics or push messages. | nowy |
+| /nawyko | R4 scena (f) telefon | Health data · off / on · Visible. Locked until you agree. / Everything is on. · Daily card · Streak · Pack rhythm · locked / ✓ on · Turn on and unlock (przycisk, „unlock” z kolejki Rafała; rubryka zasada 4 zabrania „unlock” — do decyzji) · A tick records the date only. | nowy |

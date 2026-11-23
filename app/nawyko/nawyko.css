@@ -565,3 +565,45 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 .nk-topnav a:hover{color:var(--ink);}
 @media (min-width:1200px){.nk-topnav{display:flex;}}
 #cashback,#levels,#exchange{scroll-margin-top:0;}
+
+/* ══ runda 4, sceny d–f: sciezka wiedzy z prezentem, skan z apteki, prywatnosc ══ */
+/* telefon: sciezka */
+.nk-pbars{display:grid;grid-template-columns:repeat(5,1fr);gap:1.6cqw;margin-top:2.4cqh;}
+.nk-pbars i{height:1.2cqh;min-height:4px;background:var(--pl);transform-origin:0 50%;transition:background .35s;}
+.nk-pbars i.is-in{background:var(--pa);}
+.nk-les li{color:var(--pd);transition:color .3s;}
+.nk-les li.is-got,.nk-les li.is-now{color:var(--pf);}
+.nk-les li.is-now span + span{color:var(--pa);font-weight:600;}
+.nk-gift{display:flex;align-items:center;gap:3.5cqw;margin-top:auto;margin-bottom:1cqh;padding:2.2cqh 3cqw;border:1px dashed var(--pd);}
+.nk-gift b{display:block;font-size:max(11px,4.2cqw);font-weight:600;line-height:1.2;}
+.nk-gift small{display:block;font-size:max(9px,3.3cqw);color:var(--pd);margin-top:.6cqh;}
+.nk-gmedal{flex:none;width:13cqw;height:13cqw;min-width:30px;min-height:30px;border-radius:50%;border:1px dashed var(--pd);
+  display:grid;place-items:center;font-size:max(12px,5cqw);font-weight:600;color:var(--pd);}
+.nk-gmedal span{opacity:0;transform:scale(.4);transition:opacity .3s,transform .45s cubic-bezier(.2,1.8,.3,1);}
+.nk-gift.is-on{border:1px solid var(--pf);}
+.nk-gift.is-on .nk-gmedal{border:2px solid var(--pa);background:var(--pa);color:var(--pb);animation:nk-pop .45s cubic-bezier(.2,1.8,.3,1) both;}
+.nk-gift.is-on .nk-gmedal span{opacity:1;transform:none;}
+/* telefon: skan kodu z pudelka */
+.nk-bc{position:relative;flex:none;margin-top:4cqh;height:24cqh;border:1px solid var(--pf);padding:3cqh 5cqw;overflow:hidden;}
+.nk-bc svg{display:block;width:100%;height:100%;fill:var(--pf);}
+.nk-beam{position:absolute;left:2cqw;right:2cqw;top:50%;height:2px;background:var(--pa);box-shadow:0 0 0 1px var(--pb);}
+.nk-beam.is-run{top:3cqh;animation:nk-beam .65s ease-in-out 2 alternate both;}
+@keyframes nk-beam{from{transform:translateY(0);}to{transform:translateY(calc(18cqh - 2px));}}
+/* telefon: prywatnosc */
+.nk-pt3{font-size:max(14px,7.2cqw);}
+.nk-lock li{color:var(--pd);}
+.nk-lock li span + span{text-transform:uppercase;letter-spacing:.1em;font-size:max(9px,3cqw);}
+.nk-lock li.is-got{color:var(--pf);}
+.nk-lock li.is-got span + span{color:var(--pa);font-weight:600;}
+.nk-unlock{display:block;width:100%;margin-top:auto;margin-bottom:1cqh;min-height:44px;padding:1.6cqh 2cqw;border:1px solid var(--pf);
+  background:var(--pf);color:var(--pb);font:inherit;font-size:max(10px,3.4cqw);font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;}
+.nk-unlock:hover{background:var(--pa);border-color:var(--pa);}
+.nk-unlock:focus-visible{outline:2px solid var(--pa);outline-offset:3px;}
+.nk-unlock:active{transform:translateY(1px);}
+#paths,#pharmacy,#privacy{scroll-margin-top:0;}
+/* #exchange na telefonie: mniejszy telefon, zeby suwak i ekran aplikacji miescily sie razem w kadrze */
+@media (max-width:860px){
+  .nk-still#exchange .nk-phone{height:clamp(270px,35svh,300px);aspect-ratio:9/16;border-radius:24px;padding:6px;}
+  #exchange .nk-tabs{letter-spacing:.06em;}
+  #exchange .nk-desk2{margin-top:18px;}
+}
