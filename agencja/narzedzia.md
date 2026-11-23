@@ -10,6 +10,7 @@ Bohaterem jest marka odwiedzającego. Kolejność = proponowana kolejność budo
 | 3 | Does the pack run out before the customer reorders? | Ile dni zapasu daje opakowanie kontra odstęp między zamówieniami; czy klient „ma dziurę”. | `/tool` i `/nawyko` (przypomnienie w dniu, gdy kończy się opakowanie) | na produkcji: `/tool` |
 | 4 | How many customers reach a second order? | Ilu z jego nowych klientów musi wrócić, żeby pozyskanie się zwróciło (koszt pozyskania ÷ marża na zamówieniu = liczba zamówień do zwrotu). | `/nawyko` (nawyk po pierwszym opakowaniu) | **zbudowane w podglądzie `/lab/payback`** (spec 09); wynik to numer i dzień zamówienia |
 | 5 | What does a stamp card at day 24 of 30 cost you? | Koszt kartki z pieczątką na klienta przy jego cenie opakowania i dniu nagrody, w porównaniu z marżą z kolejnego opakowania. | `/nawyko` (mechanika dni i pieczątki) | pomysł |
+| 7 | Which day should the reorder reminder go out? | Dzień opakowania (i dzień od zamówienia), w którym wysłać przypomnienie: długość opakowania − dostawa − czas na zamówienie; suwak pokazuje dni bez produktu albo zapas przy innym dniu. | `/nawyko` — aplikacja zna dzień opakowania każdego klienta (codzienne zdrapanie) | **zbudowane w podglądzie `/lab/reminder`** (spec 10) |
 | 6 | Free shipping or a discount on the next pack — which costs less? | Który z dwóch znanych z góry bonusów jest tańszy przy jego koszcie wysyłki, cenie i marży. | `/nawyko` (nagrody do wyboru marki) | pomysł |
 
 Uwagi:

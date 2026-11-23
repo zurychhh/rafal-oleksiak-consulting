@@ -82,3 +82,9 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /lab/payback | pola | Cost to win one customer (ads, offers, fees) · Gross margin per order (amount, not %) · Average days between a customer’s orders | nowy |
 | /lab/payback | suwak | A customer who stops after {2} orders · −{18} · not paid back / +{16} · paid back / Breaks even · legenda: Outline = ordered, not paid back · black = paid back · faint = never ordered | nowy |
 | /lab/payback | jedyny krok | How to get customers to order {3} → (/nawyko) | nowy |
+| /lab/reminder | nagłówek i odpowiedź | Which day should the reorder reminder go out? · Send the reminder on day of the pack · Day {25} · Example — type your own / Your numbers | nowy |
+| /lab/reminder | rachunek i porada | {30}-day pack − {3 days} delivery − {2 days} to reorder = day {25} of the pack (day {28} after the order, if opened on arrival) · Too early: the customer still has plenty at home. Too late: days without the product. | nowy |
+| /lab/reminder | za późno | … = no day left in the pack · Too late for a reminder: delivery and reorder take longer than one pack. Offer a subscription or a two-pack at checkout. | nowy |
+| /lab/reminder | pola | Days one pack lasts (servings ÷ servings per day) · Days from order to doorstep · Days a customer takes to reorder after the reminder · One average customer. Nothing you type leaves this page. | nowy |
+| /lab/reminder | suwak | If the reminder goes out on day {N} · New pack lands on day {X} · {X} days without the product / {X} days of product left when the new pack lands / The new pack lands on the last day of the old one · legenda: Black = product at home · red stripes = days without · thin line = reminder · thick line = new pack | nowy |
+| /lab/reminder | jedyny krok | Time it for each customer from the day they open the pack → (/nawyko) | nowy |

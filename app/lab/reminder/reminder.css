@@ -24,6 +24,7 @@
 
 /* stale miejsce na zmienne linie — bez skokow ukladu przy wpisywaniu (R6) */
 .nk .rm .rw-why{min-height:2.8em;}
+@media (max-width:700px){.nk .rm .rw-why{min-height:4.2em;}}
 .nk .rm .rw-do{min-height:4.05em;}
 .nk .rm .rw-hint{min-height:38px;}
 .rm .rw-tl{display:block;min-height:56px;}

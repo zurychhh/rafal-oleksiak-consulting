@@ -34,7 +34,7 @@ export function Reminder() {
 
   const cp = check(p, 'Days one pack lasts', 365)
   const cd = check(d, 'Days to the doorstep', 90)
-  const ck = check(k, 'Days to order', 90)
+  const ck = check(k, 'Days to reorder', 90)
   const input = { pack: cp.v ?? NaN, delivery: cd.v ?? NaN, decide: ck.v ?? NaN }
   const res = reminderDay(input)
   const hint = cp.hint || cd.hint || ck.hint
@@ -59,7 +59,11 @@ export function Reminder() {
     return () => window.clearTimeout(id)
   }, [say])
 
-  const field = (set: (s: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => set(e.target.value)
+  // Nowe liczby = nowa odpowiedz: suwak wraca do wyliczonego dnia (inaczej opis dla czytnikow i os pokazuja stary dzien).
+  const field = (set: (s: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    set(e.target.value)
+    setSend(null)
+  }
 
   return (
     <section className="rw rm" aria-labelledby="rm-h1">
@@ -70,7 +74,7 @@ export function Reminder() {
         </h1>
 
         <div className="rw-out">
-          <div className="nk-caps rw-k">Send the reminder on</div>
+          <div className="nk-caps rw-k">Send the reminder on day of the pack</div>
           <div className={res.ok ? 'rw-num' : 'rw-num is-off'}>
             {res.ok ? (
               <>
@@ -87,7 +91,10 @@ export function Reminder() {
           <p className="rw-why">
             {res.ok ? (
               <>
-                {cp.v}-day pack − {days(cd.v!)} delivery − {days(ck.v!)} to decide = day {res.tooLate ? `${cp.v! - cd.v! - ck.v!} → day 1` : res.day}
+                {cp.v}-day pack − {days(cd.v!)} delivery − {days(ck.v!)} to reorder ={' '}
+                {res.tooLate
+                  ? 'no day left in the pack'
+                  : `day ${res.day} of the pack (day ${res.day + cd.v!} after the order, if opened on arrival)`}
               </>
             ) : (
               hint ?? 'Fill in the three fields to see it.'
@@ -95,8 +102,8 @@ export function Reminder() {
           </p>
           <p className="rw-do">
             {res.ok && res.tooLate
-              ? 'Send it with the order: the next pack must ship on day 1.'
-              : 'Earlier, the customer still has plenty at home. Later, there are days without the product.'}
+              ? 'Too late for a reminder: delivery and reorder take longer than one pack. Offer a subscription or a two-pack at checkout.'
+              : 'Too early: the customer still has plenty at home. Too late: days without the product.'}
           </p>
           <p className="rw-live" aria-live="polite">
             {said}
@@ -115,12 +122,12 @@ export function Reminder() {
             <input id="rm-d" type="text" inputMode="numeric" autoComplete="off" value={d} onChange={field(setD)} aria-invalid={cd.hint ? true : undefined} aria-describedby="rm-hint" />
           </label>
           <label className="rw-f" htmlFor="rm-k">
-            <span>Days a customer takes to order after the reminder</span>
+            <span>Days a customer takes to reorder after the reminder</span>
             <input id="rm-k" type="text" inputMode="numeric" autoComplete="off" value={k} onChange={field(setK)} aria-invalid={ck.hint ? true : undefined} aria-describedby="rm-hint" />
           </label>
         </div>
         <p className="rw-hint" id="rm-hint">
-          {hint ? <strong>{hint}</strong> : 'Nothing you type leaves this page.'}
+          {hint ? <strong>{hint}</strong> : 'One average customer. Nothing you type leaves this page.'}
         </p>
 
         <div className="rw-try">
@@ -137,6 +144,8 @@ export function Reminder() {
             step={1}
             value={n}
             disabled={!res.ok}
+            // Suwak na tej samej skali co os ponizej: srodek uchwytu (30 px) nad dniem 1 i nad ostatnim dniem opakowania.
+            style={res.ok ? { marginLeft: `calc(${pct(1)} - 15px)`, width: `calc(${pct(input.pack - 1)} + 30px)` } : undefined}
             onChange={(e) => setSend(Number(e.target.value))}
             aria-valuetext={res.ok ? `Day ${n}: ${result}` : 'Fill in the three fields first'}
           />
@@ -157,7 +166,7 @@ export function Reminder() {
         </div>
 
         <p className="rw-act">
-          <a href="/nawyko">How to send it on the right day for every customer →</a>
+          <a href="/nawyko">Time it for each customer from the day they open the pack →</a>
         </p>
       </div>
     </section>

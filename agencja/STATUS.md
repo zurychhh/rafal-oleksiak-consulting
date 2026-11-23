@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 23.11.2026, 15:38–16:10 (runda 3, przebieg 5 — nowe narzędzie `/lab/payback`, skoki układu w `/lab/reward`, R6). Wcześniej przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 23.11.2026, 16:38–17:15 (runda 3, przebieg 6 — nowe narzędzie `/lab/reminder`, zdrapka w wersji bez ruchu na `/nawyko`, R7). Wcześniej przebieg 5 (15:38–16:10), przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
@@ -159,6 +159,31 @@ Słowa Rafała: „dobrze, teraz pracujemy nad tą częścią”. W tej kolejno�
 Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + podgląd we własnej marce klienta + deck (3 decyzje).
 
 ## Dla Rafała
+
+**Runda 3, przebieg 6 (23.11, 16:38–17:15) — trzecie narzędzie: „którego dnia wysłać przypomnienie o kolejnym opakowaniu”, i zdrapka widoczna także dla osób z wyłączonymi animacjami.**
+Do obejrzenia: `/lab/reminder` (nowe, noindex) — wpisz swoje trzy liczby i przesuń suwak.
+1. **`/lab/reminder`: „Which day should the reorder reminder go out?”** Trzy pola odwiedzającego: na ile dni starcza opakowanie,
+   ile trwa dostawa, ile dni klient zwleka z zamówieniem po przypomnieniu. U góry jedna odpowiedź „Day 25” (przykład 30 / 3 / 2,
+   podpisany „Example — type your own”), pod nią rachunek „… = day 25 of the pack (day 28 after the order, if opened on arrival)”
+   i „Too early: the customer still has plenty at home. Too late: days without the product.” Suwak „If the reminder goes out on
+   day N” rysuje jedno opakowanie: czarne dni z produktem, czerwone kreskowane dni bez produktu, kreska przypomnienia i dostawy.
+   Jedyny krok: „Time it for each customer from the day they open the pack →” do `/nawyko`.
+   Biznesowo: to pytanie, które marka zadaje przy każdej automatyzacji maili; odpowiedź „jeden dzień dla średniego klienta”
+   sama pokazuje swoją granicę — każdy klient otwiera opakowanie kiedy indziej, a Nawyko zna ten dzień, bo klient codziennie zdrapuje kartę.
+2. **`/nawyko` bez animacji (ustawienie systemu „ogranicz ruch”):** dotąd od razu pokazywał nagrodę, więc najważniejszy moment strony
+   znikał. Teraz karta jest zakryta i odwiedzający zdrapuje ją sam (palcem, myszą albo przyciskiem). Wersja z animacjami bez zmian.
+3. **Dowód:** zrzuty `agencja/podglad/reminder-390.png`, `reminder-1440.png`, `reminder-slider-390.png`, `reminder-slider-1440.png`,
+   `nawyko-reduce-scratch-390.png`, `nawyko-reduce-scratch-1440.png` (na dwóch ostatnich widać pasek cookies — karta jest nad nim).
+   Recenzja niezależna (8/8 PASS) + czytelnik-kupujący i lista poprawek: `agencja/recenzje/18-narzedzie-dzien-przypomnienia.md`.
+   Spec `agencja/specs/10-narzedzie-dzien-przypomnienia.md`. Bramki: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) ·
+   `copy-voice` OK · `reminder-model`, `payback-model`, `reward-model`, `calculator-model`, `tool-rules` OK · `qa.js` PASS na `/`, `/stop`,
+   `/tool`, `/nawyko`, `/lab/reminder` · `content-rules` PASS · `ship-compare` PASS · `focus-obscured` OK (`/lab/reminder`, `/nawyko`, `/lab/payback`) ·
+   surowe przesunięcia układu (R6) przy 12 edycjach: `/lab/reminder` 0,0058 (390) / 0,0020 (1440); mini-kalkulator w hero `/nawyko` 0,0022 / 0,0083 — poprzedni „0,0000” był ślepy, teraz zmierzony surowo.
+   Podgląd: https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/lab/reminder (stan wdrożenia w ostatniej wiadomości przebiegu).
+4. **Teksty:** 6 nowych wierszy w `agencja/teksty-do-akceptacji.md` (`/lab/reminder`); czytelnik-kupujący zmienił 5 z nich przed commitem.
+5. **Czego się nauczyliśmy:** każdy wynik będący dniem musi mówić, od czego jest liczony (R7) — złapał to tylko czytelnik-kupujący, nie recenzenci.
+   Z sieci: pierwsze słowa nagłówka niosą treść (NN/g) → nowa zasada 8 w rubryce tekstów.
+
 
 **Runda 3, przebieg 5 (23.11, 15:38–16:10) — drugie narzędzie: „które zamówienie zwraca koszt nowego klienta”, i koniec skaczącego układu przy wpisywaniu.**
 Do obejrzenia: `/lab/payback` (nowe, noindex) i `/lab/reward` (wpisz kilka liczb na telefonie).
@@ -369,6 +394,13 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 **Decyzje doradcy 23.11 13:50 (Rafał: „bądź samodzielny, angażuj mnie tylko tam, gdzie potrzebna jest moja decyzja”):**
 I → (a) scena zostaje: Rafał ocenił górną połowę `/lab/home` jako dobrą; nie wycinamy tego, co zatwierdził.
 J → (a) mini-kalkulator w hero `/nawyko` i `/lab/home`: odwiedzający wpisuje jedną liczbę, kwota liczona tym samym modelem co `/calculator`; zero liczb bez źródła. Buduj w następnym przebiegu.
+**Nowe z przebiegu 6 rundy 3:**
+
+Q (rozszerzone). **Trzy narzędzia (`/lab/reward`, `/lab/payback`, `/lab/reminder`) — wypuścić razem jako „narzędzia dla marek”?**
+   Wszystkie są gotowe w podglądzie (noindex) i linkują do siebie w stopce. Rekomendacja bez zmian: (a) wypuścić razem z linkami
+   z `/nawyko` i `/calculator` — trzy krótkie pytania marki (ile może kosztować nagroda, które zamówienie zwraca klienta, którego dnia
+   przypomnieć) prowadzą do tej samej odpowiedzi: Nawyko. Bez decyzji zostają w podglądzie.
+
 **Nowe z przebiegu 5 rundy 3:**
 
 Q. **`/lab/payback` i `/lab/reward` — razem jako „narzędzia dla marek” czy osobno?** Oba są gotowe w podglądzie (noindex). Warianty:
@@ -479,7 +511,7 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 ## Następne (kolejka)
 
 R3-0. ZROBIONE w przebiegu 4 (trzy pola zamiast jednego — czytelnik odrzucił stałe 30 dni opakowania). Dalej: brzegowy przypadek — pasek cookies pojawia się, gdy pole ma już fokus (9–30 px nachodzenia, recenzja 16); `focus-obscured` dopisać do bramki w CLAUDE.md (zmiana dokumentu — przy okazji).
-R3-7. ZROBIONE w przebiegu 5: `/lab/payback` (narzędzie 4). Dalej: narzędzie 6 (darmowa dostawa czy rabat na kolejne opakowanie) albo przypomnienie o kolejnym opakowaniu; drugi czytelnik na `/lab/payback` (waluta przy liczbach); link z `/lab/reward` do `/lab/payback` po decyzji Q.
+R3-7. ZROBIONE w przebiegu 6: `/lab/reminder` (narzędzie 7, spec 10). Dalej przy nim: przegląd nagłówków scen `/nawyko` pod zasadę 8 rubryki (pierwsze słowa niosą treść); w `/lab/reminder` drugi czytelnik po poprawkach. ZROBIONE w przebiegu 5: `/lab/payback` (narzędzie 4). Dalej: narzędzie 6 (darmowa dostawa czy rabat na kolejne opakowanie) albo przypomnienie o kolejnym opakowaniu; drugi czytelnik na `/lab/payback` (waluta przy liczbach); link z `/lab/reward` do `/lab/payback` po decyzji Q.
 R3-1. (przebieg 3: zrobione −4%, dalej tylko przez wycięcie — decyzja N) `/nawyko`: −30% słów w samej treści (dziś ok. −15%): hero w `page.tsx` (drugi akapit), panele nagród i zapytania.
       Mierzyć tekst POZA makietami telefonów (nowa metoda). CTA w środku sceny — zrobione w przebiegu 2;
       przesunięcie sceny „Your brand” wyżej = zmiana kolejności opowieści → najpierw pokazać Rafałowi (decyzja L poniżej).
@@ -487,14 +519,14 @@ R3-2. ZROBIONE w przebiegu 3 (390 też według przewijania, 0 px²). ~~Treść s
       wciąż na zegarze (zmiana skali/pozycji) — przepiąć tak samo i zmierzyć nakładanie.
 R3-3. Kalkulator: pasek cookies na pierwszym ekranie 390; uchwyt w Safari/Firefox (sprawdzić); sprawdzić, czy „pchnięcie” nie rozprasza.
 R3-4. ZROBIONE (przebieg 3 narzędzie, przebieg 4 pole, przebieg 5 skoki układu 0,149 → 0,029). Zostało w `/lab/reward`: tryb ciemny (strony `.nk` nie mają ciemnego motywu — sprawdzić, czy mają mieć).
-R3-6. Pomiar na `/nawyko` po zmianie przejazdu (390, 1440) i kl./s na telefonie — SUROWE przesunięcia (R6), także w mini-kalkulatorze hero (przebieg 4 podał „0,0000” ślepą miarą).
+R3-6. (przebieg 6: mini-kalkulator hero zmierzony surowo — 0,0022 / 0,0083, OK) Pomiar na `/nawyko` po zmianie przejazdu (390, 1440) i kl./s na telefonie — SUROWE przesunięcia (R6), także w mini-kalkulatorze hero (przebieg 4 podał „0,0000” ślepą miarą).
 R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 
 0. **Kalkulator v3** (priorytet NAJNOWSZY, pkt 2): makieta jednego ekranu → czytelnik-kupujący na makiecie → budowa.
    Bohater = wartość jednego dnia z walutą; suwak ograniczony do dnia końca opakowania; rok klienta jako główna scena.
 0b. `/nawyko`: zrobione w przebiegu 5 (powrót telefonu, klawiatura, rozdział na 390). Zostało: na 390 nawigacja aktów
-   jest ukryta (Tab prowadzi przez kroki 01–04, ale nie do aktów 5–7 bez przewijania); wersja `prefers-reduced-motion`
-   nie pokazuje zdrapki (pierwszy telefon od razu na nagrodzie).
+   jest ukryta (Tab prowadzi przez kroki 01–04, ale nie do aktów 5–7 bez przewijania). ZROBIONE w przebiegu 6: wersja `prefers-reduced-motion`
+   pokazuje zakrytą zdrapkę do zdrapania (bez samozdrapki).
 0c. `/lab/home`: drugi wariant pierwszego ekranu (odważniejszy, aplikacja na pierwszym planie); w dużym telefonie
    „8” i „days” daleko od siebie; karta narzędzi na desktopie pusta pod paskiem; „69” pojawia się dopiero po ~3 s.
 1. Punkt 3 priorytetu (starszy): przegląd układu całej strony — częściowo zrobiony przez `/lab/home`.
@@ -508,6 +540,16 @@ R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R7 (reguła, przebieg 6): każda liczba-dzień w narzędziu mówi, od czego jest liczona** („day 25 of the pack”, „day 28 after the
+  order”). Budujący i recenzent wyglądu dali 8/8 PASS; dopiero czytelnik-kupujący zapytał „dzień od czego?” — bez tego wyniku nie
+  da się wpisać do automatyzacji maili. Spec narzędzia ma sekcję „punkt zero” dla odbiorcy, nie tylko model.
+- Subagent budujący w worktree równolegle z drugim subagentem w repo głównym (dwa w jednym kroku): ~9 min blokady na dwie niezależne
+  części, zero konfliktów (różne pliki, cherry-pick). Opłaca się, gdy obie części mają rozłączne pliki i osobne porty.
+- Suwak nad osią czasu musi mieć tę samą skalę co oś (środek uchwytu = dzień na osi): `margin-left: calc(dzień1% − ½ uchwytu)`,
+  `width: calc((N−1)% + uchwyt)`. Recenzja zmierzyła różnicę ≤ 2 px.
+- Stan „co jeśli” (suwak) po zmianie danych wraca do wyniku — inaczej opis dla czytników mówi o starym dniu.
+
 
 - **R6 (reguła, przebieg 5): skoki układu przy wpisywaniu mierzymy surowo** — suma wszystkich wpisów `layout-shift` (także z
   `hadRecentInput`) na serii edycji, w tym błędnych wpisów. CLS z definicji pomija przesunięcia do 0,5 s po wpisaniu, więc „CLS 0

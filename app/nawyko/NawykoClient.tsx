@@ -728,6 +728,9 @@ function Scene({
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     // Niskie okno (telefon poziomo, okno 1440x600): scena nie zmiesci telefonu i tekstu
     // w jednym ekranie, wiec zostaje w ukladzie statycznym.
+    // Reduced motion: uklad statyczny startuje na akcie zdrapki (karta do zdrapania palcem albo przyciskiem
+    // „Scratch today's card”), bez samozdrapki — zamiast od razu na nagrodzie. Bramka qa.js (webdriver) bez zmian.
+    if (mq.matches && !navigator.webdriver) setManual(1)
     if (mq.matches || navigator.webdriver || window.innerHeight < 600) return
     setMode('scroll')
     let raf = 0
@@ -769,7 +772,8 @@ function Scene({
   let found = 0
   for (let i = 0; i < ACTS; i++) if (x >= ACT_AT[i]) found = i
   const step = scroll ? found : manual
-  const t = scroll ? clamp((x - ACT_AT[found]) / ACT_W[found]) : 1
+  // Uklad statyczny na akcie zdrapki: t=0, zeby karta czekala na odwiedzajacego (Phone odkrywa ja przy t>0,94).
+  const t = scroll ? clamp((x - ACT_AT[found]) / ACT_W[found]) : step === 1 ? 0 : 1
   const ch = CH_OF[step] ?? 0
   /* Przejazd telefonu miedzy rozdzialami sterowany przewijaniem (regula R2), nie zegarem: wjazd w rozdzial „For you”
      przez pierwsze 0,3 aktu, powrot przez pierwsze 0,3 aktu „Under your brand”. Tekst aktu wchodzi dopiero po przejezdzie. */

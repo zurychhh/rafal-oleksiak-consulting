@@ -1,7 +1,7 @@
 # 10 — Narzędzie „Którego dnia wysłać przypomnienie o kolejnym opakowaniu” (`/lab/reminder`, podgląd)
 
-**Status:** w budowie (23.11.2026, runda 3 przebieg 6), noindex, poza `sitemap.ts`. Publikacja — decyzja Rafała (razem z Q).
-Nowa pozycja 7 w `agencja/narzedzia.md` (z „Następne” R3-7: „przypomnienie o kolejnym opakowaniu”).
+**Status:** zbudowane w podglądzie (23.11.2026, runda 3 przebieg 6), noindex, poza `sitemap.ts`. Publikacja — decyzja Rafała (razem z Q).
+Pozycja 7 w `agencja/narzedzia.md` (z „Następne” R3-7: „przypomnienie o kolejnym opakowaniu”).
 
 ## Pytanie
 „Which day should the reorder reminder go out?” — marka FMCG z powtarzalnym zakupem (suplement, kosmetyk, karma).
@@ -33,8 +33,13 @@ opakowania jest każdy klient (codzienne zdrapanie), więc przypomnienie może w
   Przykład 30/3/2: wysyłka dnia 25 → dostawa dnia 30 → 0 dni bez produktu (wynik); dnia 26 → 1 dzień bez; dnia 20 → 5 dni zapasu. Test na te przypadki + brzegi.
 
 ## Kryteria akceptacji
-- [ ] build, `tsc`, lint 0 błędów (ostrzeżeń nie więcej niż przed), `copy-voice`, `reminder-model` OK.
-- [ ] `qa.js /lab/reminder --scroll` PASS (9 szerokości); `focus-obscured` OK; `content-rules` bez zmian.
-- [ ] Surowe przesunięcia układu przy 12 edycjach ≤ 0,05.
-- [ ] Kontrast każdego tekstu ≥ 4,5:1 (liczby z narzędzia).
-- [ ] Recenzent niezależny + czytelnik-kupujący: `agencja/recenzje/18-narzedzie-dzien-przypomnienia.md`.
+- [x] build, `tsc`, lint 0 błędów (ostrzeżeń nie więcej niż przed), `copy-voice`, `reminder-model` OK.
+- [x] `qa.js /lab/reminder --scroll` PASS (9 szerokości); `focus-obscured` OK; `content-rules` bez zmian.
+- [x] Surowe przesunięcia układu przy 12 edycjach ≤ 0,05.
+- [x] Kontrast każdego tekstu ≥ 4,5:1 (liczby z narzędzia).
+- [x] Recenzent niezależny + czytelnik-kupujący: `agencja/recenzje/18-narzedzie-dzien-przypomnienia.md`.
+
+Wyniki: build/tsc OK, lint 0 błędów (1 ostrzeżenie jak przed), `copy-voice` i `reminder-model` OK, `qa.js` PASS (9 szerokości),
+`focus-obscured` OK; surowe przesunięcia przy 12 edycjach: 390 = 0,0058, 1440 = 0,0020 (budujący przed poprawką wysokości miał 0,97).
+Po recenzji: suwak na tej samej skali co oś (różnica ≤ 2 px), dzień zero zdefiniowany („day 25 of the pack (day 28 after the order…)”),
+jedna nazwa „to reorder”, ujemny dzień zastąpiony zdaniem, nowe liczby przestawiają suwak na wynik (czytnik ekranu już nie mówi starego dnia).

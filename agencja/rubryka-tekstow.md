@@ -15,6 +15,10 @@ czytał tekstów oczami kupującego. Ta rubryka to naprawia. Niespełniony punkt
    unlock, supercharge, game-changing” i podobnych.
 5. **Jedna myśl.** Nagłówek do ok. 8 słów; scena do ok. 12 słów plus jedno zdanie.
 6. **Ton: rzeczowy doradca, nie sprzedawca i nie kumpel.** Bez wykrzykników, bez emoji, bez przechwałek o autorze.
+8. **Pierwsze dwa słowa niosą treść** (źródło: NN/g, H. Loranger, „Headings Are Pick-Up Lines”, 09.08.2015,
+   https://www.nngroup.com/articles/headings-pickup-lines/: „Moving the keywords to the front makes the heading more scannable”,
+   „Don't count on people reading the end of sentences”). Nagłówek, wynik i porada zaczynają się od słowa, które mówi, o co chodzi
+   („Too early: …”, „Day 25 of the pack”), nie od wstępu („Earlier, …”, „If you…”). Dwa przeciwne stany — dwie symetryczne etykiety.
 7. **Prawda.** Nic, czego produkt dziś nie robi; nic o zdrowiu poza zatwierdzonymi oświadczeniami; żadnych liczb bez źródła.
 
 ## Jak to sprawdzamy (trzy warstwy, wszystkie obowiązkowe)
