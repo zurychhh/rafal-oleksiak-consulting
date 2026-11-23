@@ -209,13 +209,13 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | Miejsce | Tekst | Status |
 |---|---|---|
 | finał, etykieta | See it with your brand | nowy |
-| finał, nagłówek | Your brand on the phone, before the first call. | nowy |
-| finał, zdanie | Type your store, pick its colour, and the phone repaints as you go. | nowy |
+| finał, nagłówek | Your customers' daily app, in your brand colour. | nowy (po czytelniku: „first call” dwuznaczne) |
+| finał, zdanie | Type your store name, pick its colour; the phone repaints live. | nowy (po czytelniku) |
 | finał, legenda wyboru | Brand colour | nowy |
 | finał, próbki (aria-label) | Signal red · Forest green · Ocean blue · Plum · Amber · Teal | nowy |
 | finał, własny kolor | Your own (aria-label: Your own colour) | nowy |
-| finał, podpis pod wyborem | The colour stays on this page. | nowy |
-| finał, podpis pod telefonem (bez nazwy) | A placeholder until you type your store. Nothing is sent until you press Send. | nowy |
+| finał, podpis pod wyborem | Your colour is never sent. Only the form fields go with Send. | nowy (po czytelniku) |
+| finał, podpis pod telefonem | A placeholder until you type your store name. / Your typed name, shown only on this page. | nowy (po czytelniku) |
 
 Zastąpione: „Enquiry” (etykieta), „Would this fit your product?”, „Supplements, skincare, pet food, coffee — anything reordered on a rhythm. Type your store and watch the phone.”
 
@@ -223,13 +223,13 @@ Zastąpione: „Enquiry” (etykieta), „Would this fit your product?”, „Su
 | Miejsce | Tekst | Status |
 |---|---|---|
 | nagłówek strony (nawigacja) | Nawyko · Work · Contact | nowy |
-| akt 9 etykieta / H2 | Results / Reorder lift stays locked until real data comes in. | nowy |
-| akt 9 zdanie | Reorder lift is measured against a control group that never gets the app, with the first read 90 days after launch. | nowy |
+| akt 9 etykieta / H2 | Results / Success means more reorders than customers without the app. | nowy (po czytelniku: „lift/locked” żargon) |
+| akt 9 zdanie | Measured against a control group that never gets the app; first read 90 days after it goes live. | nowy (po czytelniku) |
 | akt 9 podpis | Locked screen. No results shown yet. | nowy |
 | akt 9 ekran (rysunek, aria-hidden) | Results · Locked · With the app · Control group · Reorder lift · no data yet | nowy |
 | akt 10 etykieta / H2 | Your brand / See it with your brand: pick a colour. | nowy |
 | akt 10 zdanie | The phone repaints in the picked colour, and the text colour adjusts to stay readable. | nowy |
-| akt 10 próbki (czytane przez czytnik) | Brand colour · GENACTIV red · Green · Blue · Yellow · Violet · Any colour | nowy |
+| akt 10 próbki (czytane przez czytnik) | Brand colour · GENACTIV red · Forest green · Ocean blue · Amber · Plum · Any colour; pod spodem: Your colour is never sent. Only the form fields go with Send. | nowy (po czytelniku: nazwy jak na /nawyko) |
 | akt 10 podpis | Example screen in the picked colour. | nowy |
 | akt 10 ekran (rysunek, aria-hidden) | Your brand · Today's card · Rewards · Scratch today's card | nowy |
 | formularz (tytuł `Enquiry`) | Ask about an app for your brand | nowy |

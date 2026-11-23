@@ -381,3 +381,6 @@ button.ga-fakebtn.ga-done { color: var(--muted); }
   .ga-final { padding: 64px 16px; }
   .ga-final-in { padding: 20px 0 0; }
 }
+
+/* przebieg 3: notka pod próbkami (czytelnik 23.11) */
+.ga .ga-pick-note{margin:8px 0 0;font-size:13px;line-height:1.4;color:#c9bfc1}

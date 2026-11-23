@@ -76,8 +76,8 @@ const COPY: Copy[] = [
   },
   {
     kicker: 'Results',
-    title: 'Reorder lift stays locked until real data comes in.',
-    sub: 'Reorder lift is measured against a control group that never gets the app, with the first read 90 days after launch.',
+    title: 'Success means more reorders than customers without the app.',
+    sub: 'Measured against a control group that never gets the app; first read 90 days after it goes live.',
     cap: 'Locked screen. No results shown yet.',
   },
   {
@@ -92,10 +92,10 @@ const COPY: Copy[] = [
 const GA_RED = '#f5333f'
 const SWATCHES: { c: string; n: string }[] = [
   { c: GA_RED, n: 'GENACTIV red' },
-  { c: '#1f8f5a', n: 'Green' },
-  { c: '#2f6fde', n: 'Blue' },
-  { c: '#f5c400', n: 'Yellow' },
-  { c: '#8b5cf6', n: 'Violet' },
+  { c: '#1f8f5a', n: 'Forest green' },
+  { c: '#2f6fde', n: 'Ocean blue' },
+  { c: '#f5c400', n: 'Amber' },
+  { c: '#8b5cf6', n: 'Plum' },
 ]
 const DEFAULT_PICK = '#2f6fde'
 const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16))
@@ -687,6 +687,7 @@ function Picker({ pick, onPick, onFocus }: { pick: string; onPick: (c: string) =
           <span>Any colour</span>
         </label>
       </div>
+      <p className="ga-pick-note">Your colour is never sent. Only the form fields go with Send.</p>
     </fieldset>
   )
 }

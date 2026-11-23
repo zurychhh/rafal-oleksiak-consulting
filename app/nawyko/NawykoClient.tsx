@@ -1807,18 +1807,18 @@ export function Story() {
             <span className="nk-brandtag">See it with your brand</span>
           </div>
           <h2 className="nk-h2" id="nk-ask">
-            Your brand on the phone, before the first call.
+            Your customers&apos; daily app, in your brand colour.
           </h2>
-          <p className="nk-one">Type your store, pick its colour, and the phone repaints as you go.</p>
+          <p className="nk-one">Type your store name, pick its colour; the phone repaints live.</p>
           <BrandColour value={colour} onPick={setColour} />
-          <p className="nk-fine">The colour stays on this page.</p>
+          <p className="nk-fine">Your colour is never sent. Only the form fields go with Send.</p>
         </div>
         <div className="nk-phonecol nk-final-phone">
           <Phone step={3} t={1} theme={skin} scratched brand={typed || name.trim().slice(0, 14) || 'Your brand'} />
           <p className="nk-fine">
             {typed
-              ? 'Your typed name. Nothing is sent until you press Send.'
-              : 'A placeholder until you type your store. Nothing is sent until you press Send.'}
+              ? 'Your typed name, shown only on this page.'
+              : 'A placeholder until you type your store name.'}
           </p>
         </div>
         <div className="nk-final-form">
