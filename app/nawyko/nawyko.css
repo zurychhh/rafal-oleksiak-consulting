@@ -394,7 +394,7 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 .nk-name span{display:block;color:var(--dim);}
 .nk-name input{display:block;width:100%;margin-top:6px;padding:8px 0 10px;border:0;border-bottom:1px solid var(--ink);border-radius:0;background:transparent;
   font:inherit;font-size:clamp(28px,3.4vw,48px);font-weight:600;letter-spacing:-.03em;color:var(--ink);}
-.nk-name input::placeholder{color:var(--mid);opacity:1;}
+.nk-name input::placeholder{color:var(--dim);opacity:1;}
 .nk-name input:focus-visible{outline:2px solid var(--ink);outline-offset:4px;}
 @media (max-width:860px){
   .nk-acts{display:none;}
@@ -436,21 +436,15 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 @media (min-width:861px){
   .nk-scene[data-ch="1"] .nk-phonecol{transform:translateX(calc(-1 * var(--swap)));}
   .nk-scene[data-ch="1"] .nk-scenehead{transform:translateX(var(--swap));}
-  .nk-scene[data-swung][data-ch="1"] .nk-swing{animation:nk-swing-l .9s cubic-bezier(.65,0,.25,1);}
-  .nk-scene[data-swung]:not([data-ch="1"]) .nk-swing{animation:nk-swing-r .9s cubic-bezier(.65,0,.25,1);}
   /* paski scen i postepu zostaja na dole po lewej; w rozdziale 2 po prawej stronie tekstu */
   .nk-scene[data-ch="1"] .nk-acts,.nk-scene[data-ch="1"] .nk-bar{transform:translateX(0);}
 }
 .nk-swing{transform-origin:50% 60%;}
-@keyframes nk-swing-l{40%{transform:rotate(-6deg) scale(.94);}}
-@keyframes nk-swing-r{40%{transform:rotate(6deg) scale(.94);}}
 /* telefon (390): zamiast stron — zmiana skali i przesuniecie */
 @media (max-width:860px){
   .nk-phone{height:clamp(300px,50svh,500px);}
   .nk-scene[data-ch="1"] .nk-phonecol{transform:translateX(-18%) scale(.9);}
   .nk-scene[data-ch="2"] .nk-phonecol{transform:translateX(0) scale(1);}
-  .nk-scene[data-swung][data-ch="1"] .nk-swing{animation:nk-swing-l .9s cubic-bezier(.65,0,.25,1);}
-  .nk-scene[data-swung]:not([data-ch="1"]) .nk-swing{animation:nk-swing-r .9s cubic-bezier(.65,0,.25,1);}
   .is-scroll .nk-panel .nk-lab,.is-scroll .nk-scenehead .nk-lab{display:flex!important;margin-bottom:6px;}
   .is-scroll .nk-labrest{display:none;}
 }
@@ -476,3 +470,16 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 }
 @media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
 @media (max-width:860px) and (max-height:720px){.nk-scene.is-scroll{--ph:min(43svh,470px);}}
+
+/* ══ runda 3 (Rafał 22.11 18:20): wolniej i płasko ═══════════════════════
+   1) Przewijanie za szybkie: każdy akt dostaje ~2x więcej drogi (900vh → 1600vh), żeby przy zwykłym
+      tempie kółka/gładzika efekt zdążył się rozegrać. 2) Przejazd telefonu płaski: bez obrotu, bez
+      wychylenia 3D, bez wahnięcia — prosty, spokojny przesuw w rytmie strony. */
+.nk-scene.is-scroll{height:1600vh;}
+.nk-phonecol{perspective:none;}
+.nk-phone{transform:translateY(var(--ty,0)) scale(var(--sc,1));}
+.is-scroll .nk-scenehead,.is-scroll .nk-phonecol{transition:transform 1.1s cubic-bezier(.45,0,.2,1);}
+/* tekst rozdzialu wchodzi w polowie przejazdu (recenzja 08: przy 1 s opoznienia scena marki przy zwyklym tempie byla pusta) */
+.nk-scene[data-swung][data-act="5"] .nk-panel.nk-in,.nk-scene[data-swung][data-act="6"] .nk-panel.nk-in{animation-delay:.45s;}
+@media (max-width:860px){.nk-scene.is-scroll{height:1400vh;}}
+@media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}

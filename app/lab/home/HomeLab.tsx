@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react'
 
 /* /lab/home — proposal for a new homepage. Hand-written, plain CSS (home.css, prefix lh-).
    Every scene renders its FINAL state on the server, under prefers-reduced-motion and
@@ -52,26 +52,6 @@ function useTween(active: boolean, motion: boolean, dur = 1800, delay = 0) {
     return () => cancelAnimationFrame(raf)
   }, [active, motion, dur, delay])
   return t
-}
-
-/** Becomes true once the element is in view (immediately true without motion). */
-function useInView(ref: RefObject<Element | null>, motion: boolean) {
-  const [seen, setSeen] = useState(false)
-  useEffect(() => {
-    if (!motion || !ref.current) return
-    const io = new IntersectionObserver(
-      (es) => {
-        if (es.some((e) => e.isIntersecting)) {
-          setSeen(true)
-          io.disconnect()
-        }
-      },
-      { threshold: 0.35 },
-    )
-    io.observe(ref.current)
-    return () => io.disconnect()
-  }, [ref, motion])
-  return seen || !motion
 }
 
 /** Scroll progress 0..1 of a tall section through the viewport (sticky stage). */
@@ -198,7 +178,7 @@ function GapAxis({ t, compact }: { t: number; compact?: boolean }) {
 }
 
 function HeroConsulting({ motion }: { motion: boolean }) {
-  const t = useTween(true, motion, 2200, 900)
+  const t = useTween(true, motion, 900, 100)
   return (
     <article className="lh-card" aria-labelledby="lh-c2">
       <div className="lh-caps lh-lab">Consulting · repeat-purchase brands</div>
@@ -325,7 +305,94 @@ function NawykoScene({ motion }: { motion: boolean }) {
   )
 }
 
-/* ── consulting ───────────────────────────────────────────────────────── */
+/* ── second half: one thought = one scene ─────────────────────────────── */
+/** Progress 0..1 while an element travels from the bottom edge to ~35% of the viewport. */
+function useViewProgress(ref: RefObject<HTMLElement | null>, motion: boolean) {
+  const [p, setP] = useState(1)
+  useEffect(() => {
+    if (!motion) {
+      setP(1)
+      return
+    }
+    let raf = 0
+    const read = () => {
+      raf = 0
+      const el = ref.current
+      if (!el) return
+      const vh = window.innerHeight
+      setP(clamp((vh - el.getBoundingClientRect().top) / (vh * 0.65)))
+    }
+    const on = () => {
+      if (!raf) raf = requestAnimationFrame(read)
+    }
+    read()
+    window.addEventListener('scroll', on, { passive: true })
+    window.addEventListener('resize', on)
+    return () => {
+      window.removeEventListener('scroll', on)
+      window.removeEventListener('resize', on)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [ref, motion])
+  return p
+}
+
+/** Fades and lifts a block in as `t` goes from `a` to `b` (transform + opacity only). */
+const rise = (t: number, a = 0, b = 1) => {
+  const k = ease(clamp((t - a) / (b - a)))
+  return { opacity: k, transform: `translate3d(0,${(1 - k) * 24}px,0)` }
+}
+
+/* scene 1 — the evidence, drawn by scroll */
+function GapScene({ motion }: { motion: boolean }) {
+  const ref = useRef<HTMLElement>(null)
+  const p = useViewProgress(ref, motion)
+  return (
+    <section ref={ref} id="consulting" className="lh-sec lh-scene" aria-labelledby="lh-h-gap">
+      <div className="lh-caps lh-lab">Consulting</div>
+      <h2 className="lh-h2 lh-wide" id="lh-h-gap" style={rise(p, 0, 0.35)}>
+        Stop buying back customers who were already coming back.
+      </h2>
+      <div className="lh-evidence" style={rise(p, 0.2, 0.5)}>
+        <p className="lh-big">
+          The label says {LABEL_DAY} days. The order data says <span className="lh-red">{ACTUAL_DAY}</span>.
+        </p>
+        <GapAxis t={clamp((p - 0.35) / 0.65)} />
+      </div>
+    </section>
+  )
+}
+
+/* scene 2 — the terms, one line at a time */
+const TERMS = ['No setup fee. No minimum term.', 'Two clients at a time.', 'Month one: your store as it is, and the fixes to ship first.'] as const
+
+function TermsScene({ motion }: { motion: boolean }) {
+  const ref = useRef<HTMLElement>(null)
+  const p = useViewProgress(ref, motion)
+  return (
+    <section ref={ref} className="lh-sec lh-tint lh-scene" aria-labelledby="lh-h-terms">
+      <div className="lh-terms">
+        <h2 className="lh-h2" id="lh-h-terms" style={rise(p, 0, 0.3)}>
+          Your store reviewed and fixes listed, for one flat fee.
+        </h2>
+        <div>
+          <p className="lh-price" style={rise(p, 0.15, 0.45)}>
+            EUR 2,500 net per month.
+          </p>
+          <ul className="lh-termlist">
+            {TERMS.map((x, i) => (
+              <li key={x} style={rise(p, 0.3 + i * 0.15, 0.55 + i * 0.15)}>
+                {x}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* scene 3 — record of work, rows slide in on scroll (lines verbatim) */
 const PROOF = [
   { name: 'GenActiv', status: 'In production', line: 'Current client. Colostrum, Shopify: strategy and build.' },
   { name: 'Allegro', status: 'Closed', line: 'Worked with a data science team on predicting a customer’s next purchase.' },
@@ -334,63 +401,33 @@ const PROOF = [
   { name: 'Booksy', status: 'Closed', line: 'The same recurring problem on the service side, where the cycle is an appointment rather than a pack.' },
 ] as const
 
-function Consulting({ motion }: { motion: boolean }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const seen = useInView(ref, motion)
-  const t = useTween(seen, motion, 2000, 150)
+function ProofScene({ motion }: { motion: boolean }) {
+  const ref = useRef<HTMLElement>(null)
+  const p = useViewProgress(ref, motion)
   return (
-    <section id="consulting" className="lh-sec" aria-labelledby="lh-h-con">
-      <div className="lh-grid2">
-        <div>
-          <div className="lh-caps lh-lab">Consulting</div>
-          <h2 className="lh-h2" id="lh-h-con">
-            Consulting for brands built on repeat orders.
-          </h2>
-          <div className="lh-fee">
-            <p className="lh-price">EUR 2,500 net per month.</p>
-            <ul>
-              <li>No setup fee. No minimum term.</li>
-              <li>Two clients at a time.</li>
-              <li>The first month is an as-is audit and the quick wins that come out of it.</li>
-            </ul>
-          </div>
-          <div className="lh-row">
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a className="lh-cta" href="/#enquiry">
-              Send an enquiry
-            </a>
-            <a className="lh-cta lh-ghost" href={`mailto:${EMAIL}`}>
-              Write an email
-            </a>
-          </div>
-        </div>
-        <div ref={ref} className="lh-evidence">
-          <div className="lh-caps lh-dim">Source — a real supplement shop, anonymised</div>
-          <p className="lh-big">
-            The label says {LABEL_DAY} days. The order data says <span className="lh-red">{ACTUAL_DAY}</span>.
-          </p>
-          <GapAxis t={t} />
-        </div>
-      </div>
-      <div className="lh-proof">
-        <div className="lh-caps lh-dim">Record of work</div>
-        <ul>
-          {PROOF.map((p) => (
-            <li key={p.name}>
-              <span className="lh-pn">{p.name}</span>
-              <span className="lh-ps">{p.status}</span>
-              <span className="lh-pl">{p.line}</span>
+    <section ref={ref} className="lh-sec lh-scene" aria-labelledby="lh-h-proof">
+      <div className="lh-caps lh-lab">Record of work</div>
+      <h2 className="lh-h2 lh-wide" id="lh-h-proof" style={rise(p, 0, 0.3)}>
+        Brands like yours that already work this way.
+      </h2>
+      <ul className="lh-proof">
+        {PROOF.map((x, i) => {
+          const k = ease(clamp((p - 0.15 - i * 0.12) / 0.3))
+          return (
+            <li key={x.name} style={{ opacity: k, transform: `translate3d(${(1 - k) * -32}px,0,0)` }}>
+              <span className="lh-pn">{x.name}</span>
+              <span className="lh-ps">{x.status}</span>
+              <span className="lh-pl">{x.line}</span>
             </li>
-          ))}
-        </ul>
-      </div>
+          )
+        })}
+      </ul>
     </section>
   )
 }
 
-/* ── tools ────────────────────────────────────────────────────────────── */
+/* scene 4 — tools: order rows arrive, the empty days shrink */
 function ExportScene({ t }: { t: number }) {
-  // Order rows arrive one by one, then the interval bracket appears.
   const rows = ['Order', 'Order', 'Order', 'Order']
   const shown = Math.ceil(ease(t) * rows.length)
   return (
@@ -410,42 +447,64 @@ function ExportScene({ t }: { t: number }) {
   )
 }
 
-function Tools({ motion }: { motion: boolean }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const seen = useInView(ref, motion)
-  const t1 = useTween(seen, motion, 1600, 100)
-  const t2 = useTween(seen, motion, 2200, 500)
+function ToolsScene({ motion }: { motion: boolean }) {
+  const ref = useRef<HTMLElement>(null)
+  const p = useViewProgress(ref, motion)
   return (
-    <section id="tools" className="lh-sec lh-tint" aria-labelledby="lh-h-tools">
+    <section ref={ref} id="tools" className="lh-sec lh-tint lh-scene" aria-labelledby="lh-h-tools">
       <div className="lh-caps lh-lab">Free tools</div>
-      <h2 className="lh-h2" id="lh-h-tools">
-        Reorder gap and its cost, from store data.
+      <h2 className="lh-h2 lh-wide" id="lh-h-tools" style={rise(p, 0, 0.3)}>
+        See the days your customers go without your product.
       </h2>
-      <div ref={ref} className="lh-tools">
-        <article className="lh-tool" aria-labelledby="lh-t1">
-          <ExportScene t={t1} />
-          <h3 className="lh-h3" id="lh-t1">
-            Reorder gap, measured from an order export.
-          </h3>
-          <p className="lh-sub">
-            Paste the order export and the label, and the tool reads both numbers off the data.
-          </p>
+      <p className="lh-sub lh-scenesub" style={rise(p, 0.1, 0.4)}>
+        Paste your order export: see the gap and what it costs you.
+      </p>
+      <div className="lh-tools">
+        <article className="lh-tool" aria-label="Gap tool" style={rise(p, 0.2, 0.5)}>
+          <ExportScene t={clamp((p - 0.3) / 0.5)} />
           <a className="lh-cta lh-ghost" href="/tool">
             Open the tool
           </a>
         </article>
-        <article className="lh-tool" aria-labelledby="lh-t2">
-          <ShrinkBar t={t2} />
-          <h3 className="lh-h3" id="lh-t2">
-            What one day between orders is worth.
-          </h3>
-          <p className="lh-sub">
-            Type three numbers from the store and drag the gap between orders.
-          </p>
+        <article className="lh-tool" aria-label="Calculator" style={rise(p, 0.3, 0.6)}>
+          <ShrinkBar t={clamp((p - 0.45) / 0.55)} />
           <a className="lh-cta lh-ghost" href="/calculator">
             Open the calculator
           </a>
         </article>
+      </div>
+    </section>
+  )
+}
+
+/* finale — the closing sentence from production, revealed word by word by scroll */
+const FINALE = "You don't pay twice for the same customer.".split(' ')
+
+function Finale({ motion }: { motion: boolean }) {
+  const ref = useRef<HTMLElement>(null)
+  const p = useScrollProgress(ref, motion)
+  const n = FINALE.length
+  return (
+    <section ref={ref} id="enquiry" className={'lh-fin' + (motion ? ' is-scroll' : '')} aria-labelledby="lh-h-fin">
+      <div className="lh-finstage">
+        <h2 className="lh-fintext" id="lh-h-fin" aria-label={FINALE.join(' ')}>
+          {FINALE.map((w, i) => {
+            const k = ease(clamp((p - 0.08 - (i * 0.6) / n) / 0.14))
+            return (
+              <Fragment key={i}>
+                <span className="lh-w" aria-hidden="true">
+                  <span style={{ transform: `translate3d(0,${(1 - k) * 105}%,0)` }}>{w}</span>
+                </span>{' '}
+              </Fragment>
+            )
+          })}
+        </h2>
+        <div className="lh-finfoot" style={rise(p, 0.72, 0.9)}>
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a className="lh-cta" href="/#enquiry">
+            Ask how to bring customers back sooner
+          </a>
+        </div>
       </div>
     </section>
   )
@@ -480,7 +539,7 @@ export function HomeLab() {
             <h1 className="lh-h1" id="lh-h1">
               You don&rsquo;t pay twice for the same customer.
             </h1>
-            <p className="lh-lead">Consulting for brands built on repeat orders.</p>
+            <p className="lh-lead">Keep customers reordering: an app under your brand, consulting, free tools.</p>
           </div>
           <div className="lh-trio">
             <HeroNawyko motion={motion} />
@@ -490,32 +549,11 @@ export function HomeLab() {
         </section>
 
         <NawykoScene motion={motion} />
-        <Consulting motion={motion} />
-        <Tools motion={motion} />
-
-        <section id="enquiry" className="lh-sec lh-enq" aria-labelledby="lh-h-enq">
-          <div className="lh-caps lh-lab">Enquiry</div>
-          <h2 className="lh-h2" id="lh-h-enq">
-            Start with the app or a store review.
-          </h2>
-          <div className="lh-enqgrid">
-            <div className="lh-enqcol">
-              <div className="lh-caps lh-dim">Nawyko</div>
-              <p className="lh-sub">A white-label app for brands whose customers buy again.</p>
-              <a className="lh-cta" href="/nawyko#enquiry">
-                Ask about Nawyko
-              </a>
-            </div>
-            <div className="lh-enqcol">
-              <div className="lh-caps lh-dim">Consulting</div>
-              <p className="lh-sub">Reply in 24 hours, with a first observation about the store.</p>
-              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-              <a className="lh-cta" href="/#enquiry">
-                Send an enquiry
-              </a>
-            </div>
-          </div>
-        </section>
+        <GapScene motion={motion} />
+        <TermsScene motion={motion} />
+        <ProofScene motion={motion} />
+        <ToolsScene motion={motion} />
+        <Finale motion={motion} />
       </main>
 
       <footer className="lh-foot">

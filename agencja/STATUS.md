@@ -1,7 +1,9 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 22.11.2026, 15:26–15:45 (przebieg 5, jednorazowy na Twoje polecenie: 1a–1d). Przed nim przebieg 4 (14:55–15:30). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 23.11.2026, 12:45–13:15 (runda 3, przebieg 1 — kolejka z 22.11 18:20, punkty 1–5). Przed nim przebieg 5 (22.11). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
+
+**Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; dalej „Następne” R3-1…R3-5.
 
 ## RUNDA 3 — START (Rafał 23.11.2026 12:43): „kolejna tura poprawek strony — każdej z 3. Udowodnij, że się uczysz”. CZYTAJ PIERWSZE.
 Zakres: kolejka z 22.11 18:20 niżej (punkty 1–5) — startuje TERAZ, w jej kolejności (najpierw recenzja dyrektora kreatywnego).
@@ -158,6 +160,57 @@ Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + po
 
 ## Dla Rafała
 
+**Runda 3, przebieg 1 (23.11, 12:45–13:15): zrobione wszystkie 5 punktów Twojej kolejki z 22.11 18:20.** Lokalnie:
+`git checkout agencja/strona && npm ci && npm run build && npm start` → `/nawyko`, `/lab/home`, `/calculator`.
+Podgląd Vercel: link „Vercel” przy commicie tego przebiegu na GitHubie (gałąź `agencja/strona`, zakładka Commits → zielony znaczek), albo stały adres gałęzi
+https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/nawyko (i `/lab/home`, `/calculator`; może wymagać logowania do Vercela).
+**Lekcja 7 — uczciwie:** z chmury nie da się go sprawdzić `curl` (proxy tej sesji blokuje domeny vercel.app — 403 po stronie proxy),
+a API GitHuba nie zwraca wdrożeń dla tej gałęzi; stan wdrożenia sprawdzony przez status commita (wynik w ostatniej wiadomości przebiegu).
+
+1. **Recenzja dyrektora kreatywnego** (`agencja/recenzje/08-dyrektor-kreatywny-test-10s.md`), streszczenie: trzy strony są
+   w jednym stylu; najmocniejsze momenty to zdrapka i wielka liczba w kalkulatorze. **Wyciąć:** pusty przejazd telefonu
+   w środku `/nawyko` (ok. 3 ekrany bez tekstu) → naprawione; dubel czterech kroków na `/lab/home` („Daily use, tracked…”)
+   → do Twojej decyzji (I); małą nawigację scen z nazwami roboczymi → zostawiona dla klawiatury, ale z nazwami dla kupującego.
+   **Wzmocnić:** zdrapkę zdaniem o korzyści marki → zrobione; kwotę pieniędzy jak w kalkulatorze także w hero `/nawyko`
+   i `/lab/home` → do decyzji (J), bo wymaga liczby ze źródła; scenę „Your brand. Your colours.” wyżej, z przyciskiem → Następne.
+2. **`/nawyko` wolniej:** scena 900vh → 1600vh (1400vh na telefonie), akt „For you” dłuższy (waga 1 → 1,5). Przy zwykłym
+   kółku (120 px co 60 ms) każda scena zdąży się rozegrać — w tym wykres marki, którego wcześniej przy normalnym tempie nie było widać.
+3. **Przejazd telefonu płaski:** bez obrotu, bez wychylenia 3D przy wejściu, bez wahnięcia; spokojny przesuw 1,1 s.
+   Zmierzone: 320 próbek transformacji — zero obrotu i zero macierzy 3D.
+4. **`/lab/home` — druga połowa na sceny:** luka 45 → 69 rośnie z przewijaniem, warunki, historia współpracy (wiersze wjeżdżają
+   po kolei, słowo w słowo z `/`), narzędzia (puste dni się kurczą), a na końcu przypięty **finał: przewijanie odsłania
+   słowo po słowie czerwone „You don't pay twice for the same customer.”** i pod nim jeden przycisk. Pod H1 jedno zdanie
+   z trzema ofertami (było tylko „Consulting…”). „69” w karcie konsultingu po ok. 1 s (było ~3 s).
+5. **Kalkulator — widać, że suwakiem się kręci:** uchwyt w kształcie pigułki z rowkami i strzałkami, gruby tor,
+   podpowiedź „← Drag to close the gap”, która znika po pierwszym ruchu, i trzykrotne „pchnięcie” uchwytu przy wejściu
+   w kadr (bez zmiany liczb; wyłączone przy ograniczonym ruchu). v3 nie budowana.
+
+**Czego się nauczyliśmy i co zastosowaliśmy (dowód nauki, lekcje 1–8 z góry pliku):**
+1. Test 10 s → recenzent przeszedł 3 strony × 2 ekrany od zera jak właściciel marki: **8 znalezisk; naprawione 6**
+   (pusta scena marki, nagłówek-etykieta kroków, brak korzyści przy zdrapce, hero `/lab/home` bez trzech ofert, dwa
+   przyciski na końcu `/lab/home`, kontrast podpowiedzi „Tovemi” 1,41:1 → ok. 6:1), **2 czekają na Ciebie** (I, J).
+   Weryfikacja poprawek niezależnym recenzentem: `agencja/recenzje/10-weryfikacja-runda3.md` + moje zrzuty przy realnym tempie.
+2. Nagłówek = wniosek, −30% słów → nagłówki przepisane na korzyść marki (lista w `teksty-do-akceptacji.md`, runda 3).
+   **Słowa (widoczny tekst strony, liczone skryptem):** `/nawyko` 1226 → 721 (−41%, ale uczciwie: ok. −15% to krótsze
+   teksty, reszta to tekst ukrytych ekranów w nieruchomych telefonach, które teraz rysują tylko widoczny ekran);
+   `/lab/home` druga połowa ok. 258 → 203 (−21%; bez wierszy historii, których nie wolno zmieniać, −32%);
+   `/calculator` 116 (bez zmian — już po skróceniu w v2). **Cel 30% w samej treści nie jest osiągnięty na `/nawyko`** — Następne.
+3. Najpierw odpowiedź → kalkulator już ma wynik u góry wielką liczbą, założenia pod nią (sprawdzone na zrzucie `kalk-r3-390-suwak.png`).
+4. Akcja kończy się następnym krokiem → `/lab/home` kończy się jednym przyciskiem; `/nawyko` i `/calculator` już miały jeden (potwierdzone w recenzji 08).
+5. Kontrast w obu motywach → `qa.js` na 9 szerokościach bez błędów kontrastu na wszystkich 3 stronach; podpowiedź pola marki poprawiona z 1,41:1.
+6. Bramka tekstów → automat `copy-voice` OK, dwa czytania czytelnika-kupującego (`09-…`, `11-…`): 16 tekstów do poprawy, wszystkie
+   poprawione (jeden zostawiony świadomie: „dose” — Twoja decyzja 7); wpisy w `teksty-do-akceptacji.md`.
+7. Link do podglądu → podany wyżej; `curl` z chmury zablokowany przez proxy (403 proxy, nie Vercela) — sprawdzam status commita w API.
+8. Jeden push na przebieg → jeden push, na końcu.
+
+**Dowód.** Nagrania przewijania w realnym tempie: `agencja/podglad/nawyko-r3-390-przewijanie.mp4`, `nawyko-r3-1440-przewijanie.mp4`.
+Zrzuty: `labhome-r3-1440-final.png` (finał), `labhome-r3-390-hero.png`, `labhome3-{m,d}-{consulting,terms,proof,tools,finale-mid}.png`
+(robione przed ostatnim skrótem tekstu), `kalk-r3-390-suwak.png`, `kalk-r3-1440-suwak.png`.
+Bramki po ostatniej zmianie: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) · `copy-voice` OK · `qa.js` PASS na
+`/nawyko`, `/lab/home`, `/calculator`, `/tool`, `/stop` · `content-rules` PASS · `ship-compare` PASS · `tool-rules` OK ·
+`calculator-model` OK. CLS przy pełnym przewinięciu `/nawyko`: 0,0007 (390), 0,0104 (1440); `/lab/home`: 0,0005 / 0,0063.
+
+
 **Przebieg 5 (22.11, jednorazowy: „jeszcze jeden set poprawek”).** Punkty 1a–1d były już zbudowane w przebiegu 4 (opis
 niżej), więc ten przebieg je domknął po drugiej recenzji, głównie na telefonie (390):
 - **Rozdział „For you” na telefonie:** telefon maleje do ok. 60% i odjeżdża w lewo, a tekst z wykresem marki podjeżdża
@@ -222,7 +275,18 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 
 ## Czeka na Rafała
 
-**Nowe z przebiegu 4:**
+**Nowe z rundy 3:**
+
+I. **`/lab/home`: wyciąć scenę „Daily use, tracked in the brand's own app.”?** Recenzent: to słabszy dubel czterech kroków
+   z `/nawyko`. Warianty: (a) zostawić (górna połowa jest „OK” według Ciebie), (b) zastąpić kaflem z linkiem do `/nawyko`.
+   Rekomendacja: (b) — strona główna ma sprzedać trzy rzeczy, a pokaz aplikacji robi `/nawyko` lepiej. Bez decyzji zostaje (a).
+J. **Kwota pieniędzy w hero `/nawyko` i `/lab/home`** (jak „+483,310” w kalkulatorze — najbardziej zapamiętywalny element).
+   Liczba musi być ze źródła albo z danych odwiedzającego. Warianty: (a) mini-kalkulator w hero (odwiedzający wpisuje jedną
+   liczbę), (b) przykład z podpisem „example”, (c) bez kwoty. Rekomendacja: (a). Bez decyzji — bez kwoty.
+K. **GenActiv w historii współpracy na `/lab/home`** (słowo w słowo z obecnej `/`). Recenzent zwrócił uwagę, że dane
+   GenActiv są poufne w projekcie aplikacji. Na produkcji ta linia już jest. Rekomendacja: potwierdź, że nazwa może zostać.
+
+**Z przebiegu 4:**
 
 F. **Zamiana `/` na `/lab/home`.** `/` to dziś eksport Claude Design (mechanizm `ship-design`, prerender, `ship-compare`).
    Zamiana oznacza: `/` staje się trasą pisaną ręcznie, pętla Claude Design przestaje przenosić stronę główną, a
@@ -291,6 +355,14 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 
 ## Następne (kolejka)
 
+R3-1. `/nawyko`: −30% słów w samej treści (dziś ok. −15%): hero w `page.tsx`, panele nagród i zapytania; scena
+      „Your brand. Your colours.” wyżej i z przyciskiem; kroki 01–04 przez ~6 ekranów bez CTA — dodać „Ask about Nawyko” po zdrapce.
+R3-2. Treść sceny według pozycji przewijania, nie zegara (nowa reguła R2): panele rozdziałów `/nawyko` wciąż wchodzą
+      animacją czasową z opóźnieniem 0,45 s — przepiąć na postęp aktu.
+R3-3. Kalkulator: pasek cookies na pierwszym ekranie 390; uchwyt w Safari/Firefox (sprawdzić); sprawdzić, czy „pchnięcie” nie rozprasza.
+R3-4. `agencja/narzedzia.md` i pierwsze nowe narzędzie (punkt 4 starszego priorytetu).
+R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
+
 0. **Kalkulator v3** (priorytet NAJNOWSZY, pkt 2): makieta jednego ekranu → czytelnik-kupujący na makiecie → budowa.
    Bohater = wartość jednego dnia z walutą; suwak ograniczony do dnia końca opakowania; rok klienta jako główna scena.
 0b. `/nawyko`: zrobione w przebiegu 5 (powrót telefonu, klawiatura, rozdział na 390). Zostało: na 390 nawigacja aktów
@@ -309,6 +381,17 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R1 (reguła, runda 3): recenzent i nagrania przewijają realnym kółkiem — 120 px co 60 ms.** Przebiegi 3–5 oglądały
+  sceny skryptem z dużym krokiem/zwolnieniem, więc nikt z nas nie zauważył, że przy normalnym tempie efekty się nie
+  rozgrywają — zauważył Rafał. Wpisane do każdego zlecenia recenzji.
+- **R2 (reguła, źródło: Chrome „Scrollytelling”, 23.11): treść sceny wchodzi według pozycji przewijania, nigdy według zegara.**
+  Opóźnienie 1 s na panelu „For you” dawało pustą scenę przy szybszym przewijaniu (test 10 s to złapał).
+- Liczenie słów `innerText` łapie tekst ukrytych ekranów makiet — liczyć tylko widoczne (albo usunąć ukryte ekrany
+  z nieruchomych makiet, jak teraz). Raportować osobno „krótszy tekst” i „mniej ukrytego DOM”.
+- Recenzent z limitem wywołań przeoczył, że pole marki istnieje tylko w akcie 6 (warunkowy render) i uznał to za błąd SSR —
+  w zleceniu podawać, które elementy są warunkowe.
+- Subagent-budujący i recenzent w jednym kroku: ~4 min blokady przy limitach 12–14 min w zleceniu — limity działają.
 
 - **Jeden push na przebieg.** Vercel ma limit buildów; push „na próbę” na początku i drugi z kodem to dwa buildy.
   Dostęp do zapisu sprawdzaj przez `git push --dry-run`.

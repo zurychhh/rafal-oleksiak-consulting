@@ -10,19 +10,19 @@ export const DEMO_BRAND = 'Tovemi'
 const STEPS = [
   {
     t: 'Confirm the pack',
-    d: 'The customer scans the barcode on the box or the receipt. The app now knows a pack has been opened and when.',
+    d: 'Customers scan the box or receipt: you see every purchase date.',
   },
   {
     t: 'Scratch one card a day',
-    d: 'After the daily dose there is one card to scratch. It takes a second, and the streak grows by a day — try it on the phone.',
+    d: 'Scratch one card after each dose: your brand, seen daily.',
   },
   {
     t: 'Build the streak',
-    d: 'Every scratched card is a day in the grid. The customer sees how far the pack has gone and how close the next reward is.',
+    d: 'Each scratched card marks a day; the next reward stays visible.',
   },
   {
     t: 'Unlock a reward they saw coming',
-    d: 'Twenty-four days out of thirty earns the stamp and a code for the next pack. The list of rewards was on screen from day one.',
+    d: 'Twenty-four days out of thirty earns the stamp and a next-pack code.',
   },
 ] as const
 
@@ -260,8 +260,8 @@ function Scratch({ gone, onDone, auto }: { gone: boolean; onDone: () => void; au
 const REWARD_ROWS = [
   { day: 7, name: 'Free shipping', note: 'on the next order' },
   { day: 24, name: `Stamp · ${GOAL_DAY} of ${PACK_DAYS} days`, note: 'six days of slack built in' },
-  { day: 24, name: 'Next-pack discount', note: 'a code that only works on a reorder' },
-  { day: 99, name: 'Cashback', note: 'counted toward the order after that' },
+  { day: 24, name: 'Next-pack discount', note: 'valid on a reorder only' },
+  { day: 99, name: 'Cashback', note: 'toward the next order' },
 ] as const
 
 const FINISH_DAYS = 34
@@ -306,6 +306,8 @@ function Phone({
           : GOAL_DAY)
   const took = step === 5 ? Math.round(PACK_DAYS + (FINISH_DAYS - PACK_DAYS) * ease(clamp(t / 0.45))) : FINISH_DAYS
   const on = (i: number) => `nk-view nk-v${i}` + (view === i ? ' is-on' : '')
+  /* Telefony statyczne rysuja tylko widoczny ekran; animowany potrzebuje wszystkich do przejsc. */
+  const has = (i: number) => interactive || view === i
   const tab = TAB_OF[step] ?? 0
 
   return (
@@ -316,6 +318,7 @@ function Phone({
           <span>Demo</span>
         </div>
 
+        {has(0) ? (
         <div className={on(0)}>
           <div className="nk-pk">New pack</div>
           <div className="nk-pt">Scan the box to start.</div>
@@ -330,7 +333,9 @@ function Phone({
             <div className="nk-ps">Pack confirmed. Day 1 starts today.</div>
           </div>
         </div>
+        ) : null}
 
+        {has(1) ? (
         <div className={on(1)}>
           <div className="nk-pk">Today</div>
           <div className="nk-pt">Taken it? Scratch the card.</div>
@@ -350,7 +355,9 @@ function Phone({
             </span>
           </div>
         </div>
+        ) : null}
 
+        {has(2) ? (
         <div className={on(2)}>
           <div className="nk-pk">Your streak</div>
           <div className="nk-big">
@@ -368,7 +375,9 @@ function Phone({
             <span>{Math.max(0, GOAL_DAY - days)} to go</span>
           </div>
         </div>
+        ) : null}
 
+        {has(3) ? (
         <div className={on(3)}>
           <div className="nk-pk">Reward unlocked</div>
           <div className="nk-stampwrap">
@@ -402,7 +411,9 @@ function Phone({
             </li>
           </ul>
         </div>
+        ) : null}
 
+        {has(4) ? (
         <div className={on(4)}>
           <div className="nk-pk">Rewards · listed from day 1</div>
           <div className="nk-big">
@@ -423,7 +434,9 @@ function Phone({
             <small>Code for your next pack</small>
           </div>
         </div>
+        ) : null}
 
+        {has(5) ? (
         <div className={on(5)}>
           <div className="nk-pk">Pack finished</div>
           <div className="nk-big">
@@ -444,6 +457,7 @@ function Phone({
             <span>{FINISH_DAYS - PACK_DAYS} skipped</span>
           </div>
         </div>
+        ) : null}
 
         <div className="nk-tabs">
           <span className={tab === 0 ? 'is-on' : ''}>Today</span>
@@ -494,7 +508,7 @@ function RewardsPanel({ day, onDay, id }: { day: number; onDay: (d: number) => v
       <h2 className="nk-h2" id={id}>
         Every reward is listed from day one.
       </h2>
-      <p className="nk-one">Drag the day. Every reward sits on a date the customer saw on day one.</p>
+      <p className="nk-one">Drag the day to watch each reward unlock.</p>
       <div className="nk-axis">
         <div className="nk-flags" aria-hidden="true">
           <span style={{ ['--d' as string]: 7 }} className={day >= 7 ? 'is-got' : ''}>
@@ -539,7 +553,7 @@ function RewardsPanel({ day, onDay, id }: { day: number; onDay: (d: number) => v
           </li>
         ))}
       </ul>
-      <p className="nk-fine">Example schedule on a made-up brand. The brand sets the rewards and the days.</p>
+      <p className="nk-fine">Example schedule. You set the rewards and the days.</p>
     </div>
   )
 }
@@ -572,7 +586,7 @@ function BrandPanel({ t, id }: { t: number; id: string }) {
         See the day each pack really runs out.
       </h2>
       <p className="nk-one">
-        Each finished pack is a dot. Together they show the day a pack really ends — not the day the label assumes.
+        Each dot is a finished pack: the real last day, not the label&rsquo;s.
       </p>
       <div
         className={'nk-chart' + (marks ? ' is-marked' : '')}
@@ -604,14 +618,13 @@ function BrandPanel({ t, id }: { t: number; id: string }) {
           })}
         </div>
         <div className="nk-legend" aria-hidden="true">
-          <span className="nk-lg-label">Day {PACK_DAYS} · what the label assumes</span>
-          <span className="nk-lg-peak">Day {DIST_PEAK} · where most packs end here</span>
-          <span className="nk-lg-me">Day {FINISH_DAYS} · the phone on this page</span>
+          <span className="nk-lg-label">Day {PACK_DAYS} · the label</span>
+          <span className="nk-lg-peak">Day {DIST_PEAK} · most packs end</span>
+          <span className="nk-lg-me">Day {FINISH_DAYS} · the demo customer above</span>
         </div>
       </div>
       <p className="nk-fine">
-        Illustration, invented data. Your curve comes from your customers.{' '}
-        <a href="/tool">Check your own gap today — free</a>.
+        Your own curve comes from your customers' orders. <a href="/tool">Check your gap free</a>.
       </p>
     </div>
   )
@@ -647,7 +660,7 @@ function SkinPanel({
       <h2 className="nk-h2" id={id}>
         Your brand. Your colours. Your app.
       </h2>
-      <p className="nk-one">Type a brand name and pick a skin. The phone and this whole page follow.</p>
+      <p className="nk-one">Type a brand name, pick a style: the whole page adapts.</p>
       <label className="nk-name">
         <span className="nk-caps">Brand name</span>
         <input
@@ -676,12 +689,12 @@ function SkinPanel({
 /* ── scena przypieta do przewijania ──────────────────────────────────────── */
 const ACTS = 7
 /* Akt zdrapki trwa dluzej niz inne: to najwazniejszy moment strony. */
-const ACT_W = [1, 1.9, 1, 1, 1, 1, 1.1]
+const ACT_W = [1, 1.9, 1, 1, 1, 1.5, 1.1]
 const ACT_AT = ACT_W.map((_, i) => ACT_W.slice(0, i).reduce((a, b) => a + b, 0))
 const ACT_TOT = ACT_W.reduce((a, b) => a + b, 0)
 /* Rozdzialy: jak to dziala (klient) → dla marki → pod Twoja marka. Telefon zmienia strone miedzy rozdzialami. */
 const CH_OF = [0, 0, 0, 0, 0, 1, 2]
-const ACT_NAMES = ['Confirm', 'Scratch', 'Streak', 'Reward', 'Rewards by day', 'Brand view', 'Your name'] as const
+const ACT_NAMES = ['Purchase', 'Daily card', 'Streak', 'Reward', 'Reward calendar', 'Pack rhythm', 'Your branding'] as const
 
 function Scene({
   skin,
@@ -819,7 +832,7 @@ function Scene({
         <span className="nk-who">For your customer</span>
         <span className="nk-labrest">How it works · made-up brand</span>
       </div>
-      <h2 className="nk-h2">Four steps from purchase to next order.</h2>
+      <h2 className="nk-h2">Four steps that bring the customer back for the next pack.</h2>
       <ol className="nk-steps">
         {STEPS.map((s, i) => (
           <li key={s.t} className={'nk-step' + (i === step ? ' is-on' : '')}>
@@ -859,7 +872,7 @@ function Scene({
           {scroll && step === 5 ? <BrandPanel t={t} id="nk-brand" /> : null}
           {scroll && step === 6 ? <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" name={name} onName={onName} /> : null}
           <p className="nk-demo">
-            {DEMO_BRAND} is a fictional brand invented for this demo. The screens show the mechanics, not a client.
+            {DEMO_BRAND} is a made-up demo brand, not a client.
           </p>
         </div>
         <div className="nk-phonecol">
@@ -868,7 +881,6 @@ function Scene({
               display: 'contents',
               ['--ty' as string]: scroll ? `${(1 - ease(enter)) * 140}px` : '0px',
               ['--sc' as string]: scroll ? 0.8 + 0.2 * ease(enter) : 1,
-              ['--rx' as string]: scroll ? `${(1 - ease(enter)) * 18}deg` : '0deg',
             }}
           >
             <div className="nk-swing">
@@ -983,7 +995,7 @@ export function Story() {
     <div ref={root}>
       <Scene skin={skin} onSkin={setSkin} name={name} onName={setName} />
       <p className="nk-demo nk-demo-after">
-        {DEMO_BRAND} is a fictional brand invented for this demo. The screens show the mechanics, not a client.
+        {DEMO_BRAND} is a made-up demo brand, not a client.
       </p>
 
       <section ref={never} className={'nk-never' + (seen ? ' is-in' : '')} aria-labelledby="nk-never">
@@ -995,7 +1007,7 @@ export function Story() {
             </span>
           ))}
         </h2>
-        <p className="nk-one">Every reward is fixed before the customer starts. The app counts days and nothing else.</p>
+        <p className="nk-one">Rewards are fixed up front. The app records only ticked days.</p>
       </section>
 
       <section className="nk-final" id="enquiry" aria-labelledby="nk-ask">
@@ -1005,8 +1017,7 @@ export function Story() {
             Would this fit your product?
           </h2>
           <p className="nk-one">
-            An app under your brand, built and run for you. For supplements, skincare, pet food, coffee — anything
-            bought again on a rhythm.{' '}
+            For supplements, skincare, pet food, coffee — anything bought again on a rhythm.{' '}
             <span className="nk-desk">Type your store and watch the phone.</span>
           </p>
           <Enquiry onStore={setStore} />
@@ -1016,7 +1027,7 @@ export function Story() {
           <p className="nk-fine">
             {typed
               ? 'That name comes from the field you just typed in. Nothing is sent until you press Send.'
-              : 'The name on the phone is a placeholder until you type your store.'}
+              : 'A placeholder until you type your store.'}
           </p>
         </div>
       </section>

@@ -1,0 +1,6 @@
+# Postęp uczenia agencji — strona oleksiakconsulting.com
+
+Jedna linia na przebieg: data · czego się nauczyliśmy (źródło) · co konkretnie zmieniło · jak sprawdzone.
+
+- 23.11 13:05 (runda 3, przebieg 1) · Przewodnik Chrome „Scrollytelling” (https://developer.chrome.com/docs/modern-web-guidance/guides/ui-behaviors/scrollytelling.md.txt): oś czasu sceny ma być „controlled by the scroll position, not a time-based clock”, wejście treści na zakresie ok. „entry 25% cover 50%”, animować tylko transform/opacity, przy `reduce` treść w pełni widoczna · Zmiana: tekst rozdziału „For you” na `/nawyko` wchodził z opóźnieniem zegarowym 1 s i przy zwykłym tempie kółka scena marki była pusta (test 10 s, recenzja 08) — opóźnienie skrócone do 0,45 s, akt marki dłuższy (waga 1 → 1,5); NOWA REGUŁA: treść sceny pojawia się według pozycji przewijania, nigdy według zegara · Sprawdzone: seria zrzutów przy kółku 120 px / 60 ms — nagłówek i wykres widoczne na 390 i 1440 (`agencja/podglad/nawyko-r3-*-przewijanie.mp4`).
+- 23.11 13:05 · Retro: recenzenci przebiegów 3–5 oglądali sceny skryptem z dużym krokiem albo w zwolnieniu, więc nie widzieli, że przy realnym tempie efekty się nie rozgrywają (Rafał to zauważył, my nie). Zmiana: każde nagranie i każdy recenzent przewija „prawdziwym kółkiem” (120 px co 60 ms) — wpisane do rubryki recenzji w STATUS („Lekcje”, reguła R1).

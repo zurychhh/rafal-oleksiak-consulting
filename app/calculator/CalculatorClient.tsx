@@ -53,6 +53,10 @@ export function Calculator() {
   const [edited, setEdited] = useState(false)
   const [said, setSaid] = useState('')
   const [open, setOpen] = useState(false)
+  /* Podpowiedz gestu (Rafal 22.11 18:20: ma byc widac, ze suwakiem sie kreci): znika po pierwszym ruchu. */
+  const [touched, setTouched] = useState(false)
+  const [nudge, setNudge] = useState(false)
+  const slideRef = useRef<HTMLDivElement>(null)
 
   const cc = check(c, 'Repeat customers', 1, 100_000_000)
   const ca = check(a, 'Order value', 0, 1_000_000)
@@ -77,6 +81,22 @@ export function Calculator() {
   const daysNow = valid ? orderDays(gapNow) : []
   const daysTarget = valid ? orderDays(target) : []
   const pool = Math.max(orderDays(range.min).length, 1)
+
+  useEffect(() => {
+    const el = slideRef.current
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const io = new IntersectionObserver(
+      (es) => {
+        if (es.some((e) => e.isIntersecting)) {
+          setNudge(true)
+          io.disconnect()
+        }
+      },
+      { threshold: 0.9 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   /* Liczba: plynne dojscie do nowej wartosci (rAF), bez tweenu przy prefers-reduced-motion. */
   const numRef = useRef<HTMLSpanElement>(null)
@@ -199,7 +219,7 @@ export function Calculator() {
             {said}
           </p>
 
-          <div className="gc-slide">
+          <div className={`gc-slide${touched ? ' is-touched' : ''}${nudge && !touched ? ' is-nudge' : ''}`} ref={slideRef}>
             <label className="gc-sl" htmlFor="gc-t">
               <span className="nk-caps">Target gap</span>
               <span className="gc-tv">
@@ -216,9 +236,16 @@ export function Calculator() {
               step={1}
               value={target}
               disabled={!valid || range.min === range.max}
-              onChange={(e) => setRatio(Number(e.target.value) / gapNow)}
+              onChange={(e) => {
+                setTouched(true)
+                setRatio(Number(e.target.value) / gapNow)
+              }}
+              onPointerDown={() => setTouched(true)}
               aria-valuetext={cut > 0 ? `${target} days between orders, ${cut} fewer than today` : `${target} days between orders, same as today`}
             />
+            <p className="gc-gesture" aria-hidden="true">
+              <span className="gc-arrow">←</span> Drag to close the gap
+            </p>
             <div className="gc-ends">
               <span>{range.min} days</span>
               <span>{range.max} days · today</span>

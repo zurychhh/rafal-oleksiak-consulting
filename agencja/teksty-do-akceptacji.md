@@ -27,3 +27,25 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /lab/home | sekcja konsultingu | Consulting for brands built on repeat orders. (cena, warunki, historia współpracy — słowo w słowo z `/`) | nowy |
 | /lab/home | sekcja narzędzi | Reorder gap and its cost, from store data. · Reorder gap, measured from an order export. · What one day between orders is worth. | nowy |
 | /lab/home | zapytanie | Start with the app or a store review. | nowy |
+
+## Runda 3, przebieg 1 (23.11.2026) — nowe i zmienione (po czytelniku-kupującym: recenzje 09 i 11)
+
+| Strona | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /lab/home | lead pod H1 | Keep customers reordering: an app under your brand, consulting, free tools. | zastępuje „Consulting for brands built on repeat orders.” |
+| /lab/home | scena luki | Stop buying back customers who were already coming back. | nowy |
+| /lab/home | warunki | Your store reviewed and fixes listed, for one flat fee. · Month one: your store as it is, and the fixes to ship first. | nowy (cena i „No setup fee. No minimum term.” bez zmian) |
+| /lab/home | historia współpracy | Brands like yours that already work this way. | nowy (wiersze klientów słowo w słowo z `/`) |
+| /lab/home | narzędzia | See the days your customers go without your product. · Paste your order export: see the gap and what it costs you. | nowy |
+| /lab/home | finał | You don't pay twice for the same customer. (odsłonięcie) · przycisk: Ask how to bring customers back sooner | nowy przycisk |
+| /lab/home | usunięte | „Start with the app or a store review.”, „Reply in 24 hours…”, „Reorder gap and its cost, from store data.”, „Source — a real supplement shop, anonymised” | usunięte |
+| /nawyko | nagłówek kroków | Four steps that bring the customer back for the next pack. | zastępuje „Four steps from purchase to next order.” |
+| /nawyko | kroki 01–04 | Customers scan the box or receipt: you see every purchase date. · Scratch one card after each dose: your brand, seen daily. · Each scratched card marks a day; the next reward stays visible. · Twenty-four days out of thirty earns the stamp and a next-pack code. | skrócone |
+| /nawyko | nagrody | Drag the day to watch each reward unlock. · valid on a reorder only · toward the next order · Example schedule. You set the rewards and the days. | skrócone |
+| /nawyko | widok marki | Each dot is a finished pack: the real last day, not the label's. · Day 30 · the label / Day 33 · most packs end / Day 34 · the demo customer above · Your own curve comes from your customers' orders. Check your gap free. | skrócone |
+| /nawyko | white label | Type a brand name, pick a style: the whole page adapts. | skrócone |
+| /nawyko | nota o marce | Tovemi is a made-up demo brand, not a client. | skrócone |
+| /nawyko | czego nie robi | Rewards are fixed up front. The app records only ticked days. | zmienione (stare „nothing else” było nieprawdą — aplikacja skanuje też zakup) |
+| /nawyko | zapytanie | usunięte powtórzenie „An app under your brand, built and run for you.” · A placeholder until you type your store. | skrócone |
+| /nawyko | nawigacja scen | Purchase · Daily card · Streak · Reward · Reward calendar · Pack rhythm · Your branding | zastępuje nazwy robocze |
+| /calculator | pod suwakiem | ← Drag to close the gap | nowy |
