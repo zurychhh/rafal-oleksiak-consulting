@@ -1,9 +1,9 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 23.11.2026, 12:45–13:15 (runda 3, przebieg 1 — kolejka z 22.11 18:20, punkty 1–5). Przed nim przebieg 5 (22.11). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 23.11.2026, 13:14–13:30 (runda 3, przebieg 2 — R3-1 częściowo, R3-2). Przed nim runda 3 przebieg 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
-**Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; dalej „Następne” R3-1…R3-5.
+**Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
 
 ## RUNDA 3 — START (Rafał 23.11.2026 12:43): „kolejna tura poprawek strony — każdej z 3. Udowodnij, że się uczysz”. CZYTAJ PIERWSZE.
 Zakres: kolejka z 22.11 18:20 niżej (punkty 1–5) — startuje TERAZ, w jej kolejności (najpierw recenzja dyrektora kreatywnego).
@@ -160,6 +160,25 @@ Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + po
 
 ## Dla Rafała
 
+**Runda 3, przebieg 2 (23.11, 13:14–13:30) — `/nawyko`: telefon i tekst jadą razem z przewijaniem, nic się nie nakłada; dwa przyciski w środku sceny.**
+1. **Przejazd telefonu między rozdziałami sterowany przewijaniem, nie zegarem** (reguła R2): telefon przejeżdża na lewo przez
+   pierwsze 30% aktu „For you” i wraca przez pierwsze 30% aktu „Under your brand”; tekst aktu wchodzi dopiero po przejeździe.
+   Wcześniej (przejazd 1,1 s na zegarze) przy zwykłym tempie kółka telefon zasłaniał nagłówek „Your brand. Your colours.”
+   (widać na zrzucie z przebiegu 1, „Kalmio” to przykład dowolnej wpisanej nazwy). **Zmierzone:** 60 próbek przy kółku 120 px / 60 ms przez akty 5–7 na 1440 —
+   nakładanie tekstu i telefonu **0 px²**; nagłówki „Every reward…”, „See the day…”, „Your brand…” w pełni widoczne (krycie > 0,9).
+   Wykres marki dosypuje kropki dopiero, gdy tekst jest już widoczny.
+2. **Przycisk w środku sceny** (test 10 s: kroki 01–04 przez ~6 ekranów bez CTA): po zdrapce pod krokami pojawia się
+   „Ask how your brand gets its own app”, a w scenie white label — z wpisaną nazwą: „Ask how **Kalmio** gets its own app”
+   (tekst po czytelniku-kupującym: pierwsza wersja „Ask about Nawyko for your brand” stawiała w centrum nasz produkt, nie markę).
+   Na telefonie (390) tylko w scenie white label — pod krokami brakuje miejsca.
+3. Dowód: `agencja/podglad/nawyko-r3b-1440-przewijanie.mp4`, `nawyko-r3b-390-przewijanie.mp4` (realne tempo),
+   `nawyko-r3b-1440-white-label.png`, `nawyko-r3b-1440-marka.png`. Bramki: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie ·
+   `copy-voice` OK · `qa.js` PASS (`/nawyko`, `/lab/home`, `/calculator`) · `content-rules` PASS · `ship-compare` PASS ·
+   CLS 0,0006 (390) / 0,0089 (1440). Podgląd: link „Vercel” przy commicie tego przebiegu (stały adres gałęzi niżej, w bloku przebiegu 1).
+
+**Runda 3, przebieg 1 (wcześniejszy blok):**
+
+
 **Runda 3, przebieg 1 (23.11, 12:45–13:15): zrobione wszystkie 5 punktów Twojej kolejki z 22.11 18:20.** Lokalnie:
 `git checkout agencja/strona && npm ci && npm run build && npm start` → `/nawyko`, `/lab/home`, `/calculator`.
 Podgląd Vercel: link „Vercel” przy commicie tego przebiegu na GitHubie (gałąź `agencja/strona`, zakładka Commits → zielony znaczek), albo stały adres gałęzi
@@ -277,6 +296,10 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 
 **Nowe z rundy 3:**
 
+L. **Scena „Your brand. Your colours. Your app.” wcześniej?** Recenzent: najmocniejszy moment sprzedażowy stoi na ~85%
+   strony. Warianty: (a) zostaje na końcu sceny (opowieść: klient → marka → Twoja marka), (b) przenieść zaraz po zdrapce.
+   Rekomendacja: (a) + przycisk z nazwą marki, który dodałem — zmiana kolejności to zmiana kierunku, więc czeka na Ciebie.
+
 I. **`/lab/home`: wyciąć scenę „Daily use, tracked in the brand's own app.”?** Recenzent: to słabszy dubel czterech kroków
    z `/nawyko`. Warianty: (a) zostawić (górna połowa jest „OK” według Ciebie), (b) zastąpić kaflem z linkiem do `/nawyko`.
    Rekomendacja: (b) — strona główna ma sprzedać trzy rzeczy, a pokaz aplikacji robi `/nawyko` lepiej. Bez decyzji zostaje (a).
@@ -355,10 +378,11 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 
 ## Następne (kolejka)
 
-R3-1. `/nawyko`: −30% słów w samej treści (dziś ok. −15%): hero w `page.tsx`, panele nagród i zapytania; scena
-      „Your brand. Your colours.” wyżej i z przyciskiem; kroki 01–04 przez ~6 ekranów bez CTA — dodać „Ask about Nawyko” po zdrapce.
-R3-2. Treść sceny według pozycji przewijania, nie zegara (nowa reguła R2): panele rozdziałów `/nawyko` wciąż wchodzą
-      animacją czasową z opóźnieniem 0,45 s — przepiąć na postęp aktu.
+R3-1. `/nawyko`: −30% słów w samej treści (dziś ok. −15%): hero w `page.tsx` (drugi akapit), panele nagród i zapytania.
+      Mierzyć tekst POZA makietami telefonów (nowa metoda). CTA w środku sceny — zrobione w przebiegu 2;
+      przesunięcie sceny „Your brand” wyżej = zmiana kolejności opowieści → najpierw pokazać Rafałowi (decyzja L poniżej).
+R3-2. ~~Treść sceny według pozycji przewijania~~ — zrobione w przebiegu 2 (desktop). Na telefonie (390) przejazd
+      wciąż na zegarze (zmiana skali/pozycji) — przepiąć tak samo i zmierzyć nakładanie.
 R3-3. Kalkulator: pasek cookies na pierwszym ekranie 390; uchwyt w Safari/Firefox (sprawdzić); sprawdzić, czy „pchnięcie” nie rozprasza.
 R3-4. `agencja/narzedzia.md` i pierwsze nowe narzędzie (punkt 4 starszego priorytetu).
 R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
@@ -381,6 +405,14 @@ R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R3 (reguła, przebieg 2): ruch, który zmienia układ (przejazd, zamiana stron), też sterować przewijaniem** — mieszanie
+  przewijania (tekst) z zegarem (telefon) dało nakładanie się przy zwykłym tempie. Test: skrypt `ov.js` (nakładanie tekstu
+  i telefonu w px² przy kółku 120 px / 60 ms) — ma dawać 0.
+- Przycisk ma mówić o marce odwiedzającego, nie o naszym produkcie: „Ask how <marka> gets its own app” > „Ask about Nawyko”.
+- Źródło (Unbounce, O. Gardner, 2013, aktual. 2023): na długiej stronie kilka CTA dzielących opowieść na rozdziały, CTA po
+  zbudowaniu argumentu — zastosowane jako przycisk po zdrapce i po white label; jedyna liczba w tekście (41%) to jeden test
+  strony cenowej, więc nie traktujemy jej jako normy.
 
 - **R1 (reguła, runda 3): recenzent i nagrania przewijają realnym kółkiem — 120 px co 60 ms.** Przebiegi 3–5 oglądały
   sceny skryptem z dużym krokiem/zwolnieniem, więc nikt z nas nie zauważył, że przy normalnym tempie efekty się nie

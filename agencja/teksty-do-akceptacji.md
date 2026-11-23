@@ -49,3 +49,4 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /nawyko | zapytanie | usunięte powtórzenie „An app under your brand, built and run for you.” · A placeholder until you type your store. | skrócone |
 | /nawyko | nawigacja scen | Purchase · Daily card · Streak · Reward · Reward calendar · Pack rhythm · Your branding | zastępuje nazwy robocze |
 | /calculator | pod suwakiem | ← Drag to close the gap | nowy |
+| /nawyko | po zdrapce i w white label | Ask how your brand gets its own app · Ask how <wpisana marka> gets its own app | nowy (po czytelniku; zastąpił „Ask about Nawyko for your brand”) |

@@ -483,3 +483,23 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 .nk-scene[data-swung][data-act="5"] .nk-panel.nk-in,.nk-scene[data-swung][data-act="6"] .nk-panel.nk-in{animation-delay:.45s;}
 @media (max-width:860px){.nk-scene.is-scroll{height:1400vh;}}
 @media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
+
+/* ══ runda 3, przebieg 2 ═══════════════════════════════════════════════════
+   R2: panele aktow 5–7 wchodza wedlug postepu przewijania (styl inline z JS) — bez animacji zegarowej.
+   CTA po zdrapce i w white label (test 10 s: kroki 01–04 przez ~6 ekranow bez przycisku). */
+.is-scroll .nk-actin .nk-panel.nk-in{animation:none;}
+.nk-actin{will-change:opacity,transform;}
+.nk .nk-next{margin-top:14px;font-size:14px;line-height:22px;}
+.nk-next[hidden]{display:block;visibility:hidden;}
+.nk a.nk-link{color:var(--ink);text-decoration:none;font-weight:600;}
+@media (max-width:860px){
+  .is-scroll .nk-scenehead > .nk-in .nk-next{display:none;}
+  .is-scroll .nk-panel .nk-next{margin-top:8px;}
+}
+/* Desktop: przejazd telefonu i tekstu wedlug --sw (0 = telefon po prawej, 1 = po lewej), liczonego z przewijania.
+   Krotkie wygladzenie .18s tylko na drgania kolka. Tlo rozdzialu tez wedlug --sw. */
+@media (min-width:861px){
+  .is-scroll .nk-scenehead,.is-scroll .nk-phonecol{transition:transform .18s linear;}
+  .nk-scene.is-scroll .nk-phonecol,.nk-scene.is-scroll[data-ch="1"] .nk-phonecol{transform:translateX(calc(-1 * var(--swap) * var(--sw,0)));}
+  .nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateX(calc(var(--swap) * var(--sw,0)));}
+}

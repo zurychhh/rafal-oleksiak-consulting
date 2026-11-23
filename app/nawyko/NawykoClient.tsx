@@ -574,8 +574,8 @@ const DOT_ORDER: number[][] = (() => {
 })()
 
 function BrandPanel({ t, id }: { t: number; id: string }) {
-  const shown = t >= 1 ? DIST_TOTAL : Math.round((DIST_TOTAL - 1) * clamp((t - 0.12) / 0.55))
-  const marks = t > 0.72
+  const shown = t >= 1 ? DIST_TOTAL : Math.round((DIST_TOTAL - 1) * clamp((t - 0.3) / 0.45))
+  const marks = t > 0.8
   return (
     <div className="nk-panel nk-in">
       <div className="nk-caps nk-lab">
@@ -682,6 +682,11 @@ function SkinPanel({
         ))}
       </div>
       <p className="nk-fine">The name stays in this page. Nothing is sent.</p>
+      <p className="nk-next">
+        <a className="nk-link" href="#enquiry">
+          Ask how {name.trim().slice(0, 14) || 'your brand'} gets its own app
+        </a>
+      </p>
     </div>
   )
 }
@@ -766,6 +771,12 @@ function Scene({
   const step = scroll ? found : manual
   const t = scroll ? clamp((x - ACT_AT[found]) / ACT_W[found]) : 1
   const ch = CH_OF[step] ?? 0
+  /* Przejazd telefonu miedzy rozdzialami sterowany przewijaniem (regula R2), nie zegarem: wjazd w rozdzial „For you”
+     przez pierwsze 0,3 aktu, powrot przez pierwsze 0,3 aktu „Under your brand”. Tekst aktu wchodzi dopiero po przejezdzie. */
+  const SW_LEN = 0.3
+  const sw = !scroll ? 0 : x < ACT_AT[6] ? ease(clamp((x - ACT_AT[5]) / SW_LEN)) : 1 - ease(clamp((x - ACT_AT[6]) / SW_LEN))
+  const local = x - ACT_AT[step]
+  const inK = ease(step === 4 ? clamp(local / 0.12) : clamp((local - SW_LEN) / 0.2))
   const [swung, setSwung] = useState(false)
   const lastCh = useRef(0)
   useEffect(() => {
@@ -846,6 +857,11 @@ function Scene({
           </li>
         ))}
       </ol>
+      <p className="nk-next" hidden={!(scroll && step >= 2)}>
+        <a className="nk-link" href="#enquiry">
+          Ask how {name.trim().slice(0, 14) || 'your brand'} gets its own app
+        </a>
+      </p>
       <p className="nk-alt" hidden={!(step === 1 && !scratched)}>
         No pointer?{' '}
         <button type="button" className="nk-link" onClick={() => setScratched(true)}>
@@ -863,14 +879,19 @@ function Scene({
       data-act={scroll ? step : undefined}
       data-ch={scroll ? ch : undefined}
       data-swung={scroll && swung ? '' : undefined}
-      style={{ ['--p' as string]: scroll ? p : 1 }}
+      style={{ ['--p' as string]: scroll ? p : 1, ['--sw' as string]: sw }}
     >
       <div className="nk-stage">
         <div className="nk-scenehead">
           {!scroll || step < 4 ? steps : null}
-          {scroll && step === 4 ? <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" /> : null}
-          {scroll && step === 5 ? <BrandPanel t={t} id="nk-brand" /> : null}
-          {scroll && step === 6 ? <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" name={name} onName={onName} /> : null}
+          {scroll && step >= 4 ? (
+            /* Regula R2 (Chrome „Scrollytelling”): tekst aktu wchodzi wedlug postepu przewijania, nie zegara. */
+            <div className="nk-actin" style={{ opacity: inK, transform: `translateY(${(1 - inK) * 18}px)` }}>
+              {step === 4 ? <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" /> : null}
+              {step === 5 ? <BrandPanel t={t} id="nk-brand" /> : null}
+              {step === 6 ? <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" name={name} onName={onName} /> : null}
+            </div>
+          ) : null}
           <p className="nk-demo">
             {DEMO_BRAND} is a made-up demo brand, not a client.
           </p>
