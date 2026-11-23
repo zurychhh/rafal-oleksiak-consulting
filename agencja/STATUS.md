@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 23.11.2026, 13:38–14:05 (runda 3, przebieg 3 — R3-2, R3-1 część, R3-4: pierwsze nowe narzędzie). Wcześniej przebieg 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 23.11.2026, 14:38–15:00 (runda 3, przebieg 4 — R3-0 mini-kalkulator w hero, R3-4 pole w `/lab/reward`, test fokusu pod paskiem cookies). Wcześniej przebieg 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
@@ -159,6 +159,29 @@ Słowa Rafała: „dobrze, teraz pracujemy nad tą częścią”. W tej kolejno�
 Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + podgląd we własnej marce klienta + deck (3 decyzje).
 
 ## Dla Rafała
+
+**Runda 3, przebieg 4 (23.11, 14:38–15:00) — kwota pieniędzy w pierwszym ekranie `/nawyko` i `/lab/home` (decyzja J), liczona z liczb odwiedzającego.**
+Do obejrzenia: `/nawyko` i `/lab/home` tuż pod pierwszym ekranem (blok „What the gap between packs costs you”) oraz `/lab/reward` (zdanie pod wielką liczbą).
+1. **Mini-kalkulator w hero.** Trzy krótkie pola w jednym rzędzie: co ile dni klienci zamawiają ponownie, na ile dni starcza
+   opakowanie, przychód z ponownych zamówień rocznie. Pasek jednego cyklu: czarne = opakowanie, czerwone kreskowane = dni bez
+   produktu. Duża czerwona liczba: dodatkowy przychód rocznie, gdyby każdy klient zamawiał, gdy kończy się opakowanie
+   (przykład: 58 dni, opakowanie 30, 480,000 → +448,000), podpis „Example — type your own” tuż nad liczbą i „Upper limit”.
+   Ten sam wzór co `/calculator` (funkcja `gapValue`); pod spodem link do pełnego kalkulatora. Nic nie jest wysyłane.
+   Biznesowo: odwiedzający w kilka sekund widzi koszt pustych dni we WŁASNEJ walucie, a cała strona Nawyko odpowiada, jak je zamknąć.
+2. **`/lab/reward`: wartość zamówienia zmienia teraz widoczny wynik** (reguła: każde pole zmienia wynik). Pod liczbą: „Same as 80% off
+   one order of 120, once a year. Pick one fixed reward that costs less and announce it up front.” — marka od razu widzi, jaki rabat
+   na kolejne opakowanie się spina.
+3. **Fokus klawiatury nie chowa się już pod paskiem cookies** na żadnej stronie pisanej ręcznie. Nowy automat
+   `scripts/focus-obscured.test.mjs` od razu znalazł starszy błąd na `/calculator` (390: przycisk „Talk these numbers through” pod paskiem) — naprawiony.
+4. **Słowa:** hero `/nawyko` urósł o blok narzędzia (ok. +45 słów, w tym etykiety pól) — świadomie, bo to decyzja J; −30% w treści nadal czeka na decyzję N.
+5. **Dowód:** zrzuty `agencja/podglad/hg-r3d-nawyko-390.png`, `hg-r3d-nawyko-1440.png`, `hg-r3d-labhome-390.png`, `hg-r3d-labhome-1440.png`,
+   `reward-r3d-390.png`, `reward-r3d-1440.png`. Recenzja niezależna `agencja/recenzje/14-mini-kalkulator-hero.md` (5 poprawek → wszystkie
+   zrobione, potwierdzone drugim podejściem w `16-weryfikacja-r3d.md`: rachunek sprawdzony na 4 przypadkach, CLS przy wpisywaniu 0,0000);
+   czytelnik-kupujący `15-teksty-mini-kalkulator.md` (5 tekstów przepisanych, m.in. „empty shelf” → „gap between packs”, dodane pole opakowania).
+   Bramki po ostatniej zmianie: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) · `copy-voice` OK · `calculator-model`,
+   `reward-model`, `tool-rules` OK · `qa.js` PASS na `/`, `/nawyko`, `/lab/home`, `/lab/reward`, `/calculator`, `/tool`, `/stop` ·
+   `content-rules` PASS · `ship-compare` PASS · `focus-obscured` OK (4 trasy × 2 szerokości) · CLS hero: 0,0002 (390) / 0,0073 (1440) na `/nawyko`.
+   Podgląd: https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/nawyko (i `/lab/home`, `/lab/reward`); stan wdrożenia w ostatniej wiadomości przebiegu.
 
 **Runda 3, przebieg 3 (23.11, 13:38–14:05) — nowe narzędzie „ile może kosztować nagroda” i spokojniejszy przejazd telefonu na `/nawyko`.**
 Do obejrzenia: `/lab/reward` (nowe, noindex) i `/nawyko` w rozdziałach „For you” → „Under your brand”, na telefonie i na desktopie.
@@ -324,6 +347,14 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 **Decyzje doradcy 23.11 13:50 (Rafał: „bądź samodzielny, angażuj mnie tylko tam, gdzie potrzebna jest moja decyzja”):**
 I → (a) scena zostaje: Rafał ocenił górną połowę `/lab/home` jako dobrą; nie wycinamy tego, co zatwierdził.
 J → (a) mini-kalkulator w hero `/nawyko` i `/lab/home`: odwiedzający wpisuje jedną liczbę, kwota liczona tym samym modelem co `/calculator`; zero liczb bez źródła. Buduj w następnym przebiegu.
+**Nowe z przebiegu 4 rundy 3:**
+
+O. **`/lab/home`: mini-kalkulator stoi pod kartą „Free tools”, która ma podobny pasek i link do kalkulatora.** Recenzent: częściowy dubel.
+   Warianty: (a) zostawić oba, (b) w karcie „Free tools” zostawić tylko link do `/tool`, bo kalkulator jest tuż niżej, (c) bez mini-kalkulatora na `/lab/home`.
+   Rekomendacja: (b) — mniej powtórzeń, nic nie znika (link do kalkulatora jest w bloku). To zmiana tego, co widzi klient, więc czeka na Ciebie.
+P. **Czerwona liczba przy zysku.** Czytelnik: czerwony może czytać się jak strata. Na stronie czerwień = „zmierzona wartość” (zasada stylu,
+   jak +483,310 w kalkulatorze). Rekomendacja: zostawić czerwień (spójność całej strony); zmiana koloru = zmiana palety, Twoja decyzja.
+
 **Nowe z przebiegu 3 rundy 3:**
 
 M. **`/lab/reward` — adres i wypuszczenie.** Narzędzie jest gotowe w podglądzie (noindex, poza sitemapą). Warianty: (a) wypuścić
@@ -418,15 +449,15 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 
 ## Następne (kolejka)
 
-R3-0. **J (decyzja doradcy 13:50): mini-kalkulator w hero `/nawyko` i `/lab/home`** — jedna liczba od odwiedzającego, model z `/calculator`. Pierwsze w następnym przebiegu.
+R3-0. ZROBIONE w przebiegu 4 (trzy pola zamiast jednego — czytelnik odrzucił stałe 30 dni opakowania). Dalej: brzegowy przypadek — pasek cookies pojawia się, gdy pole ma już fokus (9–30 px nachodzenia, recenzja 16); `focus-obscured` dopisać do bramki w CLAUDE.md (zmiana dokumentu — przy okazji).
+R3-7. Następne narzędzie z `agencja/narzedzia.md` (kiedy wysłać przypomnienie o kolejnym opakowaniu) — spec + makieta + czytelnik.
 R3-1. (przebieg 3: zrobione −4%, dalej tylko przez wycięcie — decyzja N) `/nawyko`: −30% słów w samej treści (dziś ok. −15%): hero w `page.tsx` (drugi akapit), panele nagród i zapytania.
       Mierzyć tekst POZA makietami telefonów (nowa metoda). CTA w środku sceny — zrobione w przebiegu 2;
       przesunięcie sceny „Your brand” wyżej = zmiana kolejności opowieści → najpierw pokazać Rafałowi (decyzja L poniżej).
 R3-2. ZROBIONE w przebiegu 3 (390 też według przewijania, 0 px²). ~~Treść sceny według pozycji przewijania~~ — zrobione w przebiegu 2 (desktop). Na telefonie (390) przejazd
       wciąż na zegarze (zmiana skali/pozycji) — przepiąć tak samo i zmierzyć nakładanie.
 R3-3. Kalkulator: pasek cookies na pierwszym ekranie 390; uchwyt w Safari/Firefox (sprawdzić); sprawdzić, czy „pchnięcie” nie rozprasza.
-R3-4. ZROBIONE w przebiegu 3: `agencja/narzedzia.md` + `/lab/reward`. Dalej: w `/lab/reward` wartość zamówienia nie zmienia
-      wyniku (reguła NN/g: każde pole zmienia wynik) — albo wyciąć pole, albo pokazać „nagroda jako część zamówienia”; CLS i tryb ciemny.
+R3-4. ZROBIONE (przebieg 3 narzędzie, przebieg 4 pole wartości zamówienia). Zostało w `/lab/reward`: CLS i tryb ciemny.
 R3-6. Pomiar CLS na `/nawyko` po zmianie przejazdu (390, 1440) i kl./s na telefonie.
 R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 
@@ -448,6 +479,12 @@ R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R5 (reguła, przebieg 4): znalezisko recenzenta w jednym bloku → test całej strony, nie łatka bloku.** Ukryty fokus pod paskiem
+  cookies w nowym bloku zamieniony w `scripts/focus-obscured.test.mjs`; test od razu znalazł starszy błąd na `/calculator`, którego
+  `qa.js` i trzy rundy recenzji nie widziały. Bramka każdego kawałka: `focus-obscured` na trasach pisanych ręcznie.
+- Czytelnik-kupujący łapie słowa, które w FMCG znaczą co innego („empty shelf” = brak w sklepie, nie u klienta) — każde narzędzie
+  ma przejść czytelnika zanim trafi do recenzji wyglądu; stałe założenie w rachunku (30 dni) obniża zaufanie bardziej niż dodatkowe pole.
 
 - **R4 (reguła, przebieg 3): wygładzanie `transition` na elemencie sterowanym przewijaniem to ukryty zegar** — łamie R2
   (telefon spóźniał się za tekstem: 1 142–35 603 px² nakładania). Elementy sterowane przewijaniem: `transition:none`, płynność

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { DayStrip, Story } from './NawykoClient'
+import { HeroGap } from '../calculator/HeroGap'
 import './nawyko.css'
 
 const URL = 'https://oleksiakconsulting.com/nawyko'
@@ -83,6 +84,7 @@ export default function Nawyko() {
             </div>
           </div>
           <DayStrip />
+          <HeroGap />
         </section>
 
         <Story />

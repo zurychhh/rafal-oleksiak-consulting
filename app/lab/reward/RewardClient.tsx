@@ -80,7 +80,15 @@ export function Reward() {
               hint ?? 'Fill in the three fields to see it.'
             )}
           </p>
-          <p className="rw-do">Set one fixed reward below this and announce it up front.</p>
+          <p className="rw-do">
+            {res.ok ? (
+              <>
+                {ceiling > ca.v! ? 'Worth ' : 'Same as '}<b>{ceiling > ca.v! ? `more than one whole order of ${fmt(ca.v!)}` : `${Math.round((ceiling / ca.v!) * 100)}% off one order of ${fmt(ca.v!)}`}</b>, once a year. Pick one fixed reward that costs less and announce it up front.
+              </>
+            ) : (
+              'Set one fixed reward below this and announce it up front.'
+            )}
+          </p>
           <p className="rw-live" aria-live="polite">
             {said}
           </p>

@@ -1,6 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react'
+import { HeroGap } from '../../calculator/HeroGap'
 
 /* /lab/home — proposal for a new homepage. Hand-written, plain CSS (home.css, prefix lh-).
    Every scene renders its FINAL state on the server, under prefers-reduced-motion and
@@ -546,6 +547,7 @@ export function HomeLab() {
             <HeroConsulting motion={motion} />
             <HeroTools motion={motion} />
           </div>
+          <HeroGap className="lh-hg" />
         </section>
 
         <NawykoScene motion={motion} />

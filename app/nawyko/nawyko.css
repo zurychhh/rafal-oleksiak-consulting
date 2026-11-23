@@ -517,3 +517,4 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 /* bez wygladzania .18s: przejazd jest juz dlugi i plynny z samego przewijania, a opoznienie CSS dawalo nakladanie,
    gdy tekst wchodzi pod koniec przejazdu (recenzja 12: pusta polowa ekranu przez 4–5 ruchow kolka). */
 .nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll .nk-phonecol{transition:none;}
+html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 2.2 SC 2.4.11, technika W3C C43 */

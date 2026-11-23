@@ -275,3 +275,5 @@ body:has(.lh){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
   .lh-fintext{font-size:clamp(44px,13vw,64px);}
   .lh-finfoot .lh-cta{width:100%;}
 }
+.lh .lh-hg{margin-top:clamp(20px,3vw,36px);}
+html:has(.lh){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 2.2 SC 2.4.11, technika W3C C43 */

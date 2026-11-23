@@ -81,3 +81,4 @@
 @media (prefers-reduced-motion:reduce){
   .rw-bar i{transition:none;}
 }
+.nk .rw-do b{font-weight:600;}

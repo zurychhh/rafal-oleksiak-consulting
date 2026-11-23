@@ -65,3 +65,14 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /nawyko | widok marki | Each dot: a pack's real last day, not the label's. · Your curve comes from your own orders. Check your gap for free. | skrócone |
 | /nawyko | czego nie robi | The app stores only which days were ticked. | skrócone (fakt „rewards fixed up front” jest już w „No random rewards.”) |
 | /nawyko | zapytanie | Supplements, skincare, pet food, coffee — anything reordered on a rhythm. · This form sends the two fields above, your consent choices, and the page and campaign link you came from. I reply personally by e-mail. · Your typed name. Nothing is sent until you press Send. | skrócone |
+
+### Runda 3, przebieg 4 (23.11, 14:38–15:00) — mini-kalkulator w hero i zdanie w `/lab/reward` (czytelnik: `recenzje/15-teksty-mini-kalkulator.md`, weryfikacja `16-…`)
+
+| Strona | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /nawyko, /lab/home | hero, nagłówek bloku | What the gap between packs costs you | nowy (czytelnik odrzucił „What the empty shelf costs you” — w FMCG „empty shelf” = brak w sklepie) |
+| /nawyko, /lab/home | pola | Customers reorder every [58] days · Pack lasts [30] days · Revenue from reorders a year [480,000] · Example — type your own / Your numbers | nowy (pole „Pack lasts” dodane po czytelniku: stałe 30 dni budziło nieufność) |
+| /nawyko, /lab/home | pasek | {30}-day pack · {28} days without your product / No gap | nowy |
+| /nawyko, /lab/home | wynik | +{448,000} · Extra revenue a year, in your currency, if every customer reorders when the pack runs out. Upper limit. · Run the full calculator → | nowy |
+| /nawyko, /lab/home | odstęp ≤ opakowanie | No gap: customers reorder before the pack runs out. | nowy |
+| /lab/reward | pod liczbą | Same as {80}% off one order of {120}, once a year. / Worth more than one whole order of {60}, once a year. · Pick one fixed reward that costs less and announce it up front. | zmienione (wartość zamówienia teraz zmienia widoczny wynik; „below it” było niejasne) |
