@@ -204,3 +204,19 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | akt 8 zdanie | The studio’s AI agents wrote the app. A person signed off every gate on the way. | AI agents write the code; a person signs off each check before the next step. | zmieniony |
 | akt 8 oś | Data-access tests · Engagement gate · Store-ready build | Tests that no customer sees another’s data · Rewards check: fixed and shown in advance · Store release only after the brand signs off | zmieniony |
 | podpis ekranów z liczbami (akty 1, 4, 5, 6) | Recreated screen… / Example screen. Bar heights… / …placeholders. | Example screen. Numbers are placeholders. (+ plakietka EXAMPLE na ekranach „This month”) | zmieniony |
+
+## R4 przebieg 3 — /work/genactiv (23.11.2026, wszystkie: nowy)
+| Miejsce | Tekst | Status |
+|---|---|---|
+| nagłówek strony (nawigacja) | Nawyko · Work · Contact | nowy |
+| akt 9 etykieta / H2 | Results / Reorder lift stays locked until real data comes in. | nowy |
+| akt 9 zdanie | Reorder lift is measured against a control group that never gets the app, with the first read 90 days after launch. | nowy |
+| akt 9 podpis | Locked screen. No results shown yet. | nowy |
+| akt 9 ekran (rysunek, aria-hidden) | Results · Locked · With the app · Control group · Reorder lift · no data yet | nowy |
+| akt 10 etykieta / H2 | Your brand / See it with your brand: pick a colour. | nowy |
+| akt 10 zdanie | The phone repaints in the picked colour, and the text colour adjusts to stay readable. | nowy |
+| akt 10 próbki (czytane przez czytnik) | Brand colour · GENACTIV red · Green · Blue · Yellow · Violet · Any colour | nowy |
+| akt 10 podpis | Example screen in the picked colour. | nowy |
+| akt 10 ekran (rysunek, aria-hidden) | Your brand · Today's card · Rewards · Scratch today's card | nowy |
+| formularz (tytuł `Enquiry`) | Ask about an app for your brand | nowy |
+| link pod formularzem | See the full product page → | nowy |

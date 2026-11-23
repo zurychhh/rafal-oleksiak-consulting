@@ -100,3 +100,14 @@ liczony), link „See the full product page →” do `/nawyko`, i formularz zap
 ostylowany w palecie realizacji (kontrast ≥ 4,5:1). Nawigacja: na `/work/genactiv` nagłówek z linkami Nawyko · Work (bieżąca) · Contact (#enquiry);
 link do `/work/genactiv` z `/nawyko` NIE jest dodawany (publiczny link do prawdziwej marki przed zgodą GENACTIV — decyzja Rafała,
 wpis w „Czeka na Rafała”); `/` bez zmian. Trasa dalej `noindex`, poza sitemap.
+Stan: zbudowane (ACTS = 11, tor 1320svh). Akt 9: ekran „Results · Locked” ze szkieletem wykresu bez wartości, metoda i „90 days after
+launch” tylko w tekście, bez daty startu. Akt 10: próbki-radio (5) + `input type=color`, telefon przechodzi z czerwieni GENACTIV
+do wybranego koloru w pierwszych 40% aktu; tekst na kolorze biały albo czarny według liczonego kontrastu (minimum ok. 4,58:1);
+fokus próbek przewija scenę do aktu 10. Formularz `Enquiry` (form `work`, page `/work/genactiv`) stoi w trybie przewijania tuż pod
+sceną (`#enquiry`; w przypiętej scenie nie mieści się na 390), w trybie statycznym w akcie 10; style `nk-*` w genactiv.css pod `.ga`;
+link „See the full product page →” pod formularzem. Nagłówek: Nawyko · Work (aria-current) · Contact (#enquiry). Bramki: build,
+tsc, lint 0 błędów / 1 ostrzeżenie (jak przed), copy-voice OK (widzi nowe literały: „unlock” w H2 aktu 10 → czerwony), qa.js
+--scroll PASS (9 szerokości), noindex, 0× /work w sitemap.xml; CLS przy przewinięciu całej strony 0,0031 (390) / 0,0007 (1440);
+błąd wysyłki bez Resend: „That did not go through. Write to rafal@… instead.” z fokusem. Zrzuty `agencja/podglad/genactiv-p3-*.png`.
+Otwarte: czytelnik-kupujący dla tekstów przebiegu 3; `Enquiry` ma swoje teksty w 1. osobie („I reply personally…”, zgoda
+marketingowa) — wspólny komponent, nie zmieniany; trasa importuje cały moduł NawykoClient (rozmiar JS do sprawdzenia).
