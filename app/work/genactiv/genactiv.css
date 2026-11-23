@@ -304,3 +304,6 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
   .ga-stamp.ga-on { animation: none; opacity: 1; transform: translate(-50%, -50%) rotate(-8deg); }
   .ga-foil { transition: none; }
 }
+/* akt 7: prawdziwy przycisk zgody w makiecie (osiagalny Tabem) */
+button.ga-fakebtn { border: 0; font: 800 1em/1.2 'Montserrat', system-ui, sans-serif; cursor: pointer; min-height: 44px; }
+button.ga-fakebtn.ga-done { color: var(--muted); }

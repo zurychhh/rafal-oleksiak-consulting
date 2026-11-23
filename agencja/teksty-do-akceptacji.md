@@ -166,3 +166,16 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | akt 8 podpis | Build stages in order. | nowy |
 | akt 8 oś (czytana przez czytnik) | Build path · Green light from the brand · Security review · Data-access tests · GDPR art. 9: a dose is stored only as “ticked on date” · Copy review · Engagement gate · Store-ready build · (przy bramkach) human sign-off | nowy |
 | ekrany 5–7 (rysunek, aria-hidden) | Cashback · Example · Order 1–4 · Next order one step up · Level 2 · Points to the next level · never lost · Path 1 · Lesson 1–3 · ✓ done / next · Medal and gift at the finish · Health data consent · Consent off / Consent on · Daily card · Streak · locked / ✓ on · Order rewards · Agree and turn on / Turned on | nowy |
+
+### R4 przebieg 2 — poprawki po recenzji i czytelniku 22 (23.11.2026)
+| Miejsce | Było | Jest | Status |
+|---|---|---|---|
+| akt 5 zdanie | Each new order moves the customer one step up the stairs. The brand fixes the steps before launch. | Each repeat order raises cashback by one fixed step. The brand sets every step before launch. | zmieniony |
+| akt 6 H2 | Points and levels that never go down. | Points and levels: earned once, never taken away. | zmieniony |
+| akt 6 zdanie | Points add up to levels that only rise. Short knowledge paths end with a medal and a gift. | Points build levels. Short in-app lessons end with a medal and a fixed gift. | zmieniony |
+| akt 7 zdanie | …Order rewards never wait for consent. | The daily card and streak show as locked, with one button to turn them on. No reward depends on push or email consent. | zmieniony |
+| akt 7 makieta | wiersz „Order rewards · ✓ on” | usunięty; „Agree and turn on” to prawdziwy przycisk (aria-pressed) | zmieniony |
+| akt 8 H2 | From green light to a store-ready build. | Every build passes security, data and copy checks. | zmieniony |
+| akt 8 zdanie | The studio’s AI agents wrote the app. A person signed off every gate on the way. | AI agents write the code; a person signs off each check before the next step. | zmieniony |
+| akt 8 oś | Data-access tests · Engagement gate · Store-ready build | Tests that no customer sees another’s data · Rewards check: fixed and shown in advance · Store release only after the brand signs off | zmieniony |
+| podpis ekranów z liczbami (akty 1, 4, 5, 6) | Recreated screen… / Example screen. Bar heights… / …placeholders. | Example screen. Numbers are placeholders. (+ plakietka EXAMPLE na ekranach „This month”) | zmieniony |

@@ -21,6 +21,7 @@ const smooth = (v: number) => {
 
 type Copy = { kicker: string; title: string; sub: string; cap?: string }
 const CAP = 'Recreated screen for illustration.'
+const NUM = 'Example screen. Numbers are placeholders.'
 const COPY: Copy[] = [
   {
     kicker: 'GENACTIV · Polish colostrum brand',
@@ -31,6 +32,7 @@ const COPY: Copy[] = [
     kicker: 'The problem',
     title: 'The risk: the habit fades halfway through the pack.',
     sub: 'Without a daily reason, the second order never comes.',
+    cap: NUM,
   },
   {
     kicker: 'Step 1 · Proof of purchase',
@@ -46,28 +48,29 @@ const COPY: Copy[] = [
     kicker: 'Step 3 · The month',
     title: 'Rewards are set before day one.',
     sub: 'Every ticked day fills the ring. The stamp lands on a day the customer knew in advance, never by chance.',
+    cap: NUM,
   },
   {
     kicker: 'Step 4 · Cashback',
     title: 'Cashback grows with every repeat order.',
-    sub: 'Each new order moves the customer one step up the stairs. The brand fixes the steps before launch.',
-    cap: 'Example screen. Bar heights are illustrative.',
+    sub: 'Each repeat order raises cashback by one fixed step. The brand sets every step before launch.',
+    cap: NUM,
   },
   {
     kicker: 'Step 5 · Points and levels',
-    title: 'Points and levels that never go down.',
-    sub: 'Points add up to levels that only rise. Short knowledge paths end with a medal and a gift.',
-    cap: 'Example screen. Path and lesson names are placeholders.',
+    title: 'Points and levels: earned once, never taken away.',
+    sub: 'Points build levels. Short in-app lessons end with a medal and a fixed gift.',
+    cap: NUM,
   },
   {
     kicker: 'Step 6 · Consent',
     title: 'Consent off: every card stays visible.',
-    sub: 'The daily card and streak show as locked, with one button to turn them on. Order rewards never wait for consent.',
+    sub: 'The daily card and streak show as locked, with one button to turn them on. No reward depends on push or email consent.',
   },
   {
     kicker: 'How it was built',
-    title: 'From green light to a store-ready build.',
-    sub: 'The studio\u2019s AI agents wrote the app. A person signed off every gate on the way.',
+    title: 'Every build passes security, data and copy checks.',
+    sub: 'AI agents write the code; a person signs off each check before the next step.',
     cap: 'Build stages in order.',
   },
 ]
@@ -76,11 +79,11 @@ const COPY: Copy[] = [
 const GATES: { t: string; gate?: boolean }[] = [
   { t: 'Green light from the brand' },
   { t: 'Security review', gate: true },
-  { t: 'Data-access tests', gate: true },
+  { t: 'Tests that no customer sees another\u2019s data', gate: true },
   { t: 'GDPR art. 9: a dose is stored only as \u201cticked on date\u201d', gate: true },
   { t: 'Copy review', gate: true },
-  { t: 'Engagement gate', gate: true },
-  { t: 'Store-ready build' },
+  { t: 'Rewards check: fixed and shown in advance', gate: true },
+  { t: 'Store release only after the brand signs off' },
 ]
 
 /* ---------- Pierscien 30 dni ---------- */
@@ -308,7 +311,10 @@ function ScreenFade({ p }: { p: number }) {
   const dim = smooth((p - 0.5) / 0.4)
   return (
     <div className="ga-scr" aria-hidden="true">
-      <div className="ga-scr-h">This month</div>
+      <div className="ga-scr-top">
+        <div className="ga-scr-h">This month</div>
+        <Chip />
+      </div>
       <div className="ga-ring-wrap">
         <Ring lit={lit} dim={dim} />
         <div className="ga-ring-mid">
@@ -402,7 +408,10 @@ function ScreenMonth({ p, live, from = 0 }: { p: number; live: boolean; from?: n
   const stamp = lit >= STAMP_DAY
   return (
     <div className="ga-scr" aria-hidden="true">
-      <div className="ga-scr-h">This month</div>
+      <div className="ga-scr-top">
+        <div className="ga-scr-h">This month</div>
+        <Chip />
+      </div>
       <div className="ga-ring-wrap">
         <Ring lit={lit} stampOn={stamp} />
         <div className="ga-ring-mid">
@@ -480,8 +489,8 @@ function ScreenLevels({ p }: { p: number }) {
             </div>
           )
         })}
-        <div className="ga-path-end" style={{ opacity: 0.35 + 0.65 * end }}>
-          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <div className="ga-path-end">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" style={{ opacity: 0.35 + 0.65 * end }}>
             <path d="M7 2h4l1 4 1-4h4l-3 7a6 6 0 1 1-4 0L7 2z" fill="#ff8a91" />
             <circle cx="12" cy="15" r="3.2" fill="#c41a26" />
           </svg>
@@ -500,17 +509,18 @@ function Lock() {
   )
 }
 
-function ScreenConsent({ p }: { p: number }) {
-  const on = p > 0.72
+function ScreenConsent({ on, onToggle, onFocus }: { on: boolean; onToggle: () => void; onFocus?: () => void }) {
   return (
-    <div className="ga-scr" aria-hidden="true">
-      <div className="ga-scr-h">Health data consent</div>
-      <div className="ga-toggle-row">
+    <div className="ga-scr">
+      <div className="ga-scr-h" aria-hidden="true">
+        Health data consent
+      </div>
+      <div className="ga-toggle-row" aria-hidden="true">
         <span>{on ? 'Consent on' : 'Consent off'}</span>
         <i className={'ga-toggle' + (on ? ' ga-on' : '')} />
       </div>
       {['Daily card', 'Streak'].map((c) => (
-        <div key={c} className={'ga-cardrow' + (on ? '' : ' ga-locked')}>
+        <div key={c} className={'ga-cardrow' + (on ? '' : ' ga-locked')} aria-hidden="true">
           <span>{c}</span>
           <b>
             {on ? (
@@ -523,11 +533,15 @@ function ScreenConsent({ p }: { p: number }) {
           </b>
         </div>
       ))}
-      <div className="ga-cardrow">
-        <span>Order rewards</span>
-        <b>{'\u2713 on'}</b>
-      </div>
-      <div className={'ga-fakebtn' + (on ? ' ga-done' : '')}>{on ? 'Turned on' : 'Agree and turn on'}</div>
+      <button
+        type="button"
+        className={'ga-fakebtn' + (on ? ' ga-done' : '')}
+        aria-pressed={on}
+        onClick={onToggle}
+        onFocus={onFocus}
+      >
+        Agree and turn on
+      </button>
     </div>
   )
 }
@@ -569,6 +583,8 @@ export function GenactivStory() {
   const [f, setF] = useState(0) // postep 0..ACTS w trybie przewijania
   const [revealed, setRevealed] = useState(false)
   const [robot, setRobot] = useState(false)
+  const [consent, setConsent] = useState(false)
+  const flipConsent = useCallback(() => setConsent((v) => !v), [])
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -620,6 +636,15 @@ export function GenactivStory() {
     const y = window.scrollY + r.top + (3.4 / ACTS) * span
     if (Math.abs(window.scrollY - y) > span / ACTS / 3) window.scrollTo({ top: y })
   }
+  // Przycisk zgody w makiecie aktu 7: fokus przewija scene do aktu 7 (wzorzec jak przy zdrapce).
+  const toConsent = () => {
+    const el = track.current
+    if (mode !== 'scroll' || !el) return
+    const r = el.getBoundingClientRect()
+    const span = r.height - window.innerHeight
+    const y = window.scrollY + r.top + (7.4 / ACTS) * span
+    if (Math.abs(window.scrollY - y) > span / ACTS / 3) window.scrollTo({ top: y })
+  }
   const reveal = (
     <button type="button" className="ga-btn" onClick={done} onFocus={toScratch} aria-disabled={revealed}>
       {revealed ? 'Card revealed' : 'Reveal without scratching'}
@@ -654,7 +679,7 @@ export function GenactivStory() {
                   {i === 4 ? <ScreenMonth p={1} live={false} /> : null}
                   {i === 5 ? <ScreenCash p={1} /> : null}
                   {i === 6 ? <ScreenLevels p={1} /> : null}
-                  {i === 7 ? <ScreenConsent p={0} /> : null}
+                  {i === 7 ? <ScreenConsent on={consent} onToggle={flipConsent} /> : null}
                   {i === 8 ? <ScreenBuild p={1} /> : null}
                 </div>
                 {i === 0 ? (
@@ -718,7 +743,12 @@ export function GenactivStory() {
             <div className="ga-phone" style={{ transform: `translateY(${((1 - p0) * 50).toFixed(2)}%)` }}>
               <div className="ga-notch" />
               {COPY.map((_, i) => (
-                <div key={i} className="ga-layer" inert={vis(i) < 0.5} style={{ opacity: vis(i) }}>
+                <div
+                  key={i}
+                  className="ga-layer"
+                  inert={vis(i) < 0.5 && i !== 7}
+                  style={{ opacity: vis(i), pointerEvents: vis(i) < 0.5 ? 'none' : undefined }}
+                >
                   {i === 0 ? <ScreenHome /> : null}
                   {i === 1 ? <ScreenFade p={act === 1 ? local : act > 1 ? 1 : 0} /> : null}
                   {i === 2 ? <ScreenScan p={act === 2 ? local : act > 2 ? 1 : 0} /> : null}
@@ -726,7 +756,7 @@ export function GenactivStory() {
                   {i === 4 ? <ScreenMonth p={act === 4 ? local : 0} live from={revealed ? 1 : 0} /> : null}
                   {i === 5 ? <ScreenCash p={act === 5 ? local : act > 5 ? 1 : 0} /> : null}
                   {i === 6 ? <ScreenLevels p={act === 6 ? local : act > 6 ? 1 : 0} /> : null}
-                  {i === 7 ? <ScreenConsent p={act === 7 ? local : 0} /> : null}
+                  {i === 7 ? <ScreenConsent on={consent} onToggle={flipConsent} onFocus={toConsent} /> : null}
                   {i === 8 ? <ScreenBuild p={act === 8 ? local : 0} /> : null}
                 </div>
               ))}

@@ -81,3 +81,10 @@ Stan: zbudowane; build, tsc, lint (0 błędów, 1 ostrzeżenie jak przed), copy-
 qa.js --scroll PASS (9 szerokości), noindex, brak /work w sitemap.xml; surowy CLS przy przewinięciu całej strony 0,0034 (390)
 / 0,0007 (1440). Zrzuty: `agencja/podglad/genactiv-p2-*.png`.
 Otwarte: czytelnik-kupujący dla nowych tekstów (osobny subagent) jeszcze nie przeszedł; liczby aktu 8 czekają na plik doradcy.
+Poprawki po recenzji i czytelniku 22 (23.11): plakietka EXAMPLE na obu ekranach „This month” i podpis „Example screen. Numbers
+are placeholders.” przy każdym ekranie z liczbami (akty 1, 4, 5, 6); „Agree and turn on” to prawdziwy `<button aria-pressed>`
+przełączający makietę, osiągalny Tabem w scenie (fokus przewija do aktu 7) i w trybie statycznym (sprawdzone: 4. Tab, Enter →
+pressed=true); usunięty wiersz „Order rewards · on”; 6 przepisań z recenzji 22, oś aktu 8 bez „store-ready”; kontrast: tekst
+„Medal and gift at the finish” bez przyciemnienia (było 3,22:1 przy krycie 0,35, teraz biały na #1d1517), nieaktywne kroki osi
+#c9bfc1 na #0e0b0c = 10,92:1. Bramki: build, tsc, lint 0 błędów (1 ostrzeżenie jak przed), copy-voice OK, qa.js PASS, noindex,
+brak w sitemap, CLS 0,0026 (390) / 0,0006 (1440).
