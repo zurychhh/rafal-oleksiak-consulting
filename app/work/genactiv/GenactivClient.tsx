@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-/* /work/genactiv — przebieg 1: akty 0–4. Jeden telefon jako nic strony.
+/* /work/genactiv — przebieg 1: akty 0–4, przebieg 2: akty 5–8 (cashback, poziomy, zgoda, jak to powstalo). Jeden telefon jako nic strony.
    Stan domyslny DOM (SSR, bez JS, prefers-reduced-motion, navigator.webdriver, okno < 600 px) = uklad statyczny:
    kazdy akt z wlasnym rysunkiem w stanie koncowym. Tryb 'scroll' = przypieta scena, postep z przewijania (rAF),
    bez zegara (R2) i bez transition na elementach sterowanych przewijaniem (R4). Jedyny zegar: samozdrapka po 1,5 s
    (wymog specu) i jednorazowe drgniecie pieczatki. Wszystkie liczby na ekranach sa rysunkiem (aria-hidden) z podpisem „Example”. */
 
-const ACTS = 5
+const ACTS = 9
 const DAYS = 30
 const STAMP_DAY = 24 // rysunek, podpisany „Example”
 const MID_DAY = 15 // rysunek, podpisany „Example”
@@ -19,7 +19,8 @@ const smooth = (v: number) => {
   return x * x * (3 - 2 * x)
 }
 
-type Copy = { kicker: string; title: string; sub: string }
+type Copy = { kicker: string; title: string; sub: string; cap?: string }
+const CAP = 'Recreated screen for illustration.'
 const COPY: Copy[] = [
   {
     kicker: 'GENACTIV · Polish colostrum brand',
@@ -46,6 +47,40 @@ const COPY: Copy[] = [
     title: 'Rewards are set before day one.',
     sub: 'Every ticked day fills the ring. The stamp lands on a day the customer knew in advance, never by chance.',
   },
+  {
+    kicker: 'Step 4 · Cashback',
+    title: 'Cashback grows with every repeat order.',
+    sub: 'Each new order moves the customer one step up the stairs. The brand fixes the steps before launch.',
+    cap: 'Example screen. Bar heights are illustrative.',
+  },
+  {
+    kicker: 'Step 5 · Points and levels',
+    title: 'Points and levels that never go down.',
+    sub: 'Points add up to levels that only rise. Short knowledge paths end with a medal and a gift.',
+    cap: 'Example screen. Path and lesson names are placeholders.',
+  },
+  {
+    kicker: 'Step 6 · Consent',
+    title: 'Consent off: every card stays visible.',
+    sub: 'The daily card and streak show as locked, with one button to turn them on. Order rewards never wait for consent.',
+  },
+  {
+    kicker: 'How it was built',
+    title: 'From green light to a store-ready build.',
+    sub: 'The studio\u2019s AI agents wrote the app. A person signed off every gate on the way.',
+    cap: 'Build stages in order.',
+  },
+]
+
+/* Etapy budowy: same kroki, bez liczb (liczby dolozy doradca z agencja/dane/realizacja-genactiv.json). */
+const GATES: { t: string; gate?: boolean }[] = [
+  { t: 'Green light from the brand' },
+  { t: 'Security review', gate: true },
+  { t: 'Data-access tests', gate: true },
+  { t: 'GDPR art. 9: a dose is stored only as \u201cticked on date\u201d', gate: true },
+  { t: 'Copy review', gate: true },
+  { t: 'Engagement gate', gate: true },
+  { t: 'Store-ready build' },
 ]
 
 /* ---------- Pierscien 30 dni ---------- */
@@ -387,6 +422,136 @@ function ScreenMonth({ p, live, from = 0 }: { p: number; live: boolean; from?: n
   )
 }
 
+function Chip() {
+  return <span className="ga-chip">Example</span>
+}
+
+const STAIRS = [0.3, 0.48, 0.68, 0.92] // ksztalt schodow, bez stawek
+function ScreenCash({ p }: { p: number }) {
+  return (
+    <div className="ga-scr" aria-hidden="true">
+      <div className="ga-scr-top">
+        <div className="ga-scr-h">Cashback</div>
+        <Chip />
+      </div>
+      <div className="ga-stairs">
+        {STAIRS.map((h, i) => {
+          const g = smooth((p - i * 0.12) / 0.2)
+          return (
+            <div className="ga-step" key={i}>
+              <div className="ga-step-col">
+                <i style={{ transform: `scaleY(${(h * (0.12 + 0.88 * g)).toFixed(3)})`, opacity: 0.35 + 0.65 * g }} />
+              </div>
+              <span>Order {i + 1}</span>
+            </div>
+          )
+        })}
+      </div>
+      <div className="ga-reorder">
+        <span>Next order</span>
+        <b>one step up</b>
+      </div>
+    </div>
+  )
+}
+
+function ScreenLevels({ p }: { p: number }) {
+  const fill = smooth(p / 0.45)
+  const third = p > 0.6
+  const end = smooth((p - 0.6) / 0.12)
+  return (
+    <div className="ga-scr" aria-hidden="true">
+      <div className="ga-scr-top">
+        <div className="ga-scr-h">Level 2</div>
+        <Chip />
+      </div>
+      <div className="ga-meter">
+        <i style={{ transform: `scaleX(${(0.18 + 0.82 * fill).toFixed(3)})` }} />
+      </div>
+      <div className="ga-meter-note">Points to the next level · never lost</div>
+      <div className="ga-path">
+        <div className="ga-path-h">Path 1</div>
+        {['Lesson 1', 'Lesson 2', 'Lesson 3'].map((l, i) => {
+          const done = i < 2 || third
+          return (
+            <div key={l} className={'ga-lesson' + (done ? ' ga-done' : '')}>
+              <span>{l}</span>
+              <b>{done ? '\u2713 done' : 'next'}</b>
+            </div>
+          )
+        })}
+        <div className="ga-path-end" style={{ opacity: 0.35 + 0.65 * end }}>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <path d="M7 2h4l1 4 1-4h4l-3 7a6 6 0 1 1-4 0L7 2z" fill="#ff8a91" />
+            <circle cx="12" cy="15" r="3.2" fill="#c41a26" />
+          </svg>
+          <span>Medal and gift at the finish</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Lock() {
+  return (
+    <svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true">
+      <path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z" fill="currentColor" />
+    </svg>
+  )
+}
+
+function ScreenConsent({ p }: { p: number }) {
+  const on = p > 0.72
+  return (
+    <div className="ga-scr" aria-hidden="true">
+      <div className="ga-scr-h">Health data consent</div>
+      <div className="ga-toggle-row">
+        <span>{on ? 'Consent on' : 'Consent off'}</span>
+        <i className={'ga-toggle' + (on ? ' ga-on' : '')} />
+      </div>
+      {['Daily card', 'Streak'].map((c) => (
+        <div key={c} className={'ga-cardrow' + (on ? '' : ' ga-locked')}>
+          <span>{c}</span>
+          <b>
+            {on ? (
+              '\u2713 on'
+            ) : (
+              <>
+                <Lock /> locked
+              </>
+            )}
+          </b>
+        </div>
+      ))}
+      <div className="ga-cardrow">
+        <span>Order rewards</span>
+        <b>{'\u2713 on'}</b>
+      </div>
+      <div className={'ga-fakebtn' + (on ? ' ga-done' : '')}>{on ? 'Turned on' : 'Agree and turn on'}</div>
+    </div>
+  )
+}
+
+function ScreenBuild({ p }: { p: number }) {
+  const lit = Math.floor(clamp(p / 0.8) * (GATES.length - 1) + 0.0001)
+  return (
+    <div className="ga-scr ga-scr-build">
+      <div className="ga-scr-h">Build path</div>
+      <ol className="ga-gates">
+        {GATES.map((g, i) => (
+          <li key={i} className={i <= lit ? 'ga-on' : ''}>
+            <i aria-hidden="true" />
+            <span>
+              {g.t}
+              {g.gate ? <em>human sign-off</em> : null}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
 function Box() {
   return (
     <div className="ga-box" aria-hidden="true">
@@ -487,6 +652,10 @@ export function GenactivStory() {
                   {i === 2 ? <ScreenScan p={1} /> : null}
                   {i === 3 ? <ScreenScratch auto={false} revealed={revealed || robot} onDone={done} /> : null}
                   {i === 4 ? <ScreenMonth p={1} live={false} /> : null}
+                  {i === 5 ? <ScreenCash p={1} /> : null}
+                  {i === 6 ? <ScreenLevels p={1} /> : null}
+                  {i === 7 ? <ScreenConsent p={0} /> : null}
+                  {i === 8 ? <ScreenBuild p={1} /> : null}
                 </div>
                 {i === 0 ? (
                   <div className="ga-box-wrap">
@@ -494,7 +663,7 @@ export function GenactivStory() {
                   </div>
                 ) : null}
               </div>
-              <figcaption>Recreated screen for illustration.</figcaption>
+              <figcaption>{c.cap ?? CAP}</figcaption>
             </figure>
           </section>
         ))}
@@ -548,13 +717,17 @@ export function GenactivStory() {
             <div className="ga-glow" style={{ opacity: 1 - 0.55 * boxOut }} />
             <div className="ga-phone" style={{ transform: `translateY(${((1 - p0) * 50).toFixed(2)}%)` }}>
               <div className="ga-notch" />
-              {[0, 1, 2, 3, 4].map((i) => (
+              {COPY.map((_, i) => (
                 <div key={i} className="ga-layer" inert={vis(i) < 0.5} style={{ opacity: vis(i) }}>
                   {i === 0 ? <ScreenHome /> : null}
                   {i === 1 ? <ScreenFade p={act === 1 ? local : act > 1 ? 1 : 0} /> : null}
                   {i === 2 ? <ScreenScan p={act === 2 ? local : act > 2 ? 1 : 0} /> : null}
                   {i === 3 ? <ScreenScratch auto={act === 3} revealed={revealed} onDone={done} /> : null}
                   {i === 4 ? <ScreenMonth p={act === 4 ? local : 0} live from={revealed ? 1 : 0} /> : null}
+                  {i === 5 ? <ScreenCash p={act === 5 ? local : act > 5 ? 1 : 0} /> : null}
+                  {i === 6 ? <ScreenLevels p={act === 6 ? local : act > 6 ? 1 : 0} /> : null}
+                  {i === 7 ? <ScreenConsent p={act === 7 ? local : 0} /> : null}
+                  {i === 8 ? <ScreenBuild p={act === 8 ? local : 0} /> : null}
                 </div>
               ))}
             </div>
@@ -565,7 +738,10 @@ export function GenactivStory() {
               <Box />
             </div>
           </div>
-          <figcaption>Recreated screen for illustration.</figcaption>
+          {/* podpis jedzie razem z telefonem (transform), tekst zmienia sie z aktem w jednej linii: bez CLS */}
+          <figcaption style={{ transform: `translateY(calc(var(--ph) * ${(-(1 - p0) * 0.16).toFixed(4)}))` }}>
+            {COPY[act].cap ?? CAP}
+          </figcaption>
         </figure>
       </div>
     </div>

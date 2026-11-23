@@ -194,7 +194,7 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 .ga-box-back { display: none; }
 
 /* ---------- Tryb przewijania: przypieta scena ---------- */
-.ga-track { position: relative; height: 600svh; }
+.ga-track { position: relative; height: 1080svh; } /* 9 aktow x 120svh */
 .ga-stage {
   position: sticky; top: 0; height: 100svh;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 48px;
@@ -227,6 +227,50 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 .ga-foot { border-top: 1px solid #2a1f21; padding: 28px 48px 40px; }
 .ga-foot nav { max-width: 1240px; margin: 0 auto; display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; }
 .ga-foot a { color: var(--muted); }
+
+/* ---------- Przebieg 2: akty 5-8 ---------- */
+.ga-scr-top { display: flex; justify-content: space-between; align-items: center; gap: 0.6em; }
+.ga-chip { font-size: 0.72em; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); background: var(--rose-3); border-radius: 999px; padding: 0.35em 0.75em; }
+.ga-stairs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.6em; height: 46%; align-items: end; }
+.ga-step { height: 100%; display: flex; flex-direction: column; gap: 0.5em; }
+.ga-step-col { position: relative; flex: 1; border-radius: 0.5em; background: #1a1214; box-shadow: inset 0 0 0 1px #3a2a2d; overflow: hidden; }
+.ga-step-col i { position: absolute; inset: 0; transform-origin: 50% 100%; border-radius: 0.5em 0.5em 0 0; background: linear-gradient(180deg, #ff8a91, #f5333f 40%, #9e1520); }
+.ga-step span { text-align: center; font-size: 0.82em; font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+.ga-meter { height: 0.9em; border-radius: 999px; background: #2a1f21; overflow: hidden; }
+.ga-meter i { display: block; height: 100%; transform-origin: 0 50%; background: linear-gradient(90deg, #c41a26, #f5333f, #ff8a91); border-radius: 999px; }
+.ga-meter-note { margin-top: -0.4em; color: var(--muted); font-weight: 600; font-size: 0.9em; }
+.ga-path { background: var(--surface); border-radius: 1em; padding: 0.9em 1em; display: flex; flex-direction: column; gap: 0.55em; }
+.ga-path-h { font-weight: 800; }
+.ga-lesson { display: flex; justify-content: space-between; font-weight: 600; color: var(--muted); }
+.ga-lesson b { font-weight: 700; color: var(--muted); }
+.ga-lesson.ga-done b { color: var(--accent-hi); }
+.ga-path-end { display: flex; align-items: center; gap: 0.6em; margin-top: 0.2em; padding-top: 0.7em; border-top: 1px solid #3a2a2d; font-weight: 700; }
+
+.ga-toggle-row, .ga-cardrow { display: flex; justify-content: space-between; align-items: center; background: var(--surface); border-radius: 1em; padding: 0.9em 1em; font-weight: 700; }
+.ga-toggle { position: relative; width: 2.6em; height: 1.5em; border-radius: 999px; background: #3a2a2d; }
+.ga-toggle::after { content: ''; position: absolute; top: 0.2em; left: 0.2em; width: 1.1em; height: 1.1em; border-radius: 50%; background: #c9bfc1; }
+.ga-toggle.ga-on { background: var(--accent); }
+.ga-toggle.ga-on::after { left: auto; right: 0.2em; background: #fff; }
+.ga-cardrow b { color: var(--accent-hi); display: inline-flex; align-items: center; gap: 0.35em; }
+.ga-cardrow.ga-locked { background: #160f11; box-shadow: inset 0 0 0 1px #3a2a2d; }
+.ga-cardrow.ga-locked span, .ga-cardrow.ga-locked b { color: var(--muted); }
+.ga-fakebtn { align-self: stretch; text-align: center; border-radius: 999px; padding: 0.85em 1em; background: var(--stamp-1); color: #fff; font-weight: 800; }
+.ga-fakebtn.ga-done { background: transparent; box-shadow: inset 0 0 0 1.5px #5a4a4d; color: var(--muted); }
+
+.ga-scr-build { justify-content: flex-start; padding-top: 18%; }
+.ga-gates { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25em; }
+.ga-gates li { position: relative; display: flex; gap: 0.8em; padding: 0.45em 0 0.45em; color: var(--muted); font-weight: 600; line-height: 1.3; }
+.ga-gates li::before { content: ''; position: absolute; left: 0.45em; top: 1.3em; bottom: -0.7em; width: 2px; background: #3a2a2d; }
+.ga-gates li:last-child::before { display: none; }
+.ga-gates li i { flex: none; position: relative; z-index: 1; width: 0.95em; height: 0.95em; margin-top: 0.15em; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px #5a4a4d; }
+.ga-gates li span { display: flex; flex-direction: column; }
+.ga-gates em { font-style: normal; font-size: 0.78em; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ga-gates li.ga-on { color: var(--text); }
+.ga-gates li.ga-on i { background: var(--accent); box-shadow: inset 0 0 0 2px var(--accent-hi); }
+.ga-gates li.ga-on em { color: var(--accent-hi); }
+.ga-gates li.ga-on::before { background: var(--accent); }
+.ga-fig figcaption { white-space: nowrap; }
 
 @media (max-width: 1023px) {
   .ga-act { grid-template-columns: minmax(0, 1fr); gap: 32px; }

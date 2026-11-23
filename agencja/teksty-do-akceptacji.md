@@ -148,3 +148,21 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 |---|---|---|---|
 | /nawyko i /lab/home, kroki (nagroda) | Unlock a reward they saw coming | Earn a reward they saw coming | zmieniony (rubryka, zasada 4) |
 | /nawyko, oś nagród | Drag the day to watch each reward unlock. | Drag the day to see each reward arrive. | zmieniony (rubryka, zasada 4) |
+
+## R4 przebieg 2 — /work/genactiv akty 5–8 (23.11.2026, wszystkie: nowy)
+| Miejsce | Tekst | Status |
+|---|---|---|
+| akt 5 etykieta / H2 | Step 4 · Cashback / Cashback grows with every repeat order. | nowy |
+| akt 5 zdanie | Each new order moves the customer one step up the stairs. The brand fixes the steps before launch. | nowy |
+| akt 5 podpis | Example screen. Bar heights are illustrative. | nowy |
+| akt 6 etykieta / H2 | Step 5 · Points and levels / Points and levels that never go down. | nowy |
+| akt 6 zdanie | Points add up to levels that only rise. Short knowledge paths end with a medal and a gift. | nowy |
+| akt 6 podpis | Example screen. Path and lesson names are placeholders. | nowy |
+| akt 7 etykieta / H2 | Step 6 · Consent / Consent off: every card stays visible. | nowy |
+| akt 7 zdanie | The daily card and streak show as locked, with one button to turn them on. Order rewards never wait for consent. | nowy |
+| akt 7 podpis | Recreated screen for illustration. | bez zmian |
+| akt 8 etykieta / H2 | How it was built / From green light to a store-ready build. | nowy |
+| akt 8 zdanie | The studio’s AI agents wrote the app. A person signed off every gate on the way. | nowy |
+| akt 8 podpis | Build stages in order. | nowy |
+| akt 8 oś (czytana przez czytnik) | Build path · Green light from the brand · Security review · Data-access tests · GDPR art. 9: a dose is stored only as “ticked on date” · Copy review · Engagement gate · Store-ready build · (przy bramkach) human sign-off | nowy |
+| ekrany 5–7 (rysunek, aria-hidden) | Cashback · Example · Order 1–4 · Next order one step up · Level 2 · Points to the next level · never lost · Path 1 · Lesson 1–3 · ✓ done / next · Medal and gift at the finish · Health data consent · Consent off / Consent on · Daily card · Streak · locked / ✓ on · Order rewards · Agree and turn on / Turned on | nowy |

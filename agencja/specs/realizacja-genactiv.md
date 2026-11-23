@@ -64,3 +64,20 @@ Poprawki po recenzji 19 i czytelniku 20 (23.11): przycisk zdrapki osiągalny Tab
 do aktu zdrapki), surowy CLS przy przewinięciu całej strony 0,0003 (390) / 0,0001 (1440), jeden aktywny nagłówek na klatkę,
 „Drag to scratch”, pierścień od +1 dnia po zdrapaniu, przytrzymanie pieczątki 0,4 aktu, pudełko wyżej + link pod leadem,
 stała rezerwa pod pasek cookies na 390, teksty z listy koordynatora.
+
+## Przebieg 2 — kryteria i stan (23.11.2026)
+Kryteria: akty 5–8 w tej samej przypiętej scenie (ACTS = 9, tor 1080svh = 9 × 120svh, postęp z przewijania, rAF, zmiany
+rozmiaru tylko przez transform); telefon zostaje nicią; tryb statyczny z pełną treścią wszystkich 9 aktów; każdy ekran podpisany
+(podpis zmienia się z aktem, jedna linia, jedzie z telefonem transformem). Akt 5: schody cashbacku bez wartości, plakietka
+„Example” na ekranie + podpis „Example screen. Bar heights are illustrative.”. Akt 6: poziom (Example), pasek punktów, „Path 1 /
+Lesson 1–3” (neutralne), medal i prezent na mecie — bez nazw i treści ścieżek. Akt 7: zgoda na dane zdrowotne wyłączona → karty
+widoczne i zablokowane, przycisk „Agree and turn on” („Turn on and unlock” ze specu łamie zasadę 4 rubryki — „unlock” blokuje
+automat copy-voice, R8); „Order rewards · on” w obu stanach (zgoda nie warunkuje nagród). Akt 8: oś etapów bez żadnych liczb:
+zielone światło marki → przegląd bezpieczeństwa → testy dostępu do danych → RODO art. 9 („ticked on date”) → recenzja tekstów →
+bramka zaangażowania → store-ready build (bez daty, bez twierdzenia o sklepach). Liczby (czas, testy) dołoży doradca po
+utworzeniu `agencja/dane/realizacja-genactiv.json`. Hero 1440: podpis pod telefonem jedzie w górę razem z telefonem (był ~100 px
+pod pudełkiem).
+Stan: zbudowane; build, tsc, lint (0 błędów, 1 ostrzeżenie jak przed), copy-voice OK (sprawdzone, że czyta nowe literały),
+qa.js --scroll PASS (9 szerokości), noindex, brak /work w sitemap.xml; surowy CLS przy przewinięciu całej strony 0,0034 (390)
+/ 0,0007 (1440). Zrzuty: `agencja/podglad/genactiv-p2-*.png`.
+Otwarte: czytelnik-kupujący dla nowych tekstów (osobny subagent) jeszcze nie przeszedł; liczby aktu 8 czekają na plik doradcy.
