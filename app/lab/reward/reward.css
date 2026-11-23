@@ -82,3 +82,11 @@
   .rw-bar i{transition:none;}
 }
 .nk .rw-do b{font-weight:600;}
+
+/* stale miejsce na zmienne linie — bez skokow ukladu przy wpisywaniu (R3-4, pomiar 23.11 przebieg 5) */
+.nk .rw-cur{display:block;margin:8px 0 0;vertical-align:0;}
+.nk .rw-do{min-height:2.7em;}
+@media (max-width:860px){
+  .nk .rw-hint{min-height:38px;}
+  .nk .rw-do{min-height:4.05em;}
+}

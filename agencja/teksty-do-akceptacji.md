@@ -76,3 +76,9 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /nawyko, /lab/home | wynik | +{448,000} · Extra revenue a year, in your currency, if every customer reorders when the pack runs out. Upper limit. · Run the full calculator → | nowy |
 | /nawyko, /lab/home | odstęp ≤ opakowanie | No gap: customers reorder before the pack runs out. | nowy |
 | /lab/reward | pod liczbą | Same as {80}% off one order of {120}, once a year. / Worth more than one whole order of {60}, once a year. · Pick one fixed reward that costs less and announce it up front. | zmienione (wartość zamówienia teraz zmienia widoczny wynik; „below it” było niejasne) |
+| /lab/payback | nagłówek | Which order pays back the cost of a new customer? | nowy |
+| /lab/payback | wynik | A new customer pays back on · Order {3} · day {90} · orders {45} days apart / the first order | nowy |
+| /lab/payback | rachunek i porada | {90} to win ÷ {36} margin per order = {2.5} → order {3} · Every customer who stops before order {3} costs money. Build the habit before the first pack runs out. / The first order covers it. Each reorder adds margin. | nowy |
+| /lab/payback | pola | Cost to win one customer (ads, offers, fees) · Gross margin per order (amount, not %) · Average days between a customer’s orders | nowy |
+| /lab/payback | suwak | A customer who stops after {2} orders · −{18} · not paid back / +{16} · paid back / Breaks even · legenda: Outline = ordered, not paid back · black = paid back · faint = never ordered | nowy |
+| /lab/payback | jedyny krok | How to get customers to order {3} → (/nawyko) | nowy |

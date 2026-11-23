@@ -1,0 +1,27 @@
+/* /lab/payback — na bazie /lab/reward (reward.css) i .nk (nawyko.css).
+   Czerwien wylacznie jako stan „klient kosztuje” (strata). */
+
+.nk .pb-word{font-size:.42em;letter-spacing:-.02em;margin-right:.18em;vertical-align:.12em;}
+
+.pb-steps{list-style:none;display:grid;gap:4px;margin:2px 0 0;padding:0;}
+.pb-step{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;line-height:14px;
+  color:var(--dim);font-variant-numeric:tabular-nums;transition:opacity .2s;}
+.pb-step i{display:block;width:100%;height:18px;border:1px solid var(--ink);background:transparent;}
+.pb-step.is-paid i{background:var(--ink);}
+.pb-step.is-even span{color:var(--ink);font-weight:600;}
+.pb-step.is-even i{box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--ink);}
+
+.nk .pb-legend{margin-top:6px;font-size:12px;line-height:16px;color:var(--dim);}
+
+@media (prefers-reduced-motion:reduce){
+  .pb-step{transition:none;}
+}
+
+/* stale miejsce na zmienne linie — bez skokow ukladu przy wpisywaniu (recenzja 17) */
+.nk .pb .rw-why{min-height:2.8em;}
+.nk .pb .rw-do{min-height:4.05em;}
+.pb .rw-num{font-variant-numeric:tabular-nums;}
+/* kontrast: przygaszona tylko komorka, numer zostaje czytelny */
+.pb-step.is-gone{opacity:1;}
+.pb-step.is-gone i{opacity:.28;}
+.pb-step.is-gone span{color:var(--dim);}

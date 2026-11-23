@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 23.11.2026, 14:38–15:00 (runda 3, przebieg 4 — R3-0 mini-kalkulator w hero, R3-4 pole w `/lab/reward`, test fokusu pod paskiem cookies). Wcześniej przebieg 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 23.11.2026, 15:38–16:10 (runda 3, przebieg 5 — nowe narzędzie `/lab/payback`, skoki układu w `/lab/reward`, R6). Wcześniej przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
@@ -159,6 +159,28 @@ Słowa Rafała: „dobrze, teraz pracujemy nad tą częścią”. W tej kolejno�
 Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + podgląd we własnej marce klienta + deck (3 decyzje).
 
 ## Dla Rafała
+
+**Runda 3, przebieg 5 (23.11, 15:38–16:10) — drugie narzędzie: „które zamówienie zwraca koszt nowego klienta”, i koniec skaczącego układu przy wpisywaniu.**
+Do obejrzenia: `/lab/payback` (nowe, noindex) i `/lab/reward` (wpisz kilka liczb na telefonie).
+1. **Nowe narzędzie `/lab/payback`: „Which order pays back the cost of a new customer?”** Trzy pola z liczbami odwiedzającego: koszt
+   pozyskania klienta, marża na zamówieniu (kwota), średni odstęp między zamówieniami. U góry jedna odpowiedź: „Order 3 · day 90”
+   (przykład 90 / 36 / 45, podpisany „Example — type your own”), pod nią rachunek „90 to win ÷ 36 margin per order = 2.5 → order 3”
+   i jedno zdanie: każdy klient, który odejdzie przed tym zamówieniem, kosztuje. Suwak „A customer who stops after N orders” pokazuje
+   bilans takiego klienta (−18 · not paid back / +18 · paid back) i drabinkę zamówień. Jedyny krok: „How to get customers to order 3 →” do `/nawyko`.
+   Biznesowo: to pierwsze pytanie dyrektora marketingu o retencję („ile zamówień muszę utrzymać, żeby reklama się zwróciła”),
+   a odpowiedź — konkretny numer zamówienia i dzień — prowadzi prosto do Nawyko (nawyk przed końcem pierwszego opakowania).
+2. **Skoki układu przy wpisywaniu usunięte w `/lab/payback` i `/lab/reward`.** Recenzent znalazł, że nasz pomiar „CLS 0” był ślepy
+   (przeglądarka pomija przesunięcia tuż po wpisaniu). Zmierzone surowo na 12 edycjach: `/lab/reward` 0,149 → 0,029 (telefon).
+3. **Dowód:** zrzuty `agencja/podglad/payback-390.png`, `payback-1440.png`, `payback-390-own.png`, `payback-1440-own.png`,
+   `reward-r3e-390.png`, `reward-r3e-1440.png`. Recenzja niezależna + czytelnik-kupujący `agencja/recenzje/17-narzedzie-zwrot-klienta.md`
+   (4 poprawki wyglądu i 7 tekstów przepisanych przed commitem). Spec `agencja/specs/09-narzedzie-zwrot-klienta.md`.
+   Bramki: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) · `copy-voice` OK · `payback-model`, `reward-model`,
+   `calculator-model`, `tool-rules` OK · `qa.js` PASS na `/`, `/stop`, `/tool`, `/lab/payback` (i `/lab/reward`, `/nawyko`) · `content-rules` PASS ·
+   `ship-compare` PASS · `focus-obscured` OK (`/lab/payback`, `/lab/reward`, `/nawyko`, `/calculator`).
+   Podgląd: https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/lab/payback (stan wdrożenia w ostatniej wiadomości przebiegu).
+4. **Teksty:** 6 nowych wierszy w `agencja/teksty-do-akceptacji.md` (`/lab/payback`).
+5. **Czego się nauczyliśmy:** liczba, która wygląda na dowód, może być ślepa — od dziś skoki układu mierzymy surowo przy każdej edycji (R6).
+
 
 **Runda 3, przebieg 4 (23.11, 14:38–15:00) — kwota pieniędzy w pierwszym ekranie `/nawyko` i `/lab/home` (decyzja J), liczona z liczb odwiedzającego.**
 Do obejrzenia: `/nawyko` i `/lab/home` tuż pod pierwszym ekranem (blok „What the gap between packs costs you”) oraz `/lab/reward` (zdanie pod wielką liczbą).
@@ -347,6 +369,13 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 **Decyzje doradcy 23.11 13:50 (Rafał: „bądź samodzielny, angażuj mnie tylko tam, gdzie potrzebna jest moja decyzja”):**
 I → (a) scena zostaje: Rafał ocenił górną połowę `/lab/home` jako dobrą; nie wycinamy tego, co zatwierdził.
 J → (a) mini-kalkulator w hero `/nawyko` i `/lab/home`: odwiedzający wpisuje jedną liczbę, kwota liczona tym samym modelem co `/calculator`; zero liczb bez źródła. Buduj w następnym przebiegu.
+**Nowe z przebiegu 5 rundy 3:**
+
+Q. **`/lab/payback` i `/lab/reward` — razem jako „narzędzia dla marek” czy osobno?** Oba są gotowe w podglądzie (noindex). Warianty:
+   (a) wypuścić oba pod `/tools/payback` i `/tools/reward-cost` z linkami z `/nawyko` i `/calculator`, (b) wypuszczać po jednym po Twoim
+   obejrzeniu, (c) zostawić w podglądzie. Rekomendacja: (a) — dwa krótkie pytania marki (ile mogę wydać na nagrodę, które zamówienie
+   zwraca klienta) prowadzą do tej samej odpowiedzi: Nawyko. Adresy to propozycja, do wyrzucenia. Bez decyzji zostają w podglądzie.
+
 **Nowe z przebiegu 4 rundy 3:**
 
 O. **`/lab/home`: mini-kalkulator stoi pod kartą „Free tools”, która ma podobny pasek i link do kalkulatora.** Recenzent: częściowy dubel.
@@ -450,15 +479,15 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 ## Następne (kolejka)
 
 R3-0. ZROBIONE w przebiegu 4 (trzy pola zamiast jednego — czytelnik odrzucił stałe 30 dni opakowania). Dalej: brzegowy przypadek — pasek cookies pojawia się, gdy pole ma już fokus (9–30 px nachodzenia, recenzja 16); `focus-obscured` dopisać do bramki w CLAUDE.md (zmiana dokumentu — przy okazji).
-R3-7. Następne narzędzie z `agencja/narzedzia.md` (kiedy wysłać przypomnienie o kolejnym opakowaniu) — spec + makieta + czytelnik.
+R3-7. ZROBIONE w przebiegu 5: `/lab/payback` (narzędzie 4). Dalej: narzędzie 6 (darmowa dostawa czy rabat na kolejne opakowanie) albo przypomnienie o kolejnym opakowaniu; drugi czytelnik na `/lab/payback` (waluta przy liczbach); link z `/lab/reward` do `/lab/payback` po decyzji Q.
 R3-1. (przebieg 3: zrobione −4%, dalej tylko przez wycięcie — decyzja N) `/nawyko`: −30% słów w samej treści (dziś ok. −15%): hero w `page.tsx` (drugi akapit), panele nagród i zapytania.
       Mierzyć tekst POZA makietami telefonów (nowa metoda). CTA w środku sceny — zrobione w przebiegu 2;
       przesunięcie sceny „Your brand” wyżej = zmiana kolejności opowieści → najpierw pokazać Rafałowi (decyzja L poniżej).
 R3-2. ZROBIONE w przebiegu 3 (390 też według przewijania, 0 px²). ~~Treść sceny według pozycji przewijania~~ — zrobione w przebiegu 2 (desktop). Na telefonie (390) przejazd
       wciąż na zegarze (zmiana skali/pozycji) — przepiąć tak samo i zmierzyć nakładanie.
 R3-3. Kalkulator: pasek cookies na pierwszym ekranie 390; uchwyt w Safari/Firefox (sprawdzić); sprawdzić, czy „pchnięcie” nie rozprasza.
-R3-4. ZROBIONE (przebieg 3 narzędzie, przebieg 4 pole wartości zamówienia). Zostało w `/lab/reward`: CLS i tryb ciemny.
-R3-6. Pomiar CLS na `/nawyko` po zmianie przejazdu (390, 1440) i kl./s na telefonie.
+R3-4. ZROBIONE (przebieg 3 narzędzie, przebieg 4 pole, przebieg 5 skoki układu 0,149 → 0,029). Zostało w `/lab/reward`: tryb ciemny (strony `.nk` nie mają ciemnego motywu — sprawdzić, czy mają mieć).
+R3-6. Pomiar na `/nawyko` po zmianie przejazdu (390, 1440) i kl./s na telefonie — SUROWE przesunięcia (R6), także w mini-kalkulatorze hero (przebieg 4 podał „0,0000” ślepą miarą).
 R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 
 0. **Kalkulator v3** (priorytet NAJNOWSZY, pkt 2): makieta jednego ekranu → czytelnik-kupujący na makiecie → budowa.
@@ -479,6 +508,12 @@ R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R6 (reguła, przebieg 5): skoki układu przy wpisywaniu mierzymy surowo** — suma wszystkich wpisów `layout-shift` (także z
+  `hadRecentInput`) na serii edycji, w tym błędnych wpisów. CLS z definicji pomija przesunięcia do 0,5 s po wpisaniu, więc „CLS 0
+  przy wpisywaniu” z przebiegu 4 nic nie dowodził. Wynik każdego narzędzia: zmienne linie mają stałą wysokość (`min-height`), podpisy
+  pod liczbą w osobnej linii, puste stany zajmują tyle miejsca co pełne. Liczba w raporcie = miara + to, czego ta miara nie widzi.
+- Czytelnikowi-kupującemu dawać jeden spójny scenariusz liczb na listę; dwa scenariusze w jednym punkcie wyglądają na błąd rachunku.
 
 - **R5 (reguła, przebieg 4): znalezisko recenzenta w jednym bloku → test całej strony, nie łatka bloku.** Ukryty fokus pod paskiem
   cookies w nowym bloku zamieniony w `scripts/focus-obscured.test.mjs`; test od razu znalazł starszy błąd na `/calculator`, którego
