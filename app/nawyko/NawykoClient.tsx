@@ -1390,6 +1390,241 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
   )
 }
 
+/* ── runda 4 (g, h): dowod wynikow z grupa kontrolna, pas integracji ── */
+/* WSZYSTKIE liczby i krzywe ponizej to przyklad (znaczek „Example” przy samym rysunku), nie wynik zadnej marki.
+   Krzywe: udzial klientow, ktorzy nadal zamawiaja, miesiac 0–6. Bez procentow w tresci. */
+const CROWD = 24
+const LIFT_APP = [1, 0.82, 0.7, 0.62, 0.56, 0.52, 0.49]
+const LIFT_CTRL = [1, 0.74, 0.58, 0.48, 0.41, 0.36, 0.33]
+/* zakres niepewnosci maleje z pierwiastkiem z liczebnosci grupy (przyklad, stala dobrana do rysunku) */
+const SPREAD = 0.18
+/* dzien, w ktorym skonczylo sie opakowanie (ostatni ptaszek przed nastepnym), liczba telefonow na dzien */
+const RUNOUT: [number, number][] = [
+  [26, 1], [27, 1], [28, 2], [29, 3], [30, 5], [31, 7], [32, 9], [33, 8], [34, 6], [35, 4], [36, 3], [37, 2], [38, 1],
+]
+const RUN_PEAK = RUNOUT.reduce((a, b) => (b[1] > a[1] ? b : a))[0]
+
+const LX = (i: number) => 40 + i * 50
+const LY = (v: number) => 12 + (1 - v) * 150
+function curve(vals: readonly number[], d = 0) {
+  return vals.map((v, i) => `${i ? 'L' : 'M'}${LX(i)} ${LY(clamp(v + d)).toFixed(1)}`).join(' ')
+}
+function band(vals: readonly number[], w: number) {
+  const top = vals.map((v, i) => `${i ? 'L' : 'M'}${LX(i)} ${LY(clamp(v + (i ? w : 0))).toFixed(1)}`).join(' ')
+  const bot = [...vals]
+    .map((v, i) => [i, v] as const)
+    .reverse()
+    .map(([i, v]) => `L${LX(i)} ${LY(clamp(v - (i ? w : 0))).toFixed(1)}`)
+    .join(' ')
+  return `${top} ${bot} Z`
+}
+
+const LINKS = [
+  { k: 'Store', n: 'Shopify', d: 'Orders confirm a purchase; rewards arrive as single-use codes.' },
+  { k: 'Subscriptions', n: 'Subscription apps', d: 'Cashback can come off the next delivery.' },
+  { k: 'Loyalty', n: 'Loyalty apps', d: 'Points can sit beside a programme already running.' },
+  { k: 'Email and CRM', n: 'Your email tool', d: 'Reorder reminders go out without any health data.' },
+  { k: 'App stores', n: 'App Store · Google Play', d: 'The app is listed under your brand name.' },
+] as const
+
+function Evidence({ brand }: { brand: string }) {
+  const [held, setHeld] = useState(6)
+  const wc = SPREAD / Math.sqrt(held)
+  const wa = SPREAD / Math.sqrt(CROWD - held)
+  const last = LIFT_APP.length - 1
+  const apart = LIFT_APP[last] - wa > LIFT_CTRL[last] + wc
+
+  return (
+    <div className="nk-r4" id="evidence">
+      <section className="nk-still nk-proof" id="proof" aria-labelledby="nk-prf">
+        <div className="nk-panel">
+          <div className="nk-caps nk-lab">
+            <span className="nk-who">For you</span>
+            <span className="nk-labrest">Proof of results</span>
+          </div>
+          <h2 className="nk-h2" id="nk-prf">
+            Reorder lift, measured against customers who never get the app.
+          </h2>
+          <p className="nk-one">A control group goes without the app, so the gap between the two curves is the app&rsquo;s effect.</p>
+          <figure className="nk-desk2 nk-lift">
+            <figcaption className="nk-caps nk-deskh">
+              <span>{brand} · results panel</span>
+              <b className="nk-ex">Example</b>
+            </figcaption>
+            <div className="nk-crowd" aria-hidden="true">
+              {Array.from({ length: CROWD }, (_, i) => (
+                <i key={i} className={i >= CROWD - held ? 'is-ctrl' : ''} />
+              ))}
+            </div>
+            <label className="nk-rate" htmlFor="nk-held">
+              <span>Customers held out as control</span>
+              <output htmlFor="nk-held">
+                {held} of {CROWD}
+              </output>
+            </label>
+            <input
+              id="nk-held"
+              className="nk-slider"
+              type="range"
+              min={2}
+              max={12}
+              step={1}
+              value={held}
+              aria-valuetext={`${held} of ${CROWD} customers held out without the app`}
+              onChange={(e) => setHeld(Number(e.currentTarget.value))}
+            />
+            <svg className="nk-plot" viewBox="0 0 360 196" role="img" aria-labelledby="nk-lift-t">
+              <title id="nk-lift-t">
+                Example chart: customers still reordering over six months, app group above control group.
+              </title>
+              <line x1="40" y1="162" x2="340" y2="162" className="nk-axis" />
+              <path d={band(LIFT_CTRL, wc)} className="nk-band nk-band-c" />
+              <path d={band(LIFT_APP, wa)} className="nk-band nk-band-a" />
+              <path d={curve(LIFT_CTRL)} className="nk-cv nk-cv-c" />
+              <path d={curve(LIFT_APP)} className="nk-cv nk-cv-a" />
+              {LIFT_APP.map((_, i) => (
+                <text key={i} x={LX(i)} y="182" className="nk-tick">
+                  {i === 0 ? 'Start' : `M${i}`}
+                </text>
+              ))}
+              <text x="40" y="8" className="nk-tick nk-tick-l">
+                Still reordering
+              </text>
+            </svg>
+            <div className="nk-key" aria-hidden="true">
+              <span className="nk-key-a">With the app</span>
+              <span className="nk-key-c">Control group</span>
+            </div>
+            <p className="nk-cost" aria-live="polite">
+              {apart ? (
+                <>
+                  <b>Ranges apart by month six:</b> the gap is the lift.
+                </>
+              ) : (
+                <>
+                  <b>Ranges overlap:</b> too few customers held out to tell.
+                </>
+              )}
+            </p>
+          </figure>
+          <p className="nk-fine">A bigger control group gives a clearer answer; fewer customers get the app meanwhile. You choose the split.</p>
+        </div>
+        <div className="nk-phonecol">
+          <figure className="nk-desk2 nk-runout">
+            <figcaption className="nk-caps nk-deskh">
+              <span>When the pack really runs out</span>
+              <b className="nk-ex">Example</b>
+            </figcaption>
+            <svg className="nk-plot" viewBox="0 0 360 210" role="img" aria-labelledby="nk-run-t">
+              <title id="nk-run-t">
+                {`Example chart: each dot is one phone's last tick before the next pack. The label says ${PACK_DAYS} days; most packs last until day ${RUN_PEAK}.`}
+              </title>
+              <line x1="16" y1="178" x2="344" y2="178" className="nk-axis" />
+              <line x1={RX(PACK_DAYS)} y1="14" x2={RX(PACK_DAYS)} y2="178" className="nk-label-line" />
+              <text x={RX(PACK_DAYS) - 6} y="22" className="nk-tick nk-tick-r">
+                Label: {PACK_DAYS} days
+              </text>
+              {RUNOUT.flatMap(([day, n]) =>
+                Array.from({ length: n }, (_, k) => (
+                  <circle key={`${day}-${k}`} cx={RX(day)} cy={170 - k * 17} r="7" className={day === RUN_PEAK ? 'nk-dot is-peak' : 'nk-dot'} />
+                )),
+              )}
+              {RUNOUT.filter(([d]) => d % 2 === 0).map(([d]) => (
+                <text key={d} x={RX(d)} y="198" className="nk-tick">
+                  {d}
+                </text>
+              ))}
+            </svg>
+            <p className="nk-cost">
+              Each dot is one phone&rsquo;s last tick before the next pack. Most packs here last until <b>day {RUN_PEAK}</b>, so the reminder goes out then.
+            </p>
+          </figure>
+        </div>
+      </section>
+
+      <section className="nk-still nk-int" id="integrations" aria-labelledby="nk-intg">
+        <div className="nk-panel">
+          <div className="nk-caps nk-lab">
+            <span className="nk-who">For you</span>
+            <span className="nk-labrest">Integrations</span>
+          </div>
+          <h2 className="nk-h2" id="nk-intg">
+            Works with the shop, subscriptions and email already running.
+          </h2>
+          <p className="nk-one">The app connects to each category below and ships in both app stores under your name.</p>
+        </div>
+        <ul className="nk-band5">
+          {LINKS.map((l) => (
+            <li key={l.k}>
+              <span className="nk-caps">{l.k}</span>
+              <b>{l.n}</b>
+              <p>{l.d}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="nk-fine nk-int-fine">Which app in each category connects to your store is mapped in the first call.</p>
+      </section>
+    </div>
+  )
+}
+function RX(day: number) {
+  return 16 + ((day - 25) / 14) * 328
+}
+
+/* ── runda 4 (j): FAQ kupujacego, natywne <details> (klawiatura i bez JS za darmo) ── */
+const FAQ = [
+  {
+    q: 'Will customers really tick every day?',
+    a: 'Not every customer, and not every day. A card takes seconds, a missed day never costs a level, and the brand sees the real rhythm of use either way.',
+  },
+  {
+    q: 'What about GDPR and health data?',
+    a: 'A tick is stored only as a ticked date, and only with the customer’s consent. Nothing about symptoms or goals is collected, and ticks never reach ads, analytics, push messages or email.',
+  },
+  {
+    q: 'What does a reward cost, and who sets it?',
+    a: 'The brand sets every reward and threshold, so the cost per customer is known before launch. Rewards are fixed and shown in advance, never random.',
+  },
+  {
+    q: 'How long does setup take?',
+    a: 'It depends on your store setup and which tools need to connect. The plan and timing are mapped in the first call.',
+  },
+  {
+    q: 'Does it work for pharmacy purchases?',
+    a: 'Yes. The customer scans the code on the box, which registers the pack; the code alone does not show where it was bought, a receipt does.',
+  },
+  {
+    q: 'What if a customer does not give consent?',
+    a: 'Every feature stays visible. The daily card and streak show as locked, with one button to turn them on, and rewards never depend on agreeing to push messages or email.',
+  },
+] as const
+
+function Faq() {
+  return (
+    <section className="nk-faq" id="faq" aria-labelledby="nk-faq-h">
+      <div className="nk-caps nk-lab">
+        <span className="nk-who">For you</span>
+        <span className="nk-labrest">Questions</span>
+      </div>
+      <h2 className="nk-h2" id="nk-faq-h">
+        Six answers a brand needs before the first call.
+      </h2>
+      <p className="nk-one">Rewards, data, pharmacy purchases and setup, each in two sentences.</p>
+      <div className="nk-qs">
+        {FAQ.map((f) => (
+          <details key={f.q} className="nk-q">
+            <summary>
+              <span>{f.q}</span>
+              <i aria-hidden="true" />
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 /* ── calosc pod pierwszym ekranem: scena, „czego nie robi”, final z formularzem ── */
 const NEVER = ['No random rewards.', 'No health claims.', 'No hidden rules.'] as const
 
@@ -1451,6 +1686,7 @@ export function Story() {
 
       <Loyalty skin={skin} brand={name.trim().slice(0, 14) || DEMO_BRAND} />
       <MoreScenes skin={skin} brand={name.trim().slice(0, 14) || DEMO_BRAND} />
+      <Evidence brand={name.trim().slice(0, 14) || DEMO_BRAND} />
 
       <section ref={never} className={'nk-never' + (seen ? ' is-in' : '')} aria-labelledby="nk-never">
         <div className="nk-caps nk-lab">What it never does</div>
@@ -1463,6 +1699,8 @@ export function Story() {
         </h2>
         <p className="nk-one">The app stores only which days were ticked.</p>
       </section>
+
+      <Faq />
 
       <section className="nk-final" id="enquiry" aria-labelledby="nk-ask">
         <div className="nk-final-copy">

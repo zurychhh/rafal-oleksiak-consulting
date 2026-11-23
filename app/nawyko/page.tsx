@@ -59,6 +59,8 @@ export default function Nawyko() {
           <a href="#cashback">Cashback</a>
           <a href="#levels">Points</a>
           <a href="#exchange">Your costs</a>
+          <a href="#proof">Proof</a>
+          <a href="#faq">FAQ</a>
         </nav>
         <a className="nk-caps nk-u" href="#enquiry">
           Ask about Nawyko
