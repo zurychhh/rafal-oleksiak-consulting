@@ -61,6 +61,7 @@ export default function PaybackPage() {
           <a href="/">Home</a>
           <a href="/nawyko">Nawyko</a>
           <a href="/lab/reward">Reward cost</a>
+          <a href="/lab/reminder">Reminder day</a>
           <a href="mailto:rafal@oleksiakconsulting.com">rafal@oleksiakconsulting.com</a>
           <a href="/privacy">Privacy</a>
         </nav>

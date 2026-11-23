@@ -59,6 +59,7 @@ export default function RewardPage() {
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/">Home</a>
           <a href="/nawyko">Nawyko</a>
+          <a href="/lab/reminder">Reminder day</a>
           <a href="mailto:rafal@oleksiakconsulting.com">rafal@oleksiakconsulting.com</a>
           <a href="/privacy">Privacy</a>
         </nav>
