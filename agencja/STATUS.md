@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 23.11.2026, 21:38–22:20 (runda 4, przebieg 1 — `/nawyko` sceny d–f i pierwsza wersja `/work/genactiv`, R8). Wcześniej: 16:38–17:15 (runda 3, przebieg 6 — nowe narzędzie `/lab/reminder`, zdrapka w wersji bez ruchu na `/nawyko`, R7). Wcześniej przebieg 5 (15:38–16:10), przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 23.11.2026, 22:38–23:10 (runda 4, przebieg 2 — `/nawyko` sceny g, h, j i `/work/genactiv` akty 5–8, R9). Wcześniej: 21:38–22:20 (R4 przebieg 1). Wcześniej: 16:38–17:15 (runda 3, przebieg 6 — nowe narzędzie `/lab/reminder`, zdrapka w wersji bez ruchu na `/nawyko`, R7). Wcześniej przebieg 5 (15:38–16:10), przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
@@ -9,6 +9,8 @@ Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 **R4 przebieg 0 (doradca, 20:50–21:05):** zrobione sceny (a) cashback, (b) punkty i poziomy, (c) wymiana punktów + panel marki z suwakiem — komponent `Loyalty` w `app/nawyko/NawykoClient.tsx` (sekcje `#cashback`, `#levels`, `#exchange`, układ `nk-still` po scenie przypiętej, przed „What it never does”; telefon dostał widoki 7–9), plus wjazd z nagłówka ≥1200 px (How it works · Cashback · Points · Your costs). Bramka: build, tsc, lint 0 błędów, qa.js 9/9 PASS, copy-voice OK, kontrast ≥4,5 w Paper i Night. Teksty: 14 nowych wierszy w `teksty-do-akceptacji.md`. **Następne:** czytelnik-kupujący na nowych tekstach (nie zrobiony — brak subagenta), na 390 suwak (c) i telefon nie mieszczą się razem w kadrze (rozważ mniejszy telefon przyklejony nad panelem), wpięcie scen (a)–(c) w przypiętą scenę lub jej nawigację `nk-acts` (dziś są osobnymi sekcjami), potem kolejka R4 od (d).
 
 **R4 przebieg 1 (21:38–22:20):** zrobione (d) ścieżki wiedzy z prezentem, (e) apteka/skan pudełka, (f) prywatność — `#paths`, `#pharmacy`, `#privacy`; poprawiona `#exchange` na 390 (telefon i suwak w jednym kadrze). Realizacja: `/work/genactiv` przebieg 1 (akty 0–4). **Następne `/nawyko`:** (g) dowód wyników z grupą kontrolną, (h) pas integracji, (i), (j) FAQ, (k) finał z przemalowaniem; postęp ścieżki (d) także z przewijania. **Następne realizacja:** przebieg 2 speca (akty 5–8), szlif hero 1440 (podpis pod telefonem daleko pod pudełkiem).
+
+**R4 przebieg 2 (22:38–23:10):** zrobione (g) `#proof` dowód z grupą kontrolną (suwak „held out as control”) + rozkład „kiedy opakowanie naprawdę się kończy”, (h) `#integrations` pas pięciu kategorii, (j) `#faq` 6 pytań w `<details>`; w nagłówku ≥1200 px linki Proof i FAQ. Realizacja: akty 5–8 (cashback schody, punkty/poziomy/ścieżka, brak zgody z prawdziwym przyciskiem, oś bramek budowy bez liczb), podpis hero 1440 przy pudełku, plakietki EXAMPLE na ekranach z liczbami. **Następne `/nawyko`:** (k) finał z przemalowaniem; skok układu przy wejściu adresem z kotwicą (np. `/nawyko#proof`: 0,33–1,09 — przyczyna sprzed R4: scena główna renderuje się statycznie z serwera i po hydratacji zmienia wysokość; potrzebna stała rezerwa wysokości sceny, spec 12); na 1440 wykres w `#proof` zaczyna się pod zgięciem (nagłówek w 3 liniach). **Następne realizacja:** przebieg 3 speca (wyniki jako stan zablokowany, finał z formularzem `work`, „Work” w nawigacji).
 
 **R4 — DRUGI STRUMIEŃ, RÓWNORZĘDNY (Rafał 23.11 21:00): realizacja GENACTIV na `/work/genactiv` — spec `agencja/specs/realizacja-genactiv.md`.**
 „Nasza największa wizytówka, ma rozwalić mózgi.” Każdy przebieg: dwóch budujących w osobnych worktree (strumień `/nawyko` z kolejki niżej
@@ -204,6 +206,16 @@ Słowa Rafała: „dobrze, teraz pracujemy nad tą częścią”. W tej kolejno�
 Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + podgląd we własnej marce klienta + deck (3 decyzje).
 
 ## Dla Rafała
+
+**Runda 4, przebieg 2 (23.11, 22:38–23:10) — `/nawyko` odpowiada na trzy ostatnie pytania kupującego (dowód, integracje, FAQ), a realizacja GENACTIV ma akty 5–8.**
+Do obejrzenia: https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/nawyko#proof (przesuń suwak „Customers held out as control”), potem `#integrations` i `#faq`; oraz `/work/genactiv` przewinięte za zdrapkę (akty 5–8). Stan linku — PODGLAD_STAN.
+1. **`/nawyko` (Tovemi, zmyślona):** „Reorder lift, measured against customers who never get the app.” — suwak dzieli 24 klientów na grupę z aplikacją i kontrolną, dwie krzywe z zakresami, obok rozkład „Real pack length, from daily ticks” (oba z plakietką EXAMPLE, bez procentów). „Runs on Shopify; your other tools connect per brand.” — pas: Shopify, aplikacje subskrypcji, lojalności, e-mail/CRM, App Store · Google Play, z linkiem „Ask which apps connect to your store →”. FAQ: 6 pytań (codzienne odhaczanie, dane o zdrowiu, koszt nagrody, czas wdrożenia — bez terminów i cen, apteka, brak zgody).
+2. **`/work/genactiv`:** „Cashback grows with every repeat order.” (schody bez wartości), punkty i poziomy z medalem i prezentem na mecie ścieżki (nazwy lekcji jako placeholdery), „Consent off: every card stays visible.” z działającym przyciskiem „Agree and turn on”, „Every build passes security, data and copy checks.” — oś bramek do „Store release only after the brand signs off”, zero liczb i bez twierdzenia, że aplikacja jest w sklepach.
+3. **Dlaczego biznesowo:** kupujący po stronie marki pyta „skąd wiem, że to działa”, „czy to się wepnie w mój sklep” i „co z RODO” — strona odpowiada na to przed pierwszą rozmową, więc zapytanie przychodzi od kogoś, kto już przeszedł te obiekcje. Na realizacji: dowód, że za aplikacją stoją bramki jakości, nie tylko efekt.
+4. **Dowód:** zrzuty `agencja/podglad/nawyko-r4-{proof,integrations,faq}-{390,1440}(-night).png`, `nawyko-r4-proof-*-held2.png`, `genactiv-p2-{0-hero,4-month,5-cashback,6-levels,7-consent,8-build}-{390,1440}.png`, `genactiv-p2-7-consent-kb-1440.png`; recenzja niezależna `agencja/recenzje/21-r4-p2-review.md` (3 ważne + 4 mniejsze; poprawione: EXAMPLE na liczbach GENACTIV, przycisk zgody z klawiatury, kontrast 3,22 → biały tekst, teksty, link z pasa; nie poprawione: skok przy wejściu z kotwicą — zmierzony, przyczyna w specu 12); czytelnik `22-teksty-czytelnik-r4-p2.md` (16 tekstów przepisanych przed commitem).
+   Bramki po scaleniu: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) · `copy-voice` OK · `qa.js` PASS na `/`, `/stop`, `/tool`, `/nawyko`, `/work/genactiv` · `content-rules` PASS · `ship-compare` PASS · `tool-rules` OK · `noindex, nofollow` na `/work/genactiv`, 0 wpisów `/work` w sitemap · surowy CLS `/work/genactiv` 0,0026 (390) / 0,0006 (1440).
+5. **Czego się nauczyliśmy:** czytelnik złapał dwa zdania, które były fałszem wobec mechaniki aplikacji (FAQ sugerował, że marka widzi odhaczenia pojedynczego klienta; „nagrody za zamówienie nigdy nie czekają na zgodę” — niepotwierdzone) oraz „store-ready build”, który zdradzał status pilota. Nowa reguła R9 niżej. Z sieci: Google wycofał wyniki rozszerzone FAQ — FAQ zostaje jako widoczny tekst w HTML (sprawdzone: odpowiedzi są w HTML z serwera).
+
 
 **Runda 4, przebieg 1 (23.11, 21:38–22:20) — `/nawyko` pokazuje trzy kolejne funkcje aplikacji, a realizacja GENACTIV ma pierwszą wersję z pudełkiem, zdrapką i pieczątką.**
 Do obejrzenia: https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/work/genactiv (nowe, noindex, poza sitemap) i `/nawyko` od sceny „Exchange” w dół (stan wdrożenia — ostatnia wiadomość przebiegu).
@@ -460,6 +472,10 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 
 ## Czeka na Rafała
 
+- **(R4-P2) Czy nagrody za zakup działają bez zgody na dane o zdrowiu?** Dziś wiadomo tylko, że karta dnia i seria są bez tej zgody zablokowane, a żadna nagroda nie zależy od zgody na push i e-mail. Strona (FAQ 6 na `/nawyko`, akt 7 na `/work/genactiv`) mówi tylko to drugie. Rekomendacja: jeśli w aplikacji nagrody za zakup (np. darmowa dostawa, cashback) działają bez tej zgody, dopisać to jednym zdaniem — to mocny argument dla działu prawnego; do potwierdzenia przez Ciebie, nie zgadujemy.
+- **(R4-P2) Oś budowy na `/work/genactiv` bez liczb.** Akt 8 pokazuje same bramki (bezpieczeństwo, testy dostępu do danych, RODO art. 9, teksty, nagrody), bo `agencja/dane/realizacja-genactiv.json` nie istnieje. Rekomendacja: dostarczyć (Ty albo doradca) 2–3 liczby z datą — np. czas od zielonego światła i liczbę testów — wtedy akt zyska „wow” z dowodem; bez nich zostaje uczciwie bez liczb.
+
+
 **Nowe z rundy 4, przebieg 1:**
 
 R4-A. **Jak mówić o stanie aplikacji GENACTIV na `/work/genactiv`?** Czytelnik-kupujący czytał pierwszą wersję („GENACTIV turned its box…”)
@@ -621,6 +637,12 @@ R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R9 (reguła, runda 4 przebieg 2): każde zdanie o tym, co aplikacja robi z danymi, zgodą albo nagrodami, sprawdzamy z mechaniką aplikacji, zanim trafi na stronę — a czego nie umiemy potwierdzić, nie piszemy, tylko wpisujemy do „Czeka na Rafała”.**
+  Druga z rzędu runda, w której czytelnik-kupujący (nie budujący i nie recenzent wyglądu) złapał fałsz wobec mechaniki (R4 p1: kod z pudełka ≠ miejsce zakupu; R4 p2: „marka widzi rytm” sugerowało odhaczenia pojedynczego klienta, „order rewards never wait for consent” niepotwierdzone, „store-ready” zdradzał status). Lekcja powtórzona → reguła: brief dla budującego zawiera „prawdę o aplikacji” (ten sam akapit co dla czytelnika), a czytelnik idzie w tym samym kroku co recenzent, nie po nim.
+- Brief z dwoma budującymi + recenzent i czytelnik równolegle + `SendMessage` z poprawkami: cały cykl 22:40–23:00 (20 min), szybciej niż w p1 (25 min). Konflikt znów tylko w `teksty-do-akceptacji.md` — scalanie skryptem (obie strony konfliktu).
+- Skok układu przy wejściu adresem z kotwicą to inny pomiar niż przewijanie — recenzent go złapał, ciągłe przewijanie dawało ~0. Do bramki: mierzyć też `goto('/trasa#kotwica')`.
+
 
 - **R8 (reguła, runda 4 przebieg 1): każda bramka musi udowodnić, że łapie podłożony błąd na tym kształcie kodu, na który ją puszczamy.**
   `copy-voice` czytał tylko tekst wprost w JSX; teksty realizacji GENACTIV siedzą w tablicy `COPY`, więc „OK” nic nie znaczyło (drugi raz po R6
