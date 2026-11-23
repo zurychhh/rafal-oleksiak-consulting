@@ -294,6 +294,10 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 
 ## Czeka na Rafała
 
+**Decyzje doradcy 23.11 13:50 (Rafał: „bądź samodzielny, angażuj mnie tylko tam, gdzie potrzebna jest moja decyzja”):**
+I → (a) scena zostaje: Rafał ocenił górną połowę `/lab/home` jako dobrą; nie wycinamy tego, co zatwierdził.
+J → (a) mini-kalkulator w hero `/nawyko` i `/lab/home`: odwiedzający wpisuje jedną liczbę, kwota liczona tym samym modelem co `/calculator`; zero liczb bez źródła. Buduj w następnym przebiegu.
+
 **Nowe z rundy 3:**
 
 L. **Scena „Your brand. Your colours. Your app.” wcześniej?** Recenzent: najmocniejszy moment sprzedażowy stoi na ~85%
