@@ -75,7 +75,10 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
   font: 600 15px/1 'Montserrat', system-ui, sans-serif; cursor: pointer;
 }
 .ga-btn:hover:not(:disabled) { background: var(--surface); }
-.ga-btn:disabled { border-color: #5a4a4d; color: var(--muted); cursor: default; }
+.ga-btn[aria-disabled='true'] { border-color: #5a4a4d; color: var(--muted); cursor: default; }
+.ga-link { margin-top: 22px; align-self: flex-start; color: var(--accent-hi) !important; font-weight: 700; font-size: 16px; text-decoration: underline; text-underline-offset: 4px; }
+.ga-hint { align-self: center; display: inline-flex; align-items: center; gap: 0.5em; color: var(--muted); font-weight: 600; }
+.ga-hint-off { opacity: 0; }
 
 /* ---------- Telefon ---------- */
 .ga-fig { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
@@ -118,7 +121,7 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 .ga-ring-wrap { position: relative; width: 100%; aspect-ratio: 1; }
 .ga-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
 .ga-ring-mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.ga-ring-mid b { font-size: 3.4em; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.ga-ring-mid b { min-width: 2ch; text-align: center; font-size: 3.4em; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
 .ga-ring-mid span { color: var(--muted); font-weight: 600; margin-top: 0.3em; }
 .ga-reorder { display: flex; justify-content: space-between; background: var(--surface); border-radius: 1em; padding: 0.9em 1em; font-weight: 700; }
 .ga-reorder b { color: var(--accent-hi); }
@@ -130,8 +133,11 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 }
 .ga-bars { display: flex; gap: 0.12em; height: 44%; background: var(--paper); padding: 0.6em 0.9em; border-radius: 0.3em; }
 .ga-bars i { display: block; background: var(--ink); }
-.ga-beam { position: absolute; left: 6%; right: 6%; top: 8%; height: 2px; pointer-events: none; }
-.ga-beam::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--accent); box-shadow: 0 0 12px 3px rgba(245, 51, 63, 0.6); }
+.ga-beam { /* linia skanu przez background-position: bez przesuniec ukladu */
+  position: absolute; left: 6%; right: 6%; top: 8%; height: 84%; pointer-events: none;
+  background: linear-gradient(180deg, transparent 0, rgba(245, 51, 63, 0.35) 40%, #f5333f 46%, #f5333f 54%, rgba(245, 51, 63, 0.35) 60%, transparent 100%) no-repeat;
+  background-size: 100% 14px;
+}
 .ga-receipt {
   align-self: center; width: 62%; background: var(--paper); padding: 0.9em 1em; display: flex; flex-direction: column; gap: 0.5em;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 92% 94%, 84% 100%, 76% 94%, 68% 100%, 60% 94%, 52% 100%, 44% 94%, 36% 100%, 28% 94%, 20% 100%, 12% 94%, 4% 100%, 0 94%);
@@ -149,6 +155,7 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 .ga-card-under b { font-size: 1.7em; font-weight: 800; color: var(--text); }
 .ga-card-under span { color: var(--muted); font-weight: 600; }
 .ga-foil { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; background: var(--foil); transition: opacity 0.5s ease; }
+.ga-foil:active { cursor: grabbing; }
 .ga-foil.ga-gone { opacity: 0; pointer-events: none; }
 
 .ga-stamp {
@@ -187,7 +194,7 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 .ga-box-back { display: none; }
 
 /* ---------- Tryb przewijania: przypieta scena ---------- */
-.ga-track { position: relative; height: 560svh; }
+.ga-track { position: relative; height: 600svh; }
 .ga-stage {
   position: sticky; top: 0; height: 100svh;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 48px;
@@ -234,7 +241,8 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
   .ga-sub { font-size: 15px; margin-top: 12px !important; line-height: 1.45; }
   .ga-btn { margin-top: 14px; }
 
-  .ga { --ph: min(calc(70svh - 64px - var(--consent-h, 0px)), 500px); }
+  /* stala rezerwa pod pasek cookies (~80 px) zamiast var(--consent-h): zmiana --ph po pomiarze paska = przesuniecie ukladu */
+  .ga { --ph: min(calc(70svh - 150px), 460px); }
   .ga-stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: 30svh minmax(0, 1fr); gap: 0; padding: 18px 16px 10px; align-items: stretch; }
   .ga-stage .ga-fig { justify-content: flex-start; }
   .ga-copy { height: 100%; }

@@ -60,3 +60,7 @@ z pełną treścią; zdrapka canvas + „Reveal without scratching” + samozdra
 Stan: zbudowane; bramki build, tsc, lint (0 błędów, 1 ostrzeżenie jak przed), copy-voice, qa.js 9/9 PASS, noindex, brak w sitemap.
 Otwarte: czytelnik-kupujący nie przeszedł; copy-voice nie widzi tekstów trasy (są w tablicy `COPY`, test czyta tylko JSX);
 `content-rules` nie obejmuje tras pisanych ręcznie; przycisk zdrapki w trybie sceny osiągalny klawiaturą tylko w akcie 3.
+Poprawki po recenzji 19 i czytelniku 20 (23.11): przycisk zdrapki osiągalny Tabem (`inert` zamiast visibility, fokus przewija
+do aktu zdrapki), surowy CLS przy przewinięciu całej strony 0,0003 (390) / 0,0001 (1440), jeden aktywny nagłówek na klatkę,
+„Drag to scratch”, pierścień od +1 dnia po zdrapaniu, przytrzymanie pieczątki 0,4 aktu, pudełko wyżej + link pod leadem,
+stała rezerwa pod pasek cookies na 390, teksty z listy koordynatora.

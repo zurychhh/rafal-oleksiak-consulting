@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from 'next'
+import { preload } from 'react-dom'
 import { GenactivStory } from './GenactivClient'
 import './genactiv.css'
 
-const TITLE = 'GENACTIV — a box that became a daily ritual'
+const TITLE = 'GENACTIV — every box, a daily reason to come back'
 const DESC =
-  'GENACTIV, a Polish colostrum brand, gives its customers an app: confirm the purchase, scratch one card a day, collect rewards known in advance.'
+  'The GENACTIV app for its customers: confirm the purchase, scratch one card a day, collect rewards known in advance.'
 
 // noindex + brak w sitemap.ts do zgody GENACTIV na referencje i startu aplikacji w sklepach (spec realizacja-genactiv.md).
 export const metadata: Metadata = {
@@ -21,6 +22,8 @@ export const viewport: Viewport = {
 }
 
 export default function GenactivWork() {
+  // font od pierwszej klatki: zamiana kroju po zaladowaniu przesuwala tekst (CLS)
+  preload('/fonts/montserrat-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <div className="ga">
       <a className="ga-skip" href="#main">

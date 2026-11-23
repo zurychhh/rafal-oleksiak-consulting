@@ -23,18 +23,18 @@ type Copy = { kicker: string; title: string; sub: string }
 const COPY: Copy[] = [
   {
     kicker: 'GENACTIV · Polish colostrum brand',
-    title: 'GENACTIV turned its box into a daily ritual.',
-    sub: 'GENACTIV, a Polish colostrum brand, gives its customers an app: confirm the purchase, scratch one card a day, collect rewards known in advance.',
+    title: 'GENACTIV turns every box into a daily reason to come back.',
+    sub: 'The GENACTIV app for its customers: confirm the purchase, scratch one card a day, collect rewards known in advance.',
   },
   {
     kicker: 'The problem',
-    title: 'Customers stop halfway through the pack.',
-    sub: 'The daily habit fades mid-month, and the second order does not come.',
+    title: 'The risk: the habit fades halfway through the pack.',
+    sub: 'Without a daily reason, the second order never comes.',
   },
   {
     kicker: 'Step 1 · Proof of purchase',
-    title: 'Purchase proof from any shop.',
-    sub: 'The customer scans the code on the box or the shop receipt. The receipt stays on the phone.',
+    title: 'Proof of purchase from the box or the receipt.',
+    sub: 'The customer scans the box code or the shop receipt. The receipt photo stays on the phone.',
   },
   {
     kicker: 'Step 2 · Card of the day',
@@ -121,7 +121,7 @@ function Scratch({ auto, revealed, onDone }: { auto: boolean; revealed: boolean;
     g.font = `700 ${Math.round(12 * dpr)}px Montserrat, system-ui, sans-serif`
     g.textAlign = 'center'
     g.textBaseline = 'middle'
-    g.fillText('S C R A T C H', c.width / 2, c.height / 2)
+    g.fillText('DRAG TO SCRATCH', c.width / 2, c.height / 2)
   }, [])
 
   useEffect(() => {
@@ -282,8 +282,8 @@ function ScreenFade({ p }: { p: number }) {
         </div>
       </div>
       <div className="ga-reorder" style={{ opacity: 0.35 + 0.65 * dim }}>
-        <span>Next order</span>
-        <b>none</b>
+        <span>Next-order reward</span>
+        <b>not yet</b>
       </div>
     </div>
   )
@@ -300,7 +300,7 @@ function ScreenScan({ p }: { p: number }) {
             <i key={i} style={{ width: `${(w * 0.16).toFixed(2)}em` }} />
           ))}
         </div>
-        <div className="ga-beam" style={{ top: `${(8 + scan * 84).toFixed(1)}%` }} />
+        <div className="ga-beam" style={{ backgroundPosition: `0 ${(scan * 100).toFixed(1)}%` }} />
       </div>
       <div className="ga-receipt">
         <i />
@@ -345,12 +345,25 @@ function ScreenScratch({
         </div>
         <Scratch auto={auto} revealed={revealed} onDone={onDone} />
       </div>
+      <div className={'ga-hint' + (revealed ? ' ga-hint-off' : '')} aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="16" height="16">
+          <path d="M9 11V5a1.5 1.5 0 0 1 3 0v5h.5V8.5a1.5 1.5 0 0 1 3 0V11h.5v-1a1.5 1.5 0 0 1 3 0v5c0 3.3-2.7 6-6 6h-1.2a6 6 0 0 1-4.8-2.4L3.6 14.4a1.5 1.5 0 0 1 2.3-1.9L9 15V11z" fill="currentColor" />
+        </svg>
+        Drag to scratch
+      </div>
     </div>
   )
 }
 
-function ScreenMonth({ p, live }: { p: number; live: boolean }) {
-  const lit = live ? Math.round(clamp(p / 0.85) * DAYS) : DAYS
+function ScreenMonth({ p, live, from = 0 }: { p: number; live: boolean; from?: number }) {
+  // od dnia zdrapanego w akcie 3 (+1) do 24, przytrzymanie ~0,4 ekranu na pieczatce, potem do 30
+  const lit = !live
+    ? DAYS
+    : p < 0.32
+      ? Math.round(from + smooth(p / 0.32) * (STAMP_DAY - from))
+      : p < 0.72
+        ? STAMP_DAY
+        : Math.round(STAMP_DAY + smooth((p - 0.72) / 0.2) * (DAYS - STAMP_DAY))
   const stamp = lit >= STAMP_DAY
   return (
     <div className="ga-scr" aria-hidden="true">
@@ -428,15 +441,29 @@ export function GenactivStory() {
   }, [])
 
   const done = useCallback(() => setRevealed(true), [])
+  const heroLink = (
+    <a className="ga-link" href="/nawyko">
+      See it with your brand →
+    </a>
+  )
+  // Przycisk osiagalny Tabem w kazdym trybie: fokus przewija scene do aktu zdrapki.
+  const toScratch = () => {
+    const el = track.current
+    if (mode !== 'scroll' || !el) return
+    const r = el.getBoundingClientRect()
+    const span = r.height - window.innerHeight
+    const y = window.scrollY + r.top + (3.4 / ACTS) * span
+    if (Math.abs(window.scrollY - y) > span / ACTS / 3) window.scrollTo({ top: y })
+  }
   const reveal = (
-    <button type="button" className="ga-btn" onClick={done} disabled={revealed}>
+    <button type="button" className="ga-btn" onClick={done} onFocus={toScratch} aria-disabled={revealed}>
       {revealed ? 'Card revealed' : 'Reveal without scratching'}
     </button>
   )
 
   if (mode === 'still') {
     return (
-      <div className="ga-still">
+      <div className="ga-still" key="still">
         {COPY.map((c, i) => (
           <section key={i} className={'ga-act ga-act-' + i} aria-labelledby={'ga-t' + i}>
             <div className="ga-copy-in">
@@ -447,6 +474,7 @@ export function GenactivStory() {
                 <h2 id={'ga-t' + i}>{c.title}</h2>
               )}
               <p className="ga-sub">{c.sub}</p>
+              {i === 0 ? heroLink : null}
               {i === 3 ? reveal : null}
             </div>
             <figure className="ga-fig">
@@ -466,7 +494,7 @@ export function GenactivStory() {
                   </div>
                 ) : null}
               </div>
-              <figcaption>Example screen, not a screenshot of the app.</figcaption>
+              <figcaption>Recreated screen for illustration.</figcaption>
             </figure>
           </section>
         ))}
@@ -488,42 +516,45 @@ export function GenactivStory() {
 
   return (
     <>
-    <div className="ga-track" ref={track}>
+    <div className="ga-track" key="track" ref={track}>
       <div className="ga-stage">
         <div className="ga-copy">
           {COPY.map((c, i) => {
-            const o = vis(i)
+            // Jeden aktywny tekst na klatke (krycie 1), wejscie samym przesunieciem: zawsze jeden naglowek >= 0,9.
+            const on = i === act
+            const enter = on && i > 0 ? 1 - smooth(local / 0.1) : 0
             return (
               <article
                 key={i}
                 className="ga-copy-in"
                 aria-labelledby={'ga-t' + i}
+                inert={!on && i !== 3}
                 style={{
-                  opacity: o,
-                  visibility: o < 0.02 ? 'hidden' : 'visible',
-                  transform: `translateY(${((1 - o) * (i < act || (i === act && local > 0.5) ? -16 : 16)).toFixed(1)}px)`,
+                  opacity: on ? 1 : 0,
+                  transform: `translateY(${(enter * 18).toFixed(1)}px)`,
                 }}
               >
                 <p className="ga-kicker">{c.kicker}</p>
                 {i === 0 ? <h1 id={'ga-t' + i}>{c.title}</h1> : <h2 id={'ga-t' + i}>{c.title}</h2>}
                 <p className="ga-sub">{c.sub}</p>
+                {i === 0 ? heroLink : null}
                 {i === 3 ? reveal : null}
               </article>
             )
           })}
         </div>
         <figure className="ga-fig">
-          <div className="ga-phone-slot">
+          <div className="ga-phone-slot" style={{ transform: `translateY(${(-(1 - p0) * 16).toFixed(2)}%)` }}>
             <div className="ga-glow" style={{ opacity: 1 - 0.55 * boxOut }} />
-            <div className="ga-phone" style={{ transform: `translateY(${((1 - p0) * 58).toFixed(2)}%)` }}>
+            <div className="ga-phone" style={{ transform: `translateY(${((1 - p0) * 50).toFixed(2)}%)` }}>
               <div className="ga-notch" />
               {[0, 1, 2, 3, 4].map((i) => (
-                <div key={i} className="ga-layer" style={{ opacity: vis(i), visibility: vis(i) < 0.02 ? 'hidden' : 'visible' }}>
+                <div key={i} className="ga-layer" inert={vis(i) < 0.5} style={{ opacity: vis(i) }}>
                   {i === 0 ? <ScreenHome /> : null}
                   {i === 1 ? <ScreenFade p={act === 1 ? local : act > 1 ? 1 : 0} /> : null}
                   {i === 2 ? <ScreenScan p={act === 2 ? local : act > 2 ? 1 : 0} /> : null}
                   {i === 3 ? <ScreenScratch auto={act === 3} revealed={revealed} onDone={done} /> : null}
-                  {i === 4 ? <ScreenMonth p={act === 4 ? local : 0} live /> : null}
+                  {i === 4 ? <ScreenMonth p={act === 4 ? local : 0} live from={revealed ? 1 : 0} /> : null}
                 </div>
               ))}
             </div>
@@ -534,7 +565,7 @@ export function GenactivStory() {
               <Box />
             </div>
           </div>
-          <figcaption>Example screen, not a screenshot of the app.</figcaption>
+          <figcaption>Recreated screen for illustration.</figcaption>
         </figure>
       </div>
     </div>
