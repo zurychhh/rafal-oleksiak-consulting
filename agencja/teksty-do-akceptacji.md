@@ -88,3 +88,17 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /lab/reminder | pola | Days one pack lasts (servings ÷ servings per day) · Days from order to doorstep · Days a customer takes to reorder after the reminder · One average customer. Nothing you type leaves this page. | nowy |
 | /lab/reminder | suwak | If the reminder goes out on day {N} · New pack lands on day {X} · {X} days without the product / {X} days of product left when the new pack lands / The new pack lands on the last day of the old one · legenda: Black = product at home · red stripes = days without · thin line = reminder · thick line = new pack | nowy |
 | /lab/reminder | jedyny krok | Time it for each customer from the day they open the pack → (/nawyko) | nowy |
+| /nawyko | R4 scena (a) nagłówek | Cashback grows with every order. | nowy |
+| /nawyko | R4 scena (a) zdanie | It pays for the next order or comes off a subscription delivery. | nowy |
+| /nawyko | R4 scena (a) przyciski | 1st order · 2nd order · 3rd order | nowy |
+| /nawyko | R4 scena (a) podpis | Example · €2 back on each order. You set the rate. | nowy |
+| /nawyko | R4 scena (a) telefon | Cashback wallet · €{6} to spend · Order {n} +€2 / next · Use on next order · Take off next delivery | nowy |
+| /nawyko | R4 scena (b) nagłówek | Points every day. Levels that never drop. | nowy |
+| /nawyko | R4 scena (b) zdanie | Each scratched card adds points, and a missed day never costs a level. | nowy |
+| /nawyko | R4 scena (b) przyciski | Scratch a day +10 · Skip a day | nowy |
+| /nawyko | R4 scena (b) podpis | Example · {240} points · {Bronze} level. Levels at 100, 250, 500 points; you set them. | nowy |
+| /nawyko | R4 scena (b) telefon | Points · levels · Bronze/Silver/Gold · Day skipped. Level kept. / +10 points for today's card. | nowy |
+| /nawyko | R4 scena (c) nagłówek | You set what the programme costs. | nowy |
+| /nawyko | R4 scena (c) zdanie | Move the rate and the customer's app shows it at once. | nowy |
+| /nawyko | R4 scena (c) panel marki | {Brand} · brand panel · Example · Points for €1 of cashback · 50 · richer for customers / 200 · cheaper for you · A month of daily cards costs you €{3.00} per customer. | nowy |
+| /nawyko | R4 scena (c) telefon | Exchange points · 300 points = €{3.00} cashback · {100} pts = €1 · Rate set by {Brand} · Move to wallet | nowy |

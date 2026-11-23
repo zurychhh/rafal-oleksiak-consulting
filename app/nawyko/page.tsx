@@ -54,6 +54,12 @@ export default function Nawyko() {
         <a className="nk-caps" href="/">
           Rafał Oleksiak <span className="nk-hide">· Consultant</span>
         </a>
+        <nav className="nk-topnav nk-caps" aria-label="On this page">
+          <a href="#how">How it works</a>
+          <a href="#cashback">Cashback</a>
+          <a href="#levels">Points</a>
+          <a href="#exchange">Your costs</a>
+        </nav>
         <a className="nk-caps nk-u" href="#enquiry">
           Ask about Nawyko
         </a>

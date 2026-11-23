@@ -518,3 +518,50 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
    gdy tekst wchodzi pod koniec przejazdu (recenzja 12: pusta polowa ekranu przez 4–5 ruchow kolka). */
 .nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll .nk-phonecol{transition:none;}
 html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 2.2 SC 2.4.11, technika W3C C43 */
+
+/* ══ runda 4, przebieg 0: lojalnosc — cashback, punkty i poziomy, wymiana z panelem marki ══ */
+.nk-r4 .nk-still{background:var(--paper);}
+.nk-r4 .nk-still:nth-child(2){background:var(--tint);}
+.nk-seg{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
+.nk-seg .nk-sw{padding:0 16px;}
+.nk-seg .nk-sw:active{transform:translateY(1px);}
+.nk-ex{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);
+  border:1px solid var(--ink);padding:2px 6px 1px;margin-right:6px;}
+/* telefon: portfel */
+.nk-wal li{color:var(--pd);transition:color .3s;}
+.nk-wal li.is-got{color:var(--pf);}
+.nk-wal li.is-got span + span{color:var(--pa);font-weight:600;}
+.nk-use{display:grid;gap:1.4cqh;margin-top:auto;padding-bottom:2cqh;}
+.nk-use span{display:block;text-align:center;padding:1.6cqh 2cqw;border:1px solid var(--pf);font-size:max(9px,3.4cqw);font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;}
+.nk-use span:first-child{background:var(--pf);color:var(--pb);}
+.nk-use1{margin-top:3cqh;}
+/* telefon: medale */
+.nk-medals{display:grid;grid-template-columns:repeat(3,1fr);gap:3cqw;margin-top:4cqh;}
+.nk-medal{display:flex;flex-direction:column;align-items:center;gap:.6cqh;color:var(--pd);}
+.nk-medal i{display:grid;place-items:center;width:16cqw;height:16cqw;border-radius:50%;border:1px dashed var(--pd);font-style:normal;
+  font-size:max(12px,6cqw);font-weight:600;}
+.nk-medal span{font-size:max(9px,3.4cqw);font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.nk-medal small{font-size:max(9px,3cqw);}
+.nk-medal.is-got{color:var(--pf);}
+.nk-medal.is-got i{border:2px solid var(--pa);background:var(--pa);color:var(--pb);animation:nk-pop .45s cubic-bezier(.2,1.8,.3,1) both;}
+/* panel marki */
+.nk-desk2{margin-top:26px;max-width:460px;border:1px solid var(--ink);background:var(--paper);padding:18px 20px 20px;}
+.nk-deskh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line);color:var(--ink2);}
+.nk-deskh .nk-ex{margin:0;}
+.nk-rate{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:16px;font-size:15px;font-weight:600;color:var(--ink);}
+.nk-rate output{font-size:clamp(28px,3vw,40px);letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
+.nk-slider{display:block;width:100%;margin:10px 0 0;height:32px;accent-color:var(--red);cursor:ew-resize;}
+.nk-slider:focus-visible{outline:2px solid var(--ink);outline-offset:4px;}
+.nk-ends{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--dim);margin-top:4px;}
+.nk .nk-cost{margin-top:14px;font-size:15px;color:var(--ink2);}
+.nk .nk-cost b{color:var(--ink);font-variant-numeric:tabular-nums;}
+@media (min-width:861px){
+  .nk-still.nk-flip .nk-phonecol{order:-1;}
+}
+/* wjazd do scen R4 z naglowka (tylko szeroki ekran; na telefonie naglowek zostaje dwuelementowy) */
+.nk-topnav{display:none;gap:22px;}
+.nk-topnav a{color:var(--dim);}
+.nk-topnav a:hover{color:var(--ink);}
+@media (min-width:1200px){.nk-topnav{display:flex;}}
+#cashback,#levels,#exchange{scroll-margin-top:0;}

@@ -266,7 +266,19 @@ const REWARD_ROWS = [
 
 const FINISH_DAYS = 34
 const SKIPPED = [6, 13, 21, 27]
-const TAB_OF = [0, 0, 1, 2, 2, 0, 2]
+const TAB_OF = [0, 0, 1, 2, 2, 0, 2, 2, 1, 2]
+
+/* Runda 4: cashback, punkty, poziomy, wymiana. WSZYSTKIE liczby przykladowe (podpis „Example” w scenie),
+   ustawia je marka; zadna nie pochodzi od prawdziwej marki. */
+const CURRENCY = '€'
+const CASHBACK_PER_ORDER = 2
+const PTS_PER_DAY = 10
+const LEVELS = [
+  { name: 'Bronze', at: 100 },
+  { name: 'Silver', at: 250 },
+  { name: 'Gold', at: 500 },
+] as const
+const EX_POINTS = 300
 
 function Phone({
   step,
@@ -279,6 +291,10 @@ function Phone({
   fixedDays,
   day = PACK_DAYS,
   brand = DEMO_BRAND,
+  orders = 3,
+  pts = 240,
+  kept = false,
+  rate = 100,
 }: {
   step: number
   t: number
@@ -290,6 +306,10 @@ function Phone({
   fixedDays?: number
   day?: number
   brand?: string
+  orders?: number
+  pts?: number
+  kept?: boolean
+  rate?: number
 }) {
   const view = step === 6 ? 3 : step
   const confirmed = step > 0 || t > 0.55
@@ -455,6 +475,74 @@ function Phone({
           <div className="nk-goal">
             <span>{PACK_DAYS} ticked</span>
             <span>{FINISH_DAYS - PACK_DAYS} skipped</span>
+          </div>
+        </div>
+        ) : null}
+
+        {has(7) ? (
+        <div className={on(7)}>
+          <div className="nk-pk">Cashback wallet</div>
+          <div className="nk-big">
+            <b>
+              {CURRENCY}
+              {orders * CASHBACK_PER_ORDER}
+            </b>
+            <span>to spend</span>
+          </div>
+          <ul className="nk-rw nk-wal">
+            {[1, 2, 3].map((n) => (
+              <li key={n} className={n <= orders ? 'is-got' : ''}>
+                <span>Order {n}</span>
+                <span>{n <= orders ? `+${CURRENCY}${CASHBACK_PER_ORDER}` : 'next'}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="nk-use">
+            <span>Use on next order</span>
+            <span>Take off next delivery</span>
+          </div>
+        </div>
+        ) : null}
+
+        {has(8) ? (
+        <div className={on(8)}>
+          <div className="nk-pk">Points · levels</div>
+          <div className="nk-big">
+            <b>{pts}</b>
+            <span>points</span>
+          </div>
+          <div className="nk-medals">
+            {LEVELS.map((l) => (
+              <div key={l.name} className={'nk-medal' + (pts >= l.at ? ' is-got' : '')}>
+                <i>{l.name[0]}</i>
+                <span>{l.name}</span>
+                <small>{l.at}</small>
+              </div>
+            ))}
+          </div>
+          <div className="nk-ps">{kept ? 'Day skipped. Level kept.' : `+${PTS_PER_DAY} points for today’s card.`}</div>
+        </div>
+        ) : null}
+
+        {has(9) ? (
+        <div className={on(9)}>
+          <div className="nk-pk">Exchange points</div>
+          <div className="nk-big">
+            <b>{EX_POINTS}</b>
+            <span>points</span>
+          </div>
+          <div className="nk-pt nk-pt2">
+            = {CURRENCY}
+            {(EX_POINTS / rate).toFixed(2)} cashback
+          </div>
+          <div className="nk-coupon">
+            <code>
+              {rate} pts = {CURRENCY}1
+            </code>
+            <small>Rate set by {brand}</small>
+          </div>
+          <div className="nk-use nk-use1">
+            <span>Move to wallet</span>
           </div>
         </div>
         ) : null}
@@ -967,6 +1055,130 @@ function Scene({
   )
 }
 
+/* ── runda 4: lojalnosc — cashback, punkty i poziomy, wymiana z panelem marki ── */
+/* Trzy sceny w ukladzie „nk-still” (tekst + telefon), ten sam w kazdym trybie: bez JS, w reduced-motion
+   i przy przewijaniu stan domyslny jest kompletny, a kontrolki to zwykle przyciski i natywny suwak. */
+const ORDER_LABEL = ['1st order', '2nd order', '3rd order'] as const
+
+function Loyalty({ skin, brand }: { skin: Skin; brand: string }) {
+  const [orders, setOrders] = useState(3)
+  const [pts, setPts] = useState(240)
+  const [kept, setKept] = useState(false)
+  const [rate, setRate] = useState(100)
+  const level = [...LEVELS].reverse().find((l) => pts >= l.at)
+  const monthCost = ((PACK_DAYS * PTS_PER_DAY) / rate).toFixed(2)
+
+  return (
+    <div className="nk-r4" id="loyalty">
+      <section className="nk-still" id="cashback" aria-labelledby="nk-cash">
+        <div className="nk-panel">
+          <div className="nk-caps nk-lab">
+            <span className="nk-who">For your customer</span>
+            <span className="nk-labrest">Cashback</span>
+          </div>
+          <h2 className="nk-h2" id="nk-cash">
+            Cashback grows with every order.
+          </h2>
+          <p className="nk-one">It pays for the next order or comes off a subscription delivery.</p>
+          <div className="nk-seg" role="group" aria-label="Show the wallet after">
+            {ORDER_LABEL.map((l, i) => (
+              <button key={l} type="button" className="nk-sw" aria-pressed={orders === i + 1} onClick={() => setOrders(i + 1)}>
+                {l}
+              </button>
+            ))}
+          </div>
+          <p className="nk-fine">
+            <b className="nk-ex">Example</b> {CURRENCY}
+            {CASHBACK_PER_ORDER} back on each order. You set the rate.
+          </p>
+        </div>
+        <div className="nk-phonecol">
+          <Phone step={7} t={1} theme={skin} scratched brand={brand} orders={orders} />
+        </div>
+      </section>
+
+      <section className="nk-still" id="levels" aria-labelledby="nk-lvl">
+        <div className="nk-panel">
+          <div className="nk-caps nk-lab">
+            <span className="nk-who">For your customer</span>
+            <span className="nk-labrest">Points and levels</span>
+          </div>
+          <h2 className="nk-h2" id="nk-lvl">
+            Points every day. Levels that never drop.
+          </h2>
+          <p className="nk-one">Each scratched card adds points, and a missed day never costs a level.</p>
+          <div className="nk-seg">
+            <button
+              type="button"
+              className="nk-sw"
+              onClick={() => {
+                setPts((v) => v + PTS_PER_DAY)
+                setKept(false)
+              }}
+            >
+              Scratch a day +{PTS_PER_DAY}
+            </button>
+            <button type="button" className="nk-sw" onClick={() => setKept(true)}>
+              Skip a day
+            </button>
+          </div>
+          <p className="nk-fine" aria-live="polite">
+            <b className="nk-ex">Example</b> {pts} points · {level ? `${level.name} level` : 'no level yet'}
+            {kept ? ' · kept after a skipped day' : ''}. Levels at {LEVELS.map((l) => l.at).join(', ')} points; you set them.
+          </p>
+        </div>
+        <div className="nk-phonecol">
+          <Phone step={8} t={1} theme={skin} scratched brand={brand} pts={pts} kept={kept} />
+        </div>
+      </section>
+
+      <section className="nk-still nk-flip" id="exchange" aria-labelledby="nk-xch">
+        <div className="nk-panel">
+          <div className="nk-caps nk-lab">
+            <span className="nk-who">For you</span>
+            <span className="nk-labrest">Points to cashback</span>
+          </div>
+          <h2 className="nk-h2" id="nk-xch">
+            You set what the programme costs.
+          </h2>
+          <p className="nk-one">Move the rate and the customer&rsquo;s app shows it at once.</p>
+          <div className="nk-desk2">
+            <div className="nk-caps nk-deskh">
+              <span>{brand} · brand panel</span>
+              <b className="nk-ex">Example</b>
+            </div>
+            <label className="nk-rate" htmlFor="nk-rate">
+              <span>Points for {CURRENCY}1 of cashback</span>
+              <output htmlFor="nk-rate">{rate}</output>
+            </label>
+            <input
+              id="nk-rate"
+              className="nk-slider"
+              type="range"
+              min={50}
+              max={200}
+              step={10}
+              value={rate}
+              aria-valuetext={`${rate} points for ${CURRENCY}1 of cashback`}
+              onChange={(e) => setRate(Number(e.currentTarget.value))}
+            />
+            <div className="nk-ends" aria-hidden="true">
+              <span>50 · richer for customers</span>
+              <span>200 · cheaper for you</span>
+            </div>
+            <p className="nk-cost" aria-live="polite">
+              A month of daily cards costs you <b>{CURRENCY}{monthCost}</b> per customer.
+            </p>
+          </div>
+        </div>
+        <div className="nk-phonecol">
+          <Phone step={9} t={1} theme={skin} scratched brand={brand} rate={rate} />
+        </div>
+      </section>
+    </div>
+  )
+}
+
 /* ── calosc pod pierwszym ekranem: scena, „czego nie robi”, final z formularzem ── */
 const NEVER = ['No random rewards.', 'No health claims.', 'No hidden rules.'] as const
 
@@ -1025,6 +1237,8 @@ export function Story() {
       <p className="nk-demo nk-demo-after">
         {DEMO_BRAND} is a made-up demo brand, not a client.
       </p>
+
+      <Loyalty skin={skin} brand={name.trim().slice(0, 14) || DEMO_BRAND} />
 
       <section ref={never} className={'nk-never' + (seen ? ' is-in' : '')} aria-labelledby="nk-never">
         <div className="nk-caps nk-lab">What it never does</div>
