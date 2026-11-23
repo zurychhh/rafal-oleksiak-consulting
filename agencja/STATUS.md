@@ -5,6 +5,43 @@ Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
 
+## RUNDA 4 — „NAWYKO MA POKAZAĆ CAŁĄ APLIKACJĘ” (Rafał 23.11.2026 20:46, przez doradcę). CZYTAJ PIERWSZE, PRZED RUNDĄ 3.
+**Słowa Rafała:** „cały czas brakuje mi ostatnich zmian, Nawyko miało mieć dużo więcej, reszta też do liftingu; strona ma być
+osobną agencją cały czas poprawianą; chcę jak najwięcej zrobić w najbliższych godzinach”.
+**Diagnoza doradcy:** w ostatnich przebiegach powstawały narzędzia w `/lab`, a `/nawyko` nadal pokazuje aplikację sprzed tygodnia.
+Od tego czasu aplikacja dostała całą warstwę lojalności i prywatności, której na stronie nie ma. Narzędzia `/lab` wstrzymane,
+dopóki `/nawyko` nie pokaże całej aplikacji. Priorytet jest jeden: **`/nawyko` jako pełna strona produktu dla marki FMCG**.
+
+### Kolejka R4 (w tej kolejności; jedna myśl = jedna scena, w której produkt coś robi; ≤ 12 słów + jedno zdanie)
+1. **Nowe sceny `/nawyko` (telefon zostaje nicią strony):**
+   (a) cashback, który rośnie z każdym zamówieniem: portfel w telefonie po 1., 2., 3. zakupie, wydawany w aplikacji na następne
+       zamówienie albo odejmowany od dostawy subskrypcji (liczby z podpisem „przykład”, bez stawek żadnej prawdziwej marki);
+   (b) punkty za codzienny rytuał i poziomy-medale, które nigdy nie spadają;
+   (c) wymiana punktów na cashback, a obok telefonu **panel marki**: marka sama ustawia przelicznik i progi; przesuń suwak →
+       telefon pokazuje nowy próg (to jest sprzedażowy moment: „Ty sterujesz kosztem programu”);
+   (d) ścieżki wiedzy z prezentem na mecie: produkt uzupełniający dołączony do następnego zamówienia (sprzedaż krzyżowa bez reklamy);
+   (e) zakup w aptece też się liczy: skan kodu z pudełka (marka widzi klientów offline);
+   (f) prywatność od projektu: bez zgody na dane o zdrowiu funkcje są widoczne z przyciskiem „włącz i odblokuj”, dane o zdrowiu
+       nigdy nie trafiają do marketingu (to scena dla działu prawnego kupującego);
+   (g) dowód wyników: marka mierzy przyrost względem grupy kontrolnej, nie „wierzy na słowo”; rytm zużycia z wielu telefonów
+       składa się w wykres „kiedy opakowanie naprawdę się kończy” (przykład);
+   (h) integracje jednym pasem: Shopify, aplikacje subskrypcji i lojalności, e-mail/CRM, aplikacja w App Store i Google Play pod
+       nazwą marki; white label = jedno przeciągnięcie przemalowuje stronę;
+   (i) czego nie robi: nagrody nigdy losowe, zero twierdzeń zdrowotnych, zero reklam i śledzenia — trzy zdania w jednej scenie;
+   (j) FAQ kupującego (6 pytań, zwijane): czy klienci będą odhaczać; RODO; ile kosztuje nagroda i kto ustala; ile trwa wdrożenie;
+       czy działa z apteką; co jeśli klient nie da zgody;
+   (k) finał: „Zobacz to z Twoją marką” — formularz + przemalowanie na logo/kolor odwiedzającego na żywo.
+2. **Lifting całości:** wspólna nawigacja na każdej trasie (Konsulting · Nawyko · Narzędzia · Kontakt); strona „Narzędzia”
+   zbierająca `/tool` i narzędzia z `/lab` w jednym miejscu; zero ślepych zaułków; na `/` widoczny wjazd do Nawyko nad zgięciem
+   w granicach mechanizmu ship-design (nagłówka `/` nie ruszasz — decyzja Rafała).
+3. Dopiero potem wracasz do kolejki R3 i narzędzi.
+
+### Tryb pracy R4
+- Każdy przebieg kończy się podglądem do obejrzenia: pierwsza linia „Dla Rafała” = **sprawdzony link podglądu** + 1 zdanie, co
+  nowego obejrzeć (która scena). Jeden push na przebieg.
+- Recenzja jak dotąd: test 10 sekund na 390 i 1440, nagranie przewijania, bramka tekstów, kontrast w obu motywach.
+- Repo jest PUBLICZNE: bez danych i stawek GENACTIV, bez nazwy GENACTIV w części o aplikacji; marka pokazowa zmyślona.
+
 ## RUNDA 3 — START (Rafał 23.11.2026 12:43): „kolejna tura poprawek strony — każdej z 3. Udowodnij, że się uczysz”. CZYTAJ PIERWSZE.
 Zakres: kolejka z 22.11 18:20 niżej (punkty 1–5) — startuje TERAZ, w jej kolejności (najpierw recenzja dyrektora kreatywnego).
 Do tego doradca przenosi lekcje z całej agencji (aplikacja, kokpit, wczorajsze uwagi Rafała). Każda ma być zastosowana i SPRAWDZONA:
