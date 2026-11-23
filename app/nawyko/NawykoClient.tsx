@@ -923,7 +923,12 @@ function Scene({
     // Reduced motion: uklad statyczny startuje na akcie zdrapki (karta do zdrapania palcem albo przyciskiem
     // „Scratch today's card”), bez samozdrapki — zamiast od razu na nagrodzie. Bramka qa.js (webdriver) bez zmian.
     if (mq.matches && !navigator.webdriver) setManual(1)
-    if (mq.matches || navigator.webdriver || window.innerHeight < 600) return
+    // Spec 13: inline-skrypt w page.tsx ustawia data-nk-pin (rezerwa 780vh) przy tym samym warunku.
+    const html = document.documentElement
+    if (mq.matches || navigator.webdriver || window.innerHeight < 600) {
+      html.removeAttribute('data-nk-pin')
+      return
+    }
     setMode('scroll')
     let raf = 0
     let lastP = -1
@@ -956,6 +961,7 @@ function Scene({
       window.removeEventListener('scroll', on)
       window.removeEventListener('resize', on)
       if (raf) cancelAnimationFrame(raf)
+      html.removeAttribute('data-nk-pin')
     }
   }, [])
 
@@ -1653,8 +1659,80 @@ function brandFrom(raw: string) {
   return m ? m[0].toUpperCase() + m.slice(1) : ''
 }
 
+/* ── spec 13 (k): final „See it with your brand” — kolor marki przemalowuje telefon i akcent sekcji ── */
+/* Kolor zostaje na stronie: nie jest polem formularza i nie idzie do /api/lead. */
+const BRAND_COLS = [
+  { id: 'red', name: 'Signal red', hex: '#D6202B' },
+  { id: 'green', name: 'Forest green', hex: '#1F6B4A' },
+  { id: 'blue', name: 'Ocean blue', hex: '#1D5FA8' },
+  { id: 'plum', name: 'Plum', hex: '#7A2E8C' },
+  { id: 'amber', name: 'Amber', hex: '#E8A317' },
+  { id: 'teal', name: 'Teal', hex: '#0F7C80' },
+] as const
+const PHONE_BG: Record<Skin, string> = { paper: '#F7F5F0', night: '#14161A', clay: '#EFE6DA' }
+
+function rgbOf(hex: string): [number, number, number] {
+  const h = /^#?([0-9a-f]{6})$/i.exec(hex.trim())?.[1] ?? 'D6202B'
+  return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)) as [number, number, number]
+}
+function lum([r, g, b]: [number, number, number]) {
+  const f = (c: number) => {
+    const s = c / 255
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
+  }
+  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+}
+function contrast(a: string, b: string) {
+  const [x, y] = [lum(rgbOf(a)), lum(rgbOf(b))].sort((m, n) => n - m)
+  return (x + 0.05) / (y + 0.05)
+}
+const hexOf = (c: number[]) => '#' + c.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('')
+/* Tekst na kolorze marki: czarny albo bialy, ktory ma wyzszy kontrast (zawsze >= 4,58:1). */
+function onColour(hex: string) {
+  return contrast(hex, '#FFFFFF') >= contrast(hex, '#000000') ? '#FFFFFF' : '#000000'
+}
+/* Kolor marki jako tekst na tle telefonu: przyciemniany (albo rozjasniany na Night), az da >= 4,5:1. */
+function inkOn(hex: string, bg: string) {
+  const c = rgbOf(hex)
+  const to = lum(rgbOf(bg)) > 0.4 ? 0 : 255
+  for (let k = 0; k <= 1.0001; k += 0.04) {
+    const m = hexOf(c.map((v) => v + (to - v) * k))
+    if (contrast(m, bg) >= 4.5) return m
+  }
+  return to ? '#FFFFFF' : '#000000'
+}
+
+function BrandColour({ value, onPick }: { value: string; onPick: (hex: string) => void }) {
+  const preset = BRAND_COLS.find((c) => c.hex.toLowerCase() === value.toLowerCase())
+  return (
+    <fieldset className="nk-bcol">
+      <legend className="nk-caps">Brand colour</legend>
+      <div className="nk-bcol-row">
+        {BRAND_COLS.map((c) => (
+          <label key={c.id} className="nk-bcol-sw" title={c.name}>
+            <input
+              type="radio"
+              name="nk-brand-colour"
+              value={c.hex}
+              aria-label={c.name}
+              checked={preset?.id === c.id}
+              onChange={() => onPick(c.hex)}
+            />
+            <i style={{ background: c.hex }} aria-hidden="true" />
+          </label>
+        ))}
+        <label className="nk-bcol-own">
+          <input type="color" value={value} aria-label="Your own colour" onChange={(e) => onPick(e.currentTarget.value)} />
+          <span>Your own</span>
+        </label>
+      </div>
+    </fieldset>
+  )
+}
+
 export function Story() {
   const root = useRef<HTMLDivElement>(null)
+  const [colour, setColour] = useState<string>(BRAND_COLS[0].hex)
   const never = useRef<HTMLElement>(null)
   const [skin, setSkin] = useState<Skin>('paper')
   const [store, setStore] = useState('')
@@ -1714,25 +1792,37 @@ export function Story() {
 
       <Faq />
 
-      <section className="nk-final" id="enquiry" aria-labelledby="nk-ask">
+      <section
+        className="nk-final"
+        id="enquiry"
+        aria-labelledby="nk-ask"
+        style={{
+          ['--brand' as string]: colour,
+          ['--brand-on' as string]: onColour(colour),
+          ['--brand-ink' as string]: inkOn(colour, PHONE_BG[skin]),
+        }}
+      >
         <div className="nk-final-copy">
-          <div className="nk-caps nk-lab">Enquiry</div>
+          <div className="nk-caps nk-lab">
+            <span className="nk-brandtag">See it with your brand</span>
+          </div>
           <h2 className="nk-h2" id="nk-ask">
-            Would this fit your product?
+            Your brand on the phone, before the first call.
           </h2>
-          <p className="nk-one">
-            Supplements, skincare, pet food, coffee — anything reordered on a rhythm.{' '}
-            <span className="nk-desk">Type your store and watch the phone.</span>
-          </p>
-          <Enquiry onStore={setStore} />
+          <p className="nk-one">Type your store, pick its colour, and the phone repaints as you go.</p>
+          <BrandColour value={colour} onPick={setColour} />
+          <p className="nk-fine">The colour stays on this page.</p>
         </div>
         <div className="nk-phonecol nk-final-phone">
           <Phone step={3} t={1} theme={skin} scratched brand={typed || name.trim().slice(0, 14) || 'Your brand'} />
           <p className="nk-fine">
             {typed
               ? 'Your typed name. Nothing is sent until you press Send.'
-              : 'A placeholder until you type your store.'}
+              : 'A placeholder until you type your store. Nothing is sent until you press Send.'}
           </p>
+        </div>
+        <div className="nk-final-form">
+          <Enquiry onStore={setStore} />
         </div>
       </section>
     </div>

@@ -677,3 +677,47 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
   .nk-proof .nk-phonecol{order:0;}
 }
 .nk-proof .nk-rate output{white-space:nowrap;}
+
+/* spec 13 (k): final „See it with your brand” — kolor marki (--brand) przemalowuje telefon i akcent sekcji.
+   --brand-on (tekst na kolorze) i --brand-ink (kolor jako tekst na ekranie telefonu) licza sie w JS na >= 4,5:1. */
+.nk-final{--brand:#D6202B;--brand-on:#FFFFFF;--brand-ink:#D6202B;grid-template-areas:"copy phone" "form phone";
+  align-items:start;border-top:6px solid var(--brand);}
+.nk-final-copy{grid-area:copy;}
+.nk-final-phone{grid-area:phone;align-self:center;}
+.nk-final-form{grid-area:form;}
+.nk-final-form .nk-form{margin-top:0;}
+.nk-brandtag{display:inline-block;padding:5px 9px;background:var(--brand);color:var(--brand-on);}
+.nk-final .nk-phone{--pa:var(--brand-ink);background:var(--brand);border-color:var(--brand);}
+.nk-bcol{border:0;padding:0;margin:24px 0 0;min-width:0;}
+.nk-bcol legend{padding:0;margin-bottom:10px;color:var(--ink);}
+.nk-bcol-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
+.nk-bcol-sw{position:relative;display:grid;place-items:center;width:44px;height:44px;cursor:pointer;}
+.nk-bcol-sw input{position:absolute;inset:0;margin:0;opacity:0;cursor:pointer;}
+.nk-bcol-sw i{width:32px;height:32px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);}
+.nk-bcol-sw input:checked + i{outline:2px solid var(--ink);outline-offset:3px;}
+.nk-bcol-sw input:focus-visible + i{outline:3px solid var(--ink);outline-offset:5px;}
+.nk-bcol-own{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-left:4px;font-size:14px;color:var(--ink);cursor:pointer;}
+.nk-bcol-own input{width:44px;height:32px;padding:0;border:1px solid var(--ink);background:none;cursor:pointer;}
+.nk-final .nk-fine{margin-top:10px;}
+.nk-final,.nk-final .nk-phone,.nk-brandtag,.nk-bcol-sw i{transition:background-color .35s,border-color .35s,color .35s,outline-color .2s;}
+@media (prefers-reduced-motion:reduce){
+  .nk-final,.nk-final .nk-phone,.nk-brandtag,.nk-bcol-sw i{transition:none;}
+}
+@media (max-width:860px){
+  .nk-final{grid-template-areas:"copy" "phone" "form";}
+  .nk-final .nk-final-phone{display:flex;}
+  .nk-final .nk-phone{height:clamp(360px,52svh,440px);}
+}
+
+/* spec 13: rezerwa wysokosci sceny przed hydratacja (data-nk-pin z inline-skryptu w page.tsx, warunek jak setMode('scroll')).
+   Uklad statyczny jest na te chwile przyciety do wysokosci trybu przypietego, wiec kotwica (#proof itd.) nie skacze. */
+[data-nk-pin] .nk-scene.is-still{height:1600vh;overflow:clip;}
+@media (max-width:860px){[data-nk-pin] .nk-scene.is-still{height:1400vh;}}
+/* Wysokosci musza byc rowne .nk-scene.is-scroll wyzej (1600vh / 1400vh) — zmieniasz jedno, zmien drugie. */
+/* spec 13: rezerwa paska cookies w sekcjach jest stala (max z wysokoscia paska), nie rosnie po hydratacji.
+   Wczesniej padding = --consent-h dochodzil do kazdej sekcji po zamontowaniu paska i przesuwal kotwice (#faq o 456 px na 1440). */
+.nk{--consent-rsv:max(var(--consent-h,0px),72px);}
+@media (max-width:860px){.nk{--consent-rsv:max(var(--consent-h,0px),96px);}}
+.nk-r4 .nk-still{padding-bottom:calc(clamp(40px,6vw,88px) + var(--consent-rsv))!important;}
+.nk-faq{padding-bottom:calc(clamp(48px,7vw,104px) + var(--consent-rsv))!important;}
+.nk{padding-bottom:var(--consent-rsv);}

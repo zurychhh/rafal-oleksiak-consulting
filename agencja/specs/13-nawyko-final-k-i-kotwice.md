@@ -25,3 +25,47 @@ Wzór: spec 11/12. Plik: `app/nawyko/NawykoClient.tsx` (komponent `Story` → se
 3. Próbki osiągalne Tabem, strzałki zmieniają wybór (radio), `aria-label` z nazwą koloru.
 4. Build, `tsc`, lint (0 błędów, nie więcej ostrzeżeń niż przed), `qa.js /nawyko --scroll` PASS, `content-rules --url` PASS.
 5. Pomiar CLS kotwic przed/po (tabela niżej). Zrzuty `agencja/podglad/nawyko-r4-final-{390,1440}(-color).png`.
+
+## Wykonanie (23.11.2026, budujący wt/nk-p3)
+
+**(k)** `Story` → `#enquiry`: etykieta „See it with your brand”, nowy nagłówek i zdanie, `BrandColour` (fieldset z 6 radio
++ `input type=color`, poza `<form>`, więc kolor nie trafia do `/api/lead`). Na sekcji `--brand`, `--brand-on` (czarny/biały
+z wyższym kontrastem) i `--brand-ink` (kolor przyciemniany/rozjaśniany w JS do ≥ 4,5:1 na tle ekranu w bieżącej skórce).
+Telefon dostaje ramkę w kolorze marki i `--pa = --brand-ink`; akcent sekcji: pasek 6 px u góry i plakietka etykiety.
+Na ≤ 860 px telefon finału jest teraz widoczny (był ukryty): kopia → telefon → formularz. Przejścia tylko kolorów, w reduced-motion brak.
+Uwaga: klasa `.nk-bc` była już zajęta (kod kreskowy w telefonie) — selektor wyboru koloru to `.nk-bcol`.
+
+Kontrast zmierzony (Playwright, po przejściu): plakietka (tekst na kolorze) 4,98–9,68:1; kolor jako tekst w telefonie
+Paper 4,54–7,42:1, Night 4,53–8,35:1 — wszystkie 6 próbek, 390 i 1440. Klawiatura: Tab wchodzi w grupę, strzałka zmienia
+wybór (sprawdzone: → z „Signal red” zaznacza „Forest green”).
+
+**Rezerwa sceny** — dwie przyczyny skoku, nie jedna:
+1. scena: SSR w układzie statycznym (~3000 px), po hydratacji 1600vh / 1400vh (≤ 860 px). Naprawa: inline-skrypt w `page.tsx`
+   ustawia `html[data-nk-pin]` przy tym samym warunku co `setMode('scroll')`; CSS `[data-nk-pin] .nk-scene.is-still{height:1600vh
+   (1400vh ≤ 860);overflow:clip}`. `Scene` zdejmuje atrybut, gdy warunek nie zachodzi, i przy odmontowaniu. Wysokości muszą być
+   równe `.nk-scene.is-scroll` (komentarz w CSS).
+2. pasek cookies: `--consent-h` pojawia się po zamontowaniu `CookieConsent` i dokładał padding do KAŻDEJ sekcji `.nk-r4 .nk-still`
+   i `.nk-faq` (+57 px/sekcję na 1440, +78 na 390) — to dawało resztę skoku (#faq o 456 px). Naprawa: stała rezerwa
+   `--consent-rsv: max(var(--consent-h), 72px)` (96 px ≤ 860) w sekcjach i w `padding-bottom` `.nk`. Po zamknięciu paska zostaje
+   stały margines (nic nie skacze).
+
+Surowy CLS (suma layout-shift bez hadRecentInput, `goto('/nawyko#x')` + 3 s, webdriver nadpisany):
+
+| kotwica | 390 przed | 390 po | 1440 przed | 1440 po |
+|---|---|---|---|---|
+| #proof | 0,672 | 0,038–0,063 | 0,324 | 0,013 |
+| #integrations | 1,140 | 0,036–0,086 | 0,404 | 0,055 |
+| #faq | 1,165 | 0,023–0,110 | 0,444 | 0,013–0,055 |
+| #privacy | 0,462 | 0,001–0,037 | 1,045 | 0,000–0,014 |
+| #cashback | 0,056 | 0,000 | 0,013 | 0,004–0,023 |
+| #enquiry | 1,054 | 0,115–0,147 | 0,463 | 0,055 |
+
+Kotwica trafia teraz w cel (top 0; #enquiry na końcu strony: 88/100 px, ograniczenie przewijania). **Kryterium ≤ 0,05 nie jest
+spełnione wszędzie.** Reszta (wahania między przebiegami): (a) przesunięcie w `HeroGap` (`app/calculator`, poza zakresem)
+zgłaszane, zanim przeglądarka przewinie do kotwicy; (b) #enquiry na 390: sekcja przesuwa się o 92 px w górę po hydratacji —
+na końcu strony, prawdopodobnie przyrost wysokości pod/wokół finału po montażu klienta (nowe węzły tekstu ok. y=841);
+(c) wpisy „DIV 0→0” ~0,055 na 1440 — źródło bez geometrii, do ustalenia. Plan: śledzić `sources` per wpis z `hadRecentInput`
+i `performance.now()` po hydratacji (skrypt `/tmp/claude-0/nk/dbg.py`), dla (b) porównać wysokości dzieci `#enquiry` i stopki
+przed/po hydratacji; dla (a) zarezerwować wysokość `.hg-cap` w `hero-gap.css` (osobny spec, inny katalog).
+
+Zrzuty: `agencja/podglad/nawyko-r4-final-{390,1440}.png`, `-color.png` (Ocean blue), `-night.png` (Night + Amber).

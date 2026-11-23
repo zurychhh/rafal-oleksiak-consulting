@@ -41,10 +41,16 @@ const JSON_LD = {
   provider: { '@type': 'Person', name: 'Rafał Oleksiak', url: 'https://oleksiakconsulting.com' },
 }
 
+const PIN_JS =
+  "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!navigator.webdriver&&innerHeight>=600)document.documentElement.setAttribute('data-nk-pin','')}catch(e){}"
+
 export default function Nawyko() {
   return (
     <div className="nk">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
+      {/* Spec 13: rezerwa wysokosci sceny przed hydratacja. Ten sam warunek co setMode('scroll') w Scene;
+          bez niego wejscie z kotwica (#proof) skakalo o kilka ekranow po hydratacji (CLS 0,3–1,2). */}
+      <script dangerouslySetInnerHTML={{ __html: PIN_JS }} />
       <a className="nk-skip" href="#main">
         Skip to content
       </a>

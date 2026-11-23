@@ -204,3 +204,17 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | akt 8 zdanie | The studio’s AI agents wrote the app. A person signed off every gate on the way. | AI agents write the code; a person signs off each check before the next step. | zmieniony |
 | akt 8 oś | Data-access tests · Engagement gate · Store-ready build | Tests that no customer sees another’s data · Rewards check: fixed and shown in advance · Store release only after the brand signs off | zmieniony |
 | podpis ekranów z liczbami (akty 1, 4, 5, 6) | Recreated screen… / Example screen. Bar heights… / …placeholders. | Example screen. Numbers are placeholders. (+ plakietka EXAMPLE na ekranach „This month”) | zmieniony |
+
+## R4 przebieg 3 — /nawyko (23.11.2026; finał „See it with your brand”, spec 13)
+| Miejsce | Tekst | Status |
+|---|---|---|
+| finał, etykieta | See it with your brand | nowy |
+| finał, nagłówek | Your brand on the phone, before the first call. | nowy |
+| finał, zdanie | Type your store, pick its colour, and the phone repaints as you go. | nowy |
+| finał, legenda wyboru | Brand colour | nowy |
+| finał, próbki (aria-label) | Signal red · Forest green · Ocean blue · Plum · Amber · Teal | nowy |
+| finał, własny kolor | Your own (aria-label: Your own colour) | nowy |
+| finał, podpis pod wyborem | The colour stays on this page. | nowy |
+| finał, podpis pod telefonem (bez nazwy) | A placeholder until you type your store. Nothing is sent until you press Send. | nowy |
+
+Zastąpione: „Enquiry” (etykieta), „Would this fit your product?”, „Supplements, skincare, pet food, coffee — anything reordered on a rhythm. Type your store and watch the phone.”
