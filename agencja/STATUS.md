@@ -5,6 +5,20 @@ Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
 
+## PILNE 0 (Rafał 24.11 00:33, zrzut z iPhone'a: „już to zgłaszałem” + 00:34 „gdzie testy mobile?”) — PRZED WSZYSTKIM INNYM
+**Błąd:** na iPhonie (Safari) telefon w scenie przypiętej `/nawyko` zapada się w pionowy czarny pasek (sama ramka, szerokość ≈ 2× padding),
+treść ekranu niewidoczna. Chromium tego nie pokazuje, dlatego nasza bramka przepuszcza błąd. Najpewniejsza przyczyna: szerokość
+`.nk-phone` wynika tylko z `aspect-ratio` przy `height` w kontenerze flex, a dziecko `.nk-screen` ma `container-type:size` (rozmiar
+zawartości = 0) — WebKit liczy szerokość elementu z zawartości. **Poprawka:** jawna szerokość zamiast przenoszenia z proporcji, np.
+`--ph: clamp(...)` + `height:var(--ph); width:min(100%, calc(var(--ph) * var(--rw) / var(--rh)))` (z `--rw/--rh` w każdym wariancie,
+także 9/13.5), `flex:none`; to samo dla każdego elementu, który ma tylko `height` + `aspect-ratio` (telefony w `/work/genactiv` też).
+**Bramka od teraz (stała): testy mobile w silniku Safari.** Playwright WebKit z profilem urządzenia `devices['iPhone 15']` (i jeden Android
+w Chromium `devices['Pixel 7']`) na każdej zmienionej trasie: zrzut każdej sceny + test, że szerokość każdego `.nk-phone`/telefonu ≥ 200 px
+i że ekran telefonu ma widoczną treść. WebKit instaluj do osobnego katalogu: `PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-webkit npx playwright
+install --with-deps webkit` (tą samą wersją Playwrighta, nie ruszając Chromium). Jeśli instalacja jest niemożliwa — napisz to w
+„Dla Rafała” wprost, nie ogłaszaj „zrobione”. Lekcja: każda bramka wizualna = Chromium + WebKit (iPhone), bo klienci marek oglądają
+na iPhone'ach.
+
 ## RUNDA 4 — „NAWYKO MA POKAZAĆ CAŁĄ APLIKACJĘ” (Rafał 23.11.2026 20:46, przez doradcę). CZYTAJ PIERWSZE, PRZED RUNDĄ 3.
 **R4 przebieg 0 (doradca, 20:50–21:05):** zrobione sceny (a) cashback, (b) punkty i poziomy, (c) wymiana punktów + panel marki z suwakiem — komponent `Loyalty` w `app/nawyko/NawykoClient.tsx` (sekcje `#cashback`, `#levels`, `#exchange`, układ `nk-still` po scenie przypiętej, przed „What it never does”; telefon dostał widoki 7–9), plus wjazd z nagłówka ≥1200 px (How it works · Cashback · Points · Your costs). Bramka: build, tsc, lint 0 błędów, qa.js 9/9 PASS, copy-voice OK, kontrast ≥4,5 w Paper i Night. Teksty: 14 nowych wierszy w `teksty-do-akceptacji.md`. **Następne:** czytelnik-kupujący na nowych tekstach (nie zrobiony — brak subagenta), na 390 suwak (c) i telefon nie mieszczą się razem w kadrze (rozważ mniejszy telefon przyklejony nad panelem), wpięcie scen (a)–(c) w przypiętą scenę lub jej nawigację `nk-acts` (dziś są osobnymi sekcjami), potem kolejka R4 od (d).
 
