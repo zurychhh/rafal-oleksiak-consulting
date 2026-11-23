@@ -93,7 +93,9 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
 
 .nk-phonecol{display:flex;justify-content:center;align-items:center;min-width:0;}
 .nk-phone{--pb:#F7F5F0;--pf:#14161A;--pd:#5C5B56;--pl:#DCDAD2;--pt:#EDEAE1;--pa:#D6202B;
-  position:relative;height:clamp(460px,74svh,640px);aspect-ratio:9/18.6;max-width:100%;
+  position:relative;height:clamp(460px,74svh,640px);aspect-ratio:9/18.6;
+  /* no max-width:100% — in WebKit (iPhone/Mac Safari) a percentage max-width on this flex item cancels the width
+     transferred from aspect-ratio and the phone collapses into a thin bezel (Rafał, 24.11 00:33). */
   border:1px solid var(--bezel,#14161A);border-radius:34px;padding:9px;background:var(--bezel,#14161A);
   transform:translateY(var(--ty,0)) scale(var(--sc,1));will-change:transform;}
 .nk-phone[data-theme="night"]{--pb:#14161A;--pf:#F2F0EA;--pd:#A8A49B;--pl:#34363B;--pt:#1F2126;--pa:#FF6B73;}

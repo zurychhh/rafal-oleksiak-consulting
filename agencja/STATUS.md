@@ -5,6 +5,12 @@ Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
 
+**PILNE 0 — ZROBIONE przez doradcę 24.11 ~00:55:** przyczyna potwierdzona w WebKit (telefon 16×403 px na 390, 20×672 na 1440 — Mac Safari też):
+`max-width:100%` na `.nk-phone` (element flex z `aspect-ratio` i wysokością) kasuje w WebKit szerokość wynikającą z proporcji. Usunięte;
+po poprawce 195×403 (390) i 325×672 (1440), zrzuty obejrzane. Bramka: `scripts/webkit-check.py` (instalacja w nagłówku pliku — pobranie
+WebKit z Playwrighta jest tu zablokowane, działa WebKitGTK z apt). Każdy przebieg: uruchom na każdej zmienionej trasie (390 i 1440),
+żaden widoczny telefon węższy niż 150 px. Nie poprawiaj tego drugi raz — sprawdź tylko, czy Twoje zmiany tego nie cofnęły.
+
 ## PILNE 0 (Rafał 24.11 00:33, zrzut z iPhone'a: „już to zgłaszałem” + 00:34 „gdzie testy mobile?”) — PRZED WSZYSTKIM INNYM
 **Błąd:** na iPhonie (Safari) telefon w scenie przypiętej `/nawyko` zapada się w pionowy czarny pasek (sama ramka, szerokość ≈ 2× padding),
 treść ekranu niewidoczna. Chromium tego nie pokazuje, dlatego nasza bramka przepuszcza błąd. Najpewniejsza przyczyna: szerokość
