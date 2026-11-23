@@ -8,6 +8,10 @@ Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 ## RUNDA 4 — „NAWYKO MA POKAZAĆ CAŁĄ APLIKACJĘ” (Rafał 23.11.2026 20:46, przez doradcę). CZYTAJ PIERWSZE, PRZED RUNDĄ 3.
 **R4 przebieg 0 (doradca, 20:50–21:05):** zrobione sceny (a) cashback, (b) punkty i poziomy, (c) wymiana punktów + panel marki z suwakiem — komponent `Loyalty` w `app/nawyko/NawykoClient.tsx` (sekcje `#cashback`, `#levels`, `#exchange`, układ `nk-still` po scenie przypiętej, przed „What it never does”; telefon dostał widoki 7–9), plus wjazd z nagłówka ≥1200 px (How it works · Cashback · Points · Your costs). Bramka: build, tsc, lint 0 błędów, qa.js 9/9 PASS, copy-voice OK, kontrast ≥4,5 w Paper i Night. Teksty: 14 nowych wierszy w `teksty-do-akceptacji.md`. **Następne:** czytelnik-kupujący na nowych tekstach (nie zrobiony — brak subagenta), na 390 suwak (c) i telefon nie mieszczą się razem w kadrze (rozważ mniejszy telefon przyklejony nad panelem), wpięcie scen (a)–(c) w przypiętą scenę lub jej nawigację `nk-acts` (dziś są osobnymi sekcjami), potem kolejka R4 od (d).
 
+**R4 — DRUGI STRUMIEŃ, RÓWNORZĘDNY (Rafał 23.11 21:00): realizacja GENACTIV na `/work/genactiv` — spec `agencja/specs/realizacja-genactiv.md`.**
+„Nasza największa wizytówka, ma rozwalić mózgi.” Każdy przebieg: dwóch budujących w osobnych worktree (strumień `/nawyko` z kolejki niżej
+i strumień realizacji), jeden push. Wyjątek od zasady „bez prawdziwych marek” obejmuje tylko tę trasę i ma granice opisane w specu.
+
 **Słowa Rafała:** „cały czas brakuje mi ostatnich zmian, Nawyko miało mieć dużo więcej, reszta też do liftingu; strona ma być
 osobną agencją cały czas poprawianą; chcę jak najwięcej zrobić w najbliższych godzinach”.
 **Diagnoza doradcy:** w ostatnich przebiegach powstawały narzędzia w `/lab`, a `/nawyko` nadal pokazuje aplikację sprzed tygodnia.
