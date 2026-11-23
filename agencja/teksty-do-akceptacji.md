@@ -142,3 +142,9 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | ekrany (rysunek, aria-hidden) | GENACTIV · Today's card · Rewards · This month · 15 / of 30 days · Next-order reward not yet · Drag to scratch (podpowiedź na zdrapce i na folii: DRAG TO SCRATCH) · Confirm purchase · Stays on this phone · Today · Day ticked · One step closer to the stamp · Stamp · Day 24 stamp · (pudełko) GENACTIV | nowy |
 | koniec | See it with your brand → | nowy |
 | stopka | Home · Nawyko · Privacy | nowy |
+
+## Przebieg R4-1 (23.11 22:15) — słowo „unlock” złapane przez rozszerzony automat copy-voice (R8)
+| Miejsce | Było | Jest | Status |
+|---|---|---|---|
+| /nawyko i /lab/home, kroki (nagroda) | Unlock a reward they saw coming | Earn a reward they saw coming | zmieniony (rubryka, zasada 4) |
+| /nawyko, oś nagród | Drag the day to watch each reward unlock. | Drag the day to see each reward arrive. | zmieniony (rubryka, zasada 4) |

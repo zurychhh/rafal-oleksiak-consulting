@@ -1,0 +1,964 @@
+{
+ "rm1440": "GENACTIV · POLISH COLOSTRUM BRAND | GENACTIV turned its box into a daily ritual. | GENACTIV, a Polish colostrum brand, gives its customers an app: confirm the purchase, scratch one card a day, collect rewards known in advance. | GENACTIV | Today's card | Rewards | GENACTIV | Example screen, not a screenshot of the app. | THE PROBLEM | Customers stop halfway through the pack. | The daily habit fades mid-month, and the second order does not come. | This month | 15 | of 30 days | Next order | none | Example screen, not a screenshot of the app. | STEP 1 · PROOF OF PURCHASE | Purchase proof from any shop. | The customer scans the code on the box or the shop receipt. The receipt stays on the phone. | Confirm purchase | Stays on this phone | Example screen, not a screenshot of the app. | STEP 2 · CARD OF THE DAY | One card a day, after the daily dose. | The foil is in GENACTIV colours. Scratch it with a finger or a mouse. | Reveal without scratching | Today | Card not scratched yet | Example screen, not a screenshot of the app. | STEP 3 · THE MONTH | Rewards are set before day one. | Every ticked day fills the ring. The stamp lands on a day the customer knew in advance, never by chance. | This month | 30 | of 30 days | STAMP | Day 24 | stamp | Example screen, not a screenshot of the app. | See it with your brand →",
+ "rmH1440": 4015,
+ "rmnaw1440": "paths:428 pharmacy:408 privacy:428 exchange:403",
+ "rm390": "GENACTIV · POLISH COLOSTRUM BRAND | GENACTIV turned its box into a daily ritual. | GENACTIV, a Polish colostrum brand, gives its customers an app: confirm the purchase, scratch one card a day, collect rewards known in advance. | GENACTIV | Today's card | Rewards | GENACTIV | Example screen, not a screenshot of the app. | THE PROBLEM | Customers stop halfway through the pack. | The daily habit fades mid-month, and the second order does not come. | This month | 15 | of 30 days | Next order | none | Example screen, not a screenshot of the app. | STEP 1 · PROOF OF PURCHASE | Purchase proof from any shop. | The customer scans the code on the box or the shop receipt. The receipt stays on the phone. | Confirm purchase | Stays on this phone | Example screen, not a screenshot of the app. | STEP 2 · CARD OF THE DAY | One card a day, after the daily dose. | The foil is in GENACTIV colours. Scratch it with a finger or a mouse. | Reveal without scratching | Today | Card not scratched yet | Example screen, not a screenshot of the app. | STEP 3 · THE MONTH | Rewards are set before day one. | Every ticked day fills the ring. The stamp lands on a day the customer knew in advance, never by chance. | This month | 30 | of 30 days | STAMP | Day 24 | stamp | Example screen, not a screenshot of the app. | See it with your brand →",
+ "rmH390": 4184,
+ "rmnaw390": "paths:428 pharmacy:408 privacy:428 exchange:403",
+ "kb/work/genactiv": [
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "See it with your brand →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Home",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Nawyko",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "See it with your brand →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Home",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Nawyko",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "ACCEPT",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "DECLINE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "See it with your brand →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Home",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Nawyko",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "ACCEPT",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "DECLINE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "See it with your brand →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Home",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Nawyko",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "ACCEPT",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "DECLINE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "See it with your brand →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Home",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Nawyko",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "ACCEPT",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "DECLINE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "See it with your brand →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Home",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Nawyko",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "ACCEPT",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "DECLINE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "See it with your brand →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Home",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Nawyko",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "ACCEPT",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "DECLINE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "See it with your brand →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(255, 138, 145)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  }
+ ],
+ "kb/nawyko": [
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK · CONSULTANT",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "HOW IT WORKS",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "CASHBACK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "POINTS",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "YOUR COSTS",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "ASK ABOUT NAWYKO",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "ASK ABOUT NAWYKO",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "SEE IT WORK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "58",
+   "tag": "INPUT",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "30",
+   "tag": "INPUT",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "480,000",
+   "tag": "INPUT",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "Run the full calculator →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "01\nConfirm the pack\nCustomers ",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "02\nScratch one card a day\nA sc",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "03\nBuild the streak\nEach card ",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "04\nUnlock a reward they saw co",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "PURCHASE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "DAILY CARD",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "STREAK",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "REWARD",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "REWARD CALENDAR",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "PACK RHYTHM",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "YOUR BRANDING",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "1ST ORDER",
+   "tag": "BUTTON",
+   "sec": "cashback",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "2ND ORDER",
+   "tag": "BUTTON",
+   "sec": "cashback",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "3RD ORDER",
+   "tag": "BUTTON",
+   "sec": "cashback",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "SCRATCH A DAY +10",
+   "tag": "BUTTON",
+   "sec": "levels",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "SKIP A DAY",
+   "tag": "BUTTON",
+   "sec": "levels",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "100",
+   "tag": "INPUT",
+   "sec": "exchange",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "NEXT LESSON",
+   "tag": "BUTTON",
+   "sec": "paths",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none",
+   "enter": {
+    "len": 6245,
+    "pressed": null,
+    "txt": "NEXT LESSON"
+   },
+   "before": 6243
+  },
+  {
+   "t": "SCAN THE BOX",
+   "tag": "BUTTON",
+   "sec": "pharmacy",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none",
+   "enter": {
+    "len": 6236,
+    "pressed": null,
+    "txt": "SCAN THE BOX"
+   },
+   "before": 6245
+  },
+  {
+   "t": "WITHOUT CONSENT",
+   "tag": "BUTTON",
+   "sec": "privacy",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none",
+   "enter": {
+    "len": 6245,
+    "pressed": "true",
+    "txt": "WITHOUT CONSENT"
+   },
+   "before": 6236
+  },
+  {
+   "t": "WITH CONSENT",
+   "tag": "BUTTON",
+   "sec": "privacy",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none",
+   "enter": {
+    "len": 6230,
+    "pressed": "true",
+    "txt": "WITH CONSENT"
+   },
+   "before": 6245
+  },
+  {
+   "t": "",
+   "tag": "INPUT",
+   "sec": "enquiry",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "",
+   "tag": "INPUT",
+   "sec": "enquiry",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "on",
+   "tag": "INPUT",
+   "sec": "enquiry",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "on",
+   "tag": "INPUT",
+   "sec": "enquiry",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "SEND",
+   "tag": "BUTTON",
+   "sec": "enquiry",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "Home",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "Reorder gap tool",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "Gap calculator",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "rafal@oleksiakconsulting.com",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "LinkedIn",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "Privacy",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "ACCEPT",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "DECLINE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 3px rgb(0, 191, 255)",
+   "bs": "rgba(0, 191, 255, 0.2) 0px 0px"
+  },
+  {
+   "t": "Skip to content",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "RAFAŁ OLEKSIAK · CONSULTANT",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "HOW IT WORKS",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "CASHBACK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "POINTS",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "YOUR COSTS",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "ASK ABOUT NAWYKO",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "ASK ABOUT NAWYKO",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "SEE IT WORK",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "58",
+   "tag": "INPUT",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "30",
+   "tag": "INPUT",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "480,000",
+   "tag": "INPUT",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "Run the full calculator →",
+   "tag": "A",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "01\nConfirm the pack\nCustomers ",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "02\nScratch one card a day\nA sc",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "03\nBuild the streak\nEach card ",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "04\nUnlock a reward they saw co",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "PURCHASE",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "DAILY CARD",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "STREAK",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  },
+  {
+   "t": "REWARD",
+   "tag": "BUTTON",
+   "sec": "",
+   "ol": "solid 2px rgb(20, 22, 26)",
+   "bs": "none"
+  }
+ ],
+ "brand": {
+  "genactiv": false,
+  "html": true
+ }
+}

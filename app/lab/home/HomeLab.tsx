@@ -240,7 +240,7 @@ const STEPS = [
   { t: 'Confirm the pack', d: 'The customer scans the barcode on the box or the receipt.', from: 0 },
   { t: 'Scratch one card a day', d: 'After the daily dose there is one card to scratch.', from: 2 },
   { t: 'Build the streak', d: 'Every scratched card is a day in the grid.', from: 8 },
-  { t: 'Unlock a reward they saw coming', d: 'The list of rewards is on screen from day one.', from: 20 },
+  { t: 'Earn a reward they saw coming', d: 'The list of rewards is on screen from day one.', from: 20 },
 ] as const
 
 const REWARDS = [

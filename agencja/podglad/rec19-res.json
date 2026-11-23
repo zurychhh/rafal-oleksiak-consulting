@@ -1,0 +1,60 @@
+{
+ "naw390": {
+  "paths": true,
+  "pharmacy": true,
+  "privacy": true,
+  "exchange": true,
+  "text": "paths: FOR YOU LEARNING PATHS Cross-selling without ads: short lessons end with a gift. When a path is done, a matching product joins the customer’s next order. NEXT LESSON EXAMPLE Lesson 4 of 5. You choose the lessons and the gift. TOVEMI DEMO LEARNING PATH Lesson 1 of 5 ✓ done Lesson 2 of 5 ✓ done Lesson 3 of 5 ✓ done Lesson 4 of 5 now Lesson 5 of 5 next ✓ Gift at the finish A matching product from Tovemi TODAY STREAK REWARDS\n\npharmacy: FOR YOU PHARMACY PURCHASES Pharmacy buyers become visible when they scan the box. A pack bought offline starts the daily card like an online order and shows up in your reports. SCAN THE BOX EXAMPLE Purchase confirmed · pharmacy. The barcode on the box confirms the purchase. TOVEMI DEMO BOUGHT IN A PHARMACY? Scan the box. ✓ Purchase confirmed · pharmacy The daily card starts today. TODAY STREAK REWARDS\n\nprivacy: FOR YOU PRIVACY Health data never reaches your marketing. Without consent, features stay visible and locked, with one button to turn them on. WITHOUT CONSENT WITH CONSENT EXAMPLE Features locked. A tick is stored as a date, never sent to ads, analytics or push messages. TOVEMI DEMO HEALTH DATA · OFF Visible. Locked until you agree. Daily card LOCKED Streak LOCKED Pack rhythm LOCKED TURN ON AND UNLOCK TODAY STREAK REWARDS\n\nexchange: FOR YOU POINTS TO CASHBACK You set what the programme costs. Move the rate and the customer’s app shows it at once. TOVEMI · BRAND PANEL EXAMPLE Points for €1 of cashback 100 50 · richer for customers 200 · cheaper for you A month of daily cards costs you €3.00 per customer. TOVEMI DEMO EXCHANGE POINTS 300 points = €3.00 cashback 100 pts = €1 Rate set by Tovemi MOVE TO WALLET TODAY STREAK REWARDS",
+  "cls": 0.0004755969876143151,
+  "overflow": {
+   "sw": 390,
+   "W": 390,
+   "wide": []
+  },
+  "errs": []
+ },
+ "gen390": {
+  "H": 5116,
+  "shots": 9,
+  "text": "Skip to content | RAFAŁ OLEKSIAK | WORK · GENACTIV | STEP 3 · THE MONTH | Rewards are set before day one. | Every ticked day fills the ring. The stamp lands on a day the customer knew in advance, never by chance. | This month | 30 | of 30 days | STAMP | Day 24 | stamp | GENACTIV | Example screen, not a screenshot of the app. | See it with your brand → | Home | Nawyko | Privacy | Analytics cookies, so I can tell whether this page worked. Decline and nothing is set. Privacy. | ACCEPT | DECLINE",
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "cls": 0.22542750067185954,
+  "overflow": {
+   "sw": 390,
+   "W": 390,
+   "wide": []
+  },
+  "errs": []
+ },
+ "naw1440": {
+  "paths": true,
+  "pharmacy": true,
+  "privacy": true,
+  "exchange": true,
+  "text": "paths: FOR YOU LEARNING PATHS Cross-selling without ads: short lessons end with a gift. When a path is done, a matching product joins the customer’s next order. NEXT LESSON EXAMPLE Lesson 4 of 5. You choose the lessons and the gift. TOVEMI DEMO LEARNING PATH Lesson 1 of 5 ✓ done Lesson 2 of 5 ✓ done Lesson 3 of 5 ✓ done Lesson 4 of 5 now Lesson 5 of 5 next ✓ Gift at the finish A matching product from Tovemi TODAY STREAK REWARDS\n\npharmacy: FOR YOU PHARMACY PURCHASES Pharmacy buyers become visible when they scan the box. A pack bought offline starts the daily card like an online order and shows up in your reports. SCAN THE BOX EXAMPLE Purchase confirmed · pharmacy. The barcode on the box confirms the purchase. TOVEMI DEMO BOUGHT IN A PHARMACY? Scan the box. ✓ Purchase confirmed · pharmacy The daily card starts today. TODAY STREAK REWARDS\n\nprivacy: FOR YOU PRIVACY Health data never reaches your marketing. Without consent, features stay visible and locked, with one button to turn them on. WITHOUT CONSENT WITH CONSENT EXAMPLE Features locked. A tick is stored as a date, never sent to ads, analytics or push messages. TOVEMI DEMO HEALTH DATA · OFF Visible. Locked until you agree. Daily card LOCKED Streak LOCKED Pack rhythm LOCKED TURN ON AND UNLOCK TODAY STREAK REWARDS\n\nexchange: FOR YOU POINTS TO CASHBACK You set what the programme costs. Move the rate and the customer’s app shows it at once. TOVEMI · BRAND PANEL EXAMPLE Points for €1 of cashback 100 50 · richer for customers 200 · cheaper for you A month of daily cards costs you €3.00 per customer. TOVEMI DEMO EXCHANGE POINTS 300 points = €3.00 cashback 100 pts = €1 Rate set by Tovemi MOVE TO WALLET TODAY STREAK REWARDS",
+  "cls": 0.010474151895991402,
+  "overflow": {
+   "sw": 1440,
+   "W": 1440,
+   "wide": []
+  },
+  "errs": []
+ },
+ "gen1440": {
+  "H": 5455,
+  "shots": 9,
+  "text": "Skip to content | RAFAŁ OLEKSIAK | WORK · GENACTIV | STEP 3 · THE MONTH | Rewards are set before day one. | Every ticked day fills the ring. The stamp lands on a day the customer knew in advance, never by chance. | This month | 30 | of 30 days | STAMP | Day 24 | stamp | GENACTIV | Example screen, not a screenshot of the app. | See it with your brand → | Home | Nawyko | Privacy | Analytics cookies, so I can tell whether this page worked. Decline and nothing is set. Privacy. | ACCEPT | DECLINE",
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "cls": 0.068254457592539,
+  "overflow": {
+   "sw": 1440,
+   "W": 1440,
+   "wide": []
+  },
+  "errs": []
+ }
+}

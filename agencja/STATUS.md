@@ -1,12 +1,14 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 23.11.2026, 16:38–17:15 (runda 3, przebieg 6 — nowe narzędzie `/lab/reminder`, zdrapka w wersji bez ruchu na `/nawyko`, R7). Wcześniej przebieg 5 (15:38–16:10), przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 23.11.2026, 21:38–22:20 (runda 4, przebieg 1 — `/nawyko` sceny d–f i pierwsza wersja `/work/genactiv`, R8). Wcześniej: 16:38–17:15 (runda 3, przebieg 6 — nowe narzędzie `/lab/reminder`, zdrapka w wersji bez ruchu na `/nawyko`, R7). Wcześniej przebieg 5 (15:38–16:10), przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
 
 ## RUNDA 4 — „NAWYKO MA POKAZAĆ CAŁĄ APLIKACJĘ” (Rafał 23.11.2026 20:46, przez doradcę). CZYTAJ PIERWSZE, PRZED RUNDĄ 3.
 **R4 przebieg 0 (doradca, 20:50–21:05):** zrobione sceny (a) cashback, (b) punkty i poziomy, (c) wymiana punktów + panel marki z suwakiem — komponent `Loyalty` w `app/nawyko/NawykoClient.tsx` (sekcje `#cashback`, `#levels`, `#exchange`, układ `nk-still` po scenie przypiętej, przed „What it never does”; telefon dostał widoki 7–9), plus wjazd z nagłówka ≥1200 px (How it works · Cashback · Points · Your costs). Bramka: build, tsc, lint 0 błędów, qa.js 9/9 PASS, copy-voice OK, kontrast ≥4,5 w Paper i Night. Teksty: 14 nowych wierszy w `teksty-do-akceptacji.md`. **Następne:** czytelnik-kupujący na nowych tekstach (nie zrobiony — brak subagenta), na 390 suwak (c) i telefon nie mieszczą się razem w kadrze (rozważ mniejszy telefon przyklejony nad panelem), wpięcie scen (a)–(c) w przypiętą scenę lub jej nawigację `nk-acts` (dziś są osobnymi sekcjami), potem kolejka R4 od (d).
+
+**R4 przebieg 1 (21:38–22:20):** zrobione (d) ścieżki wiedzy z prezentem, (e) apteka/skan pudełka, (f) prywatność — `#paths`, `#pharmacy`, `#privacy`; poprawiona `#exchange` na 390 (telefon i suwak w jednym kadrze). Realizacja: `/work/genactiv` przebieg 1 (akty 0–4). **Następne `/nawyko`:** (g) dowód wyników z grupą kontrolną, (h) pas integracji, (i), (j) FAQ, (k) finał z przemalowaniem; postęp ścieżki (d) także z przewijania. **Następne realizacja:** przebieg 2 speca (akty 5–8), szlif hero 1440 (podpis pod telefonem daleko pod pudełkiem).
 
 **R4 — DRUGI STRUMIEŃ, RÓWNORZĘDNY (Rafał 23.11 21:00): realizacja GENACTIV na `/work/genactiv` — spec `agencja/specs/realizacja-genactiv.md`.**
 „Nasza największa wizytówka, ma rozwalić mózgi.” Każdy przebieg: dwóch budujących w osobnych worktree (strumień `/nawyko` z kolejki niżej
@@ -202,6 +204,30 @@ Słowa Rafała: „dobrze, teraz pracujemy nad tą częścią”. W tej kolejno�
 Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + podgląd we własnej marce klienta + deck (3 decyzje).
 
 ## Dla Rafała
+
+**Runda 4, przebieg 1 (23.11, 21:38–22:20) — `/nawyko` pokazuje trzy kolejne funkcje aplikacji, a realizacja GENACTIV ma pierwszą wersję z pudełkiem, zdrapką i pieczątką.**
+Do obejrzenia: https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/work/genactiv (nowe, noindex, poza sitemap) i `/nawyko` od sceny „Exchange” w dół (stan wdrożenia — ostatnia wiadomość przebiegu).
+1. **`/work/genactiv`, akty 0–4, nocny motyw w kolorach aplikacji, krój Montserrat (lokalnie, licencja OFL):** z czerwonego pudełka
+   (CSS 3D, nazwa marki tekstem, bez logo i zdjęć) wysuwa się telefon; H1 „GENACTIV turns every box into a daily reason to come back.”;
+   pierścień 30 dni gaśnie w połowie („The risk: the habit fades halfway through the pack.”); skan pudełka albo paragonu („The receipt
+   photo stays on the phone.”); zdrapka w folii marki do zdrapania palcem/myszą (albo sama po 1,5 s; przycisk dla klawiatury);
+   pierścień wypełnia się z przewijaniem i 24. dnia spada pieczątka. Wszystkie ekrany podpisane „Recreated screen for illustration.”
+   Bez stawek, cen, liczb sprzedaży, treści lekcji, zrzutów prawdziwej aplikacji i twierdzeń zdrowotnych. Na końcu „See it with your brand →”.
+2. **`/nawyko`, trzy nowe sceny (marka Tovemi, zmyślona):** „A second product, earned in five short lessons.” (przycisk przesuwa
+   ścieżkę, na mecie medal i kod prezentu na następne zamówienie); „Pharmacy buyers show up in your data after one scan.” (telefon
+   skanuje kod pudełka); „Health data never reaches your marketing.” (bez zgody karta i seria są widoczne, ale zablokowane; przycisk
+   „Agree and turn on” w telefonie działa). Na telefonie scena „Exchange” mieści suwak panelu marki i telefon w jednym kadrze.
+3. **Dlaczego biznesowo:** sceny d–f odpowiadają na trzy pytania kupującego, których strona nie zadawała: dodatkowa sprzedaż bez reklamy,
+   klienci z apteki, dział prawny. Realizacja GENACTIV to jedyny dowód „to działa na prawdziwej marce” — szkielet stoi, akty 5–10 w kolejnych przebiegach.
+4. **Dowód:** zrzuty `agencja/podglad/genactiv-p1-{0-open,0b-out,1-problem,2-proof,3-scratch,4-month,5-end}-{390,1440}.png`,
+   `nawyko-r4-{paths,pharmacy,privacy,exchange}-{390,1440}.png` (+ `-click-`, `-bar-390`), recenzja niezależna
+   `agencja/recenzje/19-r4-sceny-d-f-i-genactiv-p1.md` (8 poprawek — wszystkie zrobione; m.in. skoki układu na `/work/genactiv` 0,225 → 0,0003 (390)
+   i 0,068 → 0,0001 (1440), zdrapka osiągalna Tabem), czytelnik-kupujący `20-teksty-czytelnik-r4.md` (ok. 20 tekstów przepisanych przed commitem).
+   Bramki po ostatniej zmianie: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) · `copy-voice` OK (nowa wersja, R8) ·
+   `qa.js` PASS na `/`, `/stop`, `/tool`, `/nawyko`, `/work/genactiv`, `/lab/home` · `content-rules` PASS · `ship-compare` PASS ·
+   `focus-obscured` OK · `tool-rules` OK · `noindex, nofollow` na `/work/genactiv`, 0 wpisów `/work` w sitemap.
+5. **Czego się nauczyliśmy:** automat tekstów był ślepy na teksty trzymane w tablicach (cała realizacja GENACTIV przeszła „OK” bez czytania).
+   Teraz czyta też takie teksty i od razu znalazł dwa stare „unlock” na `/nawyko` i `/lab/home` — poprawione (R8). Z sieci: WCAG 2.2 2.5.7.
 
 **Runda 3, przebieg 6 (23.11, 16:38–17:15) — trzecie narzędzie: „którego dnia wysłać przypomnienie o kolejnym opakowaniu”, i zdrapka widoczna także dla osób z wyłączonymi animacjami.**
 Do obejrzenia: `/lab/reminder` (nowe, noindex) — wpisz swoje trzy liczby i przesuń suwak.
@@ -434,6 +460,18 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 
 ## Czeka na Rafała
 
+**Nowe z rundy 4, przebieg 1:**
+
+R4-A. **Jak mówić o stanie aplikacji GENACTIV na `/work/genactiv`?** Czytelnik-kupujący czytał pierwszą wersję („GENACTIV turned its box…”)
+   jako aplikację już w sklepach. Przepisaliśmy na opis produktu bez czasu przeszłego i bez słowa „pilot” (status to Twoja decyzja).
+   Rekomendacja: po zgodzie GENACTIV dopisać uczciwy stan w jednej linii (np. „Private pilot since <miesiąc>”) i — jeśli się zgodzą — jedno zdanie
+   osoby z GENACTIV z imieniem i rolą; to najmocniejszy możliwy dowód bez liczb. Bez decyzji trasa zostaje w podglądzie (i tak noindex).
+R4-B. **Ścieżki wiedzy (scena d): prezent jako kod.** Napisaliśmy „a gift code adds a matching product to the next order”, bo nagrody w aplikacji
+   to jednorazowe kody. Potwierdź, że tak ma działać prezent na mecie ścieżki (Twoja kolejka mówiła „dołączony do następnego zamówienia”).
+R4-C. **„Turn on and unlock” → „Agree and turn on”.** Twoje brzmienie z kolejki łamało zasadę 4 rubryki (słowo „unlock”). Rekomendacja: zostawić nowe.
+R4-D. **JSON-LD `/nawyko` wymienia Genactiv w historii konsultingu** (opis Organization: „Fifteen years at Allegro, mBank, Booksy and Genactiv”).
+   To historia współpracy, nie część o aplikacji — rekomendacja: zostawić; zmienić tylko, jeśli zasada „bez prawdziwych marek” ma obejmować też kod strony.
+
 **Decyzje doradcy 23.11 13:50 (Rafał: „bądź samodzielny, angażuj mnie tylko tam, gdzie potrzebna jest moja decyzja”):**
 I → (a) scena zostaje: Rafał ocenił górną połowę `/lab/home` jako dobrą; nie wycinamy tego, co zatwierdził.
 J → (a) mini-kalkulator w hero `/nawyko` i `/lab/home`: odwiedzający wpisuje jedną liczbę, kwota liczona tym samym modelem co `/calculator`; zero liczb bez źródła. Buduj w następnym przebiegu.
@@ -583,6 +621,18 @@ R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R8 (reguła, runda 4 przebieg 1): każda bramka musi udowodnić, że łapie podłożony błąd na tym kształcie kodu, na który ją puszczamy.**
+  `copy-voice` czytał tylko tekst wprost w JSX; teksty realizacji GENACTIV siedzą w tablicy `COPY`, więc „OK” nic nie znaczyło (drugi raz po R6
+  ślepa miara wyglądała na dowód). Teraz automat czyta też zdania w literałach, ma samotest z podłożonym „unlock” i „We built…”, a pierwsze
+  uruchomienie znalazło 2 stare „unlock” na `/nawyko` i `/lab/home`. Przy nowej trasie: najpierw sprawdź, czy bramka ją w ogóle widzi.
+- Tekst o funkcji produktu sprawdzaj z regułami aplikacji, nie tylko z rubryką: czytelnik złapał, że kod z pudełka nie dowodzi miejsca zakupu
+  („Purchase confirmed · pharmacy” → „Pack registered · bought offline”), a nagrody to kody, nie produkt dodany do zamówienia.
+- Dwóch budujących w worktree + recenzent i czytelnik w jednym kroku, potem `SendMessage` z listą poprawek do tych samych budujących
+  (mają kontekst): cały cykl ~25 min. Konflikty tylko w `teksty-do-akceptacji.md` — rozwiązywane skryptem (obie sekcje dopisywane).
+- React ponownie używa tego samego `<div>` przy przejściu ze statycznej wersji do sceny i to liczy się jako przesunięcie układu — klucze
+  `key="still"` / `key="track"` (CLS 0,225 → 0,0003 na `/work/genactiv`).
+- Chromium w tej chmurze: `/opt/pw-browsers/chromium-1243/chrome-linux64/chrome`; skrypty Playwright puszczać spoza repo (w repo `require('playwright')` szuka innej wersji).
 
 - **R7 (reguła, przebieg 6): każda liczba-dzień w narzędziu mówi, od czego jest liczona** („day 25 of the pack”, „day 28 after the
   order”). Budujący i recenzent wyglądu dali 8/8 PASS; dopiero czytelnik-kupujący zapytał „dzień od czego?” — bez tego wyniku nie

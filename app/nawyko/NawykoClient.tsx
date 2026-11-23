@@ -21,7 +21,7 @@ const STEPS = [
     d: 'Each card marks a day; the next reward stays in view.',
   },
   {
-    t: 'Unlock a reward they saw coming',
+    t: 'Earn a reward they saw coming',
     d: 'Twenty-four of thirty days earns the stamp and a next-pack code.',
   },
 ] as const
@@ -700,7 +700,7 @@ function RewardsPanel({ day, onDay, id }: { day: number; onDay: (d: number) => v
       <h2 className="nk-h2" id={id}>
         Every reward is listed from day one.
       </h2>
-      <p className="nk-one">Drag the day to watch each reward unlock.</p>
+      <p className="nk-one">Drag the day to see each reward arrive.</p>
       <div className="nk-axis">
         <div className="nk-flags" aria-hidden="true">
           <span style={{ ['--d' as string]: 7 }} className={day >= 7 ? 'is-got' : ''}>
