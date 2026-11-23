@@ -9,6 +9,6 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 3. ~~Copywriting sprzedażowy — front-loading (NN/g „Headings Are Pick-Up Lines”, 2015)~~ (zrobione 23.11 przebieg 6: zasada 8 w rubryce tekstów); zostaje: przegląd nagłówków scen `/nawyko` pod zasadę 8
 4. Widoczność w odpowiedziach AI — ~~FAQ: wyniki rozszerzone wycofane, liczy się widoczny tekst (23.11 R4 p2)~~; zostaje: schema `SoftwareApplication`/`Product` dla Nawyko (znacznik tylko zgodny słowo w słowo z widocznym tekstem)
 5. ~~Dostępność — WCAG 2.2: 2.4.11 Focus Not Obscured~~ (zrobione 23.11 przebieg 4) i ~~2.5.7 Dragging Movements~~ (zrobione 23.11 R4 przebieg 1: alternatywa jednym wskaźnikiem)
-6. Wydajność — INP dla scen sterowanych przewijaniem (long tasks w `scroll` + rAF)
+6. Wydajność — ~~CLS: próg 0,1, okna sesji, wejście z kotwicą (web.dev, 24.11 R4 p3)~~; zostaje: INP dla scen sterowanych przewijaniem (long tasks w `scroll` + rAF)
 7. Strony produktowe — jak Apple dzieli długie sceny na rozdziały i kiedy pokazuje CTA w trakcie (analiza 2–3 stron)
 8. Scroll-driven animations w CSS — wsparcie przeglądarek na dziś (MDN, caniuse) i czy przenieść część sceny z JS do CSS

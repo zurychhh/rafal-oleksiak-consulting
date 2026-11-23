@@ -234,3 +234,9 @@ Zastąpione: „Enquiry” (etykieta), „Would this fit your product?”, „Su
 | akt 10 ekran (rysunek, aria-hidden) | Your brand · Today's card · Rewards · Scratch today's card | nowy |
 | formularz (tytuł `Enquiry`) | Ask about an app for your brand | nowy |
 | link pod formularzem | See the full product page → | nowy |
+
+## R4 przebieg 3 — automat R10 (status w tekście), 24.11.2026
+| Miejsce | Było | Jest | Status |
+|---|---|---|---|
+| /nawyko FAQ 3 | …the most a customer can earn is known before launch. … | …is known before the programme starts. … | zmieniony (R10) |
+| /work/genactiv akt 5 zdanie | …The brand sets every step before launch. | …The brand sets every step before the programme starts. | zmieniony (R10) |

@@ -1601,7 +1601,7 @@ const FAQ = [
   },
   {
     q: 'What does a reward cost, and who sets it?',
-    a: 'The brand sets every reward and threshold, so the most a customer can earn is known before launch. Rewards are fixed and shown in advance, never random.',
+    a: 'The brand sets every reward and threshold, so the most a customer can earn is known before the programme starts. Rewards are fixed and shown in advance, never random.',
   },
   {
     q: 'How long does setup take?',

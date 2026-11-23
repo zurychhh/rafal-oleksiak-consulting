@@ -69,3 +69,5 @@ i `performance.now()` po hydratacji (skrypt `/tmp/claude-0/nk/dbg.py`), dla (b) 
 przed/po hydratacji; dla (a) zarezerwować wysokość `.hg-cap` w `hero-gap.css` (osobny spec, inny katalog).
 
 Zrzuty: `agencja/podglad/nawyko-r4-final-{390,1440}.png`, `-color.png` (Ocean blue), `-night.png` (Night + Amber).
+
+**Próg odniesienia (nauka 24.11, web.dev „Cumulative Layout Shift (CLS)”, https://web.dev/cls/):** Google uznaje CLS ≤ 0,1 (75. percentyl) za dobry, liczy przesunięcia w oknach sesji (do 5 s, przerwa 1 s) i pomija te do 500 ms po działaniu użytkownika. Nasz surowy pomiar (suma wszystkiego) jest ostrzejszy i zostaje progiem 0,05. Po tym przebiegu ponad 0,1 jest tylko `#enquiry` na 390 (0,12–0,15) — to pierwszy cel następnego przebiegu; pomiar `goto('/trasa#kotwica')` jest stałą częścią bramki `/nawyko` i `/work/genactiv`.

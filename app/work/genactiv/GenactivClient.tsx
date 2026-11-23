@@ -54,7 +54,7 @@ const COPY: Copy[] = [
   {
     kicker: 'Step 4 · Cashback',
     title: 'Cashback grows with every repeat order.',
-    sub: 'Each repeat order raises cashback by one fixed step. The brand sets every step before launch.',
+    sub: 'Each repeat order raises cashback by one fixed step. The brand sets every step before the programme starts.',
     cap: NUM,
   },
   {
