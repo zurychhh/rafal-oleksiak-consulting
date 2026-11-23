@@ -1457,7 +1457,7 @@ function Evidence({ brand }: { brand: string }) {
               ))}
             </div>
             <label className="nk-rate" htmlFor="nk-held">
-              <span>Customers held out as control</span>
+              <span>Customers held out as control, out of 24 in this example</span>
               <output htmlFor="nk-held">
                 {held} of {CROWD}
               </output>
@@ -1473,7 +1473,7 @@ function Evidence({ brand }: { brand: string }) {
               aria-valuetext={`${held} of ${CROWD} customers held out without the app`}
               onChange={(e) => setHeld(Number(e.currentTarget.value))}
             />
-            <svg className="nk-plot" viewBox="0 0 360 196" role="img" aria-labelledby="nk-lift-t">
+            <svg className="nk-plot" viewBox="0 0 360 206" role="img" aria-labelledby="nk-lift-t">
               <title id="nk-lift-t">
                 Example chart: customers still reordering over six months, app group above control group.
               </title>
@@ -1484,9 +1484,12 @@ function Evidence({ brand }: { brand: string }) {
               <path d={curve(LIFT_APP)} className="nk-cv nk-cv-a" />
               {LIFT_APP.map((_, i) => (
                 <text key={i} x={LX(i)} y="182" className="nk-tick">
-                  {i === 0 ? 'Start' : `M${i}`}
+                  {i === 0 ? 'Start' : i}
                 </text>
               ))}
+              <text x="190" y="200" className="nk-tick">
+                Month
+              </text>
               <text x="40" y="8" className="nk-tick nk-tick-l">
                 Still reordering
               </text>
@@ -1498,7 +1501,7 @@ function Evidence({ brand }: { brand: string }) {
             <p className="nk-cost" aria-live="polite">
               {apart ? (
                 <>
-                  <b>Ranges apart by month six:</b> the gap is the lift.
+                  <b>By month six the two bands no longer overlap.</b> That gap is what the app adds.
                 </>
               ) : (
                 <>
@@ -1512,12 +1515,12 @@ function Evidence({ brand }: { brand: string }) {
         <div className="nk-phonecol">
           <figure className="nk-desk2 nk-runout">
             <figcaption className="nk-caps nk-deskh">
-              <span>When the pack really runs out</span>
+              <span>Real pack length, from daily ticks</span>
               <b className="nk-ex">Example</b>
             </figcaption>
             <svg className="nk-plot" viewBox="0 0 360 210" role="img" aria-labelledby="nk-run-t">
               <title id="nk-run-t">
-                {`Example chart: each dot is one phone's last tick before the next pack. The label says ${PACK_DAYS} days; most packs last until day ${RUN_PEAK}.`}
+                {`Example chart: each dot is one customer's last daily tick before the next pack. The label says ${PACK_DAYS} days; most packs last to day ${RUN_PEAK}.`}
               </title>
               <line x1="16" y1="178" x2="344" y2="178" className="nk-axis" />
               <line x1={RX(PACK_DAYS)} y1="14" x2={RX(PACK_DAYS)} y2="178" className="nk-label-line" />
@@ -1536,7 +1539,8 @@ function Evidence({ brand }: { brand: string }) {
               ))}
             </svg>
             <p className="nk-cost">
-              Each dot is one phone&rsquo;s last tick before the next pack. Most packs here last until <b>day {RUN_PEAK}</b>, so the reminder goes out then.
+              Each dot is one customer&rsquo;s last daily tick before the next pack. In this example most packs last to <b>day {RUN_PEAK}</b>, so the
+              reorder reminder is set for day {RUN_PEAK}, from totals across customers.
             </p>
           </figure>
         </div>
@@ -1549,9 +1553,12 @@ function Evidence({ brand }: { brand: string }) {
             <span className="nk-labrest">Integrations</span>
           </div>
           <h2 className="nk-h2" id="nk-intg">
-            Works with the shop, subscriptions and email already running.
+            Runs on Shopify; your other tools connect per brand.
           </h2>
-          <p className="nk-one">The app connects to each category below and ships in both app stores under your name.</p>
+          <p className="nk-one">
+            Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both
+            stores under your brand.
+          </p>
         </div>
         <ul className="nk-band5">
           {LINKS.map((l) => (
@@ -1562,7 +1569,12 @@ function Evidence({ brand }: { brand: string }) {
             </li>
           ))}
         </ul>
-        <p className="nk-fine nk-int-fine">Which app in each category connects to your store is mapped in the first call.</p>
+        <p className="nk-fine nk-int-fine">
+          Which app in each category connects to your store is mapped in the first call.{' '}
+          <a className="nk-link" href="#enquiry">
+            Ask which apps connect to your store →
+          </a>
+        </p>
       </section>
     </div>
   )
@@ -1575,7 +1587,7 @@ function RX(day: number) {
 const FAQ = [
   {
     q: 'Will customers really tick every day?',
-    a: 'Not every customer, and not every day. A card takes seconds, a missed day never costs a level, and the brand sees the real rhythm of use either way.',
+    a: 'Not every customer, and not every day. A card takes seconds, a missed day never costs a level, and the brand sees how often customers tick as totals, never one person’s ticks.',
   },
   {
     q: 'What about GDPR and health data?',
@@ -1583,19 +1595,19 @@ const FAQ = [
   },
   {
     q: 'What does a reward cost, and who sets it?',
-    a: 'The brand sets every reward and threshold, so the cost per customer is known before launch. Rewards are fixed and shown in advance, never random.',
+    a: 'The brand sets every reward and threshold, so the most a customer can earn is known before launch. Rewards are fixed and shown in advance, never random.',
   },
   {
     q: 'How long does setup take?',
-    a: 'It depends on your store setup and which tools need to connect. The plan and timing are mapped in the first call.',
+    a: 'Setup time depends on your store and the tools to connect. Both are mapped in the first call.',
   },
   {
     q: 'Does it work for pharmacy purchases?',
-    a: 'Yes. The customer scans the code on the box, which registers the pack; the code alone does not show where it was bought, a receipt does.',
+    a: 'Yes. A scanned pharmacy receipt confirms the purchase; the code on the box registers the pack, not where it was bought.',
   },
   {
     q: 'What if a customer does not give consent?',
-    a: 'Every feature stays visible. The daily card and streak show as locked, with one button to turn them on, and rewards never depend on agreeing to push messages or email.',
+    a: 'Every feature stays visible. The daily card and streak show as locked, with one button to turn them on. No reward depends on push or email consent.',
   },
 ] as const
 
@@ -1609,7 +1621,7 @@ function Faq() {
       <h2 className="nk-h2" id="nk-faq-h">
         Six answers a brand needs before the first call.
       </h2>
-      <p className="nk-one">Rewards, data, pharmacy purchases and setup, each in two sentences.</p>
+      <p className="nk-one">Daily use, health data, reward cost, setup, pharmacy purchases, consent.</p>
       <div className="nk-qs">
         {FAQ.map((f) => (
           <details key={f.q} className="nk-q">

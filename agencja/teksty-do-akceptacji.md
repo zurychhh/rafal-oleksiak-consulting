@@ -149,27 +149,27 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /nawyko i /lab/home, kroki (nagroda) | Unlock a reward they saw coming | Earn a reward they saw coming | zmieniony (rubryka, zasada 4) |
 | /nawyko, oś nagród | Drag the day to watch each reward unlock. | Drag the day to see each reward arrive. | zmieniony (rubryka, zasada 4) |
 
-## R4 przebieg 2 — /nawyko g, h, j (23.11.2026; wszystkie: nowy, czytelnik-kupujący jeszcze nie przeszedł)
+## R4 przebieg 2 — /nawyko g, h, j (23.11.2026; nowy, poprawki po czytelniku — recenzja 22)
 | Trasa | Miejsce | Tekst | Status |
 |---|---|---|---|
 | /nawyko | nagłówek strony (≥1200 px) | Proof · FAQ (dwa nowe linki obok „Your costs”) | nowy |
 | /nawyko | R4 scena (g) etykieta | For you · Proof of results | nowy |
 | /nawyko | R4 scena (g) H2 | Reorder lift, measured against customers who never get the app. | nowy |
 | /nawyko | R4 scena (g) zdanie | A control group goes without the app, so the gap between the two curves is the app's effect. | nowy |
-| /nawyko | R4 scena (g) panel wyników | {marka} · results panel · Example · Customers held out as control · {n} of 24 (suwak 2–12) · Still reordering · Start, M1–M6 · With the app / Control group | nowy |
-| /nawyko | R4 scena (g) wynik suwaka | Ranges apart by month six: the gap is the lift. / Ranges overlap: too few customers held out to tell. | nowy |
+| /nawyko | R4 scena (g) panel wyników | {marka} · results panel · Example · Customers held out as control, out of 24 in this example · {n} of 24 (suwak 2–12) · Still reordering · Start, 1–6, Month · With the app / Control group | zmieniony (recenzja 22) |
+| /nawyko | R4 scena (g) wynik suwaka | By month six the two bands no longer overlap. That gap is what the app adds. / Ranges overlap: too few customers held out to tell. | zmieniony (recenzja 22) |
 | /nawyko | R4 scena (g) podpis | A bigger control group gives a clearer answer; fewer customers get the app meanwhile. You choose the split. | nowy |
-| /nawyko | R4 scena (g) drugi rysunek | When the pack really runs out · Example · Label: 30 days · Each dot is one phone's last tick before the next pack. Most packs here last until day 32, so the reminder goes out then. | nowy |
+| /nawyko | R4 scena (g) drugi rysunek | Real pack length, from daily ticks · Example · Label: 30 days · Each dot is one customer's last daily tick before the next pack. In this example most packs last to day 32, so the reorder reminder is set for day 32, from totals across customers. | zmieniony (recenzja 22) |
 | /nawyko | R4 scena (h) etykieta | For you · Integrations | nowy |
-| /nawyko | R4 scena (h) H2 | Works with the shop, subscriptions and email already running. | nowy |
-| /nawyko | R4 scena (h) zdanie | The app connects to each category below and ships in both app stores under your name. | nowy |
+| /nawyko | R4 scena (h) H2 | Runs on Shopify; your other tools connect per brand. | zmieniony (recenzja 22) |
+| /nawyko | R4 scena (h) zdanie | Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both stores under your brand. | zmieniony (recenzja 22) |
 | /nawyko | R4 scena (h) pas | Store · Shopify · Orders confirm a purchase; rewards arrive as single-use codes. / Subscriptions · Subscription apps · Cashback can come off the next delivery. / Loyalty · Loyalty apps · Points can sit beside a programme already running. / Email and CRM · Your email tool · Reorder reminders go out without any health data. / App stores · App Store · Google Play · The app is listed under your brand name. | nowy |
-| /nawyko | R4 scena (h) podpis | Which app in each category connects to your store is mapped in the first call. | nowy |
+| /nawyko | R4 scena (h) podpis | Which app in each category connects to your store is mapped in the first call. · link: Ask which apps connect to your store → (#enquiry) | zmieniony (link nowy) |
 | /nawyko | R4 FAQ (j) etykieta / H2 | For you · Questions / Six answers a brand needs before the first call. | nowy |
-| /nawyko | R4 FAQ (j) zdanie | Rewards, data, pharmacy purchases and setup, each in two sentences. | nowy |
-| /nawyko | FAQ 1 | Will customers really tick every day? — Not every customer, and not every day. A card takes seconds, a missed day never costs a level, and the brand sees the real rhythm of use either way. | nowy |
+| /nawyko | R4 FAQ (j) zdanie | Daily use, health data, reward cost, setup, pharmacy purchases, consent. | zmieniony (recenzja 22) |
+| /nawyko | FAQ 1 | Will customers really tick every day? — Not every customer, and not every day. A card takes seconds, a missed day never costs a level, and the brand sees how often customers tick as totals, never one person's ticks. | zmieniony (recenzja 22) |
 | /nawyko | FAQ 2 | What about GDPR and health data? — A tick is stored only as a ticked date, and only with the customer's consent. Nothing about symptoms or goals is collected, and ticks never reach ads, analytics, push messages or email. | nowy |
-| /nawyko | FAQ 3 | What does a reward cost, and who sets it? — The brand sets every reward and threshold, so the cost per customer is known before launch. Rewards are fixed and shown in advance, never random. | nowy |
-| /nawyko | FAQ 4 | How long does setup take? — It depends on your store setup and which tools need to connect. The plan and timing are mapped in the first call. | nowy (bez terminu i ceny — decyzja Rafała) |
-| /nawyko | FAQ 5 | Does it work for pharmacy purchases? — Yes. The customer scans the code on the box, which registers the pack; the code alone does not show where it was bought, a receipt does. | nowy |
-| /nawyko | FAQ 6 | What if a customer does not give consent? — Every feature stays visible. The daily card and streak show as locked, with one button to turn them on, and rewards never depend on agreeing to push messages or email. | nowy (do potwierdzenia: czy nagrody za zakup działają też bez zgody na dane o zdrowiu) |
+| /nawyko | FAQ 3 | What does a reward cost, and who sets it? — The brand sets every reward and threshold, so the most a customer can earn is known before launch. Rewards are fixed and shown in advance, never random. | zmieniony (recenzja 22) |
+| /nawyko | FAQ 4 | How long does setup take? — Setup time depends on your store and the tools to connect. Both are mapped in the first call. | zmieniony (recenzja 22; bez terminu i ceny — decyzja Rafała) |
+| /nawyko | FAQ 5 | Does it work for pharmacy purchases? — Yes. A scanned pharmacy receipt confirms the purchase; the code on the box registers the pack, not where it was bought. | zmieniony (recenzja 22) |
+| /nawyko | FAQ 6 | What if a customer does not give consent? — Every feature stays visible. The daily card and streak show as locked, with one button to turn them on. No reward depends on push or email consent. | zmieniony (do potwierdzenia przez Rafała: czy nagrody za zakup działają bez zgody na dane o zdrowiu — dziś strona tego nie twierdzi) |

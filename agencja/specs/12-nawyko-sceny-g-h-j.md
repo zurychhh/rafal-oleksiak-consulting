@@ -25,3 +25,14 @@ Kolejność: … `#privacy` → `#proof` → `#integrations` → „What it neve
 6. Zrzuty `agencja/podglad/nawyko-r4-{proof,integrations,faq}-{390,1440}.png` (+ `-night`, `proof-*-held2` po przesunięciu suwaka,
    `proof-390-runout`).
 7. Teksty w `agencja/teksty-do-akceptacji.md` (sekcja „R4 przebieg 2”, status „nowy”).
+
+## Pomiar CLS przy wejściu na kotwice (23.11, poprawki po recenzji 21)
+- Kliknięcie linku w nawigacji (1440: Proof, FAQ): **CLS 0,000**.
+- Wejście adresem z kotwicą (`/nawyko#proof|#integrations|#faq`), przed i po tym przebiegu bez zmian: 390 → 1,08 / 0,79 / 1,04;
+  1440 → 0,33 / 1,09 / 0,37. Te same skoki są na kotwicach sprzed tego przebiegu: `#privacy` 0,46 (390) i 0,28 (1440), `#cashback` 1,0 (390).
+- **Przyczyna (sprzed przebiegu):** `Scene` renderuje na serwerze układ statyczny (`mode='still'`, akty jako sekcje `nk-still`)
+  i po hydratacji przełącza się na scenę przypiętą (`setMode('scroll')`), co zmienia wysokość wszystkiego nad kotwicą; przeglądarka
+  przewinęła już do kotwicy, więc sekcja ucieka z kadru. Źródła z PerformanceObserver: `#more`, `#evidence`, `#privacy`, `.nk-never`.
+- **Nie ruszone:** poprawka wymaga stałej rezerwy wysokości sceny przypiętej w HTML z serwera albo zmiany momentu przełączenia trybu —
+  dotyka sceny głównej i wszystkich jej trybów (bez JS, reduced-motion, niskie okno). Osobne zadanie z własną bramką.
+- Kontrast przypisu `#integrations` (`--dim` na `--tint`, zmierzone obliczone kolory): Paper 5,66:1, Night 6,71:1; link 15,06 / 14,63.
