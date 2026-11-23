@@ -3,6 +3,31 @@
 Ostatni przebieg: 22.11.2026, 15:26–15:45 (przebieg 5, jednorazowy na Twoje polecenie: 1a–1d). Przed nim przebieg 4 (14:55–15:30). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
+## RUNDA 3 — START (Rafał 23.11.2026 12:43): „kolejna tura poprawek strony — każdej z 3. Udowodnij, że się uczysz”. CZYTAJ PIERWSZE.
+Zakres: kolejka z 22.11 18:20 niżej (punkty 1–5) — startuje TERAZ, w jej kolejności (najpierw recenzja dyrektora kreatywnego).
+Do tego doradca przenosi lekcje z całej agencji (aplikacja, kokpit, wczorajsze uwagi Rafała). Każda ma być zastosowana i SPRAWDZONA:
+
+1. **Test 10 sekund na każdym ekranie** (lekcja z aplikacji 22.11: Rafał znalazł 14 braków, których recenzenci nie złapali, bo
+   oceniali kawałki, a nie całą drogę). Niezależny recenzent przechodzi każdą z 3 stron od zera jak właściciel marki FMCG, na
+   telefonie 390×844 i desktopie 1440, w realnym tempie przewijania; przy każdej scenie: czy w 10 s wiem, co to jest, co z tego ma
+   moja marka i co kliknąć. Każdy „nie” = poprawka przed commitem.
+2. **Nagłówek = wniosek, nie etykieta** (lekcja z kokpitu 23.11, 5 pętli przeglądu): każdy nagłówek sceny/sekcji mówi korzyść
+   marki („so what”). Tnij co najmniej 30% słów w treści każdej strony bez utraty faktów; zmierz liczbę słów przed i po.
+3. **Najpierw odpowiedź, potem założenia** (piramida): kalkulator pokazuje wynik u góry, dużą liczbą, a założenia pod nim.
+4. **Każda akcja kończy się czymś odczuwalnym i następnym krokiem** (lekcja z aplikacji): zdrapka na `/nawyko` ma moment sukcesu
+   i jasne „co dalej” dla marki; żadna scena nie kończy się pustką; na końcu każdej strony jedno wyraźne CTA.
+5. **Kontrast w obu motywach i na każdym tle** (lekcja z kokpitu 23.11: czarna chmurka na czarnym tle). Sprawdź jasny i ciemny,
+   każdy tekst ≥ 4,5:1, liczby z narzędzia, nie na oko.
+6. **Bramka tekstów** (`agencja/rubryka-tekstow.md`, od 22.11): automat, czytelnik-kupujący, wpis do `teksty-do-akceptacji.md`.
+   Bohaterem jest marka klienta, nigdy autor strony; zero „Your name on it, not mine”-podobnych zdań.
+7. **Link do podglądu podany i SPRAWDZONY** (lekcja doradcy 23.11: Rafał chce bezpośrednich linków, a wczorajszego linku nie dało
+   się zweryfikować): adres podglądu Vercel z `gh api deployments` + `curl -sI` z kodem 200 (albo 401 = ochrona Vercel; wtedy napisz to).
+8. **Jeden push na przebieg** (Twoja lekcja: limit buildów Vercel).
+
+**Dowód nauki — wymagany w „Dla Rafała” po tej rundzie:** sekcja „Czego się nauczyliśmy i co zastosowaliśmy”: każda z lekcji 1–8
+→ co konkretnie zmieniła na stronie (plik/scena) → jak sprawdzone (liczba, zrzut, wynik testu). Plus liczba słów przed/po na każdej
+stronie i lista znalezisk testu 10 sekund (ile było, ile naprawionych). Bez tej sekcji runda nie jest skończona.
+
 ## PRIORYTET od Rafała (22.11.2026 09:07, po obejrzeniu strony lokalnie; przekazuje doradca) — przeczytaj przed kolejką
 
 **Słowa Rafała:** `/nawyko` „jest dobrze, ale tylko do początku części *Known in advance. Never random.* Od tej części jest
@@ -111,7 +136,7 @@ Nagłówek sceny white label „Your name on it, not mine.” Rafał ocenił jak
 jest marka klienta i jej klient, nigdy autor strony — żadnych „mine / my / I” w nagłówkach scen produktu. Przejrzyj pod tym
 kątem całe `/nawyko` i `/calculator` w następnym przebiegu i uruchom bramki (ta zmiana poszła bez builda).
 
-## KOLEJKA od Rafała (22.11.2026 18:20, po przeklikaniu podglądu) — NAJNOWSZA, czytaj pierwszą. Nie startować bez słowa Rafała (mało limitu).
+## KOLEJKA od Rafała (22.11.2026 18:20, po przeklikaniu podglądu) — RUSZA 23.11 12:43 jako runda 3 (sekcja na górze).
 
 Słowa Rafała: „dobrze, teraz pracujemy nad tą częścią”. W tej kolejności:
 1. **`/nawyko` — przewijanie za szybkie.** „Scrolle idą za szybko, nie widzę efektów, jak scrolluję w normalnym tempie. Zwolnić.”
