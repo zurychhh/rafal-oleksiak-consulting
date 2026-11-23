@@ -293,7 +293,7 @@ const BAR_RECTS = BARS.reduce<{ x: number; out: [number, number][] }>(
   },
   { x: 4, out: [] },
 ).out
-const LOCKED = ['Daily card', 'Streak', 'Pack rhythm'] as const
+const LOCKED = ['Daily card', 'Streak'] as const
 
 function Phone({
   step,
@@ -596,7 +596,7 @@ function Phone({
               <span>✓</span>
             </div>
             <div>
-              <b>{lesson >= LESSONS ? 'Gift added to your next order' : 'Gift at the finish'}</b>
+              <b>{lesson >= LESSONS ? 'Gift code ready for your next order' : 'Gift at the finish'}</b>
               <small>A matching product from {brand}</small>
             </div>
           </div>
@@ -618,7 +618,7 @@ function Phone({
           <div className={'nk-ok' + (bought ? ' is-on' : '')}>
             <div className="nk-okrow">
               <span className="nk-tick">✓</span>
-              <span>Purchase confirmed · pharmacy</span>
+              <span>Pack registered · bought offline</span>
             </div>
             <div className="nk-ps">The daily card starts today.</div>
           </div>
@@ -627,7 +627,7 @@ function Phone({
 
         {has(12) ? (
         <div className={on(12)}>
-          <div className="nk-pk">Health data · {consent ? 'on' : 'off'}</div>
+          <div className="nk-pk">Health data consent · {consent ? 'on' : 'off'}</div>
           <div className="nk-pt nk-pt3">{consent ? 'Everything is on.' : 'Visible. Locked until you agree.'}</div>
           <ul className="nk-rw nk-lock">
             {LOCKED.map((f) => (
@@ -641,11 +641,11 @@ function Phone({
             <div className="nk-ps">A tick records the date only.</div>
           ) : onUnlock ? (
             <button type="button" className="nk-unlock" onClick={onUnlock}>
-              Turn on and unlock
+              Agree and turn on
             </button>
           ) : (
             <div className="nk-use nk-use1">
-              <span>Turn on and unlock</span>
+              <span>Agree and turn on</span>
             </div>
           )}
         </div>
@@ -1312,9 +1312,9 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
             <span className="nk-labrest">Learning paths</span>
           </div>
           <h2 className="nk-h2" id="nk-path">
-            Cross-selling without ads: short lessons end with a gift.
+            A second product, earned in five short lessons.
           </h2>
-          <p className="nk-one">When a path is done, a matching product joins the customer&rsquo;s next order.</p>
+          <p className="nk-one">When the path is done, a gift code adds a matching product to the next order.</p>
           <div className="nk-seg">
             <button
               type="button"
@@ -1326,7 +1326,7 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
           </div>
           <p className="nk-fine" aria-live="polite">
             <b className="nk-ex">Example</b> Lesson {Math.min(lesson + (done ? 0 : 1), LESSONS)} of {LESSONS}
-            {done ? ' · gift added to the next order' : ''}. You choose the lessons and the gift.
+            {done ? ' · gift code ready' : ''}. You pick the lessons and the gift.
           </p>
         </div>
         <div className="nk-phonecol">
@@ -1341,17 +1341,17 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
             <span className="nk-labrest">Pharmacy purchases</span>
           </div>
           <h2 className="nk-h2" id="nk-pharm">
-            Pharmacy buyers become visible when they scan the box.
+            Pharmacy buyers show up in your data after one scan.
           </h2>
-          <p className="nk-one">A pack bought offline starts the daily card like an online order and shows up in your reports.</p>
+          <p className="nk-one">A pack bought offline starts the daily card, just like an online order.</p>
           <div className="nk-seg">
             <button type="button" className="nk-sw" onClick={scan}>
               Scan the box
             </button>
           </div>
           <p className="nk-fine" aria-live="polite">
-            <b className="nk-ex">Example</b> {bought ? 'Purchase confirmed · pharmacy.' : 'Scanning the barcode…'} The barcode on
-            the box confirms the purchase.
+            <b className="nk-ex">Example</b> {bought ? 'Pack registered · bought offline.' : 'Scanning the box code…'} The box code
+            registers the pack; a receipt confirms where it was bought.
           </p>
         </div>
         <div className="nk-phonecol">
@@ -1368,7 +1368,7 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
           <h2 className="nk-h2" id="nk-priv">
             Health data never reaches your marketing.
           </h2>
-          <p className="nk-one">Without consent, features stay visible and locked, with one button to turn them on.</p>
+          <p className="nk-one">Without consent, the daily card and streak stay visible but locked, with one button to turn them on.</p>
           <div className="nk-seg" role="group" aria-label="Show the app">
             <button type="button" className="nk-sw" aria-pressed={!consent} onClick={() => setConsent(false)}>
               Without consent
@@ -1378,7 +1378,7 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
             </button>
           </div>
           <p className="nk-fine" aria-live="polite">
-            <b className="nk-ex">Example</b> {consent ? 'Features on.' : 'Features locked.'} A tick is stored as a date,
+            <b className="nk-ex">Example</b> {consent ? 'Daily card and streak on.' : 'Daily card and streak locked.'} A tick is stored as a date,
             never sent to ads, analytics or push messages.
           </p>
         </div>

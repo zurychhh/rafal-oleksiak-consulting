@@ -601,6 +601,8 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 .nk-unlock:focus-visible{outline:2px solid var(--pa);outline-offset:3px;}
 .nk-unlock:active{transform:translateY(1px);}
 #paths,#pharmacy,#privacy{scroll-margin-top:0;}
+/* pasek cookies (position:fixed) nie moze zaslaniac przyciskow scen na dole ekranu */
+.nk-r4 .nk-still{padding-bottom:calc(clamp(40px,6vw,88px) + var(--consent-h,0px))!important;}
 /* #exchange na telefonie: mniejszy telefon, zeby suwak i ekran aplikacji miescily sie razem w kadrze */
 @media (max-width:860px){
   .nk-still#exchange .nk-phone{height:clamp(270px,35svh,300px);aspect-ratio:9/16;border-radius:24px;padding:6px;}
