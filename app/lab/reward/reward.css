@@ -1,0 +1,83 @@
+/* /lab/reward — jeden ekran na bazie .nk (nawyko.css): papier, tusz, linie 1 px.
+   Czerwien wylacznie jako stan „nie zwraca sie” (koszt nagrody ponad marze). */
+
+.rw{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(20px,4vw,72px);
+  align-items:start;padding:clamp(16px,3vw,44px) var(--m) clamp(20px,3vw,40px);}
+
+/* ── pytanie i odpowiedz ──────────────────────────────────── */
+.nk .rw-h1{font-weight:600;font-size:clamp(26px,3.6vw,54px);line-height:1.02;letter-spacing:-.035em;
+  margin-top:clamp(8px,1.2vw,18px);max-width:17ch;text-wrap:balance;}
+.rw-out{position:relative;margin-top:clamp(18px,3vw,44px);border-top:1px solid var(--ink);padding-top:10px;}
+.rw-k{color:var(--dim);font-size:11px;letter-spacing:.18em;}
+.rw-num{font-weight:600;font-size:clamp(64px,11vw,168px);line-height:.92;letter-spacing:-.05em;margin-top:6px;
+  font-variant-numeric:tabular-nums;color:var(--ink);overflow-wrap:anywhere;}
+.rw-num.is-off{color:var(--mid);}
+.rw-cur{display:inline-block;margin-left:.6em;font-size:clamp(14px,1.2vw,17px);letter-spacing:0;font-weight:500;
+  color:var(--dim);vertical-align:.3em;white-space:nowrap;}
+.nk .rw-why{margin-top:10px;font-size:clamp(15px,1.3vw,18px);color:var(--ink2);font-variant-numeric:tabular-nums;}
+.nk .rw-do{margin-top:6px;font-size:clamp(16px,1.4vw,20px);line-height:1.35;color:var(--ink);font-weight:500;max-width:34ch;}
+.nk .rw-live{position:absolute;left:0;top:0;opacity:0;pointer-events:none;font-size:12px;line-height:14px;
+  max-width:100%;white-space:nowrap;overflow:visible;}
+
+/* ── zalozenia ────────────────────────────────────────────── */
+.rw-tag{min-height:22px;display:flex;}
+.rw-tag span{font-size:11px;letter-spacing:.16em;background:var(--ink);color:var(--paper);padding:4px 8px;line-height:14px;}
+.rw-tag.is-own span{background:none;color:var(--dim);padding-left:0;}
+.rw-fields{margin-top:6px;}
+.rw-f{display:grid;grid-template-columns:minmax(0,1fr) minmax(88px,34%);gap:14px;align-items:end;
+  padding:10px 0 0;border-bottom:1px solid var(--line);}
+.rw-f span{display:block;font-size:15px;line-height:1.3;color:var(--ink2);padding-bottom:9px;}
+.rw-f em{display:block;font-style:normal;font-size:12px;color:var(--dim);}
+.rw-f input{display:block;width:100%;padding:6px 0 7px;border:0;border-bottom:1px solid var(--ink);margin-bottom:-1px;
+  border-radius:0;background:transparent;color:var(--ink);font:inherit;font-size:clamp(20px,1.9vw,26px);font-weight:600;
+  letter-spacing:-.02em;text-align:right;font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none;}
+.rw-f input[aria-invalid]{border-bottom-style:dashed;}
+.rw-f input:focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+.nk .rw-hint{margin-top:8px;min-height:19px;font-size:13px;line-height:19px;color:var(--dim);}
+.rw-hint strong{font-weight:600;color:var(--ink);}
+
+/* ── suwak kosztu i paski ─────────────────────────────────── */
+.rw-try{margin-top:clamp(12px,2vw,24px);background:var(--tint);border:1px solid var(--ink);padding:12px 14px 14px;}
+.rw-tl{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;}
+.rw-tl .nk-caps{font-size:11px;letter-spacing:.18em;color:var(--dim);}
+.rw-tl b{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
+.rw-tl b.is-over{color:var(--red-s);}
+.rw-range{-webkit-appearance:none;appearance:none;display:block;width:100%;height:44px;margin:0;padding:0;background:transparent;
+  cursor:ew-resize;touch-action:pan-y;}
+.rw-range::-webkit-slider-runnable-track{height:3px;background:var(--ink);}
+.rw-range::-moz-range-track{height:3px;background:var(--ink);}
+.rw-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:30px;height:30px;margin-top:-13.5px;border:0;
+  border-radius:15px;background:var(--ink);cursor:grab;}
+.rw-range::-moz-range-thumb{width:30px;height:30px;border:0;border-radius:15px;background:var(--ink);cursor:grab;}
+.rw-range:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+.rw-range:disabled{cursor:default;opacity:.45;}
+
+.rw-bars{display:grid;gap:8px;margin-top:4px;}
+.rw-bar{position:relative;display:flex;justify-content:space-between;gap:12px;font-size:13px;line-height:17px;
+  color:var(--ink2);padding-bottom:9px;font-variant-numeric:tabular-nums;}
+.rw-bar b{font-weight:600;color:var(--ink);}
+.rw-bar i{position:absolute;left:0;bottom:0;height:6px;background:var(--ink);transition:width .25s cubic-bezier(.2,.7,.2,1);}
+.rw-bar.is-sales i{background:var(--mid);}
+.rw-bar.is-over i{background:var(--red);}
+.rw-bar.is-over b{color:var(--red-s);}
+.rw-bar u{position:absolute;bottom:-3px;width:2px;height:12px;margin-left:-1px;background:var(--ink);}
+
+/* ── jeden krok ───────────────────────────────────────────── */
+.nk .rw-act{margin-top:clamp(14px,2vw,24px);font-size:16px;line-height:1.4;}
+.rw-act a{font-weight:600;color:var(--ink);text-underline-offset:4px;}
+
+@media (max-width:860px){
+  .rw{grid-template-columns:minmax(0,1fr);gap:18px;padding-top:12px;}
+  .nk .rw-h1{max-width:none;}
+  .rw-out{margin-top:14px;}
+  .rw-num{font-size:clamp(56px,17vw,96px);}
+  .rw-f{grid-template-columns:minmax(0,1fr) minmax(72px,26%);padding-top:6px;}
+  .rw-f span{padding-bottom:7px;}
+  .rw-try{padding:10px 12px 12px;}
+  .rw-range{height:38px;}
+  .rw-bars{gap:6px;}
+  .nk .rw-act{margin-top:12px;}
+}
+@media (prefers-reduced-motion:reduce){
+  .rw-bar i{transition:none;}
+}

@@ -50,3 +50,18 @@ w `agencja/rubryka-tekstow.md`. Recenzje czytelnika-kupującego: `agencja/recenz
 | /nawyko | nawigacja scen | Purchase · Daily card · Streak · Reward · Reward calendar · Pack rhythm · Your branding | zastępuje nazwy robocze |
 | /calculator | pod suwakiem | ← Drag to close the gap | nowy |
 | /nawyko | po zdrapce i w white label | Ask how your brand gets its own app · Ask how <wpisana marka> gets its own app | nowy (po czytelniku; zastąpił „Ask about Nawyko for your brand”) |
+
+### Runda 3, przebieg 3 (23.11, 13:40–14:05) — po czytelniku-kupującym (`recenzje/13-teksty-czytelnik-nagroda.md`)
+
+| Strona | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /lab/reward | H1 | What can a loyalty reward cost and still pay off? | nowy (było 11 słów: „How much can… pay for itself?”) |
+| /lab/reward | wynik | Break-even reward cost, per customer a year · {liczba} in your currency · {48} margin per order × {2} extra orders · Set one fixed reward below this and announce it up front. | nowy (czytelnik odrzucił „Most rewards can cost…” — błędna angielszczyzna) |
+| /lab/reward | pola | Average order value · Gross margin per order (amount, not %) · Extra orders a year the reward brings, per customer (your assumption) · Example — type your own / Your numbers · Nothing you type leaves this page. | nowy |
+| /lab/reward | suwak | Try a reward cost per customer a year · Pays off · {48} margin left / Doesn't pay off · {12} short · Revenue from extra orders · Margin from extra orders · Reward cost | nowy |
+| /lab/reward | jedyny krok | See a fixed reward in an app under your brand → | nowy |
+| /nawyko | hero, drugie zdanie | Customers scratch one card a day for rewards known up front. You get a reason for the next order and see the real rhythm of use. | skrócone (27 → 24 słowa) |
+| /nawyko | kroki 01–03 | Customers scan the box or receipt: you see each purchase date. · A scratch card after each dose: your brand, seen daily. · Each card marks a day; the next reward stays in view. · Twenty-four of thirty days earns the stamp and a next-pack code. | skrócone |
+| /nawyko | widok marki | Each dot: a pack's real last day, not the label's. · Your curve comes from your own orders. Check your gap for free. | skrócone |
+| /nawyko | czego nie robi | The app stores only which days were ticked. | skrócone (fakt „rewards fixed up front” jest już w „No random rewards.”) |
+| /nawyko | zapytanie | Supplements, skincare, pet food, coffee — anything reordered on a rhythm. · This form sends the two fields above, your consent choices, and the page and campaign link you came from. I reply personally by e-mail. · Your typed name. Nothing is sent until you press Send. | skrócone |

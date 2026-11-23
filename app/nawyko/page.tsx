@@ -71,8 +71,7 @@ export default function Nawyko() {
               An app under your brand that gives customers a reason to reorder — built and run for you.
             </p>
             <p className="nk-lede">
-              Your customer scratches one card a day and earns rewards they can see in advance. You get a reason for
-              the next order and the real rhythm of use.
+              Customers scratch one card a day for rewards known up front. You get a reason for the next order and see the real rhythm of use.
             </p>
             <div className="nk-row">
               <a className="nk-cta" href="#enquiry">

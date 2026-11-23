@@ -503,3 +503,17 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
   .nk-scene.is-scroll .nk-phonecol,.nk-scene.is-scroll[data-ch="1"] .nk-phonecol{transform:translateX(calc(-1 * var(--swap) * var(--sw,0)));}
   .nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateX(calc(var(--swap) * var(--sw,0)));}
 }
+
+/* ══ runda 3, przebieg 3 (R3-2): telefon 390 — przejazd rozdzialu „For you” wedlug --sw, nie zegara ══
+   Ten sam odczyt przewijania co na desktopie: telefon maleje i odjezdza w lewo, tekst podjezdza do gory
+   proporcjonalnie do --sw (0 = rozdzial klienta, 1 = rozdzial marki). Tylko transformacje (CLS). */
+@media (max-width:860px){
+  .is-scroll .nk-scenehead,.is-scroll .nk-phonecol{transition:transform .18s linear;}
+  .nk-scene.is-scroll .nk-phonecol,.nk-scene.is-scroll[data-ch="1"] .nk-phonecol,.nk-scene.is-scroll[data-ch="2"] .nk-phonecol{
+    transform-origin:50% 0;transform:translateX(calc(-26% * var(--sw,0))) scale(calc(1 - .4 * var(--sw,0)));}
+  .nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateY(calc(var(--ph) * -.4 * var(--sw,0)));}
+}
+@media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
+/* bez wygladzania .18s: przejazd jest juz dlugi i plynny z samego przewijania, a opoznienie CSS dawalo nakladanie,
+   gdy tekst wchodzi pod koniec przejazdu (recenzja 12: pusta polowa ekranu przez 4–5 ruchow kolka). */
+.nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll .nk-phonecol{transition:none;}

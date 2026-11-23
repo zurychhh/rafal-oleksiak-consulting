@@ -10,19 +10,19 @@ export const DEMO_BRAND = 'Tovemi'
 const STEPS = [
   {
     t: 'Confirm the pack',
-    d: 'Customers scan the box or receipt: you see every purchase date.',
+    d: 'Customers scan the box or receipt: you see each purchase date.',
   },
   {
     t: 'Scratch one card a day',
-    d: 'Scratch one card after each dose: your brand, seen daily.',
+    d: 'A scratch card after each dose: your brand, seen daily.',
   },
   {
     t: 'Build the streak',
-    d: 'Each scratched card marks a day; the next reward stays visible.',
+    d: 'Each card marks a day; the next reward stays in view.',
   },
   {
     t: 'Unlock a reward they saw coming',
-    d: 'Twenty-four days out of thirty earns the stamp and a next-pack code.',
+    d: 'Twenty-four of thirty days earns the stamp and a next-pack code.',
   },
 ] as const
 
@@ -586,7 +586,7 @@ function BrandPanel({ t, id }: { t: number; id: string }) {
         See the day each pack really runs out.
       </h2>
       <p className="nk-one">
-        Each dot is a finished pack: the real last day, not the label&rsquo;s.
+        Each dot: a pack&rsquo;s real last day, not the label&rsquo;s.
       </p>
       <div
         className={'nk-chart' + (marks ? ' is-marked' : '')}
@@ -624,7 +624,7 @@ function BrandPanel({ t, id }: { t: number; id: string }) {
         </div>
       </div>
       <p className="nk-fine">
-        Your own curve comes from your customers' orders. <a href="/tool">Check your gap free</a>.
+        Your curve comes from your own orders. <a href="/tool">Check your gap for free</a>.
       </p>
     </div>
   )
@@ -694,7 +694,7 @@ function SkinPanel({
 /* ── scena przypieta do przewijania ──────────────────────────────────────── */
 const ACTS = 7
 /* Akt zdrapki trwa dluzej niz inne: to najwazniejszy moment strony. */
-const ACT_W = [1, 1.9, 1, 1, 1, 1.5, 1.1]
+const ACT_W = [1, 1.9, 1, 1, 1, 1.5, 1.3]
 const ACT_AT = ACT_W.map((_, i) => ACT_W.slice(0, i).reduce((a, b) => a + b, 0))
 const ACT_TOT = ACT_W.reduce((a, b) => a + b, 0)
 /* Rozdzialy: jak to dziala (klient) → dla marki → pod Twoja marka. Telefon zmienia strone miedzy rozdzialami. */
@@ -773,10 +773,13 @@ function Scene({
   const ch = CH_OF[step] ?? 0
   /* Przejazd telefonu miedzy rozdzialami sterowany przewijaniem (regula R2), nie zegarem: wjazd w rozdzial „For you”
      przez pierwsze 0,3 aktu, powrot przez pierwsze 0,3 aktu „Under your brand”. Tekst aktu wchodzi dopiero po przejezdzie. */
-  const SW_LEN = 0.3
-  const sw = !scroll ? 0 : x < ACT_AT[6] ? ease(clamp((x - ACT_AT[5]) / SW_LEN)) : 1 - ease(clamp((x - ACT_AT[6]) / SW_LEN))
+  /* Runda 3, przebieg 3: przejazd dluzszy (0,45 aktu) i symetryczny (smoothstep zamiast ease-out) — przy kolku 120 px
+     telefon przesuwal sie o ~0,6 drogi na jeden ruch; teraz o ~0,25. */
+  const SW_LEN = 0.45
+  const smooth = (v: number) => v * v * (3 - 2 * v)
+  const sw = !scroll ? 0 : x < ACT_AT[6] ? smooth(clamp((x - ACT_AT[5]) / SW_LEN)) : 1 - smooth(clamp((x - ACT_AT[6]) / SW_LEN))
   const local = x - ACT_AT[step]
-  const inK = ease(step === 4 ? clamp(local / 0.12) : clamp((local - SW_LEN) / 0.2))
+  const inK = ease(step === 4 ? clamp(local / 0.12) : clamp((local - SW_LEN + 0.06) / 0.2))
   const [swung, setSwung] = useState(false)
   const lastCh = useRef(0)
   useEffect(() => {
@@ -1028,7 +1031,7 @@ export function Story() {
             </span>
           ))}
         </h2>
-        <p className="nk-one">Rewards are fixed up front. The app records only ticked days.</p>
+        <p className="nk-one">The app stores only which days were ticked.</p>
       </section>
 
       <section className="nk-final" id="enquiry" aria-labelledby="nk-ask">
@@ -1038,7 +1041,7 @@ export function Story() {
             Would this fit your product?
           </h2>
           <p className="nk-one">
-            For supplements, skincare, pet food, coffee — anything bought again on a rhythm.{' '}
+            Supplements, skincare, pet food, coffee — anything reordered on a rhythm.{' '}
             <span className="nk-desk">Type your store and watch the phone.</span>
           </p>
           <Enquiry onStore={setStore} />
@@ -1047,7 +1050,7 @@ export function Story() {
           <Phone step={3} t={1} theme={skin} scratched brand={typed || name.trim().slice(0, 14) || 'Your brand'} />
           <p className="nk-fine">
             {typed
-              ? 'That name comes from the field you just typed in. Nothing is sent until you press Send.'
+              ? 'Your typed name. Nothing is sent until you press Send.'
               : 'A placeholder until you type your store.'}
           </p>
         </div>
@@ -1142,8 +1145,8 @@ export function Enquiry({
       {/* Sprawdzone w kodzie 21.11.2026: zadanie do /api/lead niesie adres sklepu, e-mail,
           obie zgody z brzmieniem, nazwe formularza, sciezke strony, referrer i parametry utm. */}
       <p className="nk-note">
-        Sent with this form: the two fields above, your consent choices, and the page and campaign link you came
-        from. I reply personally — not a calendar link.
+        This form sends the two fields above, your consent choices, and the page and campaign link you came from.
+        I reply personally by e-mail.
       </p>
       {state === 'error' ? (
         <p className="nk-err" role="alert" tabIndex={-1} ref={errRef}>

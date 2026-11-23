@@ -4,6 +4,7 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 
 ## Do przerobienia (w tej kolejności)
 1. ~~Strony produktowe i scrollytelling — przewodnik Chrome „Scrollytelling”~~ (zrobione 23.11, runda 3)
+1b. ~~Narzędzia/kalkulatory — NN/g „Calculators and Quizzes: User Expectations” (2024)~~ (zrobione 23.11, runda 3 przebieg 3)
 2. B2B lead generation i CRO — jeden CTA na stronę, formularz krótki: badania Baymard / NN/g o liczbie pól i CTA
 3. Copywriting sprzedażowy — nagłówek = korzyść (NN/g „headlines”, „front-loading”)
 4. Widoczność w odpowiedziach AI — jak strony produktowe są cytowane przez wyszukiwarki AI (schema `Product`/`SoftwareApplication`, FAQ)

@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 23.11.2026, 13:14–13:30 (runda 3, przebieg 2 — R3-1 częściowo, R3-2). Przed nim runda 3 przebieg 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 23.11.2026, 13:38–14:05 (runda 3, przebieg 3 — R3-2, R3-1 część, R3-4: pierwsze nowe narzędzie). Wcześniej przebieg 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
@@ -160,6 +160,33 @@ Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + po
 
 ## Dla Rafała
 
+**Runda 3, przebieg 3 (23.11, 13:38–14:05) — nowe narzędzie „ile może kosztować nagroda” i spokojniejszy przejazd telefonu na `/nawyko`.**
+Do obejrzenia: `/lab/reward` (nowe, noindex) i `/nawyko` w rozdziałach „For you” → „Under your brand”, na telefonie i na desktopie.
+1. **Nowe narzędzie `/lab/reward`: „What can a loyalty reward cost and still pay off?”** Trzy pola z liczbami odwiedzającego
+   (wartość zamówienia, marża na zamówieniu w walucie, ile dodatkowych zamówień rocznie daje nagroda — jego założenie),
+   u góry jedna duża liczba: próg opłacalności nagrody na klienta rocznie (marża × dodatkowe zamówienia). Suwak „Try a reward
+   cost” mówi od razu „Pays off · 48 margin left” albo na czerwono „Doesn't pay off”. Jeden krok dalej: `/nawyko`.
+   Żadnej liczby rynkowej; wartości startowe oznaczone „Example — type your own”. Biznesowo: odpowiada na pierwsze pytanie
+   marki o program lojalnościowy („ile mogę na to wydać”) i prowadzi do Nawyko jako stałej, znanej z góry nagrody.
+   Lista kolejnych narzędzi: `agencja/narzedzia.md` (3 pomysły do Twojej oceny).
+2. **`/nawyko` — przejazd telefonu na telefonie (390) też sterowany przewijaniem**, nie zegarem (wcześniej tylko desktop).
+   Przejazd jest dłuższy i symetryczny (łagodny start i koniec): jeden ruch kółka przesuwa telefon o ok. 25–30% drogi (było ~60%).
+   Usunięte ukryte wygładzenie 0,18 s, przez które telefon „spóźniał się” za tekstem. Tekst rozdziału wchodzi już pod koniec
+   przejazdu, więc nie ma pustej połowy ekranu. **Zmierzone:** nakładanie tekstu i telefonu 0 px² (390 i 1440, po dwa przejazdy kółkiem 120 px / 60 ms).
+   Scena white label dostała odrobinę więcej przewijania (waga 1,1 → 1,3).
+3. **`/nawyko` krócej:** 389 → 374 słowa widocznej treści poza makietami telefonów (−4%; metoda: tekst bez telefonów, wykresu i stopki).
+   Uczciwie: cel −30% nie jest osiągnięty — czytelnik-kupujący cofnął dwa skróty, bo gubiły korzyść marki („You get a reason
+   for the next order”) i to, kto skanuje. Większa redukcja wymaga wycięcia całych elementów (decyzja N niżej).
+4. **Dowód:** `agencja/podglad/reward-r3c-390.png`, `reward-r3c-1440.png`, `nawyko-r3c-390-przejazd.mp4`, `nawyko-r3c-1440-przejazd.mp4`
+   (realne tempo kółka). Recenzja niezależna: `agencja/recenzje/12-narzedzie-nagroda-i-przejazd-390.md` — 14/14 PASS; z 4 uwag
+   poprawione 3 (komunikat przy marży większej niż zamówienie, ułamki na suwaku, pusta połowa ekranu), 1 czeka na Ciebie (M).
+   Teksty: `13-teksty-czytelnik-nagroda.md` — 16 uwag, 15 wprowadzonych, 1 to warunek (narzędzie nic nie wysyła — sprawdzone w kodzie).
+   Bramki: build OK · `tsc` OK · lint 0 błędów, 1 ostrzeżenie (jak przed) · `copy-voice` OK · `reward-model` OK · `calculator-model` OK ·
+   `tool-rules` OK · `qa.js` PASS na `/nawyko`, `/lab/reward`, `/calculator`, `/lab/home` · `content-rules` PASS · `ship-compare` PASS.
+   CLS w tym przebiegu niemierzony (zmiany tylko w transformacjach).
+   Podgląd: stały adres gałęzi https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/lab/reward
+   (i `/nawyko`); stan wdrożenia — w ostatniej wiadomości przebiegu.
+
 **Runda 3, przebieg 2 (23.11, 13:14–13:30) — `/nawyko`: telefon i tekst jadą razem z przewijaniem, nic się nie nakłada; dwa przyciski w środku sceny.**
 1. **Przejazd telefonu między rozdziałami sterowany przewijaniem, nie zegarem** (reguła R2): telefon przejeżdża na lewo przez
    pierwsze 30% aktu „For you” i wraca przez pierwsze 30% aktu „Under your brand”; tekst aktu wchodzi dopiero po przejeździe.
@@ -297,6 +324,15 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 **Decyzje doradcy 23.11 13:50 (Rafał: „bądź samodzielny, angażuj mnie tylko tam, gdzie potrzebna jest moja decyzja”):**
 I → (a) scena zostaje: Rafał ocenił górną połowę `/lab/home` jako dobrą; nie wycinamy tego, co zatwierdził.
 J → (a) mini-kalkulator w hero `/nawyko` i `/lab/home`: odwiedzający wpisuje jedną liczbę, kwota liczona tym samym modelem co `/calculator`; zero liczb bez źródła. Buduj w następnym przebiegu.
+**Nowe z przebiegu 3 rundy 3:**
+
+M. **`/lab/reward` — adres i wypuszczenie.** Narzędzie jest gotowe w podglądzie (noindex, poza sitemapą). Warianty: (a) wypuścić
+   jako `/reward-calculator` z linkiem z `/nawyko` i `/calculator`, (b) zostawić w podglądzie do Twojej oceny, (c) wyrzucić.
+   Rekomendacja: (a) po Twoim obejrzeniu — to najkrótsza droga od „ile mogę wydać na lojalność” do Nawyko. Na telefonie link
+   do `/nawyko` jest tuż pod pierwszym ekranem (przy pasku cookies — niżej); dodatkowy link wyżej to zmiana układu — powiedz, jeśli chcesz.
+N. **`/nawyko` −30% słów wymaga wycięcia elementów, nie skracania zdań.** Kandydaci: drugi akapit hero, lista nagród pod osią
+   na desktopie (dubluje telefon), druga nota „Tovemi is a made-up demo brand” (stoi w scenie i pod nią). Rekomendacja: wyciąć
+   listę nagród na desktopie i drugą notę (ok. −35 słów), hero zostawić. Bez decyzji zostaje jak jest.
 
 **Nowe z rundy 3:**
 
@@ -382,13 +418,16 @@ E. **Zdanie „Colors, type and wording are settings” zniknęło**, a „The c
 
 ## Następne (kolejka)
 
-R3-1. `/nawyko`: −30% słów w samej treści (dziś ok. −15%): hero w `page.tsx` (drugi akapit), panele nagród i zapytania.
+R3-0. **J (decyzja doradcy 13:50): mini-kalkulator w hero `/nawyko` i `/lab/home`** — jedna liczba od odwiedzającego, model z `/calculator`. Pierwsze w następnym przebiegu.
+R3-1. (przebieg 3: zrobione −4%, dalej tylko przez wycięcie — decyzja N) `/nawyko`: −30% słów w samej treści (dziś ok. −15%): hero w `page.tsx` (drugi akapit), panele nagród i zapytania.
       Mierzyć tekst POZA makietami telefonów (nowa metoda). CTA w środku sceny — zrobione w przebiegu 2;
       przesunięcie sceny „Your brand” wyżej = zmiana kolejności opowieści → najpierw pokazać Rafałowi (decyzja L poniżej).
-R3-2. ~~Treść sceny według pozycji przewijania~~ — zrobione w przebiegu 2 (desktop). Na telefonie (390) przejazd
+R3-2. ZROBIONE w przebiegu 3 (390 też według przewijania, 0 px²). ~~Treść sceny według pozycji przewijania~~ — zrobione w przebiegu 2 (desktop). Na telefonie (390) przejazd
       wciąż na zegarze (zmiana skali/pozycji) — przepiąć tak samo i zmierzyć nakładanie.
 R3-3. Kalkulator: pasek cookies na pierwszym ekranie 390; uchwyt w Safari/Firefox (sprawdzić); sprawdzić, czy „pchnięcie” nie rozprasza.
-R3-4. `agencja/narzedzia.md` i pierwsze nowe narzędzie (punkt 4 starszego priorytetu).
+R3-4. ZROBIONE w przebiegu 3: `agencja/narzedzia.md` + `/lab/reward`. Dalej: w `/lab/reward` wartość zamówienia nie zmienia
+      wyniku (reguła NN/g: każde pole zmienia wynik) — albo wyciąć pole, albo pokazać „nagroda jako część zamówienia”; CLS i tryb ciemny.
+R3-6. Pomiar CLS na `/nawyko` po zmianie przejazdu (390, 1440) i kl./s na telefonie.
 R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 
 0. **Kalkulator v3** (priorytet NAJNOWSZY, pkt 2): makieta jednego ekranu → czytelnik-kupujący na makiecie → budowa.
@@ -409,6 +448,14 @@ R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R4 (reguła, przebieg 3): wygładzanie `transition` na elemencie sterowanym przewijaniem to ukryty zegar** — łamie R2
+  (telefon spóźniał się za tekstem: 1 142–35 603 px² nakładania). Elementy sterowane przewijaniem: `transition:none`, płynność
+  z długości drogi i krzywej (smoothstep). Test: `ov.js` 0 px² + skok `--sw` na jeden ruch kółka ≤ 0,3.
+- Twierdzenia podagenta o stanie produkcji („/calculator na produkcji”) sprawdzać w STATUS przed zapisem — był błąd.
+- Czytelnik-kupujący łapie skróty, które gubią korzyść marki — cięcie słów bez czytelnika daje gorszy tekst; −30% trzeba
+  planować jako wycinanie elementów, nie ścinanie zdań.
+- Źródło (NN/g, Kohler 2024): narzędzie daje wynik bez kontaktu, obsługuje użycie „w tył”, każde pole zmienia wynik → reguła w `narzedzia.md`.
 
 - **R3 (reguła, przebieg 2): ruch, który zmienia układ (przejazd, zamiana stron), też sterować przewijaniem** — mieszanie
   przewijania (tekst) z zegarem (telefon) dało nakładanie się przy zwykłym tempie. Test: skrypt `ov.js` (nakładanie tekstu
