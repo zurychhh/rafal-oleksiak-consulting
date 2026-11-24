@@ -8,6 +8,7 @@ import { FAQ, FEATURES } from './content'
 
 const URL = 'https://oleksiakconsulting.com/nawyko'
 const TITLE = 'Nawyko — a white-label habit and loyalty app for brands people buy again'
+const H1 = 'A habit app with your logo on it.'
 const LEDE = 'An app under your brand that gives customers a reason to reorder — built and run for you.'
 
 const DESC =
@@ -47,11 +48,10 @@ const JSON_LD = {
       '@type': 'WebPage',
       '@id': URL + '#webpage',
       url: URL,
-      name: TITLE,
+      name: H1,
       description: LEDE,
       about: { '@id': URL + '#app' },
       mainEntity: { '@id': URL + '#app' },
-      isPartOf: { '@type': 'WebSite', '@id': 'https://oleksiakconsulting.com/#website', url: 'https://oleksiakconsulting.com' },
     },
     {
       '@type': 'SoftwareApplication',
@@ -113,7 +113,7 @@ export default function Nawyko() {
           <div>
             <div className="nk-caps nk-lab">Nawyko · white-label app for repeat-purchase brands</div>
             <h1 className="nk-h1" id="nk-h1">
-              A habit app with your logo on it.
+              {H1}
             </h1>
           </div>
           <div>

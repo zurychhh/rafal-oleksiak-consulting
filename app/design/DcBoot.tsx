@@ -47,10 +47,29 @@ export default function DcBoot({ runtime, resources, fonts, path }: {
     const need = shown ? shown.textContent?.length ?? 0 : 0
     let mo: MutationObserver | null = null
     let waitingFonts = false
+    // R4 p7: dopoki zrzut stoi, #dc-root lezy POD nim w przeplywie (na 390: top 5378 px). Przy wolnych fontach
+    // przejecie czeka ~sekundy, #dc-root jest malowany ponizej, a zdjecie zrzutu przesuwa go o caly ekran: CLS 1,0.
+    // Na czas czekania kladziemy #dc-root niewidoczny dokladnie w miejscu zrzutu; przy przejsciu wraca do przeplywu
+    // w tym samym miejscu — zero przesuniecia. Przy szybkich fontach styl trwa najwyzej klatke na pustym, niewidocznym
+    // #dc-root (recenzja R4 p7: CLS 0).
+    let parked: HTMLElement | null = null
+    const park = (root: HTMLElement) => {
+      if (parked === root || !shown) return
+      parked = root
+      const top = shown.getBoundingClientRect().top + window.scrollY
+      Object.assign(root.style, { position: 'absolute', top: top + 'px', left: '0', right: '0', visibility: 'hidden' })
+    }
+    const unpark = () => {
+      if (!parked) return
+      for (const k of ['position', 'top', 'left', 'right', 'visibility']) parked.style.removeProperty(k)
+      parked = null
+    }
     const takeover = (): boolean => {
       if (!pres().length) return true
       const root = document.getElementById('dc-root')
-      if (!root || (root.textContent?.length ?? 0) < need * 0.9) return false
+      if (!root) return false
+      park(root)
+      if ((root.textContent?.length ?? 0) < need * 0.9) return false
       // Runtime pisze krojem bez prefiksu zrzutu. Jesli ten jeszcze sie laduje,
       // przejecie narysowaloby tekst fontem zapasowym i przelamalo uklad —
       // czekamy na font i probujemy jeszcze raz.
@@ -80,6 +99,7 @@ export default function DcBoot({ runtime, resources, fonts, path }: {
         })
       }
       pres().forEach((el) => el.remove())
+      unpark()
       return true
     }
     if (page && !takeover()) {

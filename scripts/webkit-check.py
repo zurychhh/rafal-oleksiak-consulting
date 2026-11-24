@@ -1,7 +1,7 @@
 # WebKit (Safari engine) check of a page at iPhone size: screenshots at scroll positions and phone-frame widths.
 # Why: Chromium-only gates missed a phone that collapsed into a thin bar on iPhone and Mac Safari (Rafał, 24.11.2026).
 # Setup (once per container; Playwright's own WebKit download is blocked here):
-#   apt-get install -y webkit2gtk-driver xvfb && pip install --break-system-packages selenium
+#   apt-get update && apt-get install -y webkit2gtk-driver xvfb && pip install --break-system-packages selenium
 # Usage (local server only, never the production domain):
 #   xvfb-run -a python3 -I scripts/webkit-check.py http://localhost:3000/nawyko /tmp/wk-nawyko [css-override-file]
 #   WK_W=1440 xvfb-run -a python3 -I scripts/webkit-check.py ...   # Mac size (1440x900, desktop Safari UA)

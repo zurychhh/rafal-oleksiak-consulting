@@ -231,8 +231,9 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 
 /* ---------- Uklad statyczny (bez JS, reduced motion, webdriver, niskie okno) ---------- */
 .ga-still { max-width: 1240px; margin: 0 auto; padding: 0 48px; }
-/* R4 p7: przed hydratacja uklad statyczny ma wysokosc .ga-track (1320svh) — zmieniasz jedno, zmien drugie. */
-[data-ga-pin] .ga-still { height: 1320svh; overflow: clip; }
+/* R4 p7: przed hydratacja uklad statyczny ma co najmniej wysokosc .ga-track (1320svh) — zmieniasz jedno, zmien drugie.
+   min-height, nie height+clip: gdy JS nie wystartuje, nic nie jest uciete (recenzja: 320 px x 600 px ucinalo ostatni akt). */
+[data-ga-pin] .ga-still { min-height: 1320svh; }
 .ga-act { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; padding: 64px 0 !important; }
 .ga-act .ga-copy-in { display: flex; flex-direction: column; }
 .ga-still .ga-phone-slot { --ph: 560px; }

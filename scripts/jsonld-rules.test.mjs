@@ -28,7 +28,7 @@ const { blocks, text } = await page.evaluate(() => {
 })
 await browser.close()
 
-const norm = (s) => s.replace(/\s+/g, ' ').replace(/[’‘]/g, "'").trim()
+const norm = (s) => s.replace(/\s+/g, ' ').replace(/[’‘]/g, "'").trim().toLowerCase() // innerText oddaje text-transform (np. NAWYKO w nawigacji)
 const visible = norm(text)
 const fails = []
 const check = (label, s) => {
@@ -50,12 +50,22 @@ if (!nodes.length) fails.push('brak JSON-LD')
 for (const n of nodes) {
   const t = n['@type']
   if (t === 'SoftwareApplication' || t === 'Product') {
+    check(`${t}.name`, n.name)
+    // system = sklep widoczny na stronie (iOS -> App Store, Android -> Google Play); inny system bez pokrycia = FAIL
+    const STORE = { iOS: 'App Store', Android: 'Google Play' }
+    for (const os of String(n.operatingSystem || '').split(/,\s*/).filter(Boolean)) {
+      if (!STORE[os]) fails.push(`${t}.operatingSystem "${os}" bez widocznego sklepu na stronie`)
+      else check(`${t}.operatingSystem ${os}`, STORE[os])
+    }
     check(`${t}.description`, n.description)
     for (const f of n.featureList || []) check(`${t}.featureList`, f)
     for (const k of ['offers', 'aggregateRating', 'review'])
       if (n[k]) fails.push(`${t}.${k}: na stronie nie ma ceny/ocen — usun`)
   }
-  if (t === 'WebPage') check('WebPage.description', n.description)
+  if (t === 'WebPage') {
+    check('WebPage.name', n.name)
+    check('WebPage.description', n.description)
+  }
   if (t === 'FAQPage') {
     for (const q of n.mainEntity || []) {
       check('FAQ pytanie', q.name)
