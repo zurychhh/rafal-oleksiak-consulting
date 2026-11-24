@@ -74,6 +74,18 @@ for route in "${ROUTES[@]}"; do
     elif [ $rc -ne 0 ]; then add "$route" "scroll-perf-$w" FAIL "kod $rc, brak linii SCROLLPERF ($log)"
     else add "$route" "scroll-perf-$w" INFO "wyjscie bez linii SCROLLPERF ($log)"; fi
   done
+  # R4 p15 B1: przypieta scena na niskim oknie z paskiem cookies (scripts/short-viewport-check.mjs).
+  # Kod 2 = brak przypietej sceny na trasie -> SKIP (nie FAIL); werdykt: shortvp_verdict z gates-lib.sh (ten sam w selftescie).
+  for vp in "1100 620" "1280 720" "390 844"; do
+    set -- $vp; w=$1; h=$2; log="$LOGDIR/$slug-short-${w}c.log"
+    timeout "$TMO" node scripts/short-viewport-check.mjs "$url" "$w" "$h" --cookies >"$log" 2>&1; rc=$?
+    vd=$(shortvp_verdict "$log" "$rc")
+    case "$vd" in
+      PASS*) add "$route" "short-${w}c" PASS "" ;;
+      SKIP*) add "$route" "short-${w}c" SKIP "brak przypietej sceny" ;;
+      FAIL*) add "$route" "short-${w}c" FAIL "${vd#FAIL } ($log)" ;;
+    esac
+  done
   run "$route" "focus-obscured" "$LOGDIR/$slug-focus-obscured.log" node scripts/focus-obscured.test.mjs "$BASE" "$route"
   run "$route" "jsonld" "$LOGDIR/$slug-jsonld.log" node scripts/jsonld-rules.test.mjs "$url"
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
