@@ -11,10 +11,10 @@ const CHAPTERS: { label: string; from: number; to: number }[] = [
   { label: 'How it works', from: 2, to: 4 },
   { label: 'Cashback', from: 5, to: 5 },
   { label: 'Points and levels', from: 6, to: 6 },
-  { label: 'Consent', from: 7, to: 7 },
+  { label: 'Data and consent', from: 7, to: 7 },
   { label: 'How it was built', from: 8, to: 8 },
   { label: 'Results', from: 9, to: 9 },
-  { label: 'Your brand', from: 10, to: 10 },
+  { label: 'Your brand colour', from: 10, to: 10 },
 ]
 const chapterOf = (a: number) => CHAPTERS.findIndex((c) => a >= c.from && a <= c.to)
 
@@ -174,8 +174,22 @@ function ActBarImpl({ act, onJump }: Props) {
             </li>
           ))}
         </ol>
-        <a className="ga-ab-cta" href="#enquiry" onClick={hide}>
-          Ask about an app
+        <a
+          className="ga-ab-cta"
+          href="#enquiry"
+          onClick={() => {
+            hide()
+            // recenzja 26 M1: fokus na formularz po skoku (czytnik ekranu oglasza cel, Tab idzie dalej od formularza)
+            requestAnimationFrame(() => {
+              const t = document.getElementById('enquiry')
+              if (t) {
+                t.tabIndex = -1
+                t.focus({ preventScroll: true })
+              }
+            })
+          }}
+        >
+          Ask about a brand app
         </a>
       </nav>
     </div>

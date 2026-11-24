@@ -11,6 +11,15 @@ HOSTPART="${BASE#*://}"; HOSTPART="${HOSTPART%%/*}"; HOST="${HOSTPART%%:*}"
 case "$HOST" in localhost|127.0.0.1) ;; *) echo "odmowa: host '$HOST' to nie localhost/127.0.0.1" >&2; exit 2;; esac
 cd "$(dirname "$0")/.." || exit 2
 LOGDIR=/tmp/gates; mkdir -p "$LOGDIR"
+# R4 p10 (lekcja R17): serwer musi podawac TEN build, ktory jest w .next — stary `next-server` na tym samym porcie
+# (pkill -f "next start" go nie zabija) podaje HTML z innym BUILD_ID i 500 na chunki; bramki mierzyly wtedy zepsuta strone.
+if [ -f .next/BUILD_ID ]; then
+  BID="$(cat .next/BUILD_ID)"
+  if ! curl -s --max-time 20 "$BASE${1:-/}" | grep -q "$BID"; then
+    echo "odmowa: serwer $BASE nie podaje buildu z .next (BUILD_ID $BID) — zatrzymaj stary next-server i uruchom npm start ponownie" >&2; exit 2
+  fi
+fi
+
 TMO="${GATES_TIMEOUT:-240}"
 ROWS=(); ANYFAIL=0; ROUTES=("$@")
 

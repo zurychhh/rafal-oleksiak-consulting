@@ -794,3 +794,6 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 }
 /* R4 p10 D4: sekcja dostaje fokus po skoku z paska — bez obrysu przy kliknieciu mysza */
 .nk .cb-target:focus:not(:focus-visible){outline:none;}
+
+/* recenzja 26 I2: < 1100 px pasek w jednym rzedzie — dluga etykieta skraca sie wielokropkiem, CTA nie spada do drugiego rzedu (lista nadal zawija sie pod spod) */
+@media (max-width:1099px){.nk .cb-toggle{flex:1 1 0;}.nk .cb-cur{min-width:0;}}

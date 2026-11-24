@@ -91,7 +91,8 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
         setPinned(pin)
       }
       let a = ''
-      if (scene && k >= 0 && secs[k] === scene && scene.classList.contains('is-scroll')) {
+      // recenzja 26 I2: akt tylko w przypietej scenie — po wyjsciu z niej etykieta wraca do samego rozdzialu
+      if (pin && scene && k >= 0 && secs[k] === scene) {
         const btns = Array.from(scene.querySelectorAll('.nk-acts > *'))
         const j = btns.findIndex((b) => b.hasAttribute('aria-current'))
         if (j >= 0) a = `${String(j + 1).padStart(2, '0')} ${btns[j].textContent ?? ''}`

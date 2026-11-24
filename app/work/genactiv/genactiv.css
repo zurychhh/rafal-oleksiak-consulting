@@ -472,3 +472,6 @@ button.ga-fakebtn.ga-done { color: var(--muted); }
 .ga-act:focus:not(:focus-visible), .ga-copy-in:focus:not(:focus-visible) { outline: none; }
 /* WCAG 2.4.11: fokus na ostatnich linkach strony nie laduje pod paskiem cookies (fixed, dol ekranu) */
 .ga-final .ga-link, .ga-foot a { scroll-margin-bottom: 120px; }
+
+/* recenzja 26 M1: fokus programowy po skoku z paska bez obrysu dla myszy */
+.ga .ga-final:focus:not(:focus-visible){outline:none;}
