@@ -34,10 +34,11 @@ await p.waitForTimeout(1500)
 await p.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto' })
 
 const geo = await p.evaluate(() => {
-  const s = document.querySelector('.nk-scene.is-scroll') || document.querySelector('.ga-track')
+  // R6 p1 (spec 31): /nawyko nie ma juz sceny „Four steps” — przypieta scena trasy to final .nk-fz (sticky .nk-fz-stick).
+  const s = document.querySelector('.nk-scene.is-scroll') || document.querySelector('.ga-track') || document.querySelector('.nk-fz')
   if (!s) return null
   const r = s.getBoundingClientRect()
-  return { top: r.top + scrollY, h: r.height, sel: s.classList.contains('ga-track') ? '.ga-track' : '.nk-scene' }
+  return { top: r.top + scrollY, h: r.height, sel: s.classList.contains('ga-track') ? '.ga-track' : s.classList.contains('nk-fz') ? '.nk-fz' : '.nk-scene' }
 })
 if (!geo) { console.log(`BLAD ${url} ${W}x${H}: brak przypietej sceny (uklad statyczny?)`); await b.close(); process.exit(2) }
 
@@ -45,7 +46,7 @@ if (!geo) { console.log(`BLAD ${url} ${W}x${H}: brak przypietej sceny (uklad sta
 if (cookies) { await p.evaluate(() => scrollTo(0, 400)); await p.waitForTimeout(500) }
 
 const scanAt = (sceneSel) => {
-  const stage = document.querySelector(sceneSel === '.ga-track' ? '.ga-stage' : '.nk-stage')
+  const stage = document.querySelector(sceneSel === '.ga-track' ? '.ga-stage' : sceneSel === '.nk-fz' ? '.nk-fz-stick' : '.nk-stage')
   const vw = innerWidth, vh = innerHeight
   const label = (e) => {
     const t = (e.getAttribute('aria-label') || e.textContent || e.value || '').replace(/\s+/g, ' ').trim().slice(0, 50)

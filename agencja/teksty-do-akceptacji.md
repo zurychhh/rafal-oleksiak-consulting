@@ -372,3 +372,24 @@ Czytelnik-kupujący: `agencja/recenzje/39-r5p3c-teksty.md` (5 przepisanych). cop
 | /nawyko | Pharmacy, notka | Tap “Scan the box”. (stan przed skanem) | nowy |
 | /nawyko | Privacy, zapis | Stored · Nothing. / Tick date only. · Never sent to · Ads · Analytics · Push messages | nowy (po czytelniku) |
 | /nawyko | Privacy, notka | Example · Daily card and streak on. / locked. (usunięte zdanie o zapisie daty — przeszło do karty „Stored”) | skrócone |
+
+## R6 przebieg 1 — hero z całą personalizacją, przerywnik „why”, kokpit mechanik (24.11.2026, spec 31)
+copy-voice OK. Czytelnik-kupujący: NIE uruchomiony w tym przebiegu (do zrobienia przed promocją). Usunięte ze strony: sceny
+„Four steps”, „Rewards in the app”, portfel/punkty/kurs, Paths/Pharmacy/Privacy, „What it never does”, środkowy konfigurator.
+
+| Trasa | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /nawyko | hero, panel | Page style · Paper / Night / Clay | nowy |
+| /nawyko | hero, podpis | Everything below already follows {marka}. Nothing is sent. / (bez nazwy) Everything below follows what you set here. Nothing is sent. | nowy |
+| /nawyko | przerywnik #why | Day N of 30 / Day 31 · A pack lasts 30 days. On day 31, {marka}’s customer reorders or quietly disappears. | nowy |
+| /nawyko | kokpit, nagłówek | How it works · Left: what {marka}’s customers see. Right: what {marka} sets. (390 px: Above / Below) | nowy |
+| /nawyko | kokpit, zakładki | Daily card · Streak & stamps · Cashback · Points & levels · Paths · Pharmacy receipt · Consents · Rules | nowy |
+| /nawyko | kokpit, etykiety | The customer feels · {marka} sets | nowy |
+| /nawyko | Daily card | One small, satisfying moment after each dose. · Free shipping on day N · Example: 30 visits to {marka} per pack instead of one. · ekran: Today · day 18 · ✓ Ticked · Next card tomorrow · N cards to free shipping / Free shipping waiting in the shop | nowy |
+| /nawyko | Streak & stamps | A missed day does not wipe the streak, so one bad day is not the end. · Stamp after days N · Example: N days of slack built into every pack. · ekran: Stamp after N of 30 days · Ticked so far · N days of slack: a missed day keeps the stamp in reach. | nowy |
+| /nawyko | Cashback | Money waiting in the wallet that only works in your shop. · Cashback per order €N · Example: €N goes back into {marka}’s next orders, not to a marketplace. · ekran: Wallet · After 3 orders · €N back per order · Use on the next order · Online shop only | nowy |
+| /nawyko | Points & levels | Progress they can see, a level they do not want to lose. · Points per ticked day N · Example: N points in a full pack. · ekran: Bronze/Silver/Gold · {poziom} level reached | nowy |
+| /nawyko | Paths | Short lessons on how to take and store the product, in your voice. · Lessons in the path N · Example: N reasons to open the app in the first week. · ekran: How to use {marka} · Lesson N · One short lesson a day. | nowy |
+| /nawyko | Pharmacy receipt | Bought at a pharmacy? The streak still counts. · Accept pharmacy receipts · Example: purchases outside the shop become visible to you. / Example: only online orders count. · ekran: Scan the receipt · The photo stays on this phone | nowy |
+| /nawyko | Consents | Asked once, plainly. A no changes nothing. · Ask for daily reminders · Fixed: rewards never depend on push or e-mail consent. · ekran: Rewards · Same either way · Saying no costs the customer nothing. | nowy |
+| /nawyko | Rules | Trust: what the card promises is what they get. · Random prize draws / Health claims on cards / Swap a reward after scratching (zawsze off, „Stays off: …”) · Locked for every brand. · Fixed: 0 random draws, 0 health claims. | nowy |

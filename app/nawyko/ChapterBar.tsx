@@ -44,7 +44,8 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
     let raf = 0
     let prevK = -2
     let prevOn: boolean | null = null
-    const scene = document.querySelector<HTMLElement>('.nk-scene')
+    // R6 p1 (spec 31): na /nawyko nie ma juz .nk-scene — przypieta scena to final .nk-fz (zawsze przypiety).
+    const scene = document.querySelector<HTMLElement>('.nk-scene') ?? document.querySelector<HTMLElement>('.nk-fz')
     const narrow = window.matchMedia('(max-width:1099px)')
     // R4 p10 D4: sekcje rozdzialow przyjmuja fokus programowo (bez wejscia w kolejnosc Tab)
     for (const s of secs) {
@@ -82,7 +83,7 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
       // R4 p9 recenzja W2: na telefonie przypieta scena zaczyna sie 18 px od gory — pasek zaslanialby nazwe marki
       // na ekranie telefonu. W scenie pasek ustepuje; wraca pod nia.
       let pin = false
-      if (scene && scene.classList.contains('is-scroll')) {
+      if (scene && (scene.classList.contains('is-scroll') || scene.classList.contains('nk-fz'))) {
         const r = scene.getBoundingClientRect()
         pin = r.top <= 1 && r.bottom >= vh - 1
       }

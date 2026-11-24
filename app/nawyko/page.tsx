@@ -85,20 +85,17 @@ const JSON_LD = {
   ],
 }
 
-// Spec 20: rozdzialy paska — te same nazwy co w drugim poziomie nawigacji (≥ 1200 px), plus Privacy.
+// Spec 31 (R6 p1): rozdzialy po przebudowie — hero, przerywnik, kokpit; Proof/FAQ/final bez zmian (przebieg 2).
 const CHAPTERS = [
-  { id: 'how', label: 'How it works' },
-  { id: 'cashback', label: 'Cashback' },
-  { id: 'levels', label: 'Points' },
-  { id: 'exchange', label: 'Your costs' },
-  { id: 'privacy', label: 'Privacy' },
+  { id: 'top', label: 'Your app' },
+  { id: 'why', label: 'Why' },
+  { id: 'cockpit', label: 'How it works' },
   { id: 'proof', label: 'Proof' },
+  { id: 'integrations', label: 'Integrations' },
   { id: 'faq', label: 'FAQ' },
   { id: 'finale', label: 'One morning' },
+  { id: 'enquiry', label: 'Enquiry' },
 ]
-
-const PIN_JS =
-  "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!navigator.webdriver&&innerHeight>=600)document.documentElement.setAttribute('data-nk-pin','')}catch(e){}"
 
 const BRAND_WAIT_JS =
   "try{var b=JSON.parse(localStorage.getItem('oc-brand-v1')||'{}');if(b&&b.name)document.documentElement.setAttribute('data-brand-wait','');setTimeout(function(){document.documentElement.removeAttribute('data-brand-wait')},3000)}catch(e){}"
@@ -110,20 +107,17 @@ export default function Nawyko() {
   return (
     <div className="nk">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
-      {/* Spec 13: rezerwa wysokosci sceny przed hydratacja. Ten sam warunek co setMode('scroll') w Scene;
-          bez niego wejscie z kotwica (#proof) skakalo o kilka ekranow po hydratacji (CLS 0,3–1,2). */}
-      <script dangerouslySetInnerHTML={{ __html: PIN_JS }} />
       {/* Spec 26 / R23: zapisana marka odwiedzajacego — nazwy w telefonach ukryte do hydratacji (zero migniecia nazwy demo). */}
       <script dangerouslySetInnerHTML={{ __html: BRAND_WAIT_JS }} />
       <a className="nk-skip" href="#main">
         Skip to content
       </a>
       <SiteNav current="nawyko" contact="#enquiry" className="nk-top nk-caps">
-        <a href="#how">How it works</a>
-        <a href="#cashback">Cashback</a>
-        <a href="#levels">Points</a>
-        <a href="#exchange">Your costs</a>
+        <a href="#top">Your app</a>
+        <a href="#why">Why</a>
+        <a href="#cockpit">How it works</a>
         <a href="#proof">Proof</a>
+        <a href="#integrations">Integrations</a>
         <a href="#faq">FAQ</a>
       </SiteNav>
       <ChapterBar chapters={CHAPTERS} afterId="top" ctaHref="#enquiry" ctaLabel="Ask about Nawyko" className="nk-caps" />
@@ -148,7 +142,7 @@ export default function Nawyko() {
               <a className="nk-cta" href="#enquiry">
                 Ask about Nawyko
               </a>
-              <a className="nk-cta nk-ghost" href="#how">
+              <a className="nk-cta nk-ghost" href="#cockpit">
                 See it work
               </a>
             </div>

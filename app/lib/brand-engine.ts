@@ -8,14 +8,18 @@ export const DEMO_BRAND = 'Tovemi'
 export const DEFAULT_COLOUR = '#D6202B'
 const KEY = 'oc-brand-v1'
 
-export type BrandState = { name: string; colour: string }
-const DEFAULT: BrandState = { name: '', colour: DEFAULT_COLOUR }
+/* Spec 27 (R6 p1): styl tla strony i ekranu (paper/night/clay) tez nalezy do marki — ustawia go tylko hero. */
+export type Skin = 'paper' | 'night' | 'clay'
+export const SKINS: readonly Skin[] = ['paper', 'night', 'clay']
+export type BrandState = { name: string; colour: string; skin: Skin }
+const DEFAULT: BrandState = { name: '', colour: DEFAULT_COLOUR, skin: 'paper' }
 
 let state: BrandState = DEFAULT
 let loaded = false
 const subs = new Set<() => void>()
 
 const cleanName = (v: unknown) => (typeof v === 'string' ? [...v].filter((ch) => ch >= ' ' && ch !== '<' && ch !== '>').join('').slice(0, 14) : '')
+const cleanSkin = (v: unknown): Skin => (SKINS as readonly unknown[]).includes(v) ? (v as Skin) : 'paper'
 const cleanColour = (v: unknown) => (typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v.toUpperCase() : DEFAULT_COLOUR)
 
 function load() {
@@ -25,7 +29,7 @@ function load() {
     const raw = window.localStorage.getItem(KEY)
     if (raw) {
       const j = JSON.parse(raw) as Partial<BrandState>
-      state = { name: cleanName(j.name), colour: cleanColour(j.colour) }
+      state = { name: cleanName(j.name), colour: cleanColour(j.colour), skin: cleanSkin(j.skin) }
     }
   } catch {
     /* brak dostepu do pamieci — zostaje stan domyslny */
@@ -55,8 +59,9 @@ export function setBrand(patch: Partial<BrandState>) {
   const next = {
     name: patch.name !== undefined ? cleanName(patch.name) : state.name,
     colour: patch.colour !== undefined ? cleanColour(patch.colour) : state.colour,
+    skin: patch.skin !== undefined ? cleanSkin(patch.skin) : state.skin,
   }
-  if (next.name === state.name && next.colour === state.colour) return
+  if (next.name === state.name && next.colour === state.colour && next.skin === state.skin) return
   state = next
   try {
     window.localStorage.setItem(KEY, JSON.stringify(state))
@@ -73,10 +78,12 @@ export function useBrand() {
   return {
     name: s.name,
     colour: s.colour,
+    skin: s.skin,
     brand,
     own: s.name.trim().length > 0,
     setName: useCallback((v: string) => setBrand({ name: v }), []),
     setColour: useCallback((v: string) => setBrand({ colour: v }), []),
+    setSkin: useCallback((v: Skin) => setBrand({ skin: v }), []),
   }
 }
 
