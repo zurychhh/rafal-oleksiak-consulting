@@ -283,3 +283,11 @@ Link dokładany przez `ship-design` w nagłówku `/` (`data-ship-added="nawyko-l
 | Miejsce | Tekst | Status |
 |---|---|---|
 | nagłówek `/`, link → `/nawyko` | Nawyko reorder app | nowy; czytelnik-kupujący odrzucił „The Nawyko app” („obcy wyraz, nie mówi, co dostaje marka; brzmi jak aplikacja do pobrania dla mnie”) → nazwa + korzyść ( bez „my”, bez słów o starcie/pilotażu; copy-voice OK, content-rules OK) |
+
+## R4 przebieg 9 — pasek rozdziałów `/nawyko` (24.11.2026, spec 20 A)
+Pasek pojawia się przy przewijaniu w górę za pierwszym ekranem. Etykiety rozdziałów to te same słowa co w drugim poziomie nawigacji (zaakceptowane wcześniej); nowe są tylko dwa krótkie. Czytelnik-kupujący nie był uruchamiany (same etykiety nawigacji, bez zdań) — copy-voice OK.
+| Miejsce | Tekst | Status |
+|---|---|---|
+| pasek, rozdział przed „How it works” | Overview | nowy |
+| pasek, rozdział → `#privacy` | Privacy | nowy (nazwa sceny prywatności) |
+| pasek, przycisk → `#enquiry` | Ask about Nawyko | bez zmian (ten sam co w pierwszym ekranie) |

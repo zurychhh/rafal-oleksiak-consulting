@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { preload } from 'react-dom'
+import { ChapterBar } from './ChapterBar'
 import { SiteNav } from '../components/SiteNav'
 import { DayStrip, Story } from './NawykoClient'
 import { HeroGap } from '../calculator/HeroGap'
@@ -84,6 +85,17 @@ const JSON_LD = {
   ],
 }
 
+// Spec 20: rozdzialy paska — te same nazwy co w drugim poziomie nawigacji (≥ 1200 px), plus Privacy.
+const CHAPTERS = [
+  { id: 'how', label: 'How it works' },
+  { id: 'cashback', label: 'Cashback' },
+  { id: 'levels', label: 'Points' },
+  { id: 'exchange', label: 'Your costs' },
+  { id: 'privacy', label: 'Privacy' },
+  { id: 'proof', label: 'Proof' },
+  { id: 'faq', label: 'FAQ' },
+]
+
 const PIN_JS =
   "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!navigator.webdriver&&innerHeight>=600)document.documentElement.setAttribute('data-nk-pin','')}catch(e){}"
 
@@ -108,9 +120,10 @@ export default function Nawyko() {
         <a href="#proof">Proof</a>
         <a href="#faq">FAQ</a>
       </SiteNav>
+      <ChapterBar chapters={CHAPTERS} afterId="top" ctaHref="#enquiry" ctaLabel="Ask about Nawyko" className="nk-caps" />
 
       <main id="main">
-        <section className="nk-hero" aria-labelledby="nk-h1">
+        <section className="nk-hero" id="top" aria-labelledby="nk-h1">
           <div>
             <div className="nk-caps nk-lab">Nawyko · white-label app for repeat-purchase brands</div>
             <h1 className="nk-h1" id="nk-h1">
