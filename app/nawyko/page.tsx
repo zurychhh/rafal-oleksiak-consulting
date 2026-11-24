@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { preload } from 'react-dom'
 import { SiteNav } from '../components/SiteNav'
 import { DayStrip, Story } from './NawykoClient'
 import { HeroGap } from '../calculator/HeroGap'
@@ -46,6 +47,8 @@ const PIN_JS =
   "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!navigator.webdriver&&innerHeight>=600)document.documentElement.setAttribute('data-nk-pin','')}catch(e){}"
 
 export default function Nawyko() {
+  // Spec 15 A2: font gotowy przed pierwszym malowaniem (font-display:optional w nawyko.css) — wejscie z kotwica bez skoku.
+  preload('/fonts/instrument-sans-400-600-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <div className="nk">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />

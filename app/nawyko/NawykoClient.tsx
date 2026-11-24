@@ -69,7 +69,7 @@ function Scratch({ gone, onDone, auto }: { gone: boolean; onDone: () => void; au
       g.stroke()
     }
     g.fillStyle = '#14161A'
-    g.font = `600 ${Math.round(11 * dpr)}px "Instrument Sans", system-ui, sans-serif`
+    g.font = `600 ${Math.round(11 * dpr)}px "NK Instrument Sans", "Instrument Sans", system-ui, sans-serif`
     g.textAlign = 'center'
     g.textBaseline = 'middle'
     const label = 'S C R A T C H   H E R E'
@@ -1647,7 +1647,71 @@ function Faq() {
 }
 
 /* ── calosc pod pierwszym ekranem: scena, „czego nie robi”, final z formularzem ── */
-const NEVER = ['No random rewards.', 'No health claims.', 'No hidden rules.'] as const
+/* spec 15 A: trzy przelaczniki, ktore marka chcialaby wlaczyc. Kazdy wraca do „off” i mowi dlaczego.
+   aria-checked zostaje "false" przez caly czas — przelacznik naprawde nigdy sie nie wlacza. */
+const NEVER = [
+  { id: 'draw', label: 'Random prize draw', why: 'Stays off: rewards are fixed and shown in advance, never drawn at random.' },
+  { id: 'claim', label: 'Claim: supports immunity', why: 'Stays off: the app makes no health claims.' },
+  {
+    id: 'swap',
+    label: 'Change the reward after the card is scratched',
+    why: 'Stays off: rewards are fixed in advance, so a scratched card keeps the reward shown before it.',
+  },
+] as const
+
+function NeverScene({ skin, brand }: { skin: Skin; brand: string }) {
+  const [last, setLast] = useState<number | null>(null)
+  const [tries, setTries] = useState<number[]>(() => NEVER.map(() => 0))
+  const press = (i: number) => {
+    setLast(i)
+    setTries((t) => t.map((n, k) => (k === i ? n + 1 : n)))
+  }
+  return (
+    <section className="nk-still nk-never" id="never" aria-labelledby="nk-never">
+      <div className="nk-panel">
+        <div className="nk-caps nk-lab">
+          <span className="nk-who">For you</span>
+          <span className="nk-labrest">What it never does</span>
+        </div>
+        <h2 className="nk-h2" id="nk-never">
+          Prize draws, health claims and reward changes stay off.
+        </h2>
+        <p className="nk-one">Try a switch: it turns back off and the panel says why.</p>
+        <div className="nk-desk2 nk-nv">
+          <div className="nk-caps nk-deskh">
+            <span>{brand} · brand panel</span>
+            <b className="nk-ex">Example</b>
+          </div>
+          <ul className="nk-nv-list">
+            {NEVER.map((n, i) => (
+              <li key={n.id}>
+                <span id={'nk-nv-' + n.id}>{n.label}</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked="false"
+                  aria-labelledby={'nk-nv-' + n.id}
+                  aria-describedby="nk-nv-why"
+                  className="nk-tg"
+                  onClick={() => press(i)}
+                >
+                  <i key={tries[i]} className={tries[i] ? 'is-try' : undefined} aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p className="nk-nv-why" id="nk-nv-why" aria-live="polite">
+            {last === null ? 'All three are off.' : NEVER[last].why}
+          </p>
+        </div>
+        <p className="nk-fine nk-nv-end">The app stores only which days were ticked.</p>
+      </div>
+      <div className="nk-phonecol">
+        <Phone step={4} t={1} theme={skin} scratched brand={brand} day={17} />
+      </div>
+    </section>
+  )
+}
 
 function brandFrom(raw: string) {
   const m = raw
@@ -1736,11 +1800,9 @@ function BrandColour({ value, onPick }: { value: string; onPick: (hex: string) =
 export function Story() {
   const root = useRef<HTMLDivElement>(null)
   const [colour, setColour] = useState<string>(BRAND_COLS[0].hex)
-  const never = useRef<HTMLElement>(null)
   const [skin, setSkin] = useState<Skin>('paper')
   const [store, setStore] = useState('')
   const [name, setName] = useState('')
-  const [seen, setSeen] = useState(true)
 
   useEffect(() => {
     const host = root.current?.closest<HTMLElement>('.nk')
@@ -1748,25 +1810,6 @@ export function Story() {
     if (skin === 'paper') delete host.dataset.skin
     else host.dataset.skin = skin
   }, [skin])
-
-  useEffect(() => {
-    const el = never.current
-    if (!el || typeof IntersectionObserver === 'undefined') return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.webdriver) return
-    if (el.getBoundingClientRect().top < window.innerHeight) return
-    setSeen(false)
-    const io = new IntersectionObserver(
-      (es) => {
-        if (es.some((e) => e.isIntersecting)) {
-          setSeen(true)
-          io.disconnect()
-        }
-      },
-      { threshold: 0.35 },
-    )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
 
   const typed = brandFrom(store)
 
@@ -1781,17 +1824,7 @@ export function Story() {
       <MoreScenes skin={skin} brand={name.trim().slice(0, 14) || DEMO_BRAND} />
       <Evidence brand={name.trim().slice(0, 14) || DEMO_BRAND} />
 
-      <section ref={never} className={'nk-never' + (seen ? ' is-in' : '')} aria-labelledby="nk-never">
-        <div className="nk-caps nk-lab">What it never does</div>
-        <h2 className="nk-never-h" id="nk-never">
-          {NEVER.map((line, i) => (
-            <span key={line} style={{ ['--i' as string]: i }}>
-              {line}
-            </span>
-          ))}
-        </h2>
-        <p className="nk-one">The app stores only which days were ticked.</p>
-      </section>
+      <NeverScene skin={skin} brand={name.trim().slice(0, 14) || DEMO_BRAND} />
 
       <Faq />
 

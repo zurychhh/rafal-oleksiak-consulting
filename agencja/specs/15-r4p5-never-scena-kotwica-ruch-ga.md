@@ -32,3 +32,34 @@ Plik: `app/work/genactiv/GenactivClient.tsx`, `genactiv.css`.
 ## Bramki (oba)
 build, `tsc --noEmit`, lint (0 błędów, ≤ 1 ostrzeżenie), `copy-voice`, `qa.js --scroll` na zmienionej trasie (localhost),
 `content-rules --url`, `xvfb-run -a python3 -I scripts/webkit-check.py` 390+1440 na zmienionej trasie, recenzent niezależny.
+
+## Wykonanie A (24.11.2026)
+
+**(i) Scena.** `Story` → nowy komponent `NeverScene` (`app/nawyko/NawykoClient.tsx`, stała `NEVER` = trzy przełączniki), układ
+`nk-still` jak pozostałe sceny: panel marki (`nk-desk2`, nagłówek „{marka} · brand panel · Example” jak w `#exchange`) z trzema
+`<button role="switch" aria-checked="false">`, telefon obok (nad panelem na 390) w widoku „Rewards · listed from day 1”, dzień 17 —
+nagrody stałe, nic się w nim nie zmienia. Kliknięcie (mysz, dotyk, Space, Enter): gałka jedzie w prawo, drga i wraca;
+`aria-checked` zostaje `false` cały czas (przełącznik naprawdę się nie włącza). Zdanie wyjaśnienia w `aria-live="polite"`,
+miejsce zarezerwowane (`min-height` 3 linie, 4 linie ≤ 420 px) — wysokość sekcji przed/po kliknięciu: 1165/1165 px (390),
+846/846 px (1440). `prefers-reduced-motion`: animacja `none`, treść ta sama. Stary `IntersectionObserver` sceny (`seen`) usunięty —
+render serwera = render klienta. Teksty: `agencja/teksty-do-akceptacji.md`, sekcja „R4 przebieg 5”.
+
+**Kotwica — przyczyna inna niż w hipotezie.** Wysokości dzieci `#enquiry`, `.nk-never`, FAQ i stopki z HTML-a serwera (chunki JS
+zablokowane, skrypty inline działają) i po hydratacji są **identyczne** na 390 i 1440 (przed i po zmianie). Przesunięcie robi
+podmiana kroju: Instrument Sans ma `font-display:swap`, więc ~190 ms po pierwszym malowaniu tekst przechodzi z kroju systemowego
+na właściwy, każda sekcja nad kotwicą zmienia wysokość (np. `#how` 4340→4294, `#proof` 1473→1432 na 390), a zakotwiczenie
+przewijania przesuwa treść `#enquiry`. Dowód: z zablokowanymi plikami `.woff2` CLS = 0,000 na obu szerokościach.
+Rezerwa wysokości na kontenerze nic by tu nie dała (wysokości po hydratacji się nie zmieniają), więc poprawka jest u źródła:
+`nawyko.css` deklaruje ten sam plik pod nazwą „NK Instrument Sans” z `font-display:optional`, `.nk` używa tej nazwy, a `page.tsx`
+dokłada `preload` pliku latin. Krój jest gotowy przed pierwszym malowaniem albo (bardzo wolne łącze, pierwsza wizyta) zostaje
+systemowy do końca tej wizyty — nigdy nie podmienia się w trakcie. Inne trasy bez zmian (`app/fonts.css` nietknięty).
+
+CLS surowy (suma wszystkich `layout-shift`, także bez `hadRecentInput`), `goto('/nawyko#enquiry')`, Chromium, 3 przebiegi, `next start`:
+
+| Szerokość | Przed | Po |
+|---|---|---|
+| 390×844 | 0,168 / 0,200 / 0,168 | 0,000 / 0,000 / 0,000 |
+| 1440×900 | 0,106 / 0,106 / 0,106 | 0,000 / 0,000 / 0,000 |
+
+Ryzyko do obserwacji: przy pierwszej wizycie na wolnym łączu strona może zostać w kroju systemowym (tak działa `optional`);
+przy kolejnych plik jest w pamięci podręcznej.

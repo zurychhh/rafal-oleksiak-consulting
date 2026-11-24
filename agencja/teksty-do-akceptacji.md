@@ -258,3 +258,22 @@ Zastąpione: „Enquiry” (etykieta), „Would this fit your product?”, „Su
 | /tools title / description | Tools — five questions about your repeat customers / Five one-screen calculators for brands people buy again: reorder gap, value of a day, customer payback, reward cost, reminder day. | nowy |
 
 _Po czytelniku-kupującym i recenzencie (przebieg 4): H1, zdanie (fałszywe „Nothing you type is sent” — /tool wysyła tytuły produktów do AI po kliknięciu; „thirty seconds” bez źródła), karta 01 i 04, przycisk 02, finał — poprawione jak wyżej._
+
+## R4 przebieg 5 — /nawyko „What it never does” jako scena (24.11.2026, spec 15 A)
+Zastępuje trzy zdania „No random rewards. / No health claims. / No hidden rules.” (nagłówek sceny „czego nie robi”).
+| Miejsce | Tekst | Status |
+|---|---|---|
+| etykieta | For you · What it never does | zmieniony (doszło „For you”, jak w pozostałych scenach panelu marki) |
+| H2 | Prize draws, health claims and reward changes stay off. | nowy |
+| zdanie | Try a switch: it turns back off and the panel says why. | nowy |
+| panel (nagłówek) | {marka} · brand panel · Example | nowy (wzór z „#exchange”) |
+| przełącznik 1 | Random prize draw | nowy |
+| przełącznik 2 | Claim: supports immunity | nowy |
+| przełącznik 3 | Change the reward after the card is scratched | nowy |
+| zdanie wyjaśnienia (stan wyjściowy) | All three are off. | nowy |
+| po przełączniku 1 | Stays off: rewards are fixed and shown in advance, never drawn at random. | nowy |
+| po przełączniku 2 | Stays off: the app makes no health claims. | nowy |
+| po przełączniku 3 | Stays off: rewards are fixed in advance, so a scratched card keeps the reward shown before it. | nowy |
+| zdanie zamykające | The app stores only which days were ticked. | bez zmian |
+
+_Czytelnik-kupujący (osobny subagent) dla tych tekstów jeszcze nie przeszedł — do zlecenia przez Leada przed commitem na produkcję._
