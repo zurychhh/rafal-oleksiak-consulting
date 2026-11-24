@@ -85,15 +85,19 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 .ga-fig figcaption { font-size: 13px; color: var(--muted); font-weight: 500; }
 .ga-phone-slot {
   position: relative; height: var(--ph); width: calc(var(--ph) * 0.49);
-  clip-path: inset(-100vh -100vw 0 -100vw); /* telefon w pudelku nie wystaje pod scene */
 }
 .ga-glow {
   position: absolute; left: 50%; top: 58%; width: min(240%, 52vw); aspect-ratio: 1; transform: translate(-50%, -50%);
   background: radial-gradient(closest-side, rgba(245, 51, 63, 0.42), rgba(196, 26, 38, 0.14) 55%, transparent);
   pointer-events: none; z-index: 0;
 }
+/* Telefon w pudelku nie wystaje pod scene: przyciecie TYLKO od dolu. Ramka szersza o 60 px z kazdej strony (cien telefonu
+   jest tam juz niewidoczny) i 2x wyzsza niz slot, dolna krawedz = dol slotu; clip-path: inset(0) w granicach WLASNEJ ramki.
+   Bylo clip-path: inset(-100vh -100vw 0 -100vw) na slocie — WebKit (Safari) przycina clip-path do ramki elementu, wiec poswiata
+   byla twardym prostokatem szerokosci telefonu, a pudelko wezsze niz w Chromium (spec 15 B). Nie overflow: hidden (qa.js). */
+.ga-phone-clip { position: absolute; left: -60px; right: -60px; top: -100%; bottom: 0; clip-path: inset(0); z-index: 1; pointer-events: none; }
 .ga-phone {
-  position: absolute; inset: 0; z-index: 1;
+  position: absolute; left: 60px; right: 60px; top: 50%; height: 50%; z-index: 1; pointer-events: auto;
   border-radius: calc(var(--ph) * 0.075);
   background: var(--bg);
   border: calc(var(--ph) * 0.013) solid #2a1f21;
@@ -103,7 +107,7 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
   will-change: transform;
 }
 .ga-notch { position: absolute; top: 2.4%; left: 50%; width: 30%; height: 3.6%; transform: translateX(-50%); border-radius: 999px; background: #000; z-index: 3; }
-.ga-layer { position: absolute; inset: 0; }
+.ga-layer { position: absolute; inset: 0; box-shadow: 0 -0.8em 1.8em rgba(0, 0, 0, 0.6); } /* cien krawedzi wjezdzajacego ekranu; poza telefonem obciety */
 .ga-scr {
   position: absolute; inset: 0; padding: 16% 9% 9%;
   display: flex; flex-direction: column; justify-content: center; gap: 1.1em;
@@ -178,7 +182,7 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 
 /* ---------- Pudelko (geometria CSS, bez zdjecia i bez pliku logo) ---------- */
 .ga-box-wrap { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
-.ga-box { position: absolute; left: -24%; right: -24%; bottom: 0; height: 36%; }
+.ga-box { position: absolute; left: -24%; right: -24%; bottom: -2px; height: calc(36% + 2px); } /* 2 px pod dolna krawedz przyciecia: bez paska telefonu pod pudelkiem przy zaokragleniu (WebKit) */
 .ga-box-front {
   position: absolute; inset: 0; border-radius: 0.5em 0.5em 0 0;
   background: linear-gradient(180deg, #c41a26, #7a0f18);

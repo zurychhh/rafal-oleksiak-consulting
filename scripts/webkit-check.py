@@ -6,6 +6,10 @@
 #   xvfb-run -a python3 -I scripts/webkit-check.py http://localhost:3000/nawyko /tmp/wk-nawyko [css-override-file]
 #   WK_W=1440 xvfb-run -a python3 -I scripts/webkit-check.py ...   # Mac size (1440x900, desktop Safari UA)
 # Fail rule for the gate: any visible phone narrower than 150 px -> exit code 1 and a FAIL line.
+# WK_SCENE=1: WebDriver sets navigator.webdriver, so pages that fall back to their static layout for robots (/work/genactiv)
+#   never show the pinned scene here. With WK_SCENE=1 the script hides navigator.webdriver, leaves via client-side navigation
+#   (WK_AWAY, default /privacy) and comes back, so the scene mounts in scroll mode; then it screenshots the pinned track
+#   (.ga-track or .nk-track) every 8% of its scroll length. Same fail rule. (24.11.2026, spec 15 B)
 import os, sys, time
 from selenium import webdriver
 from selenium.webdriver.webkitgtk.options import Options
@@ -38,8 +42,23 @@ try:
     print("supports animation-timeline:scroll()", drv.execute_script("return CSS.supports('animation-timeline','scroll()')"),
           "| engine", drv.execute_script("return navigator.userAgent.match(/AppleWebKit\\/[\\d.]+/)?.[0]"))
     H = drv.execute_script("return document.documentElement.scrollHeight")
-    for i, frac in enumerate([0.0, 0.08, 0.16, 0.24, 0.4, 0.6, 0.8, 0.97]):
-        drv.execute_script("window.scrollTo(0, arguments[0])", int(H * frac))
+    plan = [(f, int(H * f)) for f in [0.0, 0.08, 0.16, 0.24, 0.4, 0.6, 0.8, 0.97]]
+    if os.environ.get("WK_SCENE") == "1":
+        path = drv.execute_script("return location.pathname + location.search")
+        drv.execute_script("Object.defineProperty(Navigator.prototype,'webdriver',{get:()=>false,configurable:true})")
+        drv.execute_script("window.next.router.push(arguments[0])", os.environ.get("WK_AWAY", "/privacy"))
+        time.sleep(2)
+        drv.execute_script("window.next.router.push(arguments[0])", path)
+        time.sleep(3)
+        t = drv.execute_script("const e=document.querySelector('.ga-track,.nk-track');if(!e)return null;"
+                               "const r=e.getBoundingClientRect();return [r.top+scrollY, r.height-innerHeight]")
+        print("scene track (top, span):", t)
+        if not t:
+            print("FAIL: WK_SCENE=1 but no pinned track mounted")
+            sys.exit(1)
+        plan = [(round(k * 0.08, 2), int(t[0] + min(1, k * 0.08) * t[1])) for k in range(13)] + [(1.0, int(t[0] + t[1]))]
+    for i, (frac, y) in enumerate(plan):
+        drv.execute_script("window.scrollTo(0, arguments[0])", y)
         time.sleep(1.2)
         phones = drv.execute_script(
             "return [...document.querySelectorAll('.nk-phone,.ga-phone')].filter(e=>{const r=e.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight}).map(e=>{const r=e.getBoundingClientRect();return [Math.round(r.width),Math.round(r.height)]})")

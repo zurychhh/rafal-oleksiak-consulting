@@ -831,6 +831,7 @@ export function GenactivStory() {
             <figure className="ga-fig">
               <div className={'ga-phone-slot' + (i === 0 ? ' ga-out' : '')}>
                 {i === 0 ? <div className="ga-glow" /> : null}
+                <div className="ga-phone-clip">
                 <div className="ga-phone">
                   <div className="ga-notch" />
                   {i === 0 ? <ScreenHome /> : null}
@@ -844,6 +845,7 @@ export function GenactivStory() {
                   {i === 8 ? <ScreenBuild p={1} /> : null}
                   {i === 9 ? <ScreenResults /> : null}
                   {i === 10 ? <ScreenBrand c={pick} /> : null}
+                </div>
                 </div>
                 {i === 0 ? (
                   <div className="ga-box-wrap">
@@ -861,14 +863,12 @@ export function GenactivStory() {
 
   const act = Math.min(ACTS - 1, Math.floor(f))
   const local = f - act
-  // przenikanie tekstow i ekranow: wejscie w pierwszych 12% aktu, wyjscie w ostatnich 12%
-  // Ekrany sa nieprzezroczyste i lezy kolejno w DOM: nowy ekran wchodzi NA stary w ostatnich 10% poprzedniego aktu,
-  // stary znika dopiero pod pelnym nowym. Wczesniej oba gasly jednoczesnie i na granicy aktow telefon byl pusty.
-  const vis = (i: number) => {
-    const fin = i === 0 ? 1 : smooth((f - (i - 0.1)) / 0.1)
-    const fout = i === ACTS - 1 ? 1 : 1 - smooth((f - (i + 1)) / 0.1)
-    return Math.min(fin, fout)
-  }
+  // Zmiana ekranu: ekrany sa nieprzezroczyste i leza kolejno w DOM; nowy ekran WJEZDZA od dolu na stary (transform) w ostatnich
+  // 10% poprzedniego aktu, stary znika dopiero pod pelnym nowym. Wczesniej nowy ekran przenikal krycie na stary i w polowie
+  // przejscia oba teksty nakladaly sie w nieczytelna mieszanke (spec 15 B); jeszcze wczesniej oba gasly i telefon byl pusty (p4).
+  const fin = (i: number) => (i === 0 ? 1 : smooth((f - (i - 0.1)) / 0.1))
+  const fout = (i: number) => (i === ACTS - 1 ? 1 : 1 - smooth((f - (i + 1)) / 0.1))
+  const vis = (i: number) => Math.min(fin(i), fout(i))
   const p0 = smooth(f / 0.8) // telefon wysuwa sie z pudelka
   const boxOut = smooth((f - 0.75) / 0.35)
 
@@ -905,6 +905,8 @@ export function GenactivStory() {
         <figure className="ga-fig">
           <div className="ga-phone-slot" style={{ transform: `translateY(${(-(1 - p0) * 16).toFixed(2)}%)` }}>
             <div className="ga-glow" style={{ opacity: 1 - 0.55 * boxOut }} />
+            {/* przycina telefon tylko od dolu (pudelko); zamiast clip-path z ujemnym inset, ktorego WebKit nie respektuje */}
+            <div className="ga-phone-clip">
             <div className="ga-phone" style={{ transform: `translateY(${((1 - p0) * 50).toFixed(2)}%)` }}>
               <div className="ga-notch" />
               {COPY.map((_, i) => (
@@ -912,7 +914,11 @@ export function GenactivStory() {
                   key={i}
                   className="ga-layer"
                   inert={vis(i) < 0.5 && i !== 7}
-                  style={{ opacity: vis(i), pointerEvents: vis(i) < 0.5 ? 'none' : undefined }}
+                  style={{
+                    opacity: fin(i) > 0 ? fout(i) : 0,
+                    transform: fin(i) < 1 ? `translateY(${((1 - fin(i)) * 100).toFixed(2)}%)` : undefined,
+                    pointerEvents: vis(i) < 0.5 ? 'none' : undefined,
+                  }}
                 >
                   {i === 0 ? <ScreenHome /> : null}
                   {i === 1 ? <ScreenFade p={act === 1 ? local : act > 1 ? 1 : 0} /> : null}
@@ -928,6 +934,7 @@ export function GenactivStory() {
                   {i === 10 ? <ScreenBrand c={act === 10 ? mix(GA_RED, pick, smooth(local / 0.4)) : GA_RED} /> : null}
                 </div>
               ))}
+            </div>
             </div>
             <div
               className="ga-box-wrap"
