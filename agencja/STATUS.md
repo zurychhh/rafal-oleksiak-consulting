@@ -12,14 +12,22 @@ po poprawce 195×403 (390) i 325×672 (1440), zrzuty obejrzane. Bramka: `scripts
 WebKit z Playwrighta jest tu zablokowane, działa WebKitGTK z apt). Każdy przebieg: uruchom na każdej zmienionej trasie (390 i 1440),
 żaden widoczny telefon węższy niż 150 px. Nie poprawiaj tego drugi raz — sprawdź tylko, czy Twoje zmiany tego nie cofnęły.
 
-## RUNDA 6 — FINALNA ARCHITEKTURA /nawyko + /work/genactiv RÓWNOLEGLE (Rafał 24.11.2026 19:15, przez doradcę). CZYTAJ PIERWSZE.
-Spec: `agencja/specs/27-r6-nawyko-architektura.md` — 7 scen zamiast ok. 13 (hero z całą personalizacją, przerywnik „dlaczego”,
-kokpit mechanik klient | marka, dowód, Twój sklep wieloplatformowo, finał bez zmian, zapytanie + pytania zamiast FAQ),
-ujednolicenie wizualne do poziomu finału; równolegle p4 `/work/genactiv` (Rafał prosi o tę wersję dziś). Zastępuje resztę RUNDY 5.
+## PILNE R6-COFNIĘTE (Rafał 24.11.2026 20:55): R6 /nawyko odrzucona — „wyrzuciłeś sedno strony”. CZYTAJ PIERWSZE.
+Doradca przywrócił `app/nawyko/` i `app/lib/brand-engine.ts` do stanu 08b1858 (R5 p3 cz. 1). `/work/genactiv` z R6 zostaje
+(Rafał: „GenActiv jest ok”). Przebieg, który zaczął się przed 21:00, NIE pushuje swoich zmian w `app/nawyko/` — przed pushem
+`git checkout origin/agencja/strona -- app/nawyko app/lib/brand-engine.ts`. `Cockpit.tsx` zostaje w repo do ponownego użycia.
 
-**R6 p1 ZROBIONY (24.11 19:38–20:35, spec 31 + 32).** Następny przebieg = R6 p2: sceny 3–6 (dowód jako jeden pełnoszerokościowy moment,
-„Twój sklep” wieloplatformowo, pytania zamiast FAQ obok formularza), kalkulator luki z hero przenieść albo wchłonąć (recenzja 40 pkt 8 —
-spec go nie wymienia), przełączanie zakładek kokpitu przewijaniem, reszta tekstów z recenzji 41. Szczegóły w „Następne” R6-N1.
+## RUNDA 6' — TYLKO części „For you” na /nawyko (spec 27 w wersji poprawionej poniżej; reszta spec 27 NIEAKTUALNA)
+- NIE RUSZAĆ: hero, „Four steps that bring the customer back” z etapami na telefonie, scena „For your customer · Rewards in the
+  app”, finał „One morning with {marka}”, zapytanie. Żadna istniejąca sekcja widoczna dla odwiedzającego nie znika bez słów Rafała.
+- Sekcje z etykietą „For you” (panel marki/kurs punktów, ścieżki, apteka, zgody, dowód, „what it never does”) łączą się w JEDEN
+  kokpit tuż po „Rewards in the app” (telefon klienta po lewej, panel marki po prawej, `Cockpit.tsx`), z jednym zdaniem-mostem,
+  dlaczego teraz widok marki.
+- Środkowy konfigurator: jego opcje (styl strony/tło) przechodzą do konfiguratora w hero, środkowy znika (prośba Rafała 19:15).
+- Integracja: osobna sekcja, wieloplatformowa (spec 27 scena 4). FAQ: pytania jako chipy z odpowiedzią-wiadomością, FAQPage w DOM.
+- Wizualnie podnieść do poziomu finału bez usuwania treści.
+- NOWA BRAMKA (stała): inwentarz sekcji — lista sekcji i scen etapów `/nawyko` przed i po kawałku; każda sekcja, która zniknęła,
+  = FAIL, chyba że w STATUS jest cytat zgody Rafała. Podgląd dla Rafała dopiero po zielonej bramce.
 
 ## RUNDA 5 — ŻYWA STRONA I WIELKI FINAŁ (Rafał 24.11.2026 12:47, przez doradcę). CZYTAJ PIERWSZE, PRZED RUNDĄ 4.
 Spec: `agencja/specs/26-r5-zywa-strona.md` (pięć uwag Rafała + kierunek doradcy + kolejność p1–p4 + nowe bramki `brand-propagation`
