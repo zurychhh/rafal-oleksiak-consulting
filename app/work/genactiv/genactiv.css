@@ -18,6 +18,22 @@
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* Spec 16 B1: zapas z dopasowanymi metrykami (fontTools z montserrat-latin.woff2 vs Arial/Liberation Sans, tekst zdania
+   z opisu trasy, potem dostrojone pomiarem wysokosci akapitow 360-1440 px): podmiana kroju po swap nie zmienia zawijania ani wysokosci linii, wiec nie przesuwa ukladu (bylo 0,062 na 390
+   przy wolnym pliku fontu). Wagi 400-500 i 600-900 osobno, bo Montserrat Bold jest wezszy wzgledem Arial Bold. */
+@font-face {
+  font-family: 'Montserrat Fallback';
+  src: local('Arial'), local('ArialMT'), local('Helvetica'), local('Liberation Sans'), local('LiberationSans');
+  font-weight: 100 550;
+  size-adjust: 113%; ascent-override: 85.7%; descent-override: 22.2%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Montserrat Fallback';
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Helvetica Bold'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
+  font-weight: 551 900;
+  size-adjust: 110.5%; ascent-override: 87.6%; descent-override: 22.7%; line-gap-override: 0%;
+}
+
 .ga {
   --bg: #0e0b0c;
   --surface: #1d1517;
@@ -37,7 +53,7 @@
   --ph: clamp(440px, 74svh, 660px);
   background: var(--bg);
   color: var(--text);
-  font-family: 'Montserrat', system-ui, sans-serif;
+  font-family: 'Montserrat', 'Montserrat Fallback', system-ui, sans-serif;
   overflow-x: clip;
   min-height: 100vh;
 }
@@ -46,7 +62,7 @@
 html:has(.ga) { overflow-x: visible; max-width: none; scroll-behavior: auto; background: #0e0b0c; }
 body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color: #fff; }
 .ga :where(section) { padding: 0; overflow-x: visible; max-width: none; transform: none; backface-visibility: visible; }
-.ga h1, .ga h2 { font-family: 'Montserrat', system-ui, sans-serif; margin: 0; color: inherit; }
+.ga h1, .ga h2 { font-family: 'Montserrat', 'Montserrat Fallback', system-ui, sans-serif; margin: 0; color: inherit; }
 .ga p { margin: 0; }
 .ga *, .ga *::before, .ga *::after { box-sizing: border-box; }
 .ga a { color: inherit; }
@@ -227,7 +243,13 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 }
 .ga-cta:hover { background: #9e1520; }
 
-.ga-foot { border-top: 1px solid #2a1f21; padding: 28px 48px 40px; }
+/* Spec 16 B1: wejscie z kotwica #enquiry na 1440 dawalo CLS ~0,1. #enquiry stoi przy koncu strony, wiec przewiniecie do
+   kotwicy dobija do dna; CookieConsent pokazuje sie od razu (scrollY > 200) i dokleja <html> padding-bottom = wysokosc paska
+   (57 px na 1440, 78 na 390), a Chromium w trakcie ladowania ponownie przewija do kotwicy -> tresc skacze o te 57 px.
+   Na tej trasie rezerwa pod pasek jest STALA, w stopce od pierwszej klatki, a padding z <html> zdjety: wysokosc strony
+   nie zmienia sie, gdy pasek wjezdza (fixed, lezy na rezerwie, nic nie przykrywa). */
+html:has(.ga) { padding-bottom: 0 !important; }
+.ga-foot { border-top: 1px solid #2a1f21; padding: 28px 48px calc(40px + var(--ga-foot-reserve, 72px)); }
 .ga-foot nav { max-width: 1240px; margin: 0 auto; display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; }
 .ga-foot a { color: var(--muted); }
 
@@ -304,7 +326,7 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
   .ga-still { padding: 0 16px; }
   .ga-act { grid-template-columns: minmax(0, 1fr); gap: 32px; padding: 40px 0 !important; }
   .ga-still .ga-phone-slot { --ph: 460px; }
-  .ga-foot { padding: 24px 16px 32px; }
+  .ga-foot { padding: 24px 16px calc(32px + var(--ga-reserve)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
