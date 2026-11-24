@@ -1,0 +1,50 @@
+{
+ "heads": [
+  "A habit app with your logo on it.",
+  "What the gap between packs costs you",
+  "Four steps that bring the customer back for the next pack.",
+  "Every reward is listed from day one.",
+  "See the day each pack really runs out.",
+  "Your brand. Your colours. Your app.",
+  "Cashback grows with every Tovemi order.",
+  "Cashback wallet",
+  "Points and levels",
+  "You set what each point is worth.",
+  "A second product, earned in five short lessons.",
+  "Pharmacy buyers show up in your data after one scan.",
+  "Health data never reaches your marketing.",
+  "Stored",
+  "Never sent to",
+  "Reorder lift, measured against customers who never get the app.",
+  "Runs on Shopify; your other tools connect per brand.",
+  "Nothing a regulator or customer could hold against your brand.",
+  "FAQ: six answers you need before the first call.",
+  "Will customers really tick every day?",
+  "What about GDPR and health data?",
+  "What does a reward cost, and who sets it?",
+  "How long does setup take?",
+  "Does it work for pharmacy purchases?",
+  "What if a customer does not give consent?",
+  "One morning with Tovemi",
+  "Build your brand’s app."
+ ],
+ "steps": [
+  "01Confirm the packCustomers scan the box or receipt: you see each purchase date.",
+  "02Scratch one card a dayA scratch card after each dose: your brand, seen daily.",
+  "03Build the streakEach card marks a day; the next reward stays in view.",
+  "04Earn a reward they saw comingTwenty-four of thirty days earns the stamp and a next-pack code."
+ ],
+ "ids": [
+  "top",
+  "loyalty",
+  "paths",
+  "pharmacy",
+  "privacy",
+  "proof",
+  "integrations",
+  "never",
+  "faq",
+  "finale",
+  "enquiry"
+ ]
+}
