@@ -9,7 +9,7 @@
 # WK_SCENE=1: WebDriver sets navigator.webdriver, so pages that fall back to their static layout for robots (/work/genactiv)
 #   never show the pinned scene here. With WK_SCENE=1 the script hides navigator.webdriver, leaves via client-side navigation
 #   (WK_AWAY, default /privacy) and comes back, so the scene mounts in scroll mode; then it screenshots the pinned track
-#   (.ga-track or .nk-track) every 8% of its scroll length. Same fail rule. (24.11.2026, spec 15 B)
+#   (.ga-track or .nk-scene.is-scroll — .nk-track is the 30-day slider, not the scene; fixed 24.11 R4p6) every 8% of its scroll length. Same fail rule. (24.11.2026, spec 15 B)
 import os, sys, time
 from selenium import webdriver
 from selenium.webdriver.webkitgtk.options import Options
@@ -50,7 +50,7 @@ try:
         time.sleep(2)
         drv.execute_script("window.next.router.push(arguments[0])", path)
         time.sleep(3)
-        t = drv.execute_script("const e=document.querySelector('.ga-track,.nk-track');if(!e)return null;"
+        t = drv.execute_script("const e=document.querySelector('.ga-track,.nk-scene.is-scroll');if(!e)return null;"
                                "const r=e.getBoundingClientRect();return [r.top+scrollY, r.height-innerHeight]")
         print("scene track (top, span):", t)
         if not t:

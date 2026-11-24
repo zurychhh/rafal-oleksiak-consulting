@@ -3,6 +3,7 @@
 Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie albo w regułach → linia w `agencja/postep-uczenia.md`.
 
 ## Do przerobienia (w tej kolejności)
+0. ~~Nawigacja — etykiety: NN/g „Category Names Suck”~~ (24.11 R4 p6: nazwa produktu + słowo opisu w linku na `/`)
 1. ~~Strony produktowe i scrollytelling — przewodnik Chrome „Scrollytelling”~~ (zrobione 23.11, runda 3)
 1b. ~~Narzędzia/kalkulatory — NN/g „Calculators and Quizzes: User Expectations” (2024)~~ (zrobione 23.11, runda 3 przebieg 3)
 2. ~~B2B lead generation i CRO — formularze: NN/g „Website Forms Usability: Top 10”~~ (zrobione 23.11 przebieg 5: reguła pól i błędów w narzędziach); zostaje: liczba pól formularza zapytania na `/nawyko` i `/calculator` (Baymard)

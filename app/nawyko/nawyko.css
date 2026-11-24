@@ -485,8 +485,8 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
   /* rozdzial „For you”: bohaterem jest wykres marki — telefon maleje i odjezdza w lewo, tekst podjezdza do gory.
      Tylko transformacje (zmiana wysokosci telefonu dawala CLS 0,26 — recenzja 07). */
   .nk-scene.is-scroll{--ph:clamp(300px,50svh,500px);}
-  .nk-scene.is-scroll[data-ch="1"] .nk-phonecol{transform-origin:50% 0;transform:translateX(-26%) scale(.6);}
-  .nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateY(calc(var(--ph) * -.4));}
+  .nk-scene.is-scroll[data-ch="1"] .nk-phonecol{transform-origin:50% 0;transform:translateX(-26%) scale(.78);}
+  .nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateY(calc(var(--ph) * -.22));}
 }
 @media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
 @media (max-width:860px) and (max-height:720px){.nk-scene.is-scroll{--ph:min(43svh,470px);}}
@@ -530,8 +530,8 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 @media (max-width:860px){
   .is-scroll .nk-scenehead,.is-scroll .nk-phonecol{transition:transform .18s linear;}
   .nk-scene.is-scroll .nk-phonecol,.nk-scene.is-scroll[data-ch="1"] .nk-phonecol,.nk-scene.is-scroll[data-ch="2"] .nk-phonecol{
-    transform-origin:50% 0;transform:translateX(calc(-26% * var(--sw,0))) scale(calc(1 - .4 * var(--sw,0)));}
-  .nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateY(calc(var(--ph) * -.4 * var(--sw,0)));}
+    transform-origin:50% 0;transform:translateX(calc(-26% * var(--sw,0))) scale(calc(1 - .22 * var(--sw,0)));}
+  .nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateY(calc(var(--ph) * -.22 * var(--sw,0)));}
 }
 @media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
 /* bez wygladzania .18s: przejazd jest juz dlugi i plynny z samego przewijania, a opoznienie CSS dawalo nakladanie,

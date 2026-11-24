@@ -282,4 +282,4 @@ _Czytelnik-kupujący przeszedł (24.11 03:05): 5 tekstów przepisanych przed com
 Link dokładany przez `ship-design` w nagłówku `/` (`data-ship-added="nawyko-link"`), obok „Check your own gap — free”.
 | Miejsce | Tekst | Status |
 |---|---|---|
-| nagłówek `/`, link → `/nawyko` | The Nawyko app | nowy (nazwa produktu; bez „my”, bez słów o starcie/pilotażu; copy-voice OK, content-rules OK) |
+| nagłówek `/`, link → `/nawyko` | Nawyko reorder app | nowy; czytelnik-kupujący odrzucił „The Nawyko app” („obcy wyraz, nie mówi, co dostaje marka; brzmi jak aplikacja do pobrania dla mnie”) → nazwa + korzyść ( bez „my”, bez słów o starcie/pilotażu; copy-voice OK, content-rules OK) |

@@ -248,11 +248,11 @@ const headerN = dcTemplate.match(/<header\b[^>]*>[\s\S]*?<\/header>/)
 if (headerN && !/href="\/nawyko"/.test(headerN[0])) {
   const nk = `<a href="/nawyko" data-ship-added="nawyko-link" style="flex:none;white-space:nowrap;${HEADER_LINK_SIZE}font-weight:700;` +
     `text-transform:uppercase;color:#14161A;text-decoration:underline;text-underline-offset:4px;` +
-    `padding:14px 0;margin:-14px 0">The Nawyko app</a>`
+    `padding:14px 0;margin:-14px 0">Nawyko reorder app</a>`
   let h = headerN[0]
   const toolA = h.match(/<a\b[^>]*data-ship-added="tool-link"[^>]*>[^<]*<\/a>/)
   h = toolA
-    ? h.replace(toolA[0], `<span data-ship-added="header-links" style="flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px">${nk}${toolA[0]}</span>`)
+    ? h.replace(toolA[0], `<span data-ship-added="header-links" style="flex:0 1 auto;min-width:0;max-width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px">${nk}${toolA[0]}</span>`)
     : h.replace(/<\/header>$/, nk + '</header>')
   dcTemplate = dcTemplate.replace(headerN[0], h)
   bump('link do /nawyko w naglowku')
