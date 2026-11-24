@@ -433,7 +433,7 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada
 | /nawyko | #integrations, fakty | Codes — Single-use, redeemed in {marka}’s own store. · Other tools — Subscription, loyalty and email tools are matched to your stack. · App stores — The app is listed under your brand name. | nowy |
 | /nawyko | #faq | chipy = 6 pytań (bez zmian) · dymek „Rafał” z odpowiedzią (bez zmian) · etykieta grupy (czytnik): Pick a question | nowy układ |
 
-### R6' p2 (24.11 23:30) — `/nawyko`
+### R6' p2 (24.11 23:25) — `/nawyko`
 - NOWE „Page style” (legenda grupy Paper / Night / Clay w hero) — czytelnik: niejasne → decyzja R6'q2-A.
 - PRZENIESIONE do hero bez zmian: „Type your brand name, pick a colour and a style. Every phone follows.”
 - ZMIENIONE nagłówek integracji: „Runs on Shopify; your other tools connect per brand.” → „Any store engine: pick yours, from Shopify to a custom build.” (decyzja R6'q2-B)
