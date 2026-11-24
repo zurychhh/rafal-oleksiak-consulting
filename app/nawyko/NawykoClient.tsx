@@ -1765,7 +1765,7 @@ function Evidence({ brand }: { brand: string }) {
             <span className="nk-labrest">Integrations</span>
           </div>
           <h2 className="nk-h2" id="nk-intg">
-            Runs on Shopify; your other tools connect per brand.
+            Any store engine: pick yours, from Shopify to a custom build.
           </h2>
           <p className="nk-one">Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both stores under your brand.</p>
           <p className="nk-fine">Pick your store engine. Shopify is ready; every other engine connects per brand through an adapter.</p>

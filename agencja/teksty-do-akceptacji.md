@@ -432,3 +432,9 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada
 | /nawyko | #integrations, podpisy adaptera | Shopify app: orders in, discount codes out · WooCommerce REST API and webhooks · Shoper REST API and webhooks · IdoSell Admin API · PrestaShop Webservice · Adobe Commerce REST API · Your own API and webhooks | nowy |
 | /nawyko | #integrations, fakty | Codes — Single-use, redeemed in {marka}’s own store. · Other tools — Subscription, loyalty and email tools are matched to your stack. · App stores — The app is listed under your brand name. | nowy |
 | /nawyko | #faq | chipy = 6 pytań (bez zmian) · dymek „Rafał” z odpowiedzią (bez zmian) · etykieta grupy (czytnik): Pick a question | nowy układ |
+
+### R6' p2 (24.11 23:30) — `/nawyko`
+- NOWE „Page style” (legenda grupy Paper / Night / Clay w hero) — czytelnik: niejasne → decyzja R6'q2-A.
+- PRZENIESIONE do hero bez zmian: „Type your brand name, pick a colour and a style. Every phone follows.”
+- ZMIENIONE nagłówek integracji: „Runs on Shopify; your other tools connect per brand.” → „Any store engine: pick yours, from Shopify to a custom build.” (decyzja R6'q2-B)
+- USUNIĘTE z aktem 7 (zgoda Rafała 19:15 w `agencja/inwentarz/zgody.json`): „Your brand. Your colours. Your app.”, „The name stays in this page. Nothing is sent.”, „Your branding”, „Under your brand”, „White label”, „Brand name”.

@@ -22,5 +22,9 @@
  {
   "tekst": "Brand name",
   "zgoda": "Rafał 24.11.2026 19:15 (spec 27): personalizacja w połowie strony dubluje górę — wszystkie opcje (tło itd.) na górę"
+ },
+ {
+  "tekst": "Runs on Shopify; your other tools connect per brand.",
+  "zgoda": "Rafał 24.11.2026 19:15 (spec 27): integracja ważna jako osobna sekcja, ale NIE tylko Shopify; doradca 22:50: nagłówek integracji ma mówić o sklepie odwiedzającego (zastąpiony: „Any store engine: pick yours, from Shopify to a custom build.”)"
  }
 ]

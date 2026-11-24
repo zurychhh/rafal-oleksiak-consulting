@@ -14,7 +14,7 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 7. ~~Strony produktowe — rozdziały i CTA w trakcie długiej strony~~ (24.11 R4 p9: Smashing „Designing Sticky Menus” → pasek rozdziałów `/nawyko` częściowo przyklejony z CTA); zostaje: to samo dla `/work/genactiv`
 9. ~~B2B CRO — ile pól i jaka kolejność w formularzu zapytania~~ (24.11 R4 p10: Baymard „Mark both required and optional fields” → `Enquiry` zgodny: 2 pola, obie zgody oznaczone; reguła 13 w rubryce tekstów dla każdego nowego formularza). Zostaje: kolejność pól (sklep przed e-mailem?) — test dopiero z danymi
 11. ~~Wydajność — CLS przy przewijaniu (web.dev „CLS”: `transform` nie przesuwa układu)~~ (24.11 R4 p11: gałka na `transform`, `key` na tekstach; zostaje: `cls-scroll` w `gates.sh`)
-12. Copywriting — nagłówki „Etykieta: zdanie” (czytelnik R4 p11: działa tylko ze słowem kupującego) — szukać źródła (NN/g o front-loading w nagłówkach z dwukropkiem)
+12. ~~Copywriting — nagłówki „Etykieta: zdanie”~~ (24.11 R6' p2: NN/g „First 2 Words” → nagłówek integracji)  (czytelnik R4 p11: działa tylko ze słowem kupującego) — szukać źródła (NN/g o front-loading w nagłówkach z dwukropkiem)
 10. ~~Dostępność — skok do celu w obrębie strony~~ (24.11 R4 p12: `/work/genactiv` 8/8 fokus na akcie z nazwą, `scripts/genactiv-focus-check.mjs`); stare brzmienie:: fokus na celu kotwicy i ogłoszenie czytnikiem (WCAG 2.4.3), dla pasków `/nawyko` i `/work/genactiv`
 8. ~~Scroll-driven animations w CSS — wsparcie przeglądarek~~ (24.11 R4 p4: Safari 26.0 obsługuje `animation-timeline`, webkit.org/blog/17333; iOS 18 nie → zawsze `@supports` + statyczny stan końcowy; `webkit-check.py` wypisuje wsparcie). Zostaje: czy przenieść część sceny z JS do CSS
 

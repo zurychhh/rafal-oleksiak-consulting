@@ -37,5 +37,5 @@ export const FEATURES = [
   'Pharmacy buyers show up in your data after one scan.',
   'Health data never reaches your marketing.',
   'Reorder lift, measured against customers who never get the app.',
-  'Runs on Shopify; your other tools connect per brand.',
+  'Any store engine: pick yours, from Shopify to a custom build.',
 ] as const
