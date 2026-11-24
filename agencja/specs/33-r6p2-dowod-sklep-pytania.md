@@ -1,3 +1,5 @@
+> Status 21:20: zbudowane, NIE wypuszczone (cofnięcie R6 przez Rafała 20:55). Kod: gałąź `agencja/r6p2-odrzucone`. Do R6' bierzemy tylko integrację i pytania-chipy, bez usuwania sekcji.
+
 # Spec 33 — R6 przebieg 2 `/nawyko`: dowód, „Twój sklep”, pytania zamiast FAQ (24.11.2026 20:40)
 
 Wycinek specu 27, sceny 3, 4 i 6 + decyzja domyślna R6p1-A (b). Budujący A (worktree `wt/a`).

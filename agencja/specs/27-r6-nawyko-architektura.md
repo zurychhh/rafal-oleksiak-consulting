@@ -1,5 +1,8 @@
 # Spec 27 — RUNDA 6: finalna architektura `/nawyko` (Rafał 24.11.2026 19:15, synteza doradcy) + `/work/genactiv` równolegle
 
+> **NIEAKTUALNE od 24.11 20:55** — Rafał odrzucił przebudowę środka strony. Obowiązuje RUNDA 6' w agencja/STATUS.md.
+
+
 Rafał: „jest już dużo lepiej”, „najładniejszy jest wielki finał”. Jego uwagi (wiążące): sekcje „For you” to dalej ściana tekstu
 ze zrzutami — zagregować albo usunąć; nie wiadomo, dlaczego nagle pojawia się „For your customer · Rewards in the app”;
 personalizacja w połowie strony dubluje górę — wszystkie opcje (tło itd.) na górę; potrzebny storytelling, przerywniki między

@@ -403,6 +403,7 @@ Etykiety w większości powtarzają istniejące kickery i rozdziały paska aktó
 | /work/genactiv | streszczenia aktów 1–11 | The box becomes a daily habit · The problem: the habit fades · Proof of purchase · One card a day · Rewards known in advance · Cashback that grows · Points and levels · Consent, never a condition · How it was built · How success is measured · Your brand colour | nowy |
 
 ## R6 p2 A — dowód na atramencie, „Your store”, pytania zamiast FAQ (24.11.2026, spec 33)
+> 21:20: NIE na stronie — wersja odłożona po cofnięciu R6 (gałąź `agencja/r6p2-odrzucone`); do czytelnika, jeśli R6' weźmie te teksty.
 copy-voice OK. Czytelnik-kupujący: NIE uruchomiony (budujący A bez osobnego subagenta) — do zrobienia przez Leada.
 Usunięte ze strony: akapity i wykres kropek w #proof, pas 5 kart #integrations, sekcja FAQ (akordeon), kalkulator luki pod hero.
 

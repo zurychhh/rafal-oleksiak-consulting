@@ -6,7 +6,6 @@
    jedna liczba z podpisem „Example”. Wszystkie liczby przykladowe; zadna nie pochodzi od prawdziwej marki. */
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { inkOn, monogram, onColour, useBrand } from '../lib/brand-engine'
-import './cockpit-scroll.css'
 
 const PACK = 30
 const SCREEN = '#111215'
@@ -61,7 +60,6 @@ export function WhyInterlude() {
         <div className="nk-why-bar" aria-hidden="true">
           <i style={{ transform: `scaleX(${Math.min(day, PACK) / PACK})` }} />
         </div>
-        <a className="nk-why-calc" href="/calculator">Work out your own gap →</a>
       </div>
     </section>
   )
@@ -94,8 +92,6 @@ const LOCKS = [
 
 type Cfg = { ship: number; stamp: number; cash: number; pts: number; lessons: number; pharmacy: boolean; push: boolean }
 const START: Cfg = { ship: 7, stamp: 24, cash: 2, pts: 10, lessons: 5, pharmacy: true, push: true }
-/* spec 34: ten sam warunek co w cockpit-scroll.css — przypieta scena, zakladka = funkcja przewiniecia */
-const PIN_Q = '(min-width:900px) and (min-height:600px) and (prefers-reduced-motion: no-preference)'
 
 function Range({ label, value, min, max, onChange, unit = '' }: { label: string; value: number; min: number; max: number; onChange: (v: number) => void; unit?: string }) {
   return (
@@ -265,106 +261,10 @@ export function Cockpit() {
   const set = <K extends keyof Cfg>(k: K, v: Cfg[K]) => setCfg((c) => ({ ...c, [k]: v }))
   const tab = TABS[at].id
 
-  const sec = useRef<HTMLElement>(null)
-  const pin = useRef<HTMLDivElement>(null)
-  const list = useRef<HTMLDivElement>(null)
-  const cur = useRef(0) // indeks pokazany (lustro `at` dla nasluchu przewijania)
-  const pinned = useRef(false)
-  const lock = useRef<{ i: number; until: number } | null>(null) // klik → plynne przewijanie bez migania posrednich zakladek
-
-  /* geometria toru: odcinek i = [top + i*seg, top + (i+1)*seg) */
-  const track = () => {
-    const s = sec.current
-    const p = pin.current
-    if (!s || !p) return null
-    const r = s.getBoundingClientRect()
-    const run = r.height - p.offsetHeight
-    return run > 40 ? { top: r.top + scrollY, r, seg: run / TABS.length } : null
-  }
-
-  useEffect(() => {
-    let mq: MediaQueryList | null = null
-    try {
-      mq = matchMedia(PIN_Q)
-    } catch {
-      return
-    }
-    let raf = 0
-    const tick = () => {
-      raf = 0
-      if (!pinned.current) return
-      const t = track()
-      if (!t) return
-      const i = Math.min(TABS.length - 1, Math.max(0, Math.floor(-t.r.top / t.seg)))
-      const l = lock.current
-      if (l) {
-        if (i !== l.i && performance.now() < l.until) return
-        lock.current = null
-      }
-      if (i !== cur.current) {
-        cur.current = i
-        setAt(i)
-      }
-    }
-    const on = () => {
-      if (!raf) raf = requestAnimationFrame(tick)
-    }
-    const end = () => {
-      lock.current = null
-      on()
-    }
-    const sync = () => {
-      pinned.current = !!mq?.matches
-      on()
-    }
-    sync()
-    mq.addEventListener('change', sync)
-    addEventListener('scroll', on, { passive: true })
-    addEventListener('resize', on)
-    addEventListener('scrollend', end)
-    return () => {
-      mq?.removeEventListener('change', sync)
-      removeEventListener('scroll', on)
-      removeEventListener('resize', on)
-      removeEventListener('scrollend', end)
-      if (raf) cancelAnimationFrame(raf)
-    }
-  }, [])
-
-  /* aktywna zakladka widoczna w poziomo przewijanym rzedzie (bez przewijania okna) */
-  useEffect(() => {
-    const l = list.current
-    const b = tabs.current[at]
-    if (!l || !b || l.scrollWidth <= l.clientWidth) return
-    const lr = l.getBoundingClientRect()
-    const br = b.getBoundingClientRect()
-    if (br.left >= lr.left && br.right <= lr.right) return
-    l.scrollTo({ left: l.scrollLeft + br.left - lr.left - 24, behavior: pinned.current ? 'smooth' : 'auto' })
-  }, [at])
-
-  /* wybor kliknieciem/klawiatura: w przypietej scenie przewija okno na poczatek odcinka zakladki (+1 px) */
-  const select = (i: number) => {
-    cur.current = i
-    setAt(i)
-    if (!pinned.current) return
-    const t = track()
-    if (!t) return
-    const now = Math.min(TABS.length - 1, Math.max(0, Math.floor(-t.r.top / t.seg)))
-    if (now === i && t.r.top <= 0) return
-    let still = false
-    try {
-      still = matchMedia('(prefers-reduced-motion: reduce)').matches
-    } catch {
-      /* bez matchMedia — plynnie */
-    }
-    lock.current = { i, until: performance.now() + 1600 }
-    scrollTo({ top: Math.round(t.top + i * t.seg) + 1, behavior: still ? 'auto' : 'smooth' })
-  }
-
   const go = (i: number) => {
     const n = (i + TABS.length) % TABS.length
-    select(n)
-    tabs.current[n]?.focus({ preventScroll: true })
+    setAt(n)
+    tabs.current[n]?.focus()
   }
   const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
     const k = e.key
@@ -457,15 +357,14 @@ export function Cockpit() {
   }
 
   return (
-    <section className="nk-kp" id="cockpit" aria-labelledby="nk-kp-h" style={vars} ref={sec}>
-      <div className="nk-kp-pin" ref={pin}>
+    <section className="nk-kp" id="cockpit" aria-labelledby="nk-kp-h" style={vars}>
       <div className="nk-kp-head">
         <p className="nk-caps nk-lab">How it works</p>
         <h2 className="nk-h2" id="nk-kp-h">
           What {brand}’s customers see, and what {brand} sets.
         </h2>
       </div>
-      <div className="nk-kp-tabs" role="tablist" aria-label="Mechanics" onKeyDown={onKey} ref={list}>
+      <div className="nk-kp-tabs" role="tablist" aria-label="Mechanics" onKeyDown={onKey}>
         {TABS.map((t, i) => (
           <button
             key={t.id}
@@ -479,15 +378,10 @@ export function Cockpit() {
             aria-controls="nk-kp-panel"
             tabIndex={i === at ? 0 : -1}
             className="nk-kp-tab"
-            onClick={() => select(i)}
+            onClick={() => setAt(i)}
           >
             {t.label}
           </button>
-        ))}
-      </div>
-      <div className="nk-kp-prog" aria-hidden="true">
-        {TABS.map((t, i) => (
-          <i key={t.id} className={i === at ? 'is-on' : i < at ? 'is-past' : undefined} />
         ))}
       </div>
       <div className="nk-kp-stage" role="tabpanel" id="nk-kp-panel" aria-labelledby={`nk-kp-t-${tab}`} tabIndex={0}>
@@ -503,14 +397,13 @@ export function Cockpit() {
             </div>
           </div>
         </div>
-        <div className="nk-kp-panel" key={tab /* nowy wezel na zakladke: zmiana tresci z przewijania nie jest przesunieciem ukladu (CLS) */}>
+        <div className="nk-kp-panel">
           <p className="nk-caps nk-kp-who">The customer feels</p>
           <p className="nk-kp-feel">{c.feel}</p>
           <p className="nk-caps nk-kp-who">{brand} sets</p>
           {c.ctl}
           <p className="nk-kp-num">{c.num}</p>
         </div>
-      </div>
       </div>
     </section>
   )

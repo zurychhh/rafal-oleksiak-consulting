@@ -1,3 +1,5 @@
+> Status 21:20: zbudowane, NIE wypuszczone (cofnięcie R6). Kod: `agencja/r6p2-odrzucone` (`Cockpit.tsx`, `cockpit-scroll.css`) — do R6' kokpitu „For you”.
+
 # Spec 34 — R6 przebieg 2 `/nawyko`: kokpit przełączany przewijaniem (24.11.2026 20:40)
 
 Ze specu 27 pkt 2 („Przewijanie przełącza zakładki, klik skacze”). Budujący B (worktree `wt/b`). Tylko `app/nawyko/Cockpit.tsx`
