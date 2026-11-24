@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type MouseEvent } from 'react'
 
 // Spec 20 (R4 p9): pasek rozdzialow jak lokalna nawigacja stron produktowych Apple.
 // Pojawia sie dopiero za pierwszym ekranem, chowa przy przewijaniu w dol i wraca przy przewijaniu w gore
@@ -26,6 +26,10 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
   const [shown, setShown] = useState(false)
   const [open, setOpen] = useState(false)
   const [cur, setCur] = useState(-1)
+  // R4 p10 D1: true, gdy przypieta scena wypelnia ekran (na >= 1100 px pasek pokazuje wtedy tylko rozdzial + CTA)
+  const [pinned, setPinned] = useState(false)
+  // R4 p10 D2: biezacy akt sceny („04 Reward”) z jej nawigacji .nk-acts — tylko skladanie istniejacych etykiet
+  const [act, setAct] = useState('')
   const bar = useRef<HTMLDivElement>(null)
   const openRef = useRef(false)
   const quiet = useRef(0)
@@ -42,6 +46,15 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
     let prevOn: boolean | null = null
     const scene = document.querySelector<HTMLElement>('.nk-scene')
     const narrow = window.matchMedia('(max-width:1099px)')
+    // R4 p10 D4: sekcje rozdzialow przyjmuja fokus programowo (bez wejscia w kolejnosc Tab)
+    for (const s of secs) {
+      if (s && !s.hasAttribute('tabindex')) {
+        s.tabIndex = -1
+        s.classList.add('cb-target')
+      }
+    }
+    let prevPin: boolean | null = null
+    let prevAct: string | null = null
 
     const tick = () => {
       raf = 0
@@ -68,11 +81,26 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
       }
       // R4 p9 recenzja W2: na telefonie przypieta scena zaczyna sie 18 px od gory — pasek zaslanialby nazwe marki
       // na ekranie telefonu. W scenie pasek ustepuje; wraca pod nia.
-      let inScene = false
-      if (scene && narrow.matches && scene.classList.contains('is-scroll')) {
+      let pin = false
+      if (scene && scene.classList.contains('is-scroll')) {
         const r = scene.getBoundingClientRect()
-        inScene = r.top <= 1 && r.bottom >= vh - 1
+        pin = r.top <= 1 && r.bottom >= vh - 1
       }
+      if (pin !== prevPin) {
+        prevPin = pin
+        setPinned(pin)
+      }
+      let a = ''
+      if (scene && k >= 0 && secs[k] === scene && scene.classList.contains('is-scroll')) {
+        const btns = Array.from(scene.querySelectorAll('.nk-acts > *'))
+        const j = btns.findIndex((b) => b.hasAttribute('aria-current'))
+        if (j >= 0) a = `${String(j + 1).padStart(2, '0')} ${btns[j].textContent ?? ''}`
+      }
+      if (a !== prevAct) {
+        prevAct = a
+        setAct(a)
+      }
+      const inScene = pin && narrow.matches
       const on = past && !atForm && !inScene && (want || openRef.current)
       if (on !== prevOn) {
         prevOn = on
@@ -98,8 +126,12 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
     document.addEventListener('focusin', onFocus)
+    // akt sceny zmienia sie po jej wlasnym renderze — odczyt po zmianie data-act, nie o klatke za wczesnie
+    const mo = scene ? new MutationObserver(onScroll) : null
+    mo?.observe(scene as HTMLElement, { attributes: true, attributeFilter: ['data-act', 'class'] })
     tick()
     return () => {
+      mo?.disconnect()
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
       document.removeEventListener('focusin', onFocus)
@@ -126,14 +158,31 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
     }
   }, [open])
 
-  const jump = () => {
+  const jump = (e: MouseEvent<HTMLAnchorElement>) => {
     quiet.current = performance.now() + 800
     setOpen(false)
     setShown(false)
+    // R4 p10 D4: klikniety link zaraz staje sie inert — fokus na cel, zeby czytnik ekranu ogloscil sekcje
+    const id = e.currentTarget.getAttribute('href')?.slice(1)
+    const t = id ? document.getElementById(id) : null
+    if (t) {
+      if (!t.hasAttribute('tabindex')) {
+        t.tabIndex = -1
+        t.classList.add('cb-target')
+      }
+      requestAnimationFrame(() => t.focus({ preventScroll: true }))
+    }
   }
-  const label = cur >= 0 ? chapters[cur].label : 'Overview'
+  const base = cur >= 0 ? chapters[cur].label : 'Overview'
+  const label = act ? `${base} · ${act}` : base
   return (
-    <div ref={bar} className={`cb ${className}`} data-on={shown ? '' : undefined} inert={!shown}>
+    <div
+      ref={bar}
+      className={`cb ${className}`}
+      data-on={shown ? '' : undefined}
+      data-pin={pinned ? '' : undefined}
+      inert={!shown}
+    >
       <div className="cb-row">
         <button
           type="button"

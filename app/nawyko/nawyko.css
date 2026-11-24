@@ -774,7 +774,7 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 .nk .cb-list a{display:flex;align-items:center;gap:14px;min-height:44px;color:var(--dim);border-bottom:1px solid var(--line);}
 .nk .cb-list li:last-child a{border-bottom:0;}
 .nk .cb-list a[aria-current]{color:var(--ink);}
-.nk .cb-list a[aria-current] .cb-n{color:var(--red);}
+.nk .cb-list a[aria-current] .cb-n{color:var(--red-s);} /* R4 p10 D5: >= 7:1 na papierze */
 .nk .cb-n{font-variant-numeric:tabular-nums;color:var(--dim);min-width:2ch;}
 @media (min-width:1100px){
   .nk .cb-toggle{display:none;}
@@ -784,3 +784,13 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 @media (max-width:420px){.nk .cb-row{column-gap:10px;}.nk .cb-kicker{display:none;}.nk .cb-cta{padding:0 12px;letter-spacing:.1em;}}
 .nk .cb-name{display:none;font-weight:600;margin-right:clamp(8px,2vw,28px);}
 @media (min-width:1100px){.nk .cb-name{display:inline-flex;align-items:center;min-height:44px;}}
+/* R4 p10 D1: w przypietej scenie na desktopie jeden rzad — biezacy rozdzial (z lista) + CTA, bez rzedu linkow
+   obok nawigacji aktow sceny. Kolejnosc Tab: przycisk -> lista -> CTA. */
+@media (min-width:1100px){
+  .nk .cb[data-pin] .cb-toggle{display:flex;}
+  .nk .cb[data-pin] .cb-name,.nk .cb[data-pin] .cb-links{display:none;}
+  .nk .cb[data-pin] .cb-list{display:block;}
+  .nk .cb[data-pin] .cb-list[hidden]{display:none;}
+}
+/* R4 p10 D4: sekcja dostaje fokus po skoku z paska — bez obrysu przy kliknieciu mysza */
+.nk .cb-target:focus:not(:focus-visible){outline:none;}
