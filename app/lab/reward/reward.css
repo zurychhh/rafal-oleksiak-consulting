@@ -17,7 +17,7 @@
 .nk .rw-why{margin-top:10px;font-size:clamp(15px,1.3vw,18px);color:var(--ink2);font-variant-numeric:tabular-nums;}
 .nk .rw-do{margin-top:6px;font-size:clamp(16px,1.4vw,20px);line-height:1.35;color:var(--ink);font-weight:500;max-width:34ch;}
 .nk .rw-live{position:absolute;left:0;top:0;opacity:0;pointer-events:none;font-size:12px;line-height:14px;
-  max-width:100%;white-space:nowrap;overflow:visible;}
+  right:0;max-width:100%;white-space:normal;overflow:visible;} /* R4p13 B3: nowrap wypychal niewidoczny region poza 390 px (qa.js: 404 px dokumentu na /lab/reward, 16 px na /lab/payback); zawijanie jak w .rm — tekst dla czytnika bez zmian */
 
 /* ── zalozenia ────────────────────────────────────────────── */
 .rw-tag{min-height:22px;display:flex;}

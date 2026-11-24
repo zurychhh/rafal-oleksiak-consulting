@@ -56,17 +56,24 @@ for route in "${ROUTES[@]}"; do
     elif [ $rc -eq 124 ]; then add "$route" "clsscroll-$w" FAIL "limit czasu ${TMO}s ($log)"
     else add "$route" "clsscroll-$w" FAIL "kod $rc, brak linii CLSSCROLL ($log)"; fi
   done
+  # R4 p13 B1: scroll-perf = rozgrzewka + 3 przebiegi, werdykt z median (progi bez zmian 100/200 ms), w uwadze wszystkie wartosci.
+  # Metoda: https://github.com/GoogleChrome/lighthouse/blob/main/docs/variability.md (mediana zamiast pojedynczego pomiaru).
   for vp in "1440 900" "390 844"; do
     set -- $vp; w=$1; h=$2; log="$LOGDIR/$slug-scrollperf-$w.log"
-    timeout "$TMO" node scripts/scroll-perf.mjs "$url" "$w" "$h" 4 >"$log" 2>&1; rc=$?
-    frame=$(grep -oE 'najdluzsza: [0-9]+' "$log" | head -1 | grep -oE '[0-9]+')
-    inter=$(grep -oE 'najdluzsza interakcja: [0-9]+' "$log" | head -1 | grep -oE '[0-9]+')
+    # 4 pelne przebiegi (rozgrzewka + 3) -> limit czasu x4
+    timeout "$((TMO * 4))" node scripts/scroll-perf.mjs "$url" "$w" "$h" 4 --runs 3 >"$log" 2>&1; rc=$?
+    line=$(grep -E '^SCROLLPERF ' "$log" | tail -1)
+    frame=$(echo "$line" | grep -oE 'klatka_med=[0-9]+' | grep -oE '[0-9]+')
+    inter=$(echo "$line" | grep -oE 'interakcja_med=[0-9]+' | grep -oE '[0-9]+')
+    fall=$(echo "$line" | grep -oE 'klatki=[0-9,]+' | cut -d= -f2)
+    iall=$(echo "$line" | grep -oE 'interakcje=[0-9,]+' | cut -d= -f2)
     if [ -n "$frame" ] && [ -n "$inter" ]; then
-      if [ "$frame" -gt 100 ] || [ "$inter" -gt 200 ]; then add "$route" "scroll-perf-$w" FAIL "klatka ${frame} ms, interakcja ${inter} ms ($log)"
-      else add "$route" "scroll-perf-$w" PASS "klatka ${frame} ms, interakcja ${inter} ms"; fi
-    elif [ $rc -eq 124 ]; then add "$route" "scroll-perf-$w" FAIL "limit czasu ${TMO}s ($log)"
-    elif [ $rc -ne 0 ]; then add "$route" "scroll-perf-$w" FAIL "kod $rc, brak liczb ($log)"
-    else add "$route" "scroll-perf-$w" INFO "wyjscie bez liczb do sparsowania ($log)"; fi
+      note="mediana klatki ${frame} ms [${fall}], interakcji ${inter} ms [${iall}]"
+      if [ "$frame" -gt 100 ] || [ "$inter" -gt 200 ]; then add "$route" "scroll-perf-$w" FAIL "$note ($log)"
+      else add "$route" "scroll-perf-$w" PASS "$note"; fi
+    elif [ $rc -eq 124 ]; then add "$route" "scroll-perf-$w" FAIL "limit czasu $((TMO * 4))s ($log)"
+    elif [ $rc -ne 0 ]; then add "$route" "scroll-perf-$w" FAIL "kod $rc, brak linii SCROLLPERF ($log)"
+    else add "$route" "scroll-perf-$w" INFO "wyjscie bez linii SCROLLPERF ($log)"; fi
   done
   run "$route" "focus-obscured" "$LOGDIR/$slug-focus-obscured.log" node scripts/focus-obscured.test.mjs "$BASE" "$route"
   run "$route" "jsonld" "$LOGDIR/$slug-jsonld.log" node scripts/jsonld-rules.test.mjs "$url"
