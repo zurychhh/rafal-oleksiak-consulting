@@ -89,7 +89,7 @@ zapisuje zawsze te same wartości domyślne, więc niczego w CRM nie dowodzi.
 ### Bramka po każdym etapie
 
 **Jedno polecenie (od 24.11.2026):** `bash scripts/gates.sh http://localhost:3000 <trasa>...` — qa.js, CLS 390/1440,
-scroll-perf z dławieniem CPU, focus-obscured, JSON-LD, WebKit (silnik Safari) 390/1440, content-rules, copy-voice,
+clsscroll 390/1440, scroll-perf z dławieniem CPU, focus-obscured, JSON-LD, WebKit (silnik Safari) 390/1440, content-rules, copy-voice,
 focus-ring, ship-compare przy `/`. Odmawia dla hosta innego niż localhost. Wynik: tabela PASS/FAIL, logi w `/tmp/gates/`.
 
 Build, `tsc --noEmit`, lint z **zerem błędów**, `qa.js` na `/`, `/stop` i `/tool`

@@ -45,6 +45,17 @@ for route in "${ROUTES[@]}"; do
     set -- $vp; w=$1; h=$2
     run "$route" "cls-$w" "$LOGDIR/$slug-cls-$w.log" node scripts/cls-check.mjs "$url" "$w" "$h"
   done
+  # R4 p12 B1: CLS przy przewijaniu kolkiem (suma bez wejscia, ladowanie + przewijanie): PASS <= 0,001, INFO 0,001-0,01, FAIL > 0,01
+  for vp in "390 844" "1440 900"; do
+    set -- $vp; w=$1; h=$2; log="$LOGDIR/$slug-clsscroll-$w.log"
+    timeout "$TMO" node scripts/cls-scroll.mjs "$url" "$w" "$h" >"$log" 2>&1; rc=$?
+    v=$(grep -oE '^CLSSCROLL suma=[0-9.]+' "$log" | tail -1 | grep -oE '[0-9.]+$')
+    if [ -n "$v" ]; then
+      lvl=$(awk -v v="$v" 'BEGIN { if (v > 0.01) print "FAIL"; else if (v > 0.001) print "INFO"; else print "PASS" }')
+      add "$route" "clsscroll-$w" "$lvl" "suma $v ($log)"
+    elif [ $rc -eq 124 ]; then add "$route" "clsscroll-$w" FAIL "limit czasu ${TMO}s ($log)"
+    else add "$route" "clsscroll-$w" FAIL "kod $rc, brak linii CLSSCROLL ($log)"; fi
+  done
   for vp in "1440 900" "390 844"; do
     set -- $vp; w=$1; h=$2; log="$LOGDIR/$slug-scrollperf-$w.log"
     timeout "$TMO" node scripts/scroll-perf.mjs "$url" "$w" "$h" 4 >"$log" 2>&1; rc=$?
