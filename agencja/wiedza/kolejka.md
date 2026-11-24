@@ -20,3 +20,4 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 
 13. ~~Wydajność — wiarygodność pomiaru klatek~~ (24.11 R4 p13: Lighthouse „Score variability” → mediana z 3 po rozgrzewce w `scroll-perf`, selftesty)
 14. ~~Dostępność — niskie okno i powiększenie (W3C Understanding SC 1.4.10 Reflow)~~ (24.11 R4 p14: `short-viewport-check`, reguła R21); zostaje: sprawdzić `/nawyko` przy powiększeniu 200 % na 1280×720 (okno 640×360) i 400 % (320 px)
+15. ~~CSS — zapytania kontenera mierzą content box~~ (24.11 R4 p15: W3C CSS Containment 3 → próg 684 px, reguła R22)

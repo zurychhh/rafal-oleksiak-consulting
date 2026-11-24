@@ -16,9 +16,10 @@ LOGDIR="${GATES_LOGDIR:-/tmp/gates}"; mkdir -p "$LOGDIR" || { echo "nie moge utw
 . scripts/gates-lib.sh
 # R4 p10 (lekcja R17): serwer musi podawac TEN build, ktory jest w .next — stary `next-server` na tym samym porcie
 # (pkill -f "next start" go nie zabija) podaje HTML z innym BUILD_ID i 500 na chunki; bramki mierzyly wtedy zepsuta strone.
+# R4 p15: BUILD_ID moze zaczynac sie od "-" (np. -lD5f7N2...) — grep -qF -- (inaczej grep czyta go jako opcje i bramka odmawia na dobrym serwerze).
 if [ -f .next/BUILD_ID ]; then
   BID="$(cat .next/BUILD_ID)"
-  if ! curl -s --max-time 20 "$BASE${1:-/}" | grep -q "$BID"; then
+  if ! curl -s --max-time 20 "$BASE${1:-/}" | grep -qF -- "$BID"; then
     echo "odmowa: serwer $BASE nie podaje buildu z .next (BUILD_ID $BID) — zatrzymaj stary next-server i uruchom npm start ponownie" >&2; exit 2
   fi
 fi
@@ -75,14 +76,17 @@ for route in "${ROUTES[@]}"; do
     else add "$route" "scroll-perf-$w" INFO "wyjscie bez linii SCROLLPERF ($log)"; fi
   done
   # R4 p15 B1: przypieta scena na niskim oknie z paskiem cookies (scripts/short-viewport-check.mjs).
-  # Kod 2 = brak przypietej sceny na trasie -> SKIP (nie FAIL); werdykt: shortvp_verdict z gates-lib.sh (ten sam w selftescie).
+  # Kod 2 = brak przypietej sceny na trasie -> SKIP (nie FAIL), ale na /nawyko i /work/genactiv FAIL (recenzja 31 W1); werdykt: shortvp_verdict z gates-lib.sh (ten sam w selftescie).
   for vp in "1100 620" "1280 720" "390 844"; do
     set -- $vp; w=$1; h=$2; log="$LOGDIR/$slug-short-${w}c.log"
     timeout "$TMO" node scripts/short-viewport-check.mjs "$url" "$w" "$h" --cookies >"$log" 2>&1; rc=$?
     vd=$(shortvp_verdict "$log" "$rc")
     case "$vd" in
       PASS*) add "$route" "short-${w}c" PASS "" ;;
-      SKIP*) add "$route" "short-${w}c" SKIP "brak przypietej sceny" ;;
+      SKIP*) case "$route" in
+               /nawyko|/work/genactiv) add "$route" "short-${w}c" FAIL "brak przypietej sceny na trasie, ktora ja ma (uklad statyczny?) ($log)" ;;
+               *) add "$route" "short-${w}c" SKIP "brak przypietej sceny" ;;
+             esac ;;
       FAIL*) add "$route" "short-${w}c" FAIL "${vd#FAIL } ($log)" ;;
     esac
   done
