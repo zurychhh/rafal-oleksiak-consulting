@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { Enquiry } from './Enquiry'
 import { FAQ } from './content'
 
@@ -399,7 +399,8 @@ function Phone({
           <div className="nk-hint">{revealed ? 'Ticked. See you tomorrow.' : 'One card a day. Drag across it.'}</div>
           <div className={'nk-mini' + (revealed ? ' is-up' : '')}>
             <span>Streak</span>
-            <span>
+            {/* A1 R4p12: tekst zmieniajacy szerokosc w miejscu = nowy wezel (nowy wezel nie jest przesunieciem w CLS) */}
+            <span key={revealed ? 'y' : 'n'}>
               <b key={revealed ? 'y' : 'n'}>{revealed ? START_DAY : START_DAY - 1}</b> days
               {revealed ? <i className="nk-plus">+1</i> : null}
             </span>
@@ -422,7 +423,7 @@ function Phone({
           </div>
           <div className="nk-goal">
             <span>Stamp at day {GOAL_DAY}</span>
-            <span>{Math.max(0, GOAL_DAY - days)} to go</span>
+            <span key={Math.max(0, GOAL_DAY - days)}>{Math.max(0, GOAL_DAY - days)} to go</span>
           </div>
         </div>
         ) : null}
@@ -475,7 +476,7 @@ function Phone({
             {REWARD_ROWS.map((r) => (
               <li key={r.name} className={day >= r.day ? 'is-got' : ''}>
                 <span>{r.name}</span>
-                <span>{r.day > PACK_DAYS ? 'on reorder' : day >= r.day ? '✓ earned' : `day ${r.day}`}</span>
+                <span key={day >= r.day ? 'y' : 'n'}>{r.day > PACK_DAYS ? 'on reorder' : day >= r.day ? '✓ earned' : `day ${r.day}`}</span>
               </li>
             ))}
           </ul>
@@ -1049,17 +1050,34 @@ function Scene({
   /* --sw i --p ustawiane na elementach, ktore ich uzywaja (nie na korzeniu sceny) i zadeklarowane @property
      z inherits:false: zmiana przy kazdym przewinieciu nie uniewaznia stylow calego poddrzewa sceny. */
   const swStyle = { ['--sw' as string]: sw }
+  /* A1 R4p12: przy przewijaniu lista krokow i akapity pod nia to nowe wezly przy kazdej zmianie aktu (key) — rozwiniecie
+     opisu nie przesuwa juz istniejacych elementow (CLS). Fokus z przycisku kroku wraca na przycisk aktywnego kroku. */
+  const stepFocus = useRef(false)
+  useEffect(() => {
+    if (!stepFocus.current) return
+    const a = document.activeElement
+    if (a && a !== document.body) return
+    wrap.current?.querySelector<HTMLElement>('.nk-stepbtn[aria-current="step"]')?.focus({ preventScroll: true })
+  }, [step])
   const steps = (
     <div className="nk-in">
       <div className="nk-caps nk-lab">
         <span className="nk-who">For your customer</span>
         <span className="nk-labrest">How it works · made-up brand</span>
       </div>
-      <h2 className="nk-h2">Four steps that bring the customer back for the next pack.</h2>
+      <h2 className="nk-h2">Reorders: four steps that bring customers back for the next pack.</h2>
+      <Fragment key={scroll ? step : 'still'}>
       <ol className="nk-steps">
         {STEPS.map((s, i) => (
           <li key={s.t} className={'nk-step' + (i === step ? ' is-on' : '')}>
-            <button type="button" className="nk-stepbtn" aria-current={i === step ? 'step' : undefined} onClick={() => go(i)}>
+            <button
+              type="button"
+              className="nk-stepbtn"
+              aria-current={i === step ? 'step' : undefined}
+              onClick={() => go(i)}
+              onFocus={() => (stepFocus.current = true)}
+              onBlur={() => (stepFocus.current = false)}
+            >
               <span className="nk-n">0{i + 1}</span>
               <span className="nk-t">{s.t}</span>
               <span className="nk-d">
@@ -1080,6 +1098,7 @@ function Scene({
           Scratch today&rsquo;s card
         </button>
       </p>
+      </Fragment>
     </div>
   )
 
@@ -1255,7 +1274,7 @@ function Loyalty({ skin, brand }: { skin: Skin; brand: string }) {
             <span className="nk-labrest">Points to cashback</span>
           </div>
           <h2 className="nk-h2" id="nk-xch">
-            You set what the programme costs.
+            Programme cost: you set the budget.
           </h2>
           <p className="nk-one">Move the rate and the customer&rsquo;s app shows it at once.</p>
           <div className="nk-desk2">
@@ -1565,7 +1584,7 @@ function Evidence({ brand }: { brand: string }) {
             <span className="nk-labrest">Integrations</span>
           </div>
           <h2 className="nk-h2" id="nk-intg">
-            Runs on Shopify; your other tools connect per brand.
+            Built on Shopify; other tools connect per brand.
           </h2>
           <p className="nk-one">
             Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both

@@ -34,10 +34,10 @@ export const FAQ = [
 export const FEATURES = [
   'Cashback grows with every order.',
   'Points every day. Levels that never drop.',
-  'You set what the programme costs.',
+  'Programme cost: you set the budget.',
   'A second product, earned in five short lessons.',
   'Pharmacy buyers show up in your data after one scan.',
   'Health data never reaches your marketing.',
   'Reorder lift, measured against customers who never get the app.',
-  'Runs on Shopify; your other tools connect per brand.',
+  'Built on Shopify; other tools connect per brand.',
 ] as const

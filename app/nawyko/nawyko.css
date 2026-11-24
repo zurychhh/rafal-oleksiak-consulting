@@ -95,6 +95,9 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
 .nk-step.is-on .nk-d > span{padding-top:8px;}
 .is-still .nk-d{grid-template-rows:1fr;opacity:1;transition:none;}
 .is-still .nk-d > span{padding-top:8px;}
+/* A1 R4p12: przy przewijaniu lista krokow montuje sie od nowa przy zmianie aktu (bez CLS) — opis wchodzi tylko opacity+transform */
+.is-scroll .nk-step.is-on .nk-d{animation:nk-din .45s cubic-bezier(.2,.7,.2,1) both;}
+@keyframes nk-din{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
 .nk-bar{height:2px;background:var(--mid);margin-top:20px;}
 .nk-bar i{display:block;height:100%;background:var(--ink);transform-origin:0 50%;transform:scaleX(var(--p,1));}
 .nk .nk-alt{margin-top:20px;min-height:22px;line-height:22px;font-size:14px;color:var(--dim);}
