@@ -34,6 +34,12 @@ i przełączaniem przewijaniem + `cockpit-scroll.css` (spec 34, CLS 0, WebKit PA
 - Wizualnie podnieść do poziomu finału bez usuwania treści.
 - NOWA BRAMKA (stała): inwentarz sekcji — lista sekcji i scen etapów `/nawyko` przed i po kawałku; każda sekcja, która zniknęła,
   = FAIL, chyba że w STATUS jest cytat zgody Rafała. Podgląd dla Rafała dopiero po zielonej bramce.
+- Doradca 22:50 po obejrzeniu R6' p1 (9affbdc, WebKit 1440): inwentarz zachowany, ale zostały dwie rzeczy z listy Rafała z 19:15:
+  (a) środkowy konfigurator „Type your brand name, pick a colour and a style. Every phone follows.” (`nk-wl`) dalej jest — jego opcje
+  (styl strony) do konfiguratora w hero, środkowy usunąć (Rafał prosił o to wprost, więc to nie jest usunięcie bez zgody);
+  (b) nagłówek integracji „Runs on Shopify; your other tools connect per brand.” przeczy wieloplatformowości — nagłówek ma mówić
+  o sklepie odwiedzającego, Shopify tylko jako jeden z silników (bramka tekstów). Sekcja „See the day each pack really runs out”
+  (For you) do kokpitu jako zakładka.
 
 ## RUNDA 5 — ŻYWA STRONA I WIELKI FINAŁ (Rafał 24.11.2026 12:47, przez doradcę). CZYTAJ PIERWSZE, PRZED RUNDĄ 4.
 Spec: `agencja/specs/26-r5-zywa-strona.md` (pięć uwag Rafała + kierunek doradcy + kolejność p1–p4 + nowe bramki `brand-propagation`
