@@ -493,13 +493,13 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
    1) Przewijanie za szybkie: każdy akt dostaje ~2x więcej drogi (900vh → 1600vh), żeby przy zwykłym
       tempie kółka/gładzika efekt zdążył się rozegrać. 2) Przejazd telefonu płaski: bez obrotu, bez
       wychylenia 3D, bez wahnięcia — prosty, spokojny przesuw w rytmie strony. */
-.nk-scene.is-scroll{height:1370vh;} /* spec 36 A: 6 aktow zamiast 7 — tor krotszy o akt 7 (1,3 z 8,7 jednostek) */
+.nk-scene.is-scroll{height:1113vh;} /* R6' q3 B: 5 aktow (akt 6 do kokpitu) — tor krotszy o 1,5 z 7,4 jednostek;  spec 36 A: 6 aktow zamiast 7 — tor krotszy o akt 7 (1,3 z 8,7 jednostek) */
 .nk-phonecol{perspective:none;}
 .nk-phone{transform:translateY(var(--ty,0)) scale(var(--sc,1));}
 .is-scroll .nk-scenehead,.is-scroll .nk-phonecol{transition:transform 1.1s cubic-bezier(.45,0,.2,1);}
 /* tekst rozdzialu wchodzi w polowie przejazdu (recenzja 08: przy 1 s opoznienia scena marki przy zwyklym tempie byla pusta) */
 .nk-scene[data-swung][data-act="5"] .nk-panel.nk-in{animation-delay:.45s;}
-@media (max-width:860px){.nk-scene.is-scroll{height:1200vh;}}
+@media (max-width:860px){.nk-scene.is-scroll{height:977vh;}}
 @media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
 
 /* ══ runda 3, przebieg 2 ═══════════════════════════════════════════════════
@@ -729,9 +729,9 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 
 /* spec 13: rezerwa wysokosci sceny przed hydratacja (data-nk-pin z inline-skryptu w page.tsx, warunek jak setMode('scroll')).
    Uklad statyczny jest na te chwile przyciety do wysokosci trybu przypietego, wiec kotwica (#proof itd.) nie skacze. */
-[data-nk-pin] .nk-scene.is-still{height:1370vh;overflow:clip;}
-@media (max-width:860px){[data-nk-pin] .nk-scene.is-still{height:1200vh;}}
-/* Wysokosci musza byc rowne .nk-scene.is-scroll wyzej (1370vh / 1200vh) — zmieniasz jedno, zmien drugie. */
+[data-nk-pin] .nk-scene.is-still{height:1113vh;overflow:clip;}
+@media (max-width:860px){[data-nk-pin] .nk-scene.is-still{height:977vh;}}
+/* Wysokosci musza byc rowne .nk-scene.is-scroll wyzej (1113vh / 977vh) — zmieniasz jedno, zmien drugie. */
 /* spec 13: rezerwa paska cookies w sekcjach jest stala (max z wysokoscia paska), nie rosnie po hydratacji.
    Wczesniej padding = --consent-h dochodzil do kazdej sekcji po zamontowaniu paska i przesuwal kotwice (#faq o 456 px na 1440). */
 .nk{--consent-rsv:max(var(--consent-h,0px),72px);}
@@ -1281,6 +1281,20 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 .nk-ck-rowwrap::after{content:"";position:absolute;top:0;right:0;bottom:0;width:56px;pointer-events:none;
   background:linear-gradient(to right,rgba(14,15,18,0),#0E0F12 85%);transition:opacity .2s;}
 .nk-ck-rowwrap[data-end]::after{opacity:0;}
+/* R6' q3 B: wyrazniejsza podpowiedz przewijania — maska wygasza krawedz po stronie, w ktora da sie przewinac (dziala na kazdym
+   tle marki), kolejna zakladka widoczna w polowie, okragly przycisk ze strzalka (osiagalny z klawiatury) przesuwa rzad */
+.nk-ck-rowwrap::after{display:none;}
+.nk-ck-tabs{--fl:40px;--fr:72px;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%);
+  mask-image:linear-gradient(to right,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%);}
+.nk-ck-rowwrap[data-start] .nk-ck-tabs{--fl:0px;}
+.nk-ck-rowwrap[data-end] .nk-ck-tabs{--fr:0px;}
+.nk-ck-more{position:absolute;top:50%;right:0;z-index:2;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;
+  display:grid;place-items:center;background:#F2F0EA;color:#0E0F12;font:600 26px/1 inherit;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,.45);}
+.nk-ck-more[hidden]{display:none;}
+.nk-ck-more span{margin-top:-3px;}
+.nk-ck-more:focus-visible{outline:3px solid #F2F0EA;outline-offset:3px;}
+@media (max-width:860px){.nk-ck-more{right:12px;}.nk-ck-rowwrap .nk-ck-tabs{--fr:80px;padding-right:calc(var(--m) + 56px);}}
 .nk-ck-stage{color:var(--ink);margin-top:clamp(20px,2.4vw,28px);border-radius:28px;overflow:clip;box-shadow:0 0 0 1px rgba(255,255,255,.14);}
 .nk-ck-stage > section[hidden]{display:none!important;}
 .nk-ck-stage > section{border-top:0!important;border-bottom:0!important;padding-top:clamp(40px,5vw,72px)!important;}
