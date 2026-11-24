@@ -299,3 +299,4 @@ Pasek pojawia się przy przewijaniu w górę za pierwszym ekranem. Etykiety rozd
 | pasek, etykieta przed bieżącym rozdziałem | GENACTIV | bez zmian (nazwa marki z trasy) |
 | pasek, rozdziały (lista i bieżący) | The problem · How it works · Cashback · Points and levels · Data and consent · How it was built · Results · Your brand colour | „How it works” nowy (grupa aktów Step 1–3); reszta z istniejących kickerów |
 | pasek, `aria-label` nawigacji | Chapters | bez zmian (to samo co pasek `/nawyko`) |
+| /nawyko | R4 p11 FAQ H2 (zasada 8) | FAQ: six answers you need before the first call. | zmieniony (było „Six answers a brand needs before the first call.”; czytelnik-kupujący: INNA → to brzmienie; copy-voice OK) |

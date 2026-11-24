@@ -1604,7 +1604,7 @@ function Faq() {
         <span className="nk-labrest">Questions</span>
       </div>
       <h2 className="nk-h2" id="nk-faq-h">
-        Six answers a brand needs before the first call.
+        FAQ: six answers you need before the first call.
       </h2>
       <p className="nk-one">Daily use, health data, reward cost, setup, pharmacy purchases, consent.</p>
       <div className="nk-qs">

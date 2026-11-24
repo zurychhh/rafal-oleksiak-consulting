@@ -70,7 +70,9 @@ function ActBarImpl({ act, onJump }: Props) {
         inScene = !!t && t.top <= 1 && t.bottom >= vh - 1
       }
       const s0 = document.querySelector('.ga-act-0')
-      const past = actRef.current === null ? !!s0 && s0.getBoundingClientRect().bottom < 0 : a >= 1
+      // R4 p11 recenzja 27 W1: przewiniecie wywolane fokusem (Tab na „Skip to content”) potrafi policzyc tick ze starym aktem —
+      // na pierwszym ekranie pasek nigdy nie jest widoczny, niezaleznie od stanu sceny.
+      const past = y > vh * 0.5 && (actRef.current === null ? !!s0 && s0.getBoundingClientRect().bottom < 0 : a >= 1)
       const fr = form?.getBoundingClientRect()
       const atForm = !!fr && fr.top < vh * 0.6 && fr.bottom > 0
       const d = y - lastY
