@@ -332,3 +332,18 @@ Brzmienie bez zmian, czytelnika-kupującego nie uruchamiano (gramatyka, nie nowe
 | scena white label, podtytuł | Type your brand name, pick a colour and a style. Every phone follows. | zmienione po czytelniku (było „…: every phone on this page follows.”) |
 | finał | Your next step / For {marka} · Build your brand’s app. / Build {marka}’s app. · Send your store address. The first call covers rewards and setup. | nowe; ostatnie zdanie zmienione po czytelniku („maps … the tools to connect” = żargon); czytelnik proponował „Get” zamiast „Build” — do decyzji R5p1-B |
 | usunięte | Your customers' daily app, in your brand colour. · Type your store name, pick its colour; the phone repaints live. · Your colour is never sent. Only the form fields go with Send. | dubel personalizacji (uwaga Rafała 3) |
+
+## R5 przebieg 2 — wielki finał `/nawyko` „One morning with {marka}” (24.11.2026, spec 28)
+Czytelnik-kupujący: `agencja/recenzje/32-r5p2-teksty.md` (4 teksty przepisane po jego ocenie). copy-voice OK.
+
+| Trasa | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /nawyko | finał, nagłówek sekcji | One morning with {marka} | nowy |
+| /nawyko | finał, chwila 1 | 07:30 · Your icon on their home screen. · Between the apps they open every morning. | nowy |
+| /nawyko | finał, chwila 2 | 07:31 · A daily reminder from {marka}. · Always the same words: “Your card of the day is ready.” | nowy |
+| /nawyko | finał, chwila 3 | 07:32 · One scratch after the dose. · Try it here: scratch the card, or press the button below. | nowy |
+| /nawyko | finał, chwila 4 | Day 24 of 30 · The stamp unlocks on day 24. · The reward they saw coming from day one. | nowy |
+| /nawyko | finał, chwila 5 | Next order · A next-pack code from {marka}. · Single use, redeemed in your online store. | nowy |
+| /nawyko | finał, przycisk / komunikat | Reveal without scratching · Day 24 done. Streak: 24 days. | nowy |
+| /nawyko | finał, w telefonie | Your card of the day is ready. · Stamps · free pack at 3 · Next-pack code · Use in the {marka} store | nowy |
+| /nawyko | pasek rozdziałów | One morning | nowy |

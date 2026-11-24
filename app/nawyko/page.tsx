@@ -94,6 +94,7 @@ const CHAPTERS = [
   { id: 'privacy', label: 'Privacy' },
   { id: 'proof', label: 'Proof' },
   { id: 'faq', label: 'FAQ' },
+  { id: 'finale', label: 'One morning' },
 ]
 
 const PIN_JS =

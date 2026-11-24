@@ -847,7 +847,7 @@ const SKINS: { id: Skin; name: string; sw: string }[] = [
 function SkinPanel({ skin, onSkin, id }: { skin: Skin; onSkin: (s: Skin) => void; id: string }) {
   const { name, colour, own, setName, setColour } = useBrand()
   return (
-    <div className="nk-panel nk-in">
+    <div className="nk-panel nk-in nk-wlp">
       <div className="nk-caps nk-lab">
         <span className="nk-who">Under your brand</span>
         <span className="nk-labrest">White label</span>
@@ -1954,8 +1954,10 @@ export function Story() {
 
       <Faq />
 
+      <Finale />
+
       <section
-        className="nk-final"
+        className="nk-final nk-final-solo"
         id="enquiry"
         aria-labelledby="nk-ask"
         style={{
@@ -1973,16 +1975,225 @@ export function Story() {
           </h2>
           <p className="nk-one">Send your store address. The first call covers rewards and setup.</p>
         </div>
-        <div className="nk-phonecol nk-final-phone">
-          <Phone step={3} t={1} theme={skin} scratched brand={shown || 'Your brand'} />
-          <p className="nk-fine">
-            {shown ? 'Your name, shown only on this page.' : 'A placeholder until you type your store name.'}
-          </p>
-        </div>
         <div className="nk-final-form">
           <Enquiry onStore={setStore} />
         </div>
       </section>
     </div>
+  )
+}
+
+/* ── spec 28 (R5 p2): wielki final — przewijanie odslania aplikacje odwiedzajacego ──
+   Piec chwil jednego poranka klienta: ikona marki na ekranie glownym → powiadomienie → zdrapka w kolorach marki
+   (do zdrapania albo „Reveal without scratching”) → dzien 24 i odblokowana pieczatka → kod na kolejne opakowanie,
+   tlo przechodzi w kolor marki i plynnie wchodzi formularz („Build {marka}’s app.”). Bez JS i przed hydratacja: chwila 3
+   (karta dnia) — najwiecej tresci. Przewijanie zmienia tylko stan liczbowy (setState przy zmianie chwili) i transformy. */
+const FZ_N = 5
+const FZ_DAY = 24
+const FZ_ICONS = ['Mail', 'Maps', 'Photos', 'Music', 'Notes', 'Chat', 'Bank', 'Clock', 'News', 'Shop', 'Books']
+function fzMoments(brand: string) {
+  return [
+    { k: '07:30', h: 'Your icon on their home screen.', p: 'Between the apps they open every morning.' },
+    { k: '07:31', h: `A daily reminder from ${brand}.`, p: 'Always the same words: “Your card of the day is ready.”' },
+    { k: '07:32', h: 'One scratch after the dose.', p: 'Try it here: scratch the card, or press the button below.' },
+    { k: `Day ${FZ_DAY} of 30`, h: `The stamp unlocks on day ${FZ_DAY}.`, p: 'The reward they saw coming from day one.' },
+    { k: 'Next order', h: `A next-pack code from ${brand}.`, p: 'Single use, redeemed in your online store.' },
+  ]
+}
+
+export function Finale() {
+  const { colour, brand } = useBrand()
+  const root = useRef<HTMLElement>(null)
+  const [at, setAt] = useState(2)
+  const [done, setDone] = useState(false)
+  const atRef = useRef(2)
+
+  useEffect(() => {
+    const el = root.current
+    if (!el) return
+    let raf = 0
+    const read = () => {
+      raf = 0
+      const r = el.getBoundingClientRect()
+      const run = Math.max(1, r.height - window.innerHeight)
+      const p = clamp(-r.top / run)
+      const n = Math.min(FZ_N - 1, Math.floor(p * FZ_N))
+      if (n !== atRef.current) {
+        atRef.current = n
+        setAt(n)
+      }
+    }
+    const on = () => {
+      if (!raf) raf = requestAnimationFrame(read)
+    }
+    read()
+    window.addEventListener('scroll', on, { passive: true })
+    window.addEventListener('resize', on)
+    return () => {
+      window.removeEventListener('scroll', on)
+      window.removeEventListener('resize', on)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [])
+
+  /* Kto przewinie dalej bez zdrapania, widzi odsloniety dzien — opowiesc idzie do przodu. */
+  useEffect(() => {
+    if (at >= 3 && !done) setDone(true)
+  }, [at, done])
+
+  const go = (n: number) => {
+    const el = root.current
+    if (!el) return
+    const run = el.offsetHeight - window.innerHeight
+    const top = el.getBoundingClientRect().top + window.scrollY
+    window.scrollTo({ top: top + run * ((n + 0.5) / FZ_N), behavior: 'auto' })
+  }
+
+  const moments = fzMoments(brand)
+  const ink = inkOn(colour, '#111215')
+  const vars = {
+    ['--brand' as string]: colour,
+    ['--brand-on' as string]: onColour(colour),
+    ['--hi' as string]: ink,
+  }
+  const streak = done ? FZ_DAY : FZ_DAY - 1
+  const stamp = done && at >= 3
+  const mono = monogram(brand)
+
+  return (
+    <section
+      ref={root}
+      className={'nk-fz' + (at === FZ_N - 1 ? ' is-brand' : '')}
+      id="finale"
+      aria-labelledby="nk-fz-h"
+      data-at={at}
+      style={vars}
+    >
+      <div className="nk-fz-stick">
+        <div className="nk-fz-copy">
+          <h2 className="nk-caps nk-fz-lab" id="nk-fz-h">
+            One morning with {brand}
+          </h2>
+          <ol className="nk-fz-list">
+            {moments.map((m, i) => (
+              <li key={i} className={i === at ? 'is-on' : i < at ? 'is-past' : ''} aria-current={i === at ? 'step' : undefined}>
+                <span className="nk-caps nk-fz-k">{m.k}</span>
+                <b className="nk-fz-h">{m.h}</b>
+                <span className="nk-fz-p">{m.p}</span>
+              </li>
+            ))}
+          </ol>
+          <div className="nk-fz-dots" role="group" aria-label="Moments">
+            {moments.map((m, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`Moment ${i + 1}: ${m.h}`}
+                aria-pressed={i === at}
+                onClick={() => go(i)}
+              >
+                <i />
+              </button>
+            ))}
+          </div>
+          <div className="nk-fz-act">
+            <button type="button" className="nk-link" onClick={() => setDone(true)} aria-disabled={done || undefined}>
+              Reveal without scratching
+            </button>
+            <p className="nk-fine nk-fz-status" aria-live="polite">
+              {done ? `Day ${FZ_DAY} done. Streak: ${FZ_DAY} days.` : ''}
+            </p>
+          </div>
+        </div>
+
+        <div className="nk-fz-phone" aria-hidden="true">
+          <div className="nk-fz-screen">
+            {/* ekran glowny */}
+            <div className="nk-fz-home">
+              <div className="nk-fz-sb">
+                <b>7:3{Math.min(at, 2)}</b>
+              </div>
+              <div className="nk-fz-grid">
+                {FZ_ICONS.slice(0, 7).map((l) => (
+                  <span key={l} className="nk-fz-ic">
+                    <i />
+                    <small>{l}</small>
+                  </span>
+                ))}
+                <span className="nk-fz-ic nk-fz-mine">
+                  <i>{mono}</i>
+                  <small>{brand}</small>
+                </span>
+                {FZ_ICONS.slice(7).map((l) => (
+                  <span key={l} className="nk-fz-ic">
+                    <i />
+                    <small>{l}</small>
+                  </span>
+                ))}
+              </div>
+              <div className="nk-fz-dock">
+                <i />
+                <i />
+                <i />
+                <i />
+              </div>
+              <div className="nk-fz-note">
+                <span className="nk-fz-nmono">{mono}</span>
+                <span className="nk-fz-ntext">
+                  <small>
+                    <b>{brand}</b> · now
+                  </small>
+                  Your card of the day is ready.
+                </span>
+              </div>
+            </div>
+
+            {/* aplikacja */}
+            <div className="nk-fz-app">
+              <div className="nk-hhead">
+                <span className="nk-hmono">{mono}</span>
+                <b className="nk-hname">{brand}</b>
+                <span className="nk-hpill">Sample data</span>
+              </div>
+              <div className="nk-htiles nk-fz-tiles">
+                <span>
+                  <b key={streak}>{streak}</b>day streak
+                </span>
+                <span>
+                  <b>{30 - streak}</b>days left
+                </span>
+              </div>
+              <div className="nk-hcard nk-fz-card">
+                <div className="nk-hcard-in">
+                  <b>{done ? `✓ Day ${FZ_DAY} ticked` : 'Card of the day'}</b>
+                  <small>{done ? 'Next card tomorrow' : 'Taken it? Scratch.'}</small>
+                </div>
+                <Scratch gone={done} foil={colour} onDone={() => setDone(true)} />
+              </div>
+              <div className="nk-fz-stamps">
+                <small>Stamps · free pack at 3</small>
+                <div>
+                  {[0, 1, 2].map((i) => (
+                    <i key={i} className={i === 0 || (i === 1 && stamp) ? 'is-got' : ''} />
+                  ))}
+                  <span>{stamp ? '2 of 3' : '1 of 3'}</span>
+                </div>
+              </div>
+              <div className={'nk-fz-code' + (at >= FZ_N - 1 ? ' is-on' : '')}>
+                <small>Next-pack code</small>
+                <b>{at >= FZ_N - 1 ? `${mono}-NEXT24` : '••••••••'}</b>
+                <span className="nk-fz-use">Use in the {brand} store</span>
+              </div>
+              <div className="nk-htabs">
+                <span className={at < FZ_N - 1 ? 'is-on' : ''}>Today</span>
+                <span className={at >= FZ_N - 1 ? 'is-on' : ''}>Rewards</span>
+                <span>Shop</span>
+                <span>Account</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
