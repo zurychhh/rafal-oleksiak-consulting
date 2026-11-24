@@ -364,7 +364,8 @@ function ScreenFade({ p }: { p: number }) {
       <div className="ga-ring-wrap">
         <Ring lit={lit} dim={dim} />
         <div className="ga-ring-mid">
-          <b>{lit}</b>
+          {/* R4 p11 B2: nowy wezel przy zmianie liczby cyfr — wysrodkowana liczba nie przesuwa sie (layout-shift) */}
+          <b key={lit < 10 ? 1 : 2}>{lit}</b>
           <span>of {DAYS} days</span>
         </div>
       </div>
@@ -461,7 +462,8 @@ function ScreenMonth({ p, live, from = 0 }: { p: number; live: boolean; from?: n
       <div className="ga-ring-wrap">
         <Ring lit={lit} stampOn={stamp} />
         <div className="ga-ring-mid">
-          <b>{lit}</b>
+          {/* R4 p11 B2: nowy wezel przy zmianie liczby cyfr — wysrodkowana liczba nie przesuwa sie (layout-shift) */}
+          <b key={lit < 10 ? 1 : 2}>{lit}</b>
           <span>of {DAYS} days</span>
         </div>
         <div className={'ga-stamp' + (stamp ? ' ga-on' : '')}>
@@ -531,7 +533,7 @@ function ScreenLevels({ p }: { p: number }) {
           return (
             <div key={l} className={'ga-lesson' + (done ? ' ga-done' : '')}>
               <span>{l}</span>
-              <b>{done ? '\u2713 done' : 'next'}</b>
+              <b key={done ? 'd' : 'n'}>{done ? '\u2713 done' : 'next'}</b>
             </div>
           )
         })}
@@ -848,6 +850,9 @@ export function GenactivStory() {
   if (mode === 'still') {
     return (
       <>
+      {/* R4 p11 B1 (recenzja M2): pasek przed trescia w DOM — Tab z pierwszego ekranu trafia w pasek przed aktami.
+          position:fixed, wiec uklad bez zmian. */}
+      {bar}
       <div className="ga-still" key="still">
         {COPY.map((c, i) => (
           <section key={i} className={'ga-act ga-act-' + i} aria-labelledby={'ga-t' + i} tabIndex={-1}>
@@ -897,7 +902,6 @@ export function GenactivStory() {
           [data-ga-pin] (.ga-still przyciety do 1320svh) #enquiry ma przed i po hydratacji te sama pozycje — wejscie
           z kotwica nie skacze (bylo 0,17 na 1440; pomiar pod navigator.webdriver widzial tylko uklad statyczny = 0). */}
       <Final />
-      {bar}
       </>
     )
   }
@@ -915,6 +919,7 @@ export function GenactivStory() {
 
   return (
     <>
+    {bar}
     <div className="ga-track" key="track" ref={track}>
       <div className="ga-stage">
         <div className="ga-copy">
@@ -986,14 +991,14 @@ export function GenactivStory() {
             </div>
           </div>
           {/* podpis jedzie razem z telefonem (transform), tekst zmienia sie z aktem w jednej linii: bez CLS */}
-          <figcaption style={{ transform: `translateY(calc(var(--ph) * ${(-(1 - p0) * 0.16).toFixed(4)}))` }}>
+          {/* R4 p11 B2: key = tekst podpisu; zmiana podpisu to nowy wezel, nie przesuniecie wysrodkowanego (CLS przy kolku) */}
+          <figcaption key={COPY[act].cap ?? CAP} style={{ transform: `translateY(calc(var(--ph) * ${(-(1 - p0) * 0.16).toFixed(4)}))` }}>
             {COPY[act].cap ?? CAP}
           </figcaption>
         </figure>
       </div>
     </div>
     <Final />
-    {bar}
     </>
   )
 }

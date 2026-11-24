@@ -116,6 +116,12 @@ function ActBarImpl({ act, onJump }: Props) {
     }
   }, [])
 
+  // R4 p11 B1: skok o wiele aktow jednym zdarzeniem przewijania (scrollTo(0,0), kotwica) liczyl tick ze starym aktem —
+  // pasek zostawal widoczny i bez inert na akcie 0. Po zmianie aktu tick liczy jeszcze raz.
+  useEffect(() => {
+    tickRef.current()
+  }, [act])
+
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
