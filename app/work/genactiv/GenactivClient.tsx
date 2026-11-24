@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Enquiry } from '../../nawyko/NawykoClient'
+import { Enquiry } from '../../nawyko/Enquiry'
 
 /* /work/genactiv — przebieg 1: akty 0–4, przebieg 2: akty 5–8 (cashback, poziomy, zgoda, jak to powstalo), przebieg 3: akty 9–10 (wyniki zablokowane, final z kolorem marki i formularzem). Jeden telefon jako nic strony.
    Stan domyslny DOM (SSR, bez JS, prefers-reduced-motion, navigator.webdriver, okno < 600 px) = uklad statyczny:
@@ -792,6 +792,18 @@ export function GenactivStory() {
     const y = window.scrollY + r.top + (10.5 / ACTS) * span
     if (Math.abs(window.scrollY - y) > span / ACTS / 3) window.scrollTo({ top: y })
   }
+  // Akt 10: etykieta „Your brand” na kolorze odwiedzajacego, tekst bialy albo czarny (inkOn, min. ok. 4,58:1) — jak na /nawyko.
+  const kicker = (i: number, k: string) => (
+    <p className="ga-kicker">
+      {i === 10 ? (
+        <span className="ga-brandtag" style={{ background: pick, color: inkOn(pick) }}>
+          {k}
+        </span>
+      ) : (
+        k
+      )}
+    </p>
+  )
   const reveal = (
     <button type="button" className="ga-btn" onClick={done} onFocus={toScratch} aria-disabled={revealed}>
       {revealed ? 'Card revealed' : 'Reveal without scratching'}
@@ -804,7 +816,7 @@ export function GenactivStory() {
         {COPY.map((c, i) => (
           <section key={i} className={'ga-act ga-act-' + i} aria-labelledby={'ga-t' + i}>
             <div className="ga-copy-in">
-              <p className="ga-kicker">{c.kicker}</p>
+              {kicker(i, c.kicker)}
               {i === 0 ? (
                 <h1 id={'ga-t' + i}>{c.title}</h1>
               ) : (
@@ -850,10 +862,12 @@ export function GenactivStory() {
   const act = Math.min(ACTS - 1, Math.floor(f))
   const local = f - act
   // przenikanie tekstow i ekranow: wejscie w pierwszych 12% aktu, wyjscie w ostatnich 12%
+  // Ekrany sa nieprzezroczyste i lezy kolejno w DOM: nowy ekran wchodzi NA stary w ostatnich 10% poprzedniego aktu,
+  // stary znika dopiero pod pelnym nowym. Wczesniej oba gasly jednoczesnie i na granicy aktow telefon byl pusty.
   const vis = (i: number) => {
-    if (i === 0) return 1 - smooth((f - 0.88) / 0.12)
-    if (i === ACTS - 1) return smooth((f - i) / 0.12)
-    return Math.min(smooth((f - i) / 0.12), 1 - smooth((f - (i + 0.88)) / 0.12))
+    const fin = i === 0 ? 1 : smooth((f - (i - 0.1)) / 0.1)
+    const fout = i === ACTS - 1 ? 1 : 1 - smooth((f - (i + 1)) / 0.1)
+    return Math.min(fin, fout)
   }
   const p0 = smooth(f / 0.8) // telefon wysuwa sie z pudelka
   const boxOut = smooth((f - 0.75) / 0.35)
@@ -878,7 +892,7 @@ export function GenactivStory() {
                   transform: `translateY(${(enter * 18).toFixed(1)}px)`,
                 }}
               >
-                <p className="ga-kicker">{c.kicker}</p>
+                {kicker(i, c.kicker)}
                 {i === 0 ? <h1 id={'ga-t' + i}>{c.title}</h1> : <h2 id={'ga-t' + i}>{c.title}</h2>}
                 <p className="ga-sub">{c.sub}</p>
                 {i === 0 ? heroLink : null}
