@@ -12,6 +12,11 @@ po poprawce 195×403 (390) i 325×672 (1440), zrzuty obejrzane. Bramka: `scripts
 WebKit z Playwrighta jest tu zablokowane, działa WebKitGTK z apt). Każdy przebieg: uruchom na każdej zmienionej trasie (390 i 1440),
 żaden widoczny telefon węższy niż 150 px. Nie poprawiaj tego drugi raz — sprawdź tylko, czy Twoje zmiany tego nie cofnęły.
 
+## RUNDA 6 — FINALNA ARCHITEKTURA /nawyko + /work/genactiv RÓWNOLEGLE (Rafał 24.11.2026 19:15, przez doradcę). CZYTAJ PIERWSZE.
+Spec: `agencja/specs/27-r6-nawyko-architektura.md` — 7 scen zamiast ok. 13 (hero z całą personalizacją, przerywnik „dlaczego”,
+kokpit mechanik klient | marka, dowód, Twój sklep wieloplatformowo, finał bez zmian, zapytanie + pytania zamiast FAQ),
+ujednolicenie wizualne do poziomu finału; równolegle p4 `/work/genactiv` (Rafał prosi o tę wersję dziś). Zastępuje resztę RUNDY 5.
+
 ## RUNDA 5 — ŻYWA STRONA I WIELKI FINAŁ (Rafał 24.11.2026 12:47, przez doradcę). CZYTAJ PIERWSZE, PRZED RUNDĄ 4.
 Spec: `agencja/specs/26-r5-zywa-strona.md` (pięć uwag Rafała + kierunek doradcy + kolejność p1–p4 + nowe bramki `brand-propagation`
 i `monotonia`). Zasada zmieniona przez Rafała: „istniejąca paleta strony” już nie obowiązuje — strona ma być żywa, prowadzona
