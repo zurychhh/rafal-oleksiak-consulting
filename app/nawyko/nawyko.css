@@ -1177,3 +1177,101 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 .nk-tile-rate{box-shadow:0 0 0 1px rgba(255,255,255,.22);}
 .nk-tbtn-pri{box-shadow:0 0 0 1px rgba(255,255,255,.4);}
 .nk-tile-cash .nk-wbig span{min-height:1.4em;}
+
+/* ── spec 30 (R5 p3): Paths / Pharmacy / Privacy — trzy rozne uklady i trzy powierzchnie zamiast „tekst + telefon” w lustrze ──
+   papier (poziomy pas lekcji) → pelny kolor marki (telefon na srodku) → atrament (wielkie zdanie + trzy kolumny). */
+.nk-r5c > section{position:relative;padding:clamp(64px,9vw,128px) var(--m) calc(clamp(56px,8vw,112px) + var(--consent-rsv))!important;
+  scroll-margin-top:0;}
+.nk-r5c .nk-phonecol{perspective:none;}
+.nk-r5c .nk-phone{height:clamp(420px,60svh,520px);transform:none;box-shadow:none;}
+@media (max-width:860px){.nk-r5c .nk-phone{height:clamp(360px,56svh,440px);}}
+
+/* Paths: papier, pas lekcji jak karty aplikacji */
+.nk-paths{background:var(--paper);border-top:1px solid var(--ink);}
+.nk-pathhead{max-width:860px;}
+.nk-rail{height:4px;margin-top:clamp(36px,5vw,64px);background:var(--line,#DCDAD2);overflow:hidden;border-radius:2px;}
+.nk-rail i{display:block;height:100%;background:var(--hi);transform-origin:0 50%;transition:transform .5s cubic-bezier(.2,.8,.2,1);}
+.nk-lessons{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(10px,1.2vw,16px);}
+.nk-lcard,.nk-lgift{display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:100%;height:100%;min-height:150px;
+  padding:18px;border-radius:22px;background:#1B1D21;color:#F2F0EA;border:0;font:inherit;text-align:left;}
+.nk-lcard{cursor:pointer;transition:background .25s,transform .25s;}
+.nk-lcard:hover{background:#26292E;}
+.nk-lcard:active{transform:translateY(1px);}
+.nk-lcard:focus-visible{outline:3px solid var(--ink);outline-offset:3px;}
+.nk-lmono{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;font-weight:700;font-size:14px;
+  background:#2C2F35;color:#F2F0EA;}
+.nk-lessons li.is-got .nk-lmono{background:var(--brand);color:var(--brand-on);box-shadow:0 0 0 1px rgba(255,255,255,.28);}
+.nk-lessons li.is-now .nk-lcard{box-shadow:0 0 0 2px var(--brand),0 0 0 3px rgba(255,255,255,.28) inset;}
+.nk-lname{font-size:16px;font-weight:600;margin-top:auto;}
+.nk-lst{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#B9B6AE;}
+.nk-lessons li.is-got .nk-lst{color:#F2F0EA;}
+.nk-lgift{background:transparent;color:var(--ink);box-shadow:0 0 0 1px var(--ink) inset;}
+.nk-lgift .nk-lmono{background:transparent;color:var(--ink);box-shadow:0 0 0 1px var(--ink);}
+.nk-lgift b{font-size:16px;margin-top:auto;}
+.nk-lgift span:last-child{font-size:13px;line-height:1.35;color:var(--ink2);}
+.nk-lgift.is-on{background:var(--brand);color:var(--brand-on);box-shadow:none;}
+.nk-lgift.is-on .nk-lmono{background:var(--brand-on);color:var(--brand);box-shadow:none;}
+.nk-lgift.is-on span:last-child{color:var(--brand-on);}
+@media (max-width:860px){.nk-lessons{grid-template-columns:repeat(2,minmax(0,1fr));}.nk-lcard,.nk-lgift{min-height:120px;}}
+
+/* Pharmacy: cala sekcja w kolorze marki, telefon na srodku */
+.nk-pharm{--ink:var(--brand-on);--ink2:var(--brand-on);--dim:var(--brand-on);background:var(--brand);color:var(--brand-on);text-align:center;}
+.nk-pharm :focus-visible{outline-color:var(--brand-on);}
+.nk-pharmhead{max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;}
+.nk-pharm .nk-lab{justify-content:center;}
+.nk-pharm .nk-who{background:var(--brand-on);color:var(--brand);}
+.nk-pharm .nk-h2{max-width:20ch;}
+.nk-pharm .nk-one{margin-left:auto;margin-right:auto;}
+.nk-pharmstage{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:clamp(16px,3vw,48px);
+  margin:clamp(36px,5vw,64px) auto 0;max-width:1100px;}
+.nk-src{display:flex;flex-direction:column;gap:6px;padding:18px 20px;border-radius:20px;box-shadow:0 0 0 1px var(--brand-on) inset;
+  justify-self:end;min-width:min(100%,220px);transition:background .3s,color .3s;}
+.nk-pharmstage > .nk-src:last-child{justify-self:start;}
+.nk-src span{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
+.nk-src b{font-size:18px;}
+.nk-src.is-on,.nk-pharmstage > .nk-src:first-child{background:var(--brand-on);color:var(--brand);}
+.nk-pharmfoot{display:flex;flex-direction:column;align-items:center;margin-top:clamp(24px,3vw,40px);}
+.nk-pharm .nk-fine{margin-left:auto;margin-right:auto;}
+.nk-scanbtn{min-height:48px;padding:0 26px;border:0;border-radius:999px;background:var(--brand-on);color:var(--brand);font:inherit;font-weight:700;
+  font-size:16px;cursor:pointer;}
+.nk-scanbtn:active{transform:translateY(1px);}
+.nk-scanbtn:focus-visible{outline:3px solid var(--brand-on);outline-offset:4px;}
+@media (max-width:860px){
+  .nk-pharmstage{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+  .nk-pharmstage .nk-phonecol{grid-column:1 / -1;order:-1;}
+  .nk-src,.nk-pharmstage > .nk-src:last-child{justify-self:stretch;min-width:0;padding:14px;}
+  .nk-src b{font-size:16px;}
+}
+
+/* Privacy: atrament, wielkie zdanie, potem trzy kolumny (przelacznik · zapis danych · telefon) */
+.nk-priv{--ink:#F2F0EA;--ink2:#C9C6BE;--dim:#A9A69E;background:#0E0F12;color:var(--ink);}
+.nk-priv :focus-visible{outline-color:#F2F0EA;}
+.nk-priv .nk-who{color:#0E0F12;}
+.nk-privbig{font-weight:600;font-size:clamp(40px,7.4vw,112px);line-height:.98;letter-spacing:-.045em;max-width:14ch;margin-top:20px!important;}
+.nk-privrow{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) auto;gap:clamp(24px,4vw,64px);align-items:center;
+  margin-top:clamp(36px,5vw,64px);}
+.nk-priv .nk-sw{border-color:#F2F0EA;color:#F2F0EA;}
+.nk-priv .nk-sw[aria-pressed="true"]{background:#F2F0EA;color:#0E0F12;}
+.nk-ledger{margin:0;display:flex;flex-direction:column;gap:14px;}
+.nk-ledger > div{padding:18px 20px;border-radius:20px;background:#1B1D21;}
+.nk-ledger dt{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#B9B6AE;}
+.nk-ledger dd{margin:8px 0 0;font-size:18px;font-weight:600;}
+.nk-ledger.is-on > div:first-child{background:var(--brand);color:var(--brand-on);}
+.nk-ledger.is-on > div:first-child dt{color:var(--brand-on);}
+.nk-ledger s{text-decoration-thickness:2px;color:#C9C6BE;margin-right:10px;white-space:nowrap;}
+@media (max-width:1100px){.nk-privrow{grid-template-columns:minmax(0,1fr) auto;}.nk-privctl{grid-column:1 / -1;}}
+@media (max-width:860px){.nk-privrow{grid-template-columns:1fr;}.nk-privrow .nk-phonecol{order:-1;}}
+@media (prefers-reduced-motion:reduce){.nk-rail i,.nk-lcard,.nk-src{transition:none;}}
+/* recenzja 38: przelacznik zgody nad zgieciem na 1440×900; przy bardzo ciemnym kolorze marki #privacy przechodzi na gline,
+   zeby kolor marki (#pharmacy) i atrament nie zlaly sie w dwa czarne bloki pod rzad. */
+.nk-privbig{font-size:clamp(40px,6.2vw,92px);}
+.nk-privrow{align-items:start;margin-top:clamp(28px,4vw,48px);}
+.nk-r5c[data-dark] .nk-priv{--ink:#14161A;--ink2:#3A3C40;--dim:#5C5B56;background:var(--tint);color:var(--ink);}
+.nk-r5c[data-dark] .nk-priv :focus-visible{outline-color:#14161A;}
+.nk-r5c[data-dark] .nk-priv .nk-who{color:var(--paper);}
+.nk-r5c[data-dark] .nk-priv .nk-sw{border-color:#14161A;color:#14161A;}
+.nk-r5c[data-dark] .nk-priv .nk-sw[aria-pressed="true"]{background:#14161A;color:#F2F0EA;}
+.nk-r5c[data-dark] .nk-ledger > div{background:var(--paper);box-shadow:0 0 0 1px #14161A inset;}
+.nk-r5c[data-dark] .nk-ledger dt{color:#5C5B56;}
+.nk-r5c[data-dark] .nk-ledger s{color:#3A3C40;}
+.nk-r5c[data-dark] .nk-ledger.is-on > div:first-child{background:var(--brand);color:var(--brand-on);box-shadow:none;}

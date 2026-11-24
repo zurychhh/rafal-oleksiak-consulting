@@ -359,3 +359,16 @@ Czytelnik-kupujący: `agencja/recenzje/37-r5p3-teksty.md` (6 tekstów przepisany
 | /nawyko | kafel portfela | Cashback wallet · off the next one-off order / off the next subscription delivery · earned in N orders · Place order N · Start again · One-off order / Subscription · Example €2 back per order. You set the rate. | nowy |
 | /nawyko | kafel punktów | Points and levels · Scratch today +10 · Skip a day · Example N points to Silver. / Day skipped. Level kept. / Top level reached. · N points = €X at {marka}’s rate. | nowy |
 | /nawyko | kafel panelu marki | For you · {marka} brand panel · You set what each point is worth. · Move the rate. The customer’s points change value at once. · Example N points now = €X. A month of daily cards: €Y in points per customer. | nowy |
+
+## R5 przebieg 3 cz. 1 — Paths / Pharmacy / Privacy w nowych układach (24.11.2026, spec 30)
+Czytelnik-kupujący: `agencja/recenzje/39-r5p3c-teksty.md` (5 przepisanych). copy-voice OK. Nagłówki h2 bez zmian.
+
+| Trasa | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /nawyko | Paths, karty | Lesson 1–5 · Done / Up next / Later | nowy |
+| /nawyko | Paths, meta | Gift at the finish / Gift code ready · Free product on the next {marka} order. | nowy (po czytelniku) |
+| /nawyko | Paths, notka | Example · Lesson 3 of 5 done. / All lessons done · gift code ready. Tap a lesson. {marka} picks the lessons and gift. | zmienione (po czytelniku) |
+| /nawyko | Pharmacy, karty | Bought online · Added automatically / Bought in a pharmacy · Not scanned yet / Scanning… / Box scanned | nowy (po czytelniku) |
+| /nawyko | Pharmacy, notka | Tap “Scan the box”. (stan przed skanem) | nowy |
+| /nawyko | Privacy, zapis | Stored · Nothing. / Tick date only. · Never sent to · Ads · Analytics · Push messages | nowy (po czytelniku) |
+| /nawyko | Privacy, notka | Example · Daily card and streak on. / locked. (usunięte zdanie o zapisie daty — przeszło do karty „Stored”) | skrócone |

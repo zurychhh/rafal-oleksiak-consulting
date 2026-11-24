@@ -24,4 +24,4 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 15. ~~CSS — zapytania kontenera mierzą content box~~ (24.11 R4 p15: W3C CSS Containment 3 → próg 684 px, reguła R22)
 
 16. ~~Strony produktowe — zakończenie długiej strony (NN/g „The Peak–End Rule”)~~ (24.11 R5 p2: finał „One morning” = szczyt + koniec obok siebie). Zostaje: emocja + dowód (NN/g „aesthetic-usability effect”) przed p3 — rytm „moment klienta → liczba dla marki”.
-17. ~~Bento — LogRocket „Bento grids UX” (2025-01-24)~~ (24.11 R5 p2 cz. 2: portfel jako bento, skutek każdej kontrolki w tym samym kaflu). Zostaje: mocniejsze źródło o siatkach kart (NN/g „Cards: UI-Component Definition”) przed p3.
+17. ~~Bento — LogRocket „Bento grids UX” (2025-01-24)~~ (24.11 R5 p2 cz. 2: portfel jako bento, skutek każdej kontrolki w tym samym kaflu). ~~Mocniejsze źródło: NN/g „Cards: UI-Component Definition”~~ (24.11 R5 p3 cz. 1: lekcje jako lista-sekwencja, cała karta klikalna). Zostaje: emocja + dowód (NN/g „aesthetic-usability effect”).

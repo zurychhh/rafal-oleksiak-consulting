@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Enquiry } from './Enquiry'
 import { FAQ } from './content'
-import { DEMO_BRAND, inkOn, mix, monogram, onColour, useBrand } from '../lib/brand-engine'
+import { DEMO_BRAND, contrast, inkOn, mix, monogram, onColour, useBrand } from '../lib/brand-engine'
 
 /* Enquiry mieszka w ./Enquiry (przebieg 4): /work/genactiv importuje sam formularz, bez calej sceny. */
 export { Enquiry }
@@ -1376,10 +1376,10 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
 /* ── runda 4 (d–f): sciezka wiedzy z prezentem, zakup w aptece, prywatnosc od projektu ── */
 /* Ten sam uklad „nk-still”. Stan domyslny (bez JS, reduced-motion) jest kompletny: sciezka w polowie z widocznym
    prezentem na mecie, zakup potwierdzony, funkcje zablokowane z przyciskiem. */
-function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
+function MoreScenes({ brand }: { skin: Skin; brand: string }) {
   const [lesson, setLesson] = useState(3)
   const [scanN, setScanN] = useState(0)
-  const [bought, setBought] = useState(true)
+  const [bought, setBought] = useState(false)
   const [consent, setConsent] = useState(false)
   const timer = useRef<number | undefined>(undefined)
   useEffect(() => () => window.clearTimeout(timer.current), [])
@@ -1393,10 +1393,19 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
   }
   const done = lesson >= LESSONS
 
+  const { colour } = useBrand()
+  const vars = {
+    ['--brand' as string]: colour,
+    ['--brand-on' as string]: onColour(colour),
+    ['--hi' as string]: inkOn(colour, '#0E0F12'),
+  }
+  const shown = Math.min(lesson, LESSONS)
+
   return (
-    <div className="nk-r4" id="more">
-      <section className="nk-still" id="paths" aria-labelledby="nk-path">
-        <div className="nk-panel">
+    <div className="nk-r4 nk-r5c" id="more" style={vars} data-dark={contrast(colour, '#0E0F12') < 2 ? '' : undefined}>
+      {/* spec 30: poziomy pas lekcji (papier) — bez telefonu; karty lekcji wygladaja jak karty aplikacji */}
+      <section className="nk-paths" id="paths" aria-labelledby="nk-path">
+        <div className="nk-pathhead">
           <div className="nk-caps nk-lab">
             <span className="nk-who">For you</span>
             <span className="nk-labrest">Learning paths</span>
@@ -1405,27 +1414,47 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
             A second product, earned in five short lessons.
           </h2>
           <p className="nk-one">When the path is done, a gift code adds a matching product to the next order.</p>
-          <div className="nk-seg">
-            <button
-              type="button"
-              className="nk-sw"
-              onClick={() => setLesson((v) => (v >= LESSONS ? 1 : v + 1))}
-            >
-              {done ? 'Start again' : 'Next lesson'}
-            </button>
-          </div>
-          <p className="nk-fine" aria-live="polite">
-            <b className="nk-ex">Example</b> Lesson {Math.min(lesson + (done ? 0 : 1), LESSONS)} of {LESSONS}
-            {done ? ' · gift code ready' : ''}. You pick the lessons and the gift.
-          </p>
         </div>
-        <div className="nk-phonecol">
-          <Phone step={10} t={1} theme={skin} scratched brand={brand} lesson={lesson} />
+        <div className="nk-rail" aria-hidden="true">
+          <i style={{ transform: `scaleX(${shown / LESSONS})` }} />
         </div>
+        <ol className="nk-lessons" aria-label={`${brand} learning path`}>
+          {Array.from({ length: LESSONS }, (_, i) => {
+            const st = i < shown ? 'is-got' : i === shown ? 'is-now' : ''
+            return (
+              <li key={i} className={st}>
+                <button
+                  type="button"
+                  className="nk-lcard"
+                  aria-pressed={i < shown}
+                  onClick={() => setLesson(i < shown && i === shown - 1 ? i : i + 1)}
+                >
+                  <span className="nk-lmono" aria-hidden="true">
+                    {i < shown ? '✓' : i + 1}
+                  </span>
+                  <span className="nk-lname">Lesson {i + 1}</span>
+                  <span className="nk-lst">{i < shown ? 'Done' : i === shown ? 'Up next' : 'Later'}</span>
+                </button>
+              </li>
+            )
+          })}
+          <li className={'nk-lgift' + (done ? ' is-on' : '')}>
+            <span className="nk-lmono" aria-hidden="true">
+              {monogram(brand)}
+            </span>
+            <b>{done ? 'Gift code ready' : 'Gift at the finish'}</b>
+            <span>Free product on the next {brand} order.</span>
+          </li>
+        </ol>
+        <p className="nk-fine" aria-live="polite">
+          <b className="nk-ex">Example</b> {done ? 'All lessons done · gift code ready' : `Lesson ${shown} of ${LESSONS} done`}. Tap a lesson. {brand} picks
+          the lessons and gift.
+        </p>
       </section>
 
-      <section className="nk-still nk-flip" id="pharmacy" aria-labelledby="nk-pharm">
-        <div className="nk-panel">
+      {/* spec 30: pelnoekranowe przejecie w kolorze marki — telefon na srodku, dwa zrodla zakupu po bokach */}
+      <section className="nk-pharm" id="pharmacy" aria-labelledby="nk-pharm">
+        <div className="nk-pharmhead">
           <div className="nk-caps nk-lab">
             <span className="nk-who">For you</span>
             <span className="nk-labrest">Pharmacy purchases</span>
@@ -1434,46 +1463,70 @@ function MoreScenes({ skin, brand }: { skin: Skin; brand: string }) {
             Pharmacy buyers show up in your data after one scan.
           </h2>
           <p className="nk-one">A pack bought offline starts the daily card, just like an online order.</p>
-          <div className="nk-seg">
-            <button type="button" className="nk-sw" onClick={scan}>
-              Scan the box
-            </button>
+        </div>
+        <div className="nk-pharmstage">
+          <div className="nk-src">
+            <span>Bought online</span>
+            <b>Added automatically</b>
           </div>
+          <div className="nk-phonecol">
+            <Phone step={11} t={1} theme="night" scratched brand={brand} scanN={scanN} bought={bought} />
+          </div>
+          <div className={'nk-src' + (bought ? ' is-on' : '')}>
+            <span>Bought in a pharmacy</span>
+            <b>{bought ? 'Box scanned' : scanN > 0 ? 'Scanning…' : 'Not scanned yet'}</b>
+          </div>
+        </div>
+        <div className="nk-pharmfoot">
+          <button type="button" className="nk-scanbtn" onClick={scan}>
+            Scan the box
+          </button>
           <p className="nk-fine" aria-live="polite">
-            <b className="nk-ex">Example</b> {bought ? 'Pack registered · bought offline.' : 'Scanning the box code…'} The box code
+            <b className="nk-ex">Example</b> {bought ? 'Pack registered · bought offline.' : scanN > 0 ? 'Scanning the box code…' : 'Tap “Scan the box”.'} The box code
             registers the pack; a receipt confirms where it was bought.
           </p>
         </div>
-        <div className="nk-phonecol">
-          <Phone step={11} t={1} theme={skin} scratched brand={brand} scanN={scanN} bought={bought} />
-        </div>
       </section>
 
-      <section className="nk-still" id="privacy" aria-labelledby="nk-priv">
-        <div className="nk-panel">
-          <div className="nk-caps nk-lab">
-            <span className="nk-who">For you</span>
-            <span className="nk-labrest">Privacy</span>
-          </div>
-          <h2 className="nk-h2" id="nk-priv">
-            Health data never reaches your marketing.
-          </h2>
-          <p className="nk-one">Without consent, the daily card and streak stay visible but locked, with one button to turn them on.</p>
-          <div className="nk-seg" role="group" aria-label="Show the app">
-            <button type="button" className="nk-sw" aria-pressed={!consent} onClick={() => setConsent(false)}>
-              Without consent
-            </button>
-            <button type="button" className="nk-sw" aria-pressed={consent} onClick={() => setConsent(true)}>
-              With consent
-            </button>
-          </div>
-          <p className="nk-fine" aria-live="polite">
-            <b className="nk-ex">Example</b> {consent ? 'Daily card and streak on.' : 'Daily card and streak locked.'} A tick is stored as a date,
-            never sent to ads, analytics or push messages.
-          </p>
+      {/* spec 30: wielkie zdanie typograficzne w atramencie; pod nim przelacznik, zapis danych i telefon w trzech kolumnach */}
+      <section className="nk-priv" id="privacy" aria-labelledby="nk-priv">
+        <div className="nk-caps nk-lab">
+          <span className="nk-who">For you</span>
+          <span className="nk-labrest">Privacy</span>
         </div>
-        <div className="nk-phonecol">
-          <Phone step={12} t={1} theme={skin} scratched brand={brand} consent={consent} onUnlock={() => setConsent(true)} />
+        <h2 className="nk-privbig" id="nk-priv">
+          Health data never reaches your marketing.
+        </h2>
+        <div className="nk-privrow">
+          <div className="nk-privctl">
+            <p className="nk-one">Without consent, the daily card and streak stay visible but locked, with one button to turn them on.</p>
+            <div className="nk-seg" role="group" aria-label="Show the app">
+              <button type="button" className="nk-sw" aria-pressed={!consent} onClick={() => setConsent(false)}>
+                Without consent
+              </button>
+              <button type="button" className="nk-sw" aria-pressed={consent} onClick={() => setConsent(true)}>
+                With consent
+              </button>
+            </div>
+            <p className="nk-fine" aria-live="polite">
+              <b className="nk-ex">Example</b> {consent ? 'Daily card and streak on.' : 'Daily card and streak locked.'}
+            </p>
+          </div>
+          <dl className={'nk-ledger' + (consent ? ' is-on' : '')}>
+            <div>
+              <dt>Stored</dt>
+              <dd>{consent ? 'Tick date only.' : 'Nothing.'}</dd>
+            </div>
+            <div>
+              <dt>Never sent to</dt>
+              <dd>
+                <s>Ads</s> <s>Analytics</s> <s>Push messages</s>
+              </dd>
+            </div>
+          </dl>
+          <div className="nk-phonecol">
+            <Phone step={12} t={1} theme="night" scratched brand={brand} consent={consent} onUnlock={() => setConsent(true)} />
+          </div>
         </div>
       </section>
     </div>

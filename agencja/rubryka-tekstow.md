@@ -34,6 +34,7 @@ czytał tekstów oczami kupującego. Ta rubryka to naprawia. Niespełniony punkt
   i dlaczego” na dole tego pliku — to jest pamięć gustu Rafała; czytaj ją przed pisaniem nowych tekstów.
 
 ## Odrzucone i dlaczego (pamięć gustu)
+- 24.11 „Stored — Nothing yet.” / „A date. Nothing else.” (`/nawyko` Privacy) — czytelnik: „yet” zapowiada zapis później, „Nothing else” jest fałszywe w szerokim odczycie (aplikacja ma konto i zakupy). Przy danych zdrowotnych bez „yet” i bez absolutów bez zakresu. Zamiast: „Nothing.” / „Tick date only.”
 - 24.11 „The Nawyko app” (link w nagłówku `/`) — czytelnik-kupujący: „obcy wyraz, nie mówi, co dostaje marka, brzmi jak aplikacja do pobrania dla mnie”. Zamiast: „Nawyko reorder app”. Nazwa własna w nawigacji zawsze z jednym zwykłym słowem opisu (NN/g „Category Names Suck”).
 - 24.11 „Claim: supports immunity” (przełącznik zakazanej funkcji na `/nawyko`) — na stronie o suplementach treść oświadczenia zdrowotnego, nawet jako zakazany przykład, na zrzucie czyta się jak oświadczenie samej strony. Zamiast: „Add a health claim to a card”. Nigdy nie cytujemy treści oświadczeń zdrowotnych.
 - 22.11 „Your name on it, not mine.” — egocentryczne i przemądrzałe; autor strony w roli bohatera. Zamiast: „Your brand. Your colours. Your app.”
