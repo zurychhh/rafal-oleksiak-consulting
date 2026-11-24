@@ -291,3 +291,11 @@ Pasek pojawia się przy przewijaniu w górę za pierwszym ekranem. Etykiety rozd
 | pasek, rozdział przed „How it works” | Overview | nowy |
 | pasek, rozdział → `#privacy` | Privacy | nowy (nazwa sceny prywatności) |
 | pasek, przycisk → `#enquiry` | Ask about Nawyko | bez zmian (ten sam co w pierwszym ekranie) |
+
+## R4 przebieg 10 — pasek aktów `/work/genactiv` (24.11.2026, spec 21 B)
+| Miejsce | Tekst | Status |
+|---|---|---|
+| pasek, przycisk → `#enquiry` | Ask about an app | nowy (skrót tytułu formularza „Ask about an app for your brand”) |
+| pasek, etykieta przed bieżącym rozdziałem | GENACTIV | bez zmian (nazwa marki z trasy) |
+| pasek, rozdziały (lista i bieżący) | The problem · How it works · Cashback · Points and levels · Consent · How it was built · Results · Your brand | „How it works” nowy (grupa aktów Step 1–3); reszta z istniejących kickerów |
+| pasek, `aria-label` nawigacji | Chapters | bez zmian (to samo co pasek `/nawyko`) |

@@ -422,3 +422,53 @@ button.ga-fakebtn.ga-done { color: var(--muted); }
 
 /* przebieg 3: notka pod próbkami (czytelnik 23.11) */
 .ga .ga-pick-note{margin:8px 0 0;font-size:13px;line-height:1.4;color:#c9bfc1}
+
+/* ---------- Spec 21 B: pasek aktow (wzor .nk .cb z /nawyko). fixed + transform = CLS 0; ukryty = inert + visibility ---------- */
+.ga-ab {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 15;
+  background: var(--surface); color: var(--text); border-bottom: 1px solid #3a2c2f;
+  font: 600 12px/1.2 'Montserrat', 'Montserrat Fallback', system-ui, sans-serif; letter-spacing: 0.12em; text-transform: uppercase;
+  transform: translateY(-101%); visibility: hidden;
+  transition: transform .22s cubic-bezier(.4,0,1,1), visibility 0s .22s;
+}
+.ga-ab[data-on] { transform: none; visibility: visible; transition: transform .28s cubic-bezier(.2,.7,.2,1), visibility 0s; }
+@media (prefers-reduced-motion: reduce) { .ga-ab, .ga-ab[data-on] { transition: none; } }
+.ga-ab-row {
+  display: flex; flex-wrap: wrap; align-items: center; column-gap: 16px; row-gap: 0;
+  max-width: 1240px; margin: 0 auto; min-height: 52px; padding: 0 48px;
+}
+.ga-ab a { text-decoration: none; }
+.ga-ab-toggle {
+  font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0;
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px; min-width: 0; flex: 0 1 auto; padding: 0; cursor: pointer;
+}
+.ga-ab-kicker { color: var(--accent-hi); font-weight: 700; }
+.ga-ab-cur { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ga-ab-chev { flex: none; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+@media (prefers-reduced-motion: no-preference) { .ga-ab-chev { transition: transform .2s; } }
+.ga-ab-toggle[aria-expanded="true"] .ga-ab-chev { transform: translateY(2px) rotate(-135deg); }
+.ga-ab-cta {
+  order: 2; margin-left: auto; flex: none; display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px;
+  border-radius: 999px; background: var(--accent-hi); color: var(--bg) !important; font-weight: 700;
+}
+.ga-ab-cta:hover { background: var(--rose-3); }
+.ga-ab-list {
+  order: 3; flex: 0 0 100%; list-style: none; margin: 0; padding: 6px 0 14px; border-top: 1px solid #3a2c2f;
+  max-height: calc(100svh - 72px); overflow-y: auto;
+}
+.ga-ab-list[hidden] { display: none; }
+.ga-ab-list a { display: flex; align-items: center; gap: 14px; min-height: 44px; color: var(--muted); border-bottom: 1px solid #3a2c2f; }
+.ga-ab-list li:last-child a { border-bottom: 0; }
+.ga-ab-list a:hover, .ga-ab-list a[aria-current] { color: var(--text); }
+.ga-ab-list a[aria-current] .ga-ab-n { color: var(--accent-hi); }
+.ga-ab-n { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 2ch; }
+/* >= 1100 px: lista jako rozwijane menu pod przyciskiem, rzad paska zostaje jeden (lekcja D1 z /nawyko) */
+@media (min-width: 1100px) {
+  .ga-ab-row { position: relative; }
+  .ga-ab-list { position: absolute; top: 100%; left: 32px; width: 380px; background: var(--surface); padding: 6px 16px 10px; border: 1px solid #3a2c2f; border-top: 0; border-radius: 0 0 12px 12px; }
+}
+@media (max-width: 759px) { .ga-ab-row { padding: 0 16px; } }
+@media (max-width: 420px) { .ga-ab-row { column-gap: 10px; } .ga-ab-kicker { display: none; } .ga-ab-cta { padding: 0 12px; letter-spacing: 0.08em; } }
+.ga-act:focus:not(:focus-visible), .ga-copy-in:focus:not(:focus-visible) { outline: none; }
+/* WCAG 2.4.11: fokus na ostatnich linkach strony nie laduje pod paskiem cookies (fixed, dol ekranu) */
+.ga-final .ga-link, .ga-foot a { scroll-margin-bottom: 120px; }
