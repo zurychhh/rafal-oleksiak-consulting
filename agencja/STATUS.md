@@ -250,7 +250,7 @@ Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + po
 ## Dla Rafała
 
 **Runda 4, przebieg 13 (24.11 10:38–11:35) — przebieg narzędzi jakości, na stronie prawie nic nowego do oglądania: bramka płynności przestała dawać fałszywe alarmy, pięć stron z narzędziami przeszło pełną kontrolę (z Safari) po raz pierwszy, a jedną poprawkę Nawyko cofnęliśmy, bo pogarszała czytelność.**
-Do obejrzenia (podgląd gałęzi; status Vercel sprawdzany po pushu — niżej): https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/lab/reward na iPhonie — strona nie przesuwa się już w bok.
+Do obejrzenia (Vercel „success” dla 5f90846, sprawdzone statusem commita): https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/lab/reward na iPhonie — strona nie przesuwa się już w bok.
 1. **Płynność mierzona uczciwie:** dotąd jeden pomiar decydował o „FAIL”, a ten sam kod raz przechodził, raz nie. Teraz rozgrzewka + 3 pomiary i mediana (metoda z dokumentacji Lighthouse Google). Bramka ma też własne testy: na celowo zepsutej stronie musi dać FAIL.
 2. **Narzędzia (`/calculator`, `/tools`, `/lab/reward`, `/lab/payback`, `/lab/reminder`):** pełna bramka pierwszy raz, w tym Safari 390 i 1440. Jedyny błąd: na telefonie `/lab/reward` dało się przesunąć w bok (ukryty komunikat dla czytnika ekranu wystawał poza ekran) — poprawione, tekst bez zmian.
 3. **Cofnięte:** lista czterech kroków na `/nawyko` nie przesuwała się już ani o piksel, ale opis kroku stał pod ostatnim krokiem i czytał się jak jego opis; na laptopie 1280 px z paskiem cookies link wypadał poza ekran. Drgnięcie, które usuwała, jest ok. 30× poniżej progu Google — nie warto płacić za nie czytelnością.
