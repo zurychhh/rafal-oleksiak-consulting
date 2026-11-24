@@ -111,3 +111,12 @@ tsc, lint 0 błędów / 1 ostrzeżenie (jak przed), copy-voice OK (widzi nowe li
 błąd wysyłki bez Resend: „That did not go through. Write to rafal@… instead.” z fokusem. Zrzuty `agencja/podglad/genactiv-p3-*.png`.
 Otwarte: czytelnik-kupujący dla tekstów przebiegu 3; `Enquiry` ma swoje teksty w 1. osobie („I reply personally…”, zgoda
 marketingowa) — wspólny komponent, nie zmieniany; trasa importuje cały moduł NawykoClient (rozmiar JS do sprawdzenia).
+
+## Przebieg 4 (24.11.2026 01:45) — zakres
+1. Wydzielić `Enquiry` (i to, czego wymaga, np. wybór koloru) z `app/nawyko/NawykoClient.tsx` do osobnego pliku
+   (`app/nawyko/Enquiry.tsx`); obie trasy importują z niego. Zmierzyć JS trasy `/work/genactiv` i `/nawyko` przed i po
+   (suma chunków ładowanych przez stronę, z buildu albo z sieci w Playwright) — wynik w tabeli niżej.
+2. Akt 10: etykieta „YOUR BRAND” w kolorze odwiedzającego (jak na `/nawyko`), kontrast ≥ 4,5:1 zmierzony.
+3. 390: pasek cookies nie zasłania podpisu pod telefonem w finale (rezerwa stała, raz, na kontenerze — lekcja z R4 p3).
+4. Jedna najbardziej widoczna usterka ruchu trasy po obejrzeniu serii zrzutów 390/1440 (Chromium + WebKit).
+Bramki jak w specu wyżej + `scripts/webkit-check.py` w 390 i 1440 na `/work/genactiv` i `/nawyko`.
