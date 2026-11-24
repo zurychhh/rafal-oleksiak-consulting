@@ -22,11 +22,17 @@ export const viewport: Viewport = {
   themeColor: '#0e0b0c',
 }
 
+// Rezerwa pod pasek cookies decydowana RAZ przed pierwszym malowaniem: bez zapisanej zgody (albo gdy localStorage rzuca)
+// pasek sie pokaze, wiec <html> dostaje data-ga-consent-pending. Atrybut zostaje do konca wizyty (bez skoku ukladu po kliknieciu).
+const CONSENT_JS =
+  "try{if(localStorage.getItem('cookie-consent')===null)document.documentElement.setAttribute('data-ga-consent-pending','')}catch(e){document.documentElement.setAttribute('data-ga-consent-pending','')}"
+
 export default function GenactivWork() {
   // font od pierwszej klatki: zamiana kroju po zaladowaniu przesuwala tekst (CLS)
   preload('/fonts/montserrat-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <div className="ga">
+      <script dangerouslySetInnerHTML={{ __html: CONSENT_JS }} />
       <a className="ga-skip" href="#main">
         Skip to content
       </a>
