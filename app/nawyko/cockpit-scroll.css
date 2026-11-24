@@ -1,0 +1,41 @@
+/* Spec 34 (R6 p2): kokpit przelaczany przewijaniem.
+   Przypieta scena TYLKO w CSS-owym warunku (ten sam co matchMedia w Cockpit.tsx) — HTML z serwera ma od razu docelowy
+   uklad, bez skoku. Sekcja = wysoki tor (8 odcinkow x 70svh + ekran), w srodku sticky top:0 jak final .nk-fz
+   (przodkowie bez transform/overflow — .nk :where(section) w nawyko.css zeruje regule globals.css).
+   Wysokosc sceny = ekran minus pasek cookies (--consent-h), wiec zadna kontrolka nie lezy pod paskiem.
+   Telefon: jawna szerokosc z wysokosci (WebKit nie przenosi szerokosci z aspect-ratio), min. 150 px. */
+.nk-kp-prog{display:none;}
+
+@media (min-width:900px) and (min-height:600px) and (prefers-reduced-motion:no-preference){
+  .nk .nk-kp{height:calc(8 * 70svh + 100svh);padding:0;scroll-margin-top:0;}
+  .nk-kp-pin{position:sticky;top:0;height:calc(100svh - var(--consent-h,0px));display:flex;flex-direction:column;
+    padding:clamp(18px,5svh,64px) var(--m) clamp(14px,3svh,36px);overflow:clip;}
+  .nk .nk-kp-pin .nk-h2{margin-top:clamp(6px,1.2svh,14px)!important;max-width:none;font-size:clamp(26px,2.6vw,40px);line-height:1.08;}
+  .nk .nk-kp-pin .nk-kp-tabs{margin-top:clamp(12px,2.4svh,28px);padding-bottom:6px;flex:none;}
+  .nk-kp-prog{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;margin-top:clamp(6px,1svh,12px);flex:none;}
+  .nk-kp-prog i{height:3px;border-radius:2px;background:#3A3D44;transition:background-color .3s;}
+  .nk-kp-prog i.is-past{background:color-mix(in srgb,var(--ck-ink) 45%,#3A3D44);}
+  .nk-kp-prog i.is-on{background:var(--ck-ink);}
+  .nk .nk-kp-pin .nk-kp-stage{flex:1 1 auto;min-height:0;margin-top:clamp(12px,2.4svh,28px);align-items:center;}
+  .nk .nk-kp-pin .nk-kp-phone{--hh:clamp(300px,calc(100svh - var(--consent-h,0px) - 250px),560px);
+    height:var(--hh);width:max(150px,calc(var(--hh) / 2));align-self:center;}
+  .nk .nk-kp-pin .nk-kp-panel{align-self:center;}
+  /* niskie okno: ciasniejszy panel, zeby kontrolki (takze 3 blokady „Fixed rules”) miescily sie nad paskiem cookies */
+  @media (max-height:760px){
+    .nk .nk-kp-pin .nk-kp-who{margin-top:14px;}
+    .nk .nk-kp-pin .nk-kp-num{margin-top:14px;padding-top:10px;}
+    .nk .nk-kp-pin .nk-kp-feel{font-size:clamp(18px,1.7vw,22px);}
+    .nk .nk-kp-pin .nk-kp-sw{margin-top:4px;}
+    .nk .nk-kp-pin .nk-kp-ctl{margin-top:6px;}
+    .nk .nk-kp-pin .nk-kp-locks .nk-fine{margin-top:6px;min-height:2.8em;}
+    .nk .nk-kp-pin .nk-kp-phone{--hh:clamp(300px,calc(100svh - var(--consent-h,0px) - 210px),560px);width:max(180px,calc(var(--hh) / 2));}
+    .nk .nk-kp-pin .nk-kp-screen{padding:20px 12px 12px;}
+    .nk .nk-kp-pin .nk-kp-body{margin-top:12px;gap:7px;}
+    /* waski ekran makiety: nazwa marki lamie sie po slowach, „Sample data” schodzi do nowej linii zamiast miazdzyc nazwe */
+    .nk .nk-kp-pin .nk-hhead{flex-wrap:wrap;row-gap:6px;}
+    .nk .nk-kp-pin .nk-hname{flex:1 1 auto;min-width:0;overflow-wrap:normal;word-break:normal;}
+    .nk .nk-kp-pin .nk-kp-big{font-size:36px;}
+    .nk .nk-kp-pin .nk-kp-scan{height:96px;}
+    .nk .nk-kp-pin .nk-kp-row b{white-space:nowrap;}
+  }
+}
