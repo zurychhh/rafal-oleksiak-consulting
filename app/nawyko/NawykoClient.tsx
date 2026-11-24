@@ -1562,13 +1562,83 @@ function band(vals: readonly number[], w: number) {
   return `${top} ${bot} Z`
 }
 
-const LINKS = [
-  { k: 'Store', n: 'Shopify', d: 'Orders confirm a purchase; rewards arrive as single-use codes.' },
-  { k: 'Subscriptions', n: 'Subscription apps', d: 'Cashback can come off the next delivery.' },
-  { k: 'Loyalty', n: 'Loyalty apps', d: 'Points can sit beside a programme already running.' },
-  { k: 'Email and CRM', n: 'Your email tool', d: 'Reorder reminders go out without any health data.' },
-  { k: 'App stores', n: 'App Store · Google Play', d: 'The app is listed under your brand name.' },
+/* ── R6' (spec 33, przeniesione z agencja/r6p2-odrzucone): #integrations jako „Your store” — gosc wybiera silnik sklepu
+   (tekst, bez logo), schemat sklep ↔ adapter ↔ aplikacja. Uczciwie: gotowy jest tylko Shopify; reszta per marka przez adapter.
+   Bez liczb i bez terminow. ── */
+const ENGINES = [
+  { id: 'shopify', n: 'Shopify', a: 'Shopify app: orders in, discount codes out', ready: true },
+  { id: 'woo', n: 'WooCommerce', a: 'WooCommerce REST API and webhooks', ready: false },
+  { id: 'shoper', n: 'Shoper', a: 'Shoper REST API and webhooks', ready: false },
+  { id: 'idosell', n: 'IdoSell', a: 'IdoSell Admin API', ready: false },
+  { id: 'presta', n: 'PrestaShop', a: 'PrestaShop Webservice', ready: false },
+  { id: 'magento', n: 'Magento / Adobe Commerce', a: 'Adobe Commerce REST API', ready: false },
+  { id: 'own', n: 'Custom store', a: 'Your own API and webhooks', ready: false },
 ] as const
+
+function StoreMap({ brand }: { brand: string }) {
+  const { colour } = useBrand()
+  const [pick, setPick] = useState(0)
+  const e = ENGINES[pick]
+  const vars = {
+    ['--brand' as string]: colour,
+    ['--brand-on' as string]: onColour(colour),
+    ['--hi' as string]: inkOn(colour, '#0E0F12'),
+  }
+  return (
+    <div className="nk-store" style={vars}>
+      <div className="nk-store-pick" role="group" aria-label="Your store engine">
+        {ENGINES.map((x, i) => (
+          <button key={x.id} type="button" className="nk-store-chip" aria-pressed={i === pick} onClick={() => setPick(i)}>
+            {x.n}
+          </button>
+        ))}
+      </div>
+      <div className="nk-store-map">
+        <div className="nk-store-node">
+          <small className="nk-caps">Your store</small>
+          <b>{e.n}</b>
+          <span>Orders, stock and customers stay here.</span>
+        </div>
+        <div className="nk-store-wire" aria-hidden="true">
+          <span>Orders</span>
+          <i />
+          <span>Codes</span>
+        </div>
+        <div className="nk-store-node nk-store-ad" aria-live="polite">
+          <small className="nk-caps">Adapter</small>
+          <b>{e.a}</b>
+          <span className={'nk-store-pill' + (e.ready ? ' is-ready' : '')}>
+            {e.ready ? 'Ready' : 'Connected per brand via an adapter'}
+          </span>
+        </div>
+        <div className="nk-store-wire" aria-hidden="true">
+          <span>Purchases</span>
+          <i />
+          <span>Rewards</span>
+        </div>
+        <div className="nk-store-node nk-store-app">
+          <span className="nk-store-mono" aria-hidden="true">
+            {monogram(brand)}
+          </span>
+          <small className="nk-caps">The app</small>
+          <b>{brand}</b>
+          <span>App Store · Google Play</span>
+        </div>
+      </div>
+      <ul className="nk-store-facts">
+        <li>
+          <b>Codes</b>Single-use, redeemed in {brand}&rsquo;s own store.
+        </li>
+        <li>
+          <b>Other tools</b>Subscription, loyalty and email tools are matched to your stack.
+        </li>
+        <li>
+          <b>App stores</b>The app is listed under your brand name.
+        </li>
+      </ul>
+    </div>
+  )
+}
 
 function Evidence({ brand }: { brand: string }) {
   const [held, setHeld] = useState(6)
@@ -1698,20 +1768,9 @@ function Evidence({ brand }: { brand: string }) {
           <h2 className="nk-h2" id="nk-intg">
             Runs on Shopify; your other tools connect per brand.
           </h2>
-          <p className="nk-one">
-            Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both
-            stores under your brand.
-          </p>
+          <p className="nk-one">Pick your store engine. Shopify is ready; every other engine connects per brand through an adapter.</p>
         </div>
-        <ul className="nk-band5">
-          {LINKS.map((l) => (
-            <li key={l.k}>
-              <span className="nk-caps">{l.k}</span>
-              <b>{l.n}</b>
-              <p>{l.d}</p>
-            </li>
-          ))}
-        </ul>
+        <StoreMap brand={brand} />
         <p className="nk-fine nk-int-fine">
           Which app in each category connects to your store is mapped in the first call.{' '}
           <a className="nk-link" href="#enquiry">
@@ -1726,8 +1785,9 @@ function RX(day: number) {
   return 16 + ((day - 25) / 14) * 328
 }
 
-/* ── runda 4 (j): FAQ kupujacego, natywne <details> (klawiatura i bez JS za darmo) ── */
+/* ── runda 4 (j) → R6': FAQ kupujacego jako chipy; odpowiedz jako dymek wiadomosci. Pelna lista w <details> ukrytych wizualnie. ── */
 function Faq() {
+  const [at, setAt] = useState(0)
   return (
     <section className="nk-faq" id="faq" aria-labelledby="nk-faq-h">
       <div className="nk-caps nk-lab">
@@ -1738,13 +1798,39 @@ function Faq() {
         FAQ: six answers you need before the first call.
       </h2>
       <p className="nk-one">Daily use, health data, reward cost, setup, pharmacy purchases, consent.</p>
-      <div className="nk-qs">
+      <div className="nk-qa-chips" role="group" aria-label="Pick a question">
+        {FAQ.map((f, i) => (
+          <button
+            key={f.q}
+            type="button"
+            className="nk-qa-chip"
+            aria-pressed={at === i}
+            aria-controls="nk-qa-ans"
+            onClick={() => setAt(i)}
+          >
+            {f.q}
+          </button>
+        ))}
+      </div>
+      <div className="nk-qa-ans" id="nk-qa-ans" aria-live="polite">
+        <div className="nk-qa-thread" key={at}>
+          <p className="nk-qa-q">{FAQ[at].q}</p>
+          <div className="nk-qa-msg">
+            <span className="nk-qa-av" aria-hidden="true">
+              R
+            </span>
+            <div>
+              <small>Rafał</small>
+              <p>{FAQ[at].a}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* pelna lista pytan i odpowiedzi (czytniki, wyszukiwarki, FAQPage JSON-LD, bramka inwentarza czyta summary) */}
+      <div className="nk-qa-sr">
         {FAQ.map((f) => (
-          <details key={f.q} className="nk-q">
-            <summary>
-              <span>{f.q}</span>
-              <i aria-hidden="true" />
-            </summary>
+          <details key={f.q} open>
+            <summary tabIndex={-1}>{f.q}</summary>
             <p>{f.a}</p>
           </details>
         ))}

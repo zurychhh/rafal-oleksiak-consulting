@@ -419,3 +419,16 @@ Usunięte ze strony: akapity i wykres kropek w #proof, pas 5 kart #integrations,
 | /nawyko | #store, fakty | Codes — Single-use, redeemed in {marka}’s own store. · Data — Customer data stays with {marka}. · Pharmacy and drugstore — A scanned receipt confirms the purchase. | nowy |
 | /nawyko | #enquiry, pytania | Asked on first calls · chipy = 6 pytań z FAQ (bez zmian) · dymek „Rafał” z odpowiedzią z FAQ (bez zmian) | nowy układ |
 | /nawyko | pasek rozdziałów | Your app · Why · How it works · Proof · Your store · One morning · Ask | zmienione |
+
+## R6' q1 — #integrations jako „Your store” i FAQ jako chipy (24.11, budujący B, gałąź wt/b2)
+Nagłówki h2 obu sekcji bez zmian; id `integrations` i `faq` bez zmian; pytania i odpowiedzi FAQ bez zmian (content.ts), FAQPage JSON-LD bez zmian.
+copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada. Usunięte: pas 5 kart #integrations (treść „Other tools” i „App stores” przeniesiona do faktów), akordeon FAQ (pełna lista zostaje w `<details>` ukrytych wizualnie).
+
+| Trasa | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /nawyko | #integrations, podtytuł | Pick your store engine. Shopify is ready; every other engine connects per brand through an adapter. | nowy |
+| /nawyko | #integrations, silniki | Shopify · WooCommerce · Shoper · IdoSell · PrestaShop · Magento / Adobe Commerce · Custom store | nowy |
+| /nawyko | #integrations, schemat | Your store · {silnik} · Orders, stock and customers stay here. · Orders / Codes · Adapter · {podpis adaptera} · Ready / Connected per brand via an adapter · Purchases / Rewards · The app · {marka} · App Store · Google Play | nowy |
+| /nawyko | #integrations, podpisy adaptera | Shopify app: orders in, discount codes out · WooCommerce REST API and webhooks · Shoper REST API and webhooks · IdoSell Admin API · PrestaShop Webservice · Adobe Commerce REST API · Your own API and webhooks | nowy |
+| /nawyko | #integrations, fakty | Codes — Single-use, redeemed in {marka}’s own store. · Other tools — Subscription, loyalty and email tools are matched to your stack. · App stores — The app is listed under your brand name. | nowy |
+| /nawyko | #faq | chipy = 6 pytań (bez zmian) · dymek „Rafał” z odpowiedzią (bez zmian) · etykieta grupy (czytnik): Pick a question | nowy układ |
