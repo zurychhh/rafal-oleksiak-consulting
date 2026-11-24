@@ -312,7 +312,10 @@ function Proof() {
   const wa = SPREAD / Math.sqrt(CROWD - held)
   const last = LIFT_APP.length - 1
   const apart = LIFT_APP[last] - wa > LIFT_CTRL[last] + wc
-  const vars = { ['--hi' as string]: inkOn(colour, PROOF_BG) }
+  /* Recenzja R6p2 (monotonia): kokpit i dowod to dwa ciemne bloki pod rzad — dowod dostaje atrament zabarwiony kolorem marki
+     (22 %), a akcent liczony od tego tla (AA). */
+  const bg = mix(PROOF_BG, colour, 0.22)
+  const vars = { ['--hi' as string]: inkOn(colour, bg), ['--pf-bg' as string]: bg }
 
   return (
     <section className="nk-pf" id="proof" aria-labelledby="nk-prf" style={vars}>
@@ -375,7 +378,7 @@ function Proof() {
             </div>
           </div>
           <p className="nk-pf-out" aria-live="polite">
-            {apart ? 'By month six the two bands no longer overlap: that gap is the app.' : 'The bands overlap: too few customers held out to tell.'}
+            {apart ? 'In this example, by month six the bands no longer overlap: that gap is the app.' : 'The bands overlap: too few customers held out to tell.'}
           </p>
         </figure>
       </div>

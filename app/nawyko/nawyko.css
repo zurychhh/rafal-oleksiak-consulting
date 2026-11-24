@@ -665,7 +665,7 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 
 .nk-why{background:var(--brand);color:var(--brand-on);padding:clamp(64px,12vw,160px) var(--m);}
 /* R6 p1 (recenzja 40 pkt 3): licznik biegnie, gdy sekcja stoi przypieta na pelnym ekranie */
-@media (prefers-reduced-motion:no-preference){.nk-why{height:230svh;padding:0 var(--m);}.nk-why-in{position:sticky;top:0;min-height:100svh;display:flex;flex-direction:column;justify-content:center;}}
+@media (prefers-reduced-motion:no-preference){.nk-why{height:160svh;padding:0 var(--m);}.nk-why-in{position:sticky;top:0;min-height:100svh;display:flex;flex-direction:column;justify-content:center;}}
 .nk-why-in{max-width:1100px;margin:0 auto;}
 .nk-why-k{font-variant-numeric:tabular-nums;opacity:.9;}
 .nk-why-n{display:inline-block;min-width:12ch;}
@@ -742,7 +742,7 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
   border-bottom:1px solid currentColor;}
 .nk-why-calc:focus-visible{outline-color:currentColor;}
 
-.nk-pf{background:#0E0F12;color:#F2F0EA;padding:clamp(72px,10vw,140px) var(--m) calc(clamp(72px,10vw,140px) + var(--consent-h,0px));
+.nk-pf{background:var(--pf-bg,#0E0F12);transition:background-color .6s;color:#F2F0EA;padding:clamp(72px,10vw,140px) var(--m) calc(clamp(72px,10vw,140px) + var(--consent-h,0px));
   --ink:#F2F0EA;--ink2:#D6D3CB;--dim:#B9B6AE;--line:#3A3D44;}
 .nk-pf :focus-visible{outline-color:#F2F0EA;}
 .nk-pf-in{max-width:1200px;margin:0 auto;}
@@ -754,7 +754,7 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 .nk-pf-ex{flex:none;font-size:11px;font-weight:600;letter-spacing:.16em;padding:3px 7px 2px;border:1px solid currentColor;color:#F2F0EA;}
 .nk-pf-plot{position:relative;margin-top:24px;padding-bottom:30px;}
 .nk-pf-plot svg{display:block;width:100%;height:clamp(200px,26vw,360px);overflow:visible;}
-.nk-pf-grid{stroke:#23252A;stroke-width:1;vector-effect:non-scaling-stroke;}
+.nk-pf-grid{stroke:rgba(242,240,234,.12);stroke-width:1;vector-effect:non-scaling-stroke;}
 .nk-pf-axis{stroke:#4A4C52;stroke-width:1;vector-effect:non-scaling-stroke;}
 .nk-pf-band{stroke:none;transition:d .3s;}
 .nk-pf-band.is-a{fill:var(--hi);opacity:.24;}

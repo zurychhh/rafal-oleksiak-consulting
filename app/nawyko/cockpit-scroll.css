@@ -1,13 +1,13 @@
 /* Spec 34 (R6 p2): kokpit przelaczany przewijaniem.
    Przypieta scena TYLKO w CSS-owym warunku (ten sam co matchMedia w Cockpit.tsx) — HTML z serwera ma od razu docelowy
-   uklad, bez skoku. Sekcja = wysoki tor (8 odcinkow x 70svh + ekran), w srodku sticky top:0 jak final .nk-fz
+   uklad, bez skoku. Sekcja = wysoki tor (8 odcinkow x 45svh + ekran; recenzja R6p2: 70svh = 6,6 ekranu na 8 zakladek, za wolno), w srodku sticky top:0 jak final .nk-fz
    (przodkowie bez transform/overflow — .nk :where(section) w nawyko.css zeruje regule globals.css).
    Wysokosc sceny = ekran minus pasek cookies (--consent-h), wiec zadna kontrolka nie lezy pod paskiem.
    Telefon: jawna szerokosc z wysokosci (WebKit nie przenosi szerokosci z aspect-ratio), min. 150 px. */
 .nk-kp-prog{display:none;}
 
 @media (min-width:900px) and (min-height:600px) and (prefers-reduced-motion:no-preference){
-  .nk .nk-kp{height:calc(8 * 70svh + 100svh);padding:0;scroll-margin-top:0;}
+  .nk .nk-kp{height:calc(8 * 45svh + 100svh);padding:0;scroll-margin-top:0;}
   .nk-kp-pin{position:sticky;top:0;height:calc(100svh - var(--consent-h,0px));display:flex;flex-direction:column;
     padding:clamp(18px,5svh,64px) var(--m) clamp(14px,3svh,36px);overflow:clip;}
   .nk .nk-kp-pin .nk-h2{margin-top:clamp(6px,1.2svh,14px)!important;max-width:none;font-size:clamp(26px,2.6vw,40px);line-height:1.08;}

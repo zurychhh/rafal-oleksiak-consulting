@@ -42,6 +42,8 @@ try:
     print("supports animation-timeline:scroll()", drv.execute_script("return CSS.supports('animation-timeline','scroll()')"),
           "| engine", drv.execute_script("return navigator.userAgent.match(/AppleWebKit\\/[\\d.]+/)?.[0]"))
     H = drv.execute_script("return document.documentElement.scrollHeight")
+    PHONES = os.environ.get('WK_PHONES', '.nk-phone,.ga-phone,.nk-hphone,.nk-kp-phone,.nk-fz-phone')
+    seen = 0
     plan = [(f, int(H * f)) for f in [0.0, 0.08, 0.16, 0.24, 0.4, 0.6, 0.8, 0.97]]
     if os.environ.get("WK_SCENE") == "1":
         path = drv.execute_script("return location.pathname + location.search")
@@ -61,13 +63,19 @@ try:
         drv.execute_script("window.scrollTo(0, arguments[0])", y)
         time.sleep(1.2)
         phones = drv.execute_script(
-            "return [...document.querySelectorAll('.nk-phone,.ga-phone')].filter(e=>{const r=e.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight}).map(e=>{const r=e.getBoundingClientRect();return [Math.round(r.width),Math.round(r.height)]})")
+            "return [...document.querySelectorAll(arguments[0])].filter(e=>{const r=e.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight}).map(e=>{const r=e.getBoundingClientRect();return [Math.round(r.width),Math.round(r.height)]})", PHONES)
         print(f"scroll {frac:.2f} visible phones (w,h):", phones)
         bad += [p for p in phones if p[0] < 150]
+        seen += len(phones)
         drv.save_screenshot(f"{out}-{i}.png")
 finally:
     drv.quit()
 if bad:
     print("FAIL: phone narrower than 150 px:", bad)
+    sys.exit(1)
+# R6 p2 (lekcja R28): po przebudowie R6 p1 telefony /nawyko mialy nowe klasy, selektor ich nie znal i bramka mowila PASS
+# przy zerze zmierzonych telefonow. Trasa, ktora MA telefony, z zerem widocznych = bramka slepa = FAIL.
+if seen == 0 and any(k in url for k in ("/nawyko", "/work/")):
+    print("FAIL: zero visible phones measured on a route that has phones - selector out of date (blind gate)")
     sys.exit(1)
 print("PASS: no visible phone narrower than 150 px")

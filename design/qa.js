@@ -68,6 +68,9 @@ function lum(c) {
         if (el.tagName === 'INPUT') return;             // pole tekstowe legalnie przewija własną wartość
         if (el.classList.contains('rail')) return;      // marquee clips by design
         if (cs.webkitLineClamp && cs.webkitLineClamp !== 'none') return; // clamp is deliberate
+        // Wzorzec „visually hidden” (tylko dla czytnikow ekranu): pudelko 1×1 z clip-path inset(50%) jest niewidoczne
+        // z definicji — to nie przyciecie widocznej tresci (R6 p2: pelne odpowiedzi FAQ w DOM obok chipow pytan).
+        if (el.clientWidth <= 1 && el.clientHeight <= 1 && /inset\(50%\)/.test(cs.clipPath)) return;
         // Zwinieta szuflada: dziecko siatki z grid-template-rows 0fr → 1fr (pasek
         // formularza na telefonie w stronie z Claude Design rozwija e-mail i zgode
         // dopiero po fokusie). Zamknieta ma zerowa wysokosc z definicji — to stan,
