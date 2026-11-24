@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { preload } from 'react-dom'
 import { ChapterBar } from './ChapterBar'
 import { SiteNav } from '../components/SiteNav'
-import { DayStrip, Story } from './NawykoClient'
+import { DayStrip, HeroApp, Story } from './NawykoClient'
 import { HeroGap } from '../calculator/HeroGap'
 import './nawyko.css'
 import { FAQ, FEATURES } from './content'
@@ -99,6 +99,9 @@ const CHAPTERS = [
 const PIN_JS =
   "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!navigator.webdriver&&innerHeight>=600)document.documentElement.setAttribute('data-nk-pin','')}catch(e){}"
 
+const BRAND_WAIT_JS =
+  "try{var b=JSON.parse(localStorage.getItem('oc-brand-v1')||'{}');if(b&&b.name)document.documentElement.setAttribute('data-brand-wait','');setTimeout(function(){document.documentElement.removeAttribute('data-brand-wait')},3000)}catch(e){}"
+
 export default function Nawyko() {
   // Spec 15 A2: font gotowy przed pierwszym malowaniem (font-display:optional w nawyko.css) — wejscie z kotwica bez skoku.
   preload('/fonts/instrument-sans-400-600-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
@@ -109,6 +112,8 @@ export default function Nawyko() {
       {/* Spec 13: rezerwa wysokosci sceny przed hydratacja. Ten sam warunek co setMode('scroll') w Scene;
           bez niego wejscie z kotwica (#proof) skakalo o kilka ekranow po hydratacji (CLS 0,3–1,2). */}
       <script dangerouslySetInnerHTML={{ __html: PIN_JS }} />
+      {/* Spec 26 / R22: zapisana marka odwiedzajacego — nazwy w telefonach ukryte do hydratacji (zero migniecia nazwy demo). */}
+      <script dangerouslySetInnerHTML={{ __html: BRAND_WAIT_JS }} />
       <a className="nk-skip" href="#main">
         Skip to content
       </a>
@@ -124,13 +129,14 @@ export default function Nawyko() {
 
       <main id="main">
         <section className="nk-hero" id="top" aria-labelledby="nk-h1">
-          <div>
+          <div className="nk-hero-head">
             <div className="nk-caps nk-lab">Nawyko · white-label app for repeat-purchase brands</div>
             <h1 className="nk-h1" id="nk-h1">
               {H1}
             </h1>
           </div>
-          <div>
+          <HeroApp />
+          <div className="nk-hero-body">
             <p className="nk-lede">
               {LEDE}
             </p>

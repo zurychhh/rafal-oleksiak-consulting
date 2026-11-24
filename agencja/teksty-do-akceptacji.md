@@ -318,3 +318,17 @@ Brzmienie bez zmian, czytelnika-kupującego nie uruchamiano (gramatyka, nie nowe
 |---|---|---|
 | `.gc-why` | +1 order × 120 × 1 customer | zmieniony (było „+1 orders × … × 1 customers”); „+1.01 orders”, „4,000 customers” bez zmian |
 | oś roku, `aria-label` | One customer, one year: 1 reorder today, … | zmieniony (było „1 reorders”) |
+
+## R5 przebieg 1 — hero z ekranem aplikacji i silnik marki (24.11.2026, spec 27)
+| Miejsce | Tekst | Status |
+|---|---|---|
+| hero, telefon | Sample data · Day 9 of 30 · Day 9 ticked · day streak / ticked / days left · Card of the day / Taken it? Scratch. · ✓ Ticked / Next card tomorrow · Next reward / Stamp at day 24 · Today · Rewards · Shop · Account | nowe; czytelnik-kupujący: OK poza „Stamp at day 24” (proponował „Reward at day 24”) — zostaje, bo pieczątka po 24 dniach to nazwa nagrody na całej stronie |
+| hero, pod telefonem | Reveal without scratching | nowe; czytelnik: „brzmi jak obejście” → zostaje (to samo brzmienie, które Rafał nazwał „super” na `/work/genactiv`) |
+| hero, komunikat | Day 9 ticked: the streak grew to 9. | nowe, OK |
+| hero, pole | Your brand name · placeholder „Type it here” · Brand colour | nowe, OK |
+| hero, notka | Stays on this page. Nothing is sent. → po wpisaniu: Every phone below now shows your brand. Nothing is sent. | nowe, OK |
+| notka pod sceną | Tovemi is a made-up demo brand, not a client. → po wpisaniu: Showing your brand: {marka} · sample data. | nowe (zamiast nazwy demo na sztywno), OK |
+| etykieta sceny | How it works · made-up brand → po wpisaniu: How it works · sample data | nowe, OK |
+| scena white label, podtytuł | Type your brand name, pick a colour and a style. Every phone follows. | zmienione po czytelniku (było „…: every phone on this page follows.”) |
+| finał | Your next step / For {marka} · Build your brand’s app. / Build {marka}’s app. · Send your store address. The first call covers rewards and setup. | nowe; ostatnie zdanie zmienione po czytelniku („maps … the tools to connect” = żargon); czytelnik proponował „Get” zamiast „Build” — do decyzji R5p1-B |
+| usunięte | Your customers' daily app, in your brand colour. · Type your store name, pick its colour; the phone repaints live. · Your colour is never sent. Only the form fields go with Send. | dubel personalizacji (uwaga Rafała 3) |

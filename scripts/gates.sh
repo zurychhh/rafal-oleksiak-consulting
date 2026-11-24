@@ -94,6 +94,14 @@ echo ">> globalnie"
 run "(globalnie)" "content-rules" "$LOGDIR/global-content-rules.log" node scripts/content-rules.test.mjs --url "$BASE"
 run "(globalnie)" "copy-voice" "$LOGDIR/global-copy-voice.log" node scripts/copy-voice.test.mjs
 run "(globalnie)" "focus-ring" "$LOGDIR/global-focus-ring.log" node scripts/focus-ring.test.mjs "$BASE"
+# Spec 26 (R5): silnik marki — nazwa i kolor odwiedzajacego w kazdym telefonie /nawyko, w finale i na /work/genactiv.
+for r in "${ROUTES[@]}"; do
+  if [ "$r" = /nawyko ] || [ "$r" = /work/genactiv ]; then
+    run "(globalnie)" "brand-propagation" "$LOGDIR/global-brandprop.log" node scripts/brand-propagation.mjs "$BASE"
+    run "(globalnie)" "brand-prop-webkit" "$LOGDIR/global-brandprop-wk.log" xvfb-run -a python3 -I scripts/brand-propagation-webkit.py "$BASE" "agencja/podglad/gates-wk-brandprop"
+    break
+  fi
+done
 for r in "${ROUTES[@]}"; do
   if [ "$r" = / ]; then SHIP_URL="$BASE" run "(globalnie)" "ship-compare" "$LOGDIR/global-ship-compare.log" node scripts/ship-compare.mjs; break; fi
 done

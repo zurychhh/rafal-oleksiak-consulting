@@ -3,13 +3,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Enquiry } from './Enquiry'
 import { FAQ } from './content'
+import { DEMO_BRAND, inkOn, mix, monogram, onColour, useBrand } from '../lib/brand-engine'
 
 /* Enquiry mieszka w ./Enquiry (przebieg 4): /work/genactiv importuje sam formularz, bez calej sceny. */
 export { Enquiry }
 
 /* Pokaz Nawyko na ZMYSLONEJ marce. Nazwa sprawdzona w sieci 21.11.2026
    (agencja/research/marka-pokazowa.md) — to nie jest klient ani realna firma. */
-export const DEMO_BRAND = 'Tovemi'
+/* DEMO_BRAND mieszka w app/lib/brand-engine.ts (silnik marki, spec 26). */
 
 const STEPS = [
   {
@@ -41,7 +42,7 @@ const ease = (t: number) => 1 - Math.pow(1 - t, 3)
 type Theme = 'paper' | 'night' | 'clay'
 
 /* ── zdrapka ─────────────────────────────────────────────────────────────── */
-function Scratch({ gone, onDone, auto }: { gone: boolean; onDone: () => void; auto?: boolean }) {
+function Scratch({ gone, onDone, auto, foil }: { gone: boolean; onDone: () => void; auto?: boolean; foil?: string }) {
   const ref = useRef<HTMLCanvasElement>(null)
   const crumbs = useRef<HTMLCanvasElement>(null)
   const finger = useRef<HTMLDivElement>(null)
@@ -59,9 +60,17 @@ function Scratch({ gone, onDone, auto }: { gone: boolean; onDone: () => void; au
     c.height = Math.round(r.height * dpr)
     const g = c.getContext('2d')
     if (!g) return
-    g.fillStyle = '#C9C7C0'
+    if (foil) {
+      /* Spec 26: folia w kolorze marki — metaliczny gradient z odblaskiem. */
+      const lg = g.createLinearGradient(0, 0, c.width, c.height)
+      lg.addColorStop(0, mix(foil, '#FFFFFF', 0.35))
+      lg.addColorStop(0.45, foil)
+      lg.addColorStop(0.55, mix(foil, '#FFFFFF', 0.5))
+      lg.addColorStop(1, mix(foil, '#000000', 0.3))
+      g.fillStyle = lg
+    } else g.fillStyle = '#C9C7C0'
     g.fillRect(0, 0, c.width, c.height)
-    g.strokeStyle = '#B4B2AB'
+    g.strokeStyle = foil ? 'rgba(255,255,255,.16)' : '#B4B2AB'
     g.lineWidth = dpr
     for (let x = -c.height; x < c.width; x += 7 * dpr) {
       g.beginPath()
@@ -69,13 +78,13 @@ function Scratch({ gone, onDone, auto }: { gone: boolean; onDone: () => void; au
       g.lineTo(x + c.height, c.height)
       g.stroke()
     }
-    g.fillStyle = '#14161A'
+    g.fillStyle = foil ? onColour(foil) : '#14161A'
     g.font = `600 ${Math.round(11 * dpr)}px "NK Instrument Sans", "Instrument Sans", system-ui, sans-serif`
     g.textAlign = 'center'
     g.textBaseline = 'middle'
     const label = 'S C R A T C H   H E R E'
     g.fillText(label, c.width / 2, c.height / 2)
-  }, [])
+  }, [foil])
 
   useEffect(() => {
     paint()
@@ -309,7 +318,7 @@ function Phone({
   autoScratch,
   fixedDays,
   day = PACK_DAYS,
-  brand = DEMO_BRAND,
+  brand,
   orders = 3,
   pts = 240,
   kept = false,
@@ -329,7 +338,7 @@ function Phone({
   autoScratch?: boolean
   fixedDays?: number
   day?: number
-  brand?: string
+  brand: string
   orders?: number
   pts?: number
   kept?: boolean
@@ -365,7 +374,7 @@ function Phone({
       <div className="nk-screen">
         <div className="nk-pbar">
           <span>{brand}</span>
-          <span>Demo</span>
+          <span>Sample data</span>
         </div>
 
         {has(0) ? (
@@ -835,19 +844,8 @@ const SKINS: { id: Skin; name: string; sw: string }[] = [
   { id: 'clay', name: 'Clay', sw: '#EFE6DA' },
 ]
 
-function SkinPanel({
-  skin,
-  onSkin,
-  id,
-  name,
-  onName,
-}: {
-  skin: Skin
-  onSkin: (s: Skin) => void
-  id: string
-  name: string
-  onName: (v: string) => void
-}) {
+function SkinPanel({ skin, onSkin, id }: { skin: Skin; onSkin: (s: Skin) => void; id: string }) {
+  const { name, colour, own, setName, setColour } = useBrand()
   return (
     <div className="nk-panel nk-in">
       <div className="nk-caps nk-lab">
@@ -857,7 +855,7 @@ function SkinPanel({
       <h2 className="nk-h2" id={id}>
         Your brand. Your colours. Your app.
       </h2>
-      <p className="nk-one">Type a brand name, pick a style: the whole page adapts.</p>
+      <p className="nk-one">Type your brand name, pick a colour and a style. Every phone follows.</p>
       <label className="nk-name">
         <span className="nk-caps">Brand name</span>
         <input
@@ -867,9 +865,10 @@ function SkinPanel({
           placeholder={DEMO_BRAND}
           autoComplete="off"
           spellCheck={false}
-          onChange={(e) => onName(e.currentTarget.value)}
+          onChange={(e) => setName(e.currentTarget.value)}
         />
       </label>
+      <BrandColour value={colour} onPick={setColour} group="nk-wl-colour" />
       <div className="nk-swatches" role="group" aria-label="Repaint this page">
         {SKINS.map((s) => (
           <button key={s.id} type="button" className="nk-sw" aria-pressed={skin === s.id} onClick={() => onSkin(s.id)}>
@@ -881,7 +880,7 @@ function SkinPanel({
       <p className="nk-fine">The name stays in this page. Nothing is sent.</p>
       <p className="nk-next">
         <a className="nk-link" href="#enquiry">
-          Ask how {name.trim().slice(0, 14) || 'your brand'} gets its own app
+          Ask how {own ? name.trim() : 'your brand'} gets its own app
         </a>
       </p>
     </div>
@@ -898,18 +897,8 @@ const ACT_TOT = ACT_W.reduce((a, b) => a + b, 0)
 const CH_OF = [0, 0, 0, 0, 0, 1, 2]
 const ACT_NAMES = ['Purchase', 'Daily card', 'Streak', 'Reward', 'Reward calendar', 'Pack rhythm', 'Your branding'] as const
 
-function Scene({
-  skin,
-  onSkin,
-  name,
-  onName,
-}: {
-  skin: Skin
-  onSkin: (s: Skin) => void
-  name: string
-  onName: (v: string) => void
-}) {
-  const brand = name.trim().slice(0, 14) || DEMO_BRAND
+function Scene({ skin, onSkin }: { skin: Skin; onSkin: (s: Skin) => void }) {
+  const { brand, own } = useBrand()
   const wrap = useRef<HTMLDivElement>(null)
   // Stan domyslny DOM = uklad statyczny ze stanami koncowymi: tak wyglada strona
   // bez JS, w prefers-reduced-motion i pod navigator.webdriver (bramka qa.js).
@@ -1054,7 +1043,7 @@ function Scene({
     <div className="nk-in">
       <div className="nk-caps nk-lab">
         <span className="nk-who">For your customer</span>
-        <span className="nk-labrest">How it works · made-up brand</span>
+        <span className="nk-labrest">{own ? 'How it works · sample data' : 'How it works · made-up brand'}</span>
       </div>
       <h2 className="nk-h2">Four steps that bring the customer back for the next pack.</h2>
       <ol className="nk-steps">
@@ -1072,7 +1061,7 @@ function Scene({
       </ol>
       <p className="nk-next" hidden={!(scroll && step >= 2)}>
         <a className="nk-link" href="#enquiry">
-          Ask how {name.trim().slice(0, 14) || 'your brand'} gets its own app
+          Ask how {own ? brand : 'your brand'} gets its own app
         </a>
       </p>
       <p className="nk-alt" hidden={!(step === 1 && !scratched)}>
@@ -1101,12 +1090,10 @@ function Scene({
             <div className="nk-actin" style={{ opacity: inK, transform: `translateY(${(1 - inK) * 18}px)` }}>
               {step === 4 ? <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" /> : null}
               {step === 5 ? <BrandPanel t={t} id="nk-brand" /> : null}
-              {step === 6 ? <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" name={name} onName={onName} /> : null}
+              {step === 6 ? <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" /> : null}
             </div>
           ) : null}
-          <p className="nk-demo">
-            {DEMO_BRAND} is a made-up demo brand, not a client.
-          </p>
+          <DemoNote />
         </div>
         <div className="nk-phonecol" style={swStyle}>
           <div
@@ -1161,7 +1148,7 @@ function Scene({
             </div>
           </section>
           <section className="nk-still" aria-labelledby="nk-wl">
-            <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" name={name} onName={onName} />
+            <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" />
             <div className="nk-phonecol">
               <Phone step={6} t={1} theme={skin} scratched brand={brand} />
             </div>
@@ -1715,38 +1702,7 @@ const BRAND_COLS = [
 ] as const
 const PHONE_BG: Record<Skin, string> = { paper: '#F7F5F0', night: '#14161A', clay: '#EFE6DA' }
 
-function rgbOf(hex: string): [number, number, number] {
-  const h = /^#?([0-9a-f]{6})$/i.exec(hex.trim())?.[1] ?? 'D6202B'
-  return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)) as [number, number, number]
-}
-function lum([r, g, b]: [number, number, number]) {
-  const f = (c: number) => {
-    const s = c / 255
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
-  }
-  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
-}
-function contrast(a: string, b: string) {
-  const [x, y] = [lum(rgbOf(a)), lum(rgbOf(b))].sort((m, n) => n - m)
-  return (x + 0.05) / (y + 0.05)
-}
-const hexOf = (c: number[]) => '#' + c.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('')
-/* Tekst na kolorze marki: czarny albo bialy, ktory ma wyzszy kontrast (zawsze >= 4,58:1). */
-function onColour(hex: string) {
-  return contrast(hex, '#FFFFFF') >= contrast(hex, '#000000') ? '#FFFFFF' : '#000000'
-}
-/* Kolor marki jako tekst na tle telefonu: przyciemniany (albo rozjasniany na Night), az da >= 4,5:1. */
-function inkOn(hex: string, bg: string) {
-  const c = rgbOf(hex)
-  const to = lum(rgbOf(bg)) > 0.4 ? 0 : 255
-  for (let k = 0; k <= 1.0001; k += 0.04) {
-    const m = hexOf(c.map((v) => v + (to - v) * k))
-    if (contrast(m, bg) >= 4.5) return m
-  }
-  return to ? '#FFFFFF' : '#000000'
-}
-
-function BrandColour({ value, onPick }: { value: string; onPick: (hex: string) => void }) {
+function BrandColour({ value, onPick, group }: { value: string; onPick: (hex: string) => void; group: string }) {
   const preset = BRAND_COLS.find((c) => c.hex.toLowerCase() === value.toLowerCase())
   return (
     <fieldset className="nk-bcol">
@@ -1756,7 +1712,7 @@ function BrandColour({ value, onPick }: { value: string; onPick: (hex: string) =
           <label key={c.id} className="nk-bcol-sw" title={c.name}>
             <input
               type="radio"
-              name="nk-brand-colour"
+              name={group}
               value={c.hex}
               aria-label={c.name}
               checked={preset?.id === c.id}
@@ -1774,12 +1730,154 @@ function BrandColour({ value, onPick }: { value: string; onPick: (hex: string) =
   )
 }
 
+/* Spec 26: jedna notka zamiast nazwy demo na sztywno. Bez wlasnej nazwy — ze to marka zmyslona; z wlasna — ze dane sa przykladowe. */
+function DemoNote({ className = 'nk-demo' }: { className?: string }) {
+  const { name, own } = useBrand()
+  return (
+    <p className={className}>
+      {own ? `Showing your brand: ${name.trim()} · sample data.` : `${DEMO_BRAND} is a made-up demo brand, not a client.`}
+    </p>
+  )
+}
+
+const PAGE_BG: Record<Skin, string> = { paper: '#F7F5F0', night: '#14161A', clay: '#EFE6DA' }
+const HERO_TILE = '#1B1D21' // najjasniejsze tlo pod akcentem w telefonie hero (recenzja 31: 4,45:1 liczone od #111215)
+const RING = 30
+const HERO_DAY = 9
+
+/* ── spec 26 p1: hero z zywym ekranem aplikacji w marce odwiedzajacego ──
+   Ciemny ekran „Today” jak w prawdziwej aplikacji (bez zrzutow z prywatnego repo): naglowek z monogramem i nazwa,
+   tarcza 30 dni wokol opakowania, trzy kafelki, karta dnia do zdrapania w kolorze marki. Pod telefonem: nazwa + kolor
+   = silnik marki dla calej strony. */
+export function HeroApp() {
+  const { name, colour, brand, own, setName, setColour } = useBrand()
+  const [done, setDone] = useState(false)
+  const [auto, setAuto] = useState(false)
+  useEffect(() => {
+    if (done) return
+    let reduce = false
+    try {
+      reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+    } catch {
+      /* bez matchMedia — bez samozdrapki */
+    }
+    if (reduce || navigator.webdriver) return
+    /* Samozdrapka tylko dla kogos, kto zostal na pierwszym ekranie — w trakcie przewijania animacja plotna dawala dlugie klatki (scroll-perf 1440). */
+    const id = window.setTimeout(() => {
+      if (window.scrollY < 120) setAuto(true)
+    }, 3200)
+    return () => window.clearTimeout(id)
+  }, [done])
+  const day = done ? HERO_DAY : HERO_DAY - 1
+  const ink = inkOn(colour, HERO_TILE)
+  const vars = {
+    ['--brand' as string]: colour,
+    ['--brand-on' as string]: onColour(colour),
+    ['--hi' as string]: ink,
+  }
+  const R = 44
+  return (
+    <div className="nk-happ" style={vars}>
+      <div className="nk-hphone" aria-hidden="true">
+        <div className="nk-hscreen">
+          <div className="nk-hhead">
+            <span className="nk-hmono">{monogram(brand)}</span>
+            <b className="nk-hname">{brand}</b>
+            <span className="nk-hpill">Sample data</span>
+          </div>
+          <div className="nk-hring">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              {Array.from({ length: RING }, (_, i) => {
+                const a = (i / RING) * Math.PI * 2 - Math.PI / 2
+                const x1 = 50 + Math.cos(a) * (R - 4)
+                const y1 = 50 + Math.sin(a) * (R - 4)
+                const x2 = 50 + Math.cos(a) * R
+                const y2 = 50 + Math.sin(a) * R
+                return (
+                  <line
+                    key={i}
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    className={i < day ? 'is-in' : i === day && !done ? 'is-now' : ''}
+                  />
+                )
+              })}
+            </svg>
+            <div className="nk-hbottle">
+              <i />
+              <span>{monogram(brand)}</span>
+            </div>
+            <span className={'nk-hday' + (done ? ' is-up' : '')} key={done ? 'y' : 'n'}>
+              {done ? `Day ${HERO_DAY} ticked` : `Day ${HERO_DAY} of ${RING}`}
+            </span>
+          </div>
+          <div className="nk-htiles">
+            <span>
+              <b key={day}>{day}</b>day streak
+            </span>
+            <span>
+              <b key={day}>{day}</b>ticked
+            </span>
+            <span>
+              <b key={day}>{RING - day}</b>days left
+            </span>
+          </div>
+          <div className="nk-hcard">
+            <div className="nk-hcard-in">
+              <b>{done ? '✓ Ticked' : 'Card of the day'}</b>
+              <small>{done ? 'Next card tomorrow' : 'Taken it? Scratch.'}</small>
+            </div>
+            <Scratch gone={done} auto={auto} foil={colour} onDone={() => setDone(true)} />
+          </div>
+          <div className="nk-hnext">
+            <span className="nk-hlock" aria-hidden="true" />
+            <span>
+              <small>Next reward</small>
+              <b>Stamp at day {GOAL_DAY}</b>
+            </span>
+            <i style={{ ['--w' as string]: `${(day / GOAL_DAY) * 100}%` }} />
+          </div>
+          <div className="nk-htabs">
+            <span className="is-on">Today</span>
+            <span>Rewards</span>
+            <span>Shop</span>
+            <span>Account</span>
+          </div>
+        </div>
+      </div>
+      <div className="nk-hbrand">
+        <button type="button" className="nk-link" onClick={() => setDone(true)} aria-disabled={done || undefined}>
+          Reveal without scratching
+        </button>
+        <p className="nk-fine nk-hstatus" aria-live="polite">
+          {done ? `Day ${HERO_DAY} ticked: the streak grew to ${HERO_DAY}.` : ''}
+        </p>
+        <label className="nk-name">
+          <span className="nk-caps">Your brand name</span>
+          <input
+            type="text"
+            value={name}
+            maxLength={14}
+            placeholder="Type it here"
+            autoComplete="off"
+            spellCheck={false}
+            onChange={(e) => setName(e.currentTarget.value)}
+          />
+        </label>
+        <BrandColour value={colour} onPick={setColour} group="nk-hero-colour" />
+        <p className="nk-fine">{own ? 'Every phone below now shows your brand. Nothing is sent.' : 'Stays on this page. Nothing is sent.'}</p>
+      </div>
+    </div>
+  )
+}
+
 export function Story() {
   const root = useRef<HTMLDivElement>(null)
-  const [colour, setColour] = useState<string>(BRAND_COLS[0].hex)
+  const { colour, name, own } = useBrand()
   const [skin, setSkin] = useState<Skin>('paper')
   const [store, setStore] = useState('')
-  const [name, setName] = useState('')
 
   useEffect(() => {
     const host = root.current?.closest<HTMLElement>('.nk')
@@ -1788,20 +1886,46 @@ export function Story() {
     else host.dataset.skin = skin
   }, [skin])
 
+  /* Silnik marki: kolor odwiedzajacego jest akcentem calej strony i kazdego telefonu (kontrast AA na kazdym tle). */
+  useEffect(() => {
+    const host = root.current?.closest<HTMLElement>('.nk')
+    if (!host) return
+    const st = host.style
+    st.setProperty('--brand', colour)
+    st.setProperty('--brand-on', onColour(colour))
+    st.setProperty('--red', inkOn(colour, PAGE_BG[skin]))
+    st.setProperty('--bi-p', inkOn(colour, PHONE_BG.paper))
+    st.setProperty('--bi-n', inkOn(colour, PHONE_BG.night))
+    st.setProperty('--bi-c', inkOn(colour, PHONE_BG.clay))
+    host.dataset.brand = ''
+  }, [colour, skin])
+
+  /* Lekcja R22 (react.dev useSyncExternalStore: hydratacja zawsze ze stanu serwera): powracajacy gosc z zapisana marka
+     widzialby przez chwile nazwe demo. Inline-skrypt w page.tsx chowa nazwy w telefonach (visibility, bez przesuniec);
+     odslaniamy je, gdy wyrenderowany stan = zapisany. */
+  useEffect(() => {
+    let stored = ''
+    try {
+      stored = (JSON.parse(localStorage.getItem('oc-brand-v1') || '{}') as { name?: string }).name ?? ''
+    } catch {
+      stored = name
+    }
+    if (stored === name) document.documentElement.removeAttribute('data-brand-wait')
+  }, [name])
+
   const typed = brandFrom(store)
+  const shown = own ? name.trim() : typed
 
   return (
     <div ref={root}>
-      <Scene skin={skin} onSkin={setSkin} name={name} onName={setName} />
-      <p className="nk-demo nk-demo-after">
-        {DEMO_BRAND} is a made-up demo brand, not a client.
-      </p>
+      <Scene skin={skin} onSkin={setSkin} />
+      <DemoNote className="nk-demo nk-demo-after" />
 
-      <Loyalty skin={skin} brand={name.trim().slice(0, 14) || DEMO_BRAND} />
-      <MoreScenes skin={skin} brand={name.trim().slice(0, 14) || DEMO_BRAND} />
-      <Evidence brand={name.trim().slice(0, 14) || DEMO_BRAND} />
+      <Loyalty skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
+      <MoreScenes skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
+      <Evidence brand={own ? name.trim() : DEMO_BRAND} />
 
-      <NeverScene skin={skin} brand={name.trim().slice(0, 14) || DEMO_BRAND} />
+      <NeverScene skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
 
       <Faq />
 
@@ -1817,21 +1941,17 @@ export function Story() {
       >
         <div className="nk-final-copy">
           <div className="nk-caps nk-lab">
-            <span className="nk-brandtag">See it with your brand</span>
+            <span className="nk-brandtag">{shown ? `For ${shown}` : 'Your next step'}</span>
           </div>
           <h2 className="nk-h2" id="nk-ask">
-            Your customers&apos; daily app, in your brand colour.
+            {shown ? `Build ${shown}’s app.` : 'Build your brand’s app.'}
           </h2>
-          <p className="nk-one">Type your store name, pick its colour; the phone repaints live.</p>
-          <BrandColour value={colour} onPick={setColour} />
-          <p className="nk-fine">Your colour is never sent. Only the form fields go with Send.</p>
+          <p className="nk-one">Send your store address. The first call covers rewards and setup.</p>
         </div>
         <div className="nk-phonecol nk-final-phone">
-          <Phone step={3} t={1} theme={skin} scratched brand={typed || name.trim().slice(0, 14) || 'Your brand'} />
+          <Phone step={3} t={1} theme={skin} scratched brand={shown || 'Your brand'} />
           <p className="nk-fine">
-            {typed
-              ? 'Your typed name, shown only on this page.'
-              : 'A placeholder until you type your store name.'}
+            {shown ? 'Your name, shown only on this page.' : 'A placeholder until you type your store name.'}
           </p>
         </div>
         <div className="nk-final-form">

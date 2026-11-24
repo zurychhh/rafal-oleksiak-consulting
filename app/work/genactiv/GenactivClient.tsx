@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { DEFAULT_COLOUR, useBrand } from '../../lib/brand-engine'
 import { ActBar } from './ActBar'
 import { Enquiry } from '../../nawyko/Enquiry'
 
@@ -646,10 +647,11 @@ function ScreenResults() {
 }
 
 function ScreenBrand({ c }: { c: string }) {
+  const { own, name } = useBrand()
   const ink = inkOn(c)
   return (
     <div className="ga-scr ga-scr-brand" aria-hidden="true" style={{ ['--b' as string]: c, ['--bi' as string]: ink }}>
-      <div className="ga-brand-bar">Your brand</div>
+      <div className="ga-brand-bar">{own ? name.trim() : 'Your brand'}</div>
       <div className="ga-home-card">
         <span>Today&apos;s card</span>
         <div className="ga-brand-foil" />
@@ -725,7 +727,10 @@ export function GenactivStory() {
   const [robot, setRobot] = useState(false)
   const [consent, setConsent] = useState(false)
   const flipConsent = useCallback(() => setConsent((v) => !v), [])
-  const [pick, setPick] = useState(DEFAULT_PICK)
+  /* Spec 26: kolor i nazwa z silnika marki — ten sam wybor co na /nawyko (localStorage, nic nie jest wysylane). */
+  const eng = useBrand()
+  const pick = eng.colour === DEFAULT_COLOUR ? DEFAULT_PICK : eng.colour.toLowerCase()
+  const setPick = eng.setColour
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
