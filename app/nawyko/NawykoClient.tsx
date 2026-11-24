@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Enquiry } from './Enquiry'
 import { FAQ } from './content'
 import { DEMO_BRAND, contrast, inkOn, mix, monogram, onColour, useBrand } from '../lib/brand-engine'
@@ -836,68 +836,66 @@ function BrandPanel({ t, id }: { t: number; id: string }) {
   )
 }
 
-/* ── akt 7: white label — skora przemalowuje cala strone ─────────────────── */
+/* ── styl strony (spec 36 A): wybierany w konfiguratorze hero, przemalowuje cala strone i kazdy telefon ──
+   Hero i Story to rodzenstwo w page.tsx, wiec styl zyje we wspolnym malym magazynie (jak nazwa i kolor marki),
+   nie w stanie Story. Nie jest zapisywany ani wysylany. */
 type Skin = 'paper' | 'night' | 'clay'
-const SKINS: { id: Skin; name: string; sw: string }[] = [
-  { id: 'paper', name: 'Paper', sw: '#F7F5F0' },
-  { id: 'night', name: 'Night', sw: '#14161A' },
-  { id: 'clay', name: 'Clay', sw: '#EFE6DA' },
+const SKINS: { id: Skin; name: string; sw: string; on: string }[] = [
+  { id: 'paper', name: 'Paper', sw: '#F7F5F0', on: '#14161A' },
+  { id: 'night', name: 'Night', sw: '#14161A', on: '#F2F0EA' },
+  { id: 'clay', name: 'Clay', sw: '#EFE6DA', on: '#2A201A' },
 ]
+let skinNow: Skin = 'paper'
+const skinSubs = new Set<() => void>()
+const skinSub = (f: () => void) => {
+  skinSubs.add(f)
+  return () => {
+    skinSubs.delete(f)
+  }
+}
+const skinSnap = () => skinNow
+const skinServer = (): Skin => 'paper'
+function setSkin(v: Skin) {
+  if (v === skinNow) return
+  skinNow = v
+  skinSubs.forEach((f) => f())
+}
+function useSkin() {
+  return useSyncExternalStore(skinSub, skinSnap, skinServer)
+}
 
-function SkinPanel({ skin, onSkin, id }: { skin: Skin; onSkin: (s: Skin) => void; id: string }) {
-  const { name, colour, own, setName, setColour } = useBrand()
+/* Grupa stylu w hero: natywne radio (strzalki zmieniaja wybor, Tab wchodzi raz), role="radiogroup" z widoczna etykieta. */
+function SkinPick() {
+  const skin = useSkin()
   return (
-    <div className="nk-panel nk-in nk-wlp">
-      <div className="nk-caps nk-lab">
-        <span className="nk-who">Under your brand</span>
-        <span className="nk-labrest">White label</span>
-      </div>
-      <h2 className="nk-h2" id={id}>
-        Your brand. Your colours. Your app.
-      </h2>
-      <p className="nk-one">Type your brand name, pick a colour and a style. Every phone follows.</p>
-      <label className="nk-name">
-        <span className="nk-caps">Brand name</span>
-        <input
-          type="text"
-          value={name}
-          maxLength={14}
-          placeholder={DEMO_BRAND}
-          autoComplete="off"
-          spellCheck={false}
-          onChange={(e) => setName(e.currentTarget.value)}
-        />
-      </label>
-      <BrandColour value={colour} onPick={setColour} group="nk-wl-colour" />
-      <div className="nk-swatches" role="group" aria-label="Repaint this page">
+    <fieldset className="nk-bcol nk-skins" role="radiogroup" aria-labelledby="nk-skins-lab">
+      <legend className="nk-caps" id="nk-skins-lab">
+        Page style
+      </legend>
+      <div className="nk-skins-row">
         {SKINS.map((s) => (
-          <button key={s.id} type="button" className="nk-sw" aria-pressed={skin === s.id} onClick={() => onSkin(s.id)}>
-            <i style={{ background: s.sw }} />
-            {s.name}
-          </button>
+          <label key={s.id} className="nk-skin" style={{ ['--tile' as string]: s.sw, ['--tile-on' as string]: s.on }}>
+            <input type="radio" name="nk-skin" value={s.id} checked={skin === s.id} onChange={() => setSkin(s.id)} />
+            <span>{s.name}</span>
+          </label>
         ))}
       </div>
-      <p className="nk-fine">The name stays in this page. Nothing is sent.</p>
-      <p className="nk-next">
-        <a className="nk-link" href="#enquiry">
-          Ask how {own ? name.trim() : 'your brand'} gets its own app
-        </a>
-      </p>
-    </div>
+    </fieldset>
   )
 }
 
 /* ── scena przypieta do przewijania ──────────────────────────────────────── */
-const ACTS = 7
+/* Spec 36 A: akt 7 „Your branding” usuniety — wybor marki i stylu jest tylko w hero. */
+const ACTS = 6
 /* Akt zdrapki trwa dluzej niz inne: to najwazniejszy moment strony. */
-const ACT_W = [1, 1.9, 1, 1, 1, 1.5, 1.3]
+const ACT_W = [1, 1.9, 1, 1, 1, 1.5]
 const ACT_AT = ACT_W.map((_, i) => ACT_W.slice(0, i).reduce((a, b) => a + b, 0))
 const ACT_TOT = ACT_W.reduce((a, b) => a + b, 0)
-/* Rozdzialy: jak to dziala (klient) → dla marki → pod Twoja marka. Telefon zmienia strone miedzy rozdzialami. */
-const CH_OF = [0, 0, 0, 0, 0, 1, 2]
-const ACT_NAMES = ['Purchase', 'Daily card', 'Streak', 'Reward', 'Reward calendar', 'Pack rhythm', 'Your branding'] as const
+/* Rozdzialy: jak to dziala (klient) → dla marki. Telefon zmienia strone miedzy rozdzialami. */
+const CH_OF = [0, 0, 0, 0, 0, 1]
+const ACT_NAMES = ['Purchase', 'Daily card', 'Streak', 'Reward', 'Reward calendar', 'Pack rhythm'] as const
 
-function Scene({ skin, onSkin }: { skin: Skin; onSkin: (s: Skin) => void }) {
+function Scene({ skin }: { skin: Skin }) {
   const { brand, own } = useBrand()
   const wrap = useRef<HTMLDivElement>(null)
   // Stan domyslny DOM = uklad statyczny ze stanami koncowymi: tak wyglada strona
@@ -973,7 +971,7 @@ function Scene({ skin, onSkin }: { skin: Skin; onSkin: (s: Skin) => void }) {
      telefon przesuwal sie o ~0,6 drogi na jeden ruch; teraz o ~0,25. */
   const SW_LEN = 0.45
   const smooth = (v: number) => v * v * (3 - 2 * v)
-  const sw = !scroll ? 0 : x < ACT_AT[6] ? smooth(clamp((x - ACT_AT[5]) / SW_LEN)) : 1 - smooth(clamp((x - ACT_AT[6]) / SW_LEN))
+  const sw = !scroll ? 0 : smooth(clamp((x - ACT_AT[5]) / SW_LEN))
   const local = x - ACT_AT[step]
   const inK = ease(step === 4 ? clamp(local / 0.12) : clamp((local - SW_LEN + 0.06) / 0.2))
   const [swung, setSwung] = useState(false)
@@ -1030,7 +1028,7 @@ function Scene({ skin, onSkin }: { skin: Skin; onSkin: (s: Skin) => void }) {
     if (!el || y === null) return
     window.scrollTo({ top: y, behavior: 'smooth' })
     if (i === 1) setHold('pending')
-    // Akty 5–7: po dojechaniu fokus trafia do kontrolki aktu (os dni, nazwa marki), zeby byla osiagalna z klawiatury.
+    // Akty 5–6: po dojechaniu fokus trafia do kontrolki aktu (os dni, link), zeby byla osiagalna z klawiatury.
     if (i === 1 && !scratched)
       for (const ms of [700, 1200, 1800])
         window.setTimeout(() => {
@@ -1115,7 +1113,6 @@ function Scene({ skin, onSkin }: { skin: Skin; onSkin: (s: Skin) => void }) {
             <div className="nk-actin" style={{ opacity: inK, transform: `translateY(${(1 - inK) * 18}px)` }}>
               {step === 4 ? <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" /> : null}
               {step === 5 ? <BrandPanel t={t} id="nk-brand" /> : null}
-              {step === 6 ? <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" /> : null}
             </div>
           ) : null}
           <DemoNote />
@@ -1170,12 +1167,6 @@ function Scene({ skin, onSkin }: { skin: Skin; onSkin: (s: Skin) => void }) {
             <BrandPanel t={1} id="nk-brand" />
             <div className="nk-phonecol">
               <Phone step={5} t={1} theme={skin} scratched brand={brand} />
-            </div>
-          </section>
-          <section className="nk-still" aria-labelledby="nk-wl">
-            <SkinPanel skin={skin} onSkin={onSkin} id="nk-wl" />
-            <div className="nk-phonecol">
-              <Phone step={6} t={1} theme={skin} scratched brand={brand} />
             </div>
           </section>
         </>
@@ -2220,6 +2211,7 @@ export function HeroApp() {
         <p className="nk-fine nk-hstatus" aria-live="polite">
           {done ? `Day ${HERO_DAY} ticked: the streak grew to ${HERO_DAY}.` : ''}
         </p>
+        <p className="nk-fine nk-hhint">Type your brand name, pick a colour and a style. Every phone follows.</p>
         <label className="nk-name">
           <span className="nk-caps">Your brand name</span>
           <input
@@ -2233,6 +2225,7 @@ export function HeroApp() {
           />
         </label>
         <BrandColour value={colour} onPick={setColour} group="nk-hero-colour" />
+        <SkinPick />
         <p className="nk-fine">{own ? 'Every phone below now shows your brand. Nothing is sent.' : 'Stays on this page. Nothing is sent.'}</p>
       </div>
     </div>
@@ -2242,7 +2235,7 @@ export function HeroApp() {
 export function Story() {
   const root = useRef<HTMLDivElement>(null)
   const { colour, name, own } = useBrand()
-  const [skin, setSkin] = useState<Skin>('paper')
+  const skin = useSkin()
   const [store, setStore] = useState('')
 
   useEffect(() => {
@@ -2284,7 +2277,7 @@ export function Story() {
 
   return (
     <div ref={root}>
-      <Scene skin={skin} onSkin={setSkin} />
+      <Scene skin={skin} />
       <DemoNote className="nk-demo nk-demo-after" />
 
       <Loyalty skin={skin} brand={own ? name.trim() : DEMO_BRAND} />

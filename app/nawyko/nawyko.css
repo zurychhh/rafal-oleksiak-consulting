@@ -195,9 +195,6 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
 .nk-list .nk-n{font-size:12px;font-weight:600;letter-spacing:.2em;color:var(--dim);padding-top:6px;}
 .nk-list h3{font-size:clamp(19px,1.8vw,24px);font-weight:600;letter-spacing:-.02em;line-height:1.2;}
 .nk-list p{font-size:16px;color:var(--ink2);margin-top:6px;max-width:48ch;}
-.nk-wl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:center;}
-.nk-wl .nk-phone{height:clamp(440px,60svh,500px);transform:none;}
-.nk-swatches{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
 .nk-sw{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px 0 10px;border:1px solid var(--ink);background:transparent;
   font:inherit;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);cursor:pointer;}
 .nk-sw i{width:22px;height:22px;border:1px solid var(--ink);}
@@ -246,7 +243,7 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
   .is-scroll .nk-demo{display:none;}
   .nk-demo-after{display:block!important;margin:0!important;padding:14px var(--m);border-bottom:1px solid var(--ink);max-width:none;}
   .is-scroll .nk-alt[hidden]{display:none;}
-  .nk-two,.nk-wl{grid-template-columns:1fr;}
+  .nk-two{grid-template-columns:1fr;}
   .nk-not{grid-template-columns:1fr;}
   .nk-not div + div{border-left:0;padding-left:0;border-top:1px solid var(--line);}
   .nk-top .nk-hide{display:none;}
@@ -388,7 +385,6 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
   .is-scroll .nk-chart{margin-top:12px;}
   .is-scroll .nk-cols{height:clamp(90px,15svh,140px);}
   .is-scroll .nk-legend{font-size:12px;gap:4px 14px;}
-  .is-scroll .nk-swatches{margin-top:16px;}
   .nk-still,.nk-final{grid-template-columns:1fr;}
   .nk-still .nk-phone{height:clamp(360px,56svh,440px);}
   .nk-final-phone,.nk-desk{display:none;}
@@ -467,7 +463,6 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 @media (max-width:860px){
   .nk-phone{height:clamp(300px,50svh,500px);}
   .nk-scene[data-ch="1"] .nk-phonecol{transform:translateX(-18%) scale(.9);}
-  .nk-scene[data-ch="2"] .nk-phonecol{transform:translateX(0) scale(1);}
   .is-scroll .nk-panel .nk-lab,.is-scroll .nk-scenehead .nk-lab{display:flex!important;margin-bottom:6px;}
   .is-scroll .nk-labrest{display:none;}
 }
@@ -478,7 +473,7 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
   .nk *{transition:none!important;animation:none!important;}
 }
 /* po recenzji 05: tekst nowego rozdzialu pojawia sie dopiero, gdy telefon dojedzie na swoja strone */
-.nk-scene[data-swung][data-act="5"] .nk-panel.nk-in,.nk-scene[data-swung][data-act="6"] .nk-panel.nk-in{animation-delay:.55s;}
+.nk-scene[data-swung][data-act="5"] .nk-panel.nk-in{animation-delay:.55s;}
 @media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
 
 /* ══ przebieg 5: telefon 390 — czytelnosc rozdzialow ══════════════════════ */
@@ -498,13 +493,13 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
    1) Przewijanie za szybkie: każdy akt dostaje ~2x więcej drogi (900vh → 1600vh), żeby przy zwykłym
       tempie kółka/gładzika efekt zdążył się rozegrać. 2) Przejazd telefonu płaski: bez obrotu, bez
       wychylenia 3D, bez wahnięcia — prosty, spokojny przesuw w rytmie strony. */
-.nk-scene.is-scroll{height:1600vh;}
+.nk-scene.is-scroll{height:1370vh;} /* spec 36 A: 6 aktow zamiast 7 — tor krotszy o akt 7 (1,3 z 8,7 jednostek) */
 .nk-phonecol{perspective:none;}
 .nk-phone{transform:translateY(var(--ty,0)) scale(var(--sc,1));}
 .is-scroll .nk-scenehead,.is-scroll .nk-phonecol{transition:transform 1.1s cubic-bezier(.45,0,.2,1);}
 /* tekst rozdzialu wchodzi w polowie przejazdu (recenzja 08: przy 1 s opoznienia scena marki przy zwyklym tempie byla pusta) */
-.nk-scene[data-swung][data-act="5"] .nk-panel.nk-in,.nk-scene[data-swung][data-act="6"] .nk-panel.nk-in{animation-delay:.45s;}
-@media (max-width:860px){.nk-scene.is-scroll{height:1400vh;}}
+.nk-scene[data-swung][data-act="5"] .nk-panel.nk-in{animation-delay:.45s;}
+@media (max-width:860px){.nk-scene.is-scroll{height:1200vh;}}
 @media (prefers-reduced-motion:reduce){.nk *{transition:none!important;animation:none!important;}}
 
 /* ══ runda 3, przebieg 2 ═══════════════════════════════════════════════════
@@ -532,7 +527,7 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
    proporcjonalnie do --sw (0 = rozdzial klienta, 1 = rozdzial marki). Tylko transformacje (CLS). */
 @media (max-width:860px){
   .is-scroll .nk-scenehead,.is-scroll .nk-phonecol{transition:transform .18s linear;}
-  .nk-scene.is-scroll .nk-phonecol,.nk-scene.is-scroll[data-ch="1"] .nk-phonecol,.nk-scene.is-scroll[data-ch="2"] .nk-phonecol{
+  .nk-scene.is-scroll .nk-phonecol,.nk-scene.is-scroll[data-ch="1"] .nk-phonecol{
     transform-origin:50% 0;transform:translateX(calc(-26% * var(--sw,0))) scale(calc(1 - .22 * var(--sw,0)));}
   .nk-scene.is-scroll .nk-scenehead,.nk-scene.is-scroll[data-ch="1"] .nk-scenehead{transform:translateY(calc(var(--ph) * -.22 * var(--sw,0)));}
 }
@@ -734,9 +729,9 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 
 /* spec 13: rezerwa wysokosci sceny przed hydratacja (data-nk-pin z inline-skryptu w page.tsx, warunek jak setMode('scroll')).
    Uklad statyczny jest na te chwile przyciety do wysokosci trybu przypietego, wiec kotwica (#proof itd.) nie skacze. */
-[data-nk-pin] .nk-scene.is-still{height:1600vh;overflow:clip;}
-@media (max-width:860px){[data-nk-pin] .nk-scene.is-still{height:1400vh;}}
-/* Wysokosci musza byc rowne .nk-scene.is-scroll wyzej (1600vh / 1400vh) — zmieniasz jedno, zmien drugie. */
+[data-nk-pin] .nk-scene.is-still{height:1370vh;overflow:clip;}
+@media (max-width:860px){[data-nk-pin] .nk-scene.is-still{height:1200vh;}}
+/* Wysokosci musza byc rowne .nk-scene.is-scroll wyzej (1370vh / 1200vh) — zmieniasz jedno, zmien drugie. */
 /* spec 13: rezerwa paska cookies w sekcjach jest stala (max z wysokoscia paska), nie rosnie po hydratacji.
    Wczesniej padding = --consent-h dochodzil do kazdej sekcji po zamontowaniu paska i przesuwal kotwice (#faq o 456 px na 1440). */
 .nk{--consent-rsv:max(var(--consent-h,0px),72px);}
@@ -877,6 +872,15 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 .nk-hbrand .nk-name input{font-size:22px;}
 .nk-hbrand .nk-bcol{margin-top:16px;}
 .nk-hbrand .nk-bcol-sw{width:36px;height:36px;}
+/* spec 36 A: styl strony w konfiguratorze hero — trzy kafle w kolorze tla danego stylu, cel dotyku >= 44 px */
+.nk-hbrand .nk-hhint{margin-top:4px;}
+.nk-skins-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.nk-skin{position:relative;display:grid;place-items:center;min-height:44px;padding:0 4px;border:1px solid var(--ink);background:var(--tile);color:var(--tile-on);
+  font-size:13px;font-weight:600;letter-spacing:.04em;cursor:pointer;}
+.nk-skin input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;}
+.nk-skin:has(input:checked){box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink);}
+.nk-skin:has(input:checked) span::before{content:"\2713\00a0";}
+.nk-skin:has(input:focus-visible){outline:3px solid var(--ink);outline-offset:6px;}
 @media (prefers-reduced-motion:reduce){.nk-hring line.is-now{animation:none;}.nk-hday.is-up{animation:none;}}
 /* Telefon obok wyboru marki: wysokosc telefonu ograniczona szerokoscia kolumny (216 px panel + 16 px odstep). */
 @media (min-width:1101px){.nk-happ{container-type:inline-size;}.nk-hphone{--hh:min(clamp(440px,64svh,580px),calc((100cqw - 236px) * 2.066));}}
@@ -1055,29 +1059,6 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
   .nk-fz,.nk-fz-list li,.nk-fz-list li.is-on,.nk-fz-note,.nk-fz-app,.nk-fz:is([data-at="2"],[data-at="3"],[data-at="4"]) .nk-fz-app,.nk-fz-mine i,.nk-fz-code{transition:none;}
   .nk-fz-stamps i.is-got,.nk-fz-code.is-on b{animation:none;}
   .nk-fz-list li,.nk-fz-list li.is-past{transform:none;}
-}
-/* R5 p2: panel „Your brand” w scenie na telefonie — po dodaniu wyboru koloru (p1) byl o ok. 120 px za wysoki z paskiem cookies
-   (short-390c: ucięte style i link). Zwarty uklad: kolory w jednym rzedzie, nizsze pole nazwy, mniejsze odstepy — nic nie znika. */
-@media (max-width:860px),(max-height:760px){
-  .nk-wlp .nk-one{margin-top:6px;}
-  .nk-wlp .nk-name{margin-top:8px;}
-  .nk-wlp .nk-name input{font-size:20px;padding-top:2px;padding-bottom:4px;}
-  .nk-wlp .nk-bcol{margin-top:10px;}
-  .nk-wlp .nk-bcol legend{margin-bottom:2px;}
-  .nk-wlp .nk-bcol-row{flex-wrap:nowrap;gap:2px;}
-  .nk-wlp .nk-bcol-sw{width:34px;height:40px;}
-  .nk-wlp .nk-bcol-sw i{width:24px;height:24px;}
-  .nk-wlp .nk-bcol-own{margin-left:2px;gap:6px;font-size:13px;min-height:40px;white-space:nowrap;}
-  .nk-wlp .nk-bcol-own input{width:34px;height:26px;}
-  .nk-wlp .nk-swatches{margin-top:8px;}
-  .nk-wlp .nk-fine{margin-top:6px;}
-  .nk-wlp .nk-next{margin-top:4px;}
-  .nk .nk-wlp .nk-name{display:flex;align-items:baseline;gap:12px;}
-  .nk .nk-wlp .nk-name span{flex:none;}
-  .nk .nk-wlp .nk-name input{margin-top:0;min-width:0;}
-  .nk .nk-wlp .nk-one{font-size:15px;}
-  .nk .nk-wlp .nk-sw{min-height:36px;}
-  .nk .nk-wlp .nk-fine,.nk .nk-wlp .nk-next{margin-top:4px;}
 }
 /* R5 p2 recenzja 33: kontrast na kolorze marki (bez przezroczystosci), status w kolorze napisow, kolumny blizej siebie. */
 .nk .nk-fz .nk-fz-status{color:inherit;opacity:1;}
