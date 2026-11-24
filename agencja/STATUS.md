@@ -252,7 +252,7 @@ Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + po
 ## Dla Rafała
 
 **Runda 4, przebieg 14 (24.11 11:38–12:35) — `/nawyko` działa teraz na niskim laptopie: na ekranie 13" (np. 1280×720 albo okno nie na pełny ekran) z paskiem cookies nic w przypiętej scenie nie jest ucięte ani schowane pod paskiem. Kalkulator mówi poprawnie „1 order”, a obrys klawiatury nie przecina już podpisów.**
-Do obejrzenia: podgląd gałęzi `agencja/strona` (adres niżej, po zbudowaniu przez Vercel) → `/nawyko` w oknie przeglądarki zmniejszonym do ok. 1280×720, przewiń scenę „How it works”; potem `/calculator`, Tab do suwaka.
+Do obejrzenia (Vercel „success” dla 0923ca6, sprawdzone statusem commita): https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/nawyko → `/nawyko` w oknie przeglądarki zmniejszonym do ok. 1280×720, przewiń scenę „How it works”; potem `/calculator`, Tab do suwaka.
 1. **Niski laptop:** wcześniej na 1100×620 i 1280×720 krok 04 i jego opis były ucięte o 19–41 px, a link „Ask how your brand gets its own app” o 55 px — dział marketingu na 13-calowym laptopie widział urwaną scenę. Teraz odstępy, nagłówek i telefon dopasowują się do wysokości okna; na 1440×900 i na telefonie wygląd bez zmian. Pilnuje tego nowy automat, który sprawdza 95 pozycji sceny na 7 rozmiarach ekranu.
 2. **Kalkulator:** „+1 orders × … × 1 customers” → „+1 order … 1 customer”; obrys fokusu suwaka rysuje się w środku pola zamiast przez tekst; suwak sprawdzony w silniku Safari (palcem/myszą i strzałkami).
 3. **Recenzent złapał skok** przy przejściu przez próg wysokości okna (nagłówek i lista kroków zmieniały rozmiar o 61 px) — poprawione przed commitem, zmierzone: 0 px.
