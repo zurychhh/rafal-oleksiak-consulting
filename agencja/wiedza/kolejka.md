@@ -19,3 +19,4 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 8. ~~Scroll-driven animations w CSS — wsparcie przeglądarek~~ (24.11 R4 p4: Safari 26.0 obsługuje `animation-timeline`, webkit.org/blog/17333; iOS 18 nie → zawsze `@supports` + statyczny stan końcowy; `webkit-check.py` wypisuje wsparcie). Zostaje: czy przenieść część sceny z JS do CSS
 
 13. ~~Wydajność — wiarygodność pomiaru klatek~~ (24.11 R4 p13: Lighthouse „Score variability” → mediana z 3 po rozgrzewce w `scroll-perf`, selftesty)
+14. ~~Dostępność — niskie okno i powiększenie (W3C Understanding SC 1.4.10 Reflow)~~ (24.11 R4 p14: `short-viewport-check`, reguła R21); zostaje: sprawdzić `/nawyko` przy powiększeniu 200 % na 1280×720 (okno 640×360) i 400 % (320 px)
