@@ -32,9 +32,7 @@ export const FAQ = [
 
 /* Naglowki scen /nawyko — te same ciagi stoja w NawykoClient (h2); test JSON-LD sprawdza, ze kazdy jest widoczny. */
 export const FEATURES = [
-  'Cashback grows with every order.',
-  'Points every day. Levels that never drop.',
-  'You set what the programme costs.',
+  'You set what each point is worth.',
   'A second product, earned in five short lessons.',
   'Pharmacy buyers show up in your data after one scan.',
   'Health data never reaches your marketing.',

@@ -347,3 +347,15 @@ Czytelnik-kupujący: `agencja/recenzje/32-r5p2-teksty.md` (4 teksty przepisane p
 | /nawyko | finał, przycisk / komunikat | Reveal without scratching · Day 24 done. Streak: 24 days. | nowy |
 | /nawyko | finał, w telefonie | Your card of the day is ready. · Stamps · free pack at 3 · Next-pack code · Use in the {marka} store | nowy |
 | /nawyko | pasek rozdziałów | One morning | nowy |
+
+## R5 przebieg 2 cz. 2 — portfel `/nawyko` jako trzy ekrany aplikacji (24.11.2026, spec 29)
+Czytelnik-kupujący: `agencja/recenzje/37-r5p3-teksty.md` (6 tekstów przepisanych po jego ocenie). copy-voice OK. Nagłówki „Cashback grows with every order.”, „Points every day. Levels that never drop.” i „You set what the programme costs.” zniknęły ze strony (i z JSON-LD).
+
+| Trasa | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /nawyko | portfel, etykieta | For your customer · Rewards in the app | nowy |
+| /nawyko | portfel, nagłówek | Cashback grows with every {marka} order. | zmieniony |
+| /nawyko | portfel, podtytuł | Two screens from {marka}’s app, one from your panel. Tap to try them. | nowy |
+| /nawyko | kafel portfela | Cashback wallet · off the next one-off order / off the next subscription delivery · earned in N orders · Place order N · Start again · One-off order / Subscription · Example €2 back per order. You set the rate. | nowy |
+| /nawyko | kafel punktów | Points and levels · Scratch today +10 · Skip a day · Example N points to Silver. / Day skipped. Level kept. / Top level reached. · N points = €X at {marka}’s rate. | nowy |
+| /nawyko | kafel panelu marki | For you · {marka} brand panel · You set what each point is worth. · Move the rate. The customer’s points change value at once. · Example N points now = €X. A month of daily cards: €Y in points per customer. | nowy |
