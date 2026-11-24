@@ -120,3 +120,30 @@ marketingowa) — wspólny komponent, nie zmieniany; trasa importuje cały modu�
 3. 390: pasek cookies nie zasłania podpisu pod telefonem w finale (rezerwa stała, raz, na kontenerze — lekcja z R4 p3).
 4. Jedna najbardziej widoczna usterka ruchu trasy po obejrzeniu serii zrzutów 390/1440 (Chromium + WebKit).
 Bramki jak w specu wyżej + `scripts/webkit-check.py` w 390 i 1440 na `/work/genactiv` i `/nawyko`.
+
+## Wykonanie przebiegu 4 (24.11.2026)
+1. **`Enquiry` w osobnym module** `app/nawyko/Enquiry.tsx` (formularz + brzmienie zgód, bez zmian w polach, zgodach, `form`,
+   `page` i `POST /api/lead`). Wybór koloru nie był zależnością formularza (`/nawyko` ma `BrandColour` w scenie, `/work/genactiv`
+   własny `Picker`), więc zostaje na miejscu. `/work/genactiv` importuje z `./Enquiry`; `NawykoClient` re-eksportuje `Enquiry`,
+   więc `/calculator` działa bez zmian (nie jest w zakresie tego przebiegu — importuje dalej z `NawykoClient`).
+   JS ładowany przez stronę (Chromium, 390×844, `networkidle`, suma `encodedDataLength` zasobów typu Script, `npm start`):
+
+   | Trasa | Przed (pliki / KB) | Po (pliki / KB) |
+   |---|---|---|
+   | `/work/genactiv` | 10 / 158,9 | 9 / 145,5 (−13,4 KB, −8%) |
+   | `/nawyko` | 10 / 157,2 | 10 / 157,4 (bez zmian) |
+2. **Akt 10: etykieta „Your brand” na kolorze odwiedzającego** (plakietka jak `.nk-brandtag` na `/nawyko`), tekst biały albo
+   czarny według liczonego kontrastu. Zmierzone w przeglądarce (styl obliczony): GENACTIV red 5,43 · Forest green 5,13 ·
+   Ocean blue 4,72 · Amber 12,78 · Plum 4,96; własne kolory #777777 4,69 · #7f7f7f 5,24 · #ffff00 19,56 · #000080 16,01 (≥ 4,5:1).
+3. **Rezerwa pod pasek cookies na 390**: jedna stała `--ga-reserve: 112px` jako dolny padding kontenera sceny (`.ga-stage`),
+   z niej liczone `--ph`; bez `--consent-h` i bez paddingu per sekcja. Pomiar (pasek 78 px): odstęp podpisu od paska
+   w akcie 10 = 37 px przy 390×844, 390×664 i 375×667 (było 29 px, reguła ukryta w `70svh − 150px`).
+4. **Usterka ruchu**: na każdej granicy aktów oba ekrany telefonu gasły jednocześnie (wyjście 0,88–1,0, wejście 1,0–1,12),
+   więc telefon był przez chwilę pusty — najlepiej widać na 1440 między „Results” a „Your brand”. Teraz nowy ekran wchodzi
+   na stary w ostatnich 10% poprzedniego aktu, stary znika pod pełnym nowym (ekrany są nieprzezroczyste).
+Bramki: build OK; `tsc --noEmit` OK; lint 0 błędów / 1 ostrzeżenie (jak przed); copy-voice OK; qa.js `--scroll` PASS na
+`/work/genactiv` i `/nawyko` (9 szerokości); content-rules `--url` PASS. `/nawyko`: formularz renderuje się (4 pola),
+próbka koloru przemalowuje telefon (rgb(214,32,43) → rgb(29,95,168)).
+**Nie zrobione:** `scripts/webkit-check.py` — w tym środowisku nie ma `/usr/bin/WebKitWebDriver` (selenium:
+NoSuchDriverException), więc brak zrzutów WebKit `r4p4-ga-wk-*`; do puszczenia na maszynie z WebKitGTK.
+Zrzuty: `agencja/podglad/r4p4-ga-final-390.png`, `r4p4-ga-final-1440.png`.
