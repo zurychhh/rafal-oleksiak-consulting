@@ -1070,6 +1070,19 @@ function Scene({
           </li>
         ))}
       </ol>
+      {/* R4 p13 A1: on desktop scroll mode the active step's description shows in one shared slot under the list.
+          All four sit in the same grid cell, so the slot is as tall as the longest one at any width and no step row
+          changes height when the step changes (R19: no remount of a container with neighbours). The in-row copies
+          stay inside the buttons (visually hidden there) so each button's accessible name is unchanged. */}
+      {scroll ? (
+        <div className="nk-dslot" aria-hidden="true">
+          {STEPS.map((s, i) => (
+            <span key={s.t} className={i === step ? 'is-on' : undefined}>
+              {s.d}
+            </span>
+          ))}
+        </div>
+      ) : null}
       <p className="nk-next" hidden={!(scroll && step >= 2)}>
         <a className="nk-link" href="#enquiry">
           Ask how {name.trim().slice(0, 14) || 'your brand'} gets its own app

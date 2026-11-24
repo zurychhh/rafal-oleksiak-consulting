@@ -95,6 +95,16 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
 .nk-step.is-on .nk-d > span{padding-top:8px;}
 .is-still .nk-d{grid-template-rows:1fr;opacity:1;transition:none;}
 .is-still .nk-d > span{padding-top:8px;}
+/* R4 p13 A1: desktop scroll mode — rows keep one height; the description lives in .nk-dslot under the list. */
+.nk-dslot{display:none;}
+@media (min-width:861px){
+  .is-scroll .nk-stepbtn .nk-d{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
+    transition:none;}
+  .is-scroll .nk-step{position:relative;}
+  .is-scroll .nk-dslot{display:grid;padding:14px 0 0 44px;font-size:16px;line-height:1.45;color:var(--ink2);}
+  .is-scroll .nk-dslot > span{grid-area:1/1;max-width:40ch;opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s;}
+  .is-scroll .nk-dslot > span.is-on{opacity:1;visibility:visible;transition:opacity .3s .05s,visibility 0s;}
+}
 .nk-bar{height:2px;background:var(--mid);margin-top:20px;}
 .nk-bar i{display:block;height:100%;background:var(--ink);transform-origin:0 50%;transform:scaleX(var(--p,1));}
 .nk .nk-alt{margin-top:20px;min-height:22px;line-height:22px;font-size:14px;color:var(--dim);}
