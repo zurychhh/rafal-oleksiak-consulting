@@ -92,6 +92,8 @@ for route in "${ROUTES[@]}"; do
   done
   run "$route" "focus-obscured" "$LOGDIR/$slug-focus-obscured.log" node scripts/focus-obscured.test.mjs "$BASE" "$route"
   run "$route" "jsonld" "$LOGDIR/$slug-jsonld.log" node scripts/jsonld-rules.test.mjs "$url"
+  # R6' (Rafał 20:55) + R29: inwentarz sekcji (nagłówki, kroki, zdania) wobec wzorca i dwie kolejne sekcje w tym samym tle
+  if [ -f "agencja/inwentarz/${slug}.json" ]; then run "$route" "inventory" "$LOGDIR/$slug-inventory.log" node scripts/section-inventory.mjs "$url"; fi
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
   wkmiss=$(webkit_missing)
   if [ -n "$wkmiss" ]; then

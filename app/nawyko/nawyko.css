@@ -1278,7 +1278,7 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 
 /* ── spec 35 (R6'): jeden kokpit „For you” po portfelu — atrament jak .nk-wallet, piec widokow marki jako zakladki ──
    Zmienne jasne tylko w naglowku i rzedzie zakladek; panele zachowuja wlasne powierzchnie (papier / kolor marki / atrament). */
-.nk-cockpit{background:#0E0F12;color:#F2F0EA;padding:clamp(48px,7vw,104px) var(--m) clamp(48px,7vw,104px);
+.nk-cockpit{background-color:#15171C;background-image:linear-gradient(180deg,color-mix(in srgb,var(--brand) 22%,#0E0F12),color-mix(in srgb,var(--brand) 8%,#0E0F12) 60%);color:#F2F0EA;padding:clamp(48px,7vw,104px) var(--m) clamp(48px,7vw,104px);
   border-top:1px solid rgba(255,255,255,.12);scroll-margin-top:0;}
 .nk-ck-head{--ink:#F2F0EA;--ink2:#C9C6BE;--dim:#A9A69E;--paper:#0E0F12;max-width:900px;}
 .nk-ck-head .nk-h2{max-width:22ch;color:#F2F0EA;}
@@ -1301,7 +1301,6 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 .nk-ck-stage > section[hidden]{display:none!important;}
 .nk-ck-stage > section{border-top:0!important;border-bottom:0!important;padding-top:clamp(40px,5vw,72px)!important;}
 .nk-ck-stage > section:focus-visible{outline:3px solid var(--hi);outline-offset:-3px;}
-#evidence > .nk-int:first-child{background:var(--tint);}
 @media (max-width:860px){
   .nk-ck-stage{margin-left:calc(-1 * var(--m));margin-right:calc(-1 * var(--m));border-radius:0;box-shadow:none;}
   .nk-ck-tabs{margin-right:0;padding-right:var(--m);}

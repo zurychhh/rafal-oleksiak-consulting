@@ -1624,7 +1624,16 @@ function StoreMap({ brand }: { brand: string }) {
           <b>Codes</b>Single-use, redeemed in {brand}&rsquo;s own store.
         </li>
         <li>
-          <b>Other tools</b>Subscription, loyalty and email tools are matched to your stack.
+          <b>Store</b>Orders confirm a purchase; rewards arrive as single-use codes.
+        </li>
+        <li>
+          <b>Subscriptions</b>Cashback can come off the next delivery.
+        </li>
+        <li>
+          <b>Loyalty</b>Points can sit beside a programme already running.
+        </li>
+        <li>
+          <b>Email and CRM</b>Reorder reminders go out without any health data.
         </li>
         <li>
           <b>App stores</b>The app is listed under your brand name.
@@ -1766,7 +1775,8 @@ function Evidence({ brand }: { brand: string }) {
           <h2 className="nk-h2" id="nk-intg">
             Runs on Shopify; your other tools connect per brand.
           </h2>
-          <p className="nk-one">Pick your store engine. Shopify is ready; every other engine connects per brand through an adapter.</p>
+          <p className="nk-one">Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both stores under your brand.</p>
+          <p className="nk-fine">Pick your store engine. Shopify is ready; every other engine connects per brand through an adapter.</p>
         </div>
         <StoreMap brand={brand} />
         <p className="nk-fine nk-int-fine">
@@ -1943,6 +1953,12 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
   const pick = (i: number, focus = false) => {
     setCur(i)
     revealTab(list.current, i)
+    // recenzja 43 W3: po recznym wyborze zakladki stary #hash w adresie blokowalby ponowny skok z menu (brak hashchange)
+    try {
+      if (location.hash && location.hash !== '#' + CK_TABS[i].id) history.replaceState(history.state, '', location.pathname + location.search)
+    } catch {
+      /* bez history — bez zmian */
+    }
     if (focus) (list.current?.children[i] as HTMLElement | undefined)?.focus()
   }
   const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
