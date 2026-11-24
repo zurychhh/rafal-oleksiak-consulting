@@ -240,7 +240,7 @@ Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + po
 ## Dla Rafała
 
 **Runda 4, przebieg 8 (24.11 05:38–06:20) — przewijanie `/nawyko` jest płynne także na słabszym sprzęcie: na komputerze z procesorem spowolnionym 4× zacięcia spadły z 14 do 0, a klik w zdrapkę reaguje 4× szybciej.**
-Do obejrzenia: PODGLAD_LINK — `/nawyko` przewinięte przez całą scenę z telefonem (na Macu w Safari i na iPhonie) oraz na `/` naciśnij Tab: ramka wokół „Nawyko reorder app” obejmuje sam napis, nie wchodzi już na link pod spodem.
+Do obejrzenia (Vercel „success” dla commita 160d5d4, sprawdzone przez status commita po pushu): https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/nawyko — `/nawyko` przewinięte przez całą scenę z telefonem (na Macu w Safari i na iPhonie) oraz na `/` naciśnij Tab: ramka wokół „Nawyko reorder app” obejmuje sam napis, nie wchodzi już na link pod spodem.
 1. **`/nawyko`:** przy każdym ruchu kółkiem przeglądarka przeliczała wygląd całego telefonu, bo dwie liczby sterujące animacją stały na samej górze sceny. Przeniesione tam, gdzie są używane — wygląd identyczny (zrzuty przed/po), a najdłuższe zacięcie na komputerze 131 ms → brak zacięć powyżej 50 ms; telefon 390: 3 → 1. Google liczy płynność reakcji (INP) do oceny strony.
 2. **`/work/genactiv`:** zmierzona tak samo i przejrzana klatka po klatce co 4% przewijania — jest płynna (żadnego zacięcia > 100 ms, kliknięcia 16 ms), więc nic nie zmienialiśmy; uczciwiej niż poprawiać szum.
 3. **`/` (bez zmian w treści i wyglądzie — porównanie ze źródłem PASS):** ramka fokusu z klawiatury na linkach w nagłówku przecinała drugi link na telefonie — poprawione, pilnuje tego nowy test.
