@@ -812,6 +812,7 @@ export function GenactivStory() {
 
   if (mode === 'still') {
     return (
+      <>
       <div className="ga-still" key="still">
         {COPY.map((c, i) => (
           <section key={i} className={'ga-act ga-act-' + i} aria-labelledby={'ga-t' + i}>
@@ -826,7 +827,6 @@ export function GenactivStory() {
               {i === 0 ? heroLink : null}
               {i === 3 ? reveal : null}
               {i === 10 ? <Picker pick={pick} onPick={setPick} /> : null}
-              {i === 10 ? <Final inScene /> : null}
             </div>
             <figure className="ga-fig">
               <div className={'ga-phone-slot' + (i === 0 ? ' ga-out' : '')}>
@@ -858,6 +858,11 @@ export function GenactivStory() {
           </section>
         ))}
       </div>
+      {/* R4 p7: formularz stoi ZA ukladem statycznym, tak samo jak za .ga-track w trybie przewijania. Z rezerwa
+          [data-ga-pin] (.ga-still przyciety do 1320svh) #enquiry ma przed i po hydratacji te sama pozycje — wejscie
+          z kotwica nie skacze (bylo 0,17 na 1440; pomiar pod navigator.webdriver widzial tylko uklad statyczny = 0). */}
+      <Final />
+      </>
     )
   }
 

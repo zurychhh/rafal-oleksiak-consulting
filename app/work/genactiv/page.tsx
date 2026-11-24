@@ -27,12 +27,16 @@ export const viewport: Viewport = {
 const CONSENT_JS =
   "try{if(localStorage.getItem('cookie-consent')===null)document.documentElement.setAttribute('data-ga-consent-pending','')}catch(e){document.documentElement.setAttribute('data-ga-consent-pending','')}"
 
+// R4 p7: rezerwa wysokosci sceny przed hydratacja (wzor z /nawyko, spec 13). Warunek = setMode('scroll') w GenactivStory.
+const PIN_JS =
+  "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!navigator.webdriver&&innerHeight>=600)document.documentElement.setAttribute('data-ga-pin','')}catch(e){}"
+
 export default function GenactivWork() {
   // font od pierwszej klatki: zamiana kroju po zaladowaniu przesuwala tekst (CLS)
   preload('/fonts/montserrat-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <div className="ga">
-      <script dangerouslySetInnerHTML={{ __html: CONSENT_JS }} />
+      <script dangerouslySetInnerHTML={{ __html: CONSENT_JS + PIN_JS }} />
       <a className="ga-skip" href="#main">
         Skip to content
       </a>

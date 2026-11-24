@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Enquiry } from './Enquiry'
+import { FAQ } from './content'
 
 /* Enquiry mieszka w ./Enquiry (przebieg 4): /work/genactiv importuje sam formularz, bez calej sceny. */
 export { Enquiry }
@@ -1593,33 +1594,6 @@ function RX(day: number) {
 }
 
 /* ── runda 4 (j): FAQ kupujacego, natywne <details> (klawiatura i bez JS za darmo) ── */
-const FAQ = [
-  {
-    q: 'Will customers really tick every day?',
-    a: 'Not every customer, and not every day. A card takes seconds, a missed day never costs a level, and the brand sees how often customers tick as totals, never one person’s ticks.',
-  },
-  {
-    q: 'What about GDPR and health data?',
-    a: 'A tick is stored only as a ticked date, and only with the customer’s consent. Nothing about symptoms or goals is collected, and ticks never reach ads, analytics, push messages or email.',
-  },
-  {
-    q: 'What does a reward cost, and who sets it?',
-    a: 'The brand sets every reward and threshold, so the most a customer can earn is known before the programme starts. Rewards are fixed and shown in advance, never random.',
-  },
-  {
-    q: 'How long does setup take?',
-    a: 'Setup time depends on your store and the tools to connect. Both are mapped in the first call.',
-  },
-  {
-    q: 'Does it work for pharmacy purchases?',
-    a: 'Yes. A scanned pharmacy receipt confirms the purchase; the code on the box registers the pack, not where it was bought.',
-  },
-  {
-    q: 'What if a customer does not give consent?',
-    a: 'Every feature stays visible. The daily card and streak show as locked, with one button to turn them on. No reward depends on push or email consent.',
-  },
-] as const
-
 function Faq() {
   return (
     <section className="nk-faq" id="faq" aria-labelledby="nk-faq-h">

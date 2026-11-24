@@ -4,9 +4,12 @@ import { SiteNav } from '../components/SiteNav'
 import { DayStrip, Story } from './NawykoClient'
 import { HeroGap } from '../calculator/HeroGap'
 import './nawyko.css'
+import { FAQ, FEATURES } from './content'
 
 const URL = 'https://oleksiakconsulting.com/nawyko'
 const TITLE = 'Nawyko — a white-label habit and loyalty app for brands people buy again'
+const LEDE = 'An app under your brand that gives customers a reason to reorder — built and run for you.'
+
 const DESC =
   'The customer confirms a purchase, scratches one card a day after their dose, builds a streak and earns rewards known in advance. The brand gets a reason for the next order and the real rhythm of use.'
 
@@ -33,14 +36,51 @@ export const viewport: Viewport = {
   themeColor: '#F7F5F0',
 }
 
+/* Kolejka wiedzy pkt 4 (R4 p7): jeden graf zamiast luznego obiektu — strona, produkt, FAQ i ta sama osoba co na `/`
+   (@id #person), zeby odpowiedzi AI laczyly Nawyko z autorem. Kazdy tekst w znaczniku jest widoczny na stronie
+   (FEATURES, FAQ z ./content; DESC = podtytul hero). Bez offers/aggregateRating: ceny i ocen nie ma na stronie,
+   wiec Google nie pokaze wyniku rozszerzonego — swiadomie, nie zmyslamy ich. */
 const JSON_LD = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'Nawyko',
-  applicationCategory: 'BusinessApplication',
-  description: DESC,
-  url: URL,
-  provider: { '@type': 'Person', name: 'Rafał Oleksiak', url: 'https://oleksiakconsulting.com' },
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': URL + '#webpage',
+      url: URL,
+      name: TITLE,
+      description: LEDE,
+      about: { '@id': URL + '#app' },
+      mainEntity: { '@id': URL + '#app' },
+      isPartOf: { '@type': 'WebSite', '@id': 'https://oleksiakconsulting.com/#website', url: 'https://oleksiakconsulting.com' },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': URL + '#app',
+      name: 'Nawyko',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'iOS, Android',
+      description: LEDE,
+      url: URL,
+      featureList: [...FEATURES],
+      provider: { '@id': 'https://oleksiakconsulting.com/#person' },
+    },
+    {
+      '@type': 'Person',
+      '@id': 'https://oleksiakconsulting.com/#person',
+      name: 'Rafał Oleksiak',
+      url: 'https://oleksiakconsulting.com',
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': URL + '#faq',
+      isPartOf: { '@id': URL + '#webpage' },
+      mainEntity: FAQ.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
 }
 
 const PIN_JS =
@@ -78,7 +118,7 @@ export default function Nawyko() {
           </div>
           <div>
             <p className="nk-lede">
-              An app under your brand that gives customers a reason to reorder — built and run for you.
+              {LEDE}
             </p>
             <p className="nk-lede">
               Customers scratch one card a day for rewards known up front. You get a reason for the next order and see the real rhythm of use.
