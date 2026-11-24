@@ -40,3 +40,5 @@ const cnt = L.filter((e) => !e.in)
 const sum = (a) => a.reduce((s, e) => s + e.v, 0)
 console.log(`${url} ${w}x${h}: CLS (bez wejscia) ${sum(cnt).toFixed(4)} — przy ladowaniu ${sum(cnt.slice(0, atLoad)).toFixed(4)}, przy przewijaniu ${sum(cnt.slice(atLoad)).toFixed(4)}; wpisow ${L.length}`)
 for (const e of L) console.log(JSON.stringify(e))
+// R4 p12 B1: one machine-readable summary line for scripts/gates.sh (clsscroll-<w>), always last.
+console.log(`CLSSCROLL suma=${sum(cnt).toFixed(5)} ladowanie=${sum(cnt.slice(0, atLoad)).toFixed(5)} przewijanie=${sum(cnt.slice(atLoad)).toFixed(5)}`)
