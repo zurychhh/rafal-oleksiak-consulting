@@ -49,6 +49,7 @@ const PIN_JS =
 export default function Nawyko() {
   // Spec 15 A2: font gotowy przed pierwszym malowaniem (font-display:optional w nawyko.css) — wejscie z kotwica bez skoku.
   preload('/fonts/instrument-sans-400-600-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
+  preload('/fonts/instrument-sans-400-600-latin-ext.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <div className="nk">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />

@@ -53,7 +53,7 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
   margin-top:22px!important;max-width:11ch;}
 .nk-lede{font-size:clamp(18px,1.6vw,22px);line-height:1.4;color:var(--ink);max-width:34ch;}
 .nk-lede + .nk-lede{margin-top:14px;color:var(--ink2);}
-.nk-cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;
+.nk-cta{font-family:inherit;display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;
   background:var(--ink);color:var(--paper)!important;text-decoration:none;font-size:13px;font-weight:600;
   letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--ink);cursor:pointer;}
 .nk-cta:hover{opacity:.86;}
@@ -351,9 +351,9 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 .nk-tg i.is-try{animation:nk-nv-try .6s cubic-bezier(.3,.7,.3,1);}
 .nk-tg:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
 @keyframes nk-nv-try{0%{transform:none;}30%{transform:translateX(18px);}55%{transform:translateX(-3px);}70%{transform:translateX(3px);}85%{transform:translateX(-1px);}100%{transform:none;}}
-.nk .nk-nv-why{margin-top:12px;min-height:calc(3 * 1.4em);font-size:15px;line-height:1.4;color:var(--ink2);}
+.nk-nv-why{margin-top:12px;min-height:42px;font-size:15px;line-height:1.4;color:var(--ink2);}
 .nk .nk-nv-end{margin-top:18px;font-size:15px;color:var(--ink2);}
-@media (max-width:420px){.nk .nk-nv-why{min-height:calc(4 * 1.4em);}}
+@media (max-width:420px){.nk-nv-why{min-height:84px;}}
 @media (prefers-reduced-motion:reduce){.nk-tg i.is-try{animation:none;}}
 
 /* final: formularz obok telefonu, ktory przyjmuje nazwe z pola */

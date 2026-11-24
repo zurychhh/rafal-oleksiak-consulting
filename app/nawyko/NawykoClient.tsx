@@ -1651,11 +1651,11 @@ function Faq() {
    aria-checked zostaje "false" przez caly czas — przelacznik naprawde nigdy sie nie wlacza. */
 const NEVER = [
   { id: 'draw', label: 'Random prize draw', why: 'Stays off: rewards are fixed and shown in advance, never drawn at random.' },
-  { id: 'claim', label: 'Claim: supports immunity', why: 'Stays off: the app makes no health claims.' },
+  { id: 'claim', label: 'Add a health claim to a card', why: 'Stays off: the app makes no health claims.' },
   {
     id: 'swap',
-    label: 'Change the reward after the card is scratched',
-    why: 'Stays off: rewards are fixed in advance, so a scratched card keeps the reward shown before it.',
+    label: 'Swap the reward after scratching',
+    why: 'Stays off: a scratched card keeps the reward it showed.',
   },
 ] as const
 
@@ -1674,7 +1674,7 @@ function NeverScene({ skin, brand }: { skin: Skin; brand: string }) {
           <span className="nk-labrest">What it never does</span>
         </div>
         <h2 className="nk-h2" id="nk-never">
-          Prize draws, health claims and reward changes stay off.
+          Nothing a regulator or customer could hold against your brand.
         </h2>
         <p className="nk-one">Try a switch: it turns back off and the panel says why.</p>
         <div className="nk-desk2 nk-nv">
@@ -1704,7 +1704,7 @@ function NeverScene({ skin, brand }: { skin: Skin; brand: string }) {
             {last === null ? 'All three are off.' : NEVER[last].why}
           </p>
         </div>
-        <p className="nk-fine nk-nv-end">The app stores only which days were ticked.</p>
+        <p className="nk-fine nk-nv-end">Each tick stores only the date. Health data never reaches ads, analytics, push or email.</p>
       </div>
       <div className="nk-phonecol">
         <Phone step={4} t={1} theme={skin} scratched brand={brand} day={17} />

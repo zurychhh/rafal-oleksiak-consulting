@@ -34,6 +34,7 @@ czytał tekstów oczami kupującego. Ta rubryka to naprawia. Niespełniony punkt
   i dlaczego” na dole tego pliku — to jest pamięć gustu Rafała; czytaj ją przed pisaniem nowych tekstów.
 
 ## Odrzucone i dlaczego (pamięć gustu)
+- 24.11 „Claim: supports immunity” (przełącznik zakazanej funkcji na `/nawyko`) — na stronie o suplementach treść oświadczenia zdrowotnego, nawet jako zakazany przykład, na zrzucie czyta się jak oświadczenie samej strony. Zamiast: „Add a health claim to a card”. Nigdy nie cytujemy treści oświadczeń zdrowotnych.
 - 22.11 „Your name on it, not mine.” — egocentryczne i przemądrzałe; autor strony w roli bohatera. Zamiast: „Your brand. Your colours. Your app.”
 - 22.11 kalkulator w pierwszej wersji — „zajebiście przegadane”: raport zamiast narzędzia. Zasada 5.
 - 22.11 `/nawyko` poniżej sceny w pierwszej wersji — „nudno, statycznie, nikt tego nie przeczyta”: listy zamiast scen.

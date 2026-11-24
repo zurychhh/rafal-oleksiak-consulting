@@ -264,16 +264,16 @@ Zastępuje trzy zdania „No random rewards. / No health claims. / No hidden rul
 | Miejsce | Tekst | Status |
 |---|---|---|
 | etykieta | For you · What it never does | zmieniony (doszło „For you”, jak w pozostałych scenach panelu marki) |
-| H2 | Prize draws, health claims and reward changes stay off. | nowy |
+| H2 | Nothing a regulator or customer could hold against your brand. | nowy (po czytelniku; było „Prize draws, health claims and reward changes stay off.” — wyliczało mechanikę, nie korzyść marki) |
 | zdanie | Try a switch: it turns back off and the panel says why. | nowy |
 | panel (nagłówek) | {marka} · brand panel · Example | nowy (wzór z „#exchange”) |
 | przełącznik 1 | Random prize draw | nowy |
-| przełącznik 2 | Claim: supports immunity | nowy |
-| przełącznik 3 | Change the reward after the card is scratched | nowy |
+| przełącznik 2 | Add a health claim to a card | nowy (po czytelniku; było „Claim: supports immunity” — na stronie o suplementach fraza na zrzucie czyta się jak oświadczenie zdrowotne samej strony) |
+| przełącznik 3 | Swap the reward after scratching | nowy (po czytelniku: krócej na telefon) |
 | zdanie wyjaśnienia (stan wyjściowy) | All three are off. | nowy |
 | po przełączniku 1 | Stays off: rewards are fixed and shown in advance, never drawn at random. | nowy |
 | po przełączniku 2 | Stays off: the app makes no health claims. | nowy |
-| po przełączniku 3 | Stays off: rewards are fixed in advance, so a scratched card keeps the reward shown before it. | nowy |
-| zdanie zamykające | The app stores only which days were ticked. | bez zmian |
+| po przełączniku 3 | Stays off: a scratched card keeps the reward it showed. | nowy (po czytelniku: bez powtórzenia „fixed in advance”) |
+| zdanie zamykające | Each tick stores only the date. Health data never reaches ads, analytics, push or email. | zmieniony (po czytelniku: mocniejszy fakt dla działu prawnego) |
 
-_Czytelnik-kupujący (osobny subagent) dla tych tekstów jeszcze nie przeszedł — do zlecenia przez Leada przed commitem na produkcję._
+_Czytelnik-kupujący przeszedł (24.11 03:05): 5 tekstów przepisanych przed commitem; etykieta „For you” zostaje dla spójności z innymi scenami panelu marki._
