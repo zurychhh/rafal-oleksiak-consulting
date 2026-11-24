@@ -1,0 +1,21 @@
+/* Spec 14 — /tools. Papier, tusz, jedna czerwien (numer karty przy hover/focus). */
+.tl{padding:0 var(--m);}
+.tl-head{padding:clamp(40px,8vw,112px) 0 clamp(32px,5vw,64px);max-width:1100px;}
+.tl-head .nk-lab{margin-bottom:22px;}
+.tl-h1{font-size:clamp(36px,6vw,84px);max-width:16ch;text-wrap:balance;}
+.tl-sub{margin-top:28px!important;max-width:46ch;font-size:clamp(17px,1.5vw,20px);color:var(--ink2);}
+.tl-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));
+  border-top:1px solid var(--ink);}
+.tl-card{display:flex;flex-direction:column;gap:12px;padding:26px clamp(0px,2vw,28px) 30px 0;border-bottom:1px solid var(--line);min-width:0;}
+.tl-n{color:var(--dim);}
+.tl-q{margin:0;font-size:clamp(22px,2vw,26px);line-height:1.15;letter-spacing:-.02em;font-weight:600;text-wrap:balance;}
+.tl-know{margin:0;color:var(--ink2);}
+.tl-needs{margin:0;font-size:15px;color:var(--dim);}
+.tl-needs .nk-caps{font-size:11px;margin-right:6px;color:var(--ink);}
+.tl-go{margin-top:auto;align-self:flex-start;font-weight:600;text-decoration:none;border-bottom:1px solid var(--ink);padding:8px 0 2px;}
+.tl-go:hover,.tl-go:focus-visible{color:var(--red);border-bottom-color:var(--red);}
+@media (min-width:700px){
+  .tl-card{padding-left:clamp(0px,2vw,28px);border-left:1px solid var(--line);}
+}
+.tl-end{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:clamp(48px,7vw,96px) 0;}
+.tl-h2{margin:0;max-width:30ch;font-size:clamp(24px,2.6vw,34px);line-height:1.15;letter-spacing:-.025em;font-weight:600;text-wrap:balance;}

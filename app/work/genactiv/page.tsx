@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { SiteNav } from '../../components/SiteNav'
 import { preload } from 'react-dom'
 import { GenactivStory } from './GenactivClient'
 import './genactiv.css'
@@ -29,18 +30,7 @@ export default function GenactivWork() {
       <a className="ga-skip" href="#main">
         Skip to content
       </a>
-      <header className="ga-top">
-        {/* Zwykly <a>, nie <Link>: runtime strony glownej nie znosi nawigacji klienckiej (CLAUDE.md, DcBoot). */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/">Rafał Oleksiak</a>
-        <nav className="ga-nav" aria-label="Main">
-          <a href="/nawyko">Nawyko</a>
-          <a href="/work/genactiv" aria-current="page">
-            Work
-          </a>
-          <a href="#enquiry">Contact</a>
-        </nav>
-      </header>
+      <SiteNav current={null} contact="#enquiry" className="ga-top" />
       <main id="main">
         <GenactivStory />
       </main>
@@ -48,6 +38,7 @@ export default function GenactivWork() {
         <nav aria-label="Footer">
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/">Home</a>
+          <a href="/tools">Tools</a>
           <a href="/nawyko">Nawyko</a>
           <a href="/privacy">Privacy</a>
         </nav>

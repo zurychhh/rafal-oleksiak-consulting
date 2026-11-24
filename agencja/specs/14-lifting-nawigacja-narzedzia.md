@@ -24,3 +24,21 @@ zbierająca `/tool` i narzędzia z `/lab`; zero ślepych zaułków”). `/` (eks
   `content-rules --url` PASS; `copy-voice` zielony (dopisać `app/tools` do zakresu, jeśli trzeba).
 - WebKit: `scripts/webkit-check.py` na `/tools` i `/nawyko` w 390 i 1440 PASS, zrzuty obejrzane.
 - Teksty w `agencja/teksty-do-akceptacji.md` (sekcja „R4 przebieg 4 — nawigacja i Tools”).
+
+## Wykonanie (24.11.2026, gałąź wt/r4p4-nav)
+- `app/components/SiteNav.tsx` + `site-nav.css`: komponent serwerowy, zwykłe `<a>`, `aria-current="page"` (kreska w czerwieni
+  strony; na /work/genactiv w `--accent-hi`). Przyjmuje klasę nagłówka strony (`nk-top nk-caps` / `ga-top`), więc wygląd
+  zostaje. Contact = `#enquiry` na /nawyko, /calculator, /work/genactiv; gdzie indziej `/nawyko#enquiry`. Drugi poziom /nawyko
+  (How it works…FAQ) jako `children`, od 1200 px pod kreską. Poniżej 600 px nazwisko znika (Consulting prowadzi na `/`),
+  cztery pozycje w jednym wierszu. Work nie jest w nawigacji (current={null} na /work/genactiv).
+- Wymienione nagłówki: /nawyko, /calculator, /lab/payback, /lab/reward, /lab/reminder, /work/genactiv (tylko page.tsx).
+  Stopki tych tras + /tools mają link Tools. /lab/home bez zmian.
+- `/tools` (`app/tools/page.tsx`, `tools.css`): H1 + zdanie, 5 kart (nazwa, pytanie, co wiesz po 30 s, „You need”, jeden link),
+  finał z CTA do /nawyko. `robots: noindex, nofollow`, brak w `app/sitemap.ts` — **czeka na Rafała** (indeksować /tools?).
+- `scripts/copy-voice.test.mjs`: zakres + `app/tools`.
+- Pomiary: przepełnienie poziome 0 px (390, 1440; Chromium); wysokość nagłówka 65 px (390) / 66 px (1440) / 125 px na
+  /nawyko ≥ 1200 (drugi poziom z CSS od pierwszej klatki, bez JS → CLS 0). Bramki: build OK, tsc 0, lint 0 błędów /
+  1 ostrzeżenie (jak przed), copy-voice OK, qa.js --scroll PASS na /tools, /nawyko, /calculator (9 szerokości),
+  content-rules --url PASS, webkit-check PASS /tools i /nawyko w 390 i 1440 (WebKitWebDriver doinstalowany: `apt-get install webkit2gtk-driver`).
+- Zrzuty: `agencja/podglad/r4p4-tools-{390,1440}.png`, `r4p4-tools-wk-{390,1440}.png`, `r4p4-nav-nawyko-{390,1440}.png`.
+- Nie zrobione: czytelnik-kupujący (osobny subagent) dla nowych tekstów — do zlecenia przez Leada.

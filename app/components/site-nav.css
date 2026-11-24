@@ -1,0 +1,22 @@
+/* Spec 14 — wspolna nawigacja. Kolory dziedziczy po naglowku strony (papier/tusz albo ciemny GENACTIV);
+   jedyny akcent to kreska pod biezaca pozycja w kolorze czerwieni strony. */
+.sn{flex-wrap:wrap;row-gap:0;}
+.sn a{text-decoration:none;color:inherit;}
+.sn-brand{white-space:nowrap;}
+.sn-nav{display:flex;gap:clamp(14px,2.2vw,28px);margin-left:auto;white-space:nowrap;}
+.sn-nav a{padding:6px 0 4px;border-bottom:2px solid transparent;}
+.sn-nav a:hover{border-bottom-color:currentColor;}
+.sn-nav a[aria-current="page"]{border-bottom-color:var(--sn-accent,var(--red,currentColor));}
+.sn-sub{display:none;flex-basis:100%;gap:22px;justify-content:flex-end;padding-top:12px;margin-top:12px;
+  border-top:1px solid var(--line,currentColor);}
+.sn .sn-sub a{color:var(--dim,inherit);}
+.sn .sn-sub a:hover{color:var(--ink,inherit);}
+@media (min-width:1200px){.sn-sub{display:flex;}}
+/* Ponizej 600 px marka znika: „Consulting” prowadzi tam samo, a cztery pozycje mieszcza sie w jednym wierszu. */
+@media (max-width:599px){
+  .sn-brand{display:none;}
+  .sn-nav{margin-left:0;width:100%;justify-content:space-between;gap:10px;}
+}
+@media (max-width:359px){.sn-nav{letter-spacing:.08em;}}
+/* GENACTIV: ciemne tlo, akcent strony */
+.ga .sn{--sn-accent:var(--accent-hi);}

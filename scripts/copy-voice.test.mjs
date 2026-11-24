@@ -3,7 +3,7 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const ROUTES = ['app/nawyko', 'app/calculator', 'app/lab', 'app/work'];
+const ROUTES = ['app/nawyko', 'app/calculator', 'app/lab', 'app/work', 'app/tools'];
 const FIRST_PERSON = /\b(I|[Mm]e|[Mm]y|[Mm]ine|[Ww]e|[Oo]urs?)\b/;
 const BANNED = /\b(seamless(ly)?|powerful|effortless(ly)?|supercharge|game[- ]chang\w+|revolutionary|unlock(s|ed|ing)?)\b/i;
 // R10: words that leak project status (launch timing, pilot, store readiness) — Rafał's decisions, never page copy.

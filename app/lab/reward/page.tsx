@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { SiteNav } from '../../components/SiteNav'
 import { Reward } from './RewardClient'
 import '../../nawyko/nawyko.css'
 import './reward.css'
@@ -41,13 +42,7 @@ export default function RewardPage() {
       <a className="nk-skip" href="#main">
         Skip to content
       </a>
-      <header className="nk-top">
-        {/* Zwykly <a>, nie <Link>: runtime strony glownej nie znosi nawigacji klienckiej (CLAUDE.md, DcBoot). */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a className="nk-caps" href="/">
-          Rafał Oleksiak <span className="nk-hide">· Consultant</span>
-        </a>
-      </header>
+      <SiteNav current={null} className="nk-top nk-caps" />
 
       <main id="main">
         <Reward />
@@ -58,6 +53,7 @@ export default function RewardPage() {
         <nav aria-label="Footer">
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/">Home</a>
+          <a href="/tools">Tools</a>
           <a href="/nawyko">Nawyko</a>
           <a href="/lab/reminder">Reminder day</a>
           <a href="mailto:rafal@oleksiakconsulting.com">rafal@oleksiakconsulting.com</a>

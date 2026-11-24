@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { SiteNav } from '../../components/SiteNav'
 import { Payback } from './PaybackClient'
 import '../../nawyko/nawyko.css'
 import '../reward/reward.css'
@@ -42,13 +43,7 @@ export default function PaybackPage() {
       <a className="nk-skip" href="#main">
         Skip to content
       </a>
-      <header className="nk-top">
-        {/* Zwykly <a>, nie <Link>: runtime strony glownej nie znosi nawigacji klienckiej (CLAUDE.md, DcBoot). */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a className="nk-caps" href="/">
-          Rafał Oleksiak <span className="nk-hide">· Consultant</span>
-        </a>
-      </header>
+      <SiteNav current={null} className="nk-top nk-caps" />
 
       <main id="main">
         <Payback />
@@ -59,6 +54,7 @@ export default function PaybackPage() {
         <nav aria-label="Footer">
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/">Home</a>
+          <a href="/tools">Tools</a>
           <a href="/nawyko">Nawyko</a>
           <a href="/lab/reward">Reward cost</a>
           <a href="/lab/reminder">Reminder day</a>

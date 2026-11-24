@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { SiteNav } from '../components/SiteNav'
 import { DayStrip, Story } from './NawykoClient'
 import { HeroGap } from '../calculator/HeroGap'
 import './nawyko.css'
@@ -54,24 +55,14 @@ export default function Nawyko() {
       <a className="nk-skip" href="#main">
         Skip to content
       </a>
-      <header className="nk-top">
-        {/* Zwykly <a>, nie <Link>: runtime strony glownej nie znosi nawigacji klienckiej (CLAUDE.md, DcBoot). */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a className="nk-caps" href="/">
-          Rafał Oleksiak <span className="nk-hide">· Consultant</span>
-        </a>
-        <nav className="nk-topnav nk-caps" aria-label="On this page">
-          <a href="#how">How it works</a>
-          <a href="#cashback">Cashback</a>
-          <a href="#levels">Points</a>
-          <a href="#exchange">Your costs</a>
-          <a href="#proof">Proof</a>
-          <a href="#faq">FAQ</a>
-        </nav>
-        <a className="nk-caps nk-u" href="#enquiry">
-          Ask about Nawyko
-        </a>
-      </header>
+      <SiteNav current="nawyko" contact="#enquiry" className="nk-top nk-caps">
+        <a href="#how">How it works</a>
+        <a href="#cashback">Cashback</a>
+        <a href="#levels">Points</a>
+        <a href="#exchange">Your costs</a>
+        <a href="#proof">Proof</a>
+        <a href="#faq">FAQ</a>
+      </SiteNav>
 
       <main id="main">
         <section className="nk-hero" aria-labelledby="nk-h1">
@@ -109,6 +100,7 @@ export default function Nawyko() {
         <nav aria-label="Footer">
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/">Home</a>
+          <a href="/tools">Tools</a>
           <a href="/tool">Reorder gap tool</a>
           <a href="/calculator">Gap calculator</a>
           <a href="mailto:rafal@oleksiakconsulting.com">rafal@oleksiakconsulting.com</a>

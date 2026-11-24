@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { SiteNav } from '../components/SiteNav'
 import { Calculator } from './CalculatorClient'
 import '../nawyko/nawyko.css'
 import './calculator.css'
@@ -50,16 +51,7 @@ export default function CalculatorPage() {
       <a className="nk-skip" href="#main">
         Skip to content
       </a>
-      <header className="nk-top">
-        {/* Zwykly <a>, nie <Link>: runtime strony glownej nie znosi nawigacji klienckiej (CLAUDE.md, DcBoot). */}
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a className="nk-caps" href="/">
-          Rafał Oleksiak <span className="nk-hide">· Consultant</span>
-        </a>
-        <a className="nk-caps nk-u" href="#enquiry">
-          Talk it through
-        </a>
-      </header>
+      <SiteNav current={null} contact="#enquiry" className="nk-top nk-caps" />
 
       <main id="main">
         <Calculator />
@@ -70,6 +62,7 @@ export default function CalculatorPage() {
         <nav aria-label="Footer">
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/">Home</a>
+          <a href="/tools">Tools</a>
           <a href="/tool">Reorder gap tool</a>
           <a href="/nawyko">Nawyko</a>
           <a href="mailto:rafal@oleksiakconsulting.com">rafal@oleksiakconsulting.com</a>
