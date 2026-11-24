@@ -34,6 +34,9 @@ try:
         time.sleep(1)
     vw = drv.execute_script("return [window.innerWidth, window.innerHeight]")
     print("viewport", vw)
+    # Safari 26+ supports CSS scroll-driven animations (webkit.org/blog/17333); iOS 18 does not -> always @supports + static fallback.
+    print("supports animation-timeline:scroll()", drv.execute_script("return CSS.supports('animation-timeline','scroll()')"),
+          "| engine", drv.execute_script("return navigator.userAgent.match(/AppleWebKit\\/[\\d.]+/)?.[0]"))
     H = drv.execute_script("return document.documentElement.scrollHeight")
     for i, frac in enumerate([0.0, 0.08, 0.16, 0.24, 0.4, 0.6, 0.8, 0.97]):
         drv.execute_script("window.scrollTo(0, arguments[0])", int(H * frac))

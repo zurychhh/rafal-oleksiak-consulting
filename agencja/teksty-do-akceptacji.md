@@ -247,12 +247,14 @@ Zastąpione: „Enquiry” (etykieta), „Would this fit your product?”, „Su
 | wspólna nawigacja (/nawyko, /calculator, /tools, /lab/payback, /lab/reward, /lab/reminder, /work/genactiv) | Rafał Oleksiak (od 600 px) · Consulting · Nawyko · Tools · Contact | nowy (zastępuje „Ask about Nawyko” i „Talk it through” w nagłówku oraz „Nawyko · Work · Contact” na /work/genactiv) |
 | stopka tych tras | Tools | nowy |
 | /tools etykieta | Tools · one question, one screen | nowy |
-| /tools H1 | Your own numbers show what the next order is worth. | nowy |
-| /tools zdanie | Each tool answers one question from figures you type, in about thirty seconds. Nothing you type is sent. | nowy |
-| karta 01 (→ /tool) | Reorder gap / Does the pack run out before the customer reorders? / The real gap between orders in your store, set against the days your pack lasts. / You need: Your order export (CSV) · counted in this browser / Read your export → | nowy |
-| karta 02 (→ /calculator) | Value of a day / What is one day between orders worth? / What a shorter gap between orders adds in a year, in your currency. / You need: Repeat customers · average order value · days between orders / Work out a day → | nowy |
+| /tools H1 | Reorder questions, answered from your own numbers. | nowy |
+| /tools zdanie | Each tool answers one question from your own figures, worked out in this browser. | nowy |
+| karta 01 (→ /tool) | Reorder gap / Does the pack run out before the customer reorders? / The real gap between orders in your store, set against the days your pack lasts. / You need: Your order export (CSV) · read in this browser; the optional AI check sends product titles / Read your export → | nowy |
+| karta 02 (→ /calculator) | Value of a day / What is one day between orders worth? / What a shorter gap between orders adds in a year, in your currency. / You need: Repeat customers · average order value · days between orders / Price a day → | nowy |
 | karta 03 (→ /lab/payback) | Customer payback / Which order pays back a new customer? / The order number, and the day, on which a new customer has paid back what it cost to win them. / You need: Cost to win a customer · margin per order · days between orders / Find the order → | nowy |
-| karta 04 (→ /lab/reward) | Reward cost / What can a loyalty reward cost and still pay off? / The highest yearly reward cost per customer that still pays back, and whether your reward idea fits. / You need: Average order value · margin per order · extra orders a year / Price the reward → | nowy |
+| karta 04 (→ /lab/reward) | Reward cost / What can a loyalty reward cost and still pay off? / The highest yearly reward cost per customer that still pays back, and whether a given reward cost fits. / You need: Average order value · margin per order · extra orders a year (your estimate) / Price the reward → | nowy |
 | karta 05 (→ /lab/reminder) | Reminder day / Which day should the reorder reminder go out? / The day of the pack on which to send the reminder, so the next pack arrives before the last one ends. / You need: Days one pack lasts · days to doorstep · days to reorder / Find the day → | nowy |
-| /tools finał H2 + CTA | Customers lapse between packs? Nawyko gives them a daily reason to come back to your brand. / See Nawyko | nowy |
+| /tools finał H2 + CTA | Customers lapse between packs? Nawyko is an app in your brand: one card to scratch each day. / See Nawyko | nowy |
 | /tools title / description | Tools — five questions about your repeat customers / Five one-screen calculators for brands people buy again: reorder gap, value of a day, customer payback, reward cost, reminder day. | nowy |
+
+_Po czytelniku-kupującym i recenzencie (przebieg 4): H1, zdanie (fałszywe „Nothing you type is sent” — /tool wysyła tytuły produktów do AI po kliknięciu; „thirty seconds” bez źródła), karta 01 i 04, przycisk 02, finał — poprawione jak wyżej._

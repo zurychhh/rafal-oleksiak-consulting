@@ -1,6 +1,6 @@
 # Agencja — stan strony oleksiakconsulting.com
 
-Ostatni przebieg: 23.11.2026 23:38 – 24.11 00:10 (runda 4, przebieg 3 — `/nawyko` finał (k) z kolorem marki i stała rezerwa sceny; `/work/genactiv` akty 9–10, formularz `work`, nawigacja; R10). Wcześniej: 22:38–23:10 (R4 przebieg 2). Wcześniej: 21:38–22:20 (R4 przebieg 1). Wcześniej: 16:38–17:15 (runda 3, przebieg 6 — nowe narzędzie `/lab/reminder`, zdrapka w wersji bez ruchu na `/nawyko`, R7). Wcześniej przebieg 5 (15:38–16:10), przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
+Ostatni przebieg: 24.11.2026 01:38–02:05 (runda 4, przebieg 4 — wspólna nawigacja + `/tools` (spec 14); realizacja: `Enquiry` w osobnym module, etykieta w kolorze marki, rezerwa cookies, przenikanie ekranów). Wcześniej: 23.11.2026 23:38 – 24.11 00:10 (runda 4, przebieg 3 — `/nawyko` finał (k) z kolorem marki i stała rezerwa sceny; `/work/genactiv` akty 9–10, formularz `work`, nawigacja; R10). Wcześniej: 22:38–23:10 (R4 przebieg 2). Wcześniej: 21:38–22:20 (R4 przebieg 1). Wcześniej: 16:38–17:15 (runda 3, przebieg 6 — nowe narzędzie `/lab/reminder`, zdrapka w wersji bez ruchu na `/nawyko`, R7). Wcześniej przebieg 5 (15:38–16:10), przebieg 4 (14:38–15:00), 3 (13:38–14:05), 2 (13:14–13:30) i 1 (12:45–13:15). Gałąź: `agencja/strona` (od `claude/production` f4594c8).
 Na produkcję nic nie poszło — wypuszcza wyłącznie Rafał.
 
 **Stan rundy 3:** przebieg 1 (23.11 12:45–13:15) zrobił punkty 1–5 kolejki z 22.11 18:20; przebieg 2 (13:14–13:30) R3-2 i część R3-1; dalej „Następne”.
@@ -33,6 +33,8 @@ na iPhone'ach.
 **R4 przebieg 2 (22:38–23:10):** zrobione (g) `#proof` dowód z grupą kontrolną (suwak „held out as control”) + rozkład „kiedy opakowanie naprawdę się kończy”, (h) `#integrations` pas pięciu kategorii, (j) `#faq` 6 pytań w `<details>`; w nagłówku ≥1200 px linki Proof i FAQ. Realizacja: akty 5–8 (cashback schody, punkty/poziomy/ścieżka, brak zgody z prawdziwym przyciskiem, oś bramek budowy bez liczb), podpis hero 1440 przy pudełku, plakietki EXAMPLE na ekranach z liczbami. **Następne `/nawyko`:** (k) finał z przemalowaniem; skok układu przy wejściu adresem z kotwicą (np. `/nawyko#proof`: 0,33–1,09 — przyczyna sprzed R4: scena główna renderuje się statycznie z serwera i po hydratacji zmienia wysokość; potrzebna stała rezerwa wysokości sceny, spec 12); na 1440 wykres w `#proof` zaczyna się pod zgięciem (nagłówek w 3 liniach). **Następne realizacja:** przebieg 3 speca (wyniki jako stan zablokowany, finał z formularzem `work`, „Work” w nawigacji).
 
 **R4 przebieg 3 (23:38–00:10):** zrobione (k) finał `#enquiry` „See it with your brand” (wybór koloru marki: 6 próbek + własny; telefon, pasek i plakietka przemalowują się na żywo; kolor nie jest wysyłany), telefon finału widoczny także na ≤ 860 px; stała rezerwa wysokości sceny z serwera (`html[data-nk-pin]` z inline-skryptu) i stała rezerwa pod pasek cookies — skok przy wejściu z kotwicą z 0,32–1,17 do 0–0,15 (spec 13, tabela). Realizacja: akt 9 wyniki jako stan zablokowany, akt 10 finał z kolorem, formularz `Enquiry` (`form="work"`) pod sceną, nagłówek Nawyko · Work · Contact. **Następne `/nawyko`:** dobić kotwice do ≤ 0,05 (`#enquiry` 390: 0,12–0,15; ~0,055 na 1440 bez źródła; `HeroGap`), (i) „czego nie robi” jako scena — dziś trzy zdania, sprawdzić, czy wystarcza; potem kolejka R4 pkt 2 (lifting: wspólna nawigacja, strona „Narzędzia”). **Następne realizacja:** akt 10 — etykieta „YOUR BRAND” też w kolorze odwiedzającego (jak na `/nawyko`); szlif ruchu całej trasy; rozmiar JS trasy (importuje cały `NawykoClient` dla `Enquiry` — wydzielić `Enquiry` do osobnego pliku i zmierzyć); na 390 pasek cookies zasłania podpis pod telefonem w finale.
+
+**R4 przebieg 4 (24.11 01:38–02:05):** zrobione R4 pkt 2 (część): wspólna nawigacja `SiteNav` (Consulting · Nawyko · Tools · Contact) na `/nawyko`, `/calculator`, `/lab/payback|reward|reminder`, `/work/genactiv` + nowa strona `/tools` (5 kart narzędzi, noindex, poza sitemap); stopki linkują do `/tools`. Realizacja: `Enquiry` wydzielone do `app/nawyko/Enquiry.tsx` (JS trasy 158,9 → 145,5 KB), etykieta „Your brand” w kolorze odwiedzającego (kontrast 4,69–19,56:1), stała rezerwa pod pasek cookies, ekrany telefonu przenikają się zamiast gasnąć razem. Bramki: build, tsc, lint 0/1, copy-voice, qa.js PASS (/tools, /nawyko, /calculator, /work/genactiv), content-rules PASS, WebKit 390+1440 PASS na /tools, /nawyko, /work/genactiv. **Następne:** `/tool` jest ślepym zaułkiem (brak linku do `/tools` — źródło to `tool-index.html` innego zadania cyklicznego, decyzja niżej); kotwice `/nawyko#enquiry` 390 do ≤ 0,05; (i) „czego nie robi” jako scena; na `/` wjazd do Nawyko w granicach ship-design; realizacja: szlif ruchu, przenikanie sprawdzić na nagraniu.
 
 **R4 — DRUGI STRUMIEŃ, RÓWNORZĘDNY (Rafał 23.11 21:00): realizacja GENACTIV na `/work/genactiv` — spec `agencja/specs/realizacja-genactiv.md`.**
 „Nasza największa wizytówka, ma rozwalić mózgi.” Każdy przebieg: dwóch budujących w osobnych worktree (strumień `/nawyko` z kolejki niżej
@@ -228,6 +230,15 @@ Słowa Rafała: „dobrze, teraz pracujemy nad tą częścią”. W tej kolejno�
 Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + podgląd we własnej marce klienta + deck (3 decyzje).
 
 ## Dla Rafała
+
+**Runda 4, przebieg 4 (24.11 01:38–02:05) — strona ma wspólną nawigację (Consulting · Nawyko · Tools · Contact) i nową stronę `/tools`, która zbiera pięć kalkulatorów w jednym miejscu.**
+Do obejrzenia: PODGLAD_LINK/tools (pięć kart: pytanie, co wiesz po wyniku, jakie dane potrzebne) i PODGLAD_LINK/work/genactiv przewinięte do końca (plakietka „Your brand” zmienia kolor razem z telefonem). PODGLAD_STAN
+1. **Nawigacja:** te same cztery pozycje na każdej trasie poza `/` (jej nagłówek to Claude Design — nie ruszany) i `/tool`; na 390 mieści się w jednym wierszu; bieżąca strona podkreślona czerwienią; Contact prowadzi do formularza tej strony.
+2. **`/tools`:** „Reorder questions, answered from your own numbers.” Recenzent złapał fałszywe zdanie „Nothing you type is sent” (narzędzie `/tool` wysyła tytuły produktów do AI po kliknięciu) — poprawione przed commitem na zgodne z prawdą.
+3. **Realizacja GENACTIV:** lżejsza o 8% JS; telefon nie robi już pustej klatki między aktami.
+4. **Dowód:** zrzuty WebKit (silnik Safari) `agencja/podglad/r4p4-tools-wk-*.png`, `r4p4-ga-wk-{390,1440}.png`; Chromium `r4p4-tools-{390,1440}.png`, `r4p4-nav-nawyko-{390,1440}.png`, `r4p4-ga-final-{390,1440}.png`. Bramka WebKit sprawdza teraz także rozmiar Maca (1440) i kończy się błędem, gdy telefon jest węższy niż 150 px.
+**Dlaczego biznesowo:** właściciel marki, który wszedł na jedno narzędzie, widzi resztę oferty jednym kliknięciem — mniej ślepych zaułków = więcej dróg do zapytania.
+
 
 **Runda 4, przebieg 3 (23.11 23:38 – 24.11 00:10) — obie strony mają już finał: odwiedzający wybiera kolor swojej marki i widzi telefon przemalowany na żywo, a pod spodem jest formularz zapytania.**
 Do obejrzenia: PODGLAD_LINK/nawyko#enquiry (wpisz nazwę sklepu i kliknij inną próbkę koloru) oraz PODGLAD_LINK/work/genactiv przewinięte do końca sceny (wyniki jako „Locked”, potem wybór koloru i formularz). PODGLAD_STAN
@@ -504,6 +515,10 @@ jak strona może w 5 sekund sprzedawać trzy rzeczy zamiast jednej.
 
 ## Czeka na Rafała
 
+- **(R4p4-A) `/tools` w Google i w sitemapie?** Strona jest dziś `noindex`. Rekomendacja: zaindeksować po Twoim obejrzeniu — to naturalna strona wejścia z wyszukiwarki i z odpowiedzi AI na pytania o powracalność. Brak decyzji = strona działa tylko z nawigacji.
+- **(R4p4-B) Link z `/tool` do `/tools` i wspólna nawigacja na `/tool`.** `/tool` jest dziś jedyną trasą bez drogi do pozostałych narzędzi, ale jego źródło (`tool-index.html`) prowadzi osobne zadanie cykliczne, którego agencja nie dotyka. Rekomendacja: zgoda na jeden link „All tools” w źródle `tool-index.html` (przez to zadanie albo przez agencję jednorazowo). Brak decyzji = ślepy zaułek zostaje.
+
+
 - **(R4-P3) Czy podlinkować realizację GENACTIV z `/nawyko` (i później z `/`)?** Dziś `/work/genactiv` ma noindex i nie prowadzi do niej żaden link — widać ją tylko z adresu. Link z publicznej strony to w praktyce publiczna referencja prawdziwej marki. Rekomendacja: dodać „Work” w nagłówku `/nawyko` dopiero po pisemnej zgodzie GENACTIV (ten sam warunek co zdjęcie noindex); do tego czasu bez linku.
 - **(R4-P3) Formularz na `/work/genactiv` mówi w pierwszej osobie („I reply personally”, zgoda „Occasional email from me…”)** — to wspólny formularz z `/nawyko`, brzmienie zgód jest Twoim tekstem prawnym. Rekomendacja: zostawić (odpowiadasz osobiście, to prawda i atut); zmienić tylko, jeśli realizacja ma mówić głosem „studia”.
 
@@ -672,6 +687,9 @@ R3-5. Recenzja: druga runda testu 10 s na całej drodze po R3-1.
 5. Z audytu (d): `/blog` bez `try/catch`, `metadataBase`, zbędne `preconnect`.
 
 ## Lekcje
+
+- **R11 (test, runda 4 przebieg 4): obietnica prywatności na stronie zbiorczej musi być prawdziwa dla KAŻDEGO narzędzia.** Budujący napisał „Nothing you type is sent”, sprawdziwszy cztery z pięciu narzędzi; recenzent znalazł `fetch('/api/label')` w `/tool`. Nie zauważyliśmy, bo bramka tekstów ocenia jasność, nie prawdziwość wobec kodu. Zmiana: w zleceniu recenzenta stały punkt „każde zdanie o danych/prywatności → grep wywołań sieci w kodzie trasy”; przy powtórce — automat w `copy-voice` (zdania „never sent/nothing is sent” tylko na trasach bez `fetch`).
+- Środowisko: budujący startujący równolegle z `apt-get install webkit2gtk-driver` nie miał jeszcze sterownika WebKit — instalację kończyć PRZED startem budujących, a bramkę WebKit dla ich tras uruchamia Lead po scaleniu (tak zrobiono: PASS).
 
 - **R10 (test, runda 4 przebieg 3): słowa zdradzające status projektu (launch, pilot, store-ready, beta, coming soon) blokuje automat `copy-voice`, z samotestem.**
   Czytelnik-kupujący drugi przebieg z rzędu złapał zdanie o statusie („store-ready build” w p2, „first read 90 days after launch” w p3), bo budujący piszą o metodzie i przy okazji o harmonogramie. Lekcja powtórzona → test: pierwsze uruchomienie znalazło 2 stare „before launch” (FAQ `/nawyko`, akt 5 realizacji), poprawione na „before the programme starts”.

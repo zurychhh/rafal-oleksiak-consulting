@@ -11,4 +11,4 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 5. ~~Dostępność — WCAG 2.2: 2.4.11 Focus Not Obscured~~ (zrobione 23.11 przebieg 4) i ~~2.5.7 Dragging Movements~~ (zrobione 23.11 R4 przebieg 1: alternatywa jednym wskaźnikiem)
 6. Wydajność — ~~CLS: próg 0,1, okna sesji, wejście z kotwicą (web.dev, 24.11 R4 p3)~~; zostaje: INP dla scen sterowanych przewijaniem (long tasks w `scroll` + rAF)
 7. Strony produktowe — jak Apple dzieli długie sceny na rozdziały i kiedy pokazuje CTA w trakcie (analiza 2–3 stron)
-8. Scroll-driven animations w CSS — wsparcie przeglądarek na dziś (MDN, caniuse) i czy przenieść część sceny z JS do CSS
+8. ~~Scroll-driven animations w CSS — wsparcie przeglądarek~~ (24.11 R4 p4: Safari 26.0 obsługuje `animation-timeline`, webkit.org/blog/17333; iOS 18 nie → zawsze `@supports` + statyczny stan końcowy; `webkit-check.py` wypisuje wsparcie). Zostaje: czy przenieść część sceny z JS do CSS
