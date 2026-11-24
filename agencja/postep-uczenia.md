@@ -58,3 +58,5 @@ Jedna linia na przebieg: data · czego się nauczyliśmy (źródło) · co konkr
 - 24.11 22:30 · Retro: zgubione zdania złapał recenzent, nie bramka → inwentarz zdań; dwie sekcje w tym samym tle po raz drugi → test (R29)
 - 24.11 23:25 (runda 6', przebieg 2) · NN/g „First 2 Words: A Signal for the Scanning Eye” (https://www.nngroup.com/articles/first-2-words-a-signal-for-scanning/) · Zmiana: nagłówek integracji „Runs on Shopify; …” → „Any store engine: pick yours, from Shopify to a custom build.” (pierwsze dwa słowa = to, czego szuka kupujący).
 - 24.11 23:25 · Retro: jednorazowy FAIL clsscroll-1440 tylko na scalonym buildzie → reguła R30.3 (3 przebiegi CLS przy przewijaniu); konflikt importu dwóch budujących → reguła R30.2.
+- 25.11 00:15 (runda 6', przebieg 3) · Baymard „Avoid Horizontal Tabs” (https://baymard.com/research-articles/avoid-horizontal-tabs) · Zmiana: rząd zakładek kokpitu na 390 pokazuje połowę następnej + przycisk „›”; propozycja paneli jeden pod drugim → decyzja R6'q3-B.
+- 25.11 00:15 · Retro: niepoprawny skrót CSS złapał recenzent, nie bramka → R31, test walidacji CSS w kolejce R6'-N3 pkt 0.

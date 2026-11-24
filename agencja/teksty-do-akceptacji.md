@@ -438,3 +438,6 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada
 - PRZENIESIONE do hero bez zmian: „Type your brand name, pick a colour and a style. Every phone follows.”
 - ZMIENIONE nagłówek integracji: „Runs on Shopify; your other tools connect per brand.” → „Any store engine: pick yours, from Shopify to a custom build.” (decyzja R6'q2-B)
 - USUNIĘTE z aktem 7 (zgoda Rafała 19:15 w `agencja/inwentarz/zgody.json`): „Your brand. Your colours. Your app.”, „The name stays in this page. Nothing is sent.”, „Your branding”, „Under your brand”, „White label”, „Brand name”.
+### R6' p3 (25.11 00:15) — `/nawyko`
+- PRZENIESIONE ze sceny do kokpitu bez zmian: „See the day each pack really runs out.”, „Each dot: a pack’s real last day, not the label’s.” i reszta dawnego aktu 6; etykieta zakładki „Pack rhythm” (dawny przycisk aktu).
+- NOWE (tylko dla czytników ekranu): „Show more brand views” (przycisk „›” na telefonie) — czytelnik-kupujący w następnym przebiegu.
