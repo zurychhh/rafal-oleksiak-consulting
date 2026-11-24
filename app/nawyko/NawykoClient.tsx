@@ -886,15 +886,16 @@ function SkinPick() {
 }
 
 /* ── scena przypieta do przewijania ──────────────────────────────────────── */
-/* Spec 36 A: akt 7 „Your branding” usuniety — wybor marki i stylu jest tylko w hero. */
-const ACTS = 6
+/* Spec 36 A: akt 7 „Your branding” usuniety — wybor marki i stylu jest tylko w hero.
+   R6' q3 B: akt 6 „Pack rhythm” (widok marki „See the day each pack really runs out.”) przeniesiony do kokpitu jako szosta zakladka. */
+const ACTS = 5
 /* Akt zdrapki trwa dluzej niz inne: to najwazniejszy moment strony. */
-const ACT_W = [1, 1.9, 1, 1, 1, 1.5]
+const ACT_W = [1, 1.9, 1, 1, 1]
 const ACT_AT = ACT_W.map((_, i) => ACT_W.slice(0, i).reduce((a, b) => a + b, 0))
 const ACT_TOT = ACT_W.reduce((a, b) => a + b, 0)
 /* Rozdzialy: jak to dziala (klient) → dla marki. Telefon zmienia strone miedzy rozdzialami. */
-const CH_OF = [0, 0, 0, 0, 0, 1]
-const ACT_NAMES = ['Purchase', 'Daily card', 'Streak', 'Reward', 'Reward calendar', 'Pack rhythm'] as const
+const CH_OF = [0, 0, 0, 0, 0]
+const ACT_NAMES = ['Purchase', 'Daily card', 'Streak', 'Reward', 'Reward calendar'] as const
 
 function Scene({ skin }: { skin: Skin }) {
   const { brand, own } = useBrand()
@@ -972,7 +973,7 @@ function Scene({ skin }: { skin: Skin }) {
      telefon przesuwal sie o ~0,6 drogi na jeden ruch; teraz o ~0,25. */
   const SW_LEN = 0.45
   const smooth = (v: number) => v * v * (3 - 2 * v)
-  const sw = !scroll ? 0 : smooth(clamp((x - ACT_AT[5]) / SW_LEN))
+  const sw = !scroll || ACTS < 6 ? 0 : smooth(clamp((x - ACT_AT[ACTS - 1] - ACT_W[ACTS - 1]) / SW_LEN))
   const local = x - ACT_AT[step]
   const inK = ease(step === 4 ? clamp(local / 0.12) : clamp((local - SW_LEN + 0.06) / 0.2))
   const [swung, setSwung] = useState(false)
@@ -1113,7 +1114,6 @@ function Scene({ skin }: { skin: Skin }) {
             /* Regula R2 (Chrome „Scrollytelling”): tekst aktu wchodzi wedlug postepu przewijania, nie zegara. */
             <div className="nk-actin" style={{ opacity: inK, transform: `translateY(${(1 - inK) * 18}px)` }}>
               {step === 4 ? <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" /> : null}
-              {step === 5 ? <BrandPanel t={t} id="nk-brand" /> : null}
             </div>
           ) : null}
           <DemoNote />
@@ -1162,12 +1162,6 @@ function Scene({ skin }: { skin: Skin }) {
             <RewardsPanel day={day} onDay={pickDay} id="nk-rewards" />
             <div className="nk-phonecol">
               <Phone step={4} t={1} theme={skin} scratched day={day} brand={brand} />
-            </div>
-          </section>
-          <section className="nk-still" aria-labelledby="nk-brand">
-            <BrandPanel t={1} id="nk-brand" />
-            <div className="nk-phonecol">
-              <Phone step={5} t={1} theme={skin} scratched brand={brand} />
             </div>
           </section>
         </>
@@ -1916,26 +1910,29 @@ const CK_TABS = [
   { id: 'privacy', label: 'Privacy' },
   { id: 'proof', label: 'Proof of results' },
   { id: 'never', label: 'What it never does' },
+  { id: 'rhythm', label: 'Pack rhythm' },
 ] as const
 
 /* aktywna zakladka widoczna w przewijanym rzedzie (bez przewijania strony) */
 function revealTab(row: HTMLElement | null, i: number) {
   const tab = row?.children[i] as HTMLElement | undefined
   if (!row || !tab) return
-  const l = tab.offsetLeft - 16
-  const r = tab.offsetLeft + tab.offsetWidth + 16 - row.clientWidth
+  const l = tab.offsetLeft - 44 // R6' q3 B: poza maska wygaszenia krawedzi
+  const r = tab.offsetLeft + tab.offsetWidth + 84 - row.clientWidth
   if (l < row.scrollLeft) row.scrollLeft = l
   else if (r > row.scrollLeft) row.scrollLeft = r
 }
 const rowAtEnd = (row: HTMLElement | null) => !row || row.scrollLeft + row.clientWidth >= row.scrollWidth - 2
+const rowAtStart = (row: HTMLElement | null) => !row || row.scrollLeft <= 8
 
-/* spec 36 B: na desktopie (ten sam warunek co w cockpit-scroll.css) kokpit jest przypieta scena z torem 5 x 45svh,
+/* spec 36 B: na desktopie (ten sam warunek co w cockpit-scroll.css) kokpit jest przypieta scena z torem 6 x 45svh (R6' q3 B: szosta zakladka „Pack rhythm”),
    zakladka = funkcja przewiniecia, klik/klawiatura = plynny skok do odcinka. Bez JS: wszystkie panele jeden pod drugim. */
 const CK_PIN_Q = '(min-width:900px) and (min-height:600px) and (prefers-reduced-motion: no-preference)'
 
 function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
   const [cur, setCur] = useState(0)
   const [end, setEnd] = useState(false)
+  const [start, setStart] = useState(true)
   // przed hydratacja (i bez JS) zadnego `hidden` — wszystkie panele widoczne; ten sam HTML na serwerze i w 1. renderze
   const [ready, setReady] = useState(false)
   const [pinned, setPinned] = useState(false)
@@ -1999,7 +1996,17 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
     e.preventDefault()
     pick(i, true)
   }
-  const onRow = () => setEnd(rowAtEnd(list.current))
+  const onRow = () => {
+    setEnd(rowAtEnd(list.current))
+    setStart(rowAtStart(list.current))
+  }
+  /* R6' q3 B: widoczna podpowiedz przewijania rzedu zakladek (telefon) — przycisk ze strzalka przesuwa rzad o ~2/3 szerokosci */
+  const more = () => {
+    const row = list.current
+    if (!row) return
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    row.scrollBy({ left: Math.round(row.clientWidth * 0.66), behavior: still ? 'auto' : 'smooth' })
+  }
 
   /* niskie okno (np. 900x600): panel, ktory mimo ciasnego CSS nie miesci sie w scenie, dostaje `zoom` < 1 przed malowaniem —
      nic nie wystaje poza scene i nie ma przesuniecia ukladu (pomiar w useLayoutEffect, tylko przy zmianie zakladki/okna) */
@@ -2056,6 +2063,7 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
     }
     const fit = () => {
       setEnd(rowAtEnd(row))
+      setStart(rowAtStart(row))
       setVw(window.innerWidth * 10000 + window.innerHeight)
       on()
     }
@@ -2131,8 +2139,8 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
             Now the same app from your side: what you set, what you see.
           </h2>
         </div>
-        <div className="nk-ck-rowwrap" data-end={end ? '' : undefined}>
-          <div className="nk-ck-tabs" role="tablist" aria-label={`${brand} brand views`} ref={list} onKeyDown={onKey} onScroll={onRow}>
+        <div className="nk-ck-rowwrap" data-end={end ? '' : undefined} data-start={start ? '' : undefined}>
+          <div className="nk-ck-tabs" id="nk-ck-tabs" role="tablist" aria-label={`${brand} brand views`} ref={list} onKeyDown={onKey} onScroll={onRow}>
             {CK_TABS.map((t, i) => (
               <button
                 key={t.id}
@@ -2152,6 +2160,9 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
               </button>
             ))}
           </div>
+          <button type="button" className="nk-ck-more" aria-label="Show more brand views" aria-controls="nk-ck-tabs" hidden={!ready || end} onClick={more}>
+            <span aria-hidden="true">›</span>
+          </button>
         </div>
         <div className="nk-ck-prog" ref={prog} aria-hidden="true">
           {CK_TABS.map((t, i) => (
@@ -2164,7 +2175,20 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
           <MoreScenes brand={brand} panel={panel} />
           <ProofPanel brand={brand} panel={panel} />
           <NeverScene skin={skin} brand={brand} panel={panel} />
+          <RhythmScene skin={skin} brand={brand} panel={panel} />
         </div>
+      </div>
+    </section>
+  )
+}
+
+/* R6' q3 B: dawny akt 6 sceny („Pack rhythm”) jako szosta zakladka kokpitu — tresc 1:1 (BrandPanel + telefon marki). */
+function RhythmScene({ skin, brand, panel }: { skin: Skin; brand: string; panel: PanelOf }) {
+  return (
+    <section className="nk-still nk-rhythm" id="rhythm" {...panel('rhythm')}>
+      <BrandPanel t={1} id="nk-brand" />
+      <div className="nk-phonecol">
+        <Phone step={5} t={1} theme={skin} scratched brand={brand} />
       </div>
     </section>
   )
