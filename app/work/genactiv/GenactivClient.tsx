@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { ActBar } from './ActBar'
 import { Enquiry } from '../../nawyko/Enquiry'
 
 /* /work/genactiv — przebieg 1: akty 0–4, przebieg 2: akty 5–8 (cashback, poziomy, zgoda, jak to powstalo), przebieg 3: akty 9–10 (wyniki zablokowane, final z kolorem marki i formularzem). Jeden telefon jako nic strony.
@@ -792,6 +793,40 @@ export function GenactivStory() {
     const y = window.scrollY + r.top + (10.5 / ACTS) * span
     if (Math.abs(window.scrollY - y) > span / ACTS / 3) window.scrollTo({ top: y })
   }
+  // Spec 21 B4: skok z paska aktow. Scena: srodek pierwszego aktu grupy (jak toBrand), fokus na tekscie aktu po
+  // przerenderowaniu (wczesniej jest inert). Uklad statyczny: przewiniecie do section.ga-act-i i fokus na niej.
+  const pendingFocus = useRef(-1)
+  const jumpAct = useCallback(
+    (a: number) => {
+      const el = track.current
+      if (mode === 'scroll' && el) {
+        const r = el.getBoundingClientRect()
+        const span = r.height - window.innerHeight
+        pendingFocus.current = a
+        window.scrollTo({ top: window.scrollY + r.top + ((a + 0.4) / ACTS) * span })
+        // ten sam akt (brak zmiany curAct) — efekt nizej sie nie odpali
+        setTimeout(() => {
+          if (pendingFocus.current !== a) return
+          pendingFocus.current = -1
+          document.querySelector<HTMLElement>('.ga-copy-in[aria-labelledby="ga-t' + a + '"]')?.focus({ preventScroll: true })
+        }, 150)
+        return
+      }
+      const s = document.querySelector<HTMLElement>('.ga-act-' + a)
+      if (!s) return
+      s.scrollIntoView({ block: 'start' })
+      s.focus({ preventScroll: true })
+    },
+    [mode],
+  )
+  const curAct = mode === 'scroll' ? Math.min(ACTS - 1, Math.floor(f)) : null
+  useEffect(() => {
+    if (curAct === null || curAct !== pendingFocus.current) return
+    pendingFocus.current = -1
+    document.querySelector<HTMLElement>('.ga-copy-in[aria-labelledby="ga-t' + curAct + '"]')?.focus({ preventScroll: true })
+  }, [curAct])
+  const bar = <ActBar act={curAct} onJump={jumpAct} />
+
   // Akt 10: etykieta „Your brand” na kolorze odwiedzajacego, tekst bialy albo czarny (inkOn, min. ok. 4,58:1) — jak na /nawyko.
   const kicker = (i: number, k: string) => (
     <p className="ga-kicker">
@@ -815,7 +850,7 @@ export function GenactivStory() {
       <>
       <div className="ga-still" key="still">
         {COPY.map((c, i) => (
-          <section key={i} className={'ga-act ga-act-' + i} aria-labelledby={'ga-t' + i}>
+          <section key={i} className={'ga-act ga-act-' + i} aria-labelledby={'ga-t' + i} tabIndex={-1}>
             <div className="ga-copy-in">
               {kicker(i, c.kicker)}
               {i === 0 ? (
@@ -862,6 +897,7 @@ export function GenactivStory() {
           [data-ga-pin] (.ga-still przyciety do 1320svh) #enquiry ma przed i po hydratacji te sama pozycje — wejscie
           z kotwica nie skacze (bylo 0,17 na 1440; pomiar pod navigator.webdriver widzial tylko uklad statyczny = 0). */}
       <Final />
+      {bar}
       </>
     )
   }
@@ -891,6 +927,7 @@ export function GenactivStory() {
                 key={i}
                 className="ga-copy-in"
                 aria-labelledby={'ga-t' + i}
+                tabIndex={-1}
                 inert={!on && i !== 3 && i !== 10}
                 style={{
                   opacity: on ? 1 : 0,
@@ -956,6 +993,7 @@ export function GenactivStory() {
       </div>
     </div>
     <Final />
+    {bar}
     </>
   )
 }
