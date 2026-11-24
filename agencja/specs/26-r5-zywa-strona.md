@@ -17,6 +17,9 @@ Rafał ocenił `/nawyko` na komputerze: „jest już naprawdę nieźle”, ale z
 5. **Cała strona zbyt NUDNA kolorystycznie i układem** — ożywić. `/work/genactiv`: wstępnie bardzo dobra, ale trochę nieczytelna,
    scroll za szybki (treść ma się pojawiać spokojniej), czytelniejsza historia, bardziej urozmaicony, mniej monotonny układ.
 
+6. **(12:54) Hero `/nawyko` musi mieć ekran aplikacji** — nie sam tekst i matematyka. Strona sprzedaje dziś tylko racjonalnie (RTB,
+   liczby); ma sprzedawać też emocjonalnie i wizualnie, inteligentnie przemieszane z racjonalnym.
+
 ## Kierunek (doradca — synteza, nie lista łatek)
 Dlaczego jest nudno: (a) jedna powierzchnia — beż + czerń + jedna czerwień — wygląda jak dokument, nie produkt; (b) każda sekcja ma ten
 sam szkielet: etykieta-chip, nagłówek, akapit, telefon obok; (c) ekrany są jasne, statyczne i prostsze niż prawdziwa aplikacja, więc
@@ -39,6 +42,12 @@ a od tej chwili cała strona jest jego aplikacją.
   postępu „0 of 7 days”, karta „Paths” z dwoma przyciskami, rząd sześciokątnych pieczątek z celem „free pack”; dolna nawigacja
   Today · Rewards · Shop · Account. Teksty po angielsku, dane przykładowe, nigdy GENACTIV.
   Każdy ekran od „Cashback” w dół reaguje: przeciągnij, dotknij, przewiń — i widać skutek w aplikacji.
+- **Emocja + dowód na zmianę (doradca, do uwagi 6):** decydent marki ma najpierw POCZUĆ, a potem dostać dowód. Hero: żywy telefon
+  z aplikacją w marce odwiedzającego w chwili, która cieszy klienta (zdrapywana karta dnia, seria rośnie), najlepiej na ekranie głównym
+  telefonu obok zwykłych aplikacji — „Twoja marka jest pierwszą rzeczą, której klient dotyka rano” jako myśl przewodnia (brzmienie przez
+  bramkę tekstów); jedno racjonalne zdanie i CTA pod spodem. Dalej każda scena w rytmie: moment klienta (radość, nawyk, nagroda,
+  duma z serii) → liczba dla marki (powrót, odstęp między zakupami, cashback). Nigdy dwie sekcje z samych liczb pod rząd; liczby
+  zawsze przy ekranie, który je wywołuje. Emocja bez kiczu: prawdziwe gesty i stany aplikacji, nie ilustracje ani hasła.
 - **Rytm układu:** żadne dwie kolejne sekcje w tym samym układzie; najwyżej dwie sekcje „tekst + telefon obok” na stronę. Do użycia:
   pełnoekranowe przejęcie w kolorze marki, przypięty telefon ze zmieniającymi się podpisami, siatka żywych mini-ekranów (bento),
   poziomy pas dni, wielkie zdanie typograficzne, licznik.
@@ -54,7 +63,8 @@ a od tej chwili cała strona jest jego aplikacją.
   Granice specu realizacji bez zmian.
 
 ## Kolejność (przebiegi)
-- **p1:** silnik marki + usunięcie wycieków nazwy demo + usunięcie dubla na końcu + test `brand-propagation` zielony.
+- **p1:** hero z żywym ekranem aplikacji (uwaga 6) + silnik marki + usunięcie wycieków nazwy demo + usunięcie dubla na końcu +
+  test `brand-propagation` zielony.
 - **p2:** wielki finał `/nawyko` (zdrapka i odsłanianie) + przebudowa od „Cashback” w dół na prawdziwe, interaktywne ekrany (część 1).
 - **p3:** reszta sekcji w dół, rytm układu, paleta na `/nawyko`, `/tools` i w nawigacji.
 - **p4:** `/work/genactiv` tempo i układ. Podgląd dla Rafała po każdym przebiegu, który zmienia coś widocznego.
@@ -62,7 +72,8 @@ a od tej chwili cała strona jest jego aplikacją.
 ## Bramki nowe (stałe, dopisane do `scripts/gates.sh`)
 - `brand-propagation`: Chromium i WebKit — wpisz „Acme”, wybierz kolor → w widocznym tekście 0 × nazwa demo, „Acme” w każdym
   telefonie i w finale, akcent każdego telefonu = wybrany kolor; po przeładowaniu i na `/work/genactiv` ten sam stan.
-- `monotonia` (niezależny krytyk-subagent, sama lista sekcji ze zrzutami 1440 i 390): FAIL, gdy dwie kolejne sekcje mają ten sam
+- `monotonia` (niezależny krytyk-subagent; także FAIL, gdy pierwszy ekran nie pokazuje aplikacji albo dwie sekcje z samych liczb
+  stoją pod rząd; sama lista sekcji ze zrzutami 1440 i 390): FAIL, gdy dwie kolejne sekcje mają ten sam
   układ, gdy sekcja poniżej pierwszego ekranu nie reaguje na nic, gdy treść się powtarza, gdy finał nie jest najmocniejszym momentem,
   gdy strona ma mniej niż trzy tony powierzchni. Werdykt „nudne / żywe” z uzasadnieniem przy każdej sekcji.
 - Dotychczasowe bramki (WebKit 390/1440, CLS, wydajność, dostępność, `prefers-reduced-motion`, teksty) bez zmian.
