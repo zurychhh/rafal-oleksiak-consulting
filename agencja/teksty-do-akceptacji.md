@@ -277,3 +277,9 @@ Zastępuje trzy zdania „No random rewards. / No health claims. / No hidden rul
 | zdanie zamykające | Each tick stores only the date. Health data never reaches ads, analytics, push or email. | zmieniony (po czytelniku: mocniejszy fakt dla działu prawnego) |
 
 _Czytelnik-kupujący przeszedł (24.11 03:05): 5 tekstów przepisanych przed commitem; etykieta „For you” zostaje dla spójności z innymi scenami panelu marki._
+
+## R4 przebieg 6 — wjazd do Nawyko z `/` (24.11.2026, spec 16 A1)
+Link dokładany przez `ship-design` w nagłówku `/` (`data-ship-added="nawyko-link"`), obok „Check your own gap — free”.
+| Miejsce | Tekst | Status |
+|---|---|---|
+| nagłówek `/`, link → `/nawyko` | The Nawyko app | nowy (nazwa produktu; bez „my”, bez słów o starcie/pilotażu; copy-voice OK, content-rules OK) |

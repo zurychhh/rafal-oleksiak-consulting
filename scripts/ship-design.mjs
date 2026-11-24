@@ -36,6 +36,7 @@
  *   3. „Rafal" → „Rafał" w tresci (adresy e-mail i URL-e nietkniete)
  *   4. stopka: e-mail i LinkedIn dokladane minimalnie, jesli ich brak
  *   5. link do /tool dokladany minimalnie do stopki, jesli go brak
+ *   6. link do /nawyko w naglowku (data-ship-added="nawyko-link"), razem z linkiem do /tool
  * Test tresci (scripts/content-rules.test.mjs) idzie PRZED zapisem: czerwony →
  * nic nie jest zapisywane, ani pliki generowane, ani kopia zrodla.
  *
@@ -224,14 +225,37 @@ dcTemplate = dcTemplate.replace(footerM[0], footer)
 // ~4 na telefonie). Tekst bierzemy z istniejacego linku do /tool — zero nowego copy.
 // data-ship-added: ship-compare zdejmuje takie elementy przed porownaniem ze zrodlem.
 // Kolor: atrament, NIE bursztyn — bursztyn na tej stronie znaczy wylacznie luke 45→69.
+// Rozmiar i odstep liter linkow dokladanych w naglowku: 12px/.18em od ~445 px w gore (bez zmian wzgledem
+// v66), ponizej plynnie mniejsze (min 10px/.06em), zeby na 390 oba linki (/nawyko i /tool) miescily sie
+// w jednym wierszu — bez ukrywania czegokolwiek (spec 16 A1).
+const HEADER_LINK_SIZE = 'font-size:clamp(10px,2.7vw,12px);letter-spacing:clamp(.06em,1.2vw - .3em,.18em);'
 const headerM = dcTemplate.match(/<header\b[^>]*>[\s\S]*?<\/header>/)
 if (headerM && !/href="\/tool"/.test(headerM[0])) {
   const label = ((dcTemplate.match(/<a\b[^>]*href="\/tool"[^>]*>([^<]{3,60})<\/a>/) || [])[1] || 'Count your own interval').trim()
-  const link = `<a href="/tool" data-ship-added="tool-link" style="flex:none;white-space:nowrap;font-size:12px;font-weight:700;` +
-    `letter-spacing:.18em;text-transform:uppercase;color:#14161A;text-decoration:underline;text-underline-offset:4px;` +
+  const link = `<a href="/tool" data-ship-added="tool-link" style="flex:none;white-space:nowrap;${HEADER_LINK_SIZE}font-weight:700;` +
+    `text-transform:uppercase;color:#14161A;text-decoration:underline;text-underline-offset:4px;` +
     `padding:14px 0;margin:-14px 0">${label}</a>`
   dcTemplate = dcTemplate.replace(headerM[0], headerM[0].replace(/<\/header>$/, link + '</header>'))
   bump('link do /tool w naglowku')
+}
+
+// Link do /nawyko w naglowku, jesli go tam nie ma (spec 16 A1). Nawyko jest glownym
+// wyroznikiem oferty, a `/` nie mial do niego zadnego wjazdu. Ten sam wzorzec i ten sam
+// styl co link do /tool (atrament, wersaliki, bez nowego koloru). Oba dokladane linki
+// stoja razem w jednym kontenerze (tez data-ship-added): na desktopie po prawej, na
+// telefonie w jednym wierszu pod podpisem zamiast dwoch wierszy jeden pod drugim.
+const headerN = dcTemplate.match(/<header\b[^>]*>[\s\S]*?<\/header>/)
+if (headerN && !/href="\/nawyko"/.test(headerN[0])) {
+  const nk = `<a href="/nawyko" data-ship-added="nawyko-link" style="flex:none;white-space:nowrap;${HEADER_LINK_SIZE}font-weight:700;` +
+    `text-transform:uppercase;color:#14161A;text-decoration:underline;text-underline-offset:4px;` +
+    `padding:14px 0;margin:-14px 0">The Nawyko app</a>`
+  let h = headerN[0]
+  const toolA = h.match(/<a\b[^>]*data-ship-added="tool-link"[^>]*>[^<]*<\/a>/)
+  h = toolA
+    ? h.replace(toolA[0], `<span data-ship-added="header-links" style="flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px">${nk}${toolA[0]}</span>`)
+    : h.replace(/<\/header>$/, nk + '</header>')
+  dcTemplate = dcTemplate.replace(headerN[0], h)
+  bump('link do /nawyko w naglowku')
 }
 
 // Nic poza naszym originem nie moze byc ladowane przez szablon.

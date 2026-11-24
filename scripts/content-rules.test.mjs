@@ -18,6 +18,8 @@
      7. „Rafał", nie „Rafal"
      8. widoczny link do /tool
      9. zadnej odznaki Claude Design i zadnych zasobow z unpkg / Google Fonts
+    11. (tylko /) widoczny link do /nawyko — dokladany przez ship-design
+        w naglowku (data-ship-added="nawyko-link", spec 16 A1)
 
    Profil /cv (--route cv) — zmieniony 11.10.2026 decyzja Rafala. CV jest
    zyciorysem, nie oferta: procenty, punkty procentowe, lata, liczebnosci zespolow,
@@ -214,6 +216,8 @@ export function checkSegments(segments, { hrefs = [], footer = '', raw = '' } = 
   for (const s of segments) if (/\brafal\b(?!@)/i.test(s)) fail.push(['7 Rafał', `„Rafal" bez ł: „${s.slice(0, 80)}"`])
   // 8
   if (!hrefs.includes('/tool')) fail.push(['8 /tool', 'brak linku do /tool'])
+  // 11 (tylko strona glowna) — wjazd do Nawyko z jedynej zaindeksowanej strony
+  if (profile === 'home' && !hrefs.includes('/nawyko')) fail.push(['11 /nawyko', 'brak linku do /nawyko (ship-design dokłada go w nagłówku)'])
   // 9
   if (/__claude_design_branding|Made with Claude Design/.test(raw)) fail.push(['9 zrodlo', 'odznaka Claude Design w tresci'])
   if (/unpkg\.com\/|fonts\.googleapis\.com|fonts\.gstatic\.com/.test(raw.replace(/"https:\/\/unpkg\.com[^"]*":/g, ''))) {
@@ -304,9 +308,10 @@ async function checkRendered(url, profile = 'home') {
       })
       const footer = [...root.querySelectorAll('footer')].map((f) => f.innerHTML).join('\n')
       const tool = [...root.querySelectorAll('a[href="/tool"]')].some((a) => a.offsetParent !== null)
-      return { segs, footer, tool, hrefs: [...root.querySelectorAll('a[href]')].map((a) => a.getAttribute('href')), raw: document.body.innerText }
+      const nawyko = [...root.querySelectorAll('a[href="/nawyko"]')].some((a) => a.offsetParent !== null)
+      return { segs, footer, tool, nawyko, hrefs: [...root.querySelectorAll('a[href]')].map((a) => a.getAttribute('href')), raw: document.body.innerText }
     })
-    const f = checkSegments(got.segs, { hrefs: got.tool ? got.hrefs : got.hrefs.filter((h) => h !== '/tool'), footer: got.footer.replace(/&amp;/g, '&'), raw: got.raw }, profile)
+    const f = checkSegments(got.segs, { hrefs: got.hrefs.filter((h) => (h !== '/tool' || got.tool) && (h !== '/nawyko' || got.nawyko)), footer: got.footer.replace(/&amp;/g, '&'), raw: got.raw }, profile)
     for (const x of f) fail.push([x[0], `${vp.width}px: ${x[1]}`])
     await page.close()
   }
@@ -333,7 +338,7 @@ async function main() {
   // 0. Samotest: kazda zasada musi strzelic na znanym naruszeniu. Bez tego
   //    zepsuty regex dawalby wieczny PASS.
   console.log('0. samotest zasad')
-  const good = { hrefs: ['/tool'], footer: `${EMAIL} ${LINKEDIN}`, raw: '' }
+  const good = { hrefs: ['/tool', '/nawyko'], footer: `${EMAIL} ${LINKEDIN}`, raw: '' }
   const base = ['EUR 2,500 net per month.', 'Two clients at a time.']
   const probes = [
     ['1 dwoch klientow', ['One client at a time.']],
@@ -353,6 +358,8 @@ async function main() {
   }
   if (!checkSegments(base, { ...good, footer: '' }).some(([r]) => r === '6 stopka')) { selfFail++; console.log('  FAIL  [6 stopka] nie wykryla braku') }
   if (!checkSegments(base, { ...good, hrefs: [] }).some(([r]) => r === '8 /tool')) { selfFail++; console.log('  FAIL  [8 /tool] nie wykryla braku') }
+  if (!checkSegments(base, { ...good, hrefs: ['/tool'] }).some(([r]) => r === '11 /nawyko')) { selfFail++; console.log('  FAIL  [11 /nawyko] nie wykryla braku') }
+  if (checkSegments(base, { ...good, hrefs: ['/tool'] }, 'cv').some(([r]) => r === '11 /nawyko')) { selfFail++; console.log('  FAIL  [11 /nawyko] strzela poza strona glowna') }
   if (checkSegments(base, good).length) { selfFail++; console.log('  FAIL  czysta tresc zglasza naruszenia') }
   // profil cv: wlasne sondy i czysta tresc z latami
   const cvBase = [
