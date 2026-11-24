@@ -1,9 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Enquiry } from './Enquiry'
 import { FAQ } from './content'
 import { DEMO_BRAND, contrast, inkOn, mix, monogram, onColour, useBrand } from '../lib/brand-engine'
+import './cockpit-scroll.css'
 
 /* Enquiry mieszka w ./Enquiry (przebieg 4): /work/genactiv importuje sam formularz, bez calej sceny. */
 export { Enquiry }
@@ -1928,11 +1929,24 @@ function revealTab(row: HTMLElement | null, i: number) {
 }
 const rowAtEnd = (row: HTMLElement | null) => !row || row.scrollLeft + row.clientWidth >= row.scrollWidth - 2
 
+/* spec 36 B: na desktopie (ten sam warunek co w cockpit-scroll.css) kokpit jest przypieta scena z torem 5 x 45svh,
+   zakladka = funkcja przewiniecia, klik/klawiatura = plynny skok do odcinka. Bez JS: wszystkie panele jeden pod drugim. */
+const CK_PIN_Q = '(min-width:900px) and (min-height:600px) and (prefers-reduced-motion: no-preference)'
+
 function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
   const [cur, setCur] = useState(0)
   const [end, setEnd] = useState(false)
+  // przed hydratacja (i bez JS) zadnego `hidden` — wszystkie panele widoczne; ten sam HTML na serwerze i w 1. renderze
+  const [ready, setReady] = useState(false)
+  const [pinned, setPinned] = useState(false)
   const list = useRef<HTMLDivElement>(null)
   const sec = useRef<HTMLElement>(null)
+  const pin = useRef<HTMLDivElement>(null)
+  const prog = useRef<HTMLDivElement>(null)
+  const at = useRef(0) // lustro `cur` dla nasluchu przewijania
+  const isPin = useRef(false)
+  const lock = useRef<{ i: number; until: number } | null>(null) // klik → plynny skok bez migania posrednich zakladek
+  const goHash = useRef<(() => void) | null>(null)
 
   const { colour } = useBrand()
   const vars = {
@@ -1941,16 +1955,41 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
     ['--hi' as string]: inkOn(colour, '#0E0F12'),
   }
 
-  const pick = (i: number, focus = false) => {
-    setCur(i)
-    revealTab(list.current, i)
-    // recenzja 43 W3: po recznym wyborze zakladki stary #hash w adresie blokowalby ponowny skok z menu (brak hashchange)
+  /* geometria toru: odcinek i = [top + i*seg, top + (i+1)*seg) */
+  const track = () => {
+    const s = sec.current
+    const p = pin.current
+    if (!s || !p) return null
+    const r = s.getBoundingClientRect()
+    const run = r.height - p.offsetHeight
+    return run > 40 ? { top: r.top + window.scrollY, r, seg: run / CK_TABS.length } : null
+  }
+  const clearHash = (i: number) => {
+    // recenzja 43 W3: stary #hash w adresie blokowalby ponowny skok z menu (brak hashchange)
     try {
       if (location.hash && location.hash !== '#' + CK_TABS[i].id) history.replaceState(history.state, '', location.pathname + location.search)
     } catch {
       /* bez history — bez zmian */
     }
-    if (focus) (list.current?.children[i] as HTMLElement | undefined)?.focus()
+  }
+  const show = (i: number) => {
+    at.current = i
+    setCur(i)
+    revealTab(list.current, i)
+  }
+  /* w przypietej scenie: przewiniecie okna na poczatek odcinka zakladki (+1 px) */
+  const scrollToSeg = (i: number, smooth: boolean) => {
+    const t = track()
+    if (!t) return
+    lock.current = smooth ? { i, until: performance.now() + 1600 } : null
+    window.scrollTo({ top: Math.round(t.top + i * t.seg) + 1, behavior: smooth ? 'smooth' : 'auto' })
+  }
+
+  const pick = (i: number, focus = false) => {
+    show(i)
+    clearHash(i)
+    if (isPin.current) scrollToSeg(i, true)
+    if (focus) (list.current?.children[i] as HTMLElement | undefined)?.focus({ preventScroll: true })
   }
   const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const n = CK_TABS.length
@@ -1962,73 +2001,170 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
   }
   const onRow = () => setEnd(rowAtEnd(list.current))
 
-  /* kotwice: /nawyko#paths itd. (wejscie i hashchange) → zakladka + przewiniecie do kokpitu */
+  /* niskie okno (np. 900x600): panel, ktory mimo ciasnego CSS nie miesci sie w scenie, dostaje `zoom` < 1 przed malowaniem —
+     nic nie wystaje poza scene i nie ma przesuniecia ukladu (pomiar w useLayoutEffect, tylko przy zmianie zakladki/okna) */
+  const [vw, setVw] = useState(0)
+  useLayoutEffect(() => {
+    const el = document.getElementById(CK_TABS[cur].id)
+    if (!el) return
+    el.style.zoom = ''
+    if (!pinned) return
+    let z = 1
+    for (let k = 0; k < 3 && el.scrollHeight > el.clientHeight + 1; k++) {
+      z = Math.max(0.7, Math.floor(z * (el.clientHeight / el.scrollHeight) * 98) / 100)
+      el.style.zoom = String(z)
+    }
+    return () => {
+      el.style.zoom = ''
+    }
+  }, [cur, pinned, vw])
+
+  /* przypiecie + zakladka z przewijania (rAF, setState tylko przy zmianie zakladki) + kotwice /nawyko#paths itd. */
   useEffect(() => {
     const row = list.current
-    const fit = () => setEnd(rowAtEnd(row))
-    const go = () => {
-      const id = decodeURIComponent(window.location.hash.slice(1))
+    let mq: MediaQueryList | null = null
+    try {
+      mq = window.matchMedia(CK_PIN_Q)
+    } catch {
+      /* bez matchMedia — zakladki na klik */
+    }
+    let raf = 0
+    const tick = () => {
+      raf = 0
+      if (!isPin.current) return
+      const t = track()
+      if (!t) return
+      const pos = Math.min(CK_TABS.length - 0.0001, Math.max(0, -t.r.top / t.seg))
+      const i = Math.floor(pos)
+      prog.current?.style.setProperty('--f', (pos - i).toFixed(3))
+      const l = lock.current
+      if (l) {
+        if (i !== l.i && performance.now() < l.until) return
+        lock.current = null
+      }
+      if (i !== at.current) {
+        show(i)
+        clearHash(i)
+      }
+    }
+    const on = () => {
+      if (!raf) raf = requestAnimationFrame(tick)
+    }
+    const stop = () => {
+      lock.current = null
+      on()
+    }
+    const fit = () => {
+      setEnd(rowAtEnd(row))
+      setVw(window.innerWidth * 10000 + window.innerHeight)
+      on()
+    }
+    const go = (hash = window.location.hash) => {
+      const id = decodeURIComponent(hash.slice(1))
       const i = CK_TABS.findIndex((t) => t.id === id)
       if (i < 0) return
-      setCur(i)
-      revealTab(row, i)
+      show(i)
       const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      requestAnimationFrame(() => sec.current?.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' }))
+      requestAnimationFrame(() => {
+        if (isPin.current) scrollToSeg(i, false)
+        else sec.current?.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' })
+      })
     }
-    go()
+    // ta sama straz co w scenie hero: pod automatyzacja (qa.js, WebKit) uklad statyczny
+    const sync = () => {
+      const p = !!mq?.matches && !navigator.webdriver
+      isPin.current = p
+      setPinned(p)
+      on()
+    }
+    // kotwica z wejscia: zapamietana teraz, bo pierwszy odczyt przewijania (pozycja z natywnego skoku do #id w ukladzie
+    // bez JS) wskazalby inna zakladke i wyczyscil adres; blokada trzyma zakladke do skoku na jej odcinek
+    const first = window.location.hash
+    const fi = CK_TABS.findIndex((t) => '#' + t.id === decodeURIComponent(first))
+    if (fi >= 0) {
+      show(fi)
+      lock.current = { i: fi, until: performance.now() + 3000 }
+    }
+    goHash.current = () => go(first)
+    setReady(true)
+    sync()
     fit()
-    window.addEventListener('hashchange', go)
+    mq?.addEventListener('change', sync)
+    const onHash = () => go()
+    window.addEventListener('hashchange', onHash)
     window.addEventListener('resize', fit)
+    window.addEventListener('scroll', on, { passive: true })
+    window.addEventListener('scrollend', stop)
     return () => {
-      window.removeEventListener('hashchange', go)
+      mq?.removeEventListener('change', sync)
+      window.removeEventListener('hashchange', onHash)
       window.removeEventListener('resize', fit)
+      window.removeEventListener('scroll', on)
+      window.removeEventListener('scrollend', stop)
+      if (raf) cancelAnimationFrame(raf)
     }
   }, [])
+
+  /* kotwica z adresu dopiero po renderze z `hidden` i [data-pin] — wtedy wysokosc toru jest juz docelowa */
+  useEffect(() => {
+    if (!ready) return
+    const id = requestAnimationFrame(() => goHash.current?.())
+    return () => cancelAnimationFrame(id)
+  }, [ready])
 
   const panel: PanelOf = (id) => ({
     role: 'tabpanel',
     'aria-labelledby': 'nk-ck-t-' + id,
-    hidden: CK_TABS[cur].id !== id,
+    hidden: ready && CK_TABS[cur].id !== id,
     tabIndex: 0,
   })
 
   return (
-    <section className="nk-cockpit" id="cockpit" aria-labelledby="nk-ck-h" style={vars} ref={sec}>
-      <div className="nk-ck-head">
-        <div className="nk-caps nk-lab">
-          <span className="nk-who">For you</span>
-          <span className="nk-labrest">{brand} · brand side</span>
+    <section className="nk-cockpit" id="cockpit" aria-labelledby="nk-ck-h" style={vars} ref={sec} data-pin={pinned ? '' : undefined}>
+      <div className="nk-ck-pin" ref={pin}>
+        <div className="nk-ck-head">
+          <div className="nk-caps nk-lab">
+            <span className="nk-who">For you</span>
+            <span className="nk-labrest">{brand} · brand side</span>
+          </div>
+          <h2 className="nk-h2" id="nk-ck-h">
+            Now the same app from your side: what you set, what you see.
+          </h2>
         </div>
-        <h2 className="nk-h2" id="nk-ck-h">
-          Now the same app from your side: what you set, what you see.
-        </h2>
-      </div>
-      <div className="nk-ck-rowwrap" data-end={end ? '' : undefined}>
-        <div className="nk-ck-tabs" role="tablist" aria-label={`${brand} brand views`} ref={list} onKeyDown={onKey} onScroll={onRow}>
+        <div className="nk-ck-rowwrap" data-end={end ? '' : undefined}>
+          <div className="nk-ck-tabs" role="tablist" aria-label={`${brand} brand views`} ref={list} onKeyDown={onKey} onScroll={onRow}>
+            {CK_TABS.map((t, i) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                id={'nk-ck-t-' + t.id}
+                aria-selected={i === cur}
+                aria-controls={t.id}
+                tabIndex={i === cur ? 0 : -1}
+                className="nk-ck-tab"
+                onClick={() => pick(i)}
+              >
+                <span className="nk-ck-n" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                {t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="nk-ck-prog" ref={prog} aria-hidden="true">
           {CK_TABS.map((t, i) => (
-            <button
-              key={t.id}
-              type="button"
-              role="tab"
-              id={'nk-ck-t-' + t.id}
-              aria-selected={i === cur}
-              aria-controls={t.id}
-              tabIndex={i === cur ? 0 : -1}
-              className="nk-ck-tab"
-              onClick={() => pick(i)}
-            >
-              <span className="nk-ck-n" aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              {t.label}
-            </button>
+            <i key={t.id} className={i === cur ? 'is-on' : i < cur ? 'is-past' : undefined}>
+              <b />
+            </i>
           ))}
         </div>
-      </div>
-      <div className="nk-ck-stage nk-r4 nk-r5c" data-dark={contrast(colour, '#0E0F12') < 2 ? '' : undefined}>
-        <MoreScenes brand={brand} panel={panel} />
-        <ProofPanel brand={brand} panel={panel} />
-        <NeverScene skin={skin} brand={brand} panel={panel} />
+        <div className="nk-ck-stage nk-r4 nk-r5c" data-dark={contrast(colour, '#0E0F12') < 2 ? '' : undefined}>
+          <MoreScenes brand={brand} panel={panel} />
+          <ProofPanel brand={brand} panel={panel} />
+          <NeverScene skin={skin} brand={brand} panel={panel} />
+        </div>
       </div>
     </section>
   )
