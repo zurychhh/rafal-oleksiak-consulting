@@ -1,6 +1,7 @@
 # WebKit (Safari engine): the /calculator slider must change the result by drag (pointer) and by keyboard (R4 p14 B1d).
 # Why: Chromium gates cannot show whether a styled <input type=range> moves in Safari.
 # Setup: as scripts/webkit-check.py (webkit2gtk-driver, xvfb, selenium).
+# Also (R4 p15 B2b): after Tab the slider must match :focus-visible with a drawn outline (window focus checked).
 # Usage (local server only): xvfb-run -a python3 -I scripts/webkit-slider-check.py http://localhost:3000 [shot-prefix]
 #   WK_W=1440 for Mac size. Exit 1 when drag or keyboard leaves the slider value or the big number unchanged.
 import os, sys, time
@@ -26,6 +27,11 @@ def state():
 
 try:
     drv.set_window_size(W, H)
+    # R4 p15 B2b: Xvfb bez menedzera okien = fokus pod kursorem (srodek ekranu). Okno 390 px w rogu nie obejmowalo
+    # kursora -> document.hasFocus() false -> WebKit nie dopasowywal :focus/:focus-visible i zrzut po strzalkach nie
+    # mial obrysu (r4p14-b-wk-slider-keys-390.png), choc strona go rysuje. Okno ustawione tak, by obejmowalo srodek ekranu.
+    sw, sh = drv.execute_script("return [screen.width, screen.height]")
+    drv.set_window_rect(x=max(0, sw // 2 - W // 2), y=max(0, sh // 2 - H // 2), width=W, height=H)
     drv.get(base + "/calculator")
     time.sleep(3)
     print("engine", drv.execute_script("return navigator.userAgent.match(/AppleWebKit\\/[\\d.]+/)?.[0]"), "| viewport", W)
@@ -53,6 +59,10 @@ try:
     ActionChains(drv).send_keys(Keys.ARROW_LEFT).send_keys(Keys.ARROW_LEFT).send_keys(Keys.ARROW_LEFT).perform()
     time.sleep(1)
     s2 = state(); print("after keys (focus on #%s)" % act, s2)
+    fv = drv.execute_script("const e=document.querySelector('#gc-t'),c=getComputedStyle(e);return [document.hasFocus(),e.matches(':focus-visible'),c.outlineStyle,c.outlineWidth]")
+    print("focus: hasFocus=%s :focus-visible=%s outline=%s %s" % tuple(fv))
+    if not (fv[0] and fv[1] and fv[2] != "none"):
+        fails.append(f"keyboard: no visible focus outline on #gc-t {fv}")
     if act != "gc-t":
         fails.append(f"keyboard: Tab from #gc-g focused #{act}, not #gc-t")
     if s2[0] == s1[0] or s2[1] == s1[1]:

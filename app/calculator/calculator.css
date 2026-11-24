@@ -117,6 +117,10 @@
 .gc-range:active::-webkit-slider-thumb{cursor:grabbing;transform:scale(1.08);}
 .gc-range:focus-visible{outline-offset:-2px;} /* R4p14 B1b: obrys wewnatrz pola suwaka (48 px) — przy +4px nachodzil na
    "Target gap", wartosc i "Drag to close the gap" (390 i 1440); kciuk ma 34 px, wiec obrys go nie tnie poza skrajnymi polozeniami */
+/* R4p15 B2a: w skrajnych polozeniach kciuk dochodzil do krawedzi pola i zlewal sie z bocznym bokiem obrysu (-2px).
+   Poziomy padding 6 px trzyma kciuk i tor w polu tresci: obrys (0-2 px) -> przerwa 4 px -> kciuk. Mierzy
+   scripts/slider-focus-check.mjs (piksele, 390 i 1440). */
+.gc-range{box-sizing:border-box;padding:0 6px;}
 .gc-gesture{margin:2px 0 0;font-size:13px;line-height:18px;font-weight:600;color:var(--ink);transition:opacity .4s;}
 .gc-arrow{display:inline-block;color:var(--red-s);}
 .gc-slide.is-touched .gc-gesture{opacity:0;}
