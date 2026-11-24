@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import chromiumExeMod from './chromium-exe.cjs'; const { chromiumExe } = chromiumExeMod
 /**
  * make-og — renderuje design/og-card.html do public/og.png.
  *
@@ -33,7 +34,7 @@ if (!existsSync(SRC)) {
 
 // Ta sama przypieta sciezka co w design/qa.js: w chmurze chromium lezy pod stala
 // sciezka, lokalnie bierzemy ten, ktory przyszedl z playwrightem.
-const pinned = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const pinned = chromiumExe() || '';
 const browser = await chromium.launch(existsSync(pinned) ? { executablePath: pinned } : {});
 
 const page = await browser.newPage({

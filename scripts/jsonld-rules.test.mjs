@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import chromiumExeMod from './chromium-exe.cjs'; const { chromiumExe } = chromiumExeMod
 // JSON-LD = widoczny tekst (kolejka wiedzy pkt 4, R4 p7). Znacznik, ktory mowi cos, czego strona nie pokazuje,
 // jest ryzykiem (wytyczne Google: dane strukturalne musza odpowiadac tresci widocznej dla uzytkownika).
 // Uzycie: node scripts/jsonld-rules.test.mjs http://localhost:3000/nawyko
@@ -17,7 +18,7 @@ if (/oleksiakconsulting\.com/.test(url)) {
   process.exit(2)
 }
 
-const exe = process.env.PW_CHROMIUM || undefined
+const exe = chromiumExe()
 const browser = await chromium.launch(exe ? { executablePath: exe } : {})
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 await page.goto(url, { waitUntil: 'networkidle' })

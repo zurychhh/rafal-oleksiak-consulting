@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import chromiumExeMod from './chromium-exe.cjs'; const { chromiumExe } = chromiumExeMod
 // Pomiar CLS jak u prawdziwego odwiedzajacego (R4 p7, lekcja R14). Strony agencji pod navigator.webdriver zostaja
 // w ukladzie statycznym — pomiar bez nadpisania tej flagi widzi inna strone (tak przeszlo 0,17 na /work/genactiv#enquiry).
 // Uzycie: PW_CHROMIUM=... node scripts/cls-check.mjs <url> [szer=390] [wys=844] [zgoda=0|1] [opoznienie_fontow_ms=0] [prog=0.05]
@@ -10,7 +11,7 @@ if (!url || /oleksiakconsulting\.com/.test(url)) {
   console.error('podaj URL localhost/podgladu (nie produkcja)')
   process.exit(2)
 }
-const exe = process.env.PW_CHROMIUM || undefined
+const exe = chromiumExe()
 const b = await chromium.launch(exe ? { executablePath: exe } : {})
 const ctx = await b.newContext({ viewport: { width: +w, height: +h } })
 await ctx.addInitScript((c) => {

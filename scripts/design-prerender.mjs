@@ -1,3 +1,4 @@
+import chromiumExeMod from './chromium-exe.cjs'; const { chromiumExe } = chromiumExeMod
 /**
  * Prerender strony z Claude Design — czesc scripts/ship-design.mjs.
  *
@@ -60,7 +61,7 @@ export async function prerender({ template, script, runtime, resources, assets }
   await new Promise((r) => server.listen(0, '127.0.0.1', r))
   const base = `http://127.0.0.1:${server.address().port}/`
 
-  const pinned = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
+  const pinned = chromiumExe() || ''
   const browser = await chromium.launch(existsSync(pinned) ? { executablePath: pinned } : {})
   try {
     const ctx = await browser.newContext({

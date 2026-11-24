@@ -34,7 +34,7 @@ function lum(c) {
 (async () => {
   // W chmurze chromium leży pod stałą ścieżką, lokalnie bierzemy ten, który
   // przyszedł z playwrightem. PW_CHROMIUM nadpisuje jedno i drugie.
-  const pinned = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+  const pinned = require('../scripts/chromium-exe.cjs').chromiumExe() || '';
   const browser = await chromium.launch(
     fs.existsSync(pinned) ? { executablePath: pinned } : {}
   );

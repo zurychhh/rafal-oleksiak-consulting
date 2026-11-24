@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import chromiumExeMod from './chromium-exe.cjs'; const { chromiumExe } = chromiumExeMod
 /* ---------------------------------------------------------------------------
    Twarde zasady tresci strony glownej — jako test, nie jako pamiec.
 
@@ -262,7 +263,7 @@ export function formatFailures(fail) {
 
 async function checkRendered(url, profile = 'home') {
   const { chromium } = await import('playwright')
-  const pinned = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
+  const pinned = chromiumExe() || ''
   const browser = await chromium.launch(fs.existsSync(pinned) ? { executablePath: pinned } : {})
   const fail = []
   const external = new Set()

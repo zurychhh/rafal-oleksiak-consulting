@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import chromiumExeMod from './chromium-exe.cjs'; const { chromiumExe } = chromiumExeMod
 /**
  * Porownuje style OBLICZONE przez przegladarke: strona glowna w aplikacji
  * (http://localhost:3000/) kontra bundle Claude Design otwarty z dysku
@@ -75,7 +76,7 @@ async function grab(browser, url, vp) {
   return out
 }
 
-const pinned = process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
+const pinned = chromiumExe() || ''
 const browser = await chromium.launch(existsSync(pinned) ? { executablePath: pinned } : {})
 let bad = 0
 for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {

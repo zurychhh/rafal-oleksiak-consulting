@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import chromiumExeMod from './chromium-exe.cjs'; const { chromiumExe } = chromiumExeMod
 // Plynnosc scen sterowanych przewijaniem (R4 p8): dlugie klatki (LoAF) i najdluzsza interakcja (proxy INP) przy CPU x4.
 // Uzycie: node scripts/scroll-perf.mjs <url> [szer=390] [wys=844] [cpu=4]   (PW_CHROMIUM opcjonalnie)
 // navigator.webdriver nadpisany (inaczej strona daje uklad statyczny — R14). Tylko localhost / podglad.
@@ -10,7 +11,7 @@ if (!url || /oleksiakconsulting\.com/.test(url)) {
   console.error('podaj URL localhost/podgladu (nie produkcja)')
   process.exit(2)
 }
-const exe = process.env.PW_CHROMIUM || undefined
+const exe = chromiumExe()
 const b = await chromium.launch(exe ? { executablePath: exe } : {})
 const ctx = await b.newContext({ viewport: { width: +w, height: +h }, hasTouch: false })
 await ctx.addInitScript(() => {
