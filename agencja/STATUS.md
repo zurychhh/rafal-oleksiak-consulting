@@ -248,7 +248,7 @@ Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + po
 ## Dla Rafała
 
 **Runda 4, przebieg 12 (24.11 09:38–10:25) — przebieg kontroli jakości, mało widocznych zmian: bramka łapie teraz drgania układu podczas przewijania na każdej stronie, a dwie poprawki, które wyglądały dobrze w liczbach, odrzuciliśmy, bo pogarszały to, co widzi klient.**
-Do obejrzenia: podgląd gałęzi `agencja/strona` (link w linii niżej po zbudowaniu) — `/nawyko`, scena „How it works”: liczniki w telefonie („days”, „to go”, „✓ earned”) zmieniają się bez przesuwania się na boki.
+Do obejrzenia (Vercel „success” dla 39d1125, sprawdzone statusem commita): https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/nawyko —, scena „How it works”: liczniki w telefonie („days”, „to go”, „✓ earned”) zmieniają się bez przesuwania się na boki.
 1. **Bramka:** każda trasa jest teraz mierzona także podczas przewijania kółkiem (wcześniej tylko przy wejściu). `/work/genactiv` 0, `/nawyko` 0 na telefonie i 0,0034 na komputerze (dużo poniżej progu Google 0,1; źródło: rozwijający się opis kroku — zostawiony, bo jest animowany).
 2. **Odrzucone przed commitem:** (a) „naprawa” listy kroków dawała w pomiarze 0, ale recenzent klatka po klatce zobaczył, że kroki skaczą o 23–54 px — cofnięte; (b) trzy nowe nagłówki z poprzedniego przebiegu nie przeszły czytelnika-kupującego (np. „budget” sugeruje limit wydatków, którego suwak nie ustawia) — zostały stare, propozycje czytelnika w „Czeka na Rafała”.
 3. **`/work/genactiv`:** skok z paska rozdziałów stawia fokus i czytnik ekranu na nagłówku aktu — sprawdzone 8/8, nic do poprawy.
