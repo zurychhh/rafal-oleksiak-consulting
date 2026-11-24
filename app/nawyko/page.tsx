@@ -48,6 +48,7 @@ const JSON_LD = {
       '@type': 'WebPage',
       '@id': URL + '#webpage',
       url: URL,
+      isPartOf: { '@id': 'https://oleksiakconsulting.com/#website' },
       name: H1,
       description: LEDE,
       about: { '@id': URL + '#app' },

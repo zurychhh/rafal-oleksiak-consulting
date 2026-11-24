@@ -86,6 +86,7 @@ export default function SchemaOrg() {
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': 'https://oleksiakconsulting.com/#website',
     name: 'Oleksiak Consulting',
     url: 'https://oleksiakconsulting.com',
     description:

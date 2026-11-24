@@ -1046,6 +1046,9 @@ function Scene({
       }, 900)
   }
 
+  /* --sw i --p ustawiane na elementach, ktore ich uzywaja (nie na korzeniu sceny) i zadeklarowane @property
+     z inherits:false: zmiana przy kazdym przewinieciu nie uniewaznia stylow calego poddrzewa sceny. */
+  const swStyle = { ['--sw' as string]: sw }
   const steps = (
     <div className="nk-in">
       <div className="nk-caps nk-lab">
@@ -1088,10 +1091,9 @@ function Scene({
       data-act={scroll ? step : undefined}
       data-ch={scroll ? ch : undefined}
       data-swung={scroll && swung ? '' : undefined}
-      style={{ ['--p' as string]: scroll ? p : 1, ['--sw' as string]: sw }}
     >
       <div className="nk-stage">
-        <div className="nk-scenehead">
+        <div className="nk-scenehead" style={swStyle}>
           {!scroll || step < 4 ? steps : null}
           {scroll && step >= 4 ? (
             /* Regula R2 (Chrome „Scrollytelling”): tekst aktu wchodzi wedlug postepu przewijania, nie zegara. */
@@ -1105,7 +1107,7 @@ function Scene({
             {DEMO_BRAND} is a made-up demo brand, not a client.
           </p>
         </div>
-        <div className="nk-phonecol">
+        <div className="nk-phonecol" style={swStyle}>
           <div
             style={{
               display: 'contents',
@@ -1139,7 +1141,7 @@ function Scene({
         ) : null}
         {scroll ? (
           <div className="nk-bar" aria-hidden="true">
-            <i />
+            <i style={{ ['--p' as string]: p }} />
           </div>
         ) : null}
       </div>

@@ -46,6 +46,9 @@ for (const b of blocks) {
   }
 }
 if (!nodes.length) fails.push('brak JSON-LD')
+const sites = nodes.filter((n) => n['@type'] === 'WebSite')
+if (sites.length > 1) fails.push(`${sites.length} wezly WebSite (ma byc jeden)`)
+if (sites.some((n) => !n['@id'])) fails.push('WebSite bez @id')
 
 for (const n of nodes) {
   const t = n['@type']
