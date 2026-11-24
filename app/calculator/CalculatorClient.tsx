@@ -15,6 +15,8 @@ const EX = { customers: '4,000', aov: '120', gap: '58', target: 50 }
 const n0 = (v: number) => Math.round(v).toLocaleString('en-US')
 const n2 = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 })
 const big = (v: number) => (Math.round(v) > 0 ? '+' : '') + n0(v)
+/* Liczba pojedyncza tylko dla dokladnie "1" po sformatowaniu ("1.01 orders", "1.0 orders" zostaja w mnogiej). */
+const per = (shown: string, one: string, many: string) => (shown === '1' ? one : many)
 
 const EX_BIG = big(gapValue({ customers: 4000, aov: 120, gapNow: 58, gapTarget: EX.target }).extraRevenue)
 
@@ -199,7 +201,8 @@ export function Calculator() {
               'Fill in the three fields to see it.'
             ) : cut > 0 ? (
               <>
-                <b>+{n2(res.extraOrders)} orders</b> × {n2(ca.v!)} × {n0(cc.v!)} customers
+                <b>+{n2(res.extraOrders)} {per(n2(res.extraOrders), 'order', 'orders')}</b> × {n2(ca.v!)} × {n0(cc.v!)}{' '}
+                {per(n0(cc.v!), 'customer', 'customers')}
               </>
             ) : (
               'Same gap as today, so nothing changes. Drag left.'
@@ -252,7 +255,7 @@ export function Calculator() {
             </div>
           </div>
 
-          <div className="gc-year" role="img" aria-label={valid ? `One customer, one year: ${daysNow.length} reorders today, ${daysTarget.length} at the target gap.` : 'One customer, one year.'}>
+          <div className="gc-year" role="img" aria-label={valid ? `One customer, one year: ${daysNow.length} ${per(String(daysNow.length), 'reorder', 'reorders')} today, ${daysTarget.length} at the target gap.` : 'One customer, one year.'}>
             <div className="gc-rowcap">
               <span>Today</span>
               <span>{res ? `${res.ordersNow.toFixed(1)} orders a year` : '—'}</span>

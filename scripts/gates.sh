@@ -2,7 +2,8 @@
 # Jedna bramka jakosci dla dzialajacego serwera lokalnego (R4 p9 B; lekcje R13-R15: bramki pominiete albo mierzace nie to).
 # Uzycie: bash scripts/gates.sh <base-url> <trasa>...   np. bash scripts/gates.sh http://localhost:3000 / /nawyko /work/genactiv
 # Tylko localhost / 127.0.0.1 (qa.js wysyla formularze) — inaczej kod 2. Kod 1, gdy jakakolwiek bramka FAIL.
-# Logi: /tmp/gates/<slug>-<bramka>.log. Zmienne: PW_CHROMIUM (jak w skryptach), GATES_TIMEOUT (s, domyslnie 240),
+# Logi: $GATES_LOGDIR/<slug>-<bramka>.log. Zmienne: GATES_LOGDIR (katalog logow, domyslnie /tmp/gates; dwaj budujacy
+#   rownolegle — kazdy wlasny katalog, R4 p14 B3), PW_CHROMIUM (jak w skryptach), GATES_TIMEOUT (s, domyslnie 240),
 # GATES_WK_SCENE=1 wymusza WK_SCENE=1 dla WebKit na kazdej trasie (domyslnie tylko /work/genactiv).
 set -u
 if [ $# -lt 2 ]; then echo "uzycie: bash scripts/gates.sh <base-url> <trasa>..." >&2; exit 2; fi
@@ -10,7 +11,9 @@ BASE="${1%/}"; shift
 HOSTPART="${BASE#*://}"; HOSTPART="${HOSTPART%%/*}"; HOST="${HOSTPART%%:*}"
 case "$HOST" in localhost|127.0.0.1) ;; *) echo "odmowa: host '$HOST' to nie localhost/127.0.0.1" >&2; exit 2;; esac
 cd "$(dirname "$0")/.." || exit 2
-LOGDIR=/tmp/gates; mkdir -p "$LOGDIR"
+LOGDIR="${GATES_LOGDIR:-/tmp/gates}"; mkdir -p "$LOGDIR" || { echo "nie moge utworzyc $LOGDIR" >&2; exit 2; }
+# Parsowanie i progi clsscroll / scroll-perf oraz sprawdzenie WebKit — wspolne z selftestami (R4 p14 B3).
+. scripts/gates-lib.sh
 # R4 p10 (lekcja R17): serwer musi podawac TEN build, ktory jest w .next — stary `next-server` na tym samym porcie
 # (pkill -f "next start" go nie zabija) podaje HTML z innym BUILD_ID i 500 na chunki; bramki mierzyly wtedy zepsuta strone.
 if [ -f .next/BUILD_ID ]; then
@@ -49,10 +52,9 @@ for route in "${ROUTES[@]}"; do
   for vp in "390 844" "1440 900"; do
     set -- $vp; w=$1; h=$2; log="$LOGDIR/$slug-clsscroll-$w.log"
     timeout "$TMO" node scripts/cls-scroll.mjs "$url" "$w" "$h" >"$log" 2>&1; rc=$?
-    v=$(grep -oE '^CLSSCROLL suma=[0-9.]+' "$log" | tail -1 | grep -oE '[0-9.]+$')
-    if [ -n "$v" ]; then
-      lvl=$(awk -v v="$v" 'BEGIN { if (v > 0.01) print "FAIL"; else if (v > 0.001) print "INFO"; else print "PASS" }')
-      add "$route" "clsscroll-$w" "$lvl" "suma $v ($log)"
+    vd=$(clsscroll_verdict "$log")
+    if [ "$vd" != BRAK ]; then
+      add "$route" "clsscroll-$w" "${vd%% *}" "suma ${vd#* } ($log)"
     elif [ $rc -eq 124 ]; then add "$route" "clsscroll-$w" FAIL "limit czasu ${TMO}s ($log)"
     else add "$route" "clsscroll-$w" FAIL "kod $rc, brak linii CLSSCROLL ($log)"; fi
   done
@@ -62,14 +64,11 @@ for route in "${ROUTES[@]}"; do
     set -- $vp; w=$1; h=$2; log="$LOGDIR/$slug-scrollperf-$w.log"
     # 4 pelne przebiegi (rozgrzewka + 3) -> limit czasu x4
     timeout "$((TMO * 4))" node scripts/scroll-perf.mjs "$url" "$w" "$h" 4 --runs 3 >"$log" 2>&1; rc=$?
-    line=$(grep -E '^SCROLLPERF ' "$log" | tail -1)
-    frame=$(echo "$line" | grep -oE 'klatka_med=[0-9]+' | grep -oE '[0-9]+')
-    inter=$(echo "$line" | grep -oE 'interakcja_med=[0-9]+' | grep -oE '[0-9]+')
-    fall=$(echo "$line" | grep -oE 'klatki=[0-9,]+' | cut -d= -f2)
-    iall=$(echo "$line" | grep -oE 'interakcje=[0-9,]+' | cut -d= -f2)
-    if [ -n "$frame" ] && [ -n "$inter" ]; then
+    vd=$(scrollperf_verdict "$log")
+    if [ "$vd" != BRAK ]; then
+      read -r lvl frame inter fall iall <<<"$vd"
       note="mediana klatki ${frame} ms [${fall}], interakcji ${inter} ms [${iall}]"
-      if [ "$frame" -gt 100 ] || [ "$inter" -gt 200 ]; then add "$route" "scroll-perf-$w" FAIL "$note ($log)"
+      if [ "$lvl" = FAIL ]; then add "$route" "scroll-perf-$w" FAIL "$note ($log)"
       else add "$route" "scroll-perf-$w" PASS "$note"; fi
     elif [ $rc -eq 124 ]; then add "$route" "scroll-perf-$w" FAIL "limit czasu $((TMO * 4))s ($log)"
     elif [ $rc -ne 0 ]; then add "$route" "scroll-perf-$w" FAIL "kod $rc, brak linii SCROLLPERF ($log)"
@@ -78,8 +77,9 @@ for route in "${ROUTES[@]}"; do
   run "$route" "focus-obscured" "$LOGDIR/$slug-focus-obscured.log" node scripts/focus-obscured.test.mjs "$BASE" "$route"
   run "$route" "jsonld" "$LOGDIR/$slug-jsonld.log" node scripts/jsonld-rules.test.mjs "$url"
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
-  if ! command -v xvfb-run >/dev/null 2>&1 || [ ! -x /usr/bin/WebKitWebDriver ]; then
-    add "$route" "webkit" FAIL "WebKit niedostepny — kawalek nie jest gotowy"
+  wkmiss=$(webkit_missing)
+  if [ -n "$wkmiss" ]; then
+    add "$route" "webkit" FAIL "WebKit niedostepny ($wkmiss) — kawalek nie jest gotowy"
   else
     mkdir -p agencja/podglad
     scene=0; { [ "${GATES_WK_SCENE:-0}" = 1 ] || [ "$route" = /work/genactiv ]; } && scene=1

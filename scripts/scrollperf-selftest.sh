@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # R4 p13 B2: test regresji bramki scroll-perf (scripts/scroll-perf.mjs --runs 3 + progi z gates.sh: klatka 100 ms, interakcja 200 ms).
-# Stawia na 127.0.0.1:3199 (python3 -m http.server z katalogu tymczasowego) dwie strony-wzorce:
+# Stawia na 127.0.0.1:3198 (SELFTEST_PORT) (python3 -m http.server z katalogu tymczasowego) dwie strony-wzorce:
 #   broken.html — handler `scroll` z petla zajeta przez 250 ms -> oczekiwany FAIL
 #   calm.html   — ta sama strona bez handlera                  -> oczekiwany PASS
 # Kod 0 tylko gdy oba werdykty zgodne z oczekiwaniem. Uzycie: bash scripts/scrollperf-selftest.sh
 set -u
 cd "$(dirname "$0")/.." || exit 2
-PORT="${SELFTEST_PORT:-3199}"
+PORT="${SELFTEST_PORT:-3198}"   # R4 p14 B3: kazdy selftest na innym porcie (3197 clsscroll, 3198 scroll-perf)
+. scripts/gates-lib.sh
 TMP="$(mktemp -d)"
 cleanup() { [ -n "${SRV:-}" ] && kill "$SRV" 2>/dev/null; rm -rf "$TMP"; }
 trap cleanup EXIT
@@ -20,13 +21,12 @@ python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$TMP" >/dev/null 2>
 SRV=$!
 for _ in $(seq 1 50); do curl -s -o /dev/null "http://127.0.0.1:$PORT/calm.html" && break; sleep 0.2; done
 
-verdict() {  # to samo parsowanie i progi co gates.sh (scroll-perf-<w>)
+verdict() {  # parsowanie i progi z gates-lib.sh (scroll-perf-<w>)
   local log="$TMP/$1.log"
   node scripts/scroll-perf.mjs "http://127.0.0.1:$PORT/$1.html" 390 844 4 --runs 3 >"$log" 2>&1
-  local line f i; line=$(grep -E '^SCROLLPERF ' "$log" | tail -1)
-  f=$(echo "$line" | grep -oE 'klatka_med=[0-9]+' | grep -oE '[0-9]+'); i=$(echo "$line" | grep -oE 'interakcja_med=[0-9]+' | grep -oE '[0-9]+')
-  [ -z "$f" ] || [ -z "$i" ] && { echo "BRAK"; return; }
-  if [ "$f" -gt 100 ] || [ "$i" -gt 200 ]; then echo "FAIL ${line#SCROLLPERF }"; else echo "PASS ${line#SCROLLPERF }"; fi
+  local vd; vd=$(scrollperf_verdict "$log")   # TA SAMA funkcja co gates.sh (scripts/gates-lib.sh)
+  [ "$vd" = BRAK ] && { echo BRAK; return; }
+  set -- $vd; echo "$1 klatka_med=$2 interakcja_med=$3 klatki=$4 interakcje=$5"
 }
 ok=0
 b=$(verdict broken); c=$(verdict calm)

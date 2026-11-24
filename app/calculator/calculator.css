@@ -115,7 +115,8 @@
   background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='34'%3E%3Cpath d='M9 17l5-5v10zM37 17l-5-5v10z' fill='%23F7F5F0'/%3E%3Cpath d='M20 11v12M23 11v12M26 11v12' stroke='%23F7F5F0' stroke-width='1.5'/%3E%3C/svg%3E") center/46px 34px no-repeat;
   box-shadow:0 6px 14px -6px rgba(20,22,26,.5);}
 .gc-range:active::-webkit-slider-thumb{cursor:grabbing;transform:scale(1.08);}
-.gc-range:focus-visible{outline-offset:4px;}
+.gc-range:focus-visible{outline-offset:-2px;} /* R4p14 B1b: obrys wewnatrz pola suwaka (48 px) — przy +4px nachodzil na
+   "Target gap", wartosc i "Drag to close the gap" (390 i 1440); kciuk ma 34 px, wiec obrys go nie tnie poza skrajnymi polozeniami */
 .gc-gesture{margin:2px 0 0;font-size:13px;line-height:18px;font-weight:600;color:var(--ink);transition:opacity .4s;}
 .gc-arrow{display:inline-block;color:var(--red-s);}
 .gc-slide.is-touched .gc-gesture{opacity:0;}
