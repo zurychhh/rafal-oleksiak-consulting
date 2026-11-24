@@ -3,7 +3,6 @@ import { preload } from 'react-dom'
 import { ChapterBar } from './ChapterBar'
 import { SiteNav } from '../components/SiteNav'
 import { DayStrip, HeroApp, Story } from './NawykoClient'
-import { HeroGap } from '../calculator/HeroGap'
 import './nawyko.css'
 import { FAQ, FEATURES } from './content'
 
@@ -85,16 +84,15 @@ const JSON_LD = {
   ],
 }
 
-// Spec 31 (R6 p1): rozdzialy po przebudowie — hero, przerywnik, kokpit; Proof/FAQ/final bez zmian (przebieg 2).
+// Spec 33 (R6 p2): siedem scen — FAQ weszlo do #enquiry jako pytania, #integrations zastapil #store.
 const CHAPTERS = [
   { id: 'top', label: 'Your app' },
   { id: 'why', label: 'Why' },
   { id: 'cockpit', label: 'How it works' },
   { id: 'proof', label: 'Proof' },
-  { id: 'integrations', label: 'Integrations' },
-  { id: 'faq', label: 'FAQ' },
+  { id: 'store', label: 'Your store' },
   { id: 'finale', label: 'One morning' },
-  { id: 'enquiry', label: 'Enquiry' },
+  { id: 'enquiry', label: 'Ask' },
 ]
 
 const BRAND_WAIT_JS =
@@ -117,8 +115,8 @@ export default function Nawyko() {
         <a href="#why">Why</a>
         <a href="#cockpit">How it works</a>
         <a href="#proof">Proof</a>
-        <a href="#integrations">Integrations</a>
-        <a href="#faq">FAQ</a>
+        <a href="#store">Your store</a>
+        <a href="#finale">One morning</a>
       </SiteNav>
       <ChapterBar chapters={CHAPTERS} afterId="top" ctaHref="#enquiry" ctaLabel="Ask about Nawyko" className="nk-caps" />
 
@@ -148,7 +146,6 @@ export default function Nawyko() {
             </div>
           </div>
           <DayStrip />
-          <HeroGap />
         </section>
 
         <Story />

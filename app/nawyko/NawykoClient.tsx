@@ -277,81 +277,89 @@ export function DayStrip() {
 }
 
 
-/* ── runda 4 (g, h): dowod wynikow z grupa kontrolna, pas integracji ── */
+/* ── spec 33 (R6 p2): #proof — jeden moment na atramencie: jedno zdanie, jeden wykres, jeden suwak ── */
 /* WSZYSTKIE liczby i krzywe ponizej to przyklad (znaczek „Example” przy samym rysunku), nie wynik zadnej marki.
-   Krzywe: udzial klientow, ktorzy nadal zamawiaja, miesiac 0–6. Bez procentow w tresci. */
+   Krzywe: udzial klientow, ktorzy nadal zamawiaja, miesiac 0–6. Bez procentow w tresci.
+   Wykres kropek konca opakowania wypadl ze strony (zostaje w /calculator i /tool). */
 const CROWD = 24
 const LIFT_APP = [1, 0.82, 0.7, 0.62, 0.56, 0.52, 0.49]
 const LIFT_CTRL = [1, 0.74, 0.58, 0.48, 0.41, 0.36, 0.33]
 /* zakres niepewnosci maleje z pierwiastkiem z liczebnosci grupy (przyklad, stala dobrana do rysunku) */
 const SPREAD = 0.18
-/* dzien, w ktorym skonczylo sie opakowanie (ostatni ptaszek przed nastepnym), liczba telefonow na dzien */
-const RUNOUT: [number, number][] = [
-  [26, 1], [27, 1], [28, 2], [29, 3], [30, 5], [31, 7], [32, 9], [33, 8], [34, 6], [35, 4], [36, 3], [37, 2], [38, 1],
-]
-const RUN_PEAK = RUNOUT.reduce((a, b) => (b[1] > a[1] ? b : a))[0]
+const PROOF_BG = '#0E0F12'
 
-const LX = (i: number) => 40 + i * 50
-const LY = (v: number) => 12 + (1 - v) * 150
-function curve(vals: readonly number[], d = 0) {
-  return vals.map((v, i) => `${i ? 'L' : 'M'}${LX(i)} ${LY(clamp(v + d)).toFixed(1)}`).join(' ')
+/* viewBox 600×200 rozciagany na szerokosc (preserveAspectRatio none, linie non-scaling-stroke); podpisy osi w HTML,
+   wiec na 390 px nie maleja do 6 px. */
+const LX = (i: number) => (i * 600) / (LIFT_APP.length - 1)
+const LY = (v: number) => 4 + (1 - v) * 192
+function curve(vals: readonly number[]) {
+  return vals.map((v, i) => `${i ? 'L' : 'M'}${LX(i).toFixed(1)} ${LY(clamp(v)).toFixed(1)}`).join(' ')
 }
 function band(vals: readonly number[], w: number) {
-  const top = vals.map((v, i) => `${i ? 'L' : 'M'}${LX(i)} ${LY(clamp(v + (i ? w : 0))).toFixed(1)}`).join(' ')
+  const top = vals.map((v, i) => `${i ? 'L' : 'M'}${LX(i).toFixed(1)} ${LY(clamp(v + (i ? w : 0))).toFixed(1)}`).join(' ')
   const bot = [...vals]
     .map((v, i) => [i, v] as const)
     .reverse()
-    .map(([i, v]) => `L${LX(i)} ${LY(clamp(v - (i ? w : 0))).toFixed(1)}`)
+    .map(([i, v]) => `L${LX(i).toFixed(1)} ${LY(clamp(v - (i ? w : 0))).toFixed(1)}`)
     .join(' ')
   return `${top} ${bot} Z`
 }
 
-const LINKS = [
-  { k: 'Store', n: 'Shopify', d: 'Orders confirm a purchase; rewards arrive as single-use codes.' },
-  { k: 'Subscriptions', n: 'Subscription apps', d: 'Cashback can come off the next delivery.' },
-  { k: 'Loyalty', n: 'Loyalty apps', d: 'Points can sit beside a programme already running.' },
-  { k: 'Email and CRM', n: 'Your email tool', d: 'Reorder reminders go out without any health data.' },
-  { k: 'App stores', n: 'App Store · Google Play', d: 'The app is listed under your brand name.' },
-] as const
-
-function Evidence({ brand }: { brand: string }) {
+function Proof() {
+  const { colour, brand } = useBrand()
   const [held, setHeld] = useState(6)
   const wc = SPREAD / Math.sqrt(held)
   const wa = SPREAD / Math.sqrt(CROWD - held)
   const last = LIFT_APP.length - 1
   const apart = LIFT_APP[last] - wa > LIFT_CTRL[last] + wc
+  const vars = { ['--hi' as string]: inkOn(colour, PROOF_BG) }
 
   return (
-    <div className="nk-r4" id="evidence">
-      <section className="nk-still nk-proof" id="proof" aria-labelledby="nk-prf">
-        <div className="nk-panel">
-          <div className="nk-caps nk-lab">
-            <span className="nk-who">For you</span>
-            <span className="nk-labrest">Proof of results</span>
-          </div>
-          <h2 className="nk-h2" id="nk-prf">
-            Reorder lift, measured against customers who never get the app.
-          </h2>
-          <p className="nk-one">A control group goes without the app, so the gap between the two curves is the app&rsquo;s effect.</p>
-          <figure className="nk-desk2 nk-lift">
-            <figcaption className="nk-caps nk-deskh">
-              <span>{brand} · results panel</span>
-              <b className="nk-ex">Example</b>
-            </figcaption>
-            <div className="nk-crowd" aria-hidden="true">
-              {Array.from({ length: CROWD }, (_, i) => (
-                <i key={i} className={i >= CROWD - held ? 'is-ctrl' : ''} />
+    <section className="nk-pf" id="proof" aria-labelledby="nk-prf" style={vars}>
+      <div className="nk-pf-in">
+        <p className="nk-caps nk-pf-k">Proof</p>
+        <h2 className="nk-pf-h" id="nk-prf">
+          Reorder lift, measured against customers who never get the app.
+        </h2>
+        <figure className="nk-pf-fig">
+          <figcaption className="nk-caps nk-pf-cap">
+            <span>{brand} · customers still reordering, by month</span>
+            <b className="nk-pf-ex">Example</b>
+          </figcaption>
+          <div className="nk-pf-plot">
+            <svg viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-labelledby="nk-lift-t">
+              <title id="nk-lift-t">Example chart: customers still reordering over six months, app group above control group.</title>
+              {[0.25, 0.5, 0.75].map((v) => (
+                <line key={v} x1="0" x2="600" y1={LY(v)} y2={LY(v)} className="nk-pf-grid" />
+              ))}
+              <line x1="0" y1="196" x2="600" y2="196" className="nk-pf-axis" />
+              <path d={band(LIFT_CTRL, wc)} className="nk-pf-band is-c" />
+              <path d={band(LIFT_APP, wa)} className="nk-pf-band is-a" />
+              <path d={curve(LIFT_CTRL)} className="nk-pf-cv is-c" />
+              <path d={curve(LIFT_APP)} className="nk-pf-cv is-a" />
+            </svg>
+            <div className="nk-pf-x" aria-hidden="true">
+              {LIFT_APP.map((_, i) => (
+                <span key={i} style={{ left: `${(i / last) * 100}%` }}>
+                  {i === 0 ? 'Start' : i}
+                </span>
               ))}
             </div>
-            <label className="nk-rate" htmlFor="nk-held">
-              <span>Customers held out as control, out of 24 in this example</span>
+          </div>
+          <div className="nk-pf-key" aria-hidden="true">
+            <span className="is-a">With the app</span>
+            <span className="is-c">Control group</span>
+          </div>
+          <div className="nk-pf-ctl">
+            <label className="nk-pf-rate" htmlFor="nk-held">
+              <span>Held out as control</span>
               <output htmlFor="nk-held">
                 {held} of {CROWD}
               </output>
             </label>
             <input
               id="nk-held"
-              className="nk-slider"
+              className="nk-pf-slider"
               type="range"
               min={2}
               max={12}
@@ -360,140 +368,151 @@ function Evidence({ brand }: { brand: string }) {
               aria-valuetext={`${held} of ${CROWD} customers held out without the app`}
               onChange={(e) => setHeld(Number(e.currentTarget.value))}
             />
-            <svg className="nk-plot" viewBox="0 0 360 206" role="img" aria-labelledby="nk-lift-t">
-              <title id="nk-lift-t">
-                Example chart: customers still reordering over six months, app group above control group.
-              </title>
-              <line x1="40" y1="162" x2="340" y2="162" className="nk-axis" />
-              <path d={band(LIFT_CTRL, wc)} className="nk-band nk-band-c" />
-              <path d={band(LIFT_APP, wa)} className="nk-band nk-band-a" />
-              <path d={curve(LIFT_CTRL)} className="nk-cv nk-cv-c" />
-              <path d={curve(LIFT_APP)} className="nk-cv nk-cv-a" />
-              {LIFT_APP.map((_, i) => (
-                <text key={i} x={LX(i)} y="182" className="nk-tick">
-                  {i === 0 ? 'Start' : i}
-                </text>
+            <div className="nk-pf-crowd" aria-hidden="true">
+              {Array.from({ length: CROWD }, (_, i) => (
+                <i key={i} className={i >= CROWD - held ? 'is-ctrl' : ''} />
               ))}
-              <text x="190" y="200" className="nk-tick">
-                Month
-              </text>
-              <text x="40" y="8" className="nk-tick nk-tick-l">
-                Still reordering
-              </text>
-            </svg>
-            <div className="nk-key" aria-hidden="true">
-              <span className="nk-key-a">With the app</span>
-              <span className="nk-key-c">Control group</span>
             </div>
-            <p className="nk-cost" aria-live="polite">
-              {apart ? (
-                <>
-                  <b>By month six the two bands no longer overlap.</b> That gap is what the app adds.
-                </>
-              ) : (
-                <>
-                  <b>Ranges overlap:</b> too few customers held out to tell.
-                </>
-              )}
-            </p>
-          </figure>
-          <p className="nk-fine">A bigger control group gives a clearer answer; fewer customers get the app meanwhile. You choose the split.</p>
-        </div>
-        <div className="nk-phonecol">
-          <figure className="nk-desk2 nk-runout">
-            <figcaption className="nk-caps nk-deskh">
-              <span>Real pack length, from daily ticks</span>
-              <b className="nk-ex">Example</b>
-            </figcaption>
-            <svg className="nk-plot" viewBox="0 0 360 210" role="img" aria-labelledby="nk-run-t">
-              <title id="nk-run-t">
-                {`Example chart: each dot is one customer's last daily tick before the next pack. The label says ${PACK_DAYS} days; most packs last to day ${RUN_PEAK}.`}
-              </title>
-              <line x1="16" y1="178" x2="344" y2="178" className="nk-axis" />
-              <line x1={RX(PACK_DAYS)} y1="14" x2={RX(PACK_DAYS)} y2="178" className="nk-label-line" />
-              <text x={RX(PACK_DAYS) - 6} y="22" className="nk-tick nk-tick-r">
-                Label: {PACK_DAYS} days
-              </text>
-              {RUNOUT.flatMap(([day, n]) =>
-                Array.from({ length: n }, (_, k) => (
-                  <circle key={`${day}-${k}`} cx={RX(day)} cy={170 - k * 17} r="7" className={day === RUN_PEAK ? 'nk-dot is-peak' : 'nk-dot'} />
-                )),
-              )}
-              {RUNOUT.filter(([d]) => d % 2 === 0).map(([d]) => (
-                <text key={d} x={RX(d)} y="198" className="nk-tick">
-                  {d}
-                </text>
-              ))}
-            </svg>
-            <p className="nk-cost">
-              Each dot is one customer&rsquo;s last daily tick before the next pack. In this example most packs last to <b>day {RUN_PEAK}</b>, so the
-              reorder reminder is set for day {RUN_PEAK}, from totals across customers.
-            </p>
-          </figure>
-        </div>
-      </section>
-
-      <section className="nk-still nk-int" id="integrations" aria-labelledby="nk-intg">
-        <div className="nk-panel">
-          <div className="nk-caps nk-lab">
-            <span className="nk-who">For you</span>
-            <span className="nk-labrest">Integrations</span>
           </div>
-          <h2 className="nk-h2" id="nk-intg">
-            Runs on Shopify; your other tools connect per brand.
-          </h2>
-          <p className="nk-one">
-            Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both
-            stores under your brand.
+          <p className="nk-pf-out" aria-live="polite">
+            {apart ? 'By month six the two bands no longer overlap: that gap is the app.' : 'The bands overlap: too few customers held out to tell.'}
           </p>
-        </div>
-        <ul className="nk-band5">
-          {LINKS.map((l) => (
-            <li key={l.k}>
-              <span className="nk-caps">{l.k}</span>
-              <b>{l.n}</b>
-              <p>{l.d}</p>
-            </li>
-          ))}
-        </ul>
-        <p className="nk-fine nk-int-fine">
-          Which app in each category connects to your store is mapped in the first call.{' '}
-          <a className="nk-link" href="#enquiry">
-            Ask which apps connect to your store →
-          </a>
-        </p>
-      </section>
-    </div>
-  )
-}
-function RX(day: number) {
-  return 16 + ((day - 25) / 14) * 328
-}
-
-/* ── runda 4 (j): FAQ kupujacego, natywne <details> (klawiatura i bez JS za darmo) ── */
-function Faq() {
-  return (
-    <section className="nk-faq" id="faq" aria-labelledby="nk-faq-h">
-      <div className="nk-caps nk-lab">
-        <span className="nk-who">For you</span>
-        <span className="nk-labrest">Questions</span>
-      </div>
-      <h2 className="nk-h2" id="nk-faq-h">
-        FAQ: six answers you need before the first call.
-      </h2>
-      <p className="nk-one">Daily use, health data, reward cost, setup, pharmacy purchases, consent.</p>
-      <div className="nk-qs">
-        {FAQ.map((f) => (
-          <details key={f.q} className="nk-q">
-            <summary>
-              <span>{f.q}</span>
-              <i aria-hidden="true" />
-            </summary>
-            <p>{f.a}</p>
-          </details>
-        ))}
+        </figure>
       </div>
     </section>
+  )
+}
+
+/* ── spec 33: #store — sklep odwiedzajacego ↔ adapter ↔ aplikacja marki. Silniki tekstem, bez logo. Uczciwie:
+   gotowy jest tylko Shopify; reszte podlaczamy w tygodniu wdrozenia. Zastepuje pas 5 kart (#integrations). ── */
+const ENGINES = [
+  { id: 'shopify', n: 'Shopify', a: 'Shopify app: orders in, discount codes out', ready: true },
+  { id: 'woo', n: 'WooCommerce', a: 'WooCommerce REST API and webhooks', ready: false },
+  { id: 'shoper', n: 'Shoper', a: 'Shoper REST API and webhooks', ready: false },
+  { id: 'idosell', n: 'IdoSell', a: 'IdoSell Admin API', ready: false },
+  { id: 'presta', n: 'PrestaShop', a: 'PrestaShop Webservice', ready: false },
+  { id: 'magento', n: 'Magento / Adobe Commerce', a: 'Adobe Commerce REST API', ready: false },
+  { id: 'own', n: 'Your own store', a: 'Your API and webhooks', ready: false },
+] as const
+
+function Store() {
+  const { colour, brand } = useBrand()
+  const [pick, setPick] = useState(0)
+  const e = ENGINES[pick]
+  const vars = {
+    ['--brand' as string]: colour,
+    ['--brand-on' as string]: onColour(colour),
+    ['--hi' as string]: inkOn(colour, PROOF_BG),
+  }
+  return (
+    <section className="nk-st" id="store" aria-labelledby="nk-st-h" style={vars}>
+      <div className="nk-st-head">
+        <div className="nk-caps nk-lab">Your store</div>
+        <h2 className="nk-h2" id="nk-st-h">
+          Works with the store you already run.
+        </h2>
+        <p className="nk-one">Shopify is ready today. Every other engine is connected in your setup week.</p>
+      </div>
+      <div className="nk-st-pick" role="group" aria-label="Your store engine">
+        {ENGINES.map((x, i) => (
+          <button key={x.id} type="button" className="nk-st-chip" aria-pressed={i === pick} onClick={() => setPick(i)}>
+            {x.n}
+          </button>
+        ))}
+      </div>
+      <div className="nk-st-map">
+        <div className="nk-st-node">
+          <small className="nk-caps">Your store</small>
+          <b>{e.n}</b>
+          <span>Orders, stock and customers stay here.</span>
+        </div>
+        <div className="nk-st-wire" aria-hidden="true">
+          <span>Orders</span>
+          <i />
+          <span>Codes</span>
+        </div>
+        <div className="nk-st-node nk-st-ad" aria-live="polite">
+          <small className="nk-caps">Adapter</small>
+          <b>{e.a}</b>
+          <span className={'nk-st-pill' + (e.ready ? ' is-ready' : '')}>{e.ready ? 'Ready' : 'Connected in your setup week'}</span>
+        </div>
+        <div className="nk-st-wire" aria-hidden="true">
+          <span>Purchases</span>
+          <i />
+          <span>Rewards</span>
+        </div>
+        <div className="nk-st-node nk-st-app">
+          <span className="nk-st-mono" aria-hidden="true">
+            {monogram(brand)}
+          </span>
+          <small className="nk-caps">The app</small>
+          <b>{brand}</b>
+          <span>App Store · Google Play</span>
+        </div>
+      </div>
+      <ul className="nk-st-facts">
+        <li>
+          <b>Codes</b>Single-use, redeemed in {brand}’s own store.
+        </li>
+        <li>
+          <b>Data</b>Customer data stays with {brand}.
+        </li>
+        <li>
+          <b>Pharmacy and drugstore</b>A scanned receipt confirms the purchase.
+        </li>
+      </ul>
+    </section>
+  )
+}
+
+/* ── spec 33: pytania z pierwszej rozmowy zamiast FAQ — chipy obok formularza, odpowiedz wjezdza jak wiadomosc.
+   Pelna tresc wszystkich odpowiedzi stoi tez w liscie sr-only (czytniki, wyszukiwarki, test JSON-LD na innerText). ── */
+function Questions() {
+  const [at, setAt] = useState<number | null>(null)
+  return (
+    <div className="nk-qa">
+      <p className="nk-caps nk-qa-k" id="nk-qa-k">
+        Asked on first calls
+      </p>
+      <div className="nk-qa-chips" role="group" aria-labelledby="nk-qa-k">
+        {FAQ.map((f, i) => (
+          <button
+            key={f.q}
+            type="button"
+            className="nk-qa-chip"
+            aria-pressed={at === i}
+            aria-controls="nk-qa-ans"
+            onClick={() => setAt(i)}
+          >
+            {f.q}
+          </button>
+        ))}
+      </div>
+      <div className="nk-qa-ans" id="nk-qa-ans" aria-live="polite">
+        {at !== null && (
+          <div className="nk-qa-thread" key={at}>
+            <p className="nk-qa-q">{FAQ[at].q}</p>
+            <div className="nk-qa-msg">
+              <span className="nk-qa-av" aria-hidden="true">
+                R
+              </span>
+              <div>
+                <small>Rafał</small>
+                <p>{FAQ[at].a}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <dl className="nk-sr">
+        {FAQ.map((f) => (
+          <div key={f.q}>
+            <dt>{f.q}</dt>
+            <dd>{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   )
 }
 
@@ -762,9 +781,9 @@ export function Story() {
       <Cockpit />
       <DemoNote className="nk-demo nk-demo-after" />
 
-      <Evidence brand={own ? name.trim() : DEMO_BRAND} />
+      <Proof />
 
-      <Faq />
+      <Store />
 
       <Finale />
 
@@ -786,6 +805,7 @@ export function Story() {
             {shown ? `Build ${shown}’s app.` : 'Build your brand’s app.'}
           </h2>
           <p className="nk-one">Send your store address. The first call covers rewards and setup.</p>
+          <Questions />
         </div>
         <div className="nk-final-form">
           <Enquiry onStore={setStore} />

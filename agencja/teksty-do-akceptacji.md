@@ -401,3 +401,20 @@ Etykiety w większości powtarzają istniejące kickery i rozdziały paska aktó
 |---|---|---|---|
 | /work/genactiv | pigułka postępu (stała) i wiersz nad kickerem w układzie statycznym | Act N of 11 · <streszczenie> | nowy |
 | /work/genactiv | streszczenia aktów 1–11 | The box becomes a daily habit · The problem: the habit fades · Proof of purchase · One card a day · Rewards known in advance · Cashback that grows · Points and levels · Consent, never a condition · How it was built · How success is measured · Your brand colour | nowy |
+
+## R6 p2 A — dowód na atramencie, „Your store”, pytania zamiast FAQ (24.11.2026, spec 33)
+copy-voice OK. Czytelnik-kupujący: NIE uruchomiony (budujący A bez osobnego subagenta) — do zrobienia przez Leada.
+Usunięte ze strony: akapity i wykres kropek w #proof, pas 5 kart #integrations, sekcja FAQ (akordeon), kalkulator luki pod hero.
+
+| Trasa | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /nawyko | #why, link | Work out your own gap → (/calculator) | nowy |
+| /nawyko | #proof | Proof · {marka} · customers still reordering, by month · Example · Start 1–6 · With the app / Control group · Held out as control · N of 24 | nowy |
+| /nawyko | #proof, wynik (aria-live) | By month six the two bands no longer overlap: that gap is the app. / The bands overlap: too few customers held out to tell. | nowy |
+| /nawyko | #store, nagłówek | Your store · Works with the store you already run. · Shopify is ready today. Every other engine is connected in your setup week. | nowy (też featureList JSON-LD) |
+| /nawyko | #store, silniki | Shopify · WooCommerce · Shoper · IdoSell · PrestaShop · Magento / Adobe Commerce · Your own store | nowy |
+| /nawyko | #store, schemat | Your store · {silnik} · Orders, stock and customers stay here. · Orders / Codes · Adapter · {podpis adaptera} · Ready / Connected in your setup week · Purchases / Rewards · The app · {marka} · App Store · Google Play | nowy |
+| /nawyko | #store, podpisy adaptera | Shopify app: orders in, discount codes out · WooCommerce REST API and webhooks · Shoper REST API and webhooks · IdoSell Admin API · PrestaShop Webservice · Adobe Commerce REST API · Your API and webhooks | nowy |
+| /nawyko | #store, fakty | Codes — Single-use, redeemed in {marka}’s own store. · Data — Customer data stays with {marka}. · Pharmacy and drugstore — A scanned receipt confirms the purchase. | nowy |
+| /nawyko | #enquiry, pytania | Asked on first calls · chipy = 6 pytań z FAQ (bez zmian) · dymek „Rafał” z odpowiedzią z FAQ (bez zmian) | nowy układ |
+| /nawyko | pasek rozdziałów | Your app · Why · How it works · Proof · Your store · One morning · Ask | zmienione |

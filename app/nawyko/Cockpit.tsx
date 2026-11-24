@@ -60,6 +60,7 @@ export function WhyInterlude() {
         <div className="nk-why-bar" aria-hidden="true">
           <i style={{ transform: `scaleX(${Math.min(day, PACK) / PACK})` }} />
         </div>
+        <a className="nk-why-calc" href="/calculator">Work out your own gap →</a>
       </div>
     </section>
   )

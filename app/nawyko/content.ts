@@ -35,5 +35,5 @@ export const FEATURES = [
   'Customers scratch one card a day for rewards known up front.',
   'One small, satisfying moment after each dose.',
   'Reorder lift, measured against customers who never get the app.',
-  'Runs on Shopify; your other tools connect per brand.',
+  'Works with the store you already run.',
 ] as const
