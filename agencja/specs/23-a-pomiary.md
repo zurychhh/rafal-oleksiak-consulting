@@ -54,3 +54,14 @@ Przebieg 1: FAIL `scroll-perf-1440` (101 ms) oraz `content-rules`/`focus-ring` �
 `agencja/podglad/r4p12-a-przed-{1440,390}-{exchange,integrations}.png` i `r4p12-a-po-…` (te same pozycje, nagłówki A2).
 `r4p12-a-po-{1440,390}-scena-*.png` — scena po zmianie. Zrzutów „przed” sceny w tych samych pozycjach brak: pierwszy skrypt
 zrzutów celował w pozycje kółka, które nie trafiały w scenę (usunięte), a stary build był już nadpisany.
+
+## Po recenzji 28 (Lead, 24.11 10:10) — A1 lista kroków WYCOFANA, A2 WYCOFANE
+- Recenzja 28 (WAŻNE): CLS 0 na 1440 był tylko efektem miary — przy `key` na całej liście kroki pod aktywnym przeskakują
+  w jednej klatce (54 px i 23 px), ale nowe węzły nie liczą się do CLS (web.dev „CLS”: przesunięcie = zmiana pozycji
+  ISTNIEJĄCEGO elementu). Oko widzi skok, więc to pogorszenie. Cofnięte: `Fragment key`, `nk-din`, przywracanie fokusu.
+  Zostały `key` na trzech tekstach w telefonie (tekst wymieniany w miejscu, sąsiedzi się nie ruszają). Stan po scaleniu:
+  clsscroll 390 0,00000, 1440 0,00338 (INFO, źródło `.nk-step is-on` jak przed — rozwinięcie opisu jest animowane).
+- A2: czytelnik-kupujący odrzucił wszystkie trzy nagłówki („budget” sugeruje limit, którego suwak nie ustawia; „Built on”
+  nic nie niesie; „Reorders: four steps” — bohaterem są kroki). Przywrócone stare brzmienia; jego propozycje w „Czeka na Rafała”.
+- scroll-perf 390 po scaleniu 85–146 ms; przeplatany pomiar A/B ze starym buildem (582834f, ten sam kod `/nawyko` bez kluczy):
+  stary 181/119/161 ms, nowy 144/98/80 ms → brak regresji, szum maszyny (2 rdzenie).

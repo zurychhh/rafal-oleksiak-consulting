@@ -301,7 +301,9 @@ Pasek pojawia się przy przewijaniu w górę za pierwszym ekranem. Etykiety rozd
 | pasek, `aria-label` nawigacji | Chapters | bez zmian (to samo co pasek `/nawyko`) |
 | /nawyko | R4 p11 FAQ H2 (zasada 8) | FAQ: six answers you need before the first call. | zmieniony (było „Six answers a brand needs before the first call.”; czytelnik-kupujący: INNA → to brzmienie; copy-voice OK) |
 
-## R4 przebieg 12 — trzy nagłówki `/nawyko` (24.11.2026, spec 23 A2; R4p11-B, brak decyzji = wprowadzone)
+## R4 przebieg 12 — trzy nagłówki `/nawyko` (24.11.2026, spec 23 A2) — WYCOFANE po bramce tekstów
+Czytelnik-kupujący odrzucił wszystkie trzy; na stronie zostały stare brzmienia. Jego propozycje: „Your customers tick each dose; your store earns the next-pack reorder.”, „Your brand sets the cashback rate and reward thresholds with one slider.”, „Your brand's own app, on Shopify, linked to subscriptions and CRM.” — do decyzji Rafała (R4p12-A).
+
 copy-voice OK, JSON-LD (`content.ts` FEATURES) zsynchronizowany, `jsonld-rules` PASS. Czytelnika-kupującego uruchamia Lead.
 | Miejsce | Tekst | Status |
 |---|---|---|

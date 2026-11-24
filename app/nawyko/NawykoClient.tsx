@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Enquiry } from './Enquiry'
 import { FAQ } from './content'
 
@@ -1050,34 +1050,17 @@ function Scene({
   /* --sw i --p ustawiane na elementach, ktore ich uzywaja (nie na korzeniu sceny) i zadeklarowane @property
      z inherits:false: zmiana przy kazdym przewinieciu nie uniewaznia stylow calego poddrzewa sceny. */
   const swStyle = { ['--sw' as string]: sw }
-  /* A1 R4p12: przy przewijaniu lista krokow i akapity pod nia to nowe wezly przy kazdej zmianie aktu (key) — rozwiniecie
-     opisu nie przesuwa juz istniejacych elementow (CLS). Fokus z przycisku kroku wraca na przycisk aktywnego kroku. */
-  const stepFocus = useRef(false)
-  useEffect(() => {
-    if (!stepFocus.current) return
-    const a = document.activeElement
-    if (a && a !== document.body) return
-    wrap.current?.querySelector<HTMLElement>('.nk-stepbtn[aria-current="step"]')?.focus({ preventScroll: true })
-  }, [step])
   const steps = (
     <div className="nk-in">
       <div className="nk-caps nk-lab">
         <span className="nk-who">For your customer</span>
         <span className="nk-labrest">How it works · made-up brand</span>
       </div>
-      <h2 className="nk-h2">Reorders: four steps that bring customers back for the next pack.</h2>
-      <Fragment key={scroll ? step : 'still'}>
+      <h2 className="nk-h2">Four steps that bring the customer back for the next pack.</h2>
       <ol className="nk-steps">
         {STEPS.map((s, i) => (
           <li key={s.t} className={'nk-step' + (i === step ? ' is-on' : '')}>
-            <button
-              type="button"
-              className="nk-stepbtn"
-              aria-current={i === step ? 'step' : undefined}
-              onClick={() => go(i)}
-              onFocus={() => (stepFocus.current = true)}
-              onBlur={() => (stepFocus.current = false)}
-            >
+            <button type="button" className="nk-stepbtn" aria-current={i === step ? 'step' : undefined} onClick={() => go(i)}>
               <span className="nk-n">0{i + 1}</span>
               <span className="nk-t">{s.t}</span>
               <span className="nk-d">
@@ -1098,7 +1081,6 @@ function Scene({
           Scratch today&rsquo;s card
         </button>
       </p>
-      </Fragment>
     </div>
   )
 
@@ -1274,7 +1256,7 @@ function Loyalty({ skin, brand }: { skin: Skin; brand: string }) {
             <span className="nk-labrest">Points to cashback</span>
           </div>
           <h2 className="nk-h2" id="nk-xch">
-            Programme cost: you set the budget.
+            You set what the programme costs.
           </h2>
           <p className="nk-one">Move the rate and the customer&rsquo;s app shows it at once.</p>
           <div className="nk-desk2">
@@ -1584,7 +1566,7 @@ function Evidence({ brand }: { brand: string }) {
             <span className="nk-labrest">Integrations</span>
           </div>
           <h2 className="nk-h2" id="nk-intg">
-            Built on Shopify; other tools connect per brand.
+            Runs on Shopify; your other tools connect per brand.
           </h2>
           <p className="nk-one">
             Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both
