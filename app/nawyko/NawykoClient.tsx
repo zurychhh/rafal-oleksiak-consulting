@@ -1376,7 +1376,7 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
 /* ── runda 4 (d–f): sciezka wiedzy z prezentem, zakup w aptece, prywatnosc od projektu ── */
 /* Ten sam uklad „nk-still”. Stan domyslny (bez JS, reduced-motion) jest kompletny: sciezka w polowie z widocznym
    prezentem na mecie, zakup potwierdzony, funkcje zablokowane z przyciskiem. */
-function MoreScenes({ brand }: { skin: Skin; brand: string }) {
+function MoreScenes({ brand, panel }: { brand: string; panel: PanelOf }) {
   const [lesson, setLesson] = useState(3)
   const [scanN, setScanN] = useState(0)
   const [bought, setBought] = useState(false)
@@ -1393,18 +1393,12 @@ function MoreScenes({ brand }: { skin: Skin; brand: string }) {
   }
   const done = lesson >= LESSONS
 
-  const { colour } = useBrand()
-  const vars = {
-    ['--brand' as string]: colour,
-    ['--brand-on' as string]: onColour(colour),
-    ['--hi' as string]: inkOn(colour, '#0E0F12'),
-  }
   const shown = Math.min(lesson, LESSONS)
 
   return (
-    <div className="nk-r4 nk-r5c" id="more" style={vars} data-dark={contrast(colour, '#0E0F12') < 2 ? '' : undefined}>
+    <>
       {/* spec 30: poziomy pas lekcji (papier) — bez telefonu; karty lekcji wygladaja jak karty aplikacji */}
-      <section className="nk-paths" id="paths" aria-labelledby="nk-path">
+      <section className="nk-paths" id="paths" {...panel('paths')}>
         <div className="nk-pathhead">
           <div className="nk-caps nk-lab">
             <span className="nk-who">For you</span>
@@ -1453,7 +1447,7 @@ function MoreScenes({ brand }: { skin: Skin; brand: string }) {
       </section>
 
       {/* spec 30: pelnoekranowe przejecie w kolorze marki — telefon na srodku, dwa zrodla zakupu po bokach */}
-      <section className="nk-pharm" id="pharmacy" aria-labelledby="nk-pharm">
+      <section className="nk-pharm" id="pharmacy" {...panel('pharmacy')}>
         <div className="nk-pharmhead">
           <div className="nk-caps nk-lab">
             <span className="nk-who">For you</span>
@@ -1489,7 +1483,7 @@ function MoreScenes({ brand }: { skin: Skin; brand: string }) {
       </section>
 
       {/* spec 30: wielkie zdanie typograficzne w atramencie; pod nim przelacznik, zapis danych i telefon w trzech kolumnach */}
-      <section className="nk-priv" id="privacy" aria-labelledby="nk-priv">
+      <section className="nk-priv" id="privacy" {...panel('privacy')}>
         <div className="nk-caps nk-lab">
           <span className="nk-who">For you</span>
           <span className="nk-labrest">Privacy</span>
@@ -1529,7 +1523,7 @@ function MoreScenes({ brand }: { skin: Skin; brand: string }) {
           </div>
         </div>
       </section>
-    </div>
+    </>
   )
 }
 
@@ -1570,7 +1564,7 @@ const LINKS = [
   { k: 'App stores', n: 'App Store · Google Play', d: 'The app is listed under your brand name.' },
 ] as const
 
-function Evidence({ brand }: { brand: string }) {
+function ProofPanel({ brand, panel }: { brand: string; panel: PanelOf }) {
   const [held, setHeld] = useState(6)
   const wc = SPREAD / Math.sqrt(held)
   const wa = SPREAD / Math.sqrt(CROWD - held)
@@ -1578,117 +1572,121 @@ function Evidence({ brand }: { brand: string }) {
   const apart = LIFT_APP[last] - wa > LIFT_CTRL[last] + wc
 
   return (
-    <div className="nk-r4" id="evidence">
-      <section className="nk-still nk-proof" id="proof" aria-labelledby="nk-prf">
-        <div className="nk-panel">
-          <div className="nk-caps nk-lab">
-            <span className="nk-who">For you</span>
-            <span className="nk-labrest">Proof of results</span>
+    <section className="nk-still nk-proof" id="proof" {...panel('proof')}>
+      <div className="nk-panel">
+        <div className="nk-caps nk-lab">
+          <span className="nk-who">For you</span>
+          <span className="nk-labrest">Proof of results</span>
+        </div>
+        <h2 className="nk-h2" id="nk-prf">
+          Reorder lift, measured against customers who never get the app.
+        </h2>
+        <p className="nk-one">A control group goes without the app, so the gap between the two curves is the app&rsquo;s effect.</p>
+        <figure className="nk-desk2 nk-lift">
+          <figcaption className="nk-caps nk-deskh">
+            <span>{brand} · results panel</span>
+            <b className="nk-ex">Example</b>
+          </figcaption>
+          <div className="nk-crowd" aria-hidden="true">
+            {Array.from({ length: CROWD }, (_, i) => (
+              <i key={i} className={i >= CROWD - held ? 'is-ctrl' : ''} />
+            ))}
           </div>
-          <h2 className="nk-h2" id="nk-prf">
-            Reorder lift, measured against customers who never get the app.
-          </h2>
-          <p className="nk-one">A control group goes without the app, so the gap between the two curves is the app&rsquo;s effect.</p>
-          <figure className="nk-desk2 nk-lift">
-            <figcaption className="nk-caps nk-deskh">
-              <span>{brand} · results panel</span>
-              <b className="nk-ex">Example</b>
-            </figcaption>
-            <div className="nk-crowd" aria-hidden="true">
-              {Array.from({ length: CROWD }, (_, i) => (
-                <i key={i} className={i >= CROWD - held ? 'is-ctrl' : ''} />
-              ))}
-            </div>
-            <label className="nk-rate" htmlFor="nk-held">
-              <span>Customers held out as control, out of 24 in this example</span>
-              <output htmlFor="nk-held">
-                {held} of {CROWD}
-              </output>
-            </label>
-            <input
-              id="nk-held"
-              className="nk-slider"
-              type="range"
-              min={2}
-              max={12}
-              step={1}
-              value={held}
-              aria-valuetext={`${held} of ${CROWD} customers held out without the app`}
-              onChange={(e) => setHeld(Number(e.currentTarget.value))}
-            />
-            <svg className="nk-plot" viewBox="0 0 360 206" role="img" aria-labelledby="nk-lift-t">
-              <title id="nk-lift-t">
-                Example chart: customers still reordering over six months, app group above control group.
-              </title>
-              <line x1="40" y1="162" x2="340" y2="162" className="nk-axis" />
-              <path d={band(LIFT_CTRL, wc)} className="nk-band nk-band-c" />
-              <path d={band(LIFT_APP, wa)} className="nk-band nk-band-a" />
-              <path d={curve(LIFT_CTRL)} className="nk-cv nk-cv-c" />
-              <path d={curve(LIFT_APP)} className="nk-cv nk-cv-a" />
-              {LIFT_APP.map((_, i) => (
-                <text key={i} x={LX(i)} y="182" className="nk-tick">
-                  {i === 0 ? 'Start' : i}
-                </text>
-              ))}
-              <text x="190" y="200" className="nk-tick">
-                Month
+          <label className="nk-rate" htmlFor="nk-held">
+            <span>Customers held out as control, out of 24 in this example</span>
+            <output htmlFor="nk-held">
+              {held} of {CROWD}
+            </output>
+          </label>
+          <input
+            id="nk-held"
+            className="nk-slider"
+            type="range"
+            min={2}
+            max={12}
+            step={1}
+            value={held}
+            aria-valuetext={`${held} of ${CROWD} customers held out without the app`}
+            onChange={(e) => setHeld(Number(e.currentTarget.value))}
+          />
+          <svg className="nk-plot" viewBox="0 0 360 206" role="img" aria-labelledby="nk-lift-t">
+            <title id="nk-lift-t">
+              Example chart: customers still reordering over six months, app group above control group.
+            </title>
+            <line x1="40" y1="162" x2="340" y2="162" className="nk-axis" />
+            <path d={band(LIFT_CTRL, wc)} className="nk-band nk-band-c" />
+            <path d={band(LIFT_APP, wa)} className="nk-band nk-band-a" />
+            <path d={curve(LIFT_CTRL)} className="nk-cv nk-cv-c" />
+            <path d={curve(LIFT_APP)} className="nk-cv nk-cv-a" />
+            {LIFT_APP.map((_, i) => (
+              <text key={i} x={LX(i)} y="182" className="nk-tick">
+                {i === 0 ? 'Start' : i}
               </text>
-              <text x="40" y="8" className="nk-tick nk-tick-l">
-                Still reordering
+            ))}
+            <text x="190" y="200" className="nk-tick">
+              Month
+            </text>
+            <text x="40" y="8" className="nk-tick nk-tick-l">
+              Still reordering
+            </text>
+          </svg>
+          <div className="nk-key" aria-hidden="true">
+            <span className="nk-key-a">With the app</span>
+            <span className="nk-key-c">Control group</span>
+          </div>
+          <p className="nk-cost" aria-live="polite">
+            {apart ? (
+              <>
+                <b>By month six the two bands no longer overlap.</b> That gap is what the app adds.
+              </>
+            ) : (
+              <>
+                <b>Ranges overlap:</b> too few customers held out to tell.
+              </>
+            )}
+          </p>
+        </figure>
+        <p className="nk-fine">A bigger control group gives a clearer answer; fewer customers get the app meanwhile. You choose the split.</p>
+      </div>
+      <div className="nk-phonecol">
+        <figure className="nk-desk2 nk-runout">
+          <figcaption className="nk-caps nk-deskh">
+            <span>Real pack length, from daily ticks</span>
+            <b className="nk-ex">Example</b>
+          </figcaption>
+          <svg className="nk-plot" viewBox="0 0 360 210" role="img" aria-labelledby="nk-run-t">
+            <title id="nk-run-t">
+              {`Example chart: each dot is one customer's last daily tick before the next pack. The label says ${PACK_DAYS} days; most packs last to day ${RUN_PEAK}.`}
+            </title>
+            <line x1="16" y1="178" x2="344" y2="178" className="nk-axis" />
+            <line x1={RX(PACK_DAYS)} y1="14" x2={RX(PACK_DAYS)} y2="178" className="nk-label-line" />
+            <text x={RX(PACK_DAYS) - 6} y="22" className="nk-tick nk-tick-r">
+              Label: {PACK_DAYS} days
+            </text>
+            {RUNOUT.flatMap(([day, n]) =>
+              Array.from({ length: n }, (_, k) => (
+                <circle key={`${day}-${k}`} cx={RX(day)} cy={170 - k * 17} r="7" className={day === RUN_PEAK ? 'nk-dot is-peak' : 'nk-dot'} />
+              )),
+            )}
+            {RUNOUT.filter(([d]) => d % 2 === 0).map(([d]) => (
+              <text key={d} x={RX(d)} y="198" className="nk-tick">
+                {d}
               </text>
-            </svg>
-            <div className="nk-key" aria-hidden="true">
-              <span className="nk-key-a">With the app</span>
-              <span className="nk-key-c">Control group</span>
-            </div>
-            <p className="nk-cost" aria-live="polite">
-              {apart ? (
-                <>
-                  <b>By month six the two bands no longer overlap.</b> That gap is what the app adds.
-                </>
-              ) : (
-                <>
-                  <b>Ranges overlap:</b> too few customers held out to tell.
-                </>
-              )}
-            </p>
-          </figure>
-          <p className="nk-fine">A bigger control group gives a clearer answer; fewer customers get the app meanwhile. You choose the split.</p>
-        </div>
-        <div className="nk-phonecol">
-          <figure className="nk-desk2 nk-runout">
-            <figcaption className="nk-caps nk-deskh">
-              <span>Real pack length, from daily ticks</span>
-              <b className="nk-ex">Example</b>
-            </figcaption>
-            <svg className="nk-plot" viewBox="0 0 360 210" role="img" aria-labelledby="nk-run-t">
-              <title id="nk-run-t">
-                {`Example chart: each dot is one customer's last daily tick before the next pack. The label says ${PACK_DAYS} days; most packs last to day ${RUN_PEAK}.`}
-              </title>
-              <line x1="16" y1="178" x2="344" y2="178" className="nk-axis" />
-              <line x1={RX(PACK_DAYS)} y1="14" x2={RX(PACK_DAYS)} y2="178" className="nk-label-line" />
-              <text x={RX(PACK_DAYS) - 6} y="22" className="nk-tick nk-tick-r">
-                Label: {PACK_DAYS} days
-              </text>
-              {RUNOUT.flatMap(([day, n]) =>
-                Array.from({ length: n }, (_, k) => (
-                  <circle key={`${day}-${k}`} cx={RX(day)} cy={170 - k * 17} r="7" className={day === RUN_PEAK ? 'nk-dot is-peak' : 'nk-dot'} />
-                )),
-              )}
-              {RUNOUT.filter(([d]) => d % 2 === 0).map(([d]) => (
-                <text key={d} x={RX(d)} y="198" className="nk-tick">
-                  {d}
-                </text>
-              ))}
-            </svg>
-            <p className="nk-cost">
-              Each dot is one customer&rsquo;s last daily tick before the next pack. In this example most packs last to <b>day {RUN_PEAK}</b>, so the
-              reorder reminder is set for day {RUN_PEAK}, from totals across customers.
-            </p>
-          </figure>
-        </div>
-      </section>
+            ))}
+          </svg>
+          <p className="nk-cost">
+            Each dot is one customer&rsquo;s last daily tick before the next pack. In this example most packs last to <b>day {RUN_PEAK}</b>, so the
+            reorder reminder is set for day {RUN_PEAK}, from totals across customers.
+          </p>
+        </figure>
+      </div>
+    </section>
+  )
+}
 
+function Evidence() {
+  return (
+    <div className="nk-r4" id="evidence">
       <section className="nk-still nk-int" id="integrations" aria-labelledby="nk-intg">
         <div className="nk-panel">
           <div className="nk-caps nk-lab">
@@ -1766,7 +1764,7 @@ const NEVER = [
   },
 ] as const
 
-function NeverScene({ skin, brand }: { skin: Skin; brand: string }) {
+function NeverScene({ skin, brand, panel }: { skin: Skin; brand: string; panel: PanelOf }) {
   const [last, setLast] = useState<number | null>(null)
   const [tries, setTries] = useState<number[]>(() => NEVER.map(() => 0))
   const press = (i: number) => {
@@ -1774,7 +1772,7 @@ function NeverScene({ skin, brand }: { skin: Skin; brand: string }) {
     setTries((t) => t.map((n, k) => (k === i ? n + 1 : n)))
   }
   return (
-    <section className="nk-still nk-never" id="never" aria-labelledby="nk-never">
+    <section className="nk-still nk-never" id="never" {...panel('never')}>
       <div className="nk-panel">
         <div className="nk-caps nk-lab">
           <span className="nk-who">For you</span>
@@ -1815,6 +1813,129 @@ function NeverScene({ skin, brand }: { skin: Skin; brand: string }) {
       </div>
       <div className="nk-phonecol">
         <Phone step={4} t={1} theme={skin} scratched brand={brand} day={17} />
+      </div>
+    </section>
+  )
+}
+
+/* ── spec 35 (R6'): jeden kokpit „For you” zaraz po portfelu ──
+   Piec dotychczasowych widokow marki jako zakladki jednej sekcji (WAI-ARIA APG Tabs, aktywacja automatyczna).
+   Nieaktywne panele maja `hidden`, ale zostaja w DOM (stan i tresc). Kotwice #paths… aktywuja zakladke i przewijaja do kokpitu. */
+type PanelOf = (id: string) => { role: 'tabpanel'; 'aria-labelledby': string; hidden: boolean; tabIndex: number }
+const CK_TABS = [
+  { id: 'paths', label: 'Learning paths' },
+  { id: 'pharmacy', label: 'Pharmacy purchases' },
+  { id: 'privacy', label: 'Privacy' },
+  { id: 'proof', label: 'Proof of results' },
+  { id: 'never', label: 'What it never does' },
+] as const
+
+/* aktywna zakladka widoczna w przewijanym rzedzie (bez przewijania strony) */
+function revealTab(row: HTMLElement | null, i: number) {
+  const tab = row?.children[i] as HTMLElement | undefined
+  if (!row || !tab) return
+  const l = tab.offsetLeft - 16
+  const r = tab.offsetLeft + tab.offsetWidth + 16 - row.clientWidth
+  if (l < row.scrollLeft) row.scrollLeft = l
+  else if (r > row.scrollLeft) row.scrollLeft = r
+}
+const rowAtEnd = (row: HTMLElement | null) => !row || row.scrollLeft + row.clientWidth >= row.scrollWidth - 2
+
+function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
+  const [cur, setCur] = useState(0)
+  const [end, setEnd] = useState(false)
+  const list = useRef<HTMLDivElement>(null)
+  const sec = useRef<HTMLElement>(null)
+
+  const { colour } = useBrand()
+  const vars = {
+    ['--brand' as string]: colour,
+    ['--brand-on' as string]: onColour(colour),
+    ['--hi' as string]: inkOn(colour, '#0E0F12'),
+  }
+
+  const pick = (i: number, focus = false) => {
+    setCur(i)
+    revealTab(list.current, i)
+    if (focus) (list.current?.children[i] as HTMLElement | undefined)?.focus()
+  }
+  const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const n = CK_TABS.length
+    const k = e.key
+    const i = k === 'ArrowRight' ? (cur + 1) % n : k === 'ArrowLeft' ? (cur - 1 + n) % n : k === 'Home' ? 0 : k === 'End' ? n - 1 : -1
+    if (i < 0) return
+    e.preventDefault()
+    pick(i, true)
+  }
+  const onRow = () => setEnd(rowAtEnd(list.current))
+
+  /* kotwice: /nawyko#paths itd. (wejscie i hashchange) → zakladka + przewiniecie do kokpitu */
+  useEffect(() => {
+    const row = list.current
+    const fit = () => setEnd(rowAtEnd(row))
+    const go = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1))
+      const i = CK_TABS.findIndex((t) => t.id === id)
+      if (i < 0) return
+      setCur(i)
+      revealTab(row, i)
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      requestAnimationFrame(() => sec.current?.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' }))
+    }
+    go()
+    fit()
+    window.addEventListener('hashchange', go)
+    window.addEventListener('resize', fit)
+    return () => {
+      window.removeEventListener('hashchange', go)
+      window.removeEventListener('resize', fit)
+    }
+  }, [])
+
+  const panel: PanelOf = (id) => ({
+    role: 'tabpanel',
+    'aria-labelledby': 'nk-ck-t-' + id,
+    hidden: CK_TABS[cur].id !== id,
+    tabIndex: 0,
+  })
+
+  return (
+    <section className="nk-cockpit" id="cockpit" aria-labelledby="nk-ck-h" style={vars} ref={sec}>
+      <div className="nk-ck-head">
+        <div className="nk-caps nk-lab">
+          <span className="nk-who">For you</span>
+          <span className="nk-labrest">{brand} · brand side</span>
+        </div>
+        <h2 className="nk-h2" id="nk-ck-h">
+          Now the same app from your side: what you set, what you see.
+        </h2>
+      </div>
+      <div className="nk-ck-rowwrap" data-end={end ? '' : undefined}>
+        <div className="nk-ck-tabs" role="tablist" aria-label={`${brand} brand views`} ref={list} onKeyDown={onKey} onScroll={onRow}>
+          {CK_TABS.map((t, i) => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              id={'nk-ck-t-' + t.id}
+              aria-selected={i === cur}
+              aria-controls={t.id}
+              tabIndex={i === cur ? 0 : -1}
+              className="nk-ck-tab"
+              onClick={() => pick(i)}
+            >
+              <span className="nk-ck-n" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="nk-ck-stage nk-r4 nk-r5c" data-dark={contrast(colour, '#0E0F12') < 2 ? '' : undefined}>
+        <MoreScenes brand={brand} panel={panel} />
+        <ProofPanel brand={brand} panel={panel} />
+        <NeverScene skin={skin} brand={brand} panel={panel} />
       </div>
     </section>
   )
@@ -2065,10 +2186,8 @@ export function Story() {
       <DemoNote className="nk-demo nk-demo-after" />
 
       <Loyalty skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
-      <MoreScenes skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
-      <Evidence brand={own ? name.trim() : DEMO_BRAND} />
-
-      <NeverScene skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
+      <BrandCockpit skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
+      <Evidence />
 
       <Faq />
 

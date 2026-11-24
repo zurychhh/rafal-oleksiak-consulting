@@ -1275,3 +1275,37 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 .nk-r5c[data-dark] .nk-ledger dt{color:#5C5B56;}
 .nk-r5c[data-dark] .nk-ledger s{color:#3A3C40;}
 .nk-r5c[data-dark] .nk-ledger.is-on > div:first-child{background:var(--brand);color:var(--brand-on);box-shadow:none;}
+
+/* ── spec 35 (R6'): jeden kokpit „For you” po portfelu — atrament jak .nk-wallet, piec widokow marki jako zakladki ──
+   Zmienne jasne tylko w naglowku i rzedzie zakladek; panele zachowuja wlasne powierzchnie (papier / kolor marki / atrament). */
+.nk-cockpit{background:#0E0F12;color:#F2F0EA;padding:clamp(48px,7vw,104px) var(--m) clamp(48px,7vw,104px);
+  border-top:1px solid rgba(255,255,255,.12);scroll-margin-top:0;}
+.nk-ck-head{--ink:#F2F0EA;--ink2:#C9C6BE;--dim:#A9A69E;--paper:#0E0F12;max-width:900px;}
+.nk-ck-head .nk-h2{max-width:22ch;color:#F2F0EA;}
+.nk-ck-rowwrap{position:relative;margin-top:clamp(28px,4vw,48px);}
+.nk-ck-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;padding:6px;margin:-6px;}
+.nk-ck-tabs::-webkit-scrollbar{display:none;}
+.nk-ck-tab{flex:none;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:0;border-radius:999px;
+  background:#1B1D21;color:#F2F0EA;box-shadow:0 0 0 1px rgba(255,255,255,.22) inset;font:inherit;font-size:15px;font-weight:600;
+  white-space:nowrap;cursor:pointer;scroll-snap-align:start;transition:background-color .2s,color .2s;}
+.nk-ck-tab:hover{background:#26292E;}
+.nk-ck-tab:focus-visible{outline:3px solid #F2F0EA;outline-offset:2px;}
+.nk-ck-n{font-size:12px;letter-spacing:.14em;color:#B9B6AE;font-variant-numeric:tabular-nums;}
+.nk-ck-tab[aria-selected="true"]{background:var(--brand);color:var(--brand-on);box-shadow:0 0 0 1px rgba(255,255,255,.4) inset;}
+.nk-ck-tab[aria-selected="true"] .nk-ck-n{color:var(--brand-on);}
+/* podpowiedz przewijania: wygaszenie prawej krawedzi, znika na koncu rzedu */
+.nk-ck-rowwrap::after{content:"";position:absolute;top:0;right:0;bottom:0;width:56px;pointer-events:none;
+  background:linear-gradient(to right,rgba(14,15,18,0),#0E0F12 85%);transition:opacity .2s;}
+.nk-ck-rowwrap[data-end]::after{opacity:0;}
+.nk-ck-stage{color:var(--ink);margin-top:clamp(20px,2.4vw,28px);border-radius:28px;overflow:clip;box-shadow:0 0 0 1px rgba(255,255,255,.14);}
+.nk-ck-stage > section[hidden]{display:none!important;}
+.nk-ck-stage > section{border-top:0!important;border-bottom:0!important;padding-top:clamp(40px,5vw,72px)!important;}
+.nk-ck-stage > section:focus-visible{outline:3px solid var(--hi);outline-offset:-3px;}
+#evidence > .nk-int:first-child{background:var(--tint);}
+@media (max-width:860px){
+  .nk-ck-stage{margin-left:calc(-1 * var(--m));margin-right:calc(-1 * var(--m));border-radius:0;box-shadow:none;}
+  .nk-ck-tabs{margin-right:0;padding-right:var(--m);}
+  .nk-ck-rowwrap{margin-right:calc(-1 * var(--m));}
+  .nk-ck-tab{font-size:14px;padding:0 16px;}
+}
+@media (prefers-reduced-motion:reduce){.nk-ck-tab,.nk-ck-rowwrap::after{transition:none;}}

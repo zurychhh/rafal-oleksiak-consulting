@@ -63,7 +63,14 @@ const JSON_LD = {
       operatingSystem: 'iOS, Android',
       description: LEDE,
       url: URL,
-      featureList: [...FEATURES],
+      // spec 35: naglowki nieaktywnych zakladek kokpitu nie sa widoczne na starcie (bramka jsonld czyta innerText),
+      // wiec zamiast nich ida widoczne nazwy zakladek
+      featureList: [
+        ...FEATURES.filter((f) => !f.startsWith('Pharmacy') && !f.startsWith('Health data') && !f.startsWith('Reorder lift')),
+        'Pharmacy purchases',
+        'Privacy',
+        'Proof of results',
+      ],
       provider: { '@id': 'https://oleksiakconsulting.com/#person' },
     },
     {
@@ -91,8 +98,7 @@ const CHAPTERS = [
   { id: 'cashback', label: 'Cashback' },
   { id: 'levels', label: 'Points' },
   { id: 'exchange', label: 'Your costs' },
-  { id: 'privacy', label: 'Privacy' },
-  { id: 'proof', label: 'Proof' },
+  { id: 'cockpit', label: 'Your side' },
   { id: 'faq', label: 'FAQ' },
   { id: 'finale', label: 'One morning' },
 ]
