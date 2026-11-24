@@ -20,7 +20,7 @@ override = open(sys.argv[3]).read() if len(sys.argv) > 3 else None
 UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 "
       "(KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1")
 W = int(os.environ.get("WK_W", "390"))
-H_VIEW = 844 if W < 800 else 900
+H_VIEW = int(os.environ.get("WK_H", "844" if W < 800 else "900"))  # WK_H: niski laptop, np. 620 (spec 25 A3)
 if W >= 800:
     UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) AppleWebKit/605.1.15 "
           "(KHTML, like Gecko) Version/18.0 Safari/605.1.15")

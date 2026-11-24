@@ -798,3 +798,23 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 
 /* recenzja 26 I2: < 1100 px pasek w jednym rzedzie — dluga etykieta skraca sie wielokropkiem, CTA nie spada do drugiego rzedu (lista nadal zawija sie pod spod) */
 @media (max-width:1099px){.nk .cb-toggle{flex:1 1 0;}.nk .cb-cur{min-width:0;}}
+
+/* ══ R4 p14 A2 (spec 25): niski laptop (1100x620, 1280x720, z paskiem cookies) ══
+   Przypieta scena miala stale odstepy liczone pod 900 px wysokosci: przy 620 px z paskiem cookies krok 04 i jego opis
+   wchodzily pod pasek aktow .nk-acts i byly uciete przez scene (overflow:hidden). Ponizej 861 px wysokosci okna
+   odstepy, naglowek i telefon skaluja sie z wysokoscia DOSTEPNA (okno minus pasek cookies), a dol sceny ma rezerwe
+   pod pasek aktow. Tresc i teksty bez zmian; 1440x900 i telefon (<= 860 px szerokosci) poza zapytaniem. */
+@media (min-width:861px) and (max-height:860px){
+  .nk-scene.is-scroll{--avh:calc(100svh - var(--consent-h,0px));}
+  /* gora: 60 px, bo przy przewijaniu w gore wraca ChapterBar (.cb, fixed, 53 px) i nie moze przykryc etykiety rozdzialu */
+  .is-scroll .nk-stage{padding-top:60px;padding-bottom:64px;}
+  .is-scroll .nk-scenehead .nk-h2{font-size:min(clamp(30px,4.4vw,60px),calc(var(--avh) * .065));margin-top:min(20px,calc(var(--avh) * .018))!important;}
+  .is-scroll .nk-steps{margin-top:min(22px,calc(var(--avh) * .022));}
+  .is-scroll .nk-stepbtn{padding:min(18px,calc(var(--avh) * .012)) 0;}
+  .nk .is-scroll .nk-alt{margin-top:min(20px,calc(var(--avh) * .016));}
+  .nk .is-scroll .nk-next{margin-top:min(14px,calc(var(--avh) * .014));}
+  .nk .is-scroll .nk-one{margin-top:min(16px,calc(var(--avh) * .016));}
+  .is-scroll .nk-acts{bottom:20px;}
+  .is-scroll .nk-bar{bottom:10px;}
+  .is-scroll .nk-phone{height:min(clamp(480px,78svh,700px),calc(var(--avh) - 124px));}
+}
