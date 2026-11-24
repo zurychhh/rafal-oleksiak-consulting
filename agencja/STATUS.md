@@ -259,7 +259,7 @@ Odłożone do decyzji Rafała (NIE zlecać): prawdziwa aplikacja na stronie + po
 ## Dla Rafała
 
 **Runda 4, przebieg 15 (24.11 12:38–13:50) — `/nawyko` na iPhonie z paskiem cookies nie ucina już niczego w scenie „How it works” (także mały iPhone SE i wąskie Androidy), a na komputerze klawisz Tab po krokach 01–04 pokazuje właściwy krok w telefonie.**
-Do obejrzenia: PODGLAD_P15 → `/nawyko` na iPhonie bez akceptowania cookies, przewiń scenę do końca (link „Ask how your brand gets its own app” cały); na komputerze kliknij nad sceną i Tabem przejdź po krokach.
+Do obejrzenia (Vercel „success” dla 11016dd, sprawdzone statusem commita): https://rafal-oleksiak-consulting-git-agencja-strona-zurychhhs-projects.vercel.app/nawyko → `/nawyko` na iPhonie bez akceptowania cookies, przewiń scenę do końca (link „Ask how your brand gets its own app” cały); na komputerze kliknij nad sceną i Tabem przejdź po krokach.
 1. **Telefon z paskiem cookies:** dotąd scena liczyła się z całego ekranu, a pasek cookies zabierał jej dół — na 390×844 link do zapytania był ucięty o 21 px, na 360×740 siedem elementów do 69 px. Teraz scena liczy się z miejsca nad paskiem. Na iPhonie bez paska wygląd bez zmian.
 2. **Klawiatura:** kroki 01–04 były przyciskami, ale Tab nie przełączał sceny (opis i telefon stały na 01). Teraz fokus przewija scenę do kroku; myszą bez zmian.
 3. **Recenzent złapał, że pierwsza wersja chowała treść** na 360×740 nawet bez paska, a pomiar płynności pokazał, że ten sam mechanizm spowalniał scenę na telefonie — wycofany przed commitem; zamiast chować, telefon lekko maleje (o 15 px na 740 px wysokości). Zostało: na najmniejszym Androidzie 360×740 z paskiem cookies link dotyka cienkiej (2 px) kreski postępu — było 7 uciętych elementów.
