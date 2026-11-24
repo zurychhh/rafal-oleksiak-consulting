@@ -249,7 +249,10 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
    Na tej trasie rezerwa pod pasek jest STALA, w stopce od pierwszej klatki, a padding z <html> zdjety: wysokosc strony
    nie zmienia sie, gdy pasek wjezdza (fixed, lezy na rezerwie, nic nie przykrywa). */
 html:has(.ga) { padding-bottom: 0 !important; }
-.ga-foot { border-top: 1px solid #2a1f21; padding: 28px 48px calc(40px + var(--ga-foot-reserve, 72px)); }
+/* Rezerwa pod pasek cookies tylko, gdy zgody jeszcze nie ma: atrybut data-ga-consent-pending ustawia skrypt w page.tsx
+   przed pierwszym malowaniem i nie zdejmuje go w trakcie wizyty (bez przesuniecia ukladu po kliknieciu; R4 p7). */
+.ga-foot { border-top: 1px solid #2a1f21; padding: 28px 48px calc(40px + var(--ga-foot-reserve, 0px)); }
+html[data-ga-consent-pending] .ga { --ga-foot-reserve: 72px; }
 .ga-foot nav { max-width: 1240px; margin: 0 auto; display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; }
 .ga-foot a { color: var(--muted); }
 
@@ -315,7 +318,9 @@ html:has(.ga) { padding-bottom: 0 !important; }
      daje zapas na zawiniecie linii w Safari. Nie var(--consent-h) i nie padding per sekcja: zmiana po pomiarze paska
      = przesuniecie ukladu i skoki kotwic (lekcja R4 p3). --ph liczone z tej samej rezerwy: 100svh - 30svh (tekst)
      - 18 px (gora) - rezerwa - 28 px (odstep + podpis). */
-  .ga { --ga-reserve: 112px; --ph: min(calc(70svh - 46px - var(--ga-reserve)), 460px); }
+  .ga { --ga-reserve: 0px; --ph: min(calc(70svh - 46px - var(--ga-reserve)), 460px); }
+  /* rezerwa tylko bez zapisanej zgody (pasek sie pokaze); ze zgoda 0 i telefon rosnie */
+  html[data-ga-consent-pending] .ga { --ga-reserve: 112px; }
   .ga-stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: 30svh minmax(0, 1fr); gap: 0; padding: 18px 16px var(--ga-reserve); align-items: stretch; }
   .ga-stage .ga-fig { justify-content: flex-start; }
   .ga-copy { height: 100%; }
