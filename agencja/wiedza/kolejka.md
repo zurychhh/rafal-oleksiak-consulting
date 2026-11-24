@@ -18,4 +18,4 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 10. ~~Dostępność — skok do celu w obrębie strony~~ (24.11 R4 p12: `/work/genactiv` 8/8 fokus na akcie z nazwą, `scripts/genactiv-focus-check.mjs`); stare brzmienie:: fokus na celu kotwicy i ogłoszenie czytnikiem (WCAG 2.4.3), dla pasków `/nawyko` i `/work/genactiv`
 8. ~~Scroll-driven animations w CSS — wsparcie przeglądarek~~ (24.11 R4 p4: Safari 26.0 obsługuje `animation-timeline`, webkit.org/blog/17333; iOS 18 nie → zawsze `@supports` + statyczny stan końcowy; `webkit-check.py` wypisuje wsparcie). Zostaje: czy przenieść część sceny z JS do CSS
 
-13. Wydajność — wiarygodność pomiaru klatek: ile powtórzeń i jaki percentyl (web.dev/Chrome o LoAF i zmienności pomiarów laboratoryjnych) — do bramki `scroll-perf` (R4-N12)
+13. ~~Wydajność — wiarygodność pomiaru klatek~~ (24.11 R4 p13: Lighthouse „Score variability” → mediana z 3 po rozgrzewce w `scroll-perf`, selftesty)

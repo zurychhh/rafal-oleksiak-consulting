@@ -41,3 +41,11 @@ Po na desktopie: `r4p13-a-po-{1440,1100}-krok{1..4}.png`.
 klatka 100 ms, interakcja 40 ms; 390: 61 / 32 ms; WebKit 390/1440 PASS).
 Uwaga: zrzuty WebKit z bramki pokazują scenę w trybie statycznym (wszystkie opisy w wierszach) — wariant przewijany
 z `.nk-dslot` nie był oglądany w WebKit (do sprawdzenia przez Leada na Safari).
+
+## Decyzja Leada po recenzji 29 (24.11 11:28): wariant (b) WYCOFANY z kodu strony
+Recenzja 29 I1: opis stoi zawsze pod wierszem 04, więc przy krokach 1–3 czyta się jak opis kroku 04 (opis kroku 02 ~170 px od swojego
+wiersza); I2: slot wysokości najdłuższego opisu zepchnął linki pod listą o ~14 px — na 1280×720 z paskiem cookies link „Ask how…” nachodzi
+na pasek postępu, a „No pointer? Scratch today's card” wypada poza scenę. Zysk (CLS przewijania 1440 0,0034 → 0, ~30× poniżej progu
+Google 0,1) nie jest wart utraty czytelności. `app/nawyko/*` wróciło do 433356e; po wycofaniu `gates.sh /nawyko` PASS (clsscroll-1440 INFO 0,0037).
+Zostaje `scripts/steps-stable-check.mjs` (na obecnym kodzie FAIL 54 px — świadomie poza `gates.sh`, do następnej próby wariantu
+z miejscem w wierszu albo numerem w slocie po czytelniku).
