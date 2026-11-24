@@ -818,3 +818,47 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
   .is-scroll .nk-bar{bottom:10px;}
   .is-scroll .nk-phone{height:min(clamp(480px,78svh,700px),calc(var(--avh) - 124px));}
 }
+
+/* ══ R4 p15 A1 (spec 26): telefon z paskiem cookies ══
+   Przypieta scena ma wysokosc okna MINUS pasek cookies, a telefon i tryb zwarty liczyly sie z samego okna (svh):
+   390x844 z paskiem (78 px) ucinal link „Ask how…” o 21 px, 360x740 z paskiem 7 elementow do 69 px.
+   1) Telefon w scenie skaluje sie z wysokoscia DOSTEPNA (okno minus pasek): bez paska wartosc ta sama co dotad
+      (50svh), wiec 390x844 bez paska bez zmian; liniowo, bez progu.
+   2) Tryb zwarty (te same reguly co @media (max-width:860px) and (max-height:720px)) wlacza sie takze wtedy,
+      gdy to scena — nie okno — ma <= 720 px: zapytanie kontenera na .nk-stage. Bez paska scena = okno, wiec
+      prog jest ten sam co dotad (720/721 px); z paskiem dochodzi niskie okno 740 px. */
+@media (max-width:860px){
+  .is-scroll .nk-stage{container:nk-stage / size;}
+  .nk-scene.is-scroll{--ph:clamp(300px,calc((100svh - var(--consent-h,0px)) * .5),500px);}
+  .is-scroll .nk-phone{height:var(--ph);}
+}
+@media (max-width:860px) and (max-height:720px){
+  .nk-scene.is-scroll{--ph:min(43svh,470px);}
+}
+@container nk-stage (max-height:720px){
+  .nk-scenehead{--ph:min(43svh,470px);}
+  .is-scroll .nk-phone{height:min(43svh,470px);aspect-ratio:9/13.5;}
+  .nk-scene .nk-v3 .nk-rw{display:none;}
+  .nk-tabs{letter-spacing:.08em;}
+  .nk-goal{font-size:10px;}
+  .is-scroll .nk-steps{margin-top:0;}
+  .is-scroll .nk-stepbtn .nk-t{font-size:18px;}
+  .is-scroll .nk-stepbtn .nk-d{font-size:14px;line-height:1.35;}
+  .is-scroll .nk-alt{margin-top:6px;}
+  .is-scroll .nk-panel .nk-one,.is-scroll .nk-panel .nk-fine{display:none;}
+  .is-scroll .nk-scenehead .nk-panel .nk-h2{font-size:20px;}
+  .is-scroll .nk-cols{height:70px;}
+  .is-scroll .nk-v2 .nk-grid{width:78%;margin-top:3cqh;}
+  .is-scroll .nk-v5 .nk-ps,.is-scroll .nk-v4 .nk-late small{display:none;}
+  .is-scroll .nk-g34{margin-top:2cqh;}
+}
+
+/* ══ R4 p15 A3 (spec 26): etykieta „For your customer · How it works · made-up brand” w jednym wierszu od ok. 1040 px ══
+   Na 1100 px kolumna ma 455 px, a etykieta przy .2em 465 px — obie czesci lamaly sie na dwa wiersze. Odstep liter
+   maleje liniowo z szerokoscia okna (0,926vw - 8,6 px: przy 1100 px 1,6 px, pelne .16em/.2em od ok. 1140/1190 px),
+   wiec bez progu; 1280 i 1440 bez zmian. Ponizej ok. 1037 px odstep stoi na 1 px i etykieta moze sie zawinac jak dotad
+   (bez nowrap — nic nie wystaje poza kolumne). Tekst bez zmian. */
+@media (min-width:861px){
+  .nk-lab:has(.nk-labrest) .nk-who{letter-spacing:clamp(1px,calc(.926vw - 8.6px),.16em);}
+  .nk-lab:has(.nk-labrest) .nk-labrest{letter-spacing:clamp(1px,calc(.926vw - 8.6px),.2em);}
+}

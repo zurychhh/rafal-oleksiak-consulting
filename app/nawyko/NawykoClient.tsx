@@ -1023,16 +1023,23 @@ function Scene({
   const day = picked ?? (scroll ? scrollDay : PACK_DAYS)
   const pickDay = (d: number) => setDayPick({ d, p })
 
+  // Pozycja przewijania, w ktorej akt i jest aktywny — odwrotnosc mapowania przewijanie -> akt z read() (p * ACT_TOT).
+  const actTop = (i: number) => {
+    const el = wrap.current
+    if (!el) return null
+    const top = el.getBoundingClientRect().top + window.scrollY
+    const total = el.offsetHeight - window.innerHeight
+    return top + (total * (ACT_AT[i] + (i === 1 ? 0.25 : 0.6) * ACT_W[i])) / ACT_TOT
+  }
   const go = (i: number) => {
     if (!scroll) {
       setManual(i)
       return
     }
     const el = wrap.current
-    if (!el) return
-    const top = el.getBoundingClientRect().top + window.scrollY
-    const total = el.offsetHeight - window.innerHeight
-    window.scrollTo({ top: top + (total * (ACT_AT[i] + (i === 1 ? 0.25 : 0.6) * ACT_W[i])) / ACT_TOT, behavior: 'smooth' })
+    const y = actTop(i)
+    if (!el || y === null) return
+    window.scrollTo({ top: y, behavior: 'smooth' })
     if (i === 1) setHold('pending')
     // Akty 5–7: po dojechaniu fokus trafia do kontrolki aktu (os dni, nazwa marki), zeby byla osiagalna z klawiatury.
     if (i === 1 && !scratched)
@@ -1045,6 +1052,18 @@ function Scene({
       window.setTimeout(() => {
         el.querySelector<HTMLElement>('.nk-panel input, .nk-panel a')?.focus({ preventScroll: true })
       }, 900)
+  }
+
+  /* Spec 26 A2 (WCAG 2.4.3/2.4.7/2.4.11): Tab na kroku N przewija scene do pozycji, w ktorej krok N jest aktywny —
+     inaczej fokus stal na „04”, a opis i telefon zostawaly na 01 (przewijanie przypietej sceny nie rusza sie, bo
+     przycisk juz jest w oknie). Tylko fokus z klawiatury (:focus-visible): klik mysza i dotyk bez zmian. Bez
+     przenoszenia fokusu i bez samozdrapki (timer zdrapki i tak czeka, gdy fokus z klawiatury jest w scenie). */
+  const onStepFocus = (i: number, b: HTMLElement) => {
+    if (!scroll || i === step || !b.matches(':focus-visible')) return
+    const y = actTop(i)
+    if (y === null) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' })
   }
 
   /* --sw i --p ustawiane na elementach, ktore ich uzywaja (nie na korzeniu sceny) i zadeklarowane @property
@@ -1060,7 +1079,13 @@ function Scene({
       <ol className="nk-steps">
         {STEPS.map((s, i) => (
           <li key={s.t} className={'nk-step' + (i === step ? ' is-on' : '')}>
-            <button type="button" className="nk-stepbtn" aria-current={i === step ? 'step' : undefined} onClick={() => go(i)}>
+            <button
+              type="button"
+              className="nk-stepbtn"
+              aria-current={i === step ? 'step' : undefined}
+              onClick={() => go(i)}
+              onFocus={(e) => onStepFocus(i, e.currentTarget)}
+            >
               <span className="nk-n">0{i + 1}</span>
               <span className="nk-t">{s.t}</span>
               <span className="nk-d">
