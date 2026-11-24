@@ -11,6 +11,11 @@ po poprawce 195×403 (390) i 325×672 (1440), zrzuty obejrzane. Bramka: `scripts
 WebKit z Playwrighta jest tu zablokowane, działa WebKitGTK z apt). Każdy przebieg: uruchom na każdej zmienionej trasie (390 i 1440),
 żaden widoczny telefon węższy niż 150 px. Nie poprawiaj tego drugi raz — sprawdź tylko, czy Twoje zmiany tego nie cofnęły.
 
+## RUNDA 5 — ŻYWA STRONA I WIELKI FINAŁ (Rafał 24.11.2026 12:47, przez doradcę). CZYTAJ PIERWSZE, PRZED RUNDĄ 4.
+Spec: `agencja/specs/26-r5-zywa-strona.md` (pięć uwag Rafała + kierunek doradcy + kolejność p1–p4 + nowe bramki `brand-propagation`
+i `monotonia`). Zasada zmieniona przez Rafała: „istniejąca paleta strony” już nie obowiązuje — strona ma być żywa, prowadzona
+kolorem marki odwiedzającego (spec). Zacznij od p1 w najbliższym przebiegu.
+
 ## PILNE 0 (Rafał 24.11 00:33, zrzut z iPhone'a: „już to zgłaszałem” + 00:34 „gdzie testy mobile?”) — PRZED WSZYSTKIM INNYM
 **Błąd:** na iPhonie (Safari) telefon w scenie przypiętej `/nawyko` zapada się w pionowy czarny pasek (sama ramka, szerokość ≈ 2× padding),
 treść ekranu niewidoczna. Chromium tego nie pokazuje, dlatego nasza bramka przepuszcza błąd. Najpewniejsza przyczyna: szerokość
