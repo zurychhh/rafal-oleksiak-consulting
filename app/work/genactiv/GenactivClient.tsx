@@ -16,6 +16,26 @@ const DAYS = 30
 const STAMP_DAY = 24 // rysunek, podpisany „Example”
 const MID_DAY = 15 // rysunek, podpisany „Example”
 
+/* R6 p1: numer aktu i jednozdaniowe streszczenie, widoczne caly czas (etykiety z kickerow i paska rozdzialow). */
+const SUMMARY = [
+  'The box becomes a daily habit',
+  'The problem: the habit fades',
+  'Proof of purchase',
+  'One card a day',
+  'Rewards known in advance',
+  'Cashback that grows',
+  'Points and levels',
+  'Consent, never a condition',
+  'How it was built',
+  'How success is measured',
+  'Your brand colour',
+]
+/* Uklad aktu na desktopie: 0 = tekst po lewej, telefon po prawej; 1 = odwrotnie (przesuniecie transformem, bez CLS).
+   Akt 1 w pelnym kolorze marki i wielka czcionka. Zdrapka (3) i final (10) bez zmian. */
+const SIDE = [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0]
+const FULL = 1
+const actNo = (i: number) => `Act ${i + 1} of ${ACTS}`
+
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v))
 const smooth = (v: number) => {
   const x = clamp(v)
@@ -860,8 +880,14 @@ export function GenactivStory() {
       {bar}
       <div className="ga-still" key="still">
         {COPY.map((c, i) => (
-          <section key={i} className={'ga-act ga-act-' + i} aria-labelledby={'ga-t' + i} tabIndex={-1}>
+          <section
+            key={i}
+            className={'ga-act ga-act-' + i + (SIDE[i] ? ' ga-flip' : '') + (i === FULL ? ' ga-act-full ga-big' : '')}
+            aria-labelledby={'ga-t' + i} tabIndex={-1}>
             <div className="ga-copy-in">
+              <p className="ga-act-no">
+                <b>{actNo(i)}</b> · {SUMMARY[i]}
+              </p>
               {kicker(i, c.kicker)}
               {i === 0 ? (
                 <h1 id={'ga-t' + i}>{c.title}</h1>
@@ -904,7 +930,7 @@ export function GenactivStory() {
         ))}
       </div>
       {/* R4 p7: formularz stoi ZA ukladem statycznym, tak samo jak za .ga-track w trybie przewijania. Z rezerwa
-          [data-ga-pin] (.ga-still przyciety do 1320svh) #enquiry ma przed i po hydratacji te sama pozycje — wejscie
+          [data-ga-pin] (.ga-still min. 1540svh) #enquiry ma przed i po hydratacji te sama pozycje — wejscie
           z kotwica nie skacze (bylo 0,17 na 1440; pomiar pod navigator.webdriver widzial tylko uklad statyczny = 0). */}
       <Final />
       </>
@@ -920,28 +946,36 @@ export function GenactivStory() {
   const fout = (i: number) => (i === ACTS - 1 ? 1 : 1 - smooth((f - (i + 1)) / 0.1))
   const vis = (i: number) => Math.min(fin(i), fout(i))
   const p0 = smooth(f / 0.8) // telefon wysuwa sie z pudelka
+  // R6 p1: zmiana strony telefonu w ostatnich 15% aktu (razem z wjazdem nowego ekranu), potem telefon stoi.
+  const side = SIDE[act] + (SIDE[Math.min(ACTS - 1, act + 1)] - SIDE[act]) * smooth((local - 0.85) / 0.15)
+  const flood = act === FULL ? 1 - smooth((local - 0.88) / 0.12) : act === FULL - 1 ? smooth((local - 0.88) / 0.12) : 0
   const boxOut = smooth((f - 0.75) / 0.35)
 
   return (
     <>
     {bar}
     <div className="ga-track" key="track" ref={track}>
-      <div className="ga-stage">
-        <div className="ga-copy">
+      <div className="ga-stage" data-flood={flood > 0 ? '' : undefined}>
+        <div className="ga-flood" aria-hidden="true" style={{ opacity: flood }} />
+        <div className="ga-copy" style={{ transform: side ? `translateX(calc(${side.toFixed(4)} * var(--ga-swap)))` : undefined }}>
           {COPY.map((c, i) => {
             // Jeden aktywny tekst na klatke (krycie 1), wejscie samym przesunieciem: zawsze jeden naglowek >= 0,9.
             const on = i === act
-            const enter = on && i > 0 ? 1 - smooth(local / 0.1) : 0
+            // R6 p1: tekst wchodzi dopiero po ustabilizowaniu telefonu (ekran wjezdza w ostatnich 10-15% poprzedniego aktu):
+            // naglowek przesunieciem 2-18% aktu (krycie zostaje 1), reszta tekstu wygasa w 12-30% aktu. Zdrapka i final bez zmian.
+            const enter = on && i > 0 ? 1 - smooth((local - 0.02) / 0.16) : 0
+            const late = on && i !== 0 && i !== 3 && i !== 10 ? smooth((local - 0.12) / 0.18) : 1
             return (
               <article
                 key={i}
-                className="ga-copy-in"
+                className={'ga-copy-in' + (i === FULL ? ' ga-big' : '')}
                 aria-labelledby={'ga-t' + i}
                 tabIndex={-1}
                 inert={!on && i !== 3 && i !== 10}
                 style={{
                   opacity: on ? 1 : 0,
-                  transform: `translateY(${(enter * 18).toFixed(1)}px)`,
+                  transform: `translateY(${(enter * 24).toFixed(1)}px)`,
+                  ['--late' as string]: late.toFixed(3),
                 }}
               >
                 {kicker(i, c.kicker)}
@@ -954,7 +988,7 @@ export function GenactivStory() {
             )
           })}
         </div>
-        <figure className="ga-fig">
+        <figure className="ga-fig" style={{ transform: side ? `translateX(calc(${(-side).toFixed(4)} * var(--ga-swap)))` : undefined }}>
           <div className="ga-phone-slot" style={{ transform: `translateY(${(-(1 - p0) * 16).toFixed(2)}%)` }}>
             <div className="ga-glow" style={{ opacity: 1 - 0.55 * boxOut }} />
             {/* przycina telefon tylko od dolu (pudelko); zamiast clip-path z ujemnym inset, ktorego WebKit nie respektuje */}
@@ -1001,6 +1035,11 @@ export function GenactivStory() {
             {COPY[act].cap ?? CAP}
           </figcaption>
         </figure>
+        <p className="ga-prog" aria-hidden="true">
+          <b key={act}>{actNo(act)} ·</b>
+          <span key={'s' + act}>{SUMMARY[act]}</span>
+          <i className="ga-prog-bar" style={{ transform: `scaleX(${((f + 0.0001) / ACTS).toFixed(4)})` }} />
+        </p>
       </div>
     </div>
     <Final />

@@ -214,7 +214,7 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 .ga-box-back { display: none; }
 
 /* ---------- Tryb przewijania: przypieta scena ---------- */
-.ga-track { position: relative; height: 1320svh; } /* 11 aktow x 120svh */
+.ga-track { position: relative; height: 1540svh; } /* R6 p1: 11 aktow x 140svh (wolniejsze tempo) */
 .ga-stage {
   position: sticky; top: 0; height: 100svh;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 48px;
@@ -231,9 +231,9 @@ body:has(.ga) { overflow-x: visible; max-width: none; background: #0e0b0c; color
 
 /* ---------- Uklad statyczny (bez JS, reduced motion, webdriver, niskie okno) ---------- */
 .ga-still { max-width: 1240px; margin: 0 auto; padding: 0 48px; }
-/* R4 p7: przed hydratacja uklad statyczny ma co najmniej wysokosc .ga-track (1320svh) — zmieniasz jedno, zmien drugie.
+/* R4 p7: przed hydratacja uklad statyczny ma co najmniej wysokosc .ga-track (1540svh) — zmieniasz jedno, zmien drugie.
    min-height, nie height+clip: gdy JS nie wystartuje, nic nie jest uciete (recenzja: 320 px x 600 px ucinalo ostatni akt). */
-[data-ga-pin] .ga-still { min-height: 1320svh; }
+[data-ga-pin] .ga-still { min-height: 1540svh; }
 .ga-act { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; padding: 64px 0 !important; }
 .ga-act .ga-copy-in { display: flex; flex-direction: column; }
 .ga-still .ga-phone-slot { --ph: 560px; }
@@ -321,10 +321,10 @@ html[data-ga-consent-pending] .ga { --ga-foot-reserve: 72px; }
      daje zapas na zawiniecie linii w Safari. Nie var(--consent-h) i nie padding per sekcja: zmiana po pomiarze paska
      = przesuniecie ukladu i skoki kotwic (lekcja R4 p3). --ph liczone z tej samej rezerwy: 100svh - 30svh (tekst)
      - 18 px (gora) - rezerwa - 28 px (odstep + podpis). */
-  .ga { --ga-reserve: 0px; --ph: min(calc(70svh - 46px - var(--ga-reserve)), 460px); }
+  .ga { --ga-reserve: 0px; --ph: min(calc(70svh - 72px - var(--ga-reserve)), 460px); }
   /* rezerwa tylko bez zapisanej zgody (pasek sie pokaze); ze zgoda 0 i telefon rosnie */
   html[data-ga-consent-pending] .ga { --ga-reserve: 112px; }
-  .ga-stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: 30svh minmax(0, 1fr); gap: 0; padding: 18px 16px var(--ga-reserve); align-items: stretch; }
+  .ga-stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: 30svh minmax(0, 1fr); gap: 0; padding: 44px 16px var(--ga-reserve); align-items: stretch; }
   .ga-stage .ga-fig { justify-content: flex-start; }
   .ga-copy { height: 100%; }
   .ga-copy .ga-copy-in { justify-content: flex-start; }
@@ -475,3 +475,43 @@ button.ga-fakebtn.ga-done { color: var(--muted); }
 
 /* recenzja 26 M1: fokus programowy po skoku z paska bez obrysu dla myszy */
 .ga .ga-final:focus:not(:focus-visible){outline:none;}
+
+/* ---------- R6 p1: tempo, numer aktu, urozmaicone uklady ---------- */
+/* Pasek postepu aktu: absolute w przypietej scenie, jedna linia (nowrap + ellipsis), stala wysokosc => zmiana tekstu bez CLS. */
+.ga-prog {
+  position: absolute; left: 48px; top: 24px; z-index: 4; max-width: min(560px, calc(100% - 96px)); height: 34px;
+  display: flex; align-items: center; gap: 12px; padding: 0 14px; border-radius: 999px;
+  background: rgba(29, 21, 23, 0.86); box-shadow: inset 0 0 0 1px #3a2c2f;
+  font: 600 12px/1 'Montserrat', 'Montserrat Fallback', system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; pointer-events: none;
+}
+.ga-prog b { color: var(--accent-hi); font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
+.ga-prog span { overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+.ga-prog-bar { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; transform-origin: 0 50%; background: var(--accent-hi); }
+/* Akt w pelnym kolorze marki (ciemna czerwien: bialy 15:1, muted 6,2:1, accent-hi 4,8:1). Krycie = jedyna zmiana => bez CLS. */
+.ga-flood { position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); z-index: -1; pointer-events: none;
+  background: radial-gradient(90% 80% at 30% 40%, #8e1420, #5a0c14 70%); }
+/* Akt z wielka czcionka: klasa statyczna artykulu, nie zmienia sie w trakcie przewijania. */
+.ga .ga-big h2 { font-size: clamp(40px, 4.6vw, 72px); line-height: 1.02; }
+.ga-copy, .ga-stage .ga-fig { will-change: transform; }
+/* Uklad statyczny: co drugi akt telefon po lewej, akt 1 w pelnym kolorze. */
+.ga-act-no { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px !important; }
+.ga-act-no b { color: var(--accent-hi); }
+@media (min-width: 1024px) {
+  .ga-still .ga-flip .ga-copy-in { order: 2; }
+  .ga-still .ga-flip .ga-fig { order: 1; }
+}
+.ga-still .ga-act-full { position: relative; isolation: isolate; }
+.ga-still .ga-act-full::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); z-index: -1;
+  background: radial-gradient(90% 80% at 30% 40%, #8e1420, #5a0c14 70%); }
+@media (max-width: 759px) {
+  .ga-prog { left: 16px; right: 16px; top: 8px; max-width: none; height: 28px; font-size: 11px; gap: 8px; padding: 0 12px; }
+  .ga .ga-big h2 { font-size: 30px; line-height: 1.08; }
+}
+/* przesuniecie kolumny przy zmianie strony: szerokosc kolumny + odstep (siatka 2 x 1fr, gap 48px); jedna kolumna = bez zamiany */
+.ga-stage { container-type: inline-size; }
+.ga-copy, .ga-stage > .ga-fig { --ga-swap: calc((100cqw - 48px) / 2 + 48px); }
+@media (max-width: 759px) { .ga-copy, .ga-stage > .ga-fig { --ga-swap: 0px; } }
+.ga-copy-in > :not(.ga-kicker):not(h1):not(h2) { opacity: var(--late, 1); }
+/* Na kolorze marki cien telefonu (przyciety przez .ga-phone-clip) rysowal ciemny prostokat: bez cienia w akcie w pelnym kolorze. */
+.ga-stage[data-flood] .ga-phone, .ga-still .ga-act-full .ga-phone { box-shadow: 0 0 0 1px #4a3a3d, 0 0 60px rgba(245, 51, 63, 0.16); }

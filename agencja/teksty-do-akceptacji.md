@@ -393,3 +393,11 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony w tym przebiegu (do zrobieni
 | /nawyko | Pharmacy receipt | Bought at a pharmacy? The streak still counts. · Accept pharmacy receipts · Example: purchases outside the shop become visible to you. / Example: only online orders count. · ekran: Scan the receipt · The photo stays on this phone | nowy |
 | /nawyko | Consents | Asked once, plainly. A no changes nothing. · Ask for daily reminders · Fixed: rewards never depend on push or e-mail consent. · ekran: Rewards · Same either way · Saying no costs the customer nothing. | nowy |
 | /nawyko | Rules | Trust: what the card promises is what they get. · Random prize draws / Health claims on cards / Swap a reward after scratching (zawsze off, „Stays off: …”) · Locked for every brand. · Fixed: 0 random draws, 0 health claims. | nowy |
+## R6 przebieg 1 (budujący B) — /work/genactiv: numer aktu i streszczenie (24.11.2026, spec 32)
+copy-voice OK. Czytelnik-kupujący NIE przeszedł (budujący B nie miał narzędzia do osobnego subagenta) — do zrobienia przez Leada.
+Etykiety w większości powtarzają istniejące kickery i rozdziały paska aktów.
+
+| Trasa | Miejsce | Tekst | Status |
+|---|---|---|---|
+| /work/genactiv | pigułka postępu (stała) i wiersz nad kickerem w układzie statycznym | Act N of 11 · <streszczenie> | nowy |
+| /work/genactiv | streszczenia aktów 1–11 | The box becomes a daily habit · The problem: the habit fades · Proof of purchase · One card a day · Rewards known in advance · Cashback that grows · Points and levels · Consent, never a condition · How it was built · How success is measured · Your brand colour | nowy |
