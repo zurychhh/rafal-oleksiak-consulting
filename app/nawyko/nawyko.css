@@ -294,10 +294,11 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 .nk-flags span{position:absolute;left:calc((var(--d) - .5) / 30 * 100%);transform:translateX(-50%);font-size:12px;font-weight:600;
   letter-spacing:.08em;color:var(--dim);transition:color .3s,transform .4s cubic-bezier(.2,1.8,.3,1);}
 .nk-flags span.is-got{color:var(--ink);transform:translateX(-50%) translateY(-3px) scale(1.25);}
-.nk-track{position:relative;}
+/* R4 p11 A2: galka jedzie transformem (cqw toru), nie `left` — `left` dawal ~35 przesuniec ukladu przy przewijaniu 390 */
+.nk-track{position:relative;container-type:inline-size;}
 .nk-track .nk-cell{transition:background-color .18s,border-color .18s;}
-.nk-knob{position:absolute;top:-7px;bottom:-7px;left:calc(var(--d) / 30 * 100%);width:2px;margin-left:-1px;background:var(--red);
-  transition:left .12s linear;pointer-events:none;}
+.nk-knob{position:absolute;top:-7px;bottom:-7px;left:0;width:2px;margin-left:-1px;background:var(--red);
+  transform:translateX(calc(var(--d) / 30 * 100cqw));transition:transform .12s linear;pointer-events:none;}
 .nk-knob::before{content:"";position:absolute;left:-5px;top:-6px;width:12px;height:12px;background:var(--red);border-radius:50%;}
 .nk-range{position:absolute;left:0;right:0;top:-16px;width:100%;height:calc(100% + 32px);margin:0;opacity:0;cursor:ew-resize;touch-action:pan-y;}
 .nk-track:has(.nk-range:focus-visible){outline:2px solid var(--ink);outline-offset:10px;}
