@@ -1,0 +1,95 @@
+/* Spec 36 B (R6' q2): kokpit „For you” przypiety i przelaczany przewijaniem na desktopie.
+   Wzor: odrzucona galaz r6p2 (cockpit-scroll.css). Roznica: przypiecie wlacza JS atrybutem [data-pin] (ten sam warunek
+   co CK_PIN_Q w NawykoClient.tsx + brak navigator.webdriver), bo bez JS widac wszystkie piec paneli jeden pod drugim.
+   Tor = 5 odcinkow x 45svh + ekran; w srodku sticky top:0 (przodkowie bez transform/overflow — .nk :where(section)).
+   Wysokosc sceny = ekran minus pasek cookies (--consent-h), wiec zadna kontrolka nie lezy pod paskiem. */
+.nk-ck-prog{display:none;}
+
+@media (min-width:900px) and (min-height:600px) and (prefers-reduced-motion:no-preference){
+  .nk .nk-cockpit[data-pin]{height:calc(5 * 45svh + 100svh);padding:0;scroll-margin-top:0;}
+  .nk-cockpit[data-pin] .nk-ck-pin{position:sticky;top:0;height:calc(100svh - var(--consent-h,0px));box-sizing:border-box;
+    display:flex;flex-direction:column;padding:clamp(18px,4svh,48px) var(--m) clamp(14px,2.6svh,32px);overflow:clip;}
+  .nk-cockpit[data-pin] .nk-ck-head{display:flex;align-items:baseline;gap:24px;max-width:none;flex:none;}
+  .nk-cockpit[data-pin] .nk-ck-head .nk-lab{flex:none;}
+  .nk .nk-cockpit[data-pin] .nk-ck-head .nk-h2{margin:0!important;max-width:none;font-size:clamp(24px,2.3vw,36px);line-height:1.1;}
+  .nk-cockpit[data-pin] .nk-ck-rowwrap{margin-top:clamp(12px,2.2svh,24px);flex:none;}
+  .nk-cockpit[data-pin] .nk-ck-prog{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:clamp(10px,1.4svh,14px);flex:none;}
+  .nk-ck-prog i{display:block;height:3px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden;}
+  .nk-ck-prog b{display:block;height:100%;background:var(--hi);transform-origin:0 50%;transform:scaleX(0);}
+  .nk-ck-prog .is-past b{transform:none;}
+  .nk-ck-prog .is-on b{transform:scaleX(var(--f,0));}
+  .nk-cockpit[data-pin] .nk-ck-stage{flex:1 1 auto;min-height:0;margin-top:clamp(10px,1.6svh,18px);display:flex;flex-direction:column;}
+  .nk-cockpit[data-pin] .nk-ck-stage > section{flex:1 1 auto;min-height:0;box-sizing:border-box;
+    padding-top:clamp(20px,3svh,40px)!important;padding-bottom:clamp(20px,3svh,40px)!important;}
+}
+
+/* Panele w przypietej scenie: kazdy wypelnia scene (recenzja 42: bez pustej dolnej polowy), typografia z wysokosci okna,
+   telefon i wykresy z wysokosci kontenera (cqh), zeby zaden panel nie wystawal poza scene na 1440x900 ani na 1280x720. */
+@media (min-width:900px) and (min-height:600px) and (prefers-reduced-motion:no-preference){
+  .nk-cockpit[data-pin] .nk-ck-stage > section{container-type:size;--ckh:clamp(26px,4.4svh,44px);}
+  .nk-cockpit[data-pin] .nk-ck-stage .nk-h2,
+  .nk-cockpit[data-pin] .nk-ck-stage .nk-privbig{font-size:var(--ckh);line-height:1.04;margin-top:clamp(8px,1.2svh,14px)!important;}
+  .nk-cockpit[data-pin] .nk-ck-stage .nk-one{font-size:clamp(15px,1.9svh,18px);margin-top:clamp(6px,1svh,12px);}
+  .nk-cockpit[data-pin] .nk-ck-stage .nk-phone{--ckp:min(520px,100cqh);height:var(--ckp);width:calc(var(--ckp) * 9 / 18.6);}
+
+  /* Learning paths: naglowek u gory, pas lekcji na dole sceny */
+  .nk-cockpit[data-pin] .nk-paths{display:flex;flex-direction:column;}
+  .nk-cockpit[data-pin] .nk-pathhead{max-width:900px;}
+  .nk-cockpit[data-pin] .nk-paths .nk-h2{max-width:20ch;font-size:calc(var(--ckh) * 1.4);}
+  .nk-cockpit[data-pin] .nk-rail{margin-top:auto;}
+  .nk-cockpit[data-pin] .nk-lcard,.nk-cockpit[data-pin] .nk-lgift{min-height:clamp(120px,21svh,200px);}
+
+  /* Pharmacy: naglowek, telefon na reszte wysokosci, przycisk skanu pod spodem */
+  .nk-cockpit[data-pin] .nk-pharm{display:flex;flex-direction:column;}
+  .nk-cockpit[data-pin] .nk-pharmhead{flex:none;max-width:1000px;}
+  .nk-cockpit[data-pin] .nk-pharm .nk-h2{max-width:28ch;}
+  .nk-cockpit[data-pin] .nk-pharmstage{flex:1 1 0;min-height:0;margin-top:clamp(12px,2svh,24px);container-type:size;width:100%;}
+  .nk-cockpit[data-pin] .nk-pharmfoot{flex:none;margin-top:clamp(10px,1.6svh,18px);flex-direction:row;justify-content:center;gap:20px;}
+  .nk-cockpit[data-pin] .nk-pharmfoot .nk-fine{margin:0;max-width:450px;text-align:left;}
+
+  /* Privacy: zdanie w jednej-dwoch liniach, rzad kontrolka · zapis · telefon na reszte wysokosci */
+  .nk-cockpit[data-pin] .nk-priv{display:flex;flex-direction:column;}
+  .nk-cockpit[data-pin] .nk-ck-stage .nk-priv .nk-privbig{max-width:20ch;font-size:calc(var(--ckh) * 1.6);flex:none;}
+  .nk-cockpit[data-pin] .nk-privrow{flex:1 1 0;min-height:0;margin-top:clamp(12px,2svh,28px);container-type:size;align-items:center;}
+  .nk-cockpit[data-pin] .nk-privrow .nk-phonecol{height:100%;}
+
+  /* Proof: trzy kolumny — tekst · panel wyniku · wykres dlugosci opakowania */
+  .nk-cockpit[data-pin] .nk-proof{grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1fr);column-gap:clamp(20px,2.4vw,40px);row-gap:0;align-items:center;
+    grid-template-rows:1fr auto auto auto auto 1fr;}
+  .nk-cockpit[data-pin] .nk-proof > .nk-panel{display:contents;}
+  .nk-cockpit[data-pin] .nk-proof > .nk-panel > :not(figure){grid-column:1;}
+  .nk-cockpit[data-pin] .nk-proof > .nk-panel > .nk-lab{grid-row:2;}
+  .nk-cockpit[data-pin] .nk-proof > .nk-panel > .nk-h2{grid-row:3;}
+  .nk-cockpit[data-pin] .nk-proof > .nk-panel > .nk-one,.nk-cockpit[data-pin] .nk-proof > .nk-panel > .nk-fine{margin-top:clamp(8px,1.4svh,14px);}
+  .nk-cockpit[data-pin] .nk-proof > .nk-panel > .nk-one{grid-row:4;}
+  .nk-cockpit[data-pin] .nk-proof > .nk-panel > .nk-fine{grid-row:5;}
+  .nk-cockpit[data-pin] .nk-proof > .nk-panel > figure{grid-column:2;grid-row:1 / -1;margin:0!important;}
+  .nk-cockpit[data-pin] .nk-proof > .nk-phonecol{grid-column:3;grid-row:1 / -1;}
+  .nk-cockpit[data-pin] .nk-proof .nk-plot{max-height:32cqh;}
+  .nk-cockpit[data-pin] .nk-proof .nk-desk2,.nk-cockpit[data-pin] .nk-runout{padding:clamp(12px,1.8svh,18px) 18px;}
+
+  /* What it never does: tekst i panel marki · telefon */
+  .nk-cockpit[data-pin] .nk-never{align-items:center;}
+  .nk-cockpit[data-pin] .nk-never .nk-desk2{margin-top:clamp(12px,2svh,26px);}
+  .nk-cockpit[data-pin] .nk-never .nk-nv-list li{padding:clamp(4px,.8svh,8px) 0;}
+
+  /* rzad prywatnosci zawsze w trzech kolumnach (nawyko.css przy <=1100 px zawija kontrolke do osobnego wiersza) */
+  .nk-cockpit[data-pin] .nk-privrow{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) auto;}
+  .nk-cockpit[data-pin] .nk-privctl{grid-column:auto;}
+
+  /* niskie okno (1100x620, 1280x720): ciasniejsze panele, zeby nic nie wystawalo poza scene */
+  @media (max-height:760px){
+    .nk-cockpit[data-pin] .nk-ck-stage > section{--ckh:clamp(24px,4.2svh,40px);}
+    .nk-cockpit[data-pin] .nk-ledger{gap:10px;}
+    .nk-cockpit[data-pin] .nk-ledger > div{padding:12px 16px;}
+    .nk-cockpit[data-pin] .nk-ledger dd{font-size:16px;margin-top:4px;}
+    .nk-cockpit[data-pin] .nk-privctl .nk-seg{margin-top:14px;}
+    .nk-cockpit[data-pin] .nk-proof .nk-plot{max-height:24cqh;margin-top:6px;}
+    .nk-cockpit[data-pin] .nk-proof .nk-crowd{margin-top:8px;gap:4px;}
+    .nk-cockpit[data-pin] .nk-proof .nk-cost{margin-top:8px;font-size:14px;}
+    .nk-cockpit[data-pin] .nk-proof .nk-rate{margin-top:8px;}
+    .nk-cockpit[data-pin] .nk-never .nk-desk2{padding:12px 16px 14px;}
+    .nk-cockpit[data-pin] .nk-never .nk-nv-list li{padding:2px 0;}
+    .nk-cockpit[data-pin] .nk-never .nk-nv-end{margin-top:8px;font-size:13px;}
+  }
+}
