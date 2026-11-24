@@ -112,7 +112,7 @@ export default function Nawyko() {
       {/* Spec 13: rezerwa wysokosci sceny przed hydratacja. Ten sam warunek co setMode('scroll') w Scene;
           bez niego wejscie z kotwica (#proof) skakalo o kilka ekranow po hydratacji (CLS 0,3–1,2). */}
       <script dangerouslySetInnerHTML={{ __html: PIN_JS }} />
-      {/* Spec 26 / R22: zapisana marka odwiedzajacego — nazwy w telefonach ukryte do hydratacji (zero migniecia nazwy demo). */}
+      {/* Spec 26 / R23: zapisana marka odwiedzajacego — nazwy w telefonach ukryte do hydratacji (zero migniecia nazwy demo). */}
       <script dangerouslySetInnerHTML={{ __html: BRAND_WAIT_JS }} />
       <a className="nk-skip" href="#main">
         Skip to content

@@ -12,7 +12,7 @@ wspólny z `/work/genactiv`, bramka `brand-propagation`.
 3. Zero nazwy demo w widocznym tekście po wpisaniu własnej (`Phone.brand` jest teraz wymagane — kompilator łapie każde wywołanie bez marki).
 4. Finał bez zdublowanej personalizacji: bez wyboru koloru i bez „Your customers' daily app, in your brand colour.”; nagłówek
    „Build {marka}’s app.” / „Build your brand’s app.”.
-5. Powracający gość z zapisaną marką nie widzi mignięcia nazwy demo (R22).
+5. Powracający gość z zapisaną marką nie widzi mignięcia nazwy demo (R23).
 6. Bramki: build · tsc · lint (0 błędów) · `gates.sh /nawyko /work/genactiv` z nowymi `brand-propagation` (Chromium) i
    `brand-prop-webkit` (Safari, z samotestem: bez marki MUSI być FAIL).
 

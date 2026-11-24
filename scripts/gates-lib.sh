@@ -33,3 +33,17 @@ webkit_missing() {
   local list; list=$(printf '%s, ' "${miss[@]}"); list=${list%, }
   echo "brak: $list — zainstaluj: apt-get update && apt-get install -y webkit2gtk-driver xvfb && pip install --break-system-packages selenium"
 }
+
+# shortvp_verdict <log> <kod wyjscia> -> "PASS", "SKIP" albo "FAIL <uwaga>" (R4 p15 B1, scripts/short-viewport-check.mjs).
+# SKIP tylko przy kodzie 2 Z linia „brak przypietej sceny” (inny kod 2 = blad uzycia -> FAIL). 124 = limit czasu.
+shortvp_verdict() {
+  local log="$1" rc="$2" line
+  line=$(grep -E '^SVC (PASS|FAIL) ' "$log" | tail -1)
+  if [ "$rc" -eq 0 ] && [ "${line#SVC PASS}" != "$line" ]; then echo "PASS"; return 0; fi
+  if [ "$rc" -eq 2 ] && grep -q 'brak przypietej sceny' "$log"; then echo "SKIP"; return 0; fi
+  if [ "$rc" -eq 124 ]; then echo "FAIL limit czasu"; return 0; fi
+  if [ "$rc" -eq 1 ] && [ -n "$line" ]; then
+    echo "FAIL $(echo "$line" | grep -oE 'problemow [0-9]+ \(unikalnych [0-9]+\)'); $(grep -m1 -E '^FAIL ' "$log" | cut -c6-120 | tr '|' '/')"; return 0
+  fi
+  echo "FAIL kod $rc, brak linii SVC"
+}
