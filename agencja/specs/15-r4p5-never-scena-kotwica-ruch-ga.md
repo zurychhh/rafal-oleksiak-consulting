@@ -63,3 +63,38 @@ CLS surowy (suma wszystkich `layout-shift`, także bez `hadRecentInput`), `goto(
 
 Ryzyko do obserwacji: przy pierwszej wizycie na wolnym łączu strona może zostać w kroju systemowym (tak działa `optional`);
 przy kolejnych plik jest w pamięci podręcznej.
+
+## Wykonanie B (24.11.2026)
+Metoda: seria zrzutów przypiętej sceny co 8% jej długości (14 klatek) w Chromium (390×844, 1440×900) i w WebKit
+(`webkit-check.py`, 390 → okno 447×806 w WebKitGTK, 1440×862), plus klatki w połowie zmiany ekranu (postęp 1,95 / 7,95 / 9,95).
+**Ważne o narzędziu:** WebDriver ustawia `navigator.webdriver`, a trasa w tym stanie pokazuje układ statyczny — dotychczasowy
+`webkit-check.py` na `/work/genactiv` NIGDY nie oglądał przypiętej sceny w silniku Safari. Dodany tryb `WK_SCENE=1`: skrypt ukrywa
+`navigator.webdriver`, wychodzi i wraca nawigacją kliencką (`WK_AWAY`, domyślnie `/privacy`), scena montuje się w trybie przewijania
+i jest fotografowana co 8% toru (`.ga-track` / `.nk-track`); reguła FAIL bez zmian (telefon < 150 px), brak toru = FAIL.
+
+**Usterka 1 (tylko Safari/WebKit, pierwszy ekran):** poświata za telefonem była twardym pionowym prostokątem szerokości telefonu,
+a pudełko węższe niż w Chromium (przycięte do szerokości telefonu, bez bocznej ścianki). Przyczyna: `clip-path: inset(-100vh -100vw 0
+-100vw)` na `.ga-phone-slot` — WebKit przycina clip-path do ramki elementu (wielokąt z punktami poza ramką też, sprawdzone).
+Poprawka: slot bez clip-path; telefon w ramce `.ga-phone-clip` (60 px szerszej z każdej strony, 2× wyższej, dolna krawędź = dół
+slotu) z `clip-path: inset(0)` w granicach własnej ramki, więc przycięcie jest tylko od dołu, jak było zamierzone; pudełko 2 px
+niżej (bez paska telefonu pod pudełkiem przy zaokrągleniu w WebKit). Nie `overflow: hidden` — qa.js liczy to jako przycięcie.
+Przed/po: `agencja/podglad/r4p5-ga-hero-wk390-przed-po.png`, `r4p5-ga-hero-wk1440-przed-po.png`; statyczny układ WebKit po:
+`r4p5-ga-wk-390-0.png`, `r4p5-ga-wk-1440-0.png`.
+
+**Usterka 2 (oba silniki, każda granica aktów):** nowy ekran wchodził przenikaniem krycia na stary, więc w połowie zmiany teksty
+dwóch ekranów nakładały się w nieczytelną mieszankę (np. „Confirm purchase” na „This month 15”, „Build path” na „Health data
+consent”). Poprawka: nowy ekran (nieprzezroczysty) wjeżdża od dołu transformem w ostatnich 10% poprzedniego aktu, z cieniem
+krawędzi; stary znika dopiero pod pełnym nowym. Zero nakładania tekstów, tylko transform (bez CLS). Plik: `GenactivClient.tsx`
+(`fin`/`fout` warstw), `.ga-layer` w `genactiv.css`. Przed/po: `r4p5-ga-zmiana-390-akt1-2-przed-po.png`,
+`r4p5-ga-zmiana-390-akt7-8-przed-po.png`; po na 1440: `r4p5-ga-zmiana-1440-akt9-10-po.png`.
+
+Serie po: `r4p5-ga-chromium-390-seria-po.png`, `r4p5-ga-chromium-1440-seria-po.png`, `r4p5-ga-wk-scena-390-seria-po.png`,
+`r4p5-ga-wk-scena-1440-seria-po.png`. Interakcja w telefonie po zmianie ramki: foil zdrapki trafiany pod palcem, „Agree and turn on”
+przełącza `aria-pressed` (390 i 1440).
+**Reduced motion** (Playwright `reducedMotion: 'reduce'`): układ statyczny, 11 aktów, każdy z nagłówkiem (krycie 1) i telefonem
+225×460 (390) / 274×560 (1440) z treścią ekranu; zrzut `r4p5-ga-reduced-390.png`.
+**Surowy CLS** (Chromium, `networkidle` + 1,5 s, 3 próby, przed = commit 44b1d5c, po = ta zmiana): wejście zwykłe 0 / 0 (390 i 1440);
+`#ga-t5` 0 / 0; `#enquiry` 390: 0 / 0; `#enquiry` 1440: 0,0967 / 0,0967 — bez zmian, ale istniejący problem do osobnej poprawki.
+Bramki: build OK; `tsc --noEmit` OK; lint 0 błędów / 1 ostrzeżenie (jak przed); copy-voice OK (bez nowych tekstów); qa.js `--scroll`
+PASS (9 szerokości); content-rules `--url` PASS; webkit-check 390 i 1440 PASS w trybie statycznym i `WK_SCENE=1`; `noindex, nofollow`
+na trasie, 0× `/work` w sitemap.xml.
