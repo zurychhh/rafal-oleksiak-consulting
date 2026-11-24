@@ -29,7 +29,9 @@ export function WhyInterlude() {
     const tick = () => {
       raf = 0
       const r = el.getBoundingClientRect()
-      const t = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.9)))
+      // przypieta (wysokosc > ekran): licznik biegnie, gdy sekcja stoi; inaczej — przy wjezdzie na ekran
+      const run = r.height - innerHeight
+      const t = run > 40 ? Math.min(1, Math.max(0, -r.top / (run * 0.85))) : Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.9)))
       setDay(Math.max(1, Math.round(1 + t * PACK)))
     }
     const on = () => {
@@ -63,16 +65,17 @@ export function WhyInterlude() {
   )
 }
 
-/* ── kokpit ── */
+/* ── kokpit ── (R6 p1: na atramencie jak final — recenzja 40 pkt 6) */
+const INK_BG = '#0E0F12'
 const TABS = [
   { id: 'card', label: 'Daily card' },
   { id: 'streak', label: 'Streak & stamps' },
   { id: 'cash', label: 'Cashback' },
   { id: 'points', label: 'Points & levels' },
-  { id: 'paths', label: 'Paths' },
-  { id: 'pharmacy', label: 'Pharmacy receipt' },
+  { id: 'paths', label: 'Lessons' },
+  { id: 'pharmacy', label: 'Pharmacy purchases' },
   { id: 'consent', label: 'Consents' },
-  { id: 'rules', label: 'Rules' },
+  { id: 'rules', label: 'Fixed rules' },
 ] as const
 type TabId = (typeof TABS)[number]['id']
 
@@ -145,7 +148,7 @@ function Screen({ tab, cfg, brand }: { tab: TabId; cfg: Cfg; brand: string }) {
             <span>Ticked so far</span>
             <b>{day}</b>
           </div>
-          <p className="nk-kp-s">{PACK - cfg.stamp} days of slack: a missed day keeps the stamp in reach.</p>
+          <p className="nk-kp-s">{PACK - cfg.stamp > 0 ? `Miss up to ${PACK - cfg.stamp} ${PACK - cfg.stamp === 1 ? 'day' : 'days'} and the stamp stays in reach.` : 'Every day of the pack counts for the stamp.'}</p>
         </>
       )
     case 'cash':
@@ -249,7 +252,7 @@ function Screen({ tab, cfg, brand }: { tab: TabId; cfg: Cfg; brand: string }) {
 }
 
 export function Cockpit() {
-  const { brand, colour, skin } = useBrand()
+  const { brand, colour } = useBrand()
   const [at, setAt] = useState(0)
   const [cfg, setCfg] = useState<Cfg>(START)
   const [last, setLast] = useState<number | null>(null)
@@ -282,9 +285,12 @@ export function Cockpit() {
       num: `Example: ${PACK} visits to ${brand} per pack instead of one.`,
     },
     streak: {
-      feel: 'A missed day does not wipe the streak, so one bad day is not the end.',
+      feel:
+        cfg.stamp < PACK
+          ? `Missed days are allowed: the stamp needs ${cfg.stamp} of ${PACK}, not all ${PACK}.`
+          : 'Every day of the pack counts toward the stamp.',
       ctl: <Range label="Stamp after days" value={cfg.stamp} min={20} max={PACK} onChange={(v) => set('stamp', v)} />,
-      num: `Example: ${PACK - cfg.stamp} days of slack built into every pack.`,
+      num: `Example: ${PACK - cfg.stamp} missed ${PACK - cfg.stamp === 1 ? 'day' : 'days'} allowed per pack.`,
     },
     cash: {
       feel: 'Money waiting in the wallet that only works in your shop.',
@@ -342,7 +348,7 @@ export function Cockpit() {
     },
   }
   const c = copy[tab]
-  const bg = skin === 'night' ? '#14161A' : skin === 'clay' ? '#EFE6DA' : '#F7F5F0'
+  const bg = INK_BG
   const vars = {
     ['--brand' as string]: colour,
     ['--brand-on' as string]: onColour(colour),
@@ -355,9 +361,7 @@ export function Cockpit() {
       <div className="nk-kp-head">
         <p className="nk-caps nk-lab">How it works</p>
         <h2 className="nk-h2" id="nk-kp-h">
-          <span className="nk-kp-wide">Left</span>
-          <span className="nk-kp-narrow">Above</span>: what {brand}’s customers see. <span className="nk-kp-wide">Right</span>
-          <span className="nk-kp-narrow">Below</span>: what {brand} sets.
+          What {brand}’s customers see, and what {brand} sets.
         </h2>
       </div>
       <div className="nk-kp-tabs" role="tablist" aria-label="Mechanics" onKeyDown={onKey}>
