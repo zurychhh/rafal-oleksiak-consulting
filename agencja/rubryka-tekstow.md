@@ -39,3 +39,5 @@ czytał tekstów oczami kupującego. Ta rubryka to naprawia. Niespełniony punkt
 - 22.11 „Your name on it, not mine.” — egocentryczne i przemądrzałe; autor strony w roli bohatera. Zamiast: „Your brand. Your colours. Your app.”
 - 22.11 kalkulator w pierwszej wersji — „zajebiście przegadane”: raport zamiast narzędzia. Zasada 5.
 - 22.11 `/nawyko` poniżej sceny w pierwszej wersji — „nudno, statycznie, nikt tego nie przeczyta”: listy zamiast scen.
+
+**13. Formularz: oznacz i wymagane, i opcjonalne (24.11 R4 p10).** Każde pole i każda zgoda ma przy etykiecie „(required)” albo „(optional)” — nie samą gwiazdkę i nie tylko jedno z dwóch. Źródło: Baymard Institute, „Mark both required and optional fields” (https://baymard.com/blog/required-optional-form-fields). `Enquiry` spełnia (stan 24.11).
