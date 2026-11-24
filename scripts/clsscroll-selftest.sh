@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # R4 p13 B2: test regresji bramki clsscroll (scripts/cls-scroll.mjs + progi z gates.sh).
-# Stawia na 127.0.0.1:3199 (python3 -m http.server z katalogu tymczasowego) dwie strony-wzorce:
+# Stawia na 127.0.0.1:3197 (SELFTEST_PORT) (python3 -m http.server z katalogu tymczasowego) dwie strony-wzorce:
 #   broken.html — element w widoku zmienia wysokosc przy kazdym przewinieciu (overflow-anchor wylaczony) -> oczekiwany FAIL (> 0,01)
 #   calm.html   — ta sama dlugosc, nic sie nie zmienia                                                 -> oczekiwany PASS (<= 0,001)
 # Kod 0 tylko gdy oba werdykty zgodne z oczekiwaniem. Uzycie: bash scripts/clsscroll-selftest.sh
 set -u
 cd "$(dirname "$0")/.." || exit 2
-PORT="${SELFTEST_PORT:-3199}"
+PORT="${SELFTEST_PORT:-3197}"   # R4 p14 B3: kazdy selftest na innym porcie (3197 clsscroll, 3198 scroll-perf)
+. scripts/gates-lib.sh
 TMP="$(mktemp -d)"
 cleanup() { [ -n "${SRV:-}" ] && kill "$SRV" 2>/dev/null; rm -rf "$TMP"; }
 trap cleanup EXIT
@@ -29,12 +30,10 @@ python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$TMP" >/dev/null 2>
 SRV=$!
 for _ in $(seq 1 50); do curl -s -o /dev/null "http://127.0.0.1:$PORT/calm.html" && break; sleep 0.2; done
 
-verdict() {  # to samo parsowanie i progi co gates.sh (clsscroll-<w>)
+verdict() {  # TA SAMA funkcja co gates.sh (clsscroll-<w>): clsscroll_verdict z scripts/gates-lib.sh
   local log="$TMP/$1.log"
   node scripts/cls-scroll.mjs "http://127.0.0.1:$PORT/$1.html" 390 844 >"$log" 2>&1
-  local v; v=$(grep -oE '^CLSSCROLL suma=[0-9.]+' "$log" | tail -1 | grep -oE '[0-9.]+$')
-  [ -z "$v" ] && { echo "BRAK"; return; }
-  awk -v v="$v" 'BEGIN { if (v > 0.01) print "FAIL " v; else if (v > 0.001) print "INFO " v; else print "PASS " v }'
+  clsscroll_verdict "$log"
 }
 ok=0
 b=$(verdict broken); c=$(verdict calm)

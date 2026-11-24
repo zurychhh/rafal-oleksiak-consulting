@@ -310,3 +310,11 @@ copy-voice OK, JSON-LD (`content.ts` FEATURES) zsynchronizowany, `jsonld-rules` 
 | scena `#how`, H2 | Reorders: four steps that bring customers back for the next pack. | zmieniony (było „Four steps that bring the customer back for the next pack.”) |
 | `#exchange`, H2 `nk-xch` | Programme cost: you set the budget. | zmieniony (było „You set what the programme costs.”) |
 | `#integrations`, H2 `nk-intg` | Built on Shopify; other tools connect per brand. | zmieniony (było „Runs on Shopify; your other tools connect per brand.”) |
+
+## R4 przebieg 14 — `/calculator` liczba pojedyncza (24.11.2026, spec 25 B1a)
+Jedyna dozwolona zmiana tekstu w spec 25: forma pojedyncza tylko, gdy liczba po sformatowaniu to dokładnie „1”. copy-voice OK.
+Brzmienie bez zmian, czytelnika-kupującego nie uruchamiano (gramatyka, nie nowe zdanie).
+| Miejsce | Tekst | Status |
+|---|---|---|
+| `.gc-why` | +1 order × 120 × 1 customer | zmieniony (było „+1 orders × … × 1 customers”); „+1.01 orders”, „4,000 customers” bez zmian |
+| oś roku, `aria-label` | One customer, one year: 1 reorder today, … | zmieniony (było „1 reorders”) |
