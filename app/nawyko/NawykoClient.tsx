@@ -785,7 +785,7 @@ const DOT_ORDER: number[][] = (() => {
 })()
 
 function BrandPanel({ t, id }: { t: number; id: string }) {
-  const shown = t >= 1 ? DIST_TOTAL : Math.round((DIST_TOTAL - 1) * clamp((t - 0.3) / 0.45))
+  const shown = t >= 1 ? DIST_TOTAL : Math.round((DIST_TOTAL - 1) * clamp((t - 0.25) / 0.55))
   const marks = t > 0.8
   return (
     <div className="nk-panel nk-in">
@@ -2029,7 +2029,9 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
       if (!t) return
       const pos = Math.min(CK_TABS.length - 0.0001, Math.max(0, -t.r.top / t.seg))
       const i = Math.floor(pos)
-      prog.current?.style.setProperty('--f', (pos - i).toFixed(3))
+      // spec 41 C: postep od punktu ladowania skoku (cel w glebi odcinka), nie od poczatku odcinka — po kliku pasek startuje od 0
+      const a = i > 0 ? Math.min(t.seg * 0.25, 120) / t.seg : 0
+      prog.current?.style.setProperty('--f', Math.max(0, (pos - i - a) / (1 - a)).toFixed(3))
       const l = lock.current
       if (l) {
         if (i !== l.i && performance.now() < l.until) return

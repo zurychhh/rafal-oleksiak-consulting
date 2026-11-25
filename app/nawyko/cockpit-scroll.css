@@ -43,7 +43,8 @@
      telefonem zjadal wysokosc (telefon 118 px na 1366x657). Scena kart (.nk-pharmstage) rozpuszczona (display:contents):
      karty „Bought online / in a pharmacy” obok siebie nad przyciskiem skanu, zeby na 900–1300 px nie wchodzily na naglowek
      (recenzja 48 I1). Telefon liczy wysokosc z kontenera panelu (section, container-type:size). */
-  .nk-cockpit[data-pin] .nk-pharm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;
+  /* spec 41 B: kolumny kart do 340 px i siatka wysrodkowana — na 1920 tekst, karty i telefon jednym blokiem, bez pustego srodka */
+  .nk-cockpit[data-pin] .nk-pharm{display:grid;grid-template-columns:minmax(0,340px) minmax(0,340px) auto;justify-content:center;
     grid-template-rows:1fr auto auto auto 1fr;column-gap:clamp(12px,1.6vw,20px);text-align:left;}
   .nk-cockpit[data-pin] .nk-pharmhead{grid-column:1 / 3;grid-row:2;margin:0;max-width:none;align-items:flex-start;}
   .nk-cockpit[data-pin] .nk-pharm .nk-lab{justify-content:flex-start;}

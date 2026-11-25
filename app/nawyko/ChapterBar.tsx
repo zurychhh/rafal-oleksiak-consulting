@@ -102,7 +102,16 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
         setAct(a)
       }
       const inScene = pin && narrow.matches
-      const on = past && !atForm && !inScene && (want || openRef.current)
+      // spec 41 A: przypiety kokpit „For you” (>= 900 px) zaczyna sie przy samej gorze ekranu — pasek przecinal jego naglowek.
+      // Gdy tor kokpitu wypelnia ekran, pasek ustepuje (kokpit ma wlasny rzad zakladek).
+      // Recenzja 49 I1: liczone z naglowka i zakladek przyklejonej sceny, nie z toru — przy koncu toru scena odjezdza w gore,
+      // a pasek wracal juz na jej naglowek. Pasek ustepuje, dopoki naglowek lub zakladki kokpitu leza w pasie 0–96 px.
+      let inCockpit = false
+      for (const el of document.querySelectorAll<HTMLElement>('.nk-cockpit[data-pin] .nk-ck-head, .nk-cockpit[data-pin] .nk-ck-tabs')) {
+        const r = el.getBoundingClientRect()
+        if (r.height > 0 && r.top < 96 && r.bottom > 0) inCockpit = true
+      }
+      const on = past && !atForm && !inScene && !inCockpit && (want || openRef.current)
       if (on !== prevOn) {
         prevOn = on
         setShown(on)

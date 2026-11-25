@@ -69,10 +69,71 @@ for (const [W, H] of vps) {
       }
       return { on, w, small: w.filter((x) => x < MIN), over }
     }, MIN)
+    // spec 41 A: ruch kolkiem w gore w przypietym kokpicie — zaden widoczny pasek position:fixed (pasek rozdzialow, nawigacja)
+    // nie moze przykryc naglowka kokpitu ani rzedu zakladek (regresja: pasek rozdzialow przecinal „Now the same app…”)
+    if (pinned) {
+      await p.mouse.move(W / 2, H / 2)
+      await p.mouse.wheel(0, -120)
+      await p.waitForTimeout(900)
+      const cov = await p.evaluate(() => {
+        const ck = document.querySelector('.nk-cockpit')
+        const tgt = [...document.querySelectorAll('.nk-ck-head, .nk-ck-tabs')].map((e) => e.getBoundingClientRect())
+        const out = []
+        for (const e of document.querySelectorAll('body *')) {
+          if (ck.contains(e) || getComputedStyle(e).position !== 'fixed') continue
+          const cs = getComputedStyle(e)
+          if (cs.visibility === 'hidden' || cs.display === 'none' || +cs.opacity === 0) continue
+          const q = e.getBoundingClientRect()
+          if (q.width < 2 || q.height < 2 || q.bottom <= 0 || q.top >= innerHeight) continue
+          for (const T of tgt) if (Math.min(q.right, T.right) - Math.max(q.left, T.left) > 1 && Math.min(q.bottom, T.bottom) - Math.max(q.top, T.top) > 1) { out.push((e.className.toString().split(' ')[0] || e.tagName) + '@' + Math.round(q.bottom)); break }
+        }
+        return out
+      })
+      if (cov.length) r.over.push('covered:' + cov.join('+'))
+    }
     const ok = r.on === i && r.small.length === 0 && r.over.length === 0 && pinned === wantPin
     if (!ok) fails++
     res.push(`${mode[0]}${i}:${ok ? 'ok' : 'FAIL'}(on=${r.on},phone=${r.w.join('/') || '-'}${r.over.length ? ',over=' + r.over.join('+') : ''})`)
     if (!ok && process.env.CPC_SHOTS) await p.screenshot({ path: `${process.env.CPC_SHOTS}/cpc-${W}x${H}-${mode}-${i}.png` })
+    await ctx.close()
+  }
+  // recenzja 49 I1: koniec toru — przewin za ostatnia zakladke, potem kolkiem w gore po 40 px; na kazdym kroku zaden
+  // element position:fixed nie moze przykrywac naglowka ani zakladek kokpitu (pasek rozdzialow wracal na odjezdzajaca scene)
+  if (wantPin) {
+    const ctx = await b.newContext({ viewport: { width: W, height: H } })
+    await ctx.addInitScript(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => false })
+      try { localStorage.setItem('cookie-consent', JSON.stringify({ analytics: false, marketing: false, ts: Date.now() })) } catch {}
+    })
+    const p = await ctx.newPage()
+    await p.goto(url, { waitUntil: 'load' })
+    await p.waitForTimeout(1200)
+    const end = await p.evaluate(() => { const c = document.querySelector('.nk-cockpit'); return c.getBoundingClientRect().bottom + scrollY - innerHeight })
+    await p.evaluate((y) => scrollTo(0, y + 200), end)
+    await p.waitForTimeout(400)
+    await p.mouse.move(W / 2, H / 2)
+    const hits = []
+    for (let k = 0; k < 14; k++) {
+      await p.mouse.wheel(0, -40)
+      await p.waitForTimeout(260)
+      const cov = await p.evaluate(() => {
+        const ck = document.querySelector('.nk-cockpit')
+        const tgt = [...document.querySelectorAll('.nk-ck-head, .nk-ck-tabs')].map((e) => e.getBoundingClientRect()).filter((T) => T.bottom > 0 && T.top < innerHeight)
+        for (const e of document.querySelectorAll('body *')) {
+          if (ck.contains(e) || getComputedStyle(e).position !== 'fixed') continue
+          const cs = getComputedStyle(e)
+          if (cs.visibility === 'hidden' || cs.display === 'none' || +cs.opacity === 0) continue
+          const q = e.getBoundingClientRect()
+          if (q.width < 2 || q.height < 2 || q.bottom <= 0 || q.top >= innerHeight) continue
+          for (const T of tgt) if (Math.min(q.right, T.right) - Math.max(q.left, T.left) > 1 && Math.min(q.bottom, T.bottom) - Math.max(q.top, T.top) > 1) return (e.className.toString().split(' ')[0] || e.tagName) + '@' + Math.round(q.bottom)
+        }
+        return ''
+      })
+      if (cov) hits.push(`k${k}:${cov}`)
+    }
+    if (hits.length) fails++
+    res.push(`endzone:${hits.length ? 'FAIL(' + hits.join('+') + ')' : 'ok'}`)
+    if (hits.length && process.env.CPC_SHOTS) await p.screenshot({ path: `${process.env.CPC_SHOTS}/cpc-${W}x${H}-endzone.png` })
     await ctx.close()
   }
   console.log(`${W}x${H} pin=${wantPin ? 'yes' : 'no'} ${res.join(' ')}`)

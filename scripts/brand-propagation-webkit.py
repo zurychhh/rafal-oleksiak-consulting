@@ -39,4 +39,6 @@ try:
         drv.execute_script("localStorage.removeItem('oc-brand-v1')")
 finally:
     drv.quit()
+# spec 41 E: jedna linia wyniku dla run_expect w gates.sh (wynik = kod wyjscia I ta linia)
+print('BRANDPROP-WK RESULT %s fails=%d' % ('FAIL' if fail else 'PASS', fail))
 sys.exit(1 if fail else 0)

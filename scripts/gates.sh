@@ -116,8 +116,8 @@ for route in "${ROUTES[@]}"; do
   # R6' p6 (spec 40, recenzja 47): kokpit „For you” — pierwszy klik kazdej zakladki (kolkiem i skokiem od gory, bez zgody
   # cookies) konczy na kliknietej zakladce, a kazdy telefon panelu >= 150 px na laptopowych wysokosciach okna
   if [ "$route" = /nawyko ]; then
-    TMO=$((TMO * 3)) run_expect '^COCKPITPIN PASS' "$route" "cockpit-pin" "$LOGDIR/$slug-cockpit-pin.log" \
-      node scripts/cockpit-pin-check.mjs "$url" 1366x657 1280x720 1024x768 1440x789 1440x900 900x600
+    TMO=$((TMO * 5)) run_expect '^COCKPITPIN PASS' "$route" "cockpit-pin" "$LOGDIR/$slug-cockpit-pin.log" \
+      node scripts/cockpit-pin-check.mjs "$url" 1366x657 1280x720 1024x768 1440x789 1440x900 900x600 1920x1080 1100x620
   fi
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
   wkmiss=$(webkit_missing)
@@ -141,7 +141,7 @@ run "(globalnie)" "focus-ring" "$LOGDIR/global-focus-ring.log" node scripts/focu
 for r in "${ROUTES[@]}"; do
   if [ "$r" = /nawyko ] || [ "$r" = /work/genactiv ]; then
     run "(globalnie)" "brand-propagation" "$LOGDIR/global-brandprop.log" node scripts/brand-propagation.mjs "$BASE"
-    run "(globalnie)" "brand-prop-webkit" "$LOGDIR/global-brandprop-wk.log" xvfb-run -a python3 -I scripts/brand-propagation-webkit.py "$BASE" "agencja/podglad/gates-wk-brandprop"
+    run_expect '^BRANDPROP-WK RESULT PASS' "(globalnie)" "brand-prop-webkit" "$LOGDIR/global-brandprop-wk.log" xvfb-run -a python3 -I scripts/brand-propagation-webkit.py "$BASE" "agencja/podglad/gates-wk-brandprop"
     break
   fi
 done
