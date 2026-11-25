@@ -91,6 +91,19 @@
   .nk-cockpit[data-pin] .nk-rhythm{align-items:center;}
   .nk-cockpit[data-pin] .nk-rhythm .nk-cols{height:clamp(120px,24svh,220px);}
 
+  /* R6' q4 B (recenzja 45): Privacy — telefon w prawej kolumnie na cala wysokosc panelu (obok zdania, nie pod nim),
+     wiec jest wyzszy i szerszy: naglowek ekranu „Health data consent · off” miesci sie w 1 linii zamiast trzech,
+     a pod lewa kolumna nie zostaje ~200 px pustki. Rzad (.nk-privrow) rozpuszczony w siatke panelu; DOM bez zmian. */
+  .nk-cockpit[data-pin] .nk-priv{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) auto;
+    grid-template-rows:1fr auto auto auto 1fr;column-gap:clamp(24px,3.4vw,56px);justify-content:stretch;}
+  .nk-cockpit[data-pin] .nk-priv > .nk-lab{grid-column:1 / 3;grid-row:2;}
+  .nk-cockpit[data-pin] .nk-ck-stage .nk-priv .nk-privbig{grid-column:1 / 3;grid-row:3;max-width:18ch;}
+  .nk-cockpit[data-pin] .nk-priv .nk-privrow{display:contents;}
+  .nk-cockpit[data-pin] .nk-priv .nk-privctl{grid-column:1;grid-row:4;margin-top:clamp(16px,3svh,36px);}
+  .nk-cockpit[data-pin] .nk-priv .nk-ledger{grid-column:2;grid-row:4;margin-top:clamp(16px,3svh,36px);}
+  .nk-cockpit[data-pin] .nk-priv .nk-privrow .nk-phonecol{grid-column:3;grid-row:1 / -1;height:auto;align-self:center;}
+  .nk-cockpit[data-pin] .nk-ck-stage .nk-priv .nk-phone{--ckp:min(560px,100cqh);}
+
   /* niskie okno (1100x620, 1280x720): ciasniejsze panele, zeby nic nie wystawalo poza scene */
   @media (max-height:760px){
     .nk-cockpit[data-pin] .nk-ck-stage > section{--ckh:clamp(24px,4.2svh,40px);}

@@ -893,8 +893,6 @@ const ACTS = 5
 const ACT_W = [1, 1.9, 1, 1, 1]
 const ACT_AT = ACT_W.map((_, i) => ACT_W.slice(0, i).reduce((a, b) => a + b, 0))
 const ACT_TOT = ACT_W.reduce((a, b) => a + b, 0)
-/* Rozdzialy: jak to dziala (klient) → dla marki. Telefon zmienia strone miedzy rozdzialami. */
-const CH_OF = [0, 0, 0, 0, 0]
 const ACT_NAMES = ['Purchase', 'Daily card', 'Streak', 'Reward', 'Reward calendar'] as const
 
 function Scene({ skin }: { skin: Skin }) {
@@ -966,25 +964,11 @@ function Scene({ skin }: { skin: Skin }) {
   const step = scroll ? found : manual
   // Uklad statyczny na akcie zdrapki: t=0, zeby karta czekala na odwiedzajacego (Phone odkrywa ja przy t>0,94).
   const t = scroll ? clamp((x - ACT_AT[found]) / ACT_W[found]) : step === 1 ? 0 : 1
-  const ch = CH_OF[step] ?? 0
-  /* Przejazd telefonu miedzy rozdzialami sterowany przewijaniem (regula R2), nie zegarem: wjazd w rozdzial „For you”
-     przez pierwsze 0,3 aktu, powrot przez pierwsze 0,3 aktu „Under your brand”. Tekst aktu wchodzi dopiero po przejezdzie. */
-  /* Runda 3, przebieg 3: przejazd dluzszy (0,45 aktu) i symetryczny (smoothstep zamiast ease-out) — przy kolku 120 px
-     telefon przesuwal sie o ~0,6 drogi na jeden ruch; teraz o ~0,25. */
+  /* R6' q4 B: po przeniesieniu aktu 6 do kokpitu scena ma jeden rozdzial — przejazd telefonu (--sw, data-ch, data-swung)
+     usuniety. SW_LEN zostaje jako opoznienie wejscia tekstu aktu (bez zmiany zachowania). */
   const SW_LEN = 0.45
-  const smooth = (v: number) => v * v * (3 - 2 * v)
-  const sw = !scroll || ACTS < 6 ? 0 : smooth(clamp((x - ACT_AT[ACTS - 1] - ACT_W[ACTS - 1]) / SW_LEN))
   const local = x - ACT_AT[step]
   const inK = ease(step === 4 ? clamp(local / 0.12) : clamp((local - SW_LEN + 0.06) / 0.2))
-  const [swung, setSwung] = useState(false)
-  const lastCh = useRef(0)
-  useEffect(() => {
-    if (ch !== lastCh.current) {
-      lastCh.current = ch
-      setSwung(true)
-    }
-  }, [ch])
-
   // Zdrapka: jesli odwiedzajacy nie zdrapie sam w ok. 1,5 s od wejscia w akt, karta zdrapuje sie sama.
   // Kto przewija szybko (polowa aktu), dostaje animacje od razu.
   const [autoS, setAutoS] = useState(false)
@@ -1055,9 +1039,6 @@ function Scene({ skin }: { skin: Skin }) {
     window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' })
   }
 
-  /* --sw i --p ustawiane na elementach, ktore ich uzywaja (nie na korzeniu sceny) i zadeklarowane @property
-     z inherits:false: zmiana przy kazdym przewinieciu nie uniewaznia stylow calego poddrzewa sceny. */
-  const swStyle = { ['--sw' as string]: sw }
   const steps = (
     <div className="nk-in">
       <div className="nk-caps nk-lab">
@@ -1104,11 +1085,9 @@ function Scene({ skin }: { skin: Skin }) {
       className={'nk-scene ' + (scroll ? 'is-scroll' : 'is-still')}
       id="how"
       data-act={scroll ? step : undefined}
-      data-ch={scroll ? ch : undefined}
-      data-swung={scroll && swung ? '' : undefined}
     >
       <div className="nk-stage">
-        <div className="nk-scenehead" style={swStyle}>
+        <div className="nk-scenehead">
           {!scroll || step < 4 ? steps : null}
           {scroll && step >= 4 ? (
             /* Regula R2 (Chrome „Scrollytelling”): tekst aktu wchodzi wedlug postepu przewijania, nie zegara. */
@@ -1118,7 +1097,7 @@ function Scene({ skin }: { skin: Skin }) {
           ) : null}
           <DemoNote />
         </div>
-        <div className="nk-phonecol" style={swStyle}>
+        <div className="nk-phonecol">
           <div
             style={{
               display: 'contents',
@@ -2182,13 +2161,79 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
   )
 }
 
-/* R6' q3 B: dawny akt 6 sceny („Pack rhythm”) jako szosta zakladka kokpitu — tresc 1:1 (BrandPanel + telefon marki). */
+/* R6' q3 B: dawny akt 6 sceny („Pack rhythm”) jako szosta zakladka kokpitu — tresc 1:1 (BrandPanel + telefon marki).
+   R6' q4 B: animacja wejscia przy kazdym pokazaniu panelu (zakladka, odcinek przypietego toru albo wjazd wykresu na ekran
+   przy przewijaniu) — kropki dosypywane, licznik 30→34, ok. 1,2 s, raz na pokazanie. SSR, bez JS i reduced motion:
+   stan koncowy (t = 1). Panel ukryty albo poza ekranem zawsze w stanie koncowym. Zmieniaja sie tylko klasy kropek
+   (opacity/transform) i cyfry licznika — stale wymiary, bez przesuniec ukladu. */
+const RHYTHM_MS = 1200
+const RHYTHM_IN = 0.35 // jaka czesc wykresu musi byc na ekranie, zeby animacja ruszyla
+function chartInView(sec: HTMLElement | null) {
+  const c = sec?.querySelector('.nk-chart')
+  if (!c) return false
+  const r = c.getBoundingClientRect()
+  if (!r.height) return false
+  const vis = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0)
+  return vis >= r.height * RHYTHM_IN
+}
 function RhythmScene({ skin, brand, panel }: { skin: Skin; brand: string; panel: PanelOf }) {
+  const props = panel('rhythm')
+  const shown = !props.hidden
+  const ref = useRef<HTMLElement>(null)
+  const [t, setT] = useState(1)
+  const played = useRef(false) // animacja juz zagrana w biezacym pokazaniu
+  const raf = useRef(0)
+  const play = useCallback(() => {
+    if (played.current) return
+    played.current = true
+    try {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    } catch {
+      return
+    }
+    cancelAnimationFrame(raf.current)
+    const t0 = performance.now()
+    setT(0)
+    const frame = (now: number) => {
+      const k = Math.min(1, (now - t0) / RHYTHM_MS)
+      setT(k)
+      raf.current = k < 1 ? requestAnimationFrame(frame) : 0
+    }
+    raf.current = requestAnimationFrame(frame)
+  }, [])
+  const rest = useCallback(() => {
+    played.current = false
+    if (raf.current) cancelAnimationFrame(raf.current)
+    raf.current = 0
+    setT(1)
+  }, [])
+  // zakladka wybrana (klik, klawiatura, odcinek toru): start przed malowaniem, zeby nie mignal stan koncowy
+  useLayoutEffect(() => {
+    if (!shown) rest()
+    else if (chartInView(ref.current)) play()
+  }, [shown, play, rest])
+  // wjazd na ekran przy przewijaniu (uklad bez przypiecia) i zjazd z ekranu = koniec pokazania
+  useEffect(() => {
+    const c = ref.current?.querySelector('.nk-chart')
+    if (!c || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && e.intersectionRatio >= RHYTHM_IN) play()
+        else if (!e.isIntersecting) rest()
+      },
+      { threshold: [0, RHYTHM_IN] },
+    )
+    io.observe(c)
+    return () => {
+      io.disconnect()
+      if (raf.current) cancelAnimationFrame(raf.current)
+    }
+  }, [play, rest])
   return (
-    <section className="nk-still nk-rhythm" id="rhythm" {...panel('rhythm')}>
-      <BrandPanel t={1} id="nk-brand" />
+    <section className="nk-still nk-rhythm" id="rhythm" ref={ref} {...props}>
+      <BrandPanel t={t} id="nk-brand" />
       <div className="nk-phonecol">
-        <Phone step={5} t={1} theme={skin} scratched brand={brand} />
+        <Phone step={5} t={t} theme={skin} scratched brand={brand} />
       </div>
     </section>
   )
