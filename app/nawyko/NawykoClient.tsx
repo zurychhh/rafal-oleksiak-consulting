@@ -363,7 +363,11 @@ function Phone({
         : step === 2
           ? Math.round(START_DAY + (GOAL_DAY - START_DAY) * ease(clamp(t / 0.8)))
           : GOAL_DAY)
-  const took = step === 5 ? Math.round(PACK_DAYS + (FINISH_DAYS - PACK_DAYS) * ease(clamp(t / 0.45))) : FINISH_DAYS
+  // R6' q5 A: licznik liniowo przez caly czas animacji, ostatnia wartosc (34) dopiero przy t = 1
+  const took =
+    step === 5 && t < 1
+      ? PACK_DAYS + Math.min(FINISH_DAYS - PACK_DAYS - 1, Math.floor((FINISH_DAYS - PACK_DAYS) * clamp(t)))
+      : FINISH_DAYS
   const on = (i: number) => `nk-view nk-v${i}` + (view === i ? ' is-on' : '')
   /* Telefony statyczne rysuja tylko widoczny ekran; animowany potrzebuje wszystkich do przejsc. */
   const has = (i: number) => interactive || view === i
@@ -2163,34 +2167,37 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
 
 /* R6' q3 B: dawny akt 6 sceny („Pack rhythm”) jako szosta zakladka kokpitu — tresc 1:1 (BrandPanel + telefon marki).
    R6' q4 B: animacja wejscia przy kazdym pokazaniu panelu (zakladka, odcinek przypietego toru albo wjazd wykresu na ekran
-   przy przewijaniu) — kropki dosypywane, licznik 30→34, ok. 1,2 s, raz na pokazanie. SSR, bez JS i reduced motion:
+   przy przewijaniu) — kropki dosypywane, ok. 1,2 s, raz na pokazanie. SSR, bez JS i reduced motion:
    stan koncowy (t = 1). Panel ukryty albo poza ekranem zawsze w stanie koncowym. Zmieniaja sie tylko klasy kropek
-   (opacity/transform) i cyfry licznika — stale wymiary, bez przesuniec ukladu. */
+   (opacity/transform) i cyfry licznika — stale wymiary, bez przesuniec ukladu.
+   R6' q5 A (spec 39 A1): licznik 30→34 w telefonie ma osobny zegar i wyzwalacz — telefon >= 35 % na ekranie
+   (na 390 stoi ~490 px pod wykresem, wiec wspolny wyzwalacz konczyl licznik, zanim telefon byl widoczny). Licznik idzie
+   liniowo przez cale 1,2 s, 34 dopiero na koncu. W przypietym kokpicie (>= 900 px, wykres i telefon razem na ekranie)
+   oba zegary startuja w tej samej chwili (startChart). Telefon czesciowo na ekranie (< 35 %) czeka na 30, zeby nie mignelo 34 → 30. */
 const RHYTHM_MS = 1200
-const RHYTHM_IN = 0.35 // jaka czesc wykresu musi byc na ekranie, zeby animacja ruszyla
-function chartInView(sec: HTMLElement | null) {
-  const c = sec?.querySelector('.nk-chart')
-  if (!c) return false
-  const r = c.getBoundingClientRect()
-  if (!r.height) return false
-  const vis = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0)
-  return vis >= r.height * RHYTHM_IN
+const RHYTHM_IN = 0.35 // jaka czesc wykresu / telefonu musi byc na ekranie, zeby animacja ruszyla
+function partInView(el: Element | null | undefined) {
+  if (!el) return 0
+  const r = el.getBoundingClientRect()
+  if (!r.height) return 0
+  return Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0)) / r.height
 }
-function RhythmScene({ skin, brand, panel }: { skin: Skin; brand: string; panel: PanelOf }) {
-  const props = panel('rhythm')
-  const shown = !props.hidden
-  const ref = useRef<HTMLElement>(null)
+function stillMotion() {
+  try {
+    return matchMedia('(prefers-reduced-motion: reduce)').matches
+  } catch {
+    return true
+  }
+}
+/* jeden zegar wejscia: t 0→1 w RHYTHM_MS, raz na pokazanie (rest = koniec pokazania, stan koncowy) */
+function useEntrance() {
   const [t, setT] = useState(1)
-  const played = useRef(false) // animacja juz zagrana w biezacym pokazaniu
+  const played = useRef(false)
   const raf = useRef(0)
   const play = useCallback(() => {
     if (played.current) return
     played.current = true
-    try {
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    } catch {
-      return
-    }
+    if (stillMotion()) return
     cancelAnimationFrame(raf.current)
     const t0 = performance.now()
     setT(0)
@@ -2201,39 +2208,80 @@ function RhythmScene({ skin, brand, panel }: { skin: Skin; brand: string; panel:
     }
     raf.current = requestAnimationFrame(frame)
   }, [])
+  // stan poczatkowy bez startu (telefon wchodzi na ekran, jeszcze < 35 %)
+  const arm = useCallback(() => {
+    if (played.current || raf.current || stillMotion()) return
+    setT(0)
+  }, [])
   const rest = useCallback(() => {
     played.current = false
     if (raf.current) cancelAnimationFrame(raf.current)
     raf.current = 0
     setT(1)
   }, [])
+  useEffect(() => () => cancelAnimationFrame(raf.current), [])
+  return { t, play, arm, rest }
+}
+function RhythmScene({ skin, brand, panel }: { skin: Skin; brand: string; panel: PanelOf }) {
+  const props = panel('rhythm')
+  const shown = !props.hidden
+  const ref = useRef<HTMLElement>(null)
+  const chart = useEntrance()
+  const phone = useEntrance()
+  const { play: playChart, rest: restChart } = chart
+  const { play: playPhone, arm: armPhone, rest: restPhone } = phone
+  const startChart = useCallback(() => {
+    playChart()
+    if (ref.current?.closest('.nk-cockpit[data-pin]')) playPhone() // przypiety kokpit: kropki i licznik razem
+  }, [playChart, playPhone])
+  const seePhone = useCallback(
+    (part: number) => {
+      if (ref.current?.closest('.nk-cockpit[data-pin]')) return // tu telefon idzie z wykresem
+      if (part >= RHYTHM_IN) playPhone()
+      else if (part > 0) armPhone()
+      else restPhone()
+    },
+    [playPhone, armPhone, restPhone],
+  )
   // zakladka wybrana (klik, klawiatura, odcinek toru): start przed malowaniem, zeby nie mignal stan koncowy
   useLayoutEffect(() => {
-    if (!shown) rest()
-    else if (chartInView(ref.current)) play()
-  }, [shown, play, rest])
-  // wjazd na ekran przy przewijaniu (uklad bez przypiecia) i zjazd z ekranu = koniec pokazania
+    if (!shown) {
+      restChart()
+      restPhone()
+      return
+    }
+    if (partInView(ref.current?.querySelector('.nk-chart')) >= RHYTHM_IN) startChart()
+    seePhone(partInView(ref.current?.querySelector('.nk-phone')))
+  }, [shown, startChart, seePhone, restChart, restPhone])
+  // wjazd na ekran przy przewijaniu (uklad bez przypiecia) i zjazd z ekranu = koniec pokazania — osobno wykres i telefon
   useEffect(() => {
     const c = ref.current?.querySelector('.nk-chart')
-    if (!c || typeof IntersectionObserver === 'undefined') return
+    const ph = ref.current?.querySelector('.nk-phone')
+    if (!c || !ph || typeof IntersectionObserver === 'undefined') return
     const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting && e.intersectionRatio >= RHYTHM_IN) play()
-        else if (!e.isIntersecting) rest()
+      (es) => {
+        for (const e of es) {
+          const part = e.isIntersecting ? e.intersectionRatio : 0
+          if (e.target === c) {
+            if (part >= RHYTHM_IN) startChart()
+            else if (!e.isIntersecting) {
+              restChart()
+              if (ref.current?.closest('.nk-cockpit[data-pin]')) restPhone()
+            }
+          } else seePhone(part)
+        }
       },
-      { threshold: [0, RHYTHM_IN] },
+      { threshold: [0, 0.01, RHYTHM_IN] },
     )
     io.observe(c)
-    return () => {
-      io.disconnect()
-      if (raf.current) cancelAnimationFrame(raf.current)
-    }
-  }, [play, rest])
+    io.observe(ph)
+    return () => io.disconnect()
+  }, [startChart, restChart, restPhone, seePhone])
   return (
     <section className="nk-still nk-rhythm" id="rhythm" ref={ref} {...props}>
-      <BrandPanel t={t} id="nk-brand" />
+      <BrandPanel t={chart.t} id="nk-brand" />
       <div className="nk-phonecol">
-        <Phone step={5} t={t} theme={skin} scratched brand={brand} />
+        <Phone step={5} t={phone.t} theme={skin} scratched brand={brand} />
       </div>
     </section>
   )

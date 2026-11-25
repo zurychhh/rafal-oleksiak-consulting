@@ -587,10 +587,14 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
 /* telefon: prywatnosc */
 .nk-pt3{font-size:max(14px,7.2cqw);}
 .nk-lock li{color:var(--pd);}
+/* R6' q5 A (spec 39 A2): przycisk zgody pod trescia (nie przyklejony do dolu) i wyzsze wiersze — bez ~200 px pustki
+   miedzy „Streak” a „Agree and turn on” */
+.nk-rw.nk-lock{margin-top:4cqh;font-size:max(11px,4.4cqw);}
+.nk-rw.nk-lock li{padding:2.4cqh 0;}
 .nk-lock li span + span{text-transform:uppercase;letter-spacing:.1em;font-size:max(9px,3cqw);}
 .nk-lock li.is-got{color:var(--pf);}
 .nk-lock li.is-got span + span{color:var(--pa);font-weight:600;}
-.nk-unlock{display:block;width:100%;margin-top:auto;margin-bottom:1cqh;min-height:44px;padding:1.6cqh 2cqw;border:1px solid var(--pf);
+.nk-unlock{display:block;width:100%;margin-top:4cqh;margin-bottom:1cqh;min-height:44px;padding:1.6cqh 2cqw;border:1px solid var(--pf);
   background:var(--pf);color:var(--pb);font:inherit;font-size:max(10px,3.4cqw);font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;}
 .nk-unlock:hover{background:var(--pa);border-color:var(--pa);}
 .nk-unlock:focus-visible{outline:2px solid var(--pa);outline-offset:3px;}
@@ -1351,4 +1355,14 @@ html[data-brand-wait] .nk-store-app b,html[data-brand-wait] .nk-store-mono,html[
    potem telefon (globalne .nk-phonecol{order:-1} jest dla sceny „Four steps”). Kolejnosc DOM bez zmian: naglowek pierwszy. */
 @media (max-width:860px){
   .nk-ck-stage .nk-rhythm .nk-phonecol,.nk-ck-stage .nk-never .nk-phonecol{order:0;}
+}
+
+/* R6' q5 A (spec 39 A3): etykiety dolnego paska w telefonach kokpitu >= 10 px (bylo 8–8,85 px); mniejszy rozstep liter i kolumny
+   wg dlugosci slowa, zeby „Rewards” miescilo sie tez w najwezszym telefonie (Pharmacy, przypiety kokpit) */
+.nk-ck-stage .nk-phone .nk-tabs{font-size:max(10px,3.1cqw);letter-spacing:.04em;grid-template-columns:repeat(3,auto);justify-content:space-evenly;}
+.nk-ck-stage .nk-phone .nk-tabs span{white-space:nowrap;}
+/* bardzo waski ekran (Pharmacy w przypietym kokpicie przy niskim oknie: 1280x720 → ok. 93 px) — trzy slowa nie mieszcza sie
+   w 10 px; zamiast nachodzenia na siebie skala z szerokoscia ekranu (na 1440 i 390 nie dziala: ekrany >= 145 px) */
+@container (max-width:140px){
+  .nk-ck-stage .nk-phone .nk-tabs{font-size:6.4cqw;letter-spacing:0;}
 }
