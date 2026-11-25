@@ -1366,3 +1366,8 @@ html[data-brand-wait] .nk-store-app b,html[data-brand-wait] .nk-store-mono,html[
 @container (max-width:140px){
   .nk-ck-stage .nk-phone .nk-tabs{font-size:6.4cqw;letter-spacing:0;}
 }
+/* R6' p6 (recenzja 48): waski ekran kokpitu (Pharmacy na 900x600: ok. 146 px) — „Sample data” w jednym wierszu (bylo: dwa wiersze
+   nachodzace na „Bought in a pharmacy?”), nazwa marki skraca sie wielokropkiem; 9 px bez zmian */
+@container (max-width:175px){
+  .nk-ck-stage .nk-phone .nk-pbar span + span{white-space:nowrap;flex:none;letter-spacing:.04em;}
+}

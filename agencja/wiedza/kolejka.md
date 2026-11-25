@@ -28,3 +28,4 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 18. ~~Komponenty — NN/g „Tabs, Used Right”~~ (24.11 R6 p1: krótkie etykiety zakładek kokpitu, sygnał przewijania rzędu na telefonie). Przełączanie zakładek przewijaniem: ~~NN/g „Scrolljacking 101”~~ (24.11 R6 p2: krótki tor, postęp, klik = skok). Zostaje: oczekiwania użytkownika (czy zakładka zmieniana przewijaniem jest jeszcze zakładką — szukać źródła przed p2).
 - [x] 24.11 22:30 NN/g „Tabs Used Right” — zastosowane w kokpicie For you (R6' p1)
 - ~~Poprawność CSS — W3C Media Queries 3 §3.1 (złe zapytanie = martwy blok)~~ (25.11 R6' p4: przypadek `@media` w bramce `css-dropped`)
+- ~~Zdarzenia przewijania — wsparcie `scrollend` w Safari~~ (25.11 R6' p6: web-features explorer + InfoQ 04.2026 → `scrollend` tylko jako ulepszenie, reguła R34.4)

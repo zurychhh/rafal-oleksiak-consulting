@@ -39,12 +39,25 @@
   .nk-cockpit[data-pin] .nk-rail{margin-top:auto;}
   .nk-cockpit[data-pin] .nk-lcard,.nk-cockpit[data-pin] .nk-lgift{min-height:clamp(120px,21svh,200px);}
 
-  /* Pharmacy: naglowek, telefon na reszte wysokosci, przycisk skanu pod spodem */
-  .nk-cockpit[data-pin] .nk-pharm{display:flex;flex-direction:column;}
-  .nk-cockpit[data-pin] .nk-pharmhead{flex:none;max-width:1000px;}
-  .nk-cockpit[data-pin] .nk-pharm .nk-h2{max-width:28ch;}
-  .nk-cockpit[data-pin] .nk-pharmstage{flex:1 1 0;min-height:0;margin-top:clamp(12px,2svh,24px);container-type:size;width:100%;}
-  .nk-cockpit[data-pin] .nk-pharmfoot{flex:none;margin-top:clamp(10px,1.6svh,18px);flex-direction:row;justify-content:center;gap:20px;}
+  /* Pharmacy (R6' p6, recenzje 47 i 48): tekst po lewej, telefon na CALA wysokosc sceny po prawej. Wczesniej naglowek nad
+     telefonem zjadal wysokosc (telefon 118 px na 1366x657). Scena kart (.nk-pharmstage) rozpuszczona (display:contents):
+     karty „Bought online / in a pharmacy” obok siebie nad przyciskiem skanu, zeby na 900–1300 px nie wchodzily na naglowek
+     (recenzja 48 I1). Telefon liczy wysokosc z kontenera panelu (section, container-type:size). */
+  .nk-cockpit[data-pin] .nk-pharm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;
+    grid-template-rows:1fr auto auto auto 1fr;column-gap:clamp(12px,1.6vw,20px);text-align:left;}
+  .nk-cockpit[data-pin] .nk-pharmhead{grid-column:1 / 3;grid-row:2;margin:0;max-width:none;align-items:flex-start;}
+  .nk-cockpit[data-pin] .nk-pharm .nk-lab{justify-content:flex-start;}
+  .nk-cockpit[data-pin] .nk-pharm .nk-h2{max-width:18ch;}
+  .nk-cockpit[data-pin] .nk-pharm .nk-one{margin-left:0;}
+  .nk-cockpit[data-pin] .nk-pharmstage{display:contents;}
+  .nk-cockpit[data-pin] .nk-pharmstage .nk-phonecol{grid-column:3;grid-row:1 / -1;align-self:center;margin-left:clamp(16px,4vw,72px);}
+  .nk-cockpit[data-pin] .nk-pharmstage > .nk-src{grid-row:3;min-width:0;justify-self:stretch;align-self:stretch;
+    margin-top:clamp(12px,2svh,24px);padding:clamp(10px,1.6svh,16px) clamp(12px,1.2vw,18px);gap:4px;}
+  .nk-cockpit[data-pin] .nk-pharmstage > .nk-src:first-child{grid-column:1;}
+  .nk-cockpit[data-pin] .nk-pharmstage > .nk-src:last-child{grid-column:2;}
+  .nk-cockpit[data-pin] .nk-src span{font-size:clamp(10px,1.3svh,12px);}
+  .nk-cockpit[data-pin] .nk-src b{font-size:clamp(15px,2svh,18px);}
+  .nk-cockpit[data-pin] .nk-pharmfoot{grid-column:1 / 3;grid-row:4;margin-top:clamp(12px,2svh,24px);flex-direction:column;align-items:flex-start;gap:10px;}
   .nk-cockpit[data-pin] .nk-pharmfoot .nk-fine{margin:0;max-width:450px;text-align:left;}
 
   /* Privacy: zdanie w jednej-dwoch liniach, rzad kontrolka · zapis · telefon na reszte wysokosci */

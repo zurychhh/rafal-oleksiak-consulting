@@ -1962,7 +1962,10 @@ function BrandCockpit({ skin, brand }: { skin: Skin; brand: string }) {
     const t = track()
     if (!t) return
     lock.current = smooth ? { i, until: performance.now() + 1600 } : null
-    window.scrollTo({ top: Math.round(t.top + i * t.seg) + 1, behavior: smooth ? 'smooth' : 'auto' })
+    // recenzja 47: cel w glebi odcinka (nie +1 px na jego poczatku) — zmiana geometrii w trakcie skoku (pasek cookies
+    // zmienia --consent-h) nie przerzuca juz na poprzednia zakladke; dla zakladki 0 bez zmian
+    const into = i > 0 ? Math.min(t.seg * 0.25, 120) : 1
+    window.scrollTo({ top: Math.round(t.top + i * t.seg + into), behavior: smooth ? 'smooth' : 'auto' })
   }
 
   const pick = (i: number, focus = false) => {

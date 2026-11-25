@@ -113,6 +113,12 @@ for route in "${ROUTES[@]}"; do
   run "$route" "jsonld" "$LOGDIR/$slug-jsonld.log" node scripts/jsonld-rules.test.mjs "$url"
   # R6' (Rafał 20:55) + R29: inwentarz sekcji (nagłówki, kroki, zdania) wobec wzorca i dwie kolejne sekcje w tym samym tle
   if [ -f "agencja/inwentarz/${slug}.json" ]; then run "$route" "inventory" "$LOGDIR/$slug-inventory.log" node scripts/section-inventory.mjs "$url"; fi
+  # R6' p6 (spec 40, recenzja 47): kokpit „For you” — pierwszy klik kazdej zakladki (kolkiem i skokiem od gory, bez zgody
+  # cookies) konczy na kliknietej zakladce, a kazdy telefon panelu >= 150 px na laptopowych wysokosciach okna
+  if [ "$route" = /nawyko ]; then
+    TMO=$((TMO * 3)) run_expect '^COCKPITPIN PASS' "$route" "cockpit-pin" "$LOGDIR/$slug-cockpit-pin.log" \
+      node scripts/cockpit-pin-check.mjs "$url" 1366x657 1280x720 1024x768 1440x789 1440x900 900x600
+  fi
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
   wkmiss=$(webkit_missing)
   if [ -n "$wkmiss" ]; then
