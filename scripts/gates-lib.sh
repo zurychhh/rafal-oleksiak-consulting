@@ -7,7 +7,27 @@
 clsscroll_verdict() {
   local v; v=$(grep -oE '^CLSSCROLL suma=[0-9.]+' "$1" | tail -1 | grep -oE '[0-9.]+$')
   [ -z "$v" ] && { echo "BRAK"; return 0; }
-  awk -v v="$v" 'BEGIN { if (v > 0.01) print "FAIL " v; else if (v > 0.001) print "INFO " v; else print "PASS " v }'
+  clsscroll_level "$v"
+}
+
+# clsscroll_level <suma> -> "PASS|INFO|FAIL <suma>" — jedno miejsce na progi clsscroll.
+clsscroll_level() {
+  awk -v v="$1" 'BEGIN { if (v > 0.01) print "FAIL " v; else if (v > 0.001) print "INFO " v; else print "PASS " v }'
+}
+
+# clsscroll_median <log>... -> "PASS|INFO|FAIL <mediana> <v1,v2,v3>" albo "BRAK" (zaden log bez linii CLSSCROLL).
+# R6' q4 A (regula R30.3): pojedynczy przebieg dawal skoki CLS nie do powtorzenia — gates.sh puszcza 3 przebiegi,
+# werdykt z mediany (progi bez zmian), w uwadze wszystkie wartosci; przebieg bez linii CLSSCROLL wpisany jako "brak".
+# Przy parzystej liczbie wartosci (jeden przebieg bez wyniku) bierzemy wyzsza ze srodkowych — ostrozniej.
+clsscroll_median() {
+  local f v vals=() all=""
+  for f in "$@"; do
+    v=$(grep -oE '^CLSSCROLL suma=[0-9.]+' "$f" 2>/dev/null | tail -1 | grep -oE '[0-9.]+$')
+    if [ -n "$v" ]; then vals+=("$v"); all="$all,$v"; else all="$all,brak"; fi
+  done
+  [ ${#vals[@]} -eq 0 ] && { echo "BRAK"; return 0; }
+  local med; med=$(printf '%s\n' "${vals[@]}" | sort -g | awk '{a[NR]=$1} END { print a[int(NR/2)+1] }')
+  echo "$(clsscroll_level "$med") ${all#,}"
 }
 
 # scrollperf_verdict <log> -> "PASS|FAIL <klatka_med> <interakcja_med> <klatki> <interakcje>" albo "BRAK"

@@ -25,7 +25,7 @@ if [ -f .next/BUILD_ID ]; then
 fi
 
 TMO="${GATES_TIMEOUT:-240}"
-ROWS=(); ANYFAIL=0; ROUTES=("$@")
+ROWS=(); ANYFAIL=0; ROUTES=("$@"); CSSDROPPED_DONE=0
 
 add() { ROWS+=("$1|$2|$3|$4"); [ "$3" = FAIL ] && ANYFAIL=1; }   # trasa|bramka|wynik|uwaga
 
@@ -45,19 +45,29 @@ for route in "${ROUTES[@]}"; do
   url="$BASE$route"
   echo ">> $route"
   run "$route" "qa.js" "$LOGDIR/$slug-qa.log" node design/qa.js "$url" --scroll
+  # R6' q4 A (spec 38, R31): deklaracje CSS odrzucane po cichu przez Chromium — raz na przebieg (pliki app/**/*.css,
+  # nie trasa), wiersz przy pierwszej trasie. Samotest: scripts/css-dropped-selftest.sh.
+  if [ "${CSSDROPPED_DONE:-0}" = 0 ]; then
+    run "$route" "css-dropped" "$LOGDIR/global-css-dropped.log" node scripts/css-dropped.mjs; CSSDROPPED_DONE=1
+  fi
   for vp in "390 844" "1440 900"; do
     set -- $vp; w=$1; h=$2
     run "$route" "cls-$w" "$LOGDIR/$slug-cls-$w.log" node scripts/cls-check.mjs "$url" "$w" "$h"
   done
   # R4 p12 B1: CLS przy przewijaniu kolkiem (suma bez wejscia, ladowanie + przewijanie): PASS <= 0,001, INFO 0,001-0,01, FAIL > 0,01
+  # R6' q4 A (R30.3): 3 przebiegi na szerokosc, werdykt z mediany (clsscroll_median z gates-lib.sh), w uwadze wszystkie trzy.
   for vp in "390 844" "1440 900"; do
-    set -- $vp; w=$1; h=$2; log="$LOGDIR/$slug-clsscroll-$w.log"
-    timeout "$TMO" node scripts/cls-scroll.mjs "$url" "$w" "$h" >"$log" 2>&1; rc=$?
-    vd=$(clsscroll_verdict "$log")
+    set -- $vp; w=$1; h=$2; logs=(); rcs=""
+    for n in 1 2 3; do
+      log="$LOGDIR/$slug-clsscroll-$w-$n.log"; logs+=("$log")
+      timeout "$TMO" node scripts/cls-scroll.mjs "$url" "$w" "$h" >"$log" 2>&1; rcs="$rcs $?"
+    done
+    vd=$(clsscroll_median "${logs[@]}")
+    lp="$LOGDIR/$slug-clsscroll-$w-{1,2,3}.log"
     if [ "$vd" != BRAK ]; then
-      add "$route" "clsscroll-$w" "${vd%% *}" "suma ${vd#* } ($log)"
-    elif [ $rc -eq 124 ]; then add "$route" "clsscroll-$w" FAIL "limit czasu ${TMO}s ($log)"
-    else add "$route" "clsscroll-$w" FAIL "kod $rc, brak linii CLSSCROLL ($log)"; fi
+      read -r lvl med all <<<"$vd"
+      add "$route" "clsscroll-$w" "$lvl" "mediana $med [$all] ($lp)"
+    else add "$route" "clsscroll-$w" FAIL "kody${rcs}, brak linii CLSSCROLL w 3 przebiegach (124 = limit ${TMO}s) ($lp)"; fi
   done
   # R4 p13 B1: scroll-perf = rozgrzewka + 3 przebiegi, werdykt z median (progi bez zmian 100/200 ms), w uwadze wszystkie wartosci.
   # Metoda: https://github.com/GoogleChrome/lighthouse/blob/main/docs/variability.md (mediana zamiast pojedynczego pomiaru).

@@ -39,5 +39,14 @@ ok=0
 b=$(verdict broken); c=$(verdict calm)
 echo "broken.html: $b (oczekiwany FAIL)"; [ "${b%% *}" = FAIL ] || ok=1
 echo "calm.html:   $c (oczekiwany PASS)"; [ "${c%% *}" = PASS ] || ok=1
+# R6' q4 A (R30.3): werdykt z mediany 3 przebiegow (clsscroll_median, ta sama funkcja co gates.sh) — jeden skok nie przewaza.
+printf 'CLSSCROLL suma=0.0000\n' >"$TMP/m1.log"; printf 'CLSSCROLL suma=0.0500\n' >"$TMP/m2.log"; printf 'CLSSCROLL suma=0.0004\n' >"$TMP/m3.log"
+printf 'nic\n' >"$TMP/m4.log"; printf 'CLSSCROLL suma=0.0200\n' >"$TMP/m5.log"; printf 'CLSSCROLL suma=0.0300\n' >"$TMP/m6.log"
+m=$(clsscroll_median "$TMP/m1.log" "$TMP/m2.log" "$TMP/m3.log")
+echo "mediana (0, 0.05, 0.0004): $m (oczekiwany PASS 0.0004 0.0000,0.0500,0.0004)"; [ "$m" = "PASS 0.0004 0.0000,0.0500,0.0004" ] || ok=1
+m=$(clsscroll_median "$TMP/m5.log" "$TMP/m4.log" "$TMP/m6.log")
+echo "mediana (0.02, brak, 0.03): $m (oczekiwany FAIL 0.0300 0.0200,brak,0.0300)"; [ "$m" = "FAIL 0.0300 0.0200,brak,0.0300" ] || ok=1
+m=$(clsscroll_median "$TMP/m4.log" "$TMP/m4.log" "$TMP/m4.log")
+echo "mediana (brak x3): $m (oczekiwany BRAK)"; [ "$m" = BRAK ] || ok=1
 [ $ok -eq 0 ] && echo "CLSSCROLL-SELFTEST: PASS" || echo "CLSSCROLL-SELFTEST: FAIL"
 exit $ok
