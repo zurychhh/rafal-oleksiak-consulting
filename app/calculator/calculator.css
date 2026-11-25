@@ -129,4 +129,4 @@
 .is-nudge .gc-range::-webkit-slider-thumb{animation:gc-nudge 1.1s cubic-bezier(.45,0,.2,1) 3;}
 .is-nudge .gc-range::-moz-range-thumb{animation:gc-nudge 1.1s cubic-bezier(.45,0,.2,1) 3;}
 @keyframes gc-nudge{50%{transform:translateX(-14px);}}
-@media (prefers-reduced-motion:reduce){.gc-arrow,.gc-range::-webkit-slider-thumb,.gc-range::-moz-range-thumb{animation:none!important;}}
+@media (prefers-reduced-motion:reduce){.gc-arrow,.gc-range::-webkit-slider-thumb{animation:none!important;}.gc-range::-moz-range-thumb{animation:none!important;}}

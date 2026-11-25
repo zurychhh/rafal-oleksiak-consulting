@@ -7,6 +7,7 @@
 #   kfbad.css  — odrzucona deklaracja w klatce @keyframes                                   -> oczekiwany kod 1
 #   ffbad.css  — odrzucony deskryptor @font-face                                            -> oczekiwany kod 1
 #   selbad.css — lista selektorow z ::-moz- obok zwyklego selektora (Chromium odrzuca cala)  -> oczekiwany kod 1
+#   mqbad.css  — @media z cecha bez jednostki (caly blok martwy, recenzja 46)                -> oczekiwany kod 1
 # Uzycie: bash scripts/css-dropped-selftest.sh
 set -u
 cd "$(dirname "$0")/.." || exit 2
@@ -26,6 +27,7 @@ EOF
 printf '%s\n' '@keyframes k{0%{opacity:0;transform:translateY(4 px)}}' >"$TMP/kfbad.css"
 printf '%s\n' '@font-face{font-family:"X";font-display:sometimes}' >"$TMP/ffbad.css"
 printf '%s\n' '.a,.r::-moz-range-thumb{animation:none}' >"$TMP/selbad.css"
+printf '%s\n' '@media (max-width:860){.a{color:red}}' >"$TMP/mqbad.css"
 
 ok=0
 check() {  # check <plik> <oczekiwany kod>
@@ -37,6 +39,7 @@ check broken.css 1
 check fixed.css 0
 check kfbad.css 1
 check ffbad.css 1
+check mqbad.css 1
 check selbad.css 1
 grep -q 'font:600 26px/1 inherit' "$TMP/broken.css.log" || { echo "broken.css: brak tekstu deklaracji w raporcie"; ok=1; }
 [ $ok -eq 0 ] && echo "CSS-DROPPED-SELFTEST: PASS" || echo "CSS-DROPPED-SELFTEST: FAIL"

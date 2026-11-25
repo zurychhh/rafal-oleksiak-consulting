@@ -87,7 +87,7 @@ section[id] {
   font-family: var(--font-poppins), sans-serif;
   font-weight: 900;  /* Black weight for dramatic impact */
   font-size: clamp(28px, 5vw + 1rem, 72px); /* Fluid: 28px mobile → 72px desktop */
-  line-height: clamp(1.1, 1vw + 1, 1.25);
+  line-height: 1.15; /* R6' q4: clamp(1.1, 1vw + 1, 1.25) mieszal liczbe z dlugoscia i byl odrzucany (css-dropped) */
   letter-spacing: clamp(-0.03em, -0.002vw, -0.01em);
   background: linear-gradient(135deg, #7B2CBF 0%, #0066FF 100%);
   -webkit-background-clip: text;

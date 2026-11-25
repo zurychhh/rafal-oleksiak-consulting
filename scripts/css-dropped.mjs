@@ -36,6 +36,7 @@ if (!files.length) { console.error('brak plikow CSS'); process.exit(2) }
 
 // --- zbieranie przypadkow testowych ---
 const cases = []   // {kind, css, file, line, where, text, supportsNot}
+const mediaCases = [] // {file, line, params} — @media; kazdy nawias-cecha musi dac matches albo not-matches
 const selCases = [] // {sel, parts, file, line}
 const ancestorAt = (n, name) => { for (let p = n.parent; p; p = p.parent) if (p.type === 'atrule' && p.name.toLowerCase() === name) return p; return null }
 const supportsNot = (n) => { for (let p = n.parent; p; p = p.parent) if (p.type === 'atrule' && p.name.toLowerCase() === 'supports' && /^\s*not\b/i.test(p.params)) return true; return false }
@@ -74,6 +75,10 @@ for (const file of files) {
     cases.push({ file: rel, line: a.source?.start?.line ?? 0, prop: '@property', text: a.toString().replace(/\s+/g, ' '),
       kind: 'property', where: `@property ${a.params}`, css: a.toString(), supportsNot: supportsNot(a) })
   })
+  // R6' q4 (recenzja 46, nauka: Media Queries 3 §3.1 — zle sformulowane zapytanie = "not all", caly blok martwy po cichu)
+  root.walkAtRules('media', (a) => {
+    mediaCases.push({ file: rel, line: a.source?.start?.line ?? 0, params: a.params })
+  })
 }
 
 // --- Chromium ---
@@ -81,7 +86,7 @@ const exe = chromiumExe()
 const b = await chromium.launch(exe ? { executablePath: exe } : {})
 const page = await b.newPage()
 await page.setContent('<!doctype html><title>css-dropped</title>')
-const res = await page.evaluate(({ cases, selCases }) => {
+const res = await page.evaluate(({ cases, selCases, mediaCases }) => {
   const sheet = (css) => { const s = new CSSStyleSheet(); try { s.replaceSync(css) } catch (e) { return null } return s }
   const decl = cases.map((c) => {
     const s = sheet(c.css); if (!s || !s.cssRules.length) return false
@@ -98,8 +103,13 @@ const res = await page.evaluate(({ cases, selCases }) => {
   })
   // Dla odrzuconych list selektorow: ktore elementy listy sa nieznane
   const parts = selCases.map((c, i) => sel[i] ? null : c.raw.split(/,(?![^()]*\))/).map((p) => p.trim()).filter((p) => { const s = sheet(`${p}{}`); return !s || !s.cssRules.length }))
-  return { decl, sel, parts }
-}, { cases, selCases })
+  const media = mediaCases.map((c) => {
+    // MQ4: nieznana/zla cecha = <general-enclosed> = "unknown" -> ani (f), ani not (f) nie pasuje
+    const leaves = c.params.match(/\([^()]*\)/g) || []
+    return leaves.every((f) => window.matchMedia(f).matches !== window.matchMedia(`not ${f}`).matches)
+  })
+  return { decl, sel, parts, media }
+}, { cases, selCases, mediaCases })
 await b.close()
 
 let fail = 0, info = 0
@@ -123,6 +133,10 @@ selCases.forEach((c, i) => {
   } else {
     fail++; out.push(`FAIL ${c.file}:${c.line}  selektor ${short}  — Chromium odrzuca regule (nieznane: ${bad.join(', ') || 'cala lista'})`)
   }
+})
+mediaCases.forEach((c, i) => {
+  if (res.media[i]) return
+  fail++; out.push(`FAIL ${c.file}:${c.line}  @media ${c.params}  — cecha nieznana dla Chromium (np. liczba bez jednostki) = "unknown"; caly blok nigdy nie dziala`)
 })
 for (const l of out) console.log(l)
 console.log(`CSSDROPPED fail=${fail} info=${info} deklaracji=${cases.length} regul=${selCases.length} plikow=${files.length}`)
