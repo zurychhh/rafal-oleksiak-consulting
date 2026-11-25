@@ -27,8 +27,25 @@ if W >= 800:
 opts = Options()
 
 opts.add_argument("--automation")
-drv = webdriver.WebKitGTK(options=opts, service=Service("/usr/bin/WebKitWebDriver"))
+# R6' q5 B (spec 39, recenzja 46 Drobne 4): kod wyjscia = wynik. Jedyne miejsce wyjscia to finish() na koncu pliku:
+# 0 = PASS, 1 = FAIL, 2 = blad skryptu/sterownika (linia ERROR). Blad przy zamykaniu sterownika nie zmienia wyniku
+# (linia WARN), a os._exit po flush omija sprzatanie interpretera (watki/destruktory selenium), zeby nic po linii
+# wyniku nie moglo podmienic kodu. gates.sh i tak wymaga zgodnosci kodu z linia (gates_result w gates-lib.sh).
+def finish(code, line):
+    print(line)
+    sys.stdout.flush(); sys.stderr.flush()
+    os._exit(code)
+
+try:
+    drv = webdriver.WebKitGTK(options=opts, service=Service("/usr/bin/WebKitWebDriver"))
+except Exception as e:
+    finish(2, f"ERROR: WebKitWebDriver did not start: {type(e).__name__}: {str(e).splitlines()[0] if str(e) else ''}")
+class SceneMissing(Exception):
+    pass
+
 bad = []
+seen = 0
+early = None
 try:
     drv.set_window_size(W, H_VIEW)
     drv.get(url)
@@ -43,7 +60,6 @@ try:
           "| engine", drv.execute_script("return navigator.userAgent.match(/AppleWebKit\\/[\\d.]+/)?.[0]"))
     H = drv.execute_script("return document.documentElement.scrollHeight")
     PHONES = os.environ.get('WK_PHONES', '.nk-phone,.ga-phone,.nk-hphone,.nk-kp-phone,.nk-fz-phone')
-    seen = 0
     plan = [(f, int(H * f)) for f in [0.0, 0.08, 0.16, 0.24, 0.4, 0.6, 0.8, 0.97]]
     if os.environ.get("WK_SCENE") == "1":
         path = drv.execute_script("return location.pathname + location.search")
@@ -56,8 +72,7 @@ try:
                                "const r=e.getBoundingClientRect();return [r.top+scrollY, r.height-innerHeight]")
         print("scene track (top, span):", t)
         if not t:
-            print("FAIL: WK_SCENE=1 but no pinned track mounted")
-            sys.exit(1)
+            raise SceneMissing()
         plan = [(round(k * 0.08, 2), int(t[0] + min(1, k * 0.08) * t[1])) for k in range(13)] + [(1.0, int(t[0] + t[1]))]
     for i, (frac, y) in enumerate(plan):
         drv.execute_script("window.scrollTo(0, arguments[0])", y)
@@ -68,14 +83,21 @@ try:
         bad += [p for p in phones if p[0] < 150]
         seen += len(phones)
         drv.save_screenshot(f"{out}-{i}.png")
+except SceneMissing:
+    early = (1, "FAIL: WK_SCENE=1 but no pinned track mounted")
+except Exception as e:
+    early = (2, f"ERROR: {type(e).__name__}: {(str(e).splitlines() or [''])[0]}")
 finally:
-    drv.quit()
+    try:
+        drv.quit()
+    except Exception as e:
+        print(f"WARN: driver quit failed ({type(e).__name__}) - result unaffected")
+if early:
+    finish(*early)
 if bad:
-    print("FAIL: phone narrower than 150 px:", bad)
-    sys.exit(1)
+    finish(1, f"FAIL: phone narrower than 150 px: {bad}")
 # R6 p2 (lekcja R28): po przebudowie R6 p1 telefony /nawyko mialy nowe klasy, selektor ich nie znal i bramka mowila PASS
 # przy zerze zmierzonych telefonow. Trasa, ktora MA telefony, z zerem widocznych = bramka slepa = FAIL.
 if seen == 0 and any(k in url for k in ("/nawyko", "/work/")):
-    print("FAIL: zero visible phones measured on a route that has phones - selector out of date (blind gate)")
-    sys.exit(1)
-print("PASS: no visible phone narrower than 150 px")
+    finish(1, "FAIL: zero visible phones measured on a route that has phones - selector out of date (blind gate)")
+finish(0, "PASS: no visible phone narrower than 150 px")

@@ -67,3 +67,23 @@ shortvp_verdict() {
   fi
   echo "FAIL kod $rc, brak linii SVC"
 }
+
+# gates_result <kod> <log> <wzorzec ERE linii PASS> -> "PASS" albo "FAIL <uwaga>" (R6' q5 B, spec 39; recenzja 46 Drobne 4).
+# PASS tylko gdy kod 0 I w logu jest linia PASS. Kod 0 bez linii = bramka nic nie orzekla; linia PASS z kodem != 0 =
+# rozbieznosc (np. webkit-check.py przy 390: „PASS” i kod 2) — oba FAIL z czytelnym komunikatem, nigdy cichy PASS.
+gates_result() {
+  local rc="$1" log="$2" re="$3" has=0
+  grep -qE -- "$re" "$log" 2>/dev/null && has=1
+  if [ "$rc" -eq 0 ] && [ $has -eq 1 ]; then echo "PASS"; return 0; fi
+  if [ "$rc" -eq 124 ]; then echo "FAIL limit czasu"; return 0; fi
+  if [ "$rc" -eq 0 ]; then echo "FAIL kod 0, ale brak linii PASS — bramka nic nie orzekla"; return 0; fi
+  if [ $has -eq 1 ]; then echo "FAIL rozbieznosc: linia PASS, ale kod $rc — wynik niewiarygodny, sprawdz log"; return 0; fi
+  echo "FAIL kod $rc"
+}
+
+# gates_exec <limit s> <log> <wzorzec linii PASS> <polecenie...> -> werdykt gates_result (wspolne z gates-run-selftest.sh)
+gates_exec() {
+  local tmo="$1" log="$2" re="$3"; shift 3
+  timeout "$tmo" "$@" >"$log" 2>&1; local rc=$?
+  gates_result "$rc" "$log" "$re"
+}

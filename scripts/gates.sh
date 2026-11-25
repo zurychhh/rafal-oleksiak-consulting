@@ -39,6 +39,15 @@ run() {
   return $rc
 }
 
+# run_expect <wzorzec linii PASS> <trasa> <bramka> <log> <polecenie...> — PASS tylko gdy kod 0 I jest linia PASS
+# (R6' q5 B: webkit-check.py dawal „PASS” z kodem 2; rozbieznosc kodu i linii = FAIL z komunikatem, gates_exec w gates-lib.sh)
+run_expect() {
+  local re="$1" route="$2" gate="$3" log="$4"; shift 4
+  local vd; vd=$(gates_exec "$TMO" "$log" "$re" "$@")
+  if [ "$vd" = PASS ]; then add "$route" "$gate" PASS ""
+  else add "$route" "$gate" FAIL "${vd#FAIL } ($log)"; fi
+}
+
 for route in "${ROUTES[@]}"; do
   case "$route" in /*) ;; *) route="/$route";; esac
   slug="$(echo "${route#/}" | tr -c 'A-Za-z0-9\n' '-' | sed 's/-*$//')"; [ -z "$slug" ] && slug=home
@@ -48,7 +57,7 @@ for route in "${ROUTES[@]}"; do
   # R6' q4 A (spec 38, R31): deklaracje CSS odrzucane po cichu przez Chromium — raz na przebieg (pliki app/**/*.css,
   # nie trasa), wiersz przy pierwszej trasie. Samotest: scripts/css-dropped-selftest.sh.
   if [ "${CSSDROPPED_DONE:-0}" = 0 ]; then
-    run "$route" "css-dropped" "$LOGDIR/global-css-dropped.log" node scripts/css-dropped.mjs; CSSDROPPED_DONE=1
+    run_expect '^CSSDROPPED fail=0 ' "$route" "css-dropped" "$LOGDIR/global-css-dropped.log" node scripts/css-dropped.mjs; CSSDROPPED_DONE=1
   fi
   for vp in "390 844" "1440 900"; do
     set -- $vp; w=$1; h=$2
@@ -112,7 +121,7 @@ for route in "${ROUTES[@]}"; do
     mkdir -p agencja/podglad
     scene=0; { [ "${GATES_WK_SCENE:-0}" = 1 ] || [ "$route" = /work/genactiv ]; } && scene=1
     for w in 390 1440; do
-      WK_W=$w WK_SCENE=$scene run "$route" "webkit-$w" "$LOGDIR/$slug-webkit-$w.log" \
+      WK_W=$w WK_SCENE=$scene run_expect '^PASS: ' "$route" "webkit-$w" "$LOGDIR/$slug-webkit-$w.log" \
         xvfb-run -a python3 -I scripts/webkit-check.py "$url" "agencja/podglad/gates-wk-$slug-$w"
     done
   fi
