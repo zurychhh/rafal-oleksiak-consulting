@@ -1,3 +1,4 @@
-start: Wed Nov 25 15:38:41 CET 2026
-punkt: R6p-N7 0a (scroll-perf /nawyko) + 0 (R36.2 fixed x przypieta scena: /nawyko Four steps, /work/genactiv, /)
-pliki: scripts/ (bramka), ewentualnie app/nawyko/*.css, app/work/genactiv/*
+start: Thu Nov 26 09:38:20 CET 2026
+punkt: R6p-N7 0a (scroll-perf /nawyko x2) + 0 (R36.2 fixed x przypieta scena: Four steps, /work/genactiv, /) + 2 (css-dropped drobne, subagent w worktree)
+pliki: scripts/, ewentualnie app/nawyko/*.css, app/work/genactiv/*
+stare znaczniki 15:38/16:38 z 25.11 porzucone (przebiegi bez commitu zamykajacego)
