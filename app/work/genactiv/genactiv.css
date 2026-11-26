@@ -485,6 +485,12 @@ button.ga-fakebtn.ga-done { color: var(--muted); }
   font: 600 12px/1 'Montserrat', 'Montserrat Fallback', system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase;
   white-space: nowrap; overflow: hidden; pointer-events: none;
 }
+/* R6'-N8 (0a, bramka sticky-fixed): gdy pasek aktow (.ga-ab, fixed, 53 px) jest widoczny, pigulka aktu zjezdza pod niego
+   transformem (bez CLS) zamiast wystawac spod paska; po schowaniu paska wraca. Pigulka zostaje widoczna (ukrycie = zmiana zakresu). */
+.ga-prog { transition: transform .28s cubic-bezier(.2,.7,.2,1); }
+body:has(.ga-ab[data-on]) .ga-prog { transform: translateY(40px); }
+@media (max-width: 759px) { body:has(.ga-ab[data-on]) .ga-prog { transform: translateY(56px); } }
+@media (prefers-reduced-motion: reduce) { .ga-prog { transition: none; } }
 .ga-prog b { color: var(--accent-hi); font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
 .ga-prog span { overflow: hidden; text-overflow: ellipsis; color: var(--text); }
 .ga-prog-bar { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; transform-origin: 0 50%; background: var(--accent-hi); }

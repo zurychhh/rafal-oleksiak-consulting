@@ -758,6 +758,9 @@ html:has(.nk){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);} /* WCAG 
   .nk .cb-links{display:flex;}
   .nk .cb-list{display:none;}
 }
+/* R6'-N8 (0b): 1100–1239 px pasek rozdzialow lamal sie na dwa wiersze (81 px; CTA w drugim wchodzilo na telefon finalu).
+   Brakowalo ~45 px: wezszy margines boczny paska i odstep linkow w tym przedziale = jeden wiersz 53 px. */
+@media (min-width:1100px) and (max-width:1239px){.nk .cb-row{padding:0 28px;column-gap:12px;}.nk .cb-links{gap:14px;}.nk .cb-name{margin-right:8px;}}
 @media (max-width:420px){.nk .cb-row{column-gap:10px;}.nk .cb-kicker{display:none;}.nk .cb-cta{padding:0 12px;letter-spacing:.1em;}}
 .nk .cb-name{display:none;font-weight:600;margin-right:clamp(8px,2vw,28px);}
 @media (min-width:1100px){.nk .cb-name{display:inline-flex;align-items:center;min-height:44px;}}
