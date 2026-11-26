@@ -77,8 +77,12 @@ function pseudoInForgiving(sel) {
   return bad
 }
 // (a) var(): warianty wartosci po podstawieniu. defs = Map(--x -> [wartosci]).
-const VAR_PLACEHOLDERS = ['0', '#000']
+const VAR_PLACEHOLDERS = ['0', '#000', '1']
 const MAX_VARIANTS = 48
+// Licznik `depth` rosnie TYLKO przy podstawianiu definicji zmiennej (zagniezdzenie var() w wartosci zmiennej),
+// nie przy przechodzeniu do kolejnego var() w tej samej wartosci. Liczba wariantow ograniczona MAX_VARIANTS
+// (opcje: zapas, definicje, zastepcze — w tej kolejnosci, wiec pierwszy wariant uzywa definicji); po przekroczeniu
+// limitu moze zabraknac poprawnego wariantu -> INFO (nie FAIL).
 function varVariants(value, defs, depth = 0) {
   const calls = fnCalls(value, /\bvar\(/gi)
   if (!calls.length) return [value]
@@ -92,15 +96,21 @@ function varVariants(value, defs, depth = 0) {
   for (const d of defs.get(name) || []) opts.push(d)
   opts.push(...VAR_PLACEHOLDERS)
   opts = [...new Set(opts)]
-  const out = []
+  const out = new Set()
   for (const o of opts) {
     for (const sub of varVariants(o, defs, depth + 1)) {
-      for (const rest of varVariants(value.slice(0, c.start) + sub + value.slice(c.end), defs, depth + 1)) {
-        out.push(rest); if (out.length >= MAX_VARIANTS) return [...new Set(out)]
+      // `sub` nie zawiera juz var(); reszta wartosci to ten sam poziom zagniezdzenia
+      // identyczne wywolania var() (ta sama nazwa i zapas) dostaja to samo podstawienie — bez tego n powtorzen
+      // tej samej zmiennej daje wykladnicza liczbe wariantow i limit odcina poprawny
+      let next = ''; let pos = 0
+      for (const k of calls) if (k.inner === c.inner) { next += value.slice(pos, k.start) + sub; pos = k.end }
+      next += value.slice(pos)
+      for (const rest of varVariants(next, defs, depth)) {
+        out.add(rest); if (out.size >= MAX_VARIANTS) return [...out]
       }
     }
   }
-  return [...new Set(out)]
+  return [...out]
 }
 
 const args = process.argv.slice(2)
@@ -221,7 +231,10 @@ cases.forEach((c, i) => {
 })
 selCases.forEach((c, i) => {
   if (c.forgivingBad.length) {
-    fail++; out.push(`FAIL ${c.file}:${c.line}  selektor ${c.raw.replace(/\s+/g, ' ').slice(0, 120)}  — pseudoelement w liscie „wybaczajacej” ${c.forgivingBad.join('; ')}: Chromium po cichu wyrzuca ten argument (regula zostaje bez niego), a pseudoelementy w :is/:where nie pasuja w zadnym silniku (rozdziel na osobna regule)`)
+    // jedna linia na selektor: gdy Chromium odrzuca tez cala regule, dopisujemy to do tej samej linii
+    const whole = res.sel[i] ? '' : '; ponadto Chromium odrzuca CALA regule (nieznane: ' + ((res.parts[i] || []).join(', ') || 'cala lista') + ')'
+    fail++; out.push(`FAIL ${c.file}:${c.line}  selektor ${c.raw.replace(/\s+/g, ' ').slice(0, 120)}  — pseudoelement w liscie „wybaczajacej” ${c.forgivingBad.join('; ')}: Chromium po cichu wyrzuca ten argument (regula zostaje bez niego), a pseudoelementy w :is/:where nie pasuja w zadnym silniku (rozdziel na osobna regule)${whole}`)
+    return
   }
   if (res.sel[i]) return
   const bad = res.parts[i] || []
