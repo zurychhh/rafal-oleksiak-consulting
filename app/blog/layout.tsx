@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { preload } from 'react-dom';
 import styles from './blog.module.css';
 import './blog-reset.css';
 
@@ -21,6 +22,10 @@ export default function BlogLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Naglowki bloga sa w Poppins 600/700 z font-display:swap — bez preloadu podmiana kroju
+  // ok. 180 ms po wejsciu przesuwala logo, tytul i stan pusty (clsscroll-390 0,0135, 26.11).
+  preload('/fonts/poppins-700-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
+  preload('/fonts/poppins-600-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
   return (
     <div className={styles.blogWrapper}>
       <header className={styles.blogHeader}>
