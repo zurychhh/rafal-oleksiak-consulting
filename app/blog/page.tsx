@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getPosts } from '@/lib/blog/blog-api';
 import styles from './blog.module.css';
+import type { PostListResponse } from '@/lib/blog/types';
 
 export default async function BlogListingPage({
   searchParams,
@@ -9,7 +10,16 @@ export default async function BlogListingPage({
 }) {
   const { page: pageParam } = await searchParams;
   const page = Number(pageParam) || 1;
-  const data = await getPosts(page, 12);
+  // Backend bloga stoi osobno (Railway). Jego awaria nie moze dawac 500 z
+  // „Application error” (audyt 22.11) — pokazujemy stan pusty z jednym zdaniem.
+  let data: PostListResponse;
+  let failed = false;
+  try {
+    data = await getPosts(page, 12);
+  } catch {
+    failed = true;
+    data = { items: [], total: 0, page, page_size: 12, total_pages: 0 };
+  }
 
   return (
     <>
@@ -20,10 +30,17 @@ export default async function BlogListingPage({
 
       {data.items.length === 0 ? (
         <div className={styles.emptyBlog}>
-          <p className={styles.emptyBlogTitle}>Coming soon</p>
+          <p className={styles.emptyBlogTitle}>{failed ? 'Articles did not load' : 'Coming soon'}</p>
           <p className={styles.emptyBlogText}>
-            We are preparing our first articles. Check back soon.
+            {failed
+              ? 'Try again in a minute, or go back to the home page.'
+              : 'We are preparing our first articles. Check back soon.'}
           </p>
+          {failed && (
+            <Link href="/" className={styles.paginationBtn}>
+              Home page
+            </Link>
+          )}
         </div>
       ) : (
         <>

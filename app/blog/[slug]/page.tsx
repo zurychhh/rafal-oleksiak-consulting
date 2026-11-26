@@ -4,14 +4,23 @@ import { getPostBySlug, getPosts } from '@/lib/blog/blog-api';
 import type { Metadata } from 'next';
 import styles from '../blog.module.css';
 
+// Awaria backendu (Railway) nie moze dawac 500 z „Application error” (audyt 22.11).
+async function loadPost(slug: string) {
+  try {
+    return { post: await getPostBySlug(slug), failed: false };
+  } catch {
+    return { post: null, failed: true };
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
-  if (!post) return { title: 'Post not found' };
+  const { post } = await loadPost(slug);
+  if (!post) return { title: 'Post not found', robots: { index: false } };
 
   return {
     title: post.meta_title || post.title,
@@ -32,8 +41,19 @@ export default async function BlogArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const { post, failed } = await loadPost(slug);
 
+  if (failed) {
+    return (
+      <div className={styles.emptyBlog}>
+        <p className={styles.emptyBlogTitle}>Article did not load</p>
+        <p className={styles.emptyBlogText}>Try again in a minute, or go back to the home page.</p>
+        <Link href="/" className={styles.paginationBtn}>
+          Home page
+        </Link>
+      </div>
+    );
+  }
   if (!post) notFound();
 
   const publishedDate = post.published_at

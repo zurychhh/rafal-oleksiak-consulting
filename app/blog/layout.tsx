@@ -1,10 +1,19 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import styles from './blog.module.css';
+import './blog-reset.css';
 
 export const metadata: Metadata = {
   title: 'Blog — Oleksiak Consulting',
   description: 'Insights on ecommerce conversion, CRM optimization, and marketing automation.',
+  alternates: { canonical: '/blog' },
+  openGraph: {
+    title: 'Blog — Oleksiak Consulting',
+    description: 'Insights on ecommerce conversion, CRM optimization, and marketing automation.',
+    url: '/blog',
+    type: 'website',
+    images: ['/og.png'],
+  },
 };
 
 export default function BlogLayout({

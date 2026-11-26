@@ -14,6 +14,9 @@ import { ScrollTracker } from "./components/ScrollTracker";
 // w czasie buildu i build padal wszedzie, gdzie fonts.googleapis.com jest zablokowany.
 
 export const metadata: Metadata = {
+  // Bez tego kanoniczne i og:url tras (np. /tool) rozwiazywaly sie wzgledem hosta buildu
+  // (audyt 22.11, `http://localhost:3100/tool`). Jedna domena, niezaleznie od podgladu.
+  metadataBase: new URL("https://oleksiakconsulting.com"),
   title: "Rafał Oleksiak — FMCG ecommerce, end to end",
   description: "One market — FMCG and anything bought again. Inside it the whole funnel: paid, search including AI answers, the storefront, CRM, subscription, loyalty. Fifteen years at Allegro, mBank, Booksy and Genactiv.",
   keywords: ["FMCG ecommerce", "replenishment", "subscription commerce", "paid traffic quality", "ecommerce SEO", "conversion rate optimization", "marketing automation", "loyalty", "Shopify", "WooCommerce"],
@@ -72,10 +75,9 @@ export default function RootLayout({
             Nie ma tu preconnectow do fonts.googleapis.com ani fonts.gstatic.com,
             bo zaden font nie jest juz pobierany z zewnatrz — <link> do Google
             wysylal IP odwiedzajacego przed zgoda i poza Consent Mode. */}
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-
-        {/* Performance: DNS prefetch for third-party services */}
-        <link rel="dns-prefetch" href="https://calendly.com" />
+        {/* Bez preconnect do cdnjs i dns-prefetch do calendly: zadna trasa ich nie uzywa
+            (audyt 22.11 — w pomiarze nie poszlo tam zadne zadanie), a polaczenie
+            otwarte bez potrzeby kosztuje gniazdo i zdradza IP przed zgoda. */}
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.googleadservices.com" />
 

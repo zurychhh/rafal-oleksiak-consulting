@@ -1,0 +1,5 @@
+/* Reset po starej stronie glownej — ten sam blok co privacy.css i stop.css.
+   critical.css narzuca html/body { overflow-x:hidden; max-width:100vw }, co na nizszych
+   oknach (1440x600, 1280x520) robilo z <html> kontener przycinajacy tresc bloga (qa.js, 26.11). */
+html{overflow-x:visible;max-width:none;scroll-padding-top:0;}
+body{overflow-x:visible;max-width:none;}

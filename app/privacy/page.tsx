@@ -5,6 +5,14 @@ import './privacy.css'
 export const metadata: Metadata = {
   title: 'Privacy Policy — Oleksiak Consulting',
   description: 'Privacy policy for oleksiakconsulting.com. GDPR-compliant data processing information.',
+  alternates: { canonical: '/privacy' },
+  openGraph: {
+    title: 'Privacy Policy — Oleksiak Consulting',
+    description: 'Privacy policy for oleksiakconsulting.com. GDPR-compliant data processing information.',
+    url: '/privacy',
+    type: 'website',
+    images: ['/og.png'],
+  },
 }
 
 export default function PrivacyPolicy() {
