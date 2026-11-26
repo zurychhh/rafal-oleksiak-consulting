@@ -58,6 +58,9 @@ for route in "${ROUTES[@]}"; do
   # nie trasa), wiersz przy pierwszej trasie. Samotest: scripts/css-dropped-selftest.sh.
   if [ "${CSSDROPPED_DONE:-0}" = 0 ]; then
     run_expect '^CSSDROPPED fail=0 ' "$route" "css-dropped" "$LOGDIR/global-css-dropped.log" node scripts/css-dropped.mjs; CSSDROPPED_DONE=1
+    # R40 (26.11 12:38): arkusz trasy nie zmienia html/body/section innej trasy po nawigacji klienckiej (Next zostawia
+    # CSS poprzedniej trasy w dokumencie; golym html{} z privacy/blog/tool/stop zerowalo scroll-padding-top na /work/genactiv).
+    run_expect '^CSSLEAK fail=0 ' "$route" "css-leak" "$LOGDIR/global-css-leak.log" node scripts/css-leak-check.mjs "$BASE"
   fi
   for vp in "390 844" "1440 900"; do
     set -- $vp; w=$1; h=$2

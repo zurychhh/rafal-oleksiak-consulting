@@ -5,8 +5,10 @@
    Na dlugiej, przewijanej stronie robi to z <html> kontener przycinajacy,
    co bramka wizualna slusznie zglasza jako przyciecie tresci. Kasujemy
    dokladnie te wlasciwosci i nic wiecej — wyglad strony sie nie zmienia. */
-html{overflow-x:visible;max-width:none;scroll-padding-top:0;}
-body{overflow-x:visible;max-width:none;}
+/* R40: zawezone przez :has — po nawigacji klienckiej arkusz zostaje w dokumencie i bez tego zerowal
+   scroll-padding-top na /work/genactiv (css-leak-check). */
+html:has(.privacy-page){overflow-x:visible;max-width:none;scroll-padding-top:0;}
+body:has(.privacy-page){overflow-x:visible;max-width:none;}
 
 /* WCAG 2.2 SC 2.4.11 (technika W3C C43): pasek cookies stoi na position:fixed u dolu.
    Tab do linku przy dolnej krawedzi (adres e-mail, "Back to homepage") przewijal go
