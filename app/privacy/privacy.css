@@ -7,3 +7,12 @@
    dokladnie te wlasciwosci i nic wiecej — wyglad strony sie nie zmienia. */
 html{overflow-x:visible;max-width:none;scroll-padding-top:0;}
 body{overflow-x:visible;max-width:none;}
+
+/* WCAG 2.2 SC 2.4.11 (technika W3C C43): pasek cookies stoi na position:fixed u dolu.
+   Tab do linku przy dolnej krawedzi (adres e-mail, "Back to homepage") przewijal go
+   dokladnie pod pasek (focus-obscured, 26.11). --consent-h ustawia CookieConsent;
+   bez paska zostaje sam margines 24 px. Ograniczone do tej trasy przez :has.
+   scroll-behavior:auto jak w stop.css, tool-reset.css i design-reset.css: smooth z critical.css
+   sprawial, ze po Tab link jeszcze plynal z dolu strony, gdy fokus juz na nim stal
+   (na 1440 px "Back to homepage" ok. 850 px pod paskiem). */
+html:has(.privacy-page){scroll-behavior:auto;scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);}

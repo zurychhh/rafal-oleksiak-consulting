@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { preload } from 'react-dom'
 import './privacy.css'
 
 export const metadata: Metadata = {
@@ -16,8 +17,15 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPolicy() {
+  // Naglowki w Poppins 700, tekst w DM Sans 400/700 (+ latin-ext dla "ł"), wszystko z
+  // font-display:swap. Bez preloadu podmiana kroju ok. 120 ms po wejsciu przesuwala
+  // akapity o 18-25 px (clsscroll 390 0,030 / 1440 0,016, 26.11) — ten sam wzor co /blog.
+  preload('/fonts/poppins-700-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
+  preload('/fonts/dm-sans-400-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
+  preload('/fonts/dm-sans-400-latin-ext.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
+  preload('/fonts/dm-sans-700-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
-    <main style={{ maxWidth: '720px', margin: '0 auto', padding: '80px 24px', color: '#ccc', background: '#1a1a2e', minHeight: '100vh' }}>
+    <main className="privacy-page" style={{ maxWidth: '720px', margin: '0 auto', padding: '80px 24px', color: '#ccc', background: '#1a1a2e', minHeight: '100vh' }}>
       <h1 style={{ color: '#fff', fontSize: '32px', marginBottom: '32px' }}>Privacy Policy</h1>
 
       <p style={{ marginBottom: '16px', lineHeight: 1.7 }}>
