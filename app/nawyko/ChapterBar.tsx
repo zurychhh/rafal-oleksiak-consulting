@@ -55,6 +55,7 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
     }
     let prevPin: boolean | null = null
     let prevAct: string | null = null
+    let yieldEls: HTMLElement[] = []
 
     const tick = () => {
       raf = 0
@@ -101,17 +102,35 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
         prevAct = a
         setAct(a)
       }
-      const inScene = pin && narrow.matches
+      // Spec 42 / recenzja 50: na telefonie pasek ustepuje takze przez pierwsze 120 px odjazdu sceny w gore (koniec toru) —
+      // inaczej przy cofnieciu wracal na gore ekranu telefonu sceny („30 day of 30”, nazwa marki)
+      let leaving = false
+      if (scene && narrow.matches && scene.classList.contains('is-scroll')) {
+        const r = scene.getBoundingClientRect()
+        leaving = r.top <= 1 && r.bottom < vh && r.bottom > vh - 120
+      }
+      const inScene = (pin || leaving) && narrow.matches
       // spec 41 A: przypiety kokpit „For you” (>= 900 px) zaczyna sie przy samej gorze ekranu — pasek przecinal jego naglowek.
       // Gdy tor kokpitu wypelnia ekran, pasek ustepuje (kokpit ma wlasny rzad zakladek).
       // Recenzja 49 I1: liczone z naglowka i zakladek przyklejonej sceny, nie z toru — przy koncu toru scena odjezdza w gore,
       // a pasek wracal juz na jej naglowek. Pasek ustepuje, dopoki naglowek lub zakladki kokpitu leza w pasie 0–96 px.
-      let inCockpit = false
-      for (const el of document.querySelectorAll<HTMLElement>('.nk-cockpit[data-pin] .nk-ck-head, .nk-cockpit[data-pin] .nk-ck-tabs')) {
-        const r = el.getBoundingClientRect()
-        if (r.height > 0 && r.top < 96 && r.bottom > 0) inCockpit = true
+      // Spec 42 (regula R36.2, sticky-fixed-check): to samo dla tekstu przypietego finalu „One morning with {marka}” —
+      // caly blok .nk-fz-copy, nie sama etykieta (recenzja 50 I1: przy koncu toru pasek wracal na naglowek momentu); na telefonie stoi 16 px od gory i pasek przykrywal go przy kazdym ruchu w gore. Wezly z pamieci (bez
+      // querySelectorAll w kazdej klatce przewijania); ponowne wyszukanie tylko, gdy React podmienil wezel.
+      if (!yieldEls.length || yieldEls.some((el) => !el.isConnected)) {
+        yieldEls = Array.from(document.querySelectorAll<HTMLElement>('.nk-cockpit .nk-ck-head, .nk-cockpit .nk-ck-tabs, .nk-fz-copy'))
       }
-      const on = past && !atForm && !inScene && !inCockpit && (want || openRef.current)
+      let yieldTop = false
+      for (const el of yieldEls) {
+        const ck = el.closest('.nk-cockpit')
+        if (ck && !ck.hasAttribute('data-pin')) continue
+        const r = el.getBoundingClientRect()
+        if (r.height > 0 && r.top < 96 && r.bottom > 0) {
+          yieldTop = true
+          break
+        }
+      }
+      const on = past && !atForm && !inScene && !yieldTop && (want || openRef.current)
       if (on !== prevOn) {
         prevOn = on
         setShown(on)

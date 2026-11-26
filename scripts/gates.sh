@@ -119,6 +119,10 @@ for route in "${ROUTES[@]}"; do
     TMO=$((TMO * 5)) run_expect '^COCKPITPIN PASS' "$route" "cockpit-pin" "$LOGDIR/$slug-cockpit-pin.log" \
       node scripts/cockpit-pin-check.mjs "$url" 1366x657 1280x720 1024x768 1440x789 1440x900 900x600 1920x1080 1100x620
   fi
+  # R6' p8 (regula R36.2, spec 42): kazda przypieta scena trasy × elementy position:fixed po ruchu kolkiem W GORE
+  # (regresja: pasek rozdzialow przykrywal naglowek finalu „One morning with …” na 390 i naglowek kokpitu na 1280)
+  TMO=$((TMO * 3)) run_expect '^STICKYFIXED PASS' "$route" "sticky-fixed" "$LOGDIR/$slug-sticky-fixed.log" \
+    node scripts/sticky-fixed-check.mjs "$url" 1440x900 1280x720 1100x620 390x844
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
   wkmiss=$(webkit_missing)
   if [ -n "$wkmiss" ]; then
