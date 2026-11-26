@@ -67,7 +67,9 @@ function ActBarImpl({ act, onJump }: Props) {
         }
       } else {
         const t = document.querySelector('.ga-track')?.getBoundingClientRect()
-        inScene = !!t && t.top <= 1 && t.bottom >= vh - 1
+        // R6'-N8 (0a, sticky-fixed): na telefonie pasek ustepuje takze przez pierwsze 120 px odjazdu sceny w gore (koniec toru) —
+        // inaczej przy cofnieciu wracal na gore odjezdzajacej sceny (wzor: ChapterBar /nawyko, spec 42)
+        inScene = !!t && t.top <= 1 && t.bottom > vh - 120
       }
       const s0 = document.querySelector('.ga-act-0')
       // R4 p11 recenzja 27 W1: przewiniecie wywolane fokusem (Tab na „Skip to content”) potrafi policzyc tick ze starym aktem —

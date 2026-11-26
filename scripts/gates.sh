@@ -123,6 +123,9 @@ for route in "${ROUTES[@]}"; do
   # (regresja: pasek rozdzialow przykrywal naglowek finalu „One morning with …” na 390 i naglowek kokpitu na 1280)
   TMO=$((TMO * 3)) run_expect '^STICKYFIXED PASS' "$route" "sticky-fixed" "$LOGDIR/$slug-sticky-fixed.log" \
     node scripts/sticky-fixed-check.mjs "$url" 1440x900 1280x720 1100x620 390x844
+  # R39 (26.11 p9): wyliczone scroll-behavior = auto na <html>/<body> (smooth z critical.css chowal fokus pod paskiem cookies na /privacy i /blog)
+  run_expect '^SCROLLBEHAVIOR PASS' "$route" "scroll-behavior" "$LOGDIR/$slug-scroll-behavior.log" \
+    node scripts/scroll-behavior-check.mjs "$BASE" "$route"
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
   wkmiss=$(webkit_missing)
   if [ -n "$wkmiss" ]; then
