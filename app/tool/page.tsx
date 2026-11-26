@@ -28,6 +28,8 @@ export const metadata: Metadata = {
       'Days of supply off the label, against the gap between orders in your own export.',
     url: '/tool',
     type: 'website',
+    // Wlasny openGraph nadpisuje caly obiekt z layoutu, wiec obraz trzeba podac jeszcze raz.
+    images: ['/og.png'],
   },
 }
 

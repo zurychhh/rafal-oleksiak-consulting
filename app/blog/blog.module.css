@@ -329,5 +329,6 @@
   padding: 24px;
   text-align: center;
   font-size: 13px;
-  color: #6b6f84;
+  /* #6b6f84 dawal 2,6:1 na #2D3142 (qa.js, 26.11); #9ca0b3 = 4,97:1 — ten sam szary co tekst stanu pustego. */
+  color: #9ca0b3;
 }

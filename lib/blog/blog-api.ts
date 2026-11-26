@@ -66,6 +66,8 @@ export async function getPosts(page = 1, pageSize = 20): Promise<PostListRespons
     next: { revalidate: 300 },
   });
 
+  // 5xx = awaria backendu, nie „brak wpisow”: strona pokazuje wtedy stan awarii, nie „Coming soon”.
+  if (res.status >= 500) throw new Error(`blog backend ${res.status}`);
   if (!res.ok) return { items: [], total: 0, page: 1, page_size: pageSize, total_pages: 0 };
   const data: PostListResponse = await res.json();
 
@@ -94,6 +96,7 @@ export async function getPostBySlug(slug: string): Promise<PostResponse | null> 
     next: { revalidate: 60 },
   });
 
+  if (res.status >= 500) throw new Error(`blog backend ${res.status}`);
   if (!res.ok) return null;
   const post: PostResponse = await res.json();
 
