@@ -1,3 +1,0 @@
-start: 2026-11-27 11:38
-punkt: R6'-N10 pkt 0 (/stop clsscroll-390, --consent-h przed pierwszym malowaniem) + pkt 4 (statyczna bramka css-leak)
-pliki: app/stop/*, app/components/ui/CookieConsent*, app/layout.tsx (skrypt inline), scripts/css-leak-static.mjs, scripts/gates.sh

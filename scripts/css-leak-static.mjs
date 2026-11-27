@@ -143,14 +143,14 @@ function walkCss(dir, out = []) {
   return out
 }
 
-// arkusze importowane przez jakikolwiek plik app/ (do oznaczenia arkuszy martwych; nadal sprawdzane — wroca z ship.mjs)
+// arkusze importowane przez jakikolwiek plik app/ (`import './x.css'`, `import s from './x.module.css'`, `@import`); reszta = martwe
 function importedCss() {
   const out = new Set()
   const walk = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
     const p = path.join(d, e.name)
     if (e.isDirectory()) { if (e.name !== 'node_modules') walk(p); continue }
     if (!/\.(tsx?|jsx?|mjs|css)$/.test(e.name)) continue
-    for (const m of fs.readFileSync(p, 'utf8').matchAll(/(?:import|@import)\s+(?:url\()?['"]([^'"]+\.css)['"]/g)) {
+    for (const m of fs.readFileSync(p, 'utf8').matchAll(/(?:@import\s+(?:url\()?|import\s+(?:[^'";]*?\sfrom\s+)?|import\(\s*)['"]([^'"]+\.css)['"]/g)) {
       const s = m[1]; const f = s.startsWith('@/') ? path.join(ROOT, s.slice(2)) : path.resolve(path.dirname(p), s)
       out.add(path.relative(ROOT, f))
     }
@@ -162,10 +162,13 @@ function importedCss() {
 function report(results, imported) {
   let files = 0, sels = 0, fail = 0, esc = 0
   for (const r of results) {
-    files++; sels += r.selectors; fail += r.offenders.length; esc += r.escapes.length
-    const tag = imported && !imported.has(path.relative(ROOT, path.resolve(r.file))) ? ' UNIMPORTED(nikt nie importuje; sprawdzany mimo to)' : ''
+    const dead = imported && !imported.has(path.relative(ROOT, path.resolve(r.file)))
+    // Arkusz martwy (nikt go nie importuje, np. app/audit.css po v66) nie trafia do dokumentu, wiec nie moze przeciekac.
+    // Gdy wroci (ship.mjs dopisze import), automatycznie wchodzi do liczenia — bez zmiany skryptu.
+    files++; sels += r.selectors; esc += r.escapes.length; if (!dead) fail += r.offenders.length
+    const tag = dead ? ' MARTWY(nikt nie importuje; offenders nie licza sie do FAIL)' : ''
     console.log(`FILE ${r.file}${tag} rules=${r.rules} selectors=${r.selectors} offenders=${r.offenders.length} escapes=${r.escapes.length}`)
-    for (const o of r.offenders) console.log(`  FAIL ${r.file}:${o.line}  ${o.selector}`)
+    for (const o of r.offenders) console.log(`  ${dead ? 'martwy' : 'FAIL'} ${r.file}:${o.line}  ${o.selector}`)
     for (const e of r.escapes) console.log(`  ESCAPE ${r.file}:${e.line}  ${e.selector}  — ${e.reason}`)
   }
   return { files, sels, fail, esc }
@@ -198,6 +201,14 @@ function selftest() {
     console.log(`${miss.length ? 'BAD ' : 'ok  '} global-set: ${[...g].join(', ')}${miss.length ? ` (brak: ${miss.join(', ')})` : ''}`)
     if (miss.length) ok = false
   } catch (e) { console.log(`BAD  global-set: ${e.message}`); ok = false }
+  // R42: `import styles from './blog.module.css'` to tez import — arkusz nie moze wyjsc na martwy (fałszywe PASS)
+  try {
+    const imp = importedCss()
+    const need = ['app/blog/blog.module.css', 'app/stop/stop.css'].filter((f) => fs.existsSync(path.join(ROOT, f)))
+    const miss = need.filter((f) => !imp.has(f))
+    console.log(`${miss.length ? 'BAD ' : 'ok  '} imported-set: ${need.join(', ')}${miss.length ? ` (uznane za martwe: ${miss.join(', ')})` : ''}`)
+    if (miss.length) ok = false
+  } catch (e) { console.log(`BAD  imported-set: ${e.message}`); ok = false }
   console.log(`CSSLEAKSTATIC-SELFTEST ${ok ? 'PASS' : 'FAIL'}`)
   process.exit(ok ? 0 : 1)
 }
