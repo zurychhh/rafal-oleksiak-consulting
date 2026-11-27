@@ -1,3 +1,3 @@
-Start: 26.11.2026 12:38 (przebieg 12:38)
-Punkt: R6'-N9 pkt 0-3 (pelny gates z scroll-behavior; ga-prog 1100x620; /tool focus-obscured; html{} w privacy.css/blog-reset.css zawezic)
-Pliki: app/tool/**, app/privacy/privacy.css, app/blog/**/blog-reset.css, app/work/genactiv/**, scripts/gates.sh, agencja/**
+Start: 27.11.2026 10:38 (przebieg 27.11 10:38)
+Punkt: R6'-N9 pkt 0-3 (wznowienie wip/1238: css-leak zawezone arkusze; pelny gates; ga-prog 1100x620; /tool focus-obscured)
+Pliki: app/tool/**, app/privacy/**, app/blog/**, app/stop/**, app/work/genactiv/**, scripts/**, agencja/**
