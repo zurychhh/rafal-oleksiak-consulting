@@ -1,4 +1,0 @@
-start: Thu Nov 26 10:38:20 CET 2026
-punkt: proces — przebiegi koncza sie bez commitu zamykajacego (15:38, 16:38, ew. 09:38) -> punkt kontrolny wip/; audyt (d): /blog try/catch, metadataBase, preconnect; kolejka wiedzy pkt 14 (powiekszenie 200% /nawyko — tylko pomiar)
-pliki: app/blog/*, app/layout.tsx, lib/blog/*, scripts/checkpoint.sh (nowy), agencja/ (bez app/nawyko, app/work)
-rownolegle do agencja/W-TOKU (przebieg 09:38)

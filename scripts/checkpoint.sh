@@ -24,6 +24,9 @@ git add -A >/dev/null  # .gitignore pomija node_modules, .next i .env*
 if git diff --cached --name-only HEAD | grep -E '(^|/)\.env|\.pem$|credentials|\.google-ads-token' >/dev/null; then
   echo "odmowa: w zmianach jest plik wygladajacy na sekret" >&2; exit 3
 fi
+# Straz rozmiaru: plik > 5 MB nie idzie do punktu kontrolnego (zrzuty z bramek maja ~75 KB).
+BIG="$(git diff --cached --name-only --diff-filter=AM HEAD | while read -r f; do [ -f "$f" ] && [ "$(stat -c %s "$f")" -gt 5242880 ] && echo "$f"; done || true)"
+if [ -n "$BIG" ]; then echo "odmowa: pliki > 5 MB: $BIG" >&2; exit 3; fi
 TREE="$(git write-tree)"
 PARENT="$(git rev-parse HEAD)"
 # Bez force push (zasada agencji): gdy wip/<znacznik> juz istnieje, nowy punkt ma go za rodzica,

@@ -1,7 +1,5 @@
-/* DOSAGE — ten sam jezyk co strona glowna v66: jasny papier, jedna ciemna farba,
-     cienkie linie, meble etykiety farmaceutycznej. Bez ciemnego motywu: strona
-     glowna go nie ma, a wejscie z niej na /tool nie moze zmieniac swiata.        */
-  :root{
+/* R40-SCOPED */
+:root:has(#orders){
     --paper:#F7F5F0; --card:#FFFFFF; --sunk:#EDEAE1;
     --ink:#14161A; --body:#3A3C40; --soft:#6E6D68; --rule:#DCDAD2;
     /* Wermilion zamiast bursztynu (norma czerwieni, design/DESIGN-SYSTEM.md).
@@ -11,6 +9,11 @@
     --disp:"Instrument Sans",system-ui,"Helvetica Neue",Arial,sans-serif;
     --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   }
+html:has(#orders){
+/* DOSAGE — ten sam jezyk co strona glowna v66: jasny papier, jedna ciemna farba,
+     cienkie linie, meble etykiety farmaceutycznej. Bez ciemnego motywu: strona
+     glowna go nie ma, a wejscie z niej na /tool nie moze zmieniac swiata.        */
+
   *{box-sizing:border-box;}
   body{margin:0;background:var(--paper);color:var(--body);font-family:var(--disp);
     font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
@@ -745,3 +748,5 @@
   .word:hover{color:var(--ink);text-decoration-color:var(--ink);}
   .dexit .word:hover::before{color:var(--ink);}
   .behind summary:hover{color:var(--ink);}
+
+}

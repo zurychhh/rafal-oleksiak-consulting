@@ -4,15 +4,15 @@
 
 /* Reset scenografii po starej stronie, identyczny jak w audit.css.
    critical.css narzuca białe tło i Poppinsa na nagłówkach. */
-html{overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;}
+html:has(.stopwrap){overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;} /* R40: tylko na /stop */
 /* Tlo i krój musza siedziec na <body>, nie na kolumnie: .stopwrap ma 620px
    szerokosci, wiec sama pomalowalaby tylko pasek posrodku bialej strony
    (critical.css ustawia body na biale i DM Sans). */
-body{overflow-x:visible;max-width:none;
+body:has(.stopwrap){overflow-x:visible;max-width:none;
   background:var(--bg);color:var(--fg);font-family:var(--sans);}
 /* --sans to od kierunku C DM Mono, wiec naglowki musza jawnie wskazac krój
    wyswietlaniowy; samo `inherit` daloby naglowek pisany monospacem. */
-h1,h2,h3,h4,h5,h6{font-family:var(--disp);}
+:where(.stopwrap) :is(h1,h2,h3,h4,h5,h6){font-family:var(--disp);} /* R40: tylko na /stop */
 
 .stopwrap{min-height:calc(100dvh - var(--consent-h, 0px));
   display:flex;flex-direction:column;justify-content:center;

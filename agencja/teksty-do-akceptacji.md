@@ -441,3 +441,6 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada
 ### R6' p3 (25.11 00:15) — `/nawyko`
 - PRZENIESIONE ze sceny do kokpitu bez zmian: „See the day each pack really runs out.”, „Each dot: a pack’s real last day, not the label’s.” i reszta dawnego aktu 6; etykieta zakładki „Pack rhythm” (dawny przycisk aktu).
 - NOWE (tylko dla czytników ekranu): „Show more brand views” (przycisk „›” na telefonie) — czytelnik-kupujący w następnym przebiegu.
+
+### Przebieg 26.11 10:38 — `/blog` (stan awarii backendu)
+- NOWE: „Articles unavailable right now” (lista) / „Article unavailable right now” (artykuł), „Reload in a minute, or go back to the home page.”, przycisk „Home page”. Czytelnik-kupujący: „did not load” = żargon, „Try again…” = wstęp → poprawione; „Home page” OK. Jego wariant „Temporary fault. …” odrzucony (zasada 6: bez technicznego tonu). copy-voice PASS.

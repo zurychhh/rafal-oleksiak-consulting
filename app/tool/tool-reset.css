@@ -10,8 +10,8 @@
    Ten plik jest PISANY RECZNIE. tool.css obok jest generowany przez
    scripts/ship-tool.mjs i nadpisywany przy kazdym przeniesieniu, wiec reset
    nie moze tam mieszkac — przepadlby przy pierwszej nowej wersji narzedzia. */
-html{overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;}
-body{overflow-x:visible;max-width:none;}
+/* R40: bez golych html{}/body{} — po nawigacji klienckiej zostawaly w dokumencie i zerowaly
+   scroll-padding-top na /work/genactiv (css-leak-check). Ta sama wartosc stoi nizej pod :has(#orders). */
 
 /* Druga rzecz ze starej strony, znacznie gorsza od pierwszej i niewidoczna dla
    qa.js: globals.css ustawia KAZDEMU <section> padding clamp(48px,8vw+1rem,120px)
@@ -25,7 +25,8 @@ body{overflow-x:visible;max-width:none;}
    transform:translateZ(0) kasujemy nie dla kosmetyki: element z transformem staje
    sie blokiem zawierajacym dla position:fixed, wiec cokolwiek fixed w srodku
    karty zaczepiloby sie o nia zamiast o okno. */
-section{padding:0;overflow-x:visible;max-width:none;transform:none;
+/* :where — ta sama specyficznosc co gole `section` (nie przebija .tool z tool.css), ale tylko na /tool. */
+:where(body:has(#orders)) section{padding:0;overflow-x:visible;max-width:none;transform:none;
   backface-visibility:visible;}
 
 /* Kolejnosc chunkow CSS w buildzie produkcyjnym nie jest gwarantowana: przy

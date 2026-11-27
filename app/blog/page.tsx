@@ -30,10 +30,10 @@ export default async function BlogListingPage({
 
       {data.items.length === 0 ? (
         <div className={styles.emptyBlog}>
-          <p className={styles.emptyBlogTitle}>{failed ? 'Articles did not load' : 'Coming soon'}</p>
+          <p className={styles.emptyBlogTitle}>{failed ? 'Articles unavailable right now' : 'Coming soon'}</p>
           <p className={styles.emptyBlogText}>
             {failed
-              ? 'Try again in a minute, or go back to the home page.'
+              ? 'Reload in a minute, or go back to the home page.'
               : 'We are preparing our first articles. Check back soon.'}
           </p>
           {failed && (

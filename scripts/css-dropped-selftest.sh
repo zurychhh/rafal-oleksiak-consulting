@@ -17,6 +17,10 @@
 #   varinfo.css — font:600 26px/1 var(--f) bez definicji --f (podstawienia 0/#000 niepoprawne) -> kod 0 + linia INFO z var()
 #   varfb.css  — font:600 26px/1 var(--g, inherit) (zapas niepoprawny w skrocie) -> kod 0 + linia INFO z var()
 #   varbad.css — var() w deklaracji niepoprawnej juz przy parsowaniu (`color:var(--x) !importantt`) -> kod 1
+# R7 (recenzja, 3 poprawki):
+#   var6.css   — box-shadow z 6 var(), wszystkie zdefiniowane -> kod 0, bez INFO (licznik glebokosci rosl takze po kolejnych var() w tej samej wartosci)
+#   varrep.css — grid-template-columns:repeat(var(--n),1fr) bez definicji --n (podstawienie `1` poprawne) -> kod 0, bez INFO
+#   dup.css    — lista z :is(...::-moz-...) i ::-moz- odrzucana w calosci przez Chromium -> kod 1 i DOKLADNIE jedna linia FAIL na selektor
 # Uzycie: bash scripts/css-dropped-selftest.sh
 set -u
 cd "$(dirname "$0")/.." || exit 2
@@ -46,6 +50,9 @@ printf '%s\n' ':root{--f:"Inter",sans-serif}' '.a{font:600 26px/1 var(--f)}' >"$
 printf '%s\n' '.a{font:600 26px/1 var(--f)}' >"$TMP/varinfo.css"
 printf '%s\n' '.a{font:600 26px/1 var(--g, inherit)}' >"$TMP/varfb.css"
 printf '%s\n' '.a{color:var(--x) !importantt}' >"$TMP/varbad.css"
+printf '%s\n' ':root{--i:inset;--a:1px;--b:2px;--c:3px;--d:4px;--f:red}' '.a{box-shadow:var(--i) var(--a) var(--b) var(--c) var(--d) var(--f)}' >"$TMP/var6.css"
+printf '%s\n' '.a{display:grid;grid-template-columns:repeat(var(--n),1fr)}' >"$TMP/varrep.css"
+printf '%s\n' '.a:is(.b,::-moz-range-thumb),.r::-moz-range-thumb{color:red}' >"$TMP/dup.css"
 
 ok=0
 check() {  # check <plik> <oczekiwany kod>
@@ -68,10 +75,16 @@ check varok.css 0
 check varinfo.css 0
 check varfb.css 0
 check varbad.css 1
+check var6.css 0
+check varrep.css 0
+check dup.css 1
 grep -q '^INFO .*var(--f).*z var()' "$TMP/varinfo.css.log" || { echo "varinfo.css: brak linii INFO dla var()"; ok=1; }
 grep -q '^INFO .*var(--g, inherit).*z var()' "$TMP/varfb.css.log" || { echo "varfb.css: brak linii INFO dla var()"; ok=1; }
 grep -q '^INFO' "$TMP/varok.css.log" && { echo "varok.css: nieoczekiwane INFO"; ok=1; }
 grep -q '^FAIL .*pseudoelement' "$TMP/isbad.css.log" || { echo "isbad.css: brak komunikatu o pseudoelemencie"; ok=1; }
 grep -q 'font:600 26px/1 inherit' "$TMP/broken.css.log" || { echo "broken.css: brak tekstu deklaracji w raporcie"; ok=1; }
+grep -q '^INFO' "$TMP/var6.css.log" && { echo "var6.css: nieoczekiwane INFO (6 var() zdefiniowanych)"; ok=1; }
+grep -q '^INFO' "$TMP/varrep.css.log" && { echo "varrep.css: nieoczekiwane INFO (repeat(var(--n),1fr))"; ok=1; }
+[ "$(grep -c '^FAIL' "$TMP/dup.css.log")" -eq 1 ] || { echo "dup.css: oczekiwano dokladnie jednej linii FAIL na selektor"; ok=1; }
 [ $ok -eq 0 ] && echo "CSS-DROPPED-SELFTEST: PASS" || echo "CSS-DROPPED-SELFTEST: FAIL"
 exit $ok
