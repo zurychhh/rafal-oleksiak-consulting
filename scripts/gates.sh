@@ -61,6 +61,11 @@ for route in "${ROUTES[@]}"; do
     # R40 (26.11 12:38): arkusz trasy nie zmienia html/body/section innej trasy po nawigacji klienckiej (Next zostawia
     # CSS poprzedniej trasy w dokumencie; golym html{} z privacy/blog/tool/stop zerowalo scroll-padding-top na /work/genactiv).
     run_expect '^CSSLEAK fail=0 ' "$route" "css-leak" "$LOGDIR/global-css-leak.log" node scripts/css-leak-check.mjs "$BASE"
+    # R40 statycznie (bez przegladarki): kazdy selektor zwyklego .css trasy (poza arkuszami z app/layout.tsx) zakotwiczony
+    # w klasie/id (html:has(.x), :where(.x) h1); gole html/body/:root/*/h1 = FAIL; :global(h1) w *.module.css = FAIL.
+    # Najpierw samotest (wzorce inline: zle i dobre), potem prawdziwe pliki. Wyjatek: /* css-leak-ok: <powod> */ w linii reguly.
+    run_expect '^CSSLEAKSTATIC-SELFTEST PASS' "$route" "cssleak-st-test" "$LOGDIR/global-css-leak-static-selftest.log" node scripts/css-leak-static.mjs --selftest
+    run_expect '^CSSLEAKSTATIC PASS ' "$route" "cssleak-static" "$LOGDIR/global-css-leak-static.log" node scripts/css-leak-static.mjs
   fi
   for vp in "390 844" "1440 900"; do
     set -- $vp; w=$1; h=$2
