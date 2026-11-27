@@ -14,7 +14,12 @@ body:has(.stopwrap){overflow-x:visible;max-width:none;
    wyswietlaniowy; samo `inherit` daloby naglowek pisany monospacem. */
 :where(.stopwrap) :is(h1,h2,h3,h4,h5,h6){font-family:var(--disp);} /* R40: tylko na /stop */
 
-.stopwrap{min-height:calc(100dvh - var(--consent-h, 0px));
+/* R42: wysokosc kolumny NIE zalezy od --consent-h. Wczesniej min-height = ekran minus pasek cookies, a tresc
+   wysrodkowana; pasek pojawia sie ~1,7 s po wczytaniu, kolumna skracala sie i tresc podskakiwala o ~39 px
+   (clsscroll-390 0,019). Teraz tresc stoi w miejscu; rezerwe pod paskiem daje padding <html> z CookieConsent
+   (da sie dojechac do kazdej kontrolki), a fokus z klawiatury trzyma scroll-padding-bottom nizej. */
+html:has(.stopwrap){scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);}
+.stopwrap{min-height:100dvh;
   display:flex;flex-direction:column;justify-content:center;
   max-width:620px;margin:0 auto;padding:80px 28px 48px;}
 .stopwrap .lab{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.2em;
@@ -46,4 +51,4 @@ body:has(.stopwrap){overflow-x:visible;max-width:none;
 @media (max-width:560px){
   .stopbox{flex-direction:column;} .stopbox button{padding:15px 0;}
 }
-@media (prefers-reduced-motion:reduce){ *{transition:none!important;} }
+@media (prefers-reduced-motion:reduce){ .stopwrap *{transition:none!important;} } /* R42: tylko na /stop (bylo `*` — wylaczalo przejscia na kazdej trasie po wizycie na /stop) */

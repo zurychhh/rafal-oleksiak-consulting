@@ -33,5 +33,8 @@
    przebudowie narzedzia (DOSAGE, 26.09.2026) critical.css wyladowal PO tym pliku
    i html znow przycinal. :has() podbija specyficznosc, wiec reset wygrywa
    niezaleznie od kolejnosci — to samo lekarstwo co w design-reset.css.       */
-html:has(#orders){overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;}
+html:has(#orders){overflow-x:visible;max-width:none;scroll-behavior:auto;scroll-padding-top:0;
+  /* R41 (27.11): WCAG 2.2 SC 2.4.11, technika W3C C43 — Tab na <summary> "Show the rows..." (1440x900) przewijal go
+     tylko do dolnej krawedzi okna, pod pasek cookies (pomiar: summary 852-900, pasek 843-900). Jak /privacy. */
+  scroll-padding-bottom:calc(var(--consent-h,0px) + 24px);}
 body:has(#orders){overflow-x:visible;max-width:none;}

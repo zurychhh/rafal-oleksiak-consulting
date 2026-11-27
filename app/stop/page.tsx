@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { preload } from 'react-dom'
 import StopClient from './StopClient'
 import './stop.css'
 
@@ -18,6 +19,9 @@ export const viewport: Viewport = {
 }
 
 export default function Stop() {
+  // R42: /stop rysuje wszystko krojem Instrument Sans (--sans/--mono/--disp w globals.css). Preload tego jednego
+  // pliku skraca okno podmiany kroju; skok przy pojawieniu sie paska cookies usunelo stop.css (min-height bez --consent-h).
+  preload('/fonts/instrument-sans-400-600-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <main className="stopwrap">
       <div className="lab">Oleksiak Consulting</div>
