@@ -27,7 +27,7 @@ export default function BlogLayout({
   preload('/fonts/poppins-700-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
   preload('/fonts/poppins-600-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
   return (
-    <div className={styles.blogWrapper}>
+    <div className={`${styles.blogWrapper} blog-root`}>
       <header className={styles.blogHeader}>
         <div className={styles.blogHeaderInner}>
           <Link href="/" className={styles.blogLogo}>

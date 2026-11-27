@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { preload } from 'react-dom'
 import StopClient from './StopClient'
 import './stop.css'
 
@@ -18,6 +19,10 @@ export const viewport: Viewport = {
 }
 
 export default function Stop() {
+  // R42: te dwa pliki /stop faktycznie pobiera (pomiar 27.11). Bez preloadu podmiana kroju ok. 120 ms
+  // po wejsciu przesuwala akapity o 12-43 px (clsscroll 390 0,031) — ten sam wzor co /privacy i /blog.
+  preload('/fonts/dm-sans-400-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
+  preload('/fonts/poppins-700-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <main className="stopwrap">
       <div className="lab">Oleksiak Consulting</div>

@@ -18,6 +18,7 @@
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
+import { scopeToolCss } from './tool-css-scope.mjs'
 
 const ROOT = resolve(dirname(new URL(import.meta.url).pathname), '..')
 const OUT = {
@@ -62,7 +63,8 @@ if (missing.length) {
 // --- style -----------------------------------------------------------------
 const styles = [...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((m) => m[1])
 if (!styles.length) die('Brak bloku <style> w zrodle.')
-const css = styles.join('\n\n').trim() + '\n'
+// R40: arkusz zawezony do strony z #orders (po nawigacji klienckiej nie zmienia innych tras) — scripts/tool-css-scope.mjs
+const css = scopeToolCss(styles.join('\n\n').trim() + '\n')
 
 // --- skrypty ---------------------------------------------------------------
 // Wszystkie bloki <script> bez atrybutu src, w kolejnosci wystapienia: shim

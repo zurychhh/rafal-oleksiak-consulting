@@ -11,6 +11,15 @@ BASE="${1%/}"; shift
 HOSTPART="${BASE#*://}"; HOSTPART="${HOSTPART%%/*}"; HOST="${HOSTPART%%:*}"
 case "$HOST" in localhost|127.0.0.1) ;; *) echo "odmowa: host '$HOST' to nie localhost/127.0.0.1" >&2; exit 2;; esac
 cd "$(dirname "$0")/.." || exit 2
+# R42: serwer musi podawac TEN build. 27.11 `pkill -f "next start"` nie trafil w proces `next-server`, nowy `npm start`
+# padl na EADDRINUSE, a pomiary szly na starym serwerze z HTML-em starego buildu (falszywe wyniki CLS w obie strony).
+if [ -f .next/BUILD_ID ] && [ -z "${GATES_SKIP_BUILDID:-}" ]; then
+  BID=$(cat .next/BUILD_ID)
+  if ! curl -s --max-time 20 "$BASE${1:-/}" | grep -q "$BID"; then
+    echo "odmowa: $BASE nie podaje biezacego buildu (.next/BUILD_ID=$BID) — zabij stary serwer (fuser -k <port>/tcp) i uruchom npm start" >&2; exit 2
+  fi
+  echo "build-id OK ($BID)"
+fi
 LOGDIR="${GATES_LOGDIR:-/tmp/gates}"; mkdir -p "$LOGDIR" || { echo "nie moge utworzyc $LOGDIR" >&2; exit 2; }
 # Parsowanie i progi clsscroll / scroll-perf oraz sprawdzenie WebKit — wspolne z selftestami (R4 p14 B3).
 . scripts/gates-lib.sh
@@ -58,6 +67,14 @@ for route in "${ROUTES[@]}"; do
   # nie trasa), wiersz przy pierwszej trasie. Samotest: scripts/css-dropped-selftest.sh.
   if [ "${CSSDROPPED_DONE:-0}" = 0 ]; then
     run_expect '^CSSDROPPED fail=0 ' "$route" "css-dropped" "$LOGDIR/global-css-dropped.log" node scripts/css-dropped.mjs; CSSDROPPED_DONE=1
+    # R40 (26.11 12:38): arkusz trasy nie zmienia html/body/section innej trasy po nawigacji klienckiej (Next zostawia
+    # CSS poprzedniej trasy w dokumencie; golym html{} z privacy/blog/tool/stop zerowalo scroll-padding-top na /work/genactiv).
+    run_expect '^CSSLEAK fail=0 ' "$route" "css-leak" "$LOGDIR/global-css-leak.log" node scripts/css-leak-check.mjs "$BASE"
+    # R40 statycznie (bez przegladarki): kazdy selektor zwyklego .css trasy (poza arkuszami z app/layout.tsx) zakotwiczony
+    # w klasie/id (html:has(.x), :where(.x) h1); gole html/body/:root/*/h1 = FAIL; :global(h1) w *.module.css = FAIL.
+    # Najpierw samotest (wzorce inline: zle i dobre), potem prawdziwe pliki. Wyjatek: /* css-leak-ok: <powod> */ w linii reguly.
+    run_expect '^CSSLEAKSTATIC-SELFTEST PASS' "$route" "cssleak-st-test" "$LOGDIR/global-css-leak-static-selftest.log" node scripts/css-leak-static.mjs --selftest
+    run_expect '^CSSLEAKSTATIC PASS ' "$route" "cssleak-static" "$LOGDIR/global-css-leak-static.log" node scripts/css-leak-static.mjs
   fi
   for vp in "390 844" "1440 900"; do
     set -- $vp; w=$1; h=$2
@@ -123,6 +140,9 @@ for route in "${ROUTES[@]}"; do
   # (regresja: pasek rozdzialow przykrywal naglowek finalu „One morning with …” na 390 i naglowek kokpitu na 1280)
   TMO=$((TMO * 3)) run_expect '^STICKYFIXED PASS' "$route" "sticky-fixed" "$LOGDIR/$slug-sticky-fixed.log" \
     node scripts/sticky-fixed-check.mjs "$url" 1440x900 1280x720 1100x620 390x844
+  # R39 (26.11 p9): wyliczone scroll-behavior = auto na <html>/<body> (smooth z critical.css chowal fokus pod paskiem cookies na /privacy i /blog)
+  run_expect '^SCROLLBEHAVIOR PASS' "$route" "scroll-behavior" "$LOGDIR/$slug-scroll-behavior.log" \
+    node scripts/scroll-behavior-check.mjs "$BASE" "$route"
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
   wkmiss=$(webkit_missing)
   if [ -n "$wkmiss" ]; then
