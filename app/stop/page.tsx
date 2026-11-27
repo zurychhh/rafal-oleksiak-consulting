@@ -19,10 +19,9 @@ export const viewport: Viewport = {
 }
 
 export default function Stop() {
-  // R42: te dwa pliki /stop faktycznie pobiera (pomiar 27.11). Bez preloadu podmiana kroju ok. 120 ms
-  // po wejsciu przesuwala akapity o 12-43 px (clsscroll 390 0,031) — ten sam wzor co /privacy i /blog.
-  preload('/fonts/dm-sans-400-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
-  preload('/fonts/poppins-700-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
+  // R42: /stop rysuje wszystko krojem Instrument Sans (--sans/--mono/--disp w globals.css). Preload tego jednego
+  // pliku skraca okno podmiany kroju; skok przy pojawieniu sie paska cookies usunelo stop.css (min-height bez --consent-h).
+  preload('/fonts/instrument-sans-400-600-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <main className="stopwrap">
       <div className="lab">Oleksiak Consulting</div>

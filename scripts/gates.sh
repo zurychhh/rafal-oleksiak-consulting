@@ -11,15 +11,6 @@ BASE="${1%/}"; shift
 HOSTPART="${BASE#*://}"; HOSTPART="${HOSTPART%%/*}"; HOST="${HOSTPART%%:*}"
 case "$HOST" in localhost|127.0.0.1) ;; *) echo "odmowa: host '$HOST' to nie localhost/127.0.0.1" >&2; exit 2;; esac
 cd "$(dirname "$0")/.." || exit 2
-# R42: serwer musi podawac TEN build. 27.11 `pkill -f "next start"` nie trafil w proces `next-server`, nowy `npm start`
-# padl na EADDRINUSE, a pomiary szly na starym serwerze z HTML-em starego buildu (falszywe wyniki CLS w obie strony).
-if [ -f .next/BUILD_ID ] && [ -z "${GATES_SKIP_BUILDID:-}" ]; then
-  BID=$(cat .next/BUILD_ID)
-  if ! curl -s --max-time 20 "$BASE${1:-/}" | grep -q "$BID"; then
-    echo "odmowa: $BASE nie podaje biezacego buildu (.next/BUILD_ID=$BID) — zabij stary serwer (fuser -k <port>/tcp) i uruchom npm start" >&2; exit 2
-  fi
-  echo "build-id OK ($BID)"
-fi
 LOGDIR="${GATES_LOGDIR:-/tmp/gates}"; mkdir -p "$LOGDIR" || { echo "nie moge utworzyc $LOGDIR" >&2; exit 2; }
 # Parsowanie i progi clsscroll / scroll-perf oraz sprawdzenie WebKit — wspolne z selftestami (R4 p14 B3).
 . scripts/gates-lib.sh
@@ -28,7 +19,7 @@ LOGDIR="${GATES_LOGDIR:-/tmp/gates}"; mkdir -p "$LOGDIR" || { echo "nie moge utw
 # R4 p15: BUILD_ID moze zaczynac sie od "-" (np. -lD5f7N2...) — grep -qF -- (inaczej grep czyta go jako opcje i bramka odmawia na dobrym serwerze).
 if [ -f .next/BUILD_ID ]; then
   BID="$(cat .next/BUILD_ID)"
-  if ! curl -s --max-time 20 "$BASE${1:-/}" | grep -qF -- "$BID"; then
+  if ! curl -sL --max-time 20 "$BASE${1:-/}" | grep -qF -- "$BID"; then
     echo "odmowa: serwer $BASE nie podaje buildu z .next (BUILD_ID $BID) — zatrzymaj stary next-server i uruchom npm start ponownie" >&2; exit 2
   fi
 fi
@@ -75,6 +66,10 @@ for route in "${ROUTES[@]}"; do
     # Najpierw samotest (wzorce inline: zle i dobre), potem prawdziwe pliki. Wyjatek: /* css-leak-ok: <powod> */ w linii reguly.
     run_expect '^CSSLEAKSTATIC-SELFTEST PASS' "$route" "cssleak-st-test" "$LOGDIR/global-css-leak-static-selftest.log" node scripts/css-leak-static.mjs --selftest
     run_expect '^CSSLEAKSTATIC PASS ' "$route" "cssleak-static" "$LOGDIR/global-css-leak-static.log" node scripts/css-leak-static.mjs
+    # R42 (web.dev „Best practices for fonts”): preload fontu w HTML trasy = krój, ktory trasa naprawde rysuje (390 i 1440),
+    # na wszystkich trasach przebiegu; najpierw kontrola pozytywna (wstrzykniety nieuzywany preload musi dac FAIL).
+    run_expect '^FONTPRELOAD-SELFTEST PASS' "$route" "fontpre-test" "$LOGDIR/global-font-preload-selftest.log" node scripts/font-preload-check.mjs "$BASE" "$route" --selftest
+    run_expect '^FONTPRELOAD PASS ' "$route" "font-preload" "$LOGDIR/global-font-preload.log" node scripts/font-preload-check.mjs "$BASE" "${ROUTES[@]}"
   fi
   for vp in "390 844" "1440 900"; do
     set -- $vp; w=$1; h=$2
