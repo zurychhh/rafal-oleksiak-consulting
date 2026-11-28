@@ -87,6 +87,18 @@ function Scratch({ gone, onDone, auto, foil }: { gone: boolean; onDone: () => vo
     g.fillText(label, c.width / 2, c.height / 2)
   }, [foil])
 
+  /* PILNE 2 pkt 1 (Rafal 28.11): karta wraca po zmianie marki — nowa folia, zdrapka znow reaguje na przeciaganie. */
+  const wasGone = useRef(gone)
+  useEffect(() => {
+    if (wasGone.current && !gone) {
+      userTook.current = false
+      last.current = null
+      moves.current = 0
+      paint()
+    }
+    wasGone.current = gone
+  }, [gone, paint])
+
   useEffect(() => {
     paint()
     const c = ref.current
@@ -155,6 +167,9 @@ function Scratch({ gone, onDone, auto, foil }: { gone: boolean; onDone: () => vo
       const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2
       const pos = at(e)
       g.globalCompositeOperation = 'destination-out'
+      /* PILNE 2 pkt 1: pelne krycie pedzla — paint() zostawia strokeStyle prazkow folii (alfa .16), a destination-out
+         z alfa .16 zdejmowal tylko 16 % folii: karta w kolorze marki nie dawala sie zdrapac do konca. */
+      g.strokeStyle = '#000'
       g.lineCap = 'round'
       g.lineJoin = 'round'
       g.lineWidth = W * 0.22
@@ -229,6 +244,7 @@ function Scratch({ gone, onDone, auto, foil }: { gone: boolean; onDone: () => vo
     const p = at(e)
     const from = last.current ?? p
     g.globalCompositeOperation = 'destination-out'
+    g.strokeStyle = '#000'
     g.lineCap = 'round'
     g.lineJoin = 'round'
     g.lineWidth = c.width * 0.16
@@ -899,6 +915,21 @@ const ACT_AT = ACT_W.map((_, i) => ACT_W.slice(0, i).reduce((a, b) => a + b, 0))
 const ACT_TOT = ACT_W.reduce((a, b) => a + b, 0)
 const ACT_NAMES = ['Purchase', 'Daily card', 'Streak', 'Reward', 'Reward calendar'] as const
 
+/* PILNE 2 pkt 1 (Rafal 28.11.2026): po zmianie nazwy, koloru albo stylu marki karta dnia jest znowu do zdrapania
+   (nowa karta w nowej marce), a „Reveal without scratching” znowu ja odslania. Wczesniej raz odslonieta karta zostawala
+   odslonieta, a przycisk martwy. Zmiana stanu w czasie renderu (wzorzec React „adjusting state when a prop changes”). */
+function useBrandChanged(): boolean {
+  const { name, colour } = useBrand()
+  const skin = useSkin()
+  const key = `${name.trim()}|${colour}|${skin}`
+  const [seen, setSeen] = useState(key)
+  if (seen !== key) {
+    setSeen(key)
+    return true
+  }
+  return false
+}
+
 function Scene({ skin }: { skin: Skin }) {
   const { brand, own } = useBrand()
   const wrap = useRef<HTMLDivElement>(null)
@@ -911,6 +942,8 @@ function Scene({ skin }: { skin: Skin }) {
   const [enter, setEnter] = useState(1)
   const [dayPick, setDayPick] = useState<{ d: number; p: number } | null>(null)
   const onScratched = useCallback(() => setScratched(true), [])
+  const brandChanged = useBrandChanged()
+  if (brandChanged && scratched) setScratched(false)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -976,6 +1009,7 @@ function Scene({ skin }: { skin: Skin }) {
   // Zdrapka: jesli odwiedzajacy nie zdrapie sam w ok. 1,5 s od wejscia w akt, karta zdrapuje sie sama.
   // Kto przewija szybko (polowa aktu), dostaje animacje od razu.
   const [autoS, setAutoS] = useState(false)
+  if (brandChanged && autoS) setAutoS(false)
   // Kto sam wybral akt zdrapki (nawigacja scen), dostaje karte do zdrapania — bez samozdrapki, dopoki jest w akcie.
   const [hold, setHold] = useState<false | 'pending' | 'on'>(false)
   useEffect(() => {
@@ -2368,8 +2402,16 @@ export function HeroApp() {
   const { name, colour, brand, own, setName, setColour } = useBrand()
   const [done, setDone] = useState(false)
   const [auto, setAuto] = useState(false)
+  /* Kto zmienil marke, sam zdrapuje albo klika „Reveal” — bez ponownej samozdrapki. */
+  const [touched, setTouched] = useState(false)
+  if (useBrandChanged()) {
+    if (done) setDone(false)
+    if (auto) setAuto(false)
+    if (!touched) setTouched(true)
+  }
+  const reveal = useCallback(() => setDone(true), [])
   useEffect(() => {
-    if (done) return
+    if (done || touched) return
     let reduce = false
     try {
       reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -2382,7 +2424,7 @@ export function HeroApp() {
       if (window.scrollY < 120) setAuto(true)
     }, 3200)
     return () => window.clearTimeout(id)
-  }, [done])
+  }, [done, touched])
   const day = done ? HERO_DAY : HERO_DAY - 1
   const ink = inkOn(colour, HERO_TILE)
   const vars = {
@@ -2444,7 +2486,7 @@ export function HeroApp() {
               <b>{done ? '✓ Ticked' : 'Card of the day'}</b>
               <small>{done ? 'Next card tomorrow' : 'Taken it? Scratch.'}</small>
             </div>
-            <Scratch gone={done} auto={auto} foil={colour} onDone={() => setDone(true)} />
+            <Scratch gone={done} auto={auto} foil={colour} onDone={reveal} />
           </div>
           <div className="nk-hnext">
             <span className="nk-hlock" aria-hidden="true" />
@@ -2463,7 +2505,7 @@ export function HeroApp() {
         </div>
       </div>
       <div className="nk-hbrand">
-        <button type="button" className="nk-link" onClick={() => setDone(true)} aria-disabled={done || undefined}>
+        <button type="button" className="nk-link" onClick={reveal} aria-disabled={done || undefined}>
           Reveal without scratching
         </button>
         <p className="nk-fine nk-hstatus" aria-live="polite">
@@ -2625,6 +2667,8 @@ export function Finale() {
   const [at, setAt] = useState(2)
   const [done, setDone] = useState(false)
   const atRef = useRef(2)
+  if (useBrandChanged() && done) setDone(false)
+  const reveal = useCallback(() => setDone(true), [])
 
   useEffect(() => {
     const el = root.current
@@ -2665,9 +2709,13 @@ export function Finale() {
   }, [])
 
   /* Kto przewinie dalej bez zdrapania, widzi odsloniety dzien — opowiesc idzie do przodu. */
+  /* PILNE 2 pkt 1: tylko przy zmianie chwili (przewiniecie dalej), nie po zmianie marki — inaczej nowa karta
+     odslanialaby sie sama w tej samej klatce i „Reveal” nie mialby czego odslonic. */
+  const prevAt = useRef(at)
   useEffect(() => {
-    if (at >= 3 && !done) setDone(true)
-  }, [at, done])
+    if (at !== prevAt.current && at >= 3) setDone(true)
+    prevAt.current = at
+  }, [at])
 
   const go = (n: number) => {
     const el = root.current
@@ -2731,7 +2779,7 @@ export function Finale() {
             ))}
           </div>
           <div className="nk-fz-act">
-            <button type="button" className="nk-link" onClick={() => setDone(true)} aria-disabled={done || undefined}>
+            <button type="button" className="nk-link" onClick={reveal} aria-disabled={done || undefined}>
               Reveal without scratching
             </button>
             <p className="nk-fine nk-fz-status" aria-live="polite">
@@ -2802,7 +2850,7 @@ export function Finale() {
                   <b>{done ? `✓ Day ${FZ_DAY} ticked` : 'Card of the day'}</b>
                   <small>{done ? 'Next card tomorrow' : 'Taken it? Scratch.'}</small>
                 </div>
-                <Scratch gone={done} foil={colour} onDone={() => setDone(true)} />
+                <Scratch gone={done} foil={colour} onDone={reveal} />
               </div>
               <div className="nk-fz-stamps">
                 <small>Stamps · free pack at 3</small>

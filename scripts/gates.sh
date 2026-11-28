@@ -171,6 +171,11 @@ for r in "${ROUTES[@]}"; do
   if [ "$r" = /nawyko ] || [ "$r" = /work/genactiv ]; then
     run "(globalnie)" "brand-propagation" "$LOGDIR/global-brandprop.log" node scripts/brand-propagation.mjs "$BASE"
     run_expect '^BRANDPROP-WK RESULT PASS' "(globalnie)" "brand-prop-webkit" "$LOGDIR/global-brandprop-wk.log" xvfb-run -a python3 -I scripts/brand-propagation-webkit.py "$BASE" "agencja/podglad/gates-wk-brandprop"
+    # PILNE 2 pkt 1 (Rafal 28.11.2026): po kazdej zmianie marki „Reveal” odslania karte, a zdrapka reaguje na przeciaganie.
+    if [ "$r" = /nawyko ] || printf '%s\n' "${ROUTES[@]}" | grep -qx /nawyko; then
+      run_expect '^REVEAL RESULT PASS' "(globalnie)" "reveal-after-brand" "$LOGDIR/global-reveal.log" node scripts/reveal-after-brand.mjs "$BASE"
+      run_expect '^REVEAL-WK RESULT PASS' "(globalnie)" "reveal-after-brand-webkit" "$LOGDIR/global-reveal-wk.log" xvfb-run -a python3 -I scripts/reveal-after-brand-webkit.py "$BASE"
+    fi
     break
   fi
 done
