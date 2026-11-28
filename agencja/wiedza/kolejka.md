@@ -21,7 +21,7 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 8. ~~Scroll-driven animations w CSS — wsparcie przeglądarek~~ (24.11 R4 p4: Safari 26.0 obsługuje `animation-timeline`, webkit.org/blog/17333; iOS 18 nie → zawsze `@supports` + statyczny stan końcowy; `webkit-check.py` wypisuje wsparcie). Zostaje: czy przenieść część sceny z JS do CSS
 
 13. ~~Wydajność — wiarygodność pomiaru klatek~~ (24.11 R4 p13: Lighthouse „Score variability” → mediana z 3 po rozgrzewce w `scroll-perf`, selftesty)
-14. ~~Dostępność — niskie okno i powiększenie (W3C Understanding SC 1.4.10 Reflow)~~ (24.11 R4 p14: `short-viewport-check`, reguła R21); zostaje: sprawdzić `/nawyko` przy powiększeniu 200 % na 1280×720 (okno 640×360) i 400 % (320 px)
+14. ~~Dostępność — niskie okno i powiększenie (W3C Understanding SC 1.4.10 Reflow)~~ (24.11 R4 p14; 28.11 R6' p15: `reflow-check.mjs` 320×568 i 640×360, poprawka finału na 320). Zostaje: finał w niskim oknie (R6'-N15 pkt 1).
 15. ~~Personalizacja z pamięci przeglądarki bez mignięcia (react.dev useSyncExternalStore, tkdodo.eu)~~ (24.11 R5 p1: osłona do hydratacji, R23). Zostaje: emocja + dowód na stronach produktowych — szukać źródła (np. NN/g o „aesthetic-usability” albo case Apple „product first”) przed p2.
 15. ~~CSS — zapytania kontenera mierzą content box~~ (24.11 R4 p15: W3C CSS Containment 3 → próg 684 px, reguła R22)
 
