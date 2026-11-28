@@ -469,3 +469,9 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada
   08 Next step — „Send your store address. Rafał replies personally within 24 hours.”
 - ZMIENIONE pasek rozdziałów: „How it works · Cashback · Points · Point value · Your side · FAQ · One morning” → „Start here · How it works · Rewards · Your side · Store engine · FAQ · One morning” (nawigacja górna bez zmian).
 - Czytelnik-kupujący: pierwsza wersja 8 × FIX („Why here” brzmi jak miejsce, „whatever it runs on” absolut, 01/06/07 nie tłumaczyły kolejności) → przepisane według uwag; recenzja w `agencja/recenzje/58-teksty-przerywniki.md`.
+
+## 28.11 13:20 — przypięte sceny (PILNE 2 pkt 2, spec 54)
+- NOWE przyciski kroków nad kaflami „Cashback grows…”: „Cashback wallet” · „Points and levels” · „Your points rate”.
+- NOWE liczniki: „1 of 3” (nagrody), „1 of 7” (silniki sklepu).
+- NOWA etykieta dla czytnika ekranu: „Cashback and points, step by step”.
+- Czytelnik-kupujący: „Point value” → „Your points rate”, „Rewards, step by step” → „Cashback and points, step by step” (recenzja 60).

@@ -130,6 +130,10 @@ for route in "${ROUTES[@]}"; do
   if [ "$route" = /nawyko ]; then
     TMO=$((TMO * 5)) run_expect '^COCKPITPIN PASS' "$route" "cockpit-pin" "$LOGDIR/$slug-cockpit-pin.log" \
       node scripts/cockpit-pin-check.mjs "$url" 1366x657 1280x720 1024x768 1440x789 1440x900 900x600 1920x1080 1100x620
+    # spec 54 (PILNE 2 pkt 2): przypiete sceny z odslanianiem (#loyalty, #integrations) — krok z przewijania, scena miesci
+    # sie nad paskiem cookies, wejscie kotwica na kafel konczy z odslonietym kaflem (recenzja 60 I1)
+    TMO=$((TMO * 3)) run_expect '^STEPPIN PASS' "$route" "step-pin" "$LOGDIR/$slug-step-pin.log" \
+      node scripts/step-pin-check.mjs "$url" 1440x900 1280x720 1100x620 900x600 1920x1080 390x844
   fi
   # R6' p12 (spec 46): pigulka aktu .ga-prog a telefon i tekst sceny /work/genactiv, w dol i w gore (pasek aktow wjezdza)
   if [ "$route" = /work/genactiv ]; then

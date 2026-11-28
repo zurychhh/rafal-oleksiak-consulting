@@ -121,11 +121,12 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
         // PILNE 2 (28.11, sticky-fixed 1100x620 po dodaniu przerywnikow): przy odjezdzie kokpitu w gore naglowek jest juz nad
         // ekranem, a etykieta ostatniego panelu („For you · What the brand sees”) stala pod paskiem — pasek ustepuje calej
         // przypietej scenie kokpitu (.nk-ck-pin), dopoki jakakolwiek jej czesc lezy w pasie 0–96 px.
-        yieldEls = Array.from(document.querySelectorAll<HTMLElement>('.nk-cockpit .nk-ck-head, .nk-cockpit .nk-ck-tabs, .nk-cockpit .nk-ck-pin, .nk-fz-copy'))
+        yieldEls = Array.from(document.querySelectorAll<HTMLElement>('.nk-cockpit .nk-ck-head, .nk-cockpit .nk-ck-tabs, .nk-cockpit .nk-ck-pin, .nk-fz-copy, .nk-sp .nk-sp-pin'))
       }
       let yieldTop = false
       for (const el of yieldEls) {
-        const ck = el.closest('.nk-cockpit')
+        // spec 53 pkt 2: przypiete sceny z odslanianiem (.nk-sp) — pasek ustepuje im jak kokpitowi
+        const ck = el.closest('.nk-cockpit, .nk-sp')
         if (ck && !ck.hasAttribute('data-pin')) continue
         const r = el.getBoundingClientRect()
         if (r.height > 0 && r.top < 96 && r.bottom > 0) {
