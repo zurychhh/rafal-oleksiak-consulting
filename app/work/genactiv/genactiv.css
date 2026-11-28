@@ -497,9 +497,15 @@ body:has(.ga-ab[data-on]) .ga-prog { transform: translateY(40px); }
 /* R6' p12 (prog-overlap-check): przy wjechanym pasku aktow pigulka zjezdza o 40 px i na niskich oknach (1100x620, 1280x720)
    wchodzila na ramke telefonu w aktach z telefonem po lewej (16 pozycji). Wtedy pasek pokazuje juz rozdzial, wiec pigulka
    zostaje (numer aktu + postep), a tytul aktu wraca po schowaniu paska. aria-hidden: czytniki nic nie traca. */
+/* R6' p13 (recenzja 53b): tytul zwija sie plynnie (max-width + krycie w tym samym czasie co zjazd), zamiast skoku szerokosci
+   pigulki; ujemny margines kasuje odstep flex po zwinieciu. Pigulka jest absolute => bez CLS. */
+.ga-prog span { max-width: 480px; transition: max-width .28s cubic-bezier(.2,.7,.2,1), opacity .2s, margin-left .28s cubic-bezier(.2,.7,.2,1); }
+.ga-prog b em { display: inline-block; overflow: hidden; vertical-align: bottom; max-width: 2em; transition: max-width .28s cubic-bezier(.2,.7,.2,1), opacity .2s; }
 @media (min-width: 760px) {
-  body:has(.ga-ab[data-on]) .ga-prog span, body:has(.ga-ab[data-on]) .ga-prog b em { display: none; }
+  body:has(.ga-ab[data-on]) .ga-prog span { max-width: 0; opacity: 0; margin-left: -12px; }
+  body:has(.ga-ab[data-on]) .ga-prog b em { max-width: 0; opacity: 0; }
 }
+@media (prefers-reduced-motion: reduce) { .ga-prog span, .ga-prog b em { transition: none; } }
 .ga-prog-bar { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; transform-origin: 0 50%; background: var(--accent-hi); }
 /* Akt w pelnym kolorze marki (ciemna czerwien: bialy 15:1, muted 6,2:1, accent-hi 4,8:1). Krycie = jedyna zmiana => bez CLS. */
 .ga-flood { position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); z-index: -1; pointer-events: none;
