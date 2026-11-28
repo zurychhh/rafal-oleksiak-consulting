@@ -1036,7 +1036,7 @@ export function GenactivStory() {
           </figcaption>
         </figure>
         <p className="ga-prog" aria-hidden="true">
-          <b key={act}>{actNo(act)} ·</b>
+          <b key={act}>{actNo(act)}<em> ·</em></b>
           <span key={'s' + act}>{SUMMARY[act]}</span>
           <i className="ga-prog-bar" style={{ transform: `scaleX(${((f + 0.0001) / ACTS).toFixed(4)})` }} />
         </p>
