@@ -5,6 +5,8 @@ import { Enquiry, NextSteps, QuickEnquiry } from './Enquiry'
 import { FAQ, NK_CHAPTERS } from './content'
 import { DEMO_BRAND, contrast, inkOn, mix, monogram, onColour, useBrand } from '../lib/brand-engine'
 import './cockpit-scroll.css'
+import './step-pin.css'
+import { useStepPin } from './step-pin'
 
 /* Enquiry mieszka w ./Enquiry (przebieg 4): /work/genactiv importuje sam formularz, bez calej sceny. */
 export { Enquiry }
@@ -1193,6 +1195,48 @@ function Scene({ skin }: { skin: Skin }) {
    Stan domyslny (bez JS, reduced-motion) jest kompletny; kontrolki to zwykle przyciski i natywny suwak. */
 const WAL_MAX = 6
 
+/* spec 53 pkt 2: pasek kroków przypiętej sceny — licznik „1 of 3”, podziałka jak .nk-ck-prog, nazwy kroków jako skróty.
+   Widoczny tylko w przypiętej scenie (step-pin.css); bez przypięcia wszystkie opcje stoją pod sobą i pasek jest zbędny. */
+function StepNav({
+  names,
+  step,
+  go,
+  progRef,
+  label,
+}: {
+  names: readonly string[]
+  step: number
+  go: (i: number) => boolean
+  progRef: React.RefObject<HTMLDivElement | null>
+  label: string
+}) {
+  return (
+    <nav className="nk-sp-nav" aria-label={label}>
+      <span className="nk-sp-count" aria-live="polite">
+        {step + 1} of {names.length}
+      </span>
+      <ol className="nk-sp-steps">
+        {names.map((n, i) => (
+          <li key={n}>
+            <button type="button" aria-current={i === step ? 'step' : undefined} onClick={() => go(i)}>
+              {n}
+            </button>
+          </li>
+        ))}
+      </ol>
+      <div className="nk-sp-prog" ref={progRef} aria-hidden="true">
+        {names.map((n, i) => (
+          <i key={n} className={i < step ? 'is-past' : i === step ? 'is-on' : ''}>
+            <b />
+          </i>
+        ))}
+      </div>
+    </nav>
+  )
+}
+
+const LOY_STEPS = ['Cashback wallet', 'Points and levels', 'Point value'] as const
+
 function Loyalty({ brand }: { skin: Skin; brand: string }) {
   const { colour } = useBrand()
   const [orders, setOrders] = useState(3)
@@ -1224,9 +1268,22 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
   }
   const R = 42
   const C = 2 * Math.PI * R
+  // spec 53 pkt 2 A: przypięta scena — krok k odsłania kafel k (kumulatywnie, na końcu całe bento; nic nie znika)
+  const sp = useStepPin(LOY_STEPS.length)
+  const later = (k: number) => (k > sp.step ? ' is-later' : '')
 
   return (
-    <section className="nk-wallet" id="loyalty" aria-labelledby="nk-wal-h" style={vars}>
+    <section
+      className="nk-wallet nk-sp nk-sp-loy"
+      id="loyalty"
+      aria-labelledby="nk-wal-h"
+      style={vars}
+      ref={sp.sec}
+      data-pin={sp.pinned ? '' : undefined}
+      onFocusCapture={sp.onFocusCapture}
+    >
+      <div className="nk-sp-pin" ref={sp.pin}>
+      <div className="nk-sp-fit" data-sp-fit="">
       <div className="nk-wal-head">
         <div className="nk-caps nk-lab nk-lab-inv">
           <span className="nk-who">For your customer</span>
@@ -1237,9 +1294,10 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
         </h2>
         <p className="nk-one">Two screens from {brand}&rsquo;s app, one from your panel. Tap to try them.</p>
       </div>
+      <StepNav names={LOY_STEPS} step={sp.step} go={sp.go} progRef={sp.prog} label="Rewards, step by step" />
 
       <div className="nk-bento">
-        <article className="nk-tile nk-tile-cash" id="cashback" aria-labelledby="nk-cash">
+        <article className={'nk-tile nk-tile-cash' + later(0)} id="cashback" aria-labelledby="nk-cash" data-sp-step="0">
           <div className="nk-thead">
             <span className="nk-hmono" aria-hidden="true">
               {monogram(brand)}
@@ -1286,7 +1344,7 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
           </p>
         </article>
 
-        <article className="nk-tile nk-tile-pts" id="levels" aria-labelledby="nk-lvl">
+        <article className={'nk-tile nk-tile-pts' + later(1)} id="levels" aria-labelledby="nk-lvl" data-sp-step="1">
           <h3 className="nk-tk" id="nk-lvl">
             Points and levels
           </h3>
@@ -1338,7 +1396,7 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
           </p>
         </article>
 
-        <article className="nk-tile nk-tile-rate" id="exchange" aria-labelledby="nk-xch">
+        <article className={'nk-tile nk-tile-rate' + later(2)} id="exchange" aria-labelledby="nk-xch" data-sp-step="2">
           <div className="nk-rate-copy">
             <div className="nk-caps nk-rate-lab">For you · {brand} brand panel</div>
             <h3 className="nk-rate-h" id="nk-xch">
@@ -1371,6 +1429,8 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
             </p>
           </div>
         </article>
+      </div>
+      </div>
       </div>
     </section>
   )
@@ -1572,9 +1632,11 @@ const ENGINES = [
   { id: 'own', n: 'Custom store', a: 'Your own API and webhooks', ready: false },
 ] as const
 
-function StoreMap({ brand }: { brand: string }) {
+function StoreMap({ brand, pinned, step, go }: { brand: string; pinned: boolean; step: number; go: (i: number) => boolean }) {
   const { colour } = useBrand()
-  const [pick, setPick] = useState(0)
+  const [picked, setPick] = useState(0)
+  // spec 53 pkt 2 B: w przypiętej scenie silnik wybiera przewijanie; klik pigułki = skrót do jej kroku
+  const pick = pinned ? Math.min(step, ENGINES.length - 1) : picked
   const e = ENGINES[pick]
   const vars = {
     ['--brand' as string]: colour,
@@ -1585,7 +1647,10 @@ function StoreMap({ brand }: { brand: string }) {
     <div className="nk-store" style={vars}>
       <div className="nk-store-pick" role="group" aria-label="Your store engine">
         {ENGINES.map((x, i) => (
-          <button key={x.id} type="button" className="nk-store-chip" aria-pressed={i === pick} onClick={() => setPick(i)}>
+          <button key={x.id} type="button" className="nk-store-chip" aria-pressed={i === pick} data-sp-step={i} onClick={() => {
+            setPick(i)
+            go(i)
+          }}>
             {x.n}
           </button>
         ))}
@@ -1767,9 +1832,18 @@ function ProofPanel({ brand, panel }: { brand: string; panel: PanelOf }) {
 }
 
 function Evidence({ brand }: { brand: string }) {
+  const sp = useStepPin(ENGINES.length)
   return (
     <div className="nk-r4" id="evidence">
-      <section className="nk-still nk-int" id="integrations" aria-labelledby="nk-intg">
+      <section
+        className="nk-still nk-int nk-sp nk-sp-int"
+        id="integrations"
+        aria-labelledby="nk-intg"
+        ref={sp.sec}
+        data-pin={sp.pinned ? '' : undefined}
+      >
+        <div className="nk-sp-pin" ref={sp.pin}>
+        <div className="nk-sp-fit" data-sp-fit="">
         <div className="nk-panel">
           <div className="nk-caps nk-lab">
             <span className="nk-who">For you</span>
@@ -1781,13 +1855,25 @@ function Evidence({ brand }: { brand: string }) {
           <p className="nk-one">Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both stores under your brand.</p>
           <p className="nk-fine">Pick your store engine. Shopify is ready; every other engine connects per brand through an adapter.</p>
         </div>
-        <StoreMap brand={brand} />
+        <div className="nk-sp-count nk-sp-count-int" aria-hidden="true">
+          {Math.min(sp.step, ENGINES.length - 1) + 1} of {ENGINES.length}
+          <span className="nk-sp-prog" ref={sp.prog}>
+            {ENGINES.map((x, i) => (
+              <i key={x.id} className={i < sp.step ? 'is-past' : i === sp.step ? 'is-on' : ''}>
+                <b />
+              </i>
+            ))}
+          </span>
+        </div>
+        <StoreMap brand={brand} pinned={sp.pinned} step={sp.step} go={sp.go} />
         <p className="nk-fine nk-int-fine">
           Which app in each category connects to your store is mapped in the first call.{' '}
           <a className="nk-link" href="#enquiry">
             Ask which apps connect to your store →
           </a>
         </p>
+        </div>
+        </div>
       </section>
     </div>
   )

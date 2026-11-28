@@ -1,0 +1,68 @@
+/* Spec 53 pkt 2 (PILNE TERAZ 2): sekcje z kilkoma opcjami jako przypiete sceny odslaniane przewijaniem.
+   Uklad przypiety wlacza atrybut [data-nk-pin] na <html> (inline-skrypt PIN_JS w page.tsx — jest przed hydratacja, wiec tor
+   ma docelowa wysokosc od pierwszej klatki: bez skoku przy wejsciu z kotwica) albo [data-pin] z useStepPin. Ten sam prog co
+   kokpit „For you”: >= 900 x 600 i bez ograniczenia ruchu. Ponizej progu (telefon, niskie okno), bez JS i w reduced-motion
+   sekcja jest jak dotad: wszystkie opcje pod soba. Telefon 390: kafel „Points and levels” (536 px) + naglowek nie mieszcza sie
+   z paskiem cookies — zgodnie ze specem bez przypiecia (pomiar w recenzji 60). */
+.nk-sp-nav,.nk-sp-count-int{display:none;}
+
+@media (min-width:900px) and (min-height:600px) and (prefers-reduced-motion:no-preference){
+  /* tor: n odcinkow + ekran; w srodku sticky top:0, wysokosc = ekran minus pasek cookies */
+  .nk :is([data-nk-pin] .nk-sp, .nk-sp[data-pin]){padding:0!important;display:block;scroll-margin-top:0;}
+  .nk :is([data-nk-pin] .nk-sp-loy, .nk-sp-loy[data-pin]){height:calc(3 * 60svh + 100svh);}
+  .nk :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]){height:calc(7 * 40svh + 100svh);}
+  :is([data-nk-pin] .nk-sp, .nk-sp[data-pin]) .nk-sp-pin{position:sticky;top:0;height:calc(100svh - var(--consent-h,0px));box-sizing:border-box;
+    display:flex;flex-direction:column;justify-content:center;padding:clamp(18px,4svh,48px) var(--m) clamp(14px,3svh,36px);overflow:hidden;}
+  :is([data-nk-pin] .nk-sp, .nk-sp[data-pin]) .nk-sp-fit{flex:none;min-width:0;width:100%;}
+
+  /* pasek krokow: licznik · nazwy krokow (skroty) · podzialka */
+  :is([data-nk-pin] .nk-sp, .nk-sp[data-pin]) .nk-sp-nav{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:20px;row-gap:10px;
+    margin-top:clamp(12px,2.2svh,24px);}
+  .nk-sp-count{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .nk-sp-steps{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0;}
+  .nk-sp-steps button{min-height:40px;padding:0 16px;border-radius:99px;border:1px solid currentColor;background:transparent;color:inherit;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;opacity:.72;}
+  .nk-sp-steps button[aria-current]{opacity:1;background:var(--ink);color:#0E0F12;border-color:var(--ink);}
+  .nk-sp-steps button:focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+  .nk-sp-prog{grid-column:1 / -1;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;}
+  .nk-sp-prog i{display:block;height:3px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden;}
+  .nk-sp-prog b{display:block;height:100%;background:var(--hi,var(--ink));transform-origin:0 50%;transform:scaleX(0);}
+  .nk-sp-prog .is-past b{transform:none;}
+  .nk-sp-prog .is-on b{transform:scaleX(var(--f,0));}
+
+  /* A. „Cashback grows with every {marka} order.” — trzy kafle obok siebie, odslaniane po kolei, na koncu cale bento */
+  :is([data-nk-pin] .nk-sp-loy, .nk-sp-loy[data-pin]) .nk-wal-head{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:32px;align-items:end;}
+  :is([data-nk-pin] .nk-sp-loy, .nk-sp-loy[data-pin]) .nk-wal-head .nk-lab{grid-column:1 / -1;}
+  .nk :is([data-nk-pin] .nk-sp-loy, .nk-sp-loy[data-pin]) .nk-h2{font-size:clamp(28px,3vw,44px);line-height:1.05;margin-top:clamp(8px,1.2svh,14px);}
+  :is([data-nk-pin] .nk-sp-loy, .nk-sp-loy[data-pin]) .nk-wal-head .nk-one{margin-top:0;max-width:34ch;}
+  :is([data-nk-pin] .nk-sp-loy, .nk-sp-loy[data-pin]) .nk-bento{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:clamp(14px,2.4svh,28px);align-items:stretch;}
+  :is([data-nk-pin] .nk-sp-loy, .nk-sp-loy[data-pin]) .nk-tile{grid-column:auto;}
+  :is([data-nk-pin] .nk-sp-loy, .nk-sp-loy[data-pin]) .nk-tile-rate{display:flex;flex-direction:column;justify-content:space-between;gap:20px;align-items:stretch;}
+  .nk-sp-loy .nk-tile{transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1);}
+  .nk-sp-loy[data-pin] .nk-tile.is-later{opacity:0;transform:translateY(28px);pointer-events:none;}
+
+  /* B. „Any store engine…” — silnik wybiera przewijanie, schemat sklep ↔ adapter ↔ aplikacja zmienia sie z nim */
+  :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]) .nk-sp-fit{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(12px,2.4svh,28px);}
+  :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]) .nk-panel{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);column-gap:40px;align-items:end;max-width:none;}
+  :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]) .nk-panel > .nk-lab{grid-column:1 / -1;}
+  :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]) .nk-panel > .nk-h2{grid-column:1;grid-row:2 / span 2;font-size:clamp(28px,3vw,44px);line-height:1.05;}
+  :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]) .nk-panel > p{grid-column:2;margin-top:8px;}
+  :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]) .nk-sp-count-int{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:16px;
+    font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums;}
+  .nk-sp-count-int .nk-sp-prog{grid-column:auto;}
+  .nk-sp-int .nk-sp-prog i{background:rgba(14,15,18,.16);}
+  .nk-sp-int .nk-sp-prog b{background:var(--ink);}
+  :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]) .nk-store-map{margin-top:clamp(12px,2svh,24px);}
+  :is([data-nk-pin] .nk-sp-int, .nk-sp-int[data-pin]) .nk-store-facts{margin-top:clamp(14px,2.4svh,32px);}
+  .nk-sp-int[data-pin] .nk-store-node b,.nk-sp-int[data-pin] .nk-store-ad b{transition:opacity .3s ease;}
+
+  /* niskie okno (1100x620, 1280x720 z paskiem cookies): ciasniejsze kafle, zeby zoom nie schodzil ponizej czytelnosci */
+  @media (max-height:760px){
+    .nk-sp-loy[data-pin] .nk-tile{padding:16px 18px;}
+    .nk-sp-loy[data-pin] .nk-wbig b{font-size:clamp(44px,8svh,64px);}
+    .nk-sp-loy[data-pin] .nk-pring{width:min(150px,22svh);height:auto;margin-top:8px;}
+    .nk-sp-loy[data-pin] .nk-hexes{margin-top:10px;}
+    .nk-sp-loy[data-pin] .nk-tacts{margin-top:10px;}
+    .nk-sp-int[data-pin] .nk-store-node{min-height:150px;padding:14px 16px;}
+  }
+}
