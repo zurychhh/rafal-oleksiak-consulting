@@ -3,6 +3,7 @@
 Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie albo w regułach → linia w `agencja/postep-uczenia.md`.
 
 ## Do przerobienia (w tej kolejności)
+19. ~~Animacja do rozmiaru auto — `interpolate-size` (caniuse, Chrome Developers)~~ (28.11 R6' p13: tylko Chromium → `max-width` ze stałą granicą w pigułce `/work/genactiv`). Następne: NN/g o stronach studiów przypadków B2B (case study) pod `/work/genactiv`.
 0. ~~Nawigacja — etykiety: NN/g „Category Names Suck”~~ (24.11 R4 p6: nazwa produktu + słowo opisu w linku na `/`)
 1. ~~Strony produktowe i scrollytelling — przewodnik Chrome „Scrollytelling”~~ (zrobione 23.11, runda 3)
 1b. ~~Narzędzia/kalkulatory — NN/g „Calculators and Quizzes: User Expectations” (2024)~~ (zrobione 23.11, runda 3 przebieg 3)
