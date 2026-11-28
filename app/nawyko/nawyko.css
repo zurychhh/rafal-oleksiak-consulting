@@ -1025,13 +1025,13 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 .nk-final-solo{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-areas:"copy form";align-items:start;}
 
 @media (max-width:860px){
-  .nk-fz-stick{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);align-content:start;gap:14px;padding-top:max(16px,3svh);}
+  .nk-fz-stick{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);align-content:start;gap:14px;padding-top:max(16px,3svh);}
   .nk-fz-list{margin-top:12px;}
   .nk-fz-h{font-size:clamp(25px,7vw,34px);max-width:none;margin-top:8px;}
   .nk-fz-p{font-size:15px;margin-top:8px;}
   .nk-fz-dots{margin-top:8px;}
   .nk-fz-act{margin-top:0;}
-  .nk-fz-copy{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:8px;}
+  .nk-fz-copy{display:grid;grid-template-columns:auto minmax(0,1fr);min-width:0;align-items:center;column-gap:8px;}
   .nk-fz-lab,.nk-fz-list{grid-column:1/-1;}
   .nk-fz-dots{margin:6px 0 0 -11px;}
   .nk-fz-dots button{width:32px;}
@@ -1041,7 +1041,8 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
   .nk-fz-screen{border-radius:26px;}
   .nk-final-solo{grid-template-areas:"copy" "form";grid-template-columns:1fr;}
 }
-@media (max-width:380px){.nk-fz-dots button{width:26px;}.nk-fz-dots{margin-left:-8px;}}
+/* spec 49 (WCAG 1.4.10, 320 px): kolumna finalu nie rozpycha sie nierozdzielnym linkiem — tekst nie ucina sie na prawej krawedzi. */
+@media (max-width:380px){.nk-fz-dots button{width:26px;}.nk-fz-dots{margin-left:-8px;}.nk-fz .nk-fz-act .nk-link{white-space:normal;text-align:right;}}
 @media (prefers-reduced-motion:reduce){
   .nk-fz,.nk-fz-list li,.nk-fz-list li.is-on,.nk-fz-note,.nk-fz-app,.nk-fz:is([data-at="2"],[data-at="3"],[data-at="4"]) .nk-fz-app,.nk-fz-mine i,.nk-fz-code{transition:none;}
   .nk-fz-stamps i.is-got,.nk-fz-code.is-on b{animation:none;}
