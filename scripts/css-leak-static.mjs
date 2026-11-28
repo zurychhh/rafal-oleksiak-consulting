@@ -143,6 +143,9 @@ function walkCss(dir, out = []) {
   return out
 }
 
+// `import './x.css'`, `import s from './x.module.css'`, `import('./x.css')`, `require('./x.css')`, `@import url('./x.css')`
+export const IMPORT_CSS_RE = /(?:@import\s+(?:url\()?|import\s+(?:[^'";]*?\sfrom\s+)?|import\(\s*|require\(\s*)['"]([^'"]+\.css)['"]/g
+const SRC_DIRS = ['app', 'lib', 'components', 'src']
 // arkusze importowane przez jakikolwiek plik app/ (`import './x.css'`, `import s from './x.module.css'`, `@import`); reszta = martwe
 function importedCss() {
   const out = new Set()
@@ -150,12 +153,13 @@ function importedCss() {
     const p = path.join(d, e.name)
     if (e.isDirectory()) { if (e.name !== 'node_modules') walk(p); continue }
     if (!/\.(tsx?|jsx?|mjs|css)$/.test(e.name)) continue
-    for (const m of fs.readFileSync(p, 'utf8').matchAll(/(?:@import\s+(?:url\()?|import\s+(?:[^'";]*?\sfrom\s+)?|import\(\s*)['"]([^'"]+\.css)['"]/g)) {
+    for (const m of fs.readFileSync(p, 'utf8').matchAll(IMPORT_CSS_RE)) {
       const s = m[1]; const f = s.startsWith('@/') ? path.join(ROOT, s.slice(2)) : path.resolve(path.dirname(p), s)
       out.add(path.relative(ROOT, f))
     }
   } }
-  walk(path.join(ROOT, 'app'))
+  // R43 (recenzja 52 b): importy CSS siedza tez poza app/ (lib/, components/) — skanujemy kazdy katalog zrodel
+  for (const d of SRC_DIRS) if (fs.existsSync(path.join(ROOT, d))) walk(path.join(ROOT, d))
   return out
 }
 
@@ -209,6 +213,14 @@ function selftest() {
     console.log(`${miss.length ? 'BAD ' : 'ok  '} imported-set: ${need.join(', ')}${miss.length ? ` (uznane za martwe: ${miss.join(', ')})` : ''}`)
     if (miss.length) ok = false
   } catch (e) { console.log(`BAD  imported-set: ${e.message}`); ok = false }
+  // R43: kazda forma importu CSS jest rozpoznana (inaczej arkusz wychodzi na martwy i jego przecieki nie licza sie do FAIL)
+  {
+    const src = `import './a.css'\nimport s from "./b.module.css"\nconst c = require('./c.css')\nimport('./d.css')\n@import url('./e.css');\n@import "./f.css";`
+    const got = [...src.matchAll(IMPORT_CSS_RE)].map((m) => m[1]).join(',')
+    const exp = './a.css,./b.module.css,./c.css,./d.css,./e.css,./f.css'
+    console.log(`${got === exp ? 'ok  ' : 'BAD '} import-forms: ${got}${got === exp ? '' : ` (oczekiwane ${exp})`}`)
+    if (got !== exp) ok = false
+  }
   console.log(`CSSLEAKSTATIC-SELFTEST ${ok ? 'PASS' : 'FAIL'}`)
   process.exit(ok ? 0 : 1)
 }
