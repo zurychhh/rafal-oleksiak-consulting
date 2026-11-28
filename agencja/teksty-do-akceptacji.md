@@ -444,3 +444,7 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada
 
 ### Przebieg 26.11 10:38 — `/blog` (stan awarii backendu)
 - NOWE: „Articles unavailable right now” (lista) / „Article unavailable right now” (artykuł), „Reload in a minute, or go back to the home page.”, przycisk „Home page”. Czytelnik-kupujący: „did not load” = żargon, „Try again…” = wstęp → poprawione; „Home page” OK. Jego wariant „Temporary fault. …” odrzucony (zasada 6: bez technicznego tonu). copy-voice PASS.
+
+### Przebieg 28.11 07:38 — `/nawyko` nawigacja
+- ZMIENIONE: link w nawigacji i pasku rozdziałów „Your costs” → „Point value” (prowadzi do „You set what each point is worth.”). Powód: niezależny recenzent i czytelnik-kupujący czytali „Your costs” jako cenę usługi, a pod linkiem jest suwak kursu punktów. Czytelnik: werdykt „Point value”; alternatywa „Reward rate”. copy-voice OK.
+- `/tool`: bez nowych słów — akapit „Four families from an anonymous supplement shop…” jest teraz w HTML od razu (wcześniej wpisywał go skrypt).

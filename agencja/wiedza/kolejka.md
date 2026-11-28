@@ -4,6 +4,7 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 
 ## Do przerobienia (w tej kolejności)
 19. ~~Animacja do rozmiaru auto — `interpolate-size` (caniuse, Chrome Developers)~~ (28.11 R6' p13: tylko Chromium → `max-width` ze stałą granicą w pigułce `/work/genactiv`). Następne: NN/g o stronach studiów przypadków B2B (case study) pod `/work/genactiv`.
+22. ~~B2B — czego kupujący szuka przed kontaktem (NN/g „B2B Website Usability”)~~ (28.11 R6' p14: forma ceny przy formularzu → decyzja R6'q14-A). Zostaje: NN/g o studiach przypadków B2B pod `/work/genactiv`.
 0. ~~Nawigacja — etykiety: NN/g „Category Names Suck”~~ (24.11 R4 p6: nazwa produktu + słowo opisu w linku na `/`)
 1. ~~Strony produktowe i scrollytelling — przewodnik Chrome „Scrollytelling”~~ (zrobione 23.11, runda 3)
 1b. ~~Narzędzia/kalkulatory — NN/g „Calculators and Quizzes: User Expectations” (2024)~~ (zrobione 23.11, runda 3 przebieg 3)

@@ -34,7 +34,7 @@ export const BODY = `<div class="top"><div class="in">
         </p>
         <input id="file" type="file" accept=".csv,.tsv,.txt,text/csv,text/plain" hidden>
       </div>
-      <p class="shelp" id="shelp" hidden></p>
+      <p class="shelp" id="shelp">Four families from an anonymous supplement shop, <b>4.8 years of orders</b>. The gap distributions are the real ones, quantile for quantile; only the names are gone.</p>
     </div>
     <aside class="dir" aria-label="Directions for use">
       <p class="whose" id="whose">Anonymous supplement shop, the real order history with the
