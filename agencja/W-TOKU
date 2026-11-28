@@ -1,0 +1,3 @@
+Start: 28.11.2026 10:38
+Punkt: R6'-N16 pkt 2 (reflow-check: kontrast telefonu finału /nawyko po kliku każdej kropki) + pkt 1 (640x360 nagłówek i telefon finału razem)
+Pliki: scripts/reflow-check.mjs, app/nawyko/* (finał), agencja/*
