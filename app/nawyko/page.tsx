@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { preload } from 'react-dom'
 import { ChapterBar } from './ChapterBar'
 import { SiteNav } from '../components/SiteNav'
-import { DayStrip, HeroApp, Story } from './NawykoClient'
+import { DayStrip, HeroApp, QuickAsk, Story } from './NawykoClient'
 import { HeroGap } from '../calculator/HeroGap'
 import './nawyko.css'
 import { FAQ, FEATURES } from './content'
@@ -162,6 +162,8 @@ export default function Nawyko() {
           <DayStrip />
           <HeroGap />
         </section>
+        {/* R6'q14-A (Rafal 28.11 10:37): krotki formularz zaraz pod hero + trzy kroki i forma rozliczenia */}
+        <QuickAsk />
 
         <Story />
       </main>

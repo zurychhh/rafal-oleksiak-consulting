@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
-import { Enquiry } from './Enquiry'
+import { Enquiry, NextSteps, QuickEnquiry } from './Enquiry'
 import { FAQ } from './content'
 import { DEMO_BRAND, contrast, inkOn, mix, monogram, onColour, useBrand } from '../lib/brand-engine'
 import './cockpit-scroll.css'
@@ -2490,6 +2490,31 @@ export function HeroApp() {
   )
 }
 
+/* R6'q14-A (Rafal 28.11.2026 10:37): krotki formularz zaraz pod hero — adres sklepu + e-mail jak pasek na /,
+   trzy kroki „co dalej” i forma rozliczenia. Akcent i etykieta w kolorze i nazwie marki odwiedzajacego (silnik marki). */
+export function QuickAsk() {
+  const { colour, brand, own } = useBrand()
+  return (
+    <section
+      className="nk-quick"
+      id="ask"
+      aria-labelledby="nk-quick-h"
+      style={{ ['--brand' as string]: colour, ['--brand-on' as string]: onColour(colour) }}
+    >
+      <div className="nk-quick-copy">
+        <div className="nk-caps nk-lab">
+          <span className="nk-brandtag">{own ? `For ${brand}` : 'Ask about Nawyko'}</span>
+        </div>
+        <h2 className="nk-h2" id="nk-quick-h">
+          Send your store address.
+        </h2>
+        <NextSteps id="nk-next-top" />
+      </div>
+      <QuickEnquiry />
+    </section>
+  )
+}
+
 export function Story() {
   const root = useRef<HTMLDivElement>(null)
   const { colour, name, own } = useBrand()
@@ -2564,6 +2589,7 @@ export function Story() {
             {shown ? `Build ${shown}’s app.` : 'Build your brand’s app.'}
           </h2>
           <p className="nk-one">Send your store address. The first call covers rewards and setup.</p>
+          <NextSteps id="nk-next-end" />
         </div>
         <div className="nk-final-form">
           <Enquiry onStore={setStore} />
