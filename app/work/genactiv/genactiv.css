@@ -534,3 +534,5 @@ body:has(.ga-ab[data-on]) .ga-prog { transform: translateY(40px); }
 .ga-copy-in > :not(.ga-kicker):not(h1):not(h2) { opacity: var(--late, 1); }
 /* Na kolorze marki cien telefonu (przyciety przez .ga-phone-clip) rysowal ciemny prostokat: bez cienia w akcie w pelnym kolorze. */
 .ga-stage[data-flood] .ga-phone, .ga-still .ga-act-full .ga-phone { box-shadow: 0 0 0 1px #4a3a3d, 0 0 60px rgba(245, 51, 63, 0.16); }
+/* spec 50 (WCAG 1.4.10, 320 px): rzad kolorow zawija sie, zamiast wypychac „Any colour” poza okno. */
+@media (max-width: 359px) { .ga-pick-row { flex-wrap: wrap; } }

@@ -37,6 +37,10 @@ czytał tekstów oczami kupującego. Ta rubryka to naprawia. Niespełniony punkt
   rusza teksty; w „Dla Rafała” jedno zdanie: ile nowych tekstów czeka. Odrzucony tekst trafia do sekcji „Odrzucone
   i dlaczego” na dole tego pliku — to jest pamięć gustu Rafała; czytaj ją przed pisaniem nowych tekstów.
 
+- **Recenzja pod zapytania (R45.1 + R47, NN/g „B2B Website Usability”: wiarygodność przed prośbą o kontakt):** każde zlecenie
+  recenzenta strony z formularzem pyta o (1) liczbę ekranów do formularza na telefonie, (2) czy pada forma rozliczenia,
+  (3) ile ekranów dzieli formularz od najbliższego dowodu wiarygodności (realizacja, metoda, osoba za usługą).
+
 ## Odrzucone i dlaczego (pamięć gustu)
 - 24.11 „Stored — Nothing yet.” / „A date. Nothing else.” (`/nawyko` Privacy) — czytelnik: „yet” zapowiada zapis później, „Nothing else” jest fałszywe w szerokim odczycie (aplikacja ma konto i zakupy). Przy danych zdrowotnych bez „yet” i bez absolutów bez zakresu. Zamiast: „Nothing.” / „Tick date only.”
 - 24.11 „The Nawyko app” (link w nagłówku `/`) — czytelnik-kupujący: „obcy wyraz, nie mówi, co dostaje marka, brzmi jak aplikacja do pobrania dla mnie”. Zamiast: „Nawyko reorder app”. Nazwa własna w nawigacji zawsze z jednym zwykłym słowem opisu (NN/g „Category Names Suck”).

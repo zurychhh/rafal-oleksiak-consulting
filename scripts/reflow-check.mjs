@@ -42,4 +42,4 @@ for (const route of routes) for (const [w, h] of SIZES) {
   ;[...bad].slice(0, 12).forEach((x) => console.log('   ' + x)); if (bad.size) fail++
   await p.close()
 }
-await b.close(); process.exit(fail ? 1 : 0)
+await b.close(); console.log(fail ? `REFLOW FAIL ${fail}` : 'REFLOW PASS'); process.exit(fail ? 1 : 0)
