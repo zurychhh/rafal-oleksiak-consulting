@@ -493,6 +493,13 @@ body:has(.ga-ab[data-on]) .ga-prog { transform: translateY(40px); }
 @media (prefers-reduced-motion: reduce) { .ga-prog { transition: none; } }
 .ga-prog b { color: var(--accent-hi); font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
 .ga-prog span { overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+.ga-prog b em { font-style: normal; }
+/* R6' p12 (prog-overlap-check): przy wjechanym pasku aktow pigulka zjezdza o 40 px i na niskich oknach (1100x620, 1280x720)
+   wchodzila na ramke telefonu w aktach z telefonem po lewej (16 pozycji). Wtedy pasek pokazuje juz rozdzial, wiec pigulka
+   zostaje (numer aktu + postep), a tytul aktu wraca po schowaniu paska. aria-hidden: czytniki nic nie traca. */
+@media (min-width: 760px) {
+  body:has(.ga-ab[data-on]) .ga-prog span, body:has(.ga-ab[data-on]) .ga-prog b em { display: none; }
+}
 .ga-prog-bar { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; transform-origin: 0 50%; background: var(--accent-hi); }
 /* Akt w pelnym kolorze marki (ciemna czerwien: bialy 15:1, muted 6,2:1, accent-hi 4,8:1). Krycie = jedyna zmiana => bez CLS. */
 .ga-flood { position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); z-index: -1; pointer-events: none;

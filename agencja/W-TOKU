@@ -1,3 +1,0 @@
-start: 28.11.2026 05:38
-punkt: wznowienie wip/1238 — R6'-N11 pkt 0 (/tool clsscroll-1440, preload) i pkt 3 (css-leak-static importy)
-pliki: app/tool/page.tsx, scripts/css-leak-static*, agencja/*

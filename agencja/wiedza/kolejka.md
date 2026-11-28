@@ -34,3 +34,4 @@ Każda porcja: źródło (link + data) → jedna konkretna zmiana na stronie alb
 19. ~~Wydajność/architektura — Next.js „CSS: Ordering and Merging”~~ (27.11 R6' p10: arkusze tras zawężone `:has()`, bramka `css-leak`). ~~Statyczna wersja bramki~~ (27.11 R6' p11: `css-leak-static`). Zostaje: przejście na CSS Modules przy następnej zmianie arkuszy tras.
 
 20. ~~Wydajność — preload fontów (web.dev „Best practices for fonts”)~~ (27.11 R6' p11: bramka `font-preload`). Zostaje: `size-adjust`/`ascent-override` dla krojów zapasowych (mniejszy skok przy podmianie) — web.dev „CSS size-adjust for @font-face”.
+21. ~~Wydajność — CLS od treści wstrzykiwanej po załadowaniu (web.dev „Optimize CLS”)~~ (28.11 R6' p12: przyczyna `/tool` 390 zmierzona, metoda w R6'-N12 pkt 0). Zostaje: wykonanie przez `tool-index.html` + `ship-tool`.

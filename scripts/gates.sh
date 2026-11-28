@@ -131,6 +131,13 @@ for route in "${ROUTES[@]}"; do
     TMO=$((TMO * 5)) run_expect '^COCKPITPIN PASS' "$route" "cockpit-pin" "$LOGDIR/$slug-cockpit-pin.log" \
       node scripts/cockpit-pin-check.mjs "$url" 1366x657 1280x720 1024x768 1440x789 1440x900 900x600 1920x1080 1100x620
   fi
+  # R6' p12 (spec 46): pigulka aktu .ga-prog a telefon i tekst sceny /work/genactiv, w dol i w gore (pasek aktow wjezdza)
+  if [ "$route" = /work/genactiv ]; then
+    for vp in "1100 620" "1280 720"; do set -- $vp
+      TMO=$((TMO * 3)) run_expect '^PROG-OVERLAP PASS' "$route" "prog-overlap-$1" "$LOGDIR/$slug-prog-overlap-$1.log" \
+        node scripts/prog-overlap-check.mjs "$1" "$2" "$url"
+    done
+  fi
   # R6' p8 (regula R36.2, spec 42): kazda przypieta scena trasy × elementy position:fixed po ruchu kolkiem W GORE
   # (regresja: pasek rozdzialow przykrywal naglowek finalu „One morning with …” na 390 i naglowek kokpitu na 1280)
   TMO=$((TMO * 3)) run_expect '^STICKYFIXED PASS' "$route" "sticky-fixed" "$LOGDIR/$slug-sticky-fixed.log" \
