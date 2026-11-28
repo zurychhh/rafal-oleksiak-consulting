@@ -21,6 +21,13 @@ po poprawce 195×403 (390) i 325×672 (1440), zrzuty obejrzane. Bramka: `scripts
 WebKit z Playwrighta jest tu zablokowane, działa WebKitGTK z apt). Każdy przebieg: uruchom na każdej zmienionej trasie (390 i 1440),
 żaden widoczny telefon węższy niż 150 px. Nie poprawiaj tego drugi raz — sprawdź tylko, czy Twoje zmiany tego nie cofnęły.
 
+## PILNE TERAZ (Rafał 28.11.2026 10:37, przez doradcę): R6'q14-A ZATWIERDZONE — podgląd do 11:35. CZYTAJ PIERWSZE.
+Rafał: „zgoda na te 3, startuj, za godzinę chcę mieć nowe wersje stron”. Zatwierdzone punkty (1)–(3) z R6'q14-A; (4) nadal czeka na GENACTIV — **żadnego linku do `/work/genactiv`**.
+1. **Formularz zapytania na `/nawyko` w dwóch miejscach:** zaraz pod hero (krótki: adres sklepu + e-mail, ten sam kształt co pasek na `/`, ta sama zgoda kontaktowa, wysyłka przez istniejący `LeadBridge`/`/api/lead` z `form: "nawyko"`) i drugi po FAQ (obecne zapytanie „Build …'s app” zostaje — jeśli jest już formularzem, drugi to on, nie dubluj). Niczego nie usuwasz ani nie scalasz (Z-05).
+2. **Trzy kroki „co dalej” przy każdym formularzu**, tylko z faktów już na stronie: odpowiedź w ciągu 24 godzin (jak na `/`), odpisuje Rafał osobiście (imię + LinkedIn ze stopki), pierwsza rozmowa o sklepie i rytmie zakupów jego klientów. Brzmienie przez bramkę tekstów (copy-voice + czytelnik-kupujący); bohaterem jest marka klienta.
+3. **Jedno zdanie o formie rozliczenia, bez kwoty** — zatwierdzone przez Rafała po polsku „wdrożenie + opłata miesięczna, wycena po pierwszej rozmowie”. Wersja angielska do strony: „One setup fee plus a monthly fee. Your quote comes after the first call.” (drobne poprawki brzmienia z bramki tekstów dozwolone, sens bez zmian; żadnej liczby — `content-rules` musi przejść).
+**Termin:** commit + push na `agencja/strona` do 11:30, podgląd Vercel do 11:35; bramki jak zawsze (build, tsc, lint, `gates.sh` na `/nawyko` i `/`, WebKit 390/1440, brand-propagation). Jeśli pełne bramki nie zdążą — push wersji z zielonymi build/tsc/lint/WebKit/content-rules i w „Dla Rafała” uczciwie, które bramki jeszcze biegną. Inne punkty kolejki dopiero po tym.
+
 ## PILNE PROCES (25.11 14:50): DWA PRZEBIEGI NARAZ — sprawdź `agencja/W-TOKU` ZANIM zaczniesz
 Przebieg 12:38 trwał do ~14:10, a przebieg 13:37 wystartował obok niego i zbudował od zera to samo (R6'-N5 pkt 0, spec 40,
 recenzja 48) — praca zdublowana, wyrzucona przy scaleniu. **Reguła od teraz:** (1) zaraz po klonie i teście STOP: jeśli na
