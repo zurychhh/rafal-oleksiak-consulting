@@ -231,7 +231,7 @@ body:has(.nk){overflow-x:visible;max-width:none;background:#F7F5F0;color:#14161A
   .nk-h1{max-width:none;}
   .nk-stage{grid-template-columns:1fr;gap:18px;align-content:start;padding-top:18px;padding-bottom:18px;}
   .nk-phonecol{order:-1;}
-  .nk-phone{height:clamp(300px,48svh,470px);border-radius:28px;padding:7px;}
+  .nk-phone{height:clamp(320px,48svh,470px);border-radius:28px;padding:7px;}
   .nk-screen{border-radius:22px;}
   .is-scroll .nk-steps{margin-top:12px;border-top:0;}
   .is-scroll .nk-step{border:0;}
@@ -449,7 +449,8 @@ body:has(.nk[data-skin="clay"]){background:#EFE6DA;color:#2A201A;}
 .nk-swing{transform-origin:50% 60%;}
 /* telefon (390): zamiast stron — zmiana skali i przesuniecie */
 @media (max-width:860px){
-  .nk-phone{height:clamp(300px,50svh,500px);}
+  /* spec 50: min. 320 px wysokosci = 155 px szerokosci (bramka reflow: zaden telefon < 150 px na 320x568 i 640x360) */
+  .nk-phone{height:clamp(320px,50svh,500px);}
   .is-scroll .nk-panel .nk-lab,.is-scroll .nk-scenehead .nk-lab{display:flex!important;margin-bottom:6px;}
   .is-scroll .nk-labrest{display:none;}
 }
@@ -1043,6 +1044,13 @@ html[data-brand-wait] .nk-hname,html[data-brand-wait] .nk-hmono,html[data-brand-
 }
 /* spec 49 (WCAG 1.4.10, 320 px): kolumna finalu nie rozpycha sie nierozdzielnym linkiem — tekst nie ucina sie na prawej krawedzi. */
 @media (max-width:380px){.nk-fz-dots button{width:26px;}.nk-fz-dots{margin-left:-8px;}.nk-fz .nk-fz-act .nk-link{white-space:normal;text-align:right;}}
+/* spec 50 (WCAG 1.4.10, okno 640x360 = 200 % z 1280x720; telefon poziomo): przy wysokosci < 600 px (ten sam warunek co PIN_JS)
+   final nie jest przypiety — sekcja ma wysokosc tresci, telefon stala wysokosc, chwile ustawiaja kropki (Finale, FZ_LOW). */
+@media (max-height:599px){
+  .nk-fz{height:auto;}
+  .nk-fz-stick{position:relative;height:auto;overflow:visible;padding-top:48px;padding-bottom:48px;}
+  .nk-fz .nk-fz-phone{--hh:500px;}
+}
 @media (prefers-reduced-motion:reduce){
   .nk-fz,.nk-fz-list li,.nk-fz-list li.is-on,.nk-fz-note,.nk-fz-app,.nk-fz:is([data-at="2"],[data-at="3"],[data-at="4"]) .nk-fz-app,.nk-fz-mine i,.nk-fz-code{transition:none;}
   .nk-fz-stamps i.is-got,.nk-fz-code.is-on b{animation:none;}

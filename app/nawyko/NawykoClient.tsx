@@ -2591,6 +2591,8 @@ function fzMoments(brand: string) {
   ]
 }
 
+const FZ_LOW = '(max-height: 599px)'
+
 export function Finale() {
   const { colour, brand } = useBrand()
   const root = useRef<HTMLElement>(null)
@@ -2602,8 +2604,11 @@ export function Finale() {
     const el = root.current
     if (!el) return
     let raf = 0
+    /* spec 50: niskie okno (< 600 px, ten sam warunek co PIN_JS) — final nie jest przypiety, chwile ustawiaja kropki. */
+    const low = window.matchMedia(FZ_LOW)
     const read = () => {
       raf = 0
+      if (low.matches) return
       const r = el.getBoundingClientRect()
       const run = Math.max(1, r.height - window.innerHeight)
       const p = clamp(-r.top / run)
@@ -2619,9 +2624,11 @@ export function Finale() {
     read()
     window.addEventListener('scroll', on, { passive: true })
     window.addEventListener('resize', on)
+    low.addEventListener('change', on)
     return () => {
       window.removeEventListener('scroll', on)
       window.removeEventListener('resize', on)
+      low.removeEventListener('change', on)
       if (raf) cancelAnimationFrame(raf)
     }
   }, [])
@@ -2634,6 +2641,11 @@ export function Finale() {
   const go = (n: number) => {
     const el = root.current
     if (!el) return
+    if (window.matchMedia(FZ_LOW).matches) {
+      atRef.current = n
+      setAt(n)
+      return
+    }
     const run = el.offsetHeight - window.innerHeight
     const top = el.getBoundingClientRect().top + window.scrollY
     window.scrollTo({ top: top + run * ((n + 0.5) / FZ_N), behavior: 'auto' })
