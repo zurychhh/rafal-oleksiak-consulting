@@ -97,7 +97,7 @@ const CHAPTERS = [
   { id: 'how', label: 'How it works' },
   { id: 'cashback', label: 'Cashback' },
   { id: 'levels', label: 'Points' },
-  { id: 'exchange', label: 'Your costs' },
+  { id: 'exchange', label: 'Point value' },
   { id: 'cockpit', label: 'Your side' },
   { id: 'faq', label: 'FAQ' },
   { id: 'finale', label: 'One morning' },
@@ -128,7 +128,7 @@ export default function Nawyko() {
         <a href="#how">How it works</a>
         <a href="#cashback">Cashback</a>
         <a href="#levels">Points</a>
-        <a href="#exchange">Your costs</a>
+        <a href="#exchange">Point value</a>
         <a href="#proof">Proof</a>
         <a href="#faq">FAQ</a>
       </SiteNav>
