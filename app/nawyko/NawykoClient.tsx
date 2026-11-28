@@ -1211,7 +1211,7 @@ function StepNav({
   label: string
 }) {
   return (
-    <nav className="nk-sp-nav" aria-label={label}>
+    <nav className="nk-sp-nav" aria-label={label} data-sp-anchor="">
       <span className="nk-sp-count">
         {step + 1} of {names.length}
       </span>
@@ -1271,7 +1271,8 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
   const C = 2 * Math.PI * R
   // spec 53 pkt 2 A: przypięta scena — krok k odsłania kafel k (kumulatywnie, na końcu całe bento; nic nie znika)
   const sp = useStepPin(LOY_STEPS.length, LOY_IDS)
-  const later = (k: number) => (k > sp.step ? ' is-later' : '')
+  // telefon (PILNE TERAZ 3): kafle w jednej komórce siatki — widoczny tylko bieżący; wcześniejsze schodzą (is-gone)
+  const later = (k: number) => (k > sp.step ? ' is-later' : sp.narrow && k < sp.step ? ' is-gone' : '')
 
   return (
     <section
@@ -1280,7 +1281,7 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
       aria-labelledby="nk-wal-h"
       style={vars}
       ref={sp.sec}
-      data-pin={sp.pinned ? '' : undefined}
+      data-pin={sp.pinned ? (sp.narrow ? 'narrow' : '') : undefined}
       onFocusCapture={sp.onFocusCapture}
     >
       <div className="nk-sp-pin" ref={sp.pin}>
@@ -1297,7 +1298,7 @@ function Loyalty({ brand }: { skin: Skin; brand: string }) {
       </div>
       <StepNav names={LOY_STEPS} step={sp.step} go={sp.go} progRef={sp.prog} label="Cashback and points, step by step" />
 
-      <div className="nk-bento">
+      <div className="nk-bento" data-sp-zoom="" data-sp-end="">
         <article className={'nk-tile nk-tile-cash' + later(0)} id="cashback" aria-labelledby="nk-cash" data-sp-step="0">
           <div className="nk-thead">
             <span className="nk-hmono" aria-hidden="true">
@@ -1645,7 +1646,7 @@ function StoreMap({ brand, pinned, step, go }: { brand: string; pinned: boolean;
     ['--hi' as string]: inkOn(colour, '#0E0F12'),
   }
   return (
-    <div className="nk-store" style={vars}>
+    <div className="nk-store" style={vars} data-sp-zoom="">
       <div className="nk-store-pick" role="group" aria-label="Your store engine">
         {ENGINES.map((x, i) => (
           <button key={x.id} type="button" className="nk-store-chip" aria-pressed={pinned ? undefined : i === pick}
@@ -1658,7 +1659,7 @@ function StoreMap({ brand, pinned, step, go }: { brand: string; pinned: boolean;
           </button>
         ))}
       </div>
-      <div className="nk-store-map">
+      <div className="nk-store-map" data-sp-end="">
         <div className="nk-store-node">
           <small className="nk-caps">Your store</small>
           <b>{e.n}</b>
@@ -1844,7 +1845,7 @@ function Evidence({ brand }: { brand: string }) {
         id="integrations"
         aria-labelledby="nk-intg"
         ref={sp.sec}
-        data-pin={sp.pinned ? '' : undefined}
+        data-pin={sp.pinned ? (sp.narrow ? 'narrow' : '') : undefined}
       >
         <div className="nk-sp-pin" ref={sp.pin}>
         <div className="nk-sp-fit" data-sp-fit="">
@@ -1859,7 +1860,7 @@ function Evidence({ brand }: { brand: string }) {
           <p className="nk-one">Rewards arrive as Shopify codes; subscription, loyalty and email tools are matched to your stack. The app is listed in both stores under your brand.</p>
           <p className="nk-fine">Pick your store engine. Shopify is ready; every other engine connects per brand through an adapter.</p>
         </div>
-        <div className="nk-sp-count nk-sp-count-int" aria-hidden="true">
+        <div className="nk-sp-count nk-sp-count-int" aria-hidden="true" data-sp-anchor="">
           {Math.min(sp.step, ENGINES.length - 1) + 1} of {ENGINES.length}
           <span className="nk-sp-prog" ref={sp.prog}>
             {ENGINES.map((x, i) => (

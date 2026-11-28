@@ -22,7 +22,9 @@ const b = await chromium.launch(exe ? { executablePath: exe } : {})
 let fails = 0, checks = 0
 const bad = (m) => { fails++; console.log('  FAIL ' + m) }
 for (const [W, H] of vps) {
-  const wantPin = W >= 900 && H >= 600
+  // PILNE TERAZ 3 (28.11 13:36): telefon i waskie okno tez przypinaja (< 900 px, wysokosc >= 560) — data-pin="narrow"
+  const wantPin = (W >= 900 && H >= 600) || (W < 900 && H >= 560)
+  const narrow = W < 900
   const ctx = await b.newContext({ viewport: { width: W, height: H } })
   await ctx.addInitScript(() => {
     Object.defineProperty(navigator, 'webdriver', { get: () => false })
@@ -40,20 +42,35 @@ for (const [W, H] of vps) {
       checks++; if (hid) bad(`${W}x${H} #${sc.id} bez przypiecia, a ${hid} krokow niewidocznych`)
       continue
     }
-    const seg = (info.h - H) / sc.n
+    // geometria toru: desktop — scena od gory sekcji, odcinek (h - H) / n; telefon — scena przypina sie przy r.top = --sp-top - odstep
+    if (narrow) { await p.evaluate((id) => document.getElementById(id).scrollIntoView(), sc.id); await p.waitForTimeout(700) }
+    const g = await p.evaluate(([id, n, narrow]) => {
+      const s = document.getElementById(id); const pin = s.querySelector('.nk-sp-pin'); const r = s.getBoundingClientRect()
+      if (!narrow) return { y0: r.top + scrollY, seg: (r.height - innerHeight) / n }
+      const pad = pin.getBoundingClientRect().top - r.top
+      const t0 = parseFloat(s.style.getPropertyValue('--sp-top')) - pad
+      return { y0: r.top + scrollY - t0, seg: (r.height - pad - pin.getBoundingClientRect().height) / n }
+    }, [sc.id, sc.n, narrow])
     for (let k = 0; k < sc.n; k++) {
-      await p.evaluate((y) => scrollTo(0, y), Math.round(info.top + (k + 0.5) * seg))
+      await p.evaluate((y) => scrollTo(0, y), Math.round(g.y0 + (k + 0.5) * g.seg))
       await p.waitForTimeout(650)
       const r = await p.evaluate((id) => {
         const s = document.getElementById(id); const pin = s.querySelector('.nk-sp-pin')
         const c = s.querySelector('.nk-sp-count')?.textContent?.trim() ?? ''
-        const hidden = [...s.querySelectorAll('.nk-tile')].filter((e) => +getComputedStyle(e).opacity < 0.9).length
-        return { c, over: pin.scrollHeight - pin.clientHeight, hidden }
+        const tiles = [...s.querySelectorAll('.nk-tile')]
+        const hidden = tiles.filter((e) => +getComputedStyle(e).opacity < 0.9).length
+        const ch = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--consent-h')) || 0
+        const a = s.querySelector('[data-sp-anchor]')?.getBoundingClientRect(); const e = s.querySelector('[data-sp-end]')?.getBoundingClientRect()
+        // telefon: od licznika do konca kafla/schematu w oknie nad paskiem cookies
+        const nOver = a && e ? Math.max(-a.top, e.bottom - (innerHeight - ch)) : 99
+        return { c, over: s.dataset.pin === 'narrow' ? nOver : pin.scrollHeight - pin.clientHeight, hidden, tiles: tiles.length }
       }, sc.id)
       checks += 2
       if (!r.c.startsWith(`${k + 1} of ${sc.n}`)) bad(`${W}x${H} #${sc.id} krok ${k}: licznik „${r.c}”`)
-      if (r.over > 1) bad(`${W}x${H} #${sc.id} krok ${k}: scena wystaje o ${r.over} px`)
-      if (sc.id === 'loyalty' && k === sc.n - 1) { checks++; if (r.hidden) bad(`${W}x${H} #loyalty ostatni krok: ${r.hidden} kafli niewidocznych`) }
+      if (r.over > 1) bad(`${W}x${H} #${sc.id} krok ${k}: scena wystaje o ${Math.round(r.over)} px`)
+      if (sc.id === 'loyalty' && !narrow && k === sc.n - 1) { checks++; if (r.hidden) bad(`${W}x${H} #loyalty ostatni krok: ${r.hidden} kafli niewidocznych`) }
+      // telefon: kafle w jednej komorce — widoczny dokladnie jeden (biezacy)
+      if (sc.id === 'loyalty' && narrow) { checks++; if (r.tiles - r.hidden !== 1) bad(`${W}x${H} #loyalty krok ${k}: widocznych kafli ${r.tiles - r.hidden}, oczekiwany 1`) }
     }
     for (const a of sc.anchors) {
       const q = await ctx.newPage()

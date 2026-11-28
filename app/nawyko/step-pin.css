@@ -67,3 +67,40 @@
     .nk-sp-int[data-pin] .nk-store-node{min-height:150px;padding:14px 16px;}
   }
 }
+
+/* PILNE TERAZ 3 (doradca 28.11 13:36): telefon i waskie okno (< 900 px, wysokosc >= 560, bez ograniczenia ruchu) — przypieta
+   jest scena od licznika krokow w dol; naglowek sekcji przewija sie normalnie przed nia (sticky z ujemnym top z useStepPin:
+   --sp-top = odleglosc licznika od gory sceny, --sp-h = scena + n odcinkow po 60 % ekranu). Bez JS / reduced-motion / nizej
+   niz 560 px atrybut data-pin="narrow" nie powstaje i sekcja jest jak dotad (wszystkie opcje pod soba). */
+@media (max-width:899.98px) and (min-height:560px) and (prefers-reduced-motion:no-preference){
+  .nk .nk-sp[data-pin="narrow"]{height:var(--sp-h,auto);padding-bottom:0!important;display:block;min-height:0;}
+  .nk-sp[data-pin="narrow"] .nk-sp-pin{position:sticky;top:var(--sp-top,0px);padding-bottom:clamp(40px,8vw,64px);}
+  .nk-sp[data-pin="narrow"] .nk-sp-nav{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:12px;row-gap:8px;margin-top:20px;}
+  .nk-sp[data-pin="narrow"] .nk-sp-count,.nk-sp[data-pin="narrow"] .nk-sp-count-int{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .nk-sp[data-pin="narrow"] .nk-sp-steps{grid-column:1 / -1;grid-row:3;display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0;}
+  .nk-sp[data-pin="narrow"] .nk-sp-steps button{min-height:36px;padding:0 12px;border-radius:99px;border:1px solid currentColor;background:transparent;
+    color:inherit;font:inherit;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;opacity:.72;}
+  .nk-sp[data-pin="narrow"] .nk-sp-steps button[aria-current]{opacity:1;background:var(--ink);color:#0E0F12;border-color:var(--ink);}
+  .nk-sp[data-pin="narrow"] .nk-sp-steps button:focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+  .nk-sp[data-pin="narrow"] .nk-sp-nav > .nk-sp-prog{grid-column:2;grid-row:1;}
+  .nk-sp[data-pin="narrow"] .nk-sp-prog{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:5px;}
+  .nk-sp[data-pin="narrow"] .nk-sp-prog i{display:block;height:3px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden;}
+  .nk-sp[data-pin="narrow"] .nk-sp-prog b{display:block;height:100%;background:var(--hi,var(--ink));transform-origin:0 50%;transform:scaleX(0);}
+  .nk-sp[data-pin="narrow"] .nk-sp-prog .is-past b{transform:none;}
+  .nk-sp[data-pin="narrow"] .nk-sp-prog .is-on b{transform:scaleX(var(--f,0));}
+
+  /* A. Cashback: kafle w jednej komorce siatki, widoczny biezacy */
+  .nk-sp-loy[data-pin="narrow"] .nk-bento{display:grid;grid-template-columns:minmax(0,1fr);margin-top:14px;}
+  .nk-sp-loy[data-pin="narrow"] .nk-tile{grid-area:1 / 1;transition:opacity .45s ease,transform .45s cubic-bezier(.2,.7,.2,1);}
+  .nk-sp-loy[data-pin="narrow"] .nk-tile.is-later{opacity:0;transform:translateY(24px);pointer-events:none;}
+  .nk-sp-loy[data-pin="narrow"] .nk-tile.is-gone{opacity:0;transform:translateY(-24px);pointer-events:none;}
+
+  /* B. Any store engine: licznik nad pigulkami, schemat zmienia sie z krokiem */
+  .nk-sp-int[data-pin="narrow"] .nk-sp-count-int{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px;margin-top:20px;}
+  .nk-sp-int[data-pin="narrow"] .nk-sp-count-int .nk-sp-prog{grid-column:auto;}
+  .nk-sp-int[data-pin="narrow"] .nk-sp-prog i{background:rgba(14,15,18,.16);}
+  .nk-sp-int[data-pin="narrow"] .nk-sp-prog b{background:var(--ink);}
+  .nk-sp-int[data-pin="narrow"] .nk-store-chip[aria-current]{background:var(--ink);color:var(--paper);}
+  .nk-sp-int[data-pin="narrow"] .nk-store{margin-top:12px;}
+}

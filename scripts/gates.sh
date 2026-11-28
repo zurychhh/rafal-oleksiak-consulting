@@ -133,7 +133,7 @@ for route in "${ROUTES[@]}"; do
     # spec 54 (PILNE 2 pkt 2): przypiete sceny z odslanianiem (#loyalty, #integrations) — krok z przewijania, scena miesci
     # sie nad paskiem cookies, wejscie kotwica na kafel konczy z odslonietym kaflem (recenzja 60 I1)
     TMO=$((TMO * 3)) run_expect '^STEPPIN PASS' "$route" "step-pin" "$LOGDIR/$slug-step-pin.log" \
-      node scripts/step-pin-check.mjs "$url" 1440x900 1280x720 1100x620 900x600 1920x1080 390x844
+      node scripts/step-pin-check.mjs "$url" 1440x900 1280x720 1100x620 900x600 1920x1080 390x844 360x740 375x667 390x540
   fi
   # R6' p12 (spec 46): pigulka aktu .ga-prog a telefon i tekst sceny /work/genactiv, w dol i w gore (pasek aktow wjezdza)
   if [ "$route" = /work/genactiv ]; then
