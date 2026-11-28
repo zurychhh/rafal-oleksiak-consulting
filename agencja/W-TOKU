@@ -1,0 +1,3 @@
+start: 28.11.2026 09:38
+punkt: R6'-N15 pkt 1 (finał /nawyko w niskim oknie), pkt 2 (/work/genactiv 320 „Any colour”), pkt 5 (reflow-check w gates.sh)
+pliki: app/nawyko/*, app/work/genactiv/*, scripts/gates.sh, agencja/*
