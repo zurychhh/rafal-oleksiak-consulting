@@ -145,6 +145,9 @@ for route in "${ROUTES[@]}"; do
   # R39 (26.11 p9): wyliczone scroll-behavior = auto na <html>/<body> (smooth z critical.css chowal fokus pod paskiem cookies na /privacy i /blog)
   run_expect '^SCROLLBEHAVIOR PASS' "$route" "scroll-behavior" "$LOGDIR/$slug-scroll-behavior.log" \
     node scripts/scroll-behavior-check.mjs "$BASE" "$route"
+  # spec 49/50 (WCAG 1.4.10 Reflow): 320x568 i 640x360 — tekst poza oknem, poziomy scroll, telefon < 150 px
+  TMO=$((TMO * 3)) run_expect '^REFLOW PASS' "$route" "reflow" "$LOGDIR/$slug-reflow.log" \
+    node scripts/reflow-check.mjs "$BASE" "$route"
   # WebKit: 390 (iPhone) i 1440 (Mac Safari), zrzuty do agencja/podglad/gates-wk-<slug>-<szer>
   wkmiss=$(webkit_missing)
   if [ -n "$wkmiss" ]; then
