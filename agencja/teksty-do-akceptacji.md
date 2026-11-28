@@ -448,3 +448,11 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada
 ### Przebieg 28.11 07:38 — `/nawyko` nawigacja
 - ZMIENIONE: link w nawigacji i pasku rozdziałów „Your costs” → „Point value” (prowadzi do „You set what each point is worth.”). Powód: niezależny recenzent i czytelnik-kupujący czytali „Your costs” jako cenę usługi, a pod linkiem jest suwak kursu punktów. Czytelnik: werdykt „Point value”; alternatywa „Reward rate”. copy-voice OK.
 - `/tool`: bez nowych słów — akapit „Four families from an anonymous supplement shop…” jest teraz w HTML od razu (wcześniej wpisywał go skrypt).
+
+### Przebieg PILNY 28.11 10:40 — `/nawyko` R6'q14-A (zatwierdzone przez Rafała co do sensu)
+- NOWE nagłówek formularza pod hero: „See what Nawyko would do for your store.” (czytelnik-kupujący odrzucił „Send your store address.” — polecenie, nie korzyść; „Tell us…” odpada, bo „us” przy jednoosobowej firmie)
+- NOWE etykieta: „Ask about Nawyko” / po wpisaniu marki „For {marka}”; pola „Your store URL (required)”, „Your email (required)”, zgoda bez zmian, „Send”
+- NOWE „What happens next”: „You send your store address.” · „Within 24 hours, Rafał Oleksiak replies to you personally.” · „First call: your store and how often your customers reorder.” (czytelnik: ZALICZONE)
+- NOWE rozliczenie: „One setup fee plus a monthly fee. You get your quote after the first call.” (Twoje zdanie, „You get…” z bramki tekstów)
+- NOWE po wysłaniu: „Enquiry received.” / „Rafał replies personally within 24 hours.”
+- ZMIENIONE dolny formularz: „Your store URL” / „Your email” + „(required)” (rubryka pkt 13)

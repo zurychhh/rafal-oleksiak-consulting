@@ -1390,3 +1390,33 @@ html[data-brand-wait] .nk-store-app b,html[data-brand-wait] .nk-store-mono,html[
 @container (max-width:175px){
   .nk-ck-stage .nk-phone .nk-pbar span + span{white-space:nowrap;flex:none;letter-spacing:.04em;}
 }
+
+/* ── R6'q14-A (28.11.2026): krotki formularz pod hero + trzy kroki „co dalej” przy obu formularzach ── */
+.nk-quick{--brand:#D6202B;--brand-on:#FFFFFF;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,4vw,64px);
+  align-items:start;padding:clamp(36px,5vw,64px) var(--m);background:var(--paper);border-top:6px solid var(--brand);border-bottom:1px solid var(--ink);}
+.nk-quick .nk-h2{margin-top:14px;}
+.nk-qf{border:1px solid var(--ink);padding:clamp(18px,2.2vw,28px);background:var(--paper);}
+.nk-qf-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 20px;align-items:end;}
+.nk-qf-field{min-width:0;}
+.nk-qf label.nk-f{display:block;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);}
+.nk-qf label.nk-f em,.nk-qf .nk-ck em{font-style:normal;color:var(--dim);letter-spacing:.06em;text-transform:none;font-weight:400;}
+.nk-qf input[type=text],.nk-qf input[type=email]{display:block;width:100%;margin-top:6px;padding:12px 0;border:0;border-bottom:1px solid var(--ink);
+  background:transparent;font:inherit;font-size:17px;color:var(--ink);border-radius:0;}
+.nk-qf input::placeholder{color:var(--dim);opacity:1;}
+.nk-qf input[type=text]:focus-visible,.nk-qf input[type=email]:focus-visible{outline:2px solid var(--ink);outline-offset:4px;}
+.nk-qf-send{min-height:48px;width:100%;margin-top:20px;scroll-margin-bottom:calc(var(--consent-h,0px) + 16px);}
+.nk-qf-send[disabled]{opacity:.6;cursor:default;}
+.nk-next{margin-top:22px;}
+.nk-next-h{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);}
+.nk-next-list{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--ink);counter-reset:nkn;}
+.nk-next-list li{counter-increment:nkn;display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;padding:12px 0;border-bottom:1px solid var(--ink);
+  font-size:16px;line-height:1.45;color:var(--ink);}
+.nk-next-list li::before{content:counter(nkn);display:grid;place-items:center;width:26px;height:26px;background:var(--brand);color:var(--brand-on);
+  font-size:13px;font-weight:600;}
+.nk-next-list a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;}
+.nk-next-fee{margin-top:14px!important;font-size:16px;line-height:1.45;color:var(--ink2);max-width:46ch;}
+@media (max-width:860px){
+  .nk-quick{grid-template-columns:minmax(0,1fr);}
+  .nk-qf-row{grid-template-columns:minmax(0,1fr);}
+}
+.nk-form label.nk-f em{font-style:normal;font-weight:400;letter-spacing:.06em;text-transform:none;color:var(--dim);}

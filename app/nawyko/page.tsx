@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { preload } from 'react-dom'
 import { ChapterBar } from './ChapterBar'
 import { SiteNav } from '../components/SiteNav'
-import { DayStrip, HeroApp, Story } from './NawykoClient'
+import { DayStrip, HeroApp, QuickAsk, Story } from './NawykoClient'
 import { HeroGap } from '../calculator/HeroGap'
 import './nawyko.css'
 import { FAQ, FEATURES } from './content'
@@ -151,7 +151,7 @@ export default function Nawyko() {
               Customers scratch one card a day for rewards known up front. You get a reason for the next order and see the real rhythm of use.
             </p>
             <div className="nk-row">
-              <a className="nk-cta" href="#enquiry">
+              <a className="nk-cta" href="#ask">
                 Ask about Nawyko
               </a>
               <a className="nk-cta nk-ghost" href="#how">
@@ -162,6 +162,8 @@ export default function Nawyko() {
           <DayStrip />
           <HeroGap />
         </section>
+        {/* R6'q14-A (Rafal 28.11 10:37): krotki formularz zaraz pod hero + trzy kroki i forma rozliczenia */}
+        <QuickAsk />
 
         <Story />
       </main>

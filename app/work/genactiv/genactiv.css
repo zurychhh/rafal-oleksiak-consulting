@@ -536,3 +536,4 @@ body:has(.ga-ab[data-on]) .ga-prog { transform: translateY(40px); }
 .ga-stage[data-flood] .ga-phone, .ga-still .ga-act-full .ga-phone { box-shadow: 0 0 0 1px #4a3a3d, 0 0 60px rgba(245, 51, 63, 0.16); }
 /* spec 50 (WCAG 1.4.10, 320 px): rzad kolorow zawija sie, zamiast wypychac „Any colour” poza okno. */
 @media (max-width: 359px) { .ga-pick-row { flex-wrap: wrap; } }
+.ga .nk-form label.nk-f em { font-style: normal; font-weight: 400; letter-spacing: 0.06em; text-transform: none; }
