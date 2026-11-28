@@ -2,10 +2,10 @@ import type { Metadata, Viewport } from 'next'
 import { preload } from 'react-dom'
 import { ChapterBar } from './ChapterBar'
 import { SiteNav } from '../components/SiteNav'
-import { DayStrip, HeroApp, QuickAsk, Story } from './NawykoClient'
+import { DayStrip, HeroApp, Interlude, QuickAsk, Story } from './NawykoClient'
 import { HeroGap } from '../calculator/HeroGap'
 import './nawyko.css'
-import { FAQ, FEATURES } from './content'
+import { FAQ, FEATURES, NK_CHAPTERS } from './content'
 
 const URL = 'https://oleksiakconsulting.com/nawyko'
 const TITLE = 'Nawyko — a white-label habit and loyalty app for brands people buy again'
@@ -92,16 +92,9 @@ const JSON_LD = {
   ],
 }
 
-// Spec 20: rozdzialy paska — te same nazwy co w drugim poziomie nawigacji (≥ 1200 px), plus Privacy.
-const CHAPTERS = [
-  { id: 'how', label: 'How it works' },
-  { id: 'cashback', label: 'Cashback' },
-  { id: 'levels', label: 'Points' },
-  { id: 'exchange', label: 'Point value' },
-  { id: 'cockpit', label: 'Your side' },
-  { id: 'faq', label: 'FAQ' },
-  { id: 'finale', label: 'One morning' },
-]
+// Spec 20 → PILNE 2 pkt 3 (28.11): rozdzialy paska = nazwy przerywnikow (NK_CHAPTERS); „Next step” prowadzi tam,
+// gdzie przycisk paska „Ask about Nawyko”, wiec pasek go nie powtarza.
+const CHAPTERS = NK_CHAPTERS.filter((c) => c.id !== 'ch-next').map((c) => ({ id: c.id, label: c.label }))
 
 const PIN_JS =
   "try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!navigator.webdriver&&innerHeight>=600)document.documentElement.setAttribute('data-nk-pin','')}catch(e){}"
@@ -163,6 +156,7 @@ export default function Nawyko() {
           <HeroGap />
         </section>
         {/* R6'q14-A (Rafal 28.11 10:37): krotki formularz zaraz pod hero + trzy kroki i forma rozliczenia */}
+        <Interlude id="ch-store" />
         <QuickAsk />
 
         <Story />
