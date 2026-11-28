@@ -118,7 +118,10 @@ export function ChapterBar({ chapters, afterId, ctaHref, ctaLabel, className = '
       // caly blok .nk-fz-copy, nie sama etykieta (recenzja 50 I1: przy koncu toru pasek wracal na naglowek momentu); na telefonie stoi 16 px od gory i pasek przykrywal go przy kazdym ruchu w gore. Wezly z pamieci (bez
       // querySelectorAll w kazdej klatce przewijania); ponowne wyszukanie tylko, gdy React podmienil wezel.
       if (!yieldEls.length || yieldEls.some((el) => !el.isConnected)) {
-        yieldEls = Array.from(document.querySelectorAll<HTMLElement>('.nk-cockpit .nk-ck-head, .nk-cockpit .nk-ck-tabs, .nk-fz-copy'))
+        // PILNE 2 (28.11, sticky-fixed 1100x620 po dodaniu przerywnikow): przy odjezdzie kokpitu w gore naglowek jest juz nad
+        // ekranem, a etykieta ostatniego panelu („For you · What the brand sees”) stala pod paskiem — pasek ustepuje calej
+        // przypietej scenie kokpitu (.nk-ck-pin), dopoki jakakolwiek jej czesc lezy w pasie 0–96 px.
+        yieldEls = Array.from(document.querySelectorAll<HTMLElement>('.nk-cockpit .nk-ck-head, .nk-cockpit .nk-ck-tabs, .nk-cockpit .nk-ck-pin, .nk-fz-copy'))
       }
       let yieldTop = false
       for (const el of yieldEls) {

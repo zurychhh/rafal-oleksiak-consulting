@@ -1420,3 +1420,34 @@ html[data-brand-wait] .nk-store-app b,html[data-brand-wait] .nk-store-mono,html[
   .nk-qf-row{grid-template-columns:minmax(0,1fr);}
 }
 .nk-form label.nk-f em{font-style:normal;font-weight:400;letter-spacing:.06em;text-transform:none;color:var(--dim);}
+
+/* ── PILNE 2 pkt 3 (Rafal 28.11.2026): przerywniki rozdzialow ──
+   Pelna szerokosc przed kazda sekcja: numer i podzialka rozdzialow (kolor marki) po lewej, nazwa i „Why here” po prawej.
+   Na telefonie jedna kolumna. Wejscie: CSS scroll-driven (view()) tylko tam, gdzie jest wsparcie i bez ograniczenia ruchu;
+   bez wsparcia (starsze Safari) przerywnik stoi od razu w stanie koncowym. */
+.nk-ch{--brand:#D6202B;--hi:#9E161F;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:clamp(24px,4vw,64px);
+  row-gap:14px;align-items:end;padding:clamp(44px,7vw,104px) var(--m) clamp(28px,4vw,56px);border-top:1px solid var(--line);
+  background:var(--paper);color:var(--ink);scroll-margin-top:64px;}
+.nk-ch-num{grid-column:1;grid-row:1;display:flex;align-items:baseline;gap:.15em;font-variant-numeric:tabular-nums;line-height:.9;}
+.nk-ch-num b{font-size:clamp(56px,9vw,128px);font-weight:600;letter-spacing:-.06em;color:var(--hi);}
+.nk-ch-num span{font-size:clamp(18px,2vw,26px);font-weight:600;letter-spacing:-.02em;color:var(--dim);}
+.nk-ch-ticks{grid-column:1;grid-row:2;display:flex;gap:6px;margin:0;padding:0;list-style:none;max-width:320px;}
+.nk-ch-ticks li{flex:1;height:3px;background:var(--line);}
+.nk-ch-ticks li.is-past{background:var(--ink2);}
+.nk-ch-ticks li.is-on{background:var(--brand);}
+.nk-ch-name{grid-column:2;grid-row:1;align-self:end;font-size:clamp(26px,3.2vw,44px);font-weight:600;letter-spacing:-.035em;line-height:1.02;}
+.nk-ch-why{grid-column:2;grid-row:2;max-width:56ch;color:var(--ink2);font-size:clamp(16px,1.25vw,19px);line-height:1.45;}
+.nk-ch-why .nk-caps{display:inline-block;margin-right:.6em;color:var(--dim);font-size:11px;vertical-align:.12em;}
+@media (max-width:759px){
+  .nk-ch{grid-template-columns:minmax(0,1fr);row-gap:12px;}
+  .nk-ch-num,.nk-ch-ticks,.nk-ch-name,.nk-ch-why{grid-column:1;grid-row:auto;}
+  .nk-ch-ticks{max-width:none;margin-bottom:6px;}
+}
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+    .nk-ch-num b,.nk-ch-name,.nk-ch-why{animation:nk-ch-in linear both;animation-timeline:view();animation-range:entry 10% cover 32%;}
+    .nk-ch-ticks li.is-on{transform-origin:left;animation:nk-ch-tick linear both;animation-timeline:view();animation-range:entry 20% cover 36%;}
+  }
+}
+@keyframes nk-ch-in{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
+@keyframes nk-ch-tick{from{transform:scaleX(0);}to{transform:scaleX(1);}}

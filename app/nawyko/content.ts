@@ -39,3 +39,18 @@ export const FEATURES = [
   'Reorder lift, measured against customers who never get the app.',
   'Any store engine: pick yours, from Shopify to a custom build.',
 ] as const
+
+/* PILNE 2 pkt 3 (Rafal 28.11.2026 11:33: „nie rozumiem kolejnosci, dlaczego co jest po czym”): przerywniki rozdzialow
+   przed kazda sekcja /nawyko — numer, nazwa (ta sama w pasku rozdzialow) i jedno zdanie, dlaczego to wlasnie teraz.
+   {b} = nazwa marki odwiedzajacego (albo marki pokazowej). Kolejnosc sekcji bez zmian. Bramka tekstow: copy-voice +
+   czytelnik-kupujacy (agencja/recenzje/58-*). */
+export const NK_CHAPTERS = [
+  { id: 'ch-store', label: 'Start here', why: 'Ready to start? Two fields and you are done. Want detail first? Every section below shows what {b} customers get.' },
+  { id: 'ch-how', label: 'How it works', why: 'The whole app in four steps, from purchase to the next pack. Each section after this opens one part of it.' },
+  { id: 'ch-rewards', label: 'Rewards', why: 'Next, what customers earn: cashback and points they can spend only on the next {b} order.' },
+  { id: 'ch-side', label: 'Your side', why: 'Now your side: what you set, from rewards to consents, and when packs are due to run out.' },
+  { id: 'ch-engine', label: 'Store engine', why: 'Rewards are redeemed as single-use codes in the {b} online store. Shopify is ready; other engines connect through an adapter.' },
+  { id: 'ch-faq', label: 'FAQ', why: 'Before a first call: answers on data, cost, setup, pharmacy purchases and consent.' },
+  { id: 'ch-morning', label: 'One morning', why: 'A recap: one customer’s morning in {b}’s colours, with every part above working together.' },
+  { id: 'ch-next', label: 'Next step', why: 'Send your store address. Rafał replies personally within 24 hours.' },
+] as const

@@ -456,3 +456,16 @@ copy-voice OK. Czytelnik-kupujący: NIE uruchomiony — do zrobienia przez Leada
 - NOWE rozliczenie: „One setup fee plus a monthly fee. You get your quote after the first call.” (Twoje zdanie, „You get…” z bramki tekstów)
 - NOWE po wysłaniu: „Enquiry received.” / „Rafał replies personally within 24 hours.”
 - ZMIENIONE dolny formularz: „Your store URL” / „Your email” + „(required)” (rubryka pkt 13)
+
+### Przebieg PILNY 28.11 11:38 — `/nawyko` przerywniki rozdziałów (PILNE TERAZ 2 pkt 3)
+- NOWE przerywniki „NN / 08” + nazwa + „Why now” (nazwy też w pasku rozdziałów; {b} = marka odwiedzającego):
+  01 Start here — „Ready to start? Two fields and you are done. Want detail first? Every section below shows what {b} customers get.”
+  02 How it works — „The whole app in four steps, from purchase to the next pack. Each section after this opens one part of it.”
+  03 Rewards — „Next, what customers earn: cashback and points they can spend only on the next {b} order.”
+  04 Your side — „Now your side: what you set, from rewards to consents, and when packs are due to run out.”
+  05 Store engine — „Rewards are redeemed as single-use codes in the {b} online store. Shopify is ready; other engines connect through an adapter.”
+  06 FAQ — „Before a first call: answers on data, cost, setup, pharmacy purchases and consent.”
+  07 One morning — „A recap: one customer’s morning in {b}’s colours, with every part above working together.”
+  08 Next step — „Send your store address. Rafał replies personally within 24 hours.”
+- ZMIENIONE pasek rozdziałów: „How it works · Cashback · Points · Point value · Your side · FAQ · One morning” → „Start here · How it works · Rewards · Your side · Store engine · FAQ · One morning” (nawigacja górna bez zmian).
+- Czytelnik-kupujący: pierwsza wersja 8 × FIX („Why here” brzmi jak miejsce, „whatever it runs on” absolut, 01/06/07 nie tłumaczyły kolejności) → przepisane według uwag; recenzja w `agencja/recenzje/58-teksty-przerywniki.md`.

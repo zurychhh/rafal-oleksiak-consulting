@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Enquiry, NextSteps, QuickEnquiry } from './Enquiry'
-import { FAQ } from './content'
+import { FAQ, NK_CHAPTERS } from './content'
 import { DEMO_BRAND, contrast, inkOn, mix, monogram, onColour, useBrand } from '../lib/brand-engine'
 import './cockpit-scroll.css'
 
@@ -2394,6 +2394,39 @@ const HERO_TILE = '#1B1D21' // najjasniejsze tlo pod akcentem w telefonie hero (
 const RING = 30
 const HERO_DAY = 9
 
+/* ── PILNE 2 pkt 3 (Rafal 28.11.2026): przerywnik rozdzialu ──
+   Pelna szerokosc przed kazda sekcja: „03 / 08”, nazwa (ta sama w pasku rozdzialow) i jedno zdanie, dlaczego teraz.
+   Reaguje na odwiedzajacego: nazwa marki w zdaniu, numer i podzialka rozdzialow w kolorze marki. */
+type ChapterId = (typeof NK_CHAPTERS)[number]['id']
+export function Interlude({ id }: { id: ChapterId }) {
+  const { colour, brand } = useBrand()
+  const i = NK_CHAPTERS.findIndex((c) => c.id === id)
+  const c = NK_CHAPTERS[i]
+  const n = NK_CHAPTERS.length
+  const pad = (v: number) => String(v).padStart(2, '0')
+  return (
+    <div
+      className="nk-ch"
+      id={c.id}
+      style={{ ['--brand' as string]: colour, ['--hi' as string]: inkOn(colour, '#F4F1EA') }}
+    >
+      <p className="nk-ch-num" aria-label={`Chapter ${i + 1} of ${n}`}>
+        <b>{pad(i + 1)}</b>
+        <span aria-hidden="true"> / {pad(n)}</span>
+      </p>
+      <ol className="nk-ch-ticks" aria-hidden="true">
+        {NK_CHAPTERS.map((x, k) => (
+          <li key={x.id} className={k < i ? 'is-past' : k === i ? 'is-on' : ''} />
+        ))}
+      </ol>
+      <p className="nk-ch-name">{c.label}</p>
+      <p className="nk-ch-why">
+        <span className="nk-caps">Why now</span> {c.why.replace(/\{b\}/g, brand)}
+      </p>
+    </div>
+  )
+}
+
 /* ── spec 26 p1: hero z zywym ekranem aplikacji w marce odwiedzajacego ──
    Ciemny ekran „Today” jak w prawdziwej aplikacji (bez zrzutow z prywatnego repo): naglowek z monogramem i nazwa,
    tarcza 30 dni wokol opakowania, trzy kafelki, karta dnia do zdrapania w kolorze marki. Pod telefonem: nazwa + kolor
@@ -2602,17 +2635,24 @@ export function Story() {
 
   return (
     <div ref={root}>
+      <Interlude id="ch-how" />
       <Scene skin={skin} />
       <DemoNote className="nk-demo nk-demo-after" />
 
+      <Interlude id="ch-rewards" />
       <Loyalty skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
+      <Interlude id="ch-side" />
       <BrandCockpit skin={skin} brand={own ? name.trim() : DEMO_BRAND} />
+      <Interlude id="ch-engine" />
       <Evidence brand={own ? name.trim() : DEMO_BRAND} />
 
+      <Interlude id="ch-faq" />
       <Faq />
 
+      <Interlude id="ch-morning" />
       <Finale />
 
+      <Interlude id="ch-next" />
       <section
         className="nk-final nk-final-solo"
         id="enquiry"
